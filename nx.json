@@ -45,5 +45,5 @@
       }
     }
   },
-  "defaultProject": "archie-web-apps"
+  "defaultProject": "archie-auth"
 }

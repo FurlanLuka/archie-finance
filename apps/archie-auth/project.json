@@ -1,6 +1,6 @@
 {
-  "root": "apps/archie-web-apps",
-  "sourceRoot": "apps/archie-web-apps/src",
+  "root": "apps/archie-auth",
+  "sourceRoot": "apps/archie-auth/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,17 +9,17 @@
       "defaultConfiguration": "production",
       "options": {
         "compiler": "babel",
-        "outputPath": "dist/apps/archie-web-apps",
-        "index": "apps/archie-web-apps/src/index.html",
+        "outputPath": "dist/apps/archie-auth",
+        "index": "apps/archie-auth/src/index.html",
         "baseHref": "/",
-        "main": "apps/archie-web-apps/src/main.tsx",
-        "polyfills": "apps/archie-web-apps/src/polyfills.ts",
-        "tsConfig": "apps/archie-web-apps/tsconfig.app.json",
+        "main": "apps/archie-auth/src/main.tsx",
+        "polyfills": "apps/archie-auth/src/polyfills.ts",
+        "tsConfig": "apps/archie-auth/tsconfig.app.json",
         "assets": [
-          "apps/archie-web-apps/src/favicon.ico",
-          "apps/archie-web-apps/src/assets"
+          "apps/archie-auth/src/favicon.ico",
+          "apps/archie-auth/src/assets"
         ],
-        "styles": ["apps/archie-web-apps/src/styles.css"],
+        "styles": ["apps/archie-auth/src/styles.css"],
         "scripts": [],
         "webpackConfig": "@nrwl/react/plugins/webpack"
       },
@@ -27,8 +27,8 @@
         "production": {
           "fileReplacements": [
             {
-              "replace": "apps/archie-web-apps/src/environments/environment.ts",
-              "with": "apps/archie-web-apps/src/environments/environment.prod.ts"
+              "replace": "apps/archie-auth/src/environments/environment.ts",
+              "with": "apps/archie-auth/src/environments/environment.prod.ts"
             }
           ],
           "optimization": true,
@@ -43,12 +43,12 @@
     "serve": {
       "executor": "@nrwl/web:dev-server",
       "options": {
-        "buildTarget": "archie-web-apps:build",
+        "buildTarget": "archie-auth:build",
         "hmr": true
       },
       "configurations": {
         "production": {
-          "buildTarget": "archie-web-apps:build:production",
+          "buildTarget": "archie-auth:build:production",
           "hmr": false
         }
       }
@@ -57,14 +57,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/archie-web-apps/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["apps/archie-auth/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/archie-web-apps"],
+      "outputs": ["coverage/apps/archie-auth"],
       "options": {
-        "jestConfig": "apps/archie-web-apps/jest.config.js",
+        "jestConfig": "apps/archie-auth/jest.config.js",
         "passWithNoTests": true
       }
     }

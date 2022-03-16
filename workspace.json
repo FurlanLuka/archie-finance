@@ -1,6 +1,6 @@
 {
   "version": 2,
   "projects": {
-    "archie-web-apps": "apps/archie-web-apps"
+    "archie-auth": "apps/archie-auth"
   }
 }
