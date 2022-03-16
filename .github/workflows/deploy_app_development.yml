@@ -63,6 +63,6 @@ jobs:
         path: build
     - name: Deploy
       run: |
-        if [ "${{ needs.build.outputs.app_name }}" = "archie-auth" ]; then export BUCKET=${{env.ARCHIE_AUTH_DEV_BUCKET}}; else exit 1; fi
+        if [ ${{ needs.build.outputs.app_name }} = "archie-auth" ]; then export BUCKET=${{env.ARCHIE_AUTH_DEV_BUCKET}}; else exit 1; fi
         echo ${BUCKET}
         aws s3 sync public s3://${BUCKET}/
