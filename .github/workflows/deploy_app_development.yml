@@ -34,7 +34,7 @@ jobs:
     - name: Install dependencies
       run: npm i
     - name: Build application
-      run: npm run execute:${{ steps.git_details.outputs.APP_NAME }}
+      run: npm run execute ${{ steps.git_details.outputs.APP_NAME }}:build
     - name: Upload artifacts
       uses: actions/upload-artifact@v2
       with:
