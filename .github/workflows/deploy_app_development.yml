@@ -1,0 +1,65 @@
+name: Development
+
+on:
+  push:
+    tags:
+      - app-*-v*-alpha
+
+env:
+  ARCHIE_AUTH_DEV_BUCKET: auth.dev.archie.finance
+
+jobs:
+  build:
+    name: Build application
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+    - name: Extract details from Git
+      id: git_details
+      run: |
+        echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+        echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+        echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+        echo ::set-output name=APP_NAME::${${${GITHUB_REF#refs/tags/}#app-}%-v*}
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Cache dependencies
+      uses: actions/cache@v2
+      with:
+        path: 'node_modules'
+        key: ${{ runner.os }}-dependencies-${{ hashFiles('package-lock.json') }}
+    - name: Install dependencies
+      run: npm i
+    - name: Build application
+      run: npm run execute:${{ steps.git_details.outputs.APP_NAME }}
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: static-build
+        path: dist/apps/${{ steps.git_details.outputs.APP_NAME }}
+    outputs:
+      app_name: steps.git_details.outputs.APP_NAME
+  deploy:
+    name: Deploy application
+    needs: build
+    runs-on: ubuntu-latest
+    environment: development
+
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    - name: Download artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: static-build
+        path: build
+    - name: Deploy
+      run: |
+        if [ "${{ needs.build.outputs.app_name }}" = "archie-auth" ]; then export BUCKET=${{env.ARCHIE_AUTH_DEV_BUCKET}}; else exit 1; fi
+        echo ${BUCKET}
+        aws s3 sync public s3://${BUCKET}/
