@@ -1,0 +1,73 @@
+{
+  "root": "apps/archie-web-apps",
+  "sourceRoot": "apps/archie-web-apps/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/web:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/archie-web-apps",
+        "index": "apps/archie-web-apps/src/index.html",
+        "baseHref": "/",
+        "main": "apps/archie-web-apps/src/main.tsx",
+        "polyfills": "apps/archie-web-apps/src/polyfills.ts",
+        "tsConfig": "apps/archie-web-apps/tsconfig.app.json",
+        "assets": [
+          "apps/archie-web-apps/src/favicon.ico",
+          "apps/archie-web-apps/src/assets"
+        ],
+        "styles": ["apps/archie-web-apps/src/styles.css"],
+        "scripts": [],
+        "webpackConfig": "@nrwl/react/plugins/webpack"
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/archie-web-apps/src/environments/environment.ts",
+              "with": "apps/archie-web-apps/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/web:dev-server",
+      "options": {
+        "buildTarget": "archie-web-apps:build",
+        "hmr": true
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "archie-web-apps:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/archie-web-apps/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/archie-web-apps"],
+      "options": {
+        "jestConfig": "apps/archie-web-apps/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
