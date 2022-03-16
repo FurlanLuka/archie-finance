@@ -7,6 +7,7 @@ on:
 
 env:
   ARCHIE_AUTH_DEV_BUCKET: auth.dev.archie.finance
+  AWS_REGION: us-east-1
 
 jobs:
   build:
