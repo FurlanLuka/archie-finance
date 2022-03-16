@@ -42,7 +42,7 @@ jobs:
         name: static-build
         path: dist/apps/${{ steps.git_details.outputs.APP_NAME }}
     outputs:
-      app_name: steps.git_details.outputs.APP_NAME
+      app_name: ${{ steps.git_details.outputs.APP_NAME }}
   deploy:
     name: Deploy application
     needs: build
@@ -63,8 +63,7 @@ jobs:
         path: build
     - name: Deploy
       env:
-        APP_NAME: ${{needs.build.outputs.app_name}}
+        APP_NAME: ${{ needs.build.outputs.app_name }}
       run: |
         if [ ${{ env.APP_NAME }} = "archie-auth" ]; then export BUCKET=${{env.ARCHIE_AUTH_DEV_BUCKET}}; else exit 1; fi
-        echo ${BUCKET}
         aws s3 sync public s3://${BUCKET}/
