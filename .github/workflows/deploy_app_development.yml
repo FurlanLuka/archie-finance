@@ -6,7 +6,7 @@ on:
       - app-*-v*-alpha
 
 env:
-  ARCHIE_AUTH_DEV_BUCKET: auth.dev.archie.finance
+  ARCHIE_AUTH_DEV_BUCKET: mfa.dev.archie.finance
   AWS_REGION: us-east-1
 
 jobs:
