@@ -1,5 +1,5 @@
 import { MfaSetup } from 'apps/archie-auth/src/components/mfa-setup/mfa-setup';
-import React, { FormEventHandler, useState } from 'react';
+import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import { MfaRecord } from '../mfa-router-helpers';
 import { verifyMfa } from './mfa-helpers';
