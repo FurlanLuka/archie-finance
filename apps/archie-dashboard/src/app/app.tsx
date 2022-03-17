@@ -26,25 +26,17 @@ export function App() {
           </li>
         </ul>
       </div>
-      <Route
-        path="/"
-        exact
-        render={() => (
-          <div>
-            This is the generated root route.{' '}
-            <Link to="/page-2">Click here for page 2.</Link>
-          </div>
-        )}
-      />
-      <Route
-        path="/page-2"
-        exact
-        render={() => (
-          <div>
-            <Link to="/">Click here to go back to root page.</Link>
-          </div>
-        )}
-      />
+      <Route path="/">
+        <div>
+          This is the generated root route.{' '}
+          <Link to="/page-2">Click here for page 2.</Link>
+        </div>
+      </Route>
+      <Route path="/page-2">
+        <div>
+          <Link to="/">Click here to go back to root page.</Link>
+        </div>
+      </Route>
       {/* END: routes */}
     </>
   );
