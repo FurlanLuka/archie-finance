@@ -1,12 +1,11 @@
 import { BallTriangle } from 'react-loading-icons';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
   extractQueryParameters,
   getMfaRecord,
   MfaRecord,
 } from './mfa-router-helpers';
-import { MfaSetup } from './routes/mfa-setup/mfa-setup';
-import { Mfa } from './routes/mfa/mfa';
+import { Mfa } from './mfa/mfa';
 import { useQuery } from 'react-query';
 
 export const MfaRouter: React.FC = () => {
@@ -25,15 +24,12 @@ export const MfaRouter: React.FC = () => {
   }
 
   if (queryResult.status === 'success') {
-    const mfaRecord = queryResult.data;
-
-    if (mfaRecord) {
-      if (mfaRecord.totpSecret) {
-        return <MfaSetup secret={mfaRecord.totpSecret} />;
-      }
-
-      return <Mfa />;
-    }
+    return (
+      <Mfa
+        mfaRecord={queryResult.data}
+        sessionToken={queryParameters.sessionToken}
+      />
+    );
   }
 
   throw new Error('Invalid response');
