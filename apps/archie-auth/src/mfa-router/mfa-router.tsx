@@ -28,6 +28,7 @@ export const MfaRouter: React.FC = () => {
       <Mfa
         mfaRecord={queryResult.data}
         sessionToken={queryParameters.sessionToken}
+        state={queryParameters.state}
       />
     );
   }
