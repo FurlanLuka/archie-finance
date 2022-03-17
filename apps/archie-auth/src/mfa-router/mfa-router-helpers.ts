@@ -20,7 +20,7 @@ export const extractQueryParameters = (): QueryParameters => {
 
   return {
     sessionToken: queryParameters.get('session_token') as string,
-    state: 'state',
+    state: queryParameters.get('state') as string,
   };
 };
 
