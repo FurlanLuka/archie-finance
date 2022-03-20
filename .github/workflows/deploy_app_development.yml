@@ -9,6 +9,8 @@ env:
   ARCHIE_AUTH_DEV_BUCKET: mfa.dev.archie.finance
   ARCHIE_DASHBOARD_DEV_BUCKET: dashboard.dev.archie.finance
   AWS_REGION: us-east-1
+  NODE_ENV: production
+  NX_API_URL: https://api.dev.archie.finance
 
 jobs:
   build:

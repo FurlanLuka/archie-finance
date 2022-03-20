@@ -1,2 +1,1 @@
-export const API_URL: string = 'https://api.dev.archie.finance'
-// export const API_URL: string = 'http://localhost'
+export const API_URL: string = process.env['NX_API_URL'] as string;
