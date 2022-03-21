@@ -23,8 +23,6 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
-    - name: Ls
-      run: ls
     - name: Extract details from Git
       id: git_details
       run: |
@@ -40,9 +38,7 @@ jobs:
         path: 'node_modules'
         key: ${{ runner.os }}-dependencies-${{ hashFiles('package-lock.json') }}
     - name: Install dependencies
-      run: cd archie-web-apps |
-        npm ci
-      # run: npm ci
+      run: npm install
     - name: Build application
       run: npm run execute ${{ steps.git_details.outputs.APP_NAME }}:build
     - name: Upload artifacts
