@@ -32,11 +32,11 @@ jobs:
         export TAG=${GITHUB_REF#refs/tags/}
         export TAG_WITHOUT_TYPE=${TAG#app-}
         echo ::set-output name=APP_NAME::${TAG_WITHOUT_TYPE%-v*}
-    - name: Cache dependencies
-      uses: actions/cache@v2
-      with:
-        path: 'node_modules'
-        key: ${{ runner.os }}-dependencies-${{ hashFiles('package-lock.json') }}
+    # - name: Cache dependencies
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: 'node_modules'
+    #     key: ${{ runner.os }}-dependencies-${{ hashFiles('package-lock.json') }}
     - name: Install dependencies
       run: npm install
     - name: Build application
