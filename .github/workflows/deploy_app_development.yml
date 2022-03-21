@@ -11,6 +11,8 @@ env:
   AWS_REGION: us-east-1
   NODE_ENV: production
   NX_API_URL: https://api.dev.archie.finance
+  NX_AUTH0_DOMAIN: auth.dev.archie.finance
+  NX_AUTH0_CLIENT_ID: 6QQ2GQTXiRF9j6i4TfLKX6E07UWFtSRm
 
 jobs:
   build:
