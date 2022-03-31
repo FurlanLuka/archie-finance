@@ -1,0 +1,23 @@
+{
+  "root": "libs/archie-api-consumer",
+  "sourceRoot": "libs/archie-api-consumer/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/archie-api-consumer/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/archie-api-consumer"],
+      "options": {
+        "jestConfig": "libs/archie-api-consumer/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

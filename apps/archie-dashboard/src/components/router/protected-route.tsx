@@ -1,13 +1,14 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import { PropsWithChildren } from 'react';
 import { Navigate } from 'react-router-dom';
+import { useSession } from '@archie/session/hooks/use-session';
+import { SessionState } from '@archie/session/context/session-context';
 
 export const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({
   children,
 }) => {
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { sessionState } = useSession();
 
-  if (isLoading) {
+  if (sessionState === SessionState.INITIALIZING) {
     return (
       <div className="center-box">
         <h2>Loading</h2>
@@ -15,7 +16,7 @@ export const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({
     );
   }
 
-  if (!isAuthenticated) {
+  if (sessionState === SessionState.NOT_AUTHENTICATED) {
     return <Navigate to="/login" />;
   }
 

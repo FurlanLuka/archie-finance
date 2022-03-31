@@ -32,3 +32,30 @@ body {
 
   width: 170px;
 }
+
+.onboarding-step__title {
+  padding: 15px;
+  background: #f2f2f2;
+  cursor: pointer;
+}
+
+.onboarding-step__content {
+  padding: 15px;
+  background: #f9f9f9;
+}
+
+.form__text-input {
+  display: block;
+  margin: auto;
+  padding: 5px 10px;
+  margin-top: 10px;
+}
+
+.form__submit-button {
+  display: block;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  width: 170px;
+}

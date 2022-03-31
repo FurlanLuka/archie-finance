@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@archie/api-consumer/*": ["libs/archie-api-consumer/src/*"],
+      "@archie/session/*": ["libs/archie-session/src/*"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
