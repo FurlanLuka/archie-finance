@@ -44,7 +44,7 @@ ReactDOM.render(
           </Routes>
         </BrowserRouter>
       </SessionProvider>
-      <ReactQueryDevtools initialIsOpen={true} />
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </StrictMode>,
   document.getElementById('root'),
