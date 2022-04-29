@@ -1,4 +1,3 @@
-import { UnauthenticatedApiError } from '../../api-error';
 import { QueryResponse } from '../../interface';
 import { getOnboarding, GetOnboardingResponse } from '../api/get-onboarding';
 import { useExtendedQuery } from '@archie/api-consumer/helper-hooks';

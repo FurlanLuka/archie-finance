@@ -3,6 +3,7 @@ import { GetOnboardingResponse } from '@archie/api-consumer/onboarding/api/get-o
 import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-onboarding';
 import { useAuthenticatedSession } from '@archie/session/hooks/use-session';
 import { OnboardingStep } from './components/onboarding-step';
+import { CollateralizationStep } from './components/onboarding-steps/collateralization-step';
 import { EmailVerificationStep } from './components/onboarding-steps/email-verification-step';
 import { KycStep } from './components/onboarding-steps/kyc-step';
 
@@ -34,10 +35,9 @@ export const OnboardingRoute: React.FC = () => {
           <br />
           <OnboardingStep
             stepTitle="Collateralization"
-            isCompleted={queryResponse.data.collateralizationStage}
-            stepContent={<></>}
+            isCompleted={false}
+            stepContent={<CollateralizationStep />}
             isExpanded={false}
-            isLocked={true}
           />
           <br />
           <OnboardingStep

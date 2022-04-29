@@ -59,3 +59,60 @@ body {
 
   width: 170px;
 }
+
+.collateral-container {
+  margin-bottom: 10px;
+}
+
+.collateral-container__title {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.collateral-record {
+  width: 83px;
+  height: 83px;
+  text-align: center;
+  color: #000000;
+  background: #ececec;
+  border: 1px solid #d9d9d9;
+  display: inline-block;
+}
+
+.collateral-record:nth-child(n + 3) {
+  margin-left: 10px;
+}
+
+.collateral-record__asset-name {
+  display: block;
+  margin-top: 20px;
+}
+
+.collateral-record__asset-amount {
+  display: block;
+  font-size: 25px;
+}
+
+.collateral-deposit-container {
+  width: 100%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  text-align: center;
+  color: #000000;
+  background: #ececec;
+  border: 1px solid #d9d9d9;
+  margin-bottom: 10px;
+}
+.collateral-deposit-container__title {
+  display: block;
+}
+
+.collateral-deposit-container__subtitle {
+  display: block;
+  font-size: 12px;
+}
+
+.collateral-deposit-container__deposit-address {
+  font-style: italic;
+  font-size: 13px;
+}
