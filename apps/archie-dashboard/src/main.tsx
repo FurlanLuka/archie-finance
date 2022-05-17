@@ -1,5 +1,6 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
+import { ThemeProvider } from 'styled-components'
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ProtectedRoute } from './components/router/protected-route';
 import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants';
@@ -9,43 +10,57 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { SessionProvider } from '@archie/session/session-provider';
 import { OnboardingRoute } from './routes/onboarding/onboarding-route';
+import GlobalStyles from './components/_generic/global_styles/global_styles.styled'
+// import FontFace from './components/_generic/global_styles/font_face.styled'
+import { Page } from './components/_generic/layout/layout.styled';
+import Header from './components/_generic/header/header'
+import { theme } from './constants/theme'
 
 const queryClient: QueryClient = new QueryClient();
 
 ReactDOM.render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <SessionProvider
-        domain={AUTH0_DOMAIN}
-        clientId={AUTH0_CLIENT_ID}
-        audience={AUTH0_AUDIENCE}
-        redirectUri={window.location.origin}
-        onLogout={() => console.log('hello!')}
-      >
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute>
-                  <DashboardRoute />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="/onboarding"
-              element={
-                <ProtectedRoute>
-                  <OnboardingRoute />
-                </ProtectedRoute>
-              }
-            />
-            <Route path="/login" element={<LoginRoute />} />
-          </Routes>
-        </BrowserRouter>
-      </SessionProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  </StrictMode>,
+  <>
+    <GlobalStyles />
+    {/* <FontFace /> */}
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <SessionProvider
+          domain={AUTH0_DOMAIN}
+          clientId={AUTH0_CLIENT_ID}
+          audience={AUTH0_AUDIENCE}
+          redirectUri={window.location.origin}
+          onLogout={() => console.log('hello!')}
+        >
+          <ThemeProvider theme={theme}>
+            <Header /> 
+            <Page>
+              <BrowserRouter>
+                <Routes>
+                  <Route
+                    path="/"
+                    element={
+                      <ProtectedRoute>
+                        <DashboardRoute />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="/onboarding"
+                    element={
+                      <ProtectedRoute>
+                        <OnboardingRoute />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path="/login" element={<LoginRoute />} />
+                </Routes>
+              </BrowserRouter>
+            </Page>
+          </ThemeProvider>
+        </SessionProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </StrictMode>
+  </>,
   document.getElementById('root'),
 );

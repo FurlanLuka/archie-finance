@@ -2,6 +2,7 @@ import { PropsWithChildren } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSession } from '@archie/session/hooks/use-session';
 import { SessionState } from '@archie/session/context/session-context';
+import Loading from '../_generic/loading/loading';
 
 export const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({
   children,
@@ -10,9 +11,7 @@ export const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({
 
   if (sessionState === SessionState.INITIALIZING) {
     return (
-      <div className="center-box">
-        <h2>Loading</h2>
-      </div>
+      <Loading />
     );
   }
 
