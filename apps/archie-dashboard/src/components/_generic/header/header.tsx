@@ -1,6 +1,6 @@
-import { Logo } from '../icons/logo'
-import { Container } from '../layout/layout.styled'
-import { HeaderLayout } from './header.styled'
+import { Logo } from '../icons/logo';
+import { Container } from '../layout/layout.styled';
+import { HeaderStyled } from './header.styled';
 
 /**
  * The main header of the website.
@@ -8,12 +8,11 @@ import { HeaderLayout } from './header.styled'
  * @returns {StatelessComponent}
  */
 const Header = () => (
-  <HeaderLayout>
+  <HeaderStyled>
     <Container alignItems="center" justifyContent="space-between">
       <Logo className="logo" />
     </Container>
-  </HeaderLayout>
-)
+  </HeaderStyled>
+);
 
-
-export default Header
+export default Header;

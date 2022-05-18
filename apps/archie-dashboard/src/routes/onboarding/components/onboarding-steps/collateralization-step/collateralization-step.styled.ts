@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const CollateralizationStepLayout = styled.div`
+export const CollateralizationStepStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,4 +11,13 @@ export const CollateralizationStepLayout = styled.div`
   width: 100%;
   padding: 2.5rem 12% 7rem;
   text-align: center;
+
+  .title {
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    margin-bottom: 3rem;
+  }
+
 `

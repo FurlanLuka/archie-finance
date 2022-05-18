@@ -10,9 +10,7 @@ export const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({
   const { sessionState } = useSession();
 
   if (sessionState === SessionState.INITIALIZING) {
-    return (
-      <Loading />
-    );
+    return <Loading />;
   }
 
   if (sessionState === SessionState.NOT_AUTHENTICATED) {

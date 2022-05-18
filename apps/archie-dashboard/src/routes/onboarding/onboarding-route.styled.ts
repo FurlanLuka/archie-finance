@@ -4,12 +4,13 @@ import bgOnboarding from '../../assets/images/bg-onboarding.png'
 
 import breakpoints from '../../constants/breakpoints'
 
-export const OnboardingLayout = styled.div`
+export const OnboardingStyled = styled.div`
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   background-image: url(${bgOnboarding});
   background-repeat: no-repeat;
-  background-size: cover;
+  background-size: 100%;
   background-position: bottom;
   width: 100%;
   padding: 5rem 1rem;

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const StepsIndicatorLayout = styled.div`
+export const StepsIndicatorStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

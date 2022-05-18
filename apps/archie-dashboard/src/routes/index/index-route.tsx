@@ -7,8 +7,7 @@ import { Navigate } from 'react-router-dom';
 export const DashboardRoute: React.FC = () => {
   const { logout } = useAuthenticatedSession();
 
-  const queryResponse: QueryResponse<GetOnboardingResponse> =
-    useGetOnboarding();
+  const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
 
   if (queryResponse.state === RequestState.SUCCESS) {
     if (!queryResponse.data.completed) {

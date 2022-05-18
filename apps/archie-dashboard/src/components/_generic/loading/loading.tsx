@@ -1,15 +1,10 @@
-import { LoadingLayout } from './loading.styled'
+import { LoadingStyled } from './loading.styled';
 
 /**
  * A loading indicator.
  * @param {ComponentProps} props
  * @returns {StatelessComponent}
  */
-const Loading = () => (
-  <LoadingLayout>
-    ...Loading
-  </LoadingLayout>
-)
+const Loading = () => <LoadingStyled>...Loading</LoadingStyled>;
 
-
-export default Loading
+export default Loading;

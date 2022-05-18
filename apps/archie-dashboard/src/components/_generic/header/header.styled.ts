@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import breakpoints from '../../../constants/breakpoints'
 
-export const HeaderLayout = styled.div`
+export const HeaderStyled = styled.div`
   display: flex;
   align-items: center;
   background-color: ${({ theme }) => theme.backgroundPrimary};

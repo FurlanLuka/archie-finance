@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const InputGroup = styled.label`
+export const InputText = styled.label`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -28,7 +28,7 @@ export const InputGroup = styled.label`
     margin-top: 0.35rem;
 
     ::placeholder {
-      color: ${({ theme }) => theme.inputPlaceholder};
+      color: ${({ theme }) => theme.inputTextPlaceholder};
     }  
   }
 `

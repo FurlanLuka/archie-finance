@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const KycStepLayout = styled.div`
+export const KycStepStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,7 +18,7 @@ export const KycStepLayout = styled.div`
   }
 
   p {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
 
   form {
@@ -34,6 +34,6 @@ export const KycStepLayout = styled.div`
   	width: 100%;
     background-color: ${({ theme }) => theme.borderPrimary};
     border: 0;
-    margin: 3rem 0 1.5rem;
+    margin-bottom: 2rem;
   }  
 `

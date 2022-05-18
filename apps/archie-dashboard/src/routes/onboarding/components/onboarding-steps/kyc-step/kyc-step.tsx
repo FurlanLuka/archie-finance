@@ -3,11 +3,11 @@ import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
 import { SubtitleS, ParagraphS } from '../../../../../components/_generic/typography/typography.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
-import { InputGroup } from '../../../../../components/_generic/input/input.styled';
+import { InputText } from '../../../../../components/_generic/input-text/input-text.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
-import { colors } from '../../../../../constants/theme'
-import { step } from '../../../onboarding-route'
-import { KycStepLayout } from './kyc-step.styled'
+import { colors } from '../../../../../constants/theme';
+import { step } from '../../../onboarding-route';
+import { KycStepStyled } from './kyc-step.styled';
 
 interface KycStepProps {
   setCurrentStep: (step: step) => void;
@@ -23,7 +23,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (mutationRequest.state === RequestState.IDLE) {
       mutationRequest.mutate({
         fullLegalName: legalFullName,
@@ -34,14 +34,17 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
 
       setCurrentStep(step.COLLATERALIZE);
     }
-  }
+  };
 
   return (
-    <KycStepLayout>
+    <KycStepStyled>
       <SubtitleS>A bit about you</SubtitleS>
-      <ParagraphS>We need to ask some personal information for compliance reasons. This information will not impact your credit score or your ability to get the Archie Card.</ParagraphS>  
+      <ParagraphS>
+        We need to ask some personal information for compliance reasons. This information will not impact your credit
+        score or your ability to get the Archie Card.
+      </ParagraphS>
       <form onSubmit={(e) => handleSubmit(e)}>
-        <InputGroup>
+        <InputText>
           Full legal name
           <input
             type="text"
@@ -49,8 +52,8 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
             onChange={(e) => setLegalFullName(e.target.value)}
             placeholder="John Doe"
           />
-        </InputGroup>
-        <InputGroup>
+        </InputText>
+        <InputText>
           Date of birth
           <input
             type="date"
@@ -58,8 +61,8 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
             onChange={(e) => setDateOfBirth(e.target.valueAsDate!)}
             placeholder="Date of birth"
           />
-        </InputGroup>
-        <InputGroup>
+        </InputText>
+        <InputText>
           Country of residence
           <input
             type="string"
@@ -67,8 +70,8 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
             onChange={(e) => setLocation(e.target.value)}
             placeholder="United states"
           />
-        </InputGroup>
-        <InputGroup>
+        </InputText>
+        <InputText>
           Last 4 SSN digits
           <input
             type="number"
@@ -76,13 +79,13 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
             onChange={(e) => setSsnDigits(e.target.valueAsNumber)}
             placeholder="XXXX"
           />
-        </InputGroup>
+        </InputText>
         <hr className="divider" />
         <ButtonPrimary type="submit">
           Next
           <ArrowRight fill={colors.white} />
         </ButtonPrimary>
       </form>
-    </KycStepLayout>
+    </KycStepStyled>
   );
 };

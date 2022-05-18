@@ -4,7 +4,7 @@ import breakpoints from '../../../constants/breakpoints'
 
 interface ButtonProps {
   isDisabled?: boolean;
-  minWidth?: string;
+  maxWidth?: string;
 }
 
 const Button = styled.button<ButtonProps>`
@@ -19,11 +19,11 @@ const Button = styled.button<ButtonProps>`
   border-radius: 0.5rem;
   border: 1px solid;
   max-height: 3rem;
-  min-width: ${({ minWidth }) => minWidth ?? '100%'};
+  width: ${({ maxWidth }) => maxWidth ?? '100%'};
   cursor: ${({ isDisabled }) => isDisabled ? 'not-allowed' : 'pointer'};
 
   @media (max-width: ${breakpoints.screenSM}) {
-    min-width: 100%;
+    width: 100%;
   }  
 
   :hover {
