@@ -13,63 +13,63 @@ import fontThin from '../../../assets/fonts/Inter-Thin.ttf'
 const FontFace = createGlobalStyle`
   @font-face {
     font-family: 'Inter';
-    src: url(${fontBlack});
+    src: url(${fontBlack}) format('truetype');
     font-style: normal;
     font-weight: 900;
   }
 
   @font-face {
     font-family: 'Inter';
-    src: url(${fontExtraBold});
+    src: url(${fontExtraBold}) format('truetype');
     font-style: normal;
     font-weight: 800;
   }
 
   @font-face {
     font-family: 'Inter';
-    src: url(${fontBold});
+    src: url(${fontBold}) format('truetype');
     font-style: normal;
     font-weight: 700;
   }
 
   @font-face {
     font-family: 'Inter';
-    src: url(${fontSemiBold});
+    src: url(${fontSemiBold}) format('truetype');
     font-style: normal;
     font-weight: 600;
   }
 
   @font-face {
     font-family: 'Inter';
-    src: url(${fontMedium});
+    src: url(${fontMedium}) format('truetype');
     font-style: normal;
     font-weight: 500;
   }
 
   @font-face {
     font-family: 'Inter';
-    src: url(${fontRegular});
+    src: url(${fontRegular}) format('truetype');
     font-style: normal;
     font-weight: 400;
   }
 
   @font-face {
     font-family: 'Inter';
-    src: url(${fontLight});
+    src: url(${fontLight}) format('truetype');
     font-style: normal;
     font-weight: 300;
   }
 
   @font-face {
     font-family: 'Inter';
-    src: url(${fontExtraLight});
+    src: url(${fontExtraLight}) format('truetype');
     font-style: normal;
     font-weight: 200;
   }
 
   @font-face {
     font-family: 'Inter';
-    src: url(${fontThin});
+    src: url(${fontThin}) format('truetype');
     font-style: normal;
     font-weight: 100;
   }

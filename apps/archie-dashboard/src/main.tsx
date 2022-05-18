@@ -11,15 +11,15 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { SessionProvider } from '@archie/session/session-provider';
 import { OnboardingRoute } from './routes/onboarding/onboarding-route';
 import GlobalStyles from './components/_generic/global-styles/global-styles.styled';
-// import FontFace from './components/_generic/global-styles/font-face.styled'
+import FontFace from './components/_generic/global-styles/font-face.styled';
 import { theme } from './constants/theme';
 
 const queryClient: QueryClient = new QueryClient();
 
 ReactDOM.render(
   <>
+    <FontFace />
     <GlobalStyles />
-    {/* <FontFace /> */}
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <SessionProvider
