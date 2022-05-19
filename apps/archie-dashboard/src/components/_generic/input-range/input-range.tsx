@@ -15,7 +15,7 @@ export const InputRange: FC<InputRangeProps> = ({ label, min, max, value, onChan
 
   return (
     <InputRangeStyled backgroundSize={getBackgroundSize()}>
-      <div className="data">
+      <div className="label">
         <ParagraphS weight={700}>{label}</ParagraphS>
         <ParagraphM>${value}</ParagraphM>
       </div>

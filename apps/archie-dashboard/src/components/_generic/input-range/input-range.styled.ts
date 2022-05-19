@@ -11,7 +11,7 @@ export const InputRangeStyled = styled.label<InputRangeStyledProps>`
   letter-spacing: 0.02em;
   width: 100%;
 
-  .data {
+  .label {
     display: flex;
     justify-content: space-between;
     align-items: center;

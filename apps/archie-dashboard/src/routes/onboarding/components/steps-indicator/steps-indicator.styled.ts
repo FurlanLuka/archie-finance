@@ -19,7 +19,7 @@ export const StepsIndicatorStyled = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 5rem;
+    width: 6rem;
   }
 
   .circle {

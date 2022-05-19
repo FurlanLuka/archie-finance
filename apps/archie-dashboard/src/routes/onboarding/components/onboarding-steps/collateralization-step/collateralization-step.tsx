@@ -1,7 +1,13 @@
 import { FC, useState } from 'react';
+import qrCode from '../../../../../assets/images/qr-code.png';
 import { CollateralDeposit } from '../../../../../components/collateral-deposit/collateral-deposit';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
-import { ParagraphM, ParagraphS } from '../../../../../components/_generic/typography/typography.styled';
+import {
+  SubtitleS,
+  ParagraphM,
+  ParagraphS,
+  ParagraphXS,
+} from '../../../../../components/_generic/typography/typography.styled';
 import { step } from '../../../onboarding-route';
 import { StepsIndicator } from '../../steps-indicator/steps-indicator';
 import { EmailVerification } from '../../email-verification/email-verification';
@@ -14,6 +20,31 @@ interface CollateralizationStepProps {
 
 export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurrentStep }) => {
   const [lineOfCredit, setLineOfCredit] = useState(100);
+  const [address, setAddress] = useState('');
+  const [selectOpen, setSelectOpen] = useState(false);
+
+  const collateralCurency = [
+    {
+      name: 'Bitcoin',
+      id: 'BTC_TEST',
+      short: 'BTC',
+    },
+    {
+      name: 'Ethereum',
+      id: 'ETH_TEST',
+      short: 'ETH',
+    },
+    {
+      name: 'Solana',
+      id: 'SOL_TEST',
+      short: 'SOL',
+    },
+    {
+      name: 'USD Coin',
+      id: 'USDC_T',
+      short: 'USDC',
+    },
+  ];
 
   return (
     <Container column>
@@ -33,10 +64,50 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
 
         <InputRange label="Line of credit" min={0} max={1500} value={lineOfCredit} onChange={setLineOfCredit} />
 
-        {/* <CollateralDeposit assetName="Bitcoin" assetId="BTC_TEST" />
-      <CollateralDeposit assetName="Ethereum" assetId="ETH_TEST" />
-      <CollateralDeposit assetName="USD Coin" assetId="USDC_T" />
-      <CollateralDeposit assetName="Solana" assetId="SOL_TEST" /> */}
+        <div className="select">
+          <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
+            Select your collateral currency
+          </div>
+          {selectOpen && (
+            <div className="select-list">
+              {collateralCurency.map((asset, index) => (
+                <div className="select-option" key={index} onClick={() => setSelectOpen(false)}>
+                  <CollateralDeposit assetName={asset.name} assetId={asset.id} setAddress={setAddress} />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="result">
+          <div className="result-item">
+            <ParagraphXS weight={700}>Required Collateral</ParagraphXS>
+            <SubtitleS weight={400}>0</SubtitleS>
+          </div>
+          <div className="result-item">
+            <ParagraphXS weight={700}>Loan-to-Value</ParagraphXS>
+            <SubtitleS weight={400}>0%</SubtitleS>
+          </div>
+          <div className="result-item">
+            <ParagraphXS weight={700}>Interest Rate</ParagraphXS>
+            <SubtitleS weight={400}>0%</SubtitleS>
+          </div>
+        </div>
+
+        <div className="info">
+          <div className="address">
+            <div className="data">
+              <ParagraphXS weight={700}>Send 0.12 BTC to:</ParagraphXS>
+              <div className="address-copy">
+                <ParagraphS>{address}</ParagraphS>
+              </div>
+            </div>
+            <div className="code">
+              <img src={qrCode} alt="QR code" />
+            </div>
+          </div>
+          <div className="terms"></div>
+        </div>
       </CollateralizationStepStyled>
     </Container>
   );

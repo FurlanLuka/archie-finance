@@ -15,11 +15,7 @@
         "main": "apps/archie-dashboard/src/main.tsx",
         "polyfills": "apps/archie-dashboard/src/polyfills.ts",
         "tsConfig": "apps/archie-dashboard/tsconfig.app.json",
-        "assets": [
-          "apps/archie-dashboard/src/favicon.ico",
-          "apps/archie-dashboard/src/assets"
-        ],
-        "styles": ["apps/archie-dashboard/src/styles.css"],
+        "assets": ["apps/archie-dashboard/src/favicon.ico", "apps/archie-dashboard/src/assets"],
         "scripts": [],
         "webpackConfig": "apps/archie-dashboard/webpack.config.js"
       },

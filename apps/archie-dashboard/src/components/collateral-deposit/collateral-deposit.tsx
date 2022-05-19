@@ -1,50 +1,27 @@
-import { useState } from 'react';
+import { FC } from 'react';
 import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
 import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
+import { CollateralDepositStyled } from './collateral-deposit.styled';
 
 interface CollateralDepositProps {
   assetName: string;
   assetId: string;
+  setAddress: (address: string) => void;
 }
 
-export const CollateralDeposit: React.FC<CollateralDepositProps> = ({
-  assetName,
-  assetId,
-}: CollateralDepositProps) => {
-  const [shouldGetAddress, setShouldGetAddress] = useState(false);
-
-  const getDepositAddressResponse: QueryResponse<GetDepositAddressResponse> =
-    useGetDepositAddress(assetId, shouldGetAddress);
+export const CollateralDeposit: FC<CollateralDepositProps> = ({ assetName, assetId, setAddress }) => {
+  const getDepositAddressResponse: QueryResponse<GetDepositAddressResponse> = useGetDepositAddress(assetId, true);
 
   const getDepositAddress = () => {
-    setShouldGetAddress(true);
+    if (getDepositAddressResponse.state === RequestState.SUCCESS) {
+      setAddress(getDepositAddressResponse.data.address);
+    }
   };
 
   return (
-    <div className="collateral-deposit-container" onClick={getDepositAddress}>
-      {(getDepositAddressResponse.state === RequestState.IDLE ||
-        getDepositAddressResponse.state === RequestState.ERROR ||
-        getDepositAddressResponse.state === RequestState.LOADING) && (
-        <>
-          <span className="collateral-deposit-container__title">
-            {assetName}
-          </span>
-          <span className="collateral-deposit-container__subtitle">
-            Click to generate deposit address
-          </span>
-        </>
-      )}
-      {getDepositAddressResponse.state === RequestState.SUCCESS && (
-        <>
-          <span className="collateral-deposit-container__title">
-            {assetName}
-          </span>
-          <span className="collateral-deposit-container__deposit-address">
-            {getDepositAddressResponse.data.address}
-          </span>
-        </>
-      )}
-    </div>
+    <CollateralDepositStyled onClick={getDepositAddress}>
+      <span>{assetName}</span>
+    </CollateralDepositStyled>
   );
 };
