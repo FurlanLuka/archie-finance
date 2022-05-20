@@ -1,4 +1,5 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { collateralCurrencies, CollateralCurrency } from '../../../../../constants/collateral-curencies';
 import qrCode from '../../../../../assets/images/qr-code.png';
 import { CollateralDeposit } from '../../../../../components/collateral-deposit/collateral-deposit';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
@@ -8,11 +9,15 @@ import {
   ParagraphS,
   ParagraphXS,
 } from '../../../../../components/_generic/typography/typography.styled';
+import { Copy } from '../../../../../components/_generic/icons/copy';
+import { Caret } from '../../../../../components/_generic/icons/caret';
 import { step } from '../../../onboarding-route';
 import { StepsIndicator } from '../../steps-indicator/steps-indicator';
 import { EmailVerification } from '../../email-verification/email-verification';
 import { CollateralizationStepStyled } from './collateralization-step.styled';
 import { InputRange } from '../../../../../components/_generic/input-range/input-range';
+import { ExternalLink } from '../../../../../components/_generic/icons/external-link';
+import { CollateralCurency } from '../../../../../components/collateral-curency/collateral-curency';
 
 interface CollateralizationStepProps {
   setCurrentStep: (step: step) => void;
@@ -20,34 +25,21 @@ interface CollateralizationStepProps {
 
 export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurrentStep }) => {
   const [lineOfCredit, setLineOfCredit] = useState(100);
-  const [address, setAddress] = useState('');
   const [selectOpen, setSelectOpen] = useState(false);
+  const [selectedCollateralDeposit, setSelectedCollateralDeposit] = useState<CollateralCurrency>();
+  const [collateralDeposit, setCollateralDeposit] = useState({ id: '', address: '' });
+  const [requiredCollateral, setRequiredCollateral] = useState(0); // TBD
 
-  const collateralCurency = [
-    {
-      name: 'Bitcoin',
-      id: 'BTC',
-      short: 'BTC',
-    },
-    {
-      name: 'Ethereum',
-      id: 'ETH',
-      short: 'ETH',
-    },
-    {
-      name: 'Solana',
-      id: 'SOL',
-      short: 'SOL',
-    },
-    {
-      name: 'USD Coin',
-      id: 'USDC',
-      short: 'USDC',
-    },
-  ];
+  useEffect(() => {
+    const curency: CollateralCurrency | undefined = collateralCurrencies.find(
+      (currency) => currency.id === collateralDeposit.id,
+    );
+
+    setSelectedCollateralDeposit(curency);
+  }, [collateralDeposit.id]);
 
   return (
-    <Container column>
+    <Container column mobileColumn>
       <StepsIndicator
         title="Let’s get started"
         subtitle="It’s just a few steps to setup your ArchCredit and get your Archie card."
@@ -66,13 +58,22 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
 
         <div className="select">
           <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
-            Select your collateral currency
+            {collateralDeposit.address ? (
+              <CollateralCurency
+                icon={selectedCollateralDeposit?.icon}
+                name={selectedCollateralDeposit?.name}
+                short={selectedCollateralDeposit?.short}
+              />
+            ) : (
+              'Select your collateral currency'
+            )}
+            <Caret className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
           </div>
           {selectOpen && (
             <div className="select-list">
-              {collateralCurency.map((asset, index) => (
+              {collateralCurrencies.map((asset, index) => (
                 <div className="select-option" key={index} onClick={() => setSelectOpen(false)}>
-                  <CollateralDeposit assetName={asset.name} assetId={asset.id} setAddress={setAddress} />
+                  <CollateralDeposit assetId={asset.id} setCollateralDeposit={setCollateralDeposit} />
                 </div>
               ))}
             </div>
@@ -82,31 +83,78 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
         <div className="result">
           <div className="result-item">
             <ParagraphXS weight={700}>Required Collateral</ParagraphXS>
-            <SubtitleS weight={400}>0</SubtitleS>
+            <SubtitleS weight={400}>
+              {requiredCollateral} {selectedCollateralDeposit?.short}
+            </SubtitleS>
           </div>
           <div className="result-item">
             <ParagraphXS weight={700}>Loan-to-Value</ParagraphXS>
-            <SubtitleS weight={400}>0%</SubtitleS>
+            <SubtitleS weight={400}>{selectedCollateralDeposit?.loan_to_value ?? '0%'}</SubtitleS>
           </div>
           <div className="result-item">
             <ParagraphXS weight={700}>Interest Rate</ParagraphXS>
-            <SubtitleS weight={400}>0%</SubtitleS>
+            <SubtitleS weight={400}>{selectedCollateralDeposit?.interest_rate ?? '0%'}</SubtitleS>
           </div>
         </div>
 
         <div className="info">
           <div className="address">
             <div className="data">
-              <ParagraphXS weight={700}>Send 0.12 BTC to:</ParagraphXS>
+              <ParagraphXS weight={700}>
+                Send {requiredCollateral} {selectedCollateralDeposit?.short} to:
+              </ParagraphXS>
               <div className="address-copy">
-                <ParagraphS>{address}</ParagraphS>
+                <ParagraphS>{collateralDeposit.address}</ParagraphS>
+                <button className="btn-copy" onClick={() => navigator.clipboard.writeText(collateralDeposit.address)}>
+                  <Copy className="icon-copy" />
+                </button>
+              </div>
+              <div className="info-group">
+                <ParagraphXS>
+                  Make sure you <b>only</b> send {selectedCollateralDeposit?.short} to this address.
+                </ParagraphXS>
+              </div>
+              <div className="info-group">
+                <ParagraphXS>We will wait for 3 confirmations before your collateral is accepted.</ParagraphXS>
+                <ParagraphXS className="info-link">
+                  Follow along on
+                  <a
+                    href={`${selectedCollateralDeposit?.url}/${collateralDeposit.address}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="info-link-url"
+                  >
+                    this blockchain explorer <ExternalLink className="info-link-icon" />
+                  </a>
+                </ParagraphXS>
               </div>
             </div>
             <div className="code">
               <img src={qrCode} alt="QR code" />
             </div>
           </div>
-          <div className="terms"></div>
+          <hr className="divider" />
+          <div className="terms">
+            <div className="terms-title">
+              <ParagraphXS weight={700}>Terms & Conditions</ParagraphXS>
+            </div>
+            <ul className="terms-list">
+              <li className="terms-list-item">
+                <ParagraphXS>
+                  You can only spend up to <b>{selectedCollateralDeposit?.loan_to_value}</b> of your line of credit.
+                </ParagraphXS>
+              </li>
+              <li className="terms-list-item">
+                <ParagraphXS>Pay monthly. We’ll be sure to send you a reminder each month!</ParagraphXS>
+              </li>
+              <li className="terms-list-item">
+                <ParagraphXS>
+                  You will be asked to pay down your balance or add collateral if <br /> your card balance goes about
+                  your credit utilization.
+                </ParagraphXS>
+              </li>
+            </ul>
+          </div>
         </div>
       </CollateralizationStepStyled>
     </Container>

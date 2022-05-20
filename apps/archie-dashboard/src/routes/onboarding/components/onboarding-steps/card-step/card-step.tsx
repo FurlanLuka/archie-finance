@@ -9,7 +9,7 @@ import { CardStepStyled } from './card-step.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 
 export const CardStep: FC = () => (
-  <Container column>
+  <Container column mobileColumn>
     <StepsIndicator
       title="Setting Up Your Archie Card"
       subtitle="There are a few steps to setup your ArchCredit and get your Archie card."

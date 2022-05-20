@@ -23,24 +23,38 @@ export const CollateralizationStepStyled = styled.div`
   }
 
   ${InputRangeStyled} {
-    margin-bottom: 5rem;
+    margin-bottom: 4rem;
   }
 
   .select {
     position: relative;
-    margin-bottom: 8rem;
+    margin-bottom: 5rem;
     width: 100%;
   }
 
   .select-header {
+    position: relative;
     display: flex;
     justify-content: flex-start;
+    align-items: center;
     border-radius: 0.5rem;
     border: 1px solid ${({ theme }) => theme.borderHighlight};
+    height: 4rem;
     width: 100%;
-    padding: 1.25rem 1rem;
+    padding: 0 1rem;
     cursor: pointer;
   } 
+
+  .select-header-caret {
+    position: absolute;
+    right: 1.5rem;
+    transform: rotate(0);
+    transition: transform 0.3s linear;
+
+    &.open {
+      transform: rotate(180deg);
+    }
+  }
 
   .select-list {
     position: absolute;
@@ -52,6 +66,7 @@ export const CollateralizationStepStyled = styled.div`
     border-radius: 0.5rem;
     width: 100%;
     margin-top: 0.5rem;
+    z-index: 1;
   }
 
   .select-option {
@@ -67,7 +82,7 @@ export const CollateralizationStepStyled = styled.div`
   .result {
     display: flex;
     width: 100%;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
 
   .result-item {
@@ -85,9 +100,14 @@ export const CollateralizationStepStyled = styled.div`
     background-color: #F9F9F9;
     border-top: 1px solid ${({ theme }) => theme.borderPrimary};
     border-bottom: 1px solid ${({ theme }) => theme.borderPrimary};
-    height: 25rem;
     width: 100%;
     padding: 1.5rem 1rem;
+  }
+
+  .address {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
   }
 
   .data {
@@ -97,20 +117,83 @@ export const CollateralizationStepStyled = styled.div`
     width: 80%;
   }
 
-  .address {
-    display: flex;
-    width: 100%;
-  }
-
   .address-copy {
+    position: relative;
+    display: flex;
+    align-items: center;
     background-color: ${({ theme }) => theme.backgroundPrimary};
+    border-radius: 0.25rem;
     height: 3rem;
-    width: 80%;
+    width: 70%;
     padding: 1rem;
-    margin-top: 0.25rem;
+    margin: 0.5rem 0 1.5rem;
   }
 
-  .code {
+  .btn-copy {
+    position: absolute;
+    right: 1rem;
+    top: 0.75rem;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+  }
+
+  .info-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+  }
+
+  .code { 
+    width: 12rem;
+  }
+
+  .divider {
+    height: 1px;
+  	width: 100%;
+    background-color: ${({ theme }) => theme.borderPrimary};
+    border: 0;
+    margin: 1rem 0 1.5rem;
+  } 
+
+  .info-link {
+    display: flex;
+  }
+
+  .info-link-url {
+    display: flex;
+    align-items: center;
+    color: ${({ theme }) => theme.textHighlight};
+    margin-left: 0.25rem;
+    margin-top: 0.05rem;
+  }
+
+  .info-link-icon {
+    margin-left: 0.25rem;
+  }
+
+  .terms {
+    display: flex;
+  }
+
+  .terms-title {
+    display: flex;
+    justify-content: flex-start;
     width: 20%;
+  }
+
+  .terms-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 80%;
+    margin: 0;
+  }
+
+  .terms-list-item {
+    margin-bottom: 1rem;
+    text-align: left;
   }
 `

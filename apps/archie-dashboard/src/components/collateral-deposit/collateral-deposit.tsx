@@ -2,26 +2,29 @@ import { FC } from 'react';
 import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
 import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
+import { collateralCurrencies, CollateralCurrency } from '../../constants/collateral-curencies';
 import { CollateralDepositStyled } from './collateral-deposit.styled';
+import { CollateralCurency } from '../collateral-curency/collateral-curency';
 
 interface CollateralDepositProps {
-  assetName: string;
   assetId: string;
-  setAddress: (address: string) => void;
+  setCollateralDeposit: (params: { id: string; address: string }) => void;
 }
 
-export const CollateralDeposit: FC<CollateralDepositProps> = ({ assetName, assetId, setAddress }) => {
+export const CollateralDeposit: FC<CollateralDepositProps> = ({ assetId, setCollateralDeposit }) => {
   const getDepositAddressResponse: QueryResponse<GetDepositAddressResponse> = useGetDepositAddress(assetId, true);
 
   const getDepositAddress = () => {
     if (getDepositAddressResponse.state === RequestState.SUCCESS) {
-      setAddress(getDepositAddressResponse.data.address);
+      setCollateralDeposit({ id: assetId, address: getDepositAddressResponse.data.address });
     }
   };
 
+  const curency: CollateralCurrency | undefined = collateralCurrencies.find((currency) => currency.id === assetId);
+
   return (
     <CollateralDepositStyled onClick={getDepositAddress}>
-      <span>{assetName}</span>
+      <CollateralCurency icon={curency?.icon} name={curency?.name} short={curency?.short} />
     </CollateralDepositStyled>
   );
 };

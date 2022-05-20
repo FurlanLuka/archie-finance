@@ -72,6 +72,10 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
           />
         </InputText>
         <InputText>
+          State
+          <input type="string" value={location} onChange={(e) => setLocation(e.target.value)} placeholder="State" />
+        </InputText>
+        <InputText>
           Last 4 SSN digits
           <input
             type="number"

@@ -16,6 +16,7 @@ export const StepsIndicatorStyled = styled.div`
   }
 
   .step {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -28,5 +29,11 @@ export const StepsIndicatorStyled = styled.div`
     border-radius: 100%;
     background-color:  ${({ theme }) => theme.textSecondary};
     margin-bottom: 0.5rem;
+  }
+
+  .arrow {
+    position: absolute;
+    top: 0.5rem;
+    right: -6rem;
   }
 `

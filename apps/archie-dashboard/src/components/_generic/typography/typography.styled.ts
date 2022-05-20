@@ -75,7 +75,7 @@ export const ParagraphS = styled.p<TypographyProps>`
   font-size: 1rem; //16
   line-height: 1.5;
   color: ${({ theme, color }) => color ?? theme.textPrimary};
-  font-weight: ${({ weight }) => weight ?? 500};
+  font-weight: ${({ weight }) => weight ?? 400};
 
   @media (max-width: ${breakpoints.screenLG}) {
     font-size: 0.875rem; //14
@@ -86,12 +86,12 @@ export const ParagraphXS = styled.p<TypographyProps>`
   font-size: 0.875rem; //14
   line-height: 1.5;
   color: ${({ theme, color }) => color ?? theme.textPrimary};
-  font-weight: ${({ weight }) => weight ?? 500};
+  font-weight: ${({ weight }) => weight ?? 400};
 `
 
 export const ParagraphXXS = styled.p<TypographyProps>` 
   font-size: 0.75rem; //12
   line-height: 1.5;
   color: ${({ theme, color }) => color ?? theme.textPrimary};
-  font-weight: ${({ weight }) => weight ?? 500};
+  font-weight: ${({ weight }) => weight ?? 400};
 `

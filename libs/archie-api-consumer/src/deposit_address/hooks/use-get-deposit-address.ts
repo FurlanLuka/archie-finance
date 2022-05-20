@@ -10,7 +10,7 @@ const getDepositAddressQueryKey = (assetId: string) =>
 
 export const useGetDepositAddress = (
   assetId: string,
-  enabled: boolean = false,
+  enabled = false,
 ): QueryResponse<GetDepositAddressResponse> => {
   return useExtendedQuery(
     getDepositAddressQueryKey(assetId),
