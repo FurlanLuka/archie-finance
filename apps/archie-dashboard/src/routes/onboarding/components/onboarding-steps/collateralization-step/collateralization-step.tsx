@@ -26,22 +26,22 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
   const collateralCurency = [
     {
       name: 'Bitcoin',
-      id: 'BTC_TEST',
+      id: 'BTC',
       short: 'BTC',
     },
     {
       name: 'Ethereum',
-      id: 'ETH_TEST',
+      id: 'ETH',
       short: 'ETH',
     },
     {
       name: 'Solana',
-      id: 'SOL_TEST',
+      id: 'SOL',
       short: 'SOL',
     },
     {
       name: 'USD Coin',
-      id: 'USDC_T',
+      id: 'USDC',
       short: 'USDC',
     },
   ];
