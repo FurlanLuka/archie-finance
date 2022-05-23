@@ -1,7 +1,7 @@
 import { FC } from 'react';
+import { step } from '../../../../../constants/onboarding-steps';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
 import { ParagraphM, ParagraphS } from '../../../../../components/_generic/typography/typography.styled';
-import { step } from '../../../onboarding-route';
 import { StepsIndicator } from '../../steps-indicator/steps-indicator';
 import { EmailVerification } from '../../email-verification/email-verification';
 import imgCardReady from '../../../../../assets/images/img-card-ready.png';

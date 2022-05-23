@@ -8,6 +8,7 @@ export const colors: { [color: string]: string } = {
   alabaster: "#d8e2dc",
   teal: "#70d1df",
   neutralgray: "#9fa3a4",
+  neutralgray_200: "#dbdcdd",
   lightgray: "#bdc0c1",
   yellow: "#ffea00",
   transparent: "transparent",
@@ -23,7 +24,9 @@ export const theme: { [key: string]: string } = {
   textPrimary: colors.black,
   textSecondary: colors.neutralgray,
   textLight: colors.white,
+  textPositive: colors.teal,
   textHighlight: colors.coral,
+  textDisabled: colors.neutralgray_200,
   // button
   buttonPrimary: colors.coral,
   buttonOutline: colors.transparent,

@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
-import { collateralCurrencies, CollateralCurrency } from '../../../../../constants/collateral-curencies';
 import qrCode from '../../../../../assets/images/qr-code.png';
+import { collateralCurrencies, CollateralCurrency } from '../../../../../constants/collateral-curencies';
+import { step } from '../../../../../constants/onboarding-steps';
 import { CollateralDeposit } from '../../../../../components/collateral-deposit/collateral-deposit';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
 import {
@@ -11,7 +12,6 @@ import {
 } from '../../../../../components/_generic/typography/typography.styled';
 import { Copy } from '../../../../../components/_generic/icons/copy';
 import { Caret } from '../../../../../components/_generic/icons/caret';
-import { step } from '../../../onboarding-route';
 import { StepsIndicator } from '../../steps-indicator/steps-indicator';
 import { EmailVerification } from '../../email-verification/email-verification';
 import { CollateralizationStepStyled } from './collateralization-step.styled';

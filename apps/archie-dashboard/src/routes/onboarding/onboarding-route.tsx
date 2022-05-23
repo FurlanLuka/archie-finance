@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { GetOnboardingResponse } from '@archie/api-consumer/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-onboarding';
+import { step } from '../../constants/onboarding-steps';
 import Loading from '../../components/_generic/loading/loading';
 import { KycStep } from './components/onboarding-steps/kyc-step/kyc-step';
 import { CollateralizationStep } from './components/onboarding-steps/collateralization-step/collateralization-step';
@@ -10,16 +11,10 @@ import { OnboardingStyled } from './onboarding-route.styled';
 import { Page } from '../../components/_generic/layout/layout.styled';
 import Header from '../../components/_generic/header/header';
 
-export enum step {
-  KYC = 'kyc',
-  COLLATERALIZE = 'collateralize',
-  CARD = 'getcard',
-}
-
 export const OnboardingRoute: React.FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
 
-  const [currentStep, setCurrentStep] = useState(step.COLLATERALIZE);
+  const [currentStep, setCurrentStep] = useState(step.KYC);
 
   const getCurrentStep = (state: step) => {
     switch (state) {

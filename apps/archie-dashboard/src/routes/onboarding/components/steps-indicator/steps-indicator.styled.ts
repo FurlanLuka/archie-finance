@@ -27,7 +27,7 @@ export const StepsIndicatorStyled = styled.div`
     width: 1.5rem;
     height: 1.5rem;
     border-radius: 100%;
-    background-color:  ${({ theme }) => theme.textSecondary};
+    background-color:  ${({ theme }) => theme.textDisabled};
     margin-bottom: 0.5rem;
   }
 

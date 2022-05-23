@@ -1,12 +1,12 @@
 import { FC, useState, FormEvent } from 'react';
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
+import { step } from '../../../../../constants/onboarding-steps';
 import { SubtitleS, ParagraphS } from '../../../../../components/_generic/typography/typography.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { InputText } from '../../../../../components/_generic/input-text/input-text.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
 import { colors } from '../../../../../constants/theme';
-import { step } from '../../../onboarding-route';
 import { KycStepStyled } from './kyc-step.styled';
 
 interface KycStepProps {
