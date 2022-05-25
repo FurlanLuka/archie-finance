@@ -4,7 +4,8 @@ import { getRequest } from '../../helpers';
 export interface GetKycResponse {
   fullLegalName: string;
   dateOfBirth: string;
-  location: string;
+  country: string;
+  state: string;
   ssnDigits: number;
 }
 

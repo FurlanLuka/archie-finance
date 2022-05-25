@@ -39,13 +39,13 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
 
   const handleSubmit = (values: FormikValues) => {
     if (mutationRequest.state === RequestState.IDLE) {
-      // mutationRequest.mutate({
-      //   fullLegalName: values.fullLegalName,
-      //   dateOfBirth: values.dateOfBirth.toISOString(),
-      //   location: values.country,
-      //   state: values.state,
-      //   ssnDigits: values.ssnDigits,
-      // });
+      mutationRequest.mutate({
+        fullLegalName: values.fullLegalName,
+        dateOfBirth: values.dateOfBirth.toISOString(),
+        country: values.country,
+        state: values.state,
+        ssnDigits: values.ssnDigits,
+      });
 
       console.log(values);
 

@@ -4,7 +4,8 @@ import { DefaultVariables, postRequest } from '../../helpers';
 export interface CreateKycPayload extends DefaultVariables {
   fullLegalName: string;
   dateOfBirth: string;
-  location: string;
+  country: string;
+  state: string;
   ssnDigits: number;
 }
 
