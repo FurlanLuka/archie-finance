@@ -4,6 +4,10 @@ export const CollateralCurencyStyled = styled.div`
   display: flex;
   align-items: center;
 
+  p {
+    line-height: 1.2;
+  }
+
   .icon {
     display: flex;
     margin-right: 0.5rem;

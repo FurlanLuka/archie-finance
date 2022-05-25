@@ -1,6 +1,9 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Formik, Form, Field, FormikValues } from 'formik';
 import { format, differenceInYears } from 'date-fns';
+import Autocomplete from 'react-google-autocomplete';
+import PhoneInput, { Country } from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 import * as Yup from 'yup';
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
@@ -9,12 +12,47 @@ import { SubtitleS, ParagraphXS } from '../../../../../components/_generic/typog
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { InputText } from '../../../../../components/_generic/input-text/input-text.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
-import { colors } from '../../../../../constants/theme';
+import { colors, theme } from '../../../../../constants/theme';
 import { KycStepStyled } from './kyc-step.styled';
 
 interface KycStepProps {
   setCurrentStep: (step: step) => void;
 }
+
+interface PhoneInputFieldProps {
+  field: {
+    name: string;
+    value: string;
+    onChange: (value: string) => void;
+  };
+  form: {
+    setFieldValue: (name: string, phoneNumber: string) => void;
+  };
+  onChange: (phoneNumber: string) => void;
+}
+
+const PhoneInputField: FC<PhoneInputFieldProps> = ({ field: { name, value, onChange }, form: { setFieldValue } }) => {
+  const onValueChange = (phoneNumber: string) => {
+    setFieldValue(name, phoneNumber);
+
+    if (onChange) {
+      onChange(phoneNumber);
+    }
+  };
+
+  return (
+    <PhoneInput
+      defaultCountry="US"
+      addInternationalOption={false}
+      countryCallingCodeEditable={false}
+      placeholder="Enter phone number"
+      name={name}
+      value={value}
+      onChange={onValueChange}
+      onCountryChange={(country) => console.log(country)}
+    />
+  );
+};
 
 export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const mutationRequest = useCreateKyc();
@@ -23,35 +61,40 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) >= 18;
 
   const validation = Yup.object().shape({
-    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter the required field'),
-    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter the required field'),
+    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter your first name'),
+    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter your last name'),
     dateOfBirth: Yup.date()
       .nullable()
       .test('dob', 'Should be older than 18', (value) => minYears(value ?? today))
       .max(today, 'Date cannot be in the future')
-      .required('Please enter the required field'),
-    address: Yup.string().required('Please enter the required field'),
-    phoneNumber: Yup.string().required('Please enter the required field'),
-    phoneNumberCountryCode: Yup.string().required('Please enter the required field'),
+      .required('Please enter your date of birth'),
+    address: Yup.string().required('Please enter your address'),
+    // phoneNumber: Yup.string().required('Please enter your phone number'),
+    // phoneNumberCountryCode: Yup.string().required('Please enter the required field'),
     ssnDigits: Yup.string()
       .matches(/^[0-9]+$/, 'Only digits')
-      .test('len', 'Must be exactly 4 digits', (value) => value?.length === 4)
-      .required('Please enter the required field'),
+      .test('len', 'Must be exactly 9 digits', (value) => value?.length === 9)
+      .required('Please enter your SSN/TIN'),
   });
 
-  const handleSubmit = (values: FormikValues) => {
-    if (mutationRequest.state === RequestState.IDLE) {
-      mutationRequest.mutate({
-        firstName: values.firstName,
-        lastname: values.lastname,
-        dateOfBirth: values.dateOfBirth.toISOString(),
-        address: values.address,
-        phoneNumber: values.phoneNumber,
-        phoneNumberCountryCode: values.phoneNumberCountryCode,
-        ssnDigits: values.ssnDigits,
-      });
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumberCountryCode, setPhoneNumberCountryCode] = useState<Country>('US');
 
-      console.log(values);
+  const handleSubmit = (values: FormikValues) => {
+    const payload = {
+      firstName: values.firstName,
+      lastname: values.lastName,
+      dateOfBirth: values.dateOfBirth,
+      address: values.address,
+      phoneNumber,
+      phoneNumberCountryCode,
+      ssnDigits: values.ssnDigits,
+    };
+
+    if (mutationRequest.state === RequestState.IDLE) {
+      // mutationRequest.mutate({ payload });
+
+      console.log(payload);
 
       setCurrentStep(step.COLLATERALIZE);
     }
@@ -83,33 +126,66 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
               <InputText>
                 First Name*
                 <Field name="firstName" placeholder="John" />
-                {errors.firstName && touched.firstName ? <div>{errors.firstName}</div> : null}
+                {errors.firstName && touched.firstName ? (
+                  <ParagraphXS className="error" color={theme.textDanger}>
+                    {errors.firstName}
+                  </ParagraphXS>
+                ) : null}
               </InputText>
               <InputText>
                 Last Name*
                 <Field name="lastName" placeholder="Doe" />
-                {errors.lastName && touched.lastName ? <div>{errors.lastName}</div> : null}
+                {errors.lastName && touched.lastName ? (
+                  <ParagraphXS className="error" color={theme.textDanger}>
+                    {errors.lastName}
+                  </ParagraphXS>
+                ) : null}
               </InputText>
             </div>
             <InputText>
               Date of birth*
               <Field name="dateOfBirth" placeholder="Date of birth" />
-              {errors.dateOfBirth && touched.dateOfBirth ? <div>{errors.dateOfBirth}</div> : null}
+              {errors.dateOfBirth && touched.dateOfBirth ? (
+                <ParagraphXS className="error" color={theme.textDanger}>
+                  {errors.dateOfBirth}
+                </ParagraphXS>
+              ) : null}
             </InputText>
             <InputText>
               Address*
-              <Field name="address" placeholder="Street, City, State" disabled />
-              {errors.address && touched.address ? <div>{errors.address}</div> : null}
+              <Autocomplete
+                apiKey="AIzaSyA-k_VEX0soa2kljYKTjtFUg4irF3hKZwQ"
+                onPlaceSelected={(place) => {
+                  console.log(place);
+                }}
+                options={{ types: ['address'] }}
+              />
+              {/* <Field name="address" placeholder="Street, City, State" />
+              {errors.address && touched.address ? <ParagraphXS className="error" color={theme.textDanger}>{errors.address}</ParagraphXS> : null} */}
             </InputText>
             <InputText>
               Phone Number*
-              <Field name="phoneNumber" placeholder="+386 30 248 965" />
-              {errors.phoneNumber && touched.phoneNumber ? <div>{errors.phoneNumber}</div> : null}
+              <PhoneInput
+                defaultCountry={phoneNumberCountryCode}
+                addInternationalOption={false}
+                countryCallingCodeEditable={false}
+                placeholder="Enter phone number"
+                name="phoneNumber"
+                value={phoneNumber}
+                onChange={(value) => setPhoneNumber(value as string)}
+                onCountryChange={(country: Country) => setPhoneNumberCountryCode(country)}
+              />
+              {/* <Field name="phoneNumber" component={PhoneInputField} />
+              {errors.phoneNumber && touched.phoneNumber ? <ParagraphXS className="error" color={theme.textDanger}>{errors.phoneNumber}</ParagraphXS> : null} */}
             </InputText>
             <InputText>
-              Last 4 SSN digits*
-              <Field name="ssnDigits" placeholder="XXXX" />
-              {errors.ssnDigits && touched.ssnDigits ? <div>{errors.ssnDigits}</div> : null}
+              SSN/TIN*
+              <Field name="ssnDigits" placeholder="XXX-XX-XXXX" />
+              {errors.ssnDigits && touched.ssnDigits ? (
+                <ParagraphXS className="error" color={theme.textDanger}>
+                  {errors.ssnDigits}
+                </ParagraphXS>
+              ) : null}
             </InputText>
             <hr className="divider" />
             <ButtonPrimary type="submit">

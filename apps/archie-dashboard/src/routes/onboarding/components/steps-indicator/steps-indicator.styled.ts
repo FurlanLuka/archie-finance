@@ -2,18 +2,8 @@ import styled from 'styled-components'
 
 export const StepsIndicatorStyled = styled.div`
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1rem;
-
-  h4, p {
-    margin-bottom: 1.5rem;
-  }
-
-  .steps {
-    display: flex;
-    gap: 6rem;
-  }
+  gap: 6rem;
+  margin-bottom: 2rem;
 
   .step {
     position: relative;

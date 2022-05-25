@@ -7,6 +7,7 @@ export const EmailVerificationStyled = styled.div`
   border: 0;
   border-radius: 0.5rem;
   width: 100%;
+  max-width: 928px;
   padding: 0.75rem 3rem;
   margin-bottom: 1.5rem;
 

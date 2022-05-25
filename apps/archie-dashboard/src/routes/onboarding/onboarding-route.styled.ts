@@ -14,10 +14,10 @@ export const OnboardingStyled = styled.div`
   background-size: 100%;
   background-position: bottom;
   width: 100%;
-  padding: 3rem 1rem;
+  padding: 2rem 1rem;
 
   @media (max-width: ${breakpoints.screenSM}) {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
   }
 `
 

@@ -30,6 +30,14 @@ export const KycStepStyled = styled.div`
     gap: 1rem;
   }
 
+  .error {
+    margin: 0.25rem 0;
+  }
+
+  .PhoneInput {
+    width: 100%;
+  }
+
   .divider {
     height: 1px;
   	width: 100%;

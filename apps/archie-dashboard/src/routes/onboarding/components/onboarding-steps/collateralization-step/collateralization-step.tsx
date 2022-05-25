@@ -39,45 +39,42 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
   }, [collateralDeposit.id]);
 
   return (
-    <Container column mobileColumn>
-      <StepsIndicator
-        title="Let’s get started"
-        subtitle="It’s just a few steps to setup your ArchCredit and get your Archie card."
-        currentStep={step.COLLATERALIZE}
-      />
+    <Container column mobileColumn alignItems="center">
+      <StepsIndicator currentStep={step.COLLATERALIZE} />
       <EmailVerification />
       <CollateralizationStepStyled>
-        <ParagraphM weight={800} className="title">
-          Send crypto to your collateral wallet
-        </ParagraphM>
-        <ParagraphS className="subtitle">
-          Choose your desired initial line of credit and which crypto asset you’d <br /> like to collateralize.
-        </ParagraphS>
+        <SubtitleS className="title">Send crypto to your collateral wallet</SubtitleS>
+        <ParagraphXS className="subtitle">
+          Choose your desired initial line of credit and which crypto asset you'd like to collateralize.
+        </ParagraphXS>
 
-        <InputRange label="Line of credit" min={0} max={1500} value={lineOfCredit} onChange={setLineOfCredit} />
-
-        <div className="select">
-          <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
-            {collateralDeposit.address ? (
-              <CollateralCurency
-                icon={selectedCollateralDeposit?.icon}
-                name={selectedCollateralDeposit?.name}
-                short={selectedCollateralDeposit?.short}
-              />
-            ) : (
-              'Select your collateral currency'
-            )}
-            <Caret className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
-          </div>
-          {selectOpen && (
-            <div className="select-list">
-              {collateralCurrencies.map((asset, index) => (
-                <div className="select-option" key={index} onClick={() => setSelectOpen(false)}>
-                  <CollateralDeposit assetId={asset.id} setCollateralDeposit={setCollateralDeposit} />
-                </div>
-              ))}
+        <div className="inputs">
+          <div className="select">
+            <ParagraphXS weight={700}>Collateral</ParagraphXS>
+            <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
+              {collateralDeposit.address ? (
+                <CollateralCurency
+                  icon={selectedCollateralDeposit?.icon}
+                  name={selectedCollateralDeposit?.name}
+                  short={selectedCollateralDeposit?.short}
+                />
+              ) : (
+                'Select your collateral currency'
+              )}
+              <Caret className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
             </div>
-          )}
+            {selectOpen && (
+              <div className="select-list">
+                {collateralCurrencies.map((asset, index) => (
+                  <div className="select-option" key={index} onClick={() => setSelectOpen(false)}>
+                    <CollateralDeposit assetId={asset.id} setCollateralDeposit={setCollateralDeposit} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <InputRange label="Credit Amount" min={0} max={1500} value={lineOfCredit} onChange={setLineOfCredit} />
         </div>
 
         <div className="result">

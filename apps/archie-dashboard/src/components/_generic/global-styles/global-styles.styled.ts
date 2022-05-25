@@ -48,25 +48,6 @@ const GlobalStyles = createGlobalStyle`
   *:active {
     outline: 0 !important;
   }
-
-  ::-webkit-scrollbar {
-    width: 7px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: rgba(222, 222, 222, .75);
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    width: 7px;
-    border-radius: 4px;
-    background: rgba(0, 0, 0, .2);
-    transition: all 0.5s ease-out;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, .4);
-  }
   
   a,
   button {

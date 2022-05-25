@@ -11,7 +11,8 @@ export const colors: { [color: string]: string } = {
   neutralgray_200: "#dbdcdd",
   neutralgray_100: "#f9f9f9",
   lightgray: "#bdc0c1",
-  yellow: "#ffea00",
+  yellow_500: "#ffea00",
+  red_600: "#d50000",
   transparent: "transparent",
 };
 
@@ -21,7 +22,7 @@ export const theme: { [key: string]: string } = {
   // background
   backgroundPrimary: colors.white,
   backgroundSecondary: colors.neutralgray_100,
-  backgroundAlert: colors.yellow,
+  backgroundAlert: colors.yellow_500,
   // text
   textPrimary: colors.black,
   textSecondary: colors.neutralgray,
@@ -29,6 +30,7 @@ export const theme: { [key: string]: string } = {
   textPositive: colors.teal,
   textHighlight: colors.coral,
   textDisabled: colors.neutralgray_200,
+  textDanger: colors.red_600,
   // button
   buttonPrimary: colors.coral,
   buttonOutline: colors.transparent,

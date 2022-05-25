@@ -9,26 +9,23 @@ export const CardStepStyled = styled.div`
   border: 0;
   border-radius: 1rem;
   width: 100%;
-  padding: 2.5rem 12% 7rem;
+  max-width: 928px;
+  padding: 2.5rem 7% 3.5rem;
   text-align: center;
 
-  p {
-    margin-bottom: 1rem;
+  h4 {
+    margin-bottom: 0.5rem;
   }
 
-  .divider {
-    height: 1px;
-  	width: 100%;
-    background-color: ${({ theme }) => theme.borderPrimary};
-    border: 0;
-    margin: 1rem 0 1.5rem;
-  } 
+  p {
+    margin-bottom: 2rem;
+  }
 
   .image {
     width: 16rem;
   }
 
   button {
-    margin-top: 1rem;
+    margin-top: 2rem;
   }
 `;

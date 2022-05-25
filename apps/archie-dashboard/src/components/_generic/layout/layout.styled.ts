@@ -7,7 +7,11 @@ export const Page = styled.div`
   background-color: ${({ theme }) => theme.backgroundPrimary};
   color: ${({ theme }) => theme.textPrimary};
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 78px); // Header's height, TBD
+
+  @media (max-width: ${breakpoints.screenSM}) {
+    min-height: calc(100vh - 54px); // Header's height, TBD
+  }
 `
 
 interface ContainerProps {
