@@ -9,6 +9,7 @@ export const colors: { [color: string]: string } = {
   teal: "#70d1df",
   neutralgray: "#9fa3a4",
   neutralgray_200: "#dbdcdd",
+  neutralgray_100: "#f9f9f9",
   lightgray: "#bdc0c1",
   yellow: "#ffea00",
   transparent: "transparent",
@@ -19,6 +20,7 @@ export const theme: { [key: string]: string } = {
   fontPrimary: "Inter",
   // background
   backgroundPrimary: colors.white,
+  backgroundSecondary: colors.neutralgray_100,
   backgroundAlert: colors.yellow,
   // text
   textPrimary: colors.black,

@@ -52,7 +52,7 @@ export const SubtitleS = styled.h4<TypographyProps>`
   font-size: 2.5rem; //40
   line-height: 1.2;
   color: ${({ theme, color }) => color ?? theme.textPrimary};
-  font-weight: ${({ weight }) => weight ?? 900};
+  font-weight: ${({ weight }) => weight ?? 800};
 
   @media (max-width: ${breakpoints.screenMD}) {
     font-size: 2rem; //32

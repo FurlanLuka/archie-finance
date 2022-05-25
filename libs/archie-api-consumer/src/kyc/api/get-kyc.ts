@@ -2,10 +2,12 @@ import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
 
 export interface GetKycResponse {
-  fullLegalName: string;
+  firstName: string;
+  lastName: string;
   dateOfBirth: string;
-  country: string;
-  state: string;
+  address: string;
+  phoneNumber: string;
+  phoneNumberCountryCode: string;
   ssnDigits: number;
 }
 

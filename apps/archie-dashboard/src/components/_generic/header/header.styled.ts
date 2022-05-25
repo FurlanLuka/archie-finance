@@ -6,8 +6,6 @@ export const HeaderStyled = styled.div`
   display: flex;
   align-items: center;
   background-color: ${({ theme }) => theme.backgroundPrimary};
-  border-bottom: 1px solid ${({theme }) => theme.borderPrimary};
-  min-height: 97px; // Temp, change once unified with marketing-site
   width: 100%;
   padding: 1.5rem 10rem;
 

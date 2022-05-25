@@ -14,7 +14,7 @@ export const KycStepStyled = styled.div`
   text-align: center;
 
   h4 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
   }
 
   p {
@@ -25,8 +25,9 @@ export const KycStepStyled = styled.div`
     width: 100%;
   }
 
-  button {
-    margin-bottom: 1.5rem;
+  .input-group {
+    display: flex;
+    gap: 1rem;
   }
 
   .divider {
@@ -34,6 +35,10 @@ export const KycStepStyled = styled.div`
   	width: 100%;
     background-color: ${({ theme }) => theme.borderPrimary};
     border: 0;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }  
+
+  button {
+    margin-bottom: 0.5rem;
+  }
 `

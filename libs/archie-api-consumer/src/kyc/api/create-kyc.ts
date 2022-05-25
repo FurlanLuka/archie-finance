@@ -2,10 +2,12 @@ import { API_URL } from '../../constants';
 import { DefaultVariables, postRequest } from '../../helpers';
 
 export interface CreateKycPayload extends DefaultVariables {
-  fullLegalName: string;
+  firstName: string;
+  lastName: string;
   dateOfBirth: string;
-  country: string;
-  state: string;
+  address: string;
+  phoneNumber: string;
+  phoneNumberCountryCode: string;
   ssnDigits: number;
 }
 

@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { Formik, Form, Field, FormikValues } from 'formik';
-import { format, parse, isDate, differenceInYears } from 'date-fns';
+import { format, differenceInYears } from 'date-fns';
 import * as Yup from 'yup';
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
 import { step } from '../../../../../constants/onboarding-steps';
-import { SubtitleS, ParagraphS } from '../../../../../components/_generic/typography/typography.styled';
+import { SubtitleS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { InputText } from '../../../../../components/_generic/input-text/input-text.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
@@ -23,14 +23,16 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) >= 18;
 
   const validation = Yup.object().shape({
-    fullLegalName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter the required field'),
+    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter the required field'),
+    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter the required field'),
     dateOfBirth: Yup.date()
       .nullable()
       .test('dob', 'Should be older than 18', (value) => minYears(value ?? today))
       .max(today, 'Date cannot be in the future')
       .required('Please enter the required field'),
-    country: Yup.string().required('Please enter the required field'),
-    state: Yup.string().required('Please enter the required field'),
+    address: Yup.string().required('Please enter the required field'),
+    phoneNumber: Yup.string().required('Please enter the required field'),
+    phoneNumberCountryCode: Yup.string().required('Please enter the required field'),
     ssnDigits: Yup.string()
       .matches(/^[0-9]+$/, 'Only digits')
       .test('len', 'Must be exactly 4 digits', (value) => value?.length === 4)
@@ -40,10 +42,12 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const handleSubmit = (values: FormikValues) => {
     if (mutationRequest.state === RequestState.IDLE) {
       mutationRequest.mutate({
-        fullLegalName: values.fullLegalName,
+        firstName: values.firstName,
+        lastname: values.lastname,
         dateOfBirth: values.dateOfBirth.toISOString(),
-        country: values.country,
-        state: values.state,
+        address: values.address,
+        phoneNumber: values.phoneNumber,
+        phoneNumberCountryCode: values.phoneNumberCountryCode,
         ssnDigits: values.ssnDigits,
       });
 
@@ -56,16 +60,18 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   return (
     <KycStepStyled>
       <SubtitleS>A bit about you</SubtitleS>
-      <ParagraphS>
+      <ParagraphXS>
         We need to ask some personal information for compliance reasons. This information will not impact your credit
         score or your ability to get the Archie Card.
-      </ParagraphS>
+      </ParagraphXS>
       <Formik
         initialValues={{
-          fullLegalName: '',
+          firstName: '',
+          lastName: '',
           dateOfBirth: format(today, 'MM-dd-yyyy'),
-          country: 'United states',
-          state: '',
+          address: '',
+          phoneNumber: '',
+          phoneNumberCountryCode: '',
           ssnDigits: '',
         }}
         validationSchema={validation}
@@ -73,25 +79,32 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
       >
         {({ errors, touched }) => (
           <Form>
-            <InputText>
-              Full legal name*
-              <Field name="fullLegalName" placeholder="John Doe" />
-              {errors.fullLegalName && touched.fullLegalName ? <div>{errors.fullLegalName}</div> : null}
-            </InputText>
+            <div className="input-group">
+              <InputText>
+                First Name*
+                <Field name="firstName" placeholder="John" />
+                {errors.firstName && touched.firstName ? <div>{errors.firstName}</div> : null}
+              </InputText>
+              <InputText>
+                Last Name*
+                <Field name="lastName" placeholder="Doe" />
+                {errors.lastName && touched.lastName ? <div>{errors.lastName}</div> : null}
+              </InputText>
+            </div>
             <InputText>
               Date of birth*
               <Field name="dateOfBirth" placeholder="Date of birth" />
               {errors.dateOfBirth && touched.dateOfBirth ? <div>{errors.dateOfBirth}</div> : null}
             </InputText>
             <InputText>
-              Country of residence*
-              <Field name="country" placeholder="Country" disabled />
-              {errors.country && touched.country ? <div>{errors.country}</div> : null}
+              Address*
+              <Field name="address" placeholder="Street, City, State" disabled />
+              {errors.address && touched.address ? <div>{errors.address}</div> : null}
             </InputText>
             <InputText>
-              State of residence*
-              <Field name="state" placeholder="State" />
-              {errors.state && touched.state ? <div>{errors.state}</div> : null}
+              Phone Number*
+              <Field name="phoneNumber" placeholder="+386 30 248 965" />
+              {errors.phoneNumber && touched.phoneNumber ? <div>{errors.phoneNumber}</div> : null}
             </InputText>
             <InputText>
               Last 4 SSN digits*
