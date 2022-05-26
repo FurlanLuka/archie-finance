@@ -1,0 +1,31 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@archie-microservices/auth0": ["libs/auth0/src/index.ts"],
+      "@archie-microservices/config": ["libs/config/src/index.ts"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "test",
+    "tmp",
+    "dist",
+    "**/*spec.ts",
+    "**/__data__",
+    "**/__mocks__"
+  ]
+}

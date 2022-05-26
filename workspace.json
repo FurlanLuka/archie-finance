@@ -1,0 +1,9 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "auth0": "libs/auth0",
+    "config": "libs/config",
+    "monolith-api": "apps/monolith-api"
+  }
+}
