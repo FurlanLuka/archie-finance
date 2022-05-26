@@ -14,7 +14,8 @@
     "**/*.spec.ts",
     "**/*.test.ts",
     "**/__data__",
-    "**/__mocks__"
+    "**/__mocks__",
+    "test"
   ],
   "include": [
     "**/*.ts"

@@ -1,0 +1,17 @@
+import { Provider } from '@nestjs/common';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
+
+export const getMockRepositoryProvider = (
+  entity: EntityClassOrSchema,
+): Provider<any> => {
+  return {
+    provide: getRepositoryToken(entity),
+    useValue: {
+      save: jest.fn(),
+      update: jest.fn(),
+      findOne: jest.fn(),
+      findOneOrFail: jest.fn(),
+    },
+  };
+};
