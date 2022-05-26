@@ -5,7 +5,7 @@ export const CollateralCurencyStyled = styled.div`
   align-items: center;
 
   p {
-    line-height: 1.2;
+    line-height: 1.1;
   }
 
   .icon {

@@ -1,6 +1,22 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
-import { InputRangeStyled } from '../../../../../components/_generic/input-range/input-range.styled';
+const load = keyframes`
+  0% {
+    background-position: -500px 0;
+  }
+  100% {
+    background-position: 500px 0;
+  }
+`
+
+const fadeOut = keyframes`
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+`
 
 export const CollateralizationStepStyled = styled.div`
   display: flex;
@@ -94,6 +110,7 @@ export const CollateralizationStepStyled = styled.div`
   }
 
   .result-item {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -105,12 +122,42 @@ export const CollateralizationStepStyled = styled.div`
     }
   }
 
+  .placeholder {
+    position: absolute;
+    top: 1.5rem;
+    display: flex;
+    justify-content: flex-start;
+    background-color: ${({ theme }) => theme.backgroundPrimary};
+    width: 100%;
+
+    &.fade-out {
+      animation: ${fadeOut} 0.4s ease-out 2s forwards;
+    }
+  }
+
   .info {
-    background-color: #F9F9F9;
+    position: relative;
+    background-color: ${({ theme }) => theme.backgroundSecondary};
     border-top: 1px solid ${({ theme }) => theme.borderPrimary};
     border-bottom: 1px solid ${({ theme }) => theme.borderPrimary};
     width: 100%;
+    min-height: 436px;
     padding: 1.5rem 1rem;
+  }
+
+  .overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: ${({ theme }) => theme.backgroundSecondary};
+
+    &.fade-out {
+      background: linear-gradient(to right, #f9f9f9 8%, #ececec 38%, #f9f9f9 54%);
+      background-size: 1000px 500px;
+      animation: ${load} 1s linear infinite forwards, ${fadeOut} 0.4s ease-out 2s forwards;
+    }
   }
 
   .address {
@@ -124,6 +171,7 @@ export const CollateralizationStepStyled = styled.div`
     flex-direction: column;
     align-items: flex-start;
     width: 80%;
+    padding-right: 2rem;
   }
 
   .address-copy {
@@ -133,9 +181,16 @@ export const CollateralizationStepStyled = styled.div`
     background-color: ${({ theme }) => theme.backgroundPrimary};
     border-radius: 0.25rem;
     height: 3rem;
-    width: 70%;
+    width: 100%;
     padding: 1rem;
     margin: 0.5rem 0 1.5rem;
+
+    p {
+      max-width: 92%;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
   }
 
   .btn-copy {

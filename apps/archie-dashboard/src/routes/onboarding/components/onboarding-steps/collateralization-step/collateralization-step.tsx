@@ -4,12 +4,7 @@ import { collateralCurrencies, CollateralCurrency } from '../../../../../constan
 import { step } from '../../../../../constants/onboarding-steps';
 import { CollateralDeposit } from '../../../../../components/collateral-deposit/collateral-deposit';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
-import {
-  SubtitleS,
-  ParagraphM,
-  ParagraphS,
-  ParagraphXS,
-} from '../../../../../components/_generic/typography/typography.styled';
+import { SubtitleS, ParagraphS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
 import { Copy } from '../../../../../components/_generic/icons/copy';
 import { Caret } from '../../../../../components/_generic/icons/caret';
 import { StepsIndicator } from '../../steps-indicator/steps-indicator';
@@ -18,6 +13,7 @@ import { CollateralizationStepStyled } from './collateralization-step.styled';
 import { InputRange } from '../../../../../components/_generic/input-range/input-range';
 import { ExternalLink } from '../../../../../components/_generic/icons/external-link';
 import { CollateralCurency } from '../../../../../components/collateral-curency/collateral-curency';
+import { theme } from '../../../../../constants/theme';
 
 interface CollateralizationStepProps {
   setCurrentStep: (step: step) => void;
@@ -59,7 +55,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
                   short={selectedCollateralDeposit?.short}
                 />
               ) : (
-                'Select your collateral currency'
+                <ParagraphXS>Select your collateral currency</ParagraphXS>
               )}
               <Caret className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
             </div>
@@ -83,14 +79,35 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
             <SubtitleS weight={400}>
               {requiredCollateral} {selectedCollateralDeposit?.short}
             </SubtitleS>
+            <SubtitleS
+              weight={400}
+              color={theme.textDisabled}
+              className={`placeholder ${collateralDeposit.address && 'fade-out'}`}
+            >
+              -/-
+            </SubtitleS>
           </div>
           <div className="result-item">
             <ParagraphXS weight={700}>Loan-to-Value</ParagraphXS>
-            <SubtitleS weight={400}>{selectedCollateralDeposit?.loan_to_value ?? '0%'}</SubtitleS>
+            <SubtitleS weight={400}>{selectedCollateralDeposit?.loan_to_value}</SubtitleS>
+            <SubtitleS
+              weight={400}
+              color={theme.textDisabled}
+              className={`placeholder ${collateralDeposit.address && 'fade-out'}`}
+            >
+              -/-
+            </SubtitleS>
           </div>
           <div className="result-item">
             <ParagraphXS weight={700}>Interest Rate</ParagraphXS>
-            <SubtitleS weight={400}>{selectedCollateralDeposit?.interest_rate ?? '0%'}</SubtitleS>
+            <SubtitleS weight={400}>{selectedCollateralDeposit?.interest_rate}</SubtitleS>
+            <SubtitleS
+              weight={400}
+              color={theme.textDisabled}
+              className={`placeholder ${collateralDeposit.address && 'fade-out'}`}
+            >
+              -/-
+            </SubtitleS>
           </div>
         </div>
 
@@ -152,6 +169,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
               </li>
             </ul>
           </div>
+          <div className={`overlay ${collateralDeposit.address && 'fade-out'}`} />
         </div>
       </CollateralizationStepStyled>
     </Container>
