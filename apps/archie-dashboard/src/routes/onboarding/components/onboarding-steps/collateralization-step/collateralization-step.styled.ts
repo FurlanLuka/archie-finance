@@ -18,6 +18,15 @@ const fadeOut = keyframes`
   }
 `
 
+const hide = keyframes`
+  0% {
+    visibility: visible;
+  }
+  100% {
+    visibility: hidden;
+  }
+`
+
 export const CollateralizationStepStyled = styled.div`
   display: flex;
   flex-direction: column;
@@ -156,7 +165,7 @@ export const CollateralizationStepStyled = styled.div`
     &.fade-out {
       background: linear-gradient(to right, #f9f9f9 8%, #ececec 38%, #f9f9f9 54%);
       background-size: 1000px 500px;
-      animation: ${load} 1s linear infinite forwards, ${fadeOut} 0.4s ease-out 2s forwards;
+      animation: ${load} 1s linear infinite forwards, ${fadeOut} 0.4s ease-out 2s forwards, ${hide} 0s linear 2s forwards;
     }
   }
 
