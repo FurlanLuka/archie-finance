@@ -69,7 +69,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
       .max(today, 'Date cannot be in the future')
       .required('Please enter your date of birth'),
     address: Yup.string().required('Please enter your address'),
-    // phoneNumber: Yup.string().required('Please enter your phone number'),
+    phoneNumber: Yup.string().required('Please enter your phone number'),
     // phoneNumberCountryCode: Yup.string().required('Please enter the required field'),
     ssnDigits: Yup.string()
       .matches(/^[0-9]+$/, 'Only digits')
@@ -77,7 +77,6 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
       .required('Please enter your SSN/TIN'),
   });
 
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneNumberCountryCode, setPhoneNumberCountryCode] = useState<Country>('US');
 
   const handleSubmit = (values: FormikValues) => {
@@ -86,7 +85,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
       lastname: values.lastName,
       dateOfBirth: values.dateOfBirth,
       address: values.address,
-      phoneNumber,
+      phoneNumber: values.phoneNumber,
       phoneNumberCountryCode,
       ssnDigits: values.ssnDigits,
     };
@@ -114,7 +113,6 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
           dateOfBirth: format(today, 'MM-dd-yyyy'),
           address: '',
           phoneNumber: '',
-          phoneNumberCountryCode: '',
           ssnDigits: '',
         }}
         validationSchema={validation}
@@ -126,20 +124,20 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
               <InputText>
                 First Name*
                 <Field name="firstName" placeholder="John" />
-                {errors.firstName && touched.firstName ? (
+                {errors.firstName && touched.firstName && (
                   <ParagraphXS className="error" color={theme.textDanger}>
                     {errors.firstName}
                   </ParagraphXS>
-                ) : null}
+                )}
               </InputText>
               <InputText>
                 Last Name*
                 <Field name="lastName" placeholder="Doe" />
-                {errors.lastName && touched.lastName ? (
+                {errors.lastName && touched.lastName && (
                   <ParagraphXS className="error" color={theme.textDanger}>
                     {errors.lastName}
                   </ParagraphXS>
-                ) : null}
+                )}
               </InputText>
             </div>
             <InputText>
@@ -161,11 +159,15 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
                 options={{ types: ['address'] }}
               />
               {/* <Field name="address" placeholder="Street, City, State" />
-              {errors.address && touched.address ? <ParagraphXS className="error" color={theme.textDanger}>{errors.address}</ParagraphXS> : null} */}
+              {errors.address && touched.address && (
+                <ParagraphXS className="error" color={theme.textDanger}>
+                  {errors.address}
+                </ParagraphXS>
+              )} */}
             </InputText>
             <InputText>
               Phone Number*
-              <PhoneInput
+              {/* <PhoneInput
                 defaultCountry={phoneNumberCountryCode}
                 addInternationalOption={false}
                 countryCallingCodeEditable={false}
@@ -174,18 +176,22 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
                 value={phoneNumber}
                 onChange={(value) => setPhoneNumber(value as string)}
                 onCountryChange={(country: Country) => setPhoneNumberCountryCode(country)}
-              />
-              {/* <Field name="phoneNumber" component={PhoneInputField} />
-              {errors.phoneNumber && touched.phoneNumber ? <ParagraphXS className="error" color={theme.textDanger}>{errors.phoneNumber}</ParagraphXS> : null} */}
+              /> */}
+              <Field name="phoneNumber" component={PhoneInputField} />
+              {errors.phoneNumber && touched.phoneNumber && (
+                <ParagraphXS className="error" color={theme.textDanger}>
+                  {errors.phoneNumber}
+                </ParagraphXS>
+              )}
             </InputText>
             <InputText>
               SSN/TIN*
               <Field name="ssnDigits" placeholder="XXX-XX-XXXX" />
-              {errors.ssnDigits && touched.ssnDigits ? (
+              {errors.ssnDigits && touched.ssnDigits && (
                 <ParagraphXS className="error" color={theme.textDanger}>
                   {errors.ssnDigits}
                 </ParagraphXS>
-              ) : null}
+              )}
             </InputText>
             <hr className="divider" />
             <ButtonPrimary type="submit">

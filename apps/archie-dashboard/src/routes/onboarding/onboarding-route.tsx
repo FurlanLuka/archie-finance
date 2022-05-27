@@ -14,7 +14,7 @@ import Header from '../../components/_generic/header/header';
 export const OnboardingRoute: React.FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
 
-  const [currentStep, setCurrentStep] = useState(step.COLLATERALIZE);
+  const [currentStep, setCurrentStep] = useState(step.KYC);
 
   const getCurrentStep = (state: step) => {
     switch (state) {
