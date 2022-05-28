@@ -21,8 +21,8 @@ jobs:
         run: npm ci
       - name: Workspace lint
         run: npx nx workspace-lint
-      - name: Format check
-        run: npx nx format:check
+      # - name: Format check
+      #   run: npx nx format:check
       - name: Affected lint
         run: npx nx affected --target=lint --parallel=3
       - name: Affected test
