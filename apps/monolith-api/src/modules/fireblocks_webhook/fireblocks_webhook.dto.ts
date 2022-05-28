@@ -11,5 +11,6 @@ export class FireblocksWebhookDto {
   @IsNumber()
   timestamp: number;
 
+  // eslint-disable-next-line
   data: any;
 }

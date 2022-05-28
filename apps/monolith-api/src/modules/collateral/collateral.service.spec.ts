@@ -45,6 +45,7 @@ describe('CollateralService', () => {
 
     when(connection.createQueryRunner)
       .calledWith()
+      // eslint-disable-next-line
       .mockReturnValue(queryRunnerMock as any);
   });
 

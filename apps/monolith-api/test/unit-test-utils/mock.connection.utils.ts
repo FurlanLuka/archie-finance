@@ -1,6 +1,7 @@
 import { Provider } from '@nestjs/common';
 import { getConnectionToken } from '@nestjs/typeorm';
 
+// eslint-disable-next-line
 export const getMockConnectionProvider = (): Provider<any> => {
   return {
     provide: getConnectionToken(),

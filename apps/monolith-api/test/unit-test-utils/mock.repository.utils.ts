@@ -4,6 +4,7 @@ import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-clas
 
 export const getMockRepositoryProvider = (
   entity: EntityClassOrSchema,
+// eslint-disable-next-line
 ): Provider<any> => {
   return {
     provide: getRepositoryToken(entity),

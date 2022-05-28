@@ -17,6 +17,7 @@ export class VaultService {
 
   private async authenticateVault(): Promise<string> {
     try {
+      // eslint-disable-next-line
       const tokenData: AxiosResponse<any> = await axios.post(
         `${this.configService.get(
           ConfigVariables.VAULT_PRIVATE_ADDRESS,

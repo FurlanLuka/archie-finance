@@ -8,6 +8,7 @@ export class FireblocksWebhookController {
 
   @Post('')
   @UseGuards(FireblocksWebhookGuard)
+  // eslint-disable-next-line
   public webhook(@Body() body: any) {
     return this.fireblocksWebhookService.webhookHandler(body);
   }

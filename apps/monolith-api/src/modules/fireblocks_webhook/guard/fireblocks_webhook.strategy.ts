@@ -4,7 +4,7 @@ import { Strategy } from 'passport-custom';
 import { ConfigService } from '@archie-microservices/config';
 import * as crypto from 'crypto';
 import { base64decode } from 'nodejs-base64';
-import { ConfigVariables } from 'apps/monolith-api/src/interfaces';
+import { ConfigVariables } from '../../../interfaces';
 
 @Injectable()
 export class FireblocksWebhookStrategy extends PassportStrategy(

@@ -1,6 +1,7 @@
 import { ConfigService } from '@archie-microservices/config';
 import { Provider } from '@nestjs/common';
 
+// eslint-disable-next-line
 export const getMockConfigServiceProvider = (): Provider<any> => {
   return {
     provide: ConfigService,
