@@ -85,6 +85,12 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
+    - name: Test
+      env:
+        CHART: ./charts/${{ steps.git_details.outputs.APP_NAME }}
+      run: |
+        cd $CHART
+        ls 
     - name: Deploy
       uses: koslib/helm-eks-action@master
       env:
