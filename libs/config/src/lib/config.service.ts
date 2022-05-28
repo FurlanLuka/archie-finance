@@ -13,7 +13,6 @@ export class ConfigService {
         throw new Error(`INVALID_CONFIG_${variableName}_MISSING`);
       }
     });
-    
   }
 
   public get<T = any>(configVariable: string): T {
