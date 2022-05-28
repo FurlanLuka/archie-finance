@@ -19,41 +19,6 @@ interface KycStepProps {
   setCurrentStep: (step: step) => void;
 }
 
-interface PhoneInputFieldProps {
-  field: {
-    name: string;
-    value: string;
-    onChange: (value: string) => void;
-  };
-  form: {
-    setFieldValue: (name: string, phoneNumber: string) => void;
-  };
-  onChange: (phoneNumber: string) => void;
-}
-
-const PhoneInputField: FC<PhoneInputFieldProps> = ({ field: { name, value, onChange }, form: { setFieldValue } }) => {
-  const onValueChange = (phoneNumber: string) => {
-    setFieldValue(name, phoneNumber);
-
-    if (onChange) {
-      onChange(phoneNumber);
-    }
-  };
-
-  return (
-    <PhoneInput
-      defaultCountry="US"
-      addInternationalOption={false}
-      countryCallingCodeEditable={false}
-      placeholder="Enter phone number"
-      name={name}
-      value={value}
-      onChange={onValueChange}
-      onCountryChange={(country) => console.log(country)}
-    />
-  );
-};
-
 export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const mutationRequest = useCreateKyc();
 
@@ -68,34 +33,56 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
       .test('dob', 'Should be older than 18', (value) => minYears(value ?? today))
       .max(today, 'Date cannot be in the future')
       .required('Please enter your date of birth'),
-    address: Yup.string().required('Please enter your address'),
-    phoneNumber: Yup.string().required('Please enter your phone number'),
-    // phoneNumberCountryCode: Yup.string().required('Please enter the required field'),
     ssnDigits: Yup.string()
       .matches(/^[0-9]+$/, 'Only digits')
       .test('len', 'Must be exactly 9 digits', (value) => value?.length === 9)
       .required('Please enter your SSN/TIN'),
   });
 
+  const [address, setAddress] = useState('');
+  const [addressError, setAddressError] = useState('');
+
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneNumberError, setPhoneNumberError] = useState('');
   const [phoneNumberCountryCode, setPhoneNumberCountryCode] = useState<Country>('US');
 
+  const validate = () => {
+    if (!address) {
+      setAddressError('Please enter your address');
+    } else {
+      setAddressError('');
+    }
+
+    if (!phoneNumber) {
+      setPhoneNumberError('Please enter your phone number');
+    } else {
+      setPhoneNumberError('');
+    }
+  };
+
+  const hasLength = (value: string) => value.length > 0;
+
   const handleSubmit = (values: FormikValues) => {
+    validate();
+
     const payload = {
       firstName: values.firstName,
       lastname: values.lastName,
       dateOfBirth: values.dateOfBirth,
-      address: values.address,
-      phoneNumber: values.phoneNumber,
+      address,
+      phoneNumber,
       phoneNumberCountryCode,
       ssnDigits: values.ssnDigits,
     };
 
-    if (mutationRequest.state === RequestState.IDLE) {
-      // mutationRequest.mutate({ payload });
+    if (hasLength(address) && hasLength(phoneNumber)) {
+      if (mutationRequest.state === RequestState.IDLE) {
+        // mutationRequest.mutate({ payload });
 
-      console.log(payload);
+        console.log(payload);
 
-      setCurrentStep(step.COLLATERALIZE);
+        // setCurrentStep(step.COLLATERALIZE);
+      }
     }
   };
 
@@ -153,21 +140,18 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
               Address*
               <Autocomplete
                 apiKey="AIzaSyA-k_VEX0soa2kljYKTjtFUg4irF3hKZwQ"
-                onPlaceSelected={(place) => {
-                  console.log(place);
-                }}
+                onPlaceSelected={(place) => setAddress(place.formatted_address)}
                 options={{ types: ['address'] }}
               />
-              {/* <Field name="address" placeholder="Street, City, State" />
-              {errors.address && touched.address && (
+              {addressError && (
                 <ParagraphXS className="error" color={theme.textDanger}>
-                  {errors.address}
+                  {addressError}
                 </ParagraphXS>
-              )} */}
+              )}
             </InputText>
             <InputText>
               Phone Number*
-              {/* <PhoneInput
+              <PhoneInput
                 defaultCountry={phoneNumberCountryCode}
                 addInternationalOption={false}
                 countryCallingCodeEditable={false}
@@ -176,11 +160,10 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
                 value={phoneNumber}
                 onChange={(value) => setPhoneNumber(value as string)}
                 onCountryChange={(country: Country) => setPhoneNumberCountryCode(country)}
-              /> */}
-              <Field name="phoneNumber" component={PhoneInputField} />
-              {errors.phoneNumber && touched.phoneNumber && (
+              />
+              {phoneNumberError && (
                 <ParagraphXS className="error" color={theme.textDanger}>
-                  {errors.phoneNumber}
+                  {phoneNumberError}
                 </ParagraphXS>
               )}
             </InputText>
