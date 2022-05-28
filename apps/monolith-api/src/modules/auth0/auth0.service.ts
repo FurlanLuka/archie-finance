@@ -16,6 +16,7 @@ export class Auth0Service {
       ),
       scope: 'read:users update:users',
     });
+    
   }
 
   getManagmentClient(): ManagementClient {
