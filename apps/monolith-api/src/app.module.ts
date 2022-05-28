@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HealthModule } from './modules/health/health.module';
 import { KycModule } from './modules/kyc/kyc.module';
 import { UserModule } from './modules/user/user.module';
 import { EmailWaitlistModule } from './modules/email_waitlist/email_waitlist.module';
@@ -11,6 +10,7 @@ import { FireblocksWebhookModule } from './modules/fireblocks_webhook/fireblocks
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from './interfaces';
 import { AuthModule } from '@archie-microservices/auth0';
+import { HealthModule } from '@archie-microservices/health';
 
 @Module({
   imports: [

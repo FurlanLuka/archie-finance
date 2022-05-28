@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@archie-microservices/auth0": ["libs/auth0/src/index.ts"],
-      "@archie-microservices/config": ["libs/config/src/index.ts"]
+      "@archie-microservices/config": ["libs/config/src/index.ts"],
+      "@archie-microservices/health": ["libs/health/src/index.ts"]
     }
   },
   "exclude": [

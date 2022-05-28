@@ -2,8 +2,10 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "asset-price-api": "apps/asset-price-api",
     "auth0": "libs/auth0",
     "config": "libs/config",
+    "health": "libs/health",
     "monolith-api": "apps/monolith-api"
   }
 }
