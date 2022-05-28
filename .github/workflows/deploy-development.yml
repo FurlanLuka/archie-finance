@@ -91,6 +91,6 @@ jobs:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ needs.publish.outputs.image_tag }}
-        APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
+        CHART: ./charts/${{ steps.git_details.outputs.APP_NAME }}
       with:
-        command: helm upgrade --install archie-backend charts/$APP_NAME --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment="development"
+        command: helm upgrade --install archie-backend $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment="development"
