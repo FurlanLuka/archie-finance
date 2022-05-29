@@ -28,21 +28,21 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: user-api-service
+                name: archie-user-api-service
                 port:
                   number: 80
           - path: /v1/kyc
             pathType: Prefix
             backend:
               service:
-                name: user-api-service
+                name: archie-user-api-service
                 port:
                   number: 80
           - path: /v1/user
             pathType: Prefix
             backend:
               service:
-                name: user-api-service
+                name: archie-user-api-service
                 port:
                   number: 80
           ## Collateral api service
@@ -50,20 +50,20 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: collateral-api-service
+                name: archie-collateral-api-service
                 port:
                   number: 80
           - path: /v1/deposit_address
             pathType: Prefix
             backend:
               service:
-                name: collateral-api-service
+                name: archie-collateral-api-service
                 port:
                   number: 80
           - path: /v1/fireblocks/webhook
             pathType: Prefix
             backend:
               service:
-                name: collateral-api-service
+                name: archie-collateral-api-service
                 port:
                   number: 80
