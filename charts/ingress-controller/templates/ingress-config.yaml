@@ -19,7 +19,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: asset-price-api-service
+                name: archie-asset-price-api-service
                 port:
                   number: 80
           - path: /health
