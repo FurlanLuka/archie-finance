@@ -6,6 +6,8 @@
     "start": "nx serve",
     "build": "nx build",
     "build:asset-price-api": "nx run asset-price-api:build",
+    "build:collateral-api": "nx run collateral-api:build",
+    "build:user-api": "nx run user-api:build",
     "test": "nx test"
   },
   "private": true,
