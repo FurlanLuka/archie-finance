@@ -107,5 +107,6 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ needs.publish.outputs.image_tag }}
         CHART: ./charts/${{ steps.git_details.outputs.APP_NAME }}
+        APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
       with:
-        command: helm upgrade --install archie-backend $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment="development"
+        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment="development"
