@@ -25,7 +25,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const today = new Date();
   const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) >= 18;
 
-  const validation = Yup.object().shape({
+  const validationSchema = Yup.object().shape({
     firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter your first name'),
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter your last name'),
     dateOfBirth: Yup.date()
@@ -63,8 +63,6 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const hasLength = (value: string) => value.length > 0;
 
   const handleSubmit = (values: FormikValues) => {
-    validate();
-
     const payload = {
       firstName: values.firstName,
       lastname: values.lastName,
@@ -98,12 +96,13 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
           firstName: '',
           lastName: '',
           dateOfBirth: format(today, 'MM-dd-yyyy'),
-          address: '',
-          phoneNumber: '',
           ssnDigits: '',
         }}
-        validationSchema={validation}
+        validationSchema={validationSchema}
         onSubmit={(values) => handleSubmit(values)}
+        validate={validate}
+        validateOnBlur={false}
+        validateOnChange={false}
       >
         {({ errors, touched }) => (
           <Form>
