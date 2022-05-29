@@ -17,7 +17,11 @@
     "paths": {
       "@archie-microservices/auth0": ["libs/auth0/src/index.ts"],
       "@archie-microservices/config": ["libs/config/src/index.ts"],
-      "@archie-microservices/health": ["libs/health/src/index.ts"]
+      "@archie-microservices/health": ["libs/health/src/index.ts"],
+      "@archie-microservices/vault": ["libs/vault/src/index.ts"],
+      "@archie-microservices/vault/__mocks__/*": [
+        "libs/vault/src/lib/__mocks__/*"
+      ]
     }
   },
   "exclude": [

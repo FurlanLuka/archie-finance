@@ -1,19 +1,3 @@
-export enum AssetType {
-  ERC20 = 'ERC20',
-  SOL = 'SOL',
-  BTC = 'BTC',
-}
-
-export interface AssetList {
-  [key: string]: AssetInformation;
-}
-
-export interface AssetInformation {
-  fireblocks_id: string;
-  coinapi_id: string;
-  network: AssetType;
-}
-
 export enum ConfigVariables {
   AUTH0_DOMAIN = 'AUTH0_DOMAIN',
   AUTH0_AUDIENCE = 'AUTH0_AUDIENCE',

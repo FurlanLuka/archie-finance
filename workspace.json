@@ -4,8 +4,10 @@
   "projects": {
     "asset-price-api": "apps/asset-price-api",
     "auth0": "libs/auth0",
+    "collateral-api": "apps/collateral-api",
     "config": "libs/config",
     "health": "libs/health",
-    "monolith-api": "apps/monolith-api"
+    "monolith-api": "apps/monolith-api",
+    "vault": "libs/vault"
   }
 }

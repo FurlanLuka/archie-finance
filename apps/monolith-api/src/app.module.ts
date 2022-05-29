@@ -3,20 +3,16 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { KycModule } from './modules/kyc/kyc.module';
 import { UserModule } from './modules/user/user.module';
 import { EmailWaitlistModule } from './modules/email_waitlist/email_waitlist.module';
-import { DepositAddressModule } from './modules/deposit_address/deposit_address.module';
-import { UserVaultAccountModule } from './modules/user_vault_account/user_vault_account.module';
-import { OmnibusVaultAccountModule } from './modules/omnibus_vault_account/omnibus_vault_account.module';
-import { FireblocksWebhookModule } from './modules/fireblocks_webhook/fireblocks_webhook.module';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from './interfaces';
 import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
+import { VaultModule } from '@archie-microservices/vault';
 
 @Module({
   imports: [
     ConfigModule.register({
       requiredEnvironmentVariables: [
-        ConfigVariables.ASSET_LIST,
         ConfigVariables.AUTH0_AUDIENCE,
         ConfigVariables.AUTH0_DOMAIN,
         ConfigVariables.AUTH0_M2M_DOMAIN,
@@ -28,23 +24,12 @@ import { HealthModule } from '@archie-microservices/health';
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.SENDGRID_API_KEY,
         ConfigVariables.SENDGRID_MAILING_LIST_ID,
-        ConfigVariables.FIREBLOCKS_VAULT_ACCOUNT_ID,
-        ConfigVariables.ASSET_LIST,
-        ConfigVariables.FIREBLOCKS_API_KEY,
-        ConfigVariables.FIREBLOCKS_PRIVATE_KEY,
-        ConfigVariables.FIREBLOCKS_PUBLIC_KEY,
         ConfigVariables.VAULT_PRIVATE_ADDRESS,
         ConfigVariables.VAULT_USERNAME,
         ConfigVariables.VAULT_PASSWORD,
         ConfigVariables.VAULT_NAMESPACE,
       ],
-      parse: (configVariable, value) => {
-        if (configVariable === ConfigVariables.ASSET_LIST) {
-          return JSON.parse(value);
-        }
-
-        return value;
-      },
+      parse: (_configVariable, value) => value,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -69,14 +54,22 @@ import { HealthModule } from '@archie-microservices/health';
       }),
       inject: [ConfigService],
     }),
+    VaultModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        VAULT_NAMESPACE: configService.get(ConfigVariables.VAULT_NAMESPACE),
+        VAULT_USERNAME: configService.get(ConfigVariables.VAULT_USERNAME),
+        VAULT_PASSWORD: configService.get(ConfigVariables.VAULT_PASSWORD),
+        VAULT_PRIVATE_ADDRESS: configService.get(
+          ConfigVariables.VAULT_PRIVATE_ADDRESS,
+        ),
+      }),
+      inject: [ConfigService],
+    }),
     KycModule,
     HealthModule,
     UserModule,
     EmailWaitlistModule,
-    DepositAddressModule,
-    UserVaultAccountModule,
-    OmnibusVaultAccountModule,
-    FireblocksWebhookModule,
   ],
   controllers: [],
   providers: [],
