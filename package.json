@@ -5,6 +5,7 @@
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
+    "build:asset-price-api": "nx run asset-price-api:build",
     "test": "nx test"
   },
   "private": true,

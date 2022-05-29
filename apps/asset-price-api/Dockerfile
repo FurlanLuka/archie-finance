@@ -6,7 +6,7 @@ ARG application
 COPY . /service
 
 RUN npm i
-RUN npm run build
+RUN npm run build:asset-price-api
 RUN npm prune --production
 RUN ls
 
