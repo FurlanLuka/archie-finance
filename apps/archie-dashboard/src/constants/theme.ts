@@ -7,6 +7,7 @@ export const colors: { [color: string]: string } = {
   coral_200: "#fbdcd9",
   alabaster: "#d8e2dc",
   teal: "#70d1df",
+  teal_800: "#24464b",
   neutralgray: "#9fa3a4",
   neutralgray_200: "#dbdcdd",
   neutralgray_100: "#f9f9f9",
@@ -42,4 +43,6 @@ export const theme: { [key: string]: string } = {
   // border
   borderPrimary: colors.alabaster,
   borderHighlight: colors.coral,
+  // loader
+  loaderBackground: colors.teal_800,
 };
