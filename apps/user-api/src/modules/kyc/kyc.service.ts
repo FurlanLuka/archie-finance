@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, QueryRunner, Repository } from 'typeorm';
-import { InternalApiService } from '../../../../../libs/internal-api/src';
+import { InternalApiService } from '@archie-microservices/internal-api';
 import { Kyc } from './kyc.entity';
 import { CreateKycResponse, GetKycResponse } from './kyc.interfaces';
 

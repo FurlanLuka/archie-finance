@@ -2,11 +2,11 @@ import { VaultModule } from '@archie-microservices/vault';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { InternalApiModule } from '../../../../../libs/internal-api/src';
 import { ConfigVariables } from '../../interfaces';
 import { KycController } from './kyc.controller';
 import { Kyc } from './kyc.entity';
 import { KycService } from './kyc.service';
+import { InternalApiModule } from '@archie-microservices/internal-api';
 
 @Module({
   imports: [
