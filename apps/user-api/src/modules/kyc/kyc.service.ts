@@ -116,7 +116,7 @@ export class KycService {
         ssn: encryptedData[6],
       });
 
-      await this.internalApiService.completeOnboardingStage(userId, 'kycStage');
+      await this.internalApiService.completeOnboardingStage('kycStage', userId);
 
       await queryRunner.commitTransaction();
     } catch (error) {
