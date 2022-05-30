@@ -10,6 +10,7 @@ import { Collateral } from './collateral.entity';
 import { CollateralDeposit } from './collateral_deposit.entity';
 import {
   GetCollateralValueResponse,
+  GetTotalCollateralValueResponse,
   GetUserCollateral,
 } from '@archie-microservices/api-interfaces/collateral';
 import {
@@ -155,10 +156,14 @@ export class CollateralService {
     });
   }
 
-  public async getUserTotalCollateralValue(userId: string): Promise<number> {
+  public async getUserTotalCollateralValue(
+    userId: string,
+  ): Promise<GetTotalCollateralValueResponse> {
     const userCollateralValue: GetCollateralValueResponse =
       await this.getUserCollateralValue(userId);
 
-    return userCollateralValue.reduce((sum, value) => sum + value.price, 0);
+    return {
+      value: userCollateralValue.reduce((sum, value) => sum + value.price, 0),
+    };
   }
 }

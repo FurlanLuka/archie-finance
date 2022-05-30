@@ -6,6 +6,10 @@ export interface CollateralValue {
 
 export type GetCollateralValueResponse = CollateralValue[];
 
+export type GetTotalCollateralValueResponse = {
+  value: number;
+};
+
 export interface Collateral {
   asset: string;
   amount: number;
