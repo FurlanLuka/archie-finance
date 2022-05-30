@@ -43,7 +43,7 @@ export class OnboardingService {
 
   async completeOnboardingStage(
     userId: string,
-    stage: OnboardingStage,
+    stage: string,
   ): Promise<Onboarding> {
     const onboardingRecord: Onboarding | undefined =
       await this.onboardingRepository.findOne({
@@ -62,7 +62,6 @@ export class OnboardingService {
     const isFinalOnboardingStep: boolean =
       updatedOnboardingRecord.cardActivationStage &&
       updatedOnboardingRecord.collateralizationStage &&
-      updatedOnboardingRecord.emailVerificationStage &&
       updatedOnboardingRecord.kycStage;
 
     await this.onboardingRepository.update(
