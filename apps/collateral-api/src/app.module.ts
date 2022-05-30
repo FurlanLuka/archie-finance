@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from './interfaces';
 import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
+import { CollateralModule } from './modules/collateral/collateral.module';
 
 @Module({
   imports: [
@@ -61,6 +62,7 @@ import { HealthModule } from '@archie-microservices/health';
     UserVaultAccountModule,
     OmnibusVaultAccountModule,
     FireblocksWebhookModule,
+    CollateralModule,
   ],
   controllers: [],
   providers: [],
