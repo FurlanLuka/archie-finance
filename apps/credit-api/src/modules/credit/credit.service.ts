@@ -43,16 +43,25 @@ export class CreditService {
       ConfigVariables.ASSET_LIST,
     );
 
+    Logger.log(assetList);
+
     let totalCollateralValue: number = collateralValue.reduce(
       (sum: number, value: CollateralValue) => {
+        Logger.log(sum);
+        Logger.log(value);
+
         if (assetList[value.asset] === undefined) {
           return sum;
         }
 
         const assetInformation: AssetInformation = assetList[value.asset];
 
+        Logger.log(assetInformation);
+
         const actualCollateralValue: number =
           (value.price / 100) * assetInformation.ltv;
+
+        Logger.log(actualCollateralValue);
 
         return sum + actualCollateralValue;
       },
