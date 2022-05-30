@@ -8,6 +8,7 @@
     "build:asset-price-api": "nx run asset-price-api:build",
     "build:collateral-api": "nx run collateral-api:build",
     "build:user-api": "nx run user-api:build",
+    "build:onboarding-api": "nx run onboarding-api:build",
     "test": "nx test"
   },
   "private": true,

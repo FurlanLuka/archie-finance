@@ -12,7 +12,7 @@ metadata:
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:108827241267:certificate/25948e51-ba06-4736-9396-d591481e72f7
 spec:
   rules:
-    - host: "api.dev.archie.finance"
+    - host: 'api.dev.archie.finance'
       http:
         paths:
           ## Asset price api service
@@ -65,5 +65,13 @@ spec:
             backend:
               service:
                 name: archie-collateral-api-service
+                port:
+                  number: 80
+          ## Onboarding api service
+          - path: /v1/onboarding
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-onboarding-api-service
                 port:
                   number: 80
