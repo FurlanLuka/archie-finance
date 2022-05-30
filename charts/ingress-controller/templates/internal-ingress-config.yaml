@@ -9,7 +9,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internal
 spec:
   rules:
-    http:
+    - http:
       paths:
         ## Onboarding api service
         - path: /internal/onboarding
