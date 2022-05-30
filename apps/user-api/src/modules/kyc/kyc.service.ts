@@ -105,7 +105,7 @@ export class KycService {
     await queryRunner.startTransaction();
 
     try {
-      await this.kycRepository.save({
+      await queryRunner.manager.save(Kyc, {
         userId,
         firstName: encryptedData[0],
         lastName: encryptedData[1],
