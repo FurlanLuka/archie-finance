@@ -3,8 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from './interfaces';
-import { AuthModule, AuthGuard } from '@archie-microservices/auth0';
+import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
+import { OnboardingModule } from './modules/onboarding/onboarding.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { HealthModule } from '@archie-microservices/health';
       inject: [ConfigService],
     }),
     HealthModule,
+    OnboardingModule,
   ],
   controllers: [],
   providers: [],

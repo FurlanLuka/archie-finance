@@ -7,6 +7,7 @@
     "collateral-api": "apps/collateral-api",
     "config": "libs/config",
     "health": "libs/health",
+    "internal-api": "libs/internal-api",
     "onboarding-api": "apps/onboarding-api",
     "user-api": "apps/user-api",
     "vault": "libs/vault"
