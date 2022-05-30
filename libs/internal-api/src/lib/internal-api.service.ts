@@ -1,5 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
-import axios from 'axios';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import axios, { AxiosError } from 'axios';
 import { InternalApiConfig } from './internal-api.interfaces';
 
 @Injectable()
@@ -12,17 +12,22 @@ export class InternalApiService {
     onboardingStage: string,
     userId: string,
   ): Promise<void> {
-    await axios.post(
-      `${this.config.internalApiUrl}/internal/onboarding/complete`,
-      {
-        userId,
-        stage: onboardingStage,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
+    try {
+      await axios.post(
+        `${this.config.internalApiUrl}/internal/onboarding/complete`,
+        {
+          userId,
+          stage: onboardingStage,
         },
-      },
-    );
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+    } catch (error) {
+      Logger.error(JSON.stringify(error));
+      Logger.error((error as AxiosError).toJSON());
+    }
   }
 }
