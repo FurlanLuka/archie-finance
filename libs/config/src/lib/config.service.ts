@@ -15,6 +15,7 @@ export class ConfigService {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public get<T = any>(configVariable: string): T {
     const value = this.configService.get(configVariable);
 

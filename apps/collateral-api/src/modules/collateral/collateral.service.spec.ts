@@ -13,15 +13,13 @@ import { CollateralService } from './collateral.service';
 import { CollateralDeposit } from './collateral_deposit.entity';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { InternalServerErrorException } from '@nestjs/common';
-import { InternalApiService } from '../../../../../libs/internal-api/src';
+import { InternalApiService } from '@archie-microservices/internal-api';
 
 describe('CollateralService', () => {
   let service: CollateralService;
 
   let collateralRepository: Repository<Collateral>;
   let collateralDepositRepository: Repository<CollateralDeposit>;
-
-  let internalApiService: InternalApiService;
 
   let connection: Connection;
 
@@ -47,8 +45,6 @@ describe('CollateralService', () => {
     collateralDepositRepository = module.get(
       getRepositoryToken(CollateralDeposit),
     );
-
-    internalApiService = module.get(InternalApiService);
 
     connection = module.get(getConnectionToken());
 

@@ -27,6 +27,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'auth0-auth') {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   validate(payload: any, done: VerifiedCallback) {
     Logger.log(this.authOptions)
     if (!payload) {

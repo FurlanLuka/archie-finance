@@ -22,7 +22,10 @@ export interface VaultConfig {
 }
 
 export interface VaultOptions {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   imports: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   inject: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   useFactory: (...args: any[]) => VaultConfig;
 }
