@@ -19,7 +19,13 @@ import { CreditModule } from './modules/credit/credit.module';
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.INTERNAL_API_URL,
       ],
-      parse: (_configVariable, value) => value,
+      parse: (configVariable, value) => {
+        if (configVariable === ConfigVariables.ASSET_LIST) {
+          return JSON.parse(value);
+        }
+
+        return value;
+      },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
