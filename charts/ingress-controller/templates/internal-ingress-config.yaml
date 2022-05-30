@@ -1,0 +1,21 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: default
+  name: archie-development-internal-ingress
+  annotations:
+    alb.ingress.kubernetes.io/group.name: archie-development
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internal
+spec:
+  rules:
+  - http:
+      paths:
+        ## Onboarding api service
+        - path: /internal/onboarding
+          pathType: Prefix
+          backend:
+            service:
+              name: archie-onboarding-api-service
+              port:
+                number: 80

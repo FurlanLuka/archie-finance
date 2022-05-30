@@ -22,7 +22,7 @@ export class VaultService {
     try {
       // eslint-disable-next-line
       const tokenData: AxiosResponse<any> = await axios.post(
-        `${this.vaultConfig.VAULT_PRIVATE_ADDRESS}/v1/auth/userpass/login/${this.vaultConfig.VAULT_USERNAME}}`,
+        `${this.vaultConfig.VAULT_PRIVATE_ADDRESS}/v1/auth/userpass/login/${this.vaultConfig.VAULT_USERNAME}`,
         {
           password: this.vaultConfig.VAULT_PASSWORD,
         },

@@ -1,19 +1,3 @@
-export enum AssetType {
-  ERC20 = 'ERC20',
-  SOL = 'SOL',
-  BTC = 'BTC',
-}
-
-export interface AssetList {
-  [key: string]: AssetInformation;
-}
-
-export interface AssetInformation {
-  fireblocks_id: string;
-  coinapi_id: string;
-  network: AssetType;
-}
-
 export enum ConfigVariables {
   AUTH0_DOMAIN = 'AUTH0_DOMAIN',
   AUTH0_AUDIENCE = 'AUTH0_AUDIENCE',
@@ -27,13 +11,9 @@ export enum ConfigVariables {
   TYPEORM_PORT = 'TYPEORM_PORT',
   SENDGRID_API_KEY = 'SENDGRID_API_KEY',
   SENDGRID_MAILING_LIST_ID = 'SENDGRID_MAILING_LIST_ID',
-  FIREBLOCKS_VAULT_ACCOUNT_ID = 'FIREBLOCKS_VAULT_ACCOUNT_ID',
-  ASSET_LIST = 'ASSET_LIST',
-  FIREBLOCKS_API_KEY = 'FIREBLOCKS_API_KEY',
-  FIREBLOCKS_PRIVATE_KEY = 'FIREBLOCKS_PRIVATE_KEY',
-  FIREBLOCKS_PUBLIC_KEY = 'FIREBLOCKS_PUBLIC_KEY',
   VAULT_PRIVATE_ADDRESS = 'VAULT_PRIVATE_ADDRESS',
   VAULT_USERNAME = 'VAULT_USERNAME',
   VAULT_PASSWORD = 'VAULT_PASSWORD',
   VAULT_NAMESPACE = 'VAULT_NAMESPACE',
+  INTERNAL_API_URL = 'INTERNAL_API_URL',
 }
