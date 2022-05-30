@@ -16,7 +16,7 @@ export class InternalApiService {
       `${this.config.internalApiUrl}/internal/onboarding/complete`,
       {
         userId,
-        onboardingStage,
+        stage: onboardingStage,
       },
     );
   }
