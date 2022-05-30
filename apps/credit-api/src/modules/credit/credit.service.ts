@@ -33,7 +33,10 @@ export class CreditService {
     });
 
     if (creditRecord) {
-      return;
+      return {
+        totalCredit: creditRecord.totalCredit,
+        availableCredit: creditRecord.availableCredit,
+      };
     }
 
     const collateralValue: GetCollateralValueResponse =
