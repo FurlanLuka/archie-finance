@@ -1,6 +1,5 @@
 import { AuthGuard } from '@archie-microservices/auth0';
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
-import { Collateral } from './collateral.entity';
 import { CollateralService } from './collateral.service';
 import { GetUserCollateral, GetCollateralValueResponse } from '@archie-microservices/api-interfaces/collateral';
 

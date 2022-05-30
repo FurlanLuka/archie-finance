@@ -75,3 +75,11 @@ spec:
                 name: archie-onboarding-api-service
                 port:
                   number: 80
+          ## Credit api service
+          - path: /v1/credit
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-credit-api-service
+                port:
+                  number: 80

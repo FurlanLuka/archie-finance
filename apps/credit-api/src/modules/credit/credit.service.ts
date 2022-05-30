@@ -10,19 +10,24 @@ import { Credit } from './credit.entity';
 import { GetCreditResponse } from './credit.interfaces';
 import { ConfigService } from '@archie-microservices/config';
 import { AssetList, ConfigVariables, AssetInformation } from '../../interfaces';
+import { InternalApiService } from '@archie-microservices/internal-api';
+import {
+  GetCollateralValueResponse,
+  CollateralValue,
+} from '@archie-microservices/api-interfaces/collateral';
 
 @Injectable()
 export class CreditService {
-  private MINIMUM_CREDIT: number = 200;
-  private MAXIMUM_CREDIT: number = 2000;
+  private MINIMUM_CREDIT = 200;
+  private MAXIMUM_CREDIT = 2000;
 
   constructor(
-    private collateralService: CollateralService,
     private configService: ConfigService,
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
+    private internalApiService: InternalApiService,
   ) {}
 
-  public async createCredit(userId: string): Promise<void> {
+  public async createCredit(userId: string): Promise<GetCreditResponse> {
     const creditRecord: Credit = await this.creditRepository.findOne({
       userId,
     });
@@ -32,7 +37,7 @@ export class CreditService {
     }
 
     const collateralValue: GetCollateralValueResponse =
-      await this.collateralService.getUserCollateralValue(userId);
+      await this.internalApiService.getUserCollateralValue(userId);
 
     const assetList: AssetList = this.configService.get(
       ConfigVariables.ASSET_LIST,
@@ -84,6 +89,11 @@ export class CreditService {
       totalCredit: totalCollateralValue,
       availableCredit: totalCollateralValue,
     });
+
+    return {
+      availableCredit: totalCollateralValue,
+      totalCredit: totalCollateralValue,
+    };
   }
 
   public async getCredit(userId: string): Promise<GetCreditResponse> {

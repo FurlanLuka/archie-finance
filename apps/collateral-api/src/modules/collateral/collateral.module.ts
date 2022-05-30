@@ -1,6 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CollateralController } from './collateral.controller';
+import {
+  CollateralController,
+  InternalCollateralController,
+} from './collateral.controller';
 import { Collateral } from './collateral.entity';
 import { CollateralService } from './collateral.service';
 import { CollateralDeposit } from './collateral_deposit.entity';
@@ -21,6 +24,6 @@ import { ConfigVariables } from '../../interfaces';
   ],
   exports: [CollateralService],
   providers: [CollateralService],
-  controllers: [CollateralController],
+  controllers: [CollateralController, InternalCollateralController],
 })
 export class CollateralModule {}

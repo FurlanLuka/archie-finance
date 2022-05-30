@@ -12,6 +12,8 @@ export interface AssetInformation {
   fireblocks_id: string;
   coinapi_id: string;
   network: AssetType;
+  ltv: number;
+  interest: number;
 }
 
 export enum ConfigVariables {
@@ -23,4 +25,5 @@ export enum ConfigVariables {
   TYPEORM_DATABASE = 'TYPEORM_DATABASE',
   TYPEORM_PORT = 'TYPEORM_PORT',
   ASSET_LIST = 'ASSET_LIST',
+  INTERNAL_API_URL = 'INTERNAL_API_URL',
 }

@@ -9,13 +9,37 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internal
 spec:
   rules:
-  - http:
-      paths:
-        ## Onboarding api service
-        - path: /internal/onboarding
-          pathType: Prefix
-          backend:
-            service:
-              name: archie-onboarding-api-service
-              port:
-                number: 80
+    - http:
+        paths:
+          ## Onboarding api service
+          - path: /internal/onboarding
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-onboarding-api-service
+                port:
+                  number: 80
+          ## Credit api service
+          - path: /internal/credit
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-credit-api-service
+                port:
+                  number: 80
+          ## Asset price api service
+          - path: /internal/asset_price
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-asset-price-api-service
+                port:
+                  number: 80
+          ## Collateral api service
+          - path: /internal/collateral
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-collateral-api-service
+                port:
+                  number: 80

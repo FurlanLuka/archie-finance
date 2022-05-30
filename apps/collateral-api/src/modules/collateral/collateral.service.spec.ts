@@ -13,12 +13,15 @@ import { CollateralService } from './collateral.service';
 import { CollateralDeposit } from './collateral_deposit.entity';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { InternalServerErrorException } from '@nestjs/common';
+import { InternalApiService } from '../../../../../libs/internal-api/src';
 
 describe('CollateralService', () => {
   let service: CollateralService;
 
   let collateralRepository: Repository<Collateral>;
   let collateralDepositRepository: Repository<CollateralDeposit>;
+
+  let internalApiService: InternalApiService;
 
   let connection: Connection;
 
@@ -31,6 +34,10 @@ describe('CollateralService', () => {
         getMockRepositoryProvider(Collateral),
         getMockRepositoryProvider(CollateralDeposit),
         getMockConnectionProvider(),
+        {
+          provide: InternalApiService,
+          useValue: jest.fn(),
+        },
       ],
     }).compile();
 
@@ -40,6 +47,8 @@ describe('CollateralService', () => {
     collateralDepositRepository = module.get(
       getRepositoryToken(CollateralDeposit),
     );
+
+    internalApiService = module.get(InternalApiService);
 
     connection = module.get(getConnectionToken());
 

@@ -12,6 +12,8 @@ export interface AssetInformation {
   fireblocks_id: string;
   coinapi_id: string;
   network: AssetType;
+  ltv: number;
+  interest: number;
 }
 
 export enum ConfigVariables {
