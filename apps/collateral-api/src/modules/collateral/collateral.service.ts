@@ -134,8 +134,6 @@ export class CollateralService {
     const assetPrices: GetAssetPricesResponse =
       await this.internalApiService.getAssetPrices();
 
-    Logger.log(JSON.stringify(assetPrices));
-
     return userCollateral.map((collateral: Collateral) => {
       const assetPrice: GetAssetPriceResponse | undefined = assetPrices.find(
         (asset) => asset.asset === collateral.asset,
