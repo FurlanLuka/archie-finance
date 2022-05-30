@@ -25,6 +25,7 @@ import { CollateralModule } from './modules/collateral/collateral.module';
         ConfigVariables.FIREBLOCKS_API_KEY,
         ConfigVariables.FIREBLOCKS_PRIVATE_KEY,
         ConfigVariables.FIREBLOCKS_PUBLIC_KEY,
+        ConfigVariables.INTERNAL_API_URL,
       ],
       parse: (configVariable, value) => {
         if (configVariable === ConfigVariables.ASSET_LIST) {

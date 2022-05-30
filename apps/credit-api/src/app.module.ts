@@ -17,6 +17,7 @@ import { CreditModule } from './modules/credit/credit.module';
         ConfigVariables.TYPEORM_USERNAME,
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
+        ConfigVariables.INTERNAL_API_URL,
       ],
       parse: (_configVariable, value) => value,
     }),

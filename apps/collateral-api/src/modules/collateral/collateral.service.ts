@@ -12,7 +12,10 @@ import {
   GetCollateralValueResponse,
   GetUserCollateral,
 } from '@archie-microservices/api-interfaces/collateral';
-import { GetAssetPriceResponse } from '@archie-microservices/api-interfaces/asset_price';
+import {
+  GetAssetPriceResponse,
+  GetAssetPricesResponse,
+} from '@archie-microservices/api-interfaces/asset_price';
 import { InternalApiService } from '@archie-microservices/internal-api';
 
 @Injectable()
@@ -128,8 +131,10 @@ export class CollateralService {
       userId,
     );
 
-    const assetPrices: GetAssetPriceResponse[] =
+    const assetPrices: GetAssetPricesResponse =
       await this.internalApiService.getAssetPrices();
+
+    Logger.log(JSON.stringify(assetPrices));
 
     return userCollateral.map((collateral: Collateral) => {
       const assetPrice: GetAssetPriceResponse | undefined = assetPrices.find(
