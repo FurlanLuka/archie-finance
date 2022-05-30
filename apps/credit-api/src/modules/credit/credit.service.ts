@@ -45,7 +45,7 @@ export class CreditService {
 
     let totalCollateralValue: number = collateralValue.reduce(
       (sum: number, value: CollateralValue) => {
-        if (!(value.asset in assetList)) {
+        if (assetList[value.asset] === undefined) {
           return sum;
         }
 
