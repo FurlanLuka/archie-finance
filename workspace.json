@@ -2,10 +2,12 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "api-interfaces": "libs/api-interfaces",
     "asset-price-api": "apps/asset-price-api",
     "auth0": "libs/auth0",
     "collateral-api": "apps/collateral-api",
     "config": "libs/config",
+    "credit-api": "apps/credit-api",
     "health": "libs/health",
     "internal-api": "libs/internal-api",
     "onboarding-api": "apps/onboarding-api",
