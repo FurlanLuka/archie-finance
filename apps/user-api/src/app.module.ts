@@ -28,14 +28,9 @@ import { VaultModule } from '@archie-microservices/vault';
         ConfigVariables.VAULT_USERNAME,
         ConfigVariables.VAULT_PASSWORD,
         ConfigVariables.VAULT_NAMESPACE,
+        ConfigVariables.INTERNAL_API_URL,
       ],
-      parse: (configVariable, value) => {
-        if (configVariable === ConfigVariables.ASSET_LIST) {
-          return JSON.parse(value);
-        }
-
-        return value;
-      },
+      parse: (_configVariable, value) => value,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

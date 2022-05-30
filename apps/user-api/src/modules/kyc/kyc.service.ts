@@ -2,11 +2,13 @@ import { VaultService } from '@archie-microservices/vault';
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Connection, QueryRunner, Repository } from 'typeorm';
+import { InternalApiService } from '../../../../../libs/internal-api/src';
 import { Kyc } from './kyc.entity';
 import { CreateKycResponse, GetKycResponse } from './kyc.interfaces';
 
@@ -15,6 +17,8 @@ export class KycService {
   constructor(
     @InjectRepository(Kyc) private kycRepository: Repository<Kyc>,
     private vaultService: VaultService,
+    private connection: Connection,
+    private internalApiService: InternalApiService,
   ) {}
 
   async getKyc(userId: string): Promise<GetKycResponse> {
@@ -95,16 +99,44 @@ export class KycService {
       ssn,
     ]);
 
-    await this.kycRepository.save({
-      userId,
-      firstName: encryptedData[0],
-      lastName: encryptedData[1],
-      dateOfBirth: encryptedData[2],
-      address: encryptedData[3],
-      phoneNumberCountryCode: encryptedData[4],
-      phoneNumber: encryptedData[5],
-      ssn: encryptedData[6],
-    });
+    const queryRunner: QueryRunner = this.connection.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await this.kycRepository.save({
+        userId,
+        firstName: encryptedData[0],
+        lastName: encryptedData[1],
+        dateOfBirth: encryptedData[2],
+        address: encryptedData[3],
+        phoneNumberCountryCode: encryptedData[4],
+        phoneNumber: encryptedData[5],
+        ssn: encryptedData[6],
+      });
+
+      await this.internalApiService.completeOnboardingStage(userId, 'kycStage');
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+
+      Logger.error({
+        code: 'CREATE_KYC_ERROR',
+        metadata: {
+          userId,
+          error: JSON.stringify(error),
+        },
+      });
+
+      throw new InternalServerErrorException(
+        'ERR_CREATING_KYC_RECORD',
+        'There was an issue creating KYC record. Please try again or contact support.',
+      );
+    } finally {
+      await queryRunner.release();
+    }
 
     return {
       firstName,
