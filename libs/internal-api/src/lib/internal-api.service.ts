@@ -18,6 +18,11 @@ export class InternalApiService {
         userId,
         stage: onboardingStage,
       },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
     );
   }
 }

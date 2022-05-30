@@ -2,10 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Onboarding } from './onboarding.entity';
-import {
-  GetOnboardingResponse,
-  OnboardingStage,
-} from './onboarding.interfaces';
+import { GetOnboardingResponse } from './onboarding.interfaces';
 
 @Injectable()
 export class OnboardingService {
