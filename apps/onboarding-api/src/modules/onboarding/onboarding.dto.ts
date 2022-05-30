@@ -4,4 +4,7 @@ import { OnboardingStage } from './onboarding.interfaces';
 export class OnboardingDto {
   @IsString()
   stage: OnboardingStage;
+
+  @IsString()
+  userId: string;
 }

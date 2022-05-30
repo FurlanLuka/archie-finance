@@ -26,13 +26,10 @@ export class OnboardingController {
 export class InternalOnboardingController {
   constructor(private onboardingService: OnboardingService) {}
 
-  @Post()
-  async completeOnboardingStage(
-    @Body() body: OnboardingDto,
-    @Request() req,
-  ): Promise<void> {
+  @Post('complete')
+  async completeOnboardingStage(@Body() body: OnboardingDto): Promise<void> {
     await this.onboardingService.completeOnboardingStage(
-      req.user.sub,
+      body.userId,
       body.stage,
     );
   }
