@@ -73,16 +73,6 @@ spec:
                 secretKeyRef:
                   name: auth0-secrets
                   key: audience
-            - name: SENDGRID_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: sendgrid-secrets
-                  key: api-key
-            - name: SENDGRID_MAILING_LIST_ID
-              valueFrom:
-                secretKeyRef:
-                  name: sendgrid-secrets
-                  key: mailing-list-id
             - name: TYPEORM_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -108,31 +98,16 @@ spec:
                 secretKeyRef:
                   name: database-secrets
                   key: database
-            - name: FIREBLOCKS_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-secrets
-                  key: api-key
-            - name: FIREBLOCKS_PRIVATE_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-secrets
-                  key: private-key
-            - name: FIREBLOCKS_PUBLIC_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-secrets
-                  key: public-key
-            - name: FIREBLOCKS_VAULT_ACCOUNT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-secrets
-                  key: vault-account-id
             - name: ASSET_LIST
               valueFrom:
                 secretKeyRef:
                   name: asset-secrets
                   key: enabled-assets
+            - name: INTERNAL_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: internal-api-secrets
+                  key: internal-api-url
       imagePullSecrets:
         - name: regcred
 ---
