@@ -6,18 +6,18 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenerateAddressResponse } from 'fireblocks-sdk';
-import {
-  AssetInformation,
-  AssetList,
-  AssetType,
-  ConfigVariables,
-} from '../../interfaces';
+import { ConfigVariables } from '../../interfaces';
 import { Repository } from 'typeorm';
 import { OmnibusVaultAccountService } from '../omnibus_vault_account/omnibus_vault_account.service';
 import { UserVaultAccountService } from '../user_vault_account/user_vault_account.service';
 import { DepositAddress } from './deposit_address.entity';
 import { GetDepositAddressResponse } from './deposit_address.interfaces';
 import { ConfigService } from '@archie-microservices/config';
+import {
+  AssetList,
+  AssetInformation,
+  AssetType,
+} from '@archie-microservices/api-interfaces/asset_information';
 
 @Injectable()
 export class DepositAddressService {

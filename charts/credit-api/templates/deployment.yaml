@@ -98,11 +98,6 @@ spec:
                 secretKeyRef:
                   name: database-secrets
                   key: database
-            - name: ASSET_LIST
-              valueFrom:
-                secretKeyRef:
-                  name: asset-secrets
-                  key: enabled-assets
             - name: INTERNAL_API_URL
               valueFrom:
                 secretKeyRef:

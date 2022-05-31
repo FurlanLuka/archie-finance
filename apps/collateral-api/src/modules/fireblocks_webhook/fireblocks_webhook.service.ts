@@ -11,7 +11,11 @@ import {
   FireblocksWebhookPayload,
 } from './fireblocks_webhook.interfaces';
 import { ConfigService } from '@archie-microservices/config';
-import { AssetInformation, AssetList, ConfigVariables } from '../../interfaces';
+import { ConfigVariables } from '../../interfaces';
+import {
+  AssetInformation,
+  AssetList,
+} from '@archie-microservices/api-interfaces/asset_information';
 
 @Injectable()
 export class FireblocksWebhookService {
