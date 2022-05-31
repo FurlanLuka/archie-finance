@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { step } from '../../../../constants/onboarding-steps';
+import { Step } from '../../../../constants/onboarding-steps';
 import { theme } from '../../../../constants/theme';
 import { IndicatorDone } from '../../../../components/_generic/icons/indicator-done';
 import { IndicatorActive } from '../../../../components/_generic/icons/indicator-active';
@@ -23,18 +23,18 @@ export const StepsIndicator: FC<StepsIndicatorProps> = ({ currentStep }) => (
       <ArrowIndicatorRight className="arrow" fill={theme.textPositive} />
     </div>
     <div className="step">
-      <div className="circle">{currentStep === step.COLLATERALIZE ? <IndicatorActive /> : <IndicatorDone />}</div>
-      <ParagraphXXS weight={700} color={currentStep === step.COLLATERALIZE ? theme.textHighlight : theme.textPositive}>
+      <div className="circle">{currentStep === Step.COLLATERALIZE ? <IndicatorActive /> : <IndicatorDone />}</div>
+      <ParagraphXXS weight={700} color={currentStep === Step.COLLATERALIZE ? theme.textHighlight : theme.textPositive}>
         Collateralize
       </ParagraphXXS>
       <ArrowIndicatorRight
         className="arrow"
-        fill={currentStep === step.CARD ? theme.textPositive : theme.textDisabled}
+        fill={currentStep === Step.CARD ? theme.textPositive : theme.textDisabled}
       />
     </div>
     <div className="step">
-      <div className="circle">{currentStep === step.CARD && <IndicatorDone />}</div>
-      <ParagraphXXS weight={700} color={currentStep === step.CARD ? theme.textPositive : theme.textDisabled}>
+      <div className="circle">{currentStep === Step.CARD && <IndicatorDone />}</div>
+      <ParagraphXXS weight={700} color={currentStep === Step.CARD ? theme.textPositive : theme.textDisabled}>
         Get Archie Card
       </ParagraphXXS>
     </div>

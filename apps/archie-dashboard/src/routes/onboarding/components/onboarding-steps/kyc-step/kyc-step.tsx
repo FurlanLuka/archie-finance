@@ -7,20 +7,22 @@ import 'react-phone-number-input/style.css';
 import * as Yup from 'yup';
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
-import { step } from '../../../../../constants/onboarding-steps';
+import { Step } from '../../../../../constants/onboarding-steps';
 import { SubtitleS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { InputText } from '../../../../../components/_generic/input-text/input-text.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
 import { colors, theme } from '../../../../../constants/theme';
 import { KycStepStyled } from './kyc-step.styled';
+import { useQueryClient } from 'react-query';
 
 interface KycStepProps {
-  setCurrentStep: (step: step) => void;
+  setCurrentStep: (step: Step) => void;
 }
 
 export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const mutationRequest = useCreateKyc();
+  const queryClient = useQueryClient();
 
   const today = new Date();
   const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) >= 18;
@@ -44,7 +46,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
 
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneNumberError, setPhoneNumberError] = useState('');
-  const [phoneNumberCountryCode, setPhoneNumberCountryCode] = useState<Country>('US');
+  const [phoneNumberCountryCode, setPhoneNumberCountryCode] = useState('+1');
 
   const validate = () => {
     if (!address) {
@@ -65,17 +67,17 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const handleSubmit = (values: FormikValues) => {
     const payload = {
       firstName: values.firstName,
-      lastname: values.lastName,
+      lastName: values.lastName,
       dateOfBirth: values.dateOfBirth,
       address,
       phoneNumber,
       phoneNumberCountryCode,
-      ssnDigits: values.ssnDigits,
+      ssn: values.ssnDigits,
     };
 
     if (hasLength(address) && hasLength(phoneNumber)) {
       if (mutationRequest.state === RequestState.IDLE) {
-        // mutationRequest.mutate({ payload });
+        mutationRequest.mutate(payload);
 
         console.log(payload);
 
@@ -151,7 +153,8 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
             <InputText>
               Phone Number*
               <PhoneInput
-                defaultCountry={phoneNumberCountryCode}
+                defaultCountry={'US'}
+                international={false}
                 addInternationalOption={false}
                 countryCallingCodeEditable={false}
                 placeholder="Enter phone number"

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { step } from '../../../../../constants/onboarding-steps';
+import { Step } from '../../../../../constants/onboarding-steps';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
 import { SubtitleS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
 import { StepsIndicator } from '../../steps-indicator/steps-indicator';
@@ -10,7 +10,7 @@ import { ButtonPrimary } from '../../../../../components/_generic/button/button.
 
 export const CardStep: FC = () => (
   <Container column mobileColumn alignItems="center">
-    <StepsIndicator currentStep={step.CARD} />
+    <StepsIndicator currentStep={Step.CARD} />
     <EmailVerification />
     <CardStepStyled>
       <SubtitleS>Your Archie Card is Ready!</SubtitleS>

@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import qrCode from '../../../../../assets/images/qr-code.png';
 import { collateralCurrencies, CollateralCurrency } from '../../../../../constants/collateral-curencies';
-import { step } from '../../../../../constants/onboarding-steps';
+import { Step } from '../../../../../constants/onboarding-steps';
 import { CollateralDeposit } from '../../../../../components/collateral-deposit/collateral-deposit';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
 import { SubtitleS, ParagraphS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
@@ -16,7 +16,7 @@ import { CollateralCurency } from '../../../../../components/collateral-curency/
 import { theme } from '../../../../../constants/theme';
 
 interface CollateralizationStepProps {
-  setCurrentStep: (step: step) => void;
+  setCurrentStep: (step: Step) => void;
 }
 
 export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurrentStep }) => {
@@ -36,7 +36,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
 
   return (
     <Container column mobileColumn alignItems="center">
-      <StepsIndicator currentStep={step.COLLATERALIZE} />
+      <StepsIndicator currentStep={Step.COLLATERALIZE} />
       <EmailVerification />
       <CollateralizationStepStyled>
         <SubtitleS className="title">Send crypto to your collateral wallet</SubtitleS>
