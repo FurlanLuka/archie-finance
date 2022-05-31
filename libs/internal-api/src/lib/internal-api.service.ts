@@ -6,6 +6,11 @@ import {
   GetCollateralValueResponse,
   GetUserCollateral,
 } from '@archie-microservices/api-interfaces/collateral';
+import {
+  GetAssetInformationResponse,
+  GetAssetListResponse,
+} from '@archie-microservices/api-interfaces/asset_information';
+
 @Injectable()
 export class InternalApiService {
   constructor(
@@ -28,6 +33,25 @@ export class InternalApiService {
         },
       },
     );
+  }
+
+  public async getAssetList(): Promise<GetAssetListResponse> {
+    const response: AxiosResponse<GetAssetListResponse> = await axios.get(
+      `${this.config.internalApiUrl}/internal/asset_information`,
+    );
+
+    return response.data;
+  }
+
+  public async getAssetInformation(
+    asset: string,
+  ): Promise<GetAssetInformationResponse> {
+    const response: AxiosResponse<GetAssetInformationResponse> =
+      await axios.get(
+        `${this.config.internalApiUrl}/internal/asset_information/${asset}`,
+      );
+
+    return response.data;
   }
 
   public async getAssetPrices(): Promise<GetAssetPricesResponse> {

@@ -8,13 +8,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Credit } from './credit.entity';
 import { GetCreditResponse } from './credit.interfaces';
-import { ConfigService } from '@archie-microservices/config';
-import { AssetList, ConfigVariables, AssetInformation } from '../../interfaces';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import {
   GetCollateralValueResponse,
   CollateralValue,
 } from '@archie-microservices/api-interfaces/collateral';
+import { GetAssetListResponse, AssetInformation } from '@archie-microservices/api-interfaces/asset_information';
 
 @Injectable()
 export class CreditService {
@@ -22,7 +21,6 @@ export class CreditService {
   private MAXIMUM_CREDIT = 2000;
 
   constructor(
-    private configService: ConfigService,
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
     private internalApiService: InternalApiService,
   ) {}
@@ -42,9 +40,7 @@ export class CreditService {
     const collateralValue: GetCollateralValueResponse =
       await this.internalApiService.getUserCollateralValue(userId);
 
-    const assetList: AssetList = this.configService.get(
-      ConfigVariables.ASSET_LIST,
-    );
+    const assetList: GetAssetListResponse = await this.internalApiService.getAssetList();
 
     let totalCollateralValue: number = collateralValue.reduce(
       (sum: number, value: CollateralValue) => {

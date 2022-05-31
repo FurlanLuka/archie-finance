@@ -43,3 +43,11 @@ spec:
                 name: archie-collateral-api-service
                 port:
                   number: 80
+          - path: /internal/asset_information
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-collateral-api-service
+                port:
+                  number: 80
+                  

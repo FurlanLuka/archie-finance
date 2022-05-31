@@ -9,6 +9,7 @@ import { ConfigVariables } from './interfaces';
 import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
 import { CollateralModule } from './modules/collateral/collateral.module';
+import { AssetInformationModule } from './modules/asset_information/asset_information.module';
 
 @Module({
   imports: [
@@ -64,6 +65,7 @@ import { CollateralModule } from './modules/collateral/collateral.module';
     OmnibusVaultAccountModule,
     FireblocksWebhookModule,
     CollateralModule,
+    AssetInformationModule,
   ],
   controllers: [],
   providers: [],
