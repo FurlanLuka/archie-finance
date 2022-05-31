@@ -1,5 +1,7 @@
 import styled, { keyframes } from 'styled-components'
 
+import breakpoints from '../../../../../constants/breakpoints'
+
 const load = keyframes`
   0% {
     background-position: -500px 0;
@@ -38,14 +40,15 @@ export const CollateralizationStepStyled = styled.div`
   width: 100%;
   max-width: 928px;
   padding: 2.5rem 7% 3.5rem;
-  text-align: center;
 
   .title {
     margin-bottom: 0.5rem;
+    text-align: center;
   }
 
   .subtitle {
     margin-bottom: 3.5rem;
+    text-align: center;
   }
 
   .inputs {
@@ -144,7 +147,7 @@ export const CollateralizationStepStyled = styled.div`
     }
   }
 
-  .info {
+  .address {
     position: relative;
     background-color: ${({ theme }) => theme.backgroundSecondary};
     border-top: 1px solid ${({ theme }) => theme.borderPrimary};
@@ -169,18 +172,10 @@ export const CollateralizationStepStyled = styled.div`
     }
   }
 
-  .address {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-  }
-
   .data {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    width: 80%;
-    padding-right: 2rem;
   }
 
   .address-copy {
@@ -189,27 +184,34 @@ export const CollateralizationStepStyled = styled.div`
     align-items: center;
     background-color: ${({ theme }) => theme.backgroundPrimary};
     border-radius: 0.25rem;
-    height: 3rem;
     width: 100%;
-    padding: 1rem;
+    padding: 0.5rem 1rem;
     margin: 0.5rem 0 1.5rem;
 
     p {
-      max-width: 92%;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
+      max-width: 85%;
+
+      @media (max-width: ${breakpoints.screenXS}) {
+        max-width: 12rem;
+      }
     }
   }
 
   .btn-copy {
     position: absolute;
     right: 1rem;
-    top: 0.75rem;
     background-color: transparent;
     border: 0;
     padding: 0;
     cursor: pointer;
+  }
+
+  .address-code {
+    display: flex;
+  }
+
+  .info {
+    margin-left: 2rem;
   }
 
   .info-group {
@@ -217,10 +219,6 @@ export const CollateralizationStepStyled = styled.div`
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 1.5rem;
-  }
-
-  .code { 
-    width: 12rem;
   }
 
   .divider {

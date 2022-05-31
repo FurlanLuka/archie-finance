@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import QRCode from 'react-qr-code';
 import qrCode from '../../../../../assets/images/qr-code.png';
 import { collateralCurrencies, CollateralCurrency } from '../../../../../constants/collateral-curencies';
 import { Step } from '../../../../../constants/onboarding-steps';
@@ -111,18 +112,21 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
           </div>
         </div>
 
-        <div className="info">
-          <div className="address">
-            <div className="data">
-              <ParagraphXS weight={700}>
-                Send {requiredCollateral} {selectedCollateralDeposit?.short} to:
-              </ParagraphXS>
-              <div className="address-copy">
-                <ParagraphS>{collateralDeposit.address}</ParagraphS>
-                <button className="btn-copy" onClick={() => navigator.clipboard.writeText(collateralDeposit.address)}>
-                  <Copy className="icon-copy" />
-                </button>
-              </div>
+        <div className="address">
+          <ParagraphXS weight={700}>
+            Send {requiredCollateral} {selectedCollateralDeposit?.short} to:
+          </ParagraphXS>
+          <div className="address-copy">
+            <ParagraphS>{collateralDeposit.address}</ParagraphS>
+            <button className="btn-copy" onClick={() => navigator.clipboard.writeText(collateralDeposit.address)}>
+              <Copy className="icon-copy" />
+            </button>
+          </div>
+          <div className="address-code">
+            <div className="code">
+              <QRCode value={collateralDeposit.address} size={96} />
+            </div>
+            <div className="info">
               <div className="info-group">
                 <ParagraphXS>
                   Make sure you <b>only</b> send {selectedCollateralDeposit?.short} to this address.
@@ -143,11 +147,10 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
                 </ParagraphXS>
               </div>
             </div>
-            <div className="code">
-              <img src={qrCode} alt="QR code" />
-            </div>
           </div>
+
           <hr className="divider" />
+
           <div className="terms">
             <div className="terms-title">
               <ParagraphXS weight={700}>Terms & Conditions</ParagraphXS>

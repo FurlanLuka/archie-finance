@@ -14,15 +14,18 @@ import { InputText } from '../../../../../components/_generic/input-text/input-t
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
 import { colors, theme } from '../../../../../constants/theme';
 import { KycStepStyled } from './kyc-step.styled';
-import { useQueryClient } from 'react-query';
 
 interface KycStepProps {
   setCurrentStep: (step: Step) => void;
 }
 
+interface GooglePlace {
+  address_components: Array<{ types: Array<string> }>;
+  formatted_address: string;
+}
+
 export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const mutationRequest = useCreateKyc();
-  const queryClient = useQueryClient();
 
   const today = new Date();
   const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) >= 18;
@@ -31,7 +34,6 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
     firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter your first name'),
     lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter your last name'),
     dateOfBirth: Yup.date()
-      .nullable()
       .test('dob', 'Should be older than 18', (value) => minYears(value ?? today))
       .max(today, 'Date cannot be in the future')
       .required('Please enter your date of birth'),
@@ -47,6 +49,17 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneNumberError, setPhoneNumberError] = useState('');
   const [phoneNumberCountryCode, setPhoneNumberCountryCode] = useState('+1');
+
+  const addAddress = (place: GooglePlace) => {
+    const hasStreetNumber = place.address_components.find((item) => item.types.includes('street_number'));
+
+    if (hasStreetNumber) {
+      setAddress(place.formatted_address);
+      setAddressError('');
+    } else {
+      setAddressError('Please enter your street number');
+    }
+  };
 
   const validate = () => {
     if (!address) {
@@ -141,7 +154,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
               Address*
               <Autocomplete
                 apiKey="AIzaSyA-k_VEX0soa2kljYKTjtFUg4irF3hKZwQ"
-                onPlaceSelected={(place) => setAddress(place.formatted_address)}
+                onPlaceSelected={(place) => addAddress(place)}
                 options={{ types: ['address'] }}
               />
               {addressError && (

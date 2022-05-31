@@ -21,6 +21,11 @@ export const StepsIndicatorStyled = styled.div`
     margin-bottom: 0.5rem;
   }
 
+  .active {
+    margin-top: -5px;
+    margin-left: -5px;
+  }
+
   .arrow {
     position: absolute;
     top: 0.5rem;

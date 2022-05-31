@@ -4,9 +4,7 @@ import { useSession } from '@archie/session/hooks/use-session';
 import { SessionState } from '@archie/session/context/session-context';
 import Loading from '../_generic/loading/loading';
 
-export const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({
-  children,
-}) => {
+export const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const { sessionState } = useSession();
 
   if (sessionState === SessionState.INITIALIZING) {
