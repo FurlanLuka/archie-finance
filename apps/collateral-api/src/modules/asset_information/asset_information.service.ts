@@ -5,8 +5,9 @@ import {
   AssetList,
 } from '@archie-microservices/api-interfaces/asset_information';
 import { ConfigVariables } from '../../interfaces';
-import { NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
+@Injectable()
 export class AssetInformationService {
   constructor(private configService: ConfigService) {}
 
