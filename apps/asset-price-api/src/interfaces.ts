@@ -17,4 +17,6 @@ interface AssetInformation {
   fireblocks_id: string;
   coinapi_id: string;
   network: string;
+  ltv: number;
+  interest: number;
 }

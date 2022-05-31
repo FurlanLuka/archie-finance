@@ -16,7 +16,7 @@ export class InternalApiModule {
         },
         InternalApiService,
       ],
-      exports: [InternalApiService]
+      exports: [InternalApiService],
     };
   }
 }

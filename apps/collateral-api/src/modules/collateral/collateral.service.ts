@@ -8,6 +8,16 @@ import { TransactionStatus } from 'fireblocks-sdk';
 import { Connection, Repository } from 'typeorm';
 import { Collateral } from './collateral.entity';
 import { CollateralDeposit } from './collateral_deposit.entity';
+import {
+  GetCollateralValueResponse,
+  GetTotalCollateralValueResponse,
+  GetUserCollateral,
+} from '@archie-microservices/api-interfaces/collateral';
+import {
+  GetAssetPriceResponse,
+  GetAssetPricesResponse,
+} from '@archie-microservices/api-interfaces/asset_price';
+import { InternalApiService } from '@archie-microservices/internal-api';
 
 @Injectable()
 export class CollateralService {
@@ -17,6 +27,7 @@ export class CollateralService {
     @InjectRepository(CollateralDeposit)
     private collateralDepositRepository: Repository<CollateralDeposit>,
     private connection: Connection,
+    private internalApiService: InternalApiService,
   ) {}
 
   public async createDeposit(
@@ -103,9 +114,56 @@ export class CollateralService {
     };
   }
 
-  public async getUserCollateral(userId: string): Promise<Collateral[]> {
-    return this.collateralRepository.find({
+  public async getUserCollateral(userId: string): Promise<GetUserCollateral> {
+    const userCollateral: Collateral[] = await this.collateralRepository.find({
       userId,
     });
+
+    return userCollateral.map((collateral: Collateral) => ({
+      asset: collateral.asset,
+      amount: collateral.amount,
+    }));
+  }
+
+  public async getUserCollateralValue(
+    userId: string,
+  ): Promise<GetCollateralValueResponse> {
+    const userCollateral: GetUserCollateral = await this.getUserCollateral(
+      userId,
+    );
+
+    const assetPrices: GetAssetPricesResponse =
+      await this.internalApiService.getAssetPrices();
+
+    return userCollateral.map((collateral: Collateral) => {
+      const assetPrice: GetAssetPriceResponse | undefined = assetPrices.find(
+        (asset) => asset.asset === collateral.asset,
+      );
+
+      if (assetPrice === undefined) {
+        return {
+          asset: collateral.asset,
+          assetAmount: collateral.amount,
+          price: 0,
+        };
+      }
+
+      return {
+        asset: collateral.asset,
+        assetAmount: collateral.amount,
+        price: collateral.amount * assetPrice.price,
+      };
+    });
+  }
+
+  public async getUserTotalCollateralValue(
+    userId: string,
+  ): Promise<GetTotalCollateralValueResponse> {
+    const userCollateralValue: GetCollateralValueResponse =
+      await this.getUserCollateralValue(userId);
+
+    return {
+      value: userCollateralValue.reduce((sum, value) => sum + value.price, 0),
+    };
   }
 }

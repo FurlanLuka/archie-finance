@@ -10,12 +10,15 @@ import {
   EventType,
   FireblocksWebhookPayload,
 } from './fireblocks_webhook.interfaces';
+import { ConfigService } from '@archie-microservices/config';
+import { AssetInformation, AssetList, ConfigVariables } from '../../interfaces';
 
 @Injectable()
 export class FireblocksWebhookService {
   constructor(
     private collateralService: CollateralService,
     private depositAddressService: DepositAddressService,
+    private configService: ConfigService,
   ) {}
 
   public async webhookHandler(payload: FireblocksWebhookDto): Promise<void> {
@@ -37,10 +40,29 @@ export class FireblocksWebhookService {
           payload.data.destinationAddress,
         );
 
+      const assetList: AssetList = this.configService.get(
+        ConfigVariables.ASSET_LIST,
+      );
+
+      const assetInformation: AssetInformation[] = Object.keys(
+        assetList,
+      ).flatMap((key) => {
+        if (assetList[key] === undefined) {
+          return [];
+        }
+
+        return [assetList[key]];
+      });
+
+      const assetId: string =
+        assetInformation.length > 0
+          ? assetInformation[0].fireblocks_id
+          : payload.data.assetId;
+
       await this.collateralService.createDeposit(
         payload.data.id,
         userId,
-        payload.data.assetId,
+        assetId,
         payload.data.netAmount,
         payload.data.destinationAddress,
         payload.data.status,

@@ -4,14 +4,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AssetPrice } from './asset_price.entity';
 import { Repository } from 'typeorm';
 import { AssetPriceHistory } from './asset_price_history.entity';
-import {
-  CoinApiMessage,
-  CoinApiMessageType,
-  GetAssetPriceResponse,
-  GetAssetPricesResponse,
-} from './asset_price.interfaces';
+import { CoinApiMessage, CoinApiMessageType } from './asset_price.interfaces';
 import { ConfigService } from '@archie-microservices/config';
 import { AssetList, ConfigVariables } from '../../interfaces';
+import {
+  GetAssetPriceResponse,
+  GetAssetPricesResponse,
+} from '@archie-microservices/api-interfaces/asset_price';
 
 @Injectable()
 export class AssetPriceService {

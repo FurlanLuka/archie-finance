@@ -8,6 +8,7 @@ import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from './interfaces';
 import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
+import { CollateralModule } from './modules/collateral/collateral.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { HealthModule } from '@archie-microservices/health';
         ConfigVariables.FIREBLOCKS_API_KEY,
         ConfigVariables.FIREBLOCKS_PRIVATE_KEY,
         ConfigVariables.FIREBLOCKS_PUBLIC_KEY,
+        ConfigVariables.INTERNAL_API_URL,
       ],
       parse: (configVariable, value) => {
         if (configVariable === ConfigVariables.ASSET_LIST) {
@@ -61,6 +63,7 @@ import { HealthModule } from '@archie-microservices/health';
     UserVaultAccountModule,
     OmnibusVaultAccountModule,
     FireblocksWebhookModule,
+    CollateralModule,
   ],
   controllers: [],
   providers: [],

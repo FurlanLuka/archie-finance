@@ -1,5 +1,3 @@
-import { AssetPrice } from './asset_price.entity';
-
 export enum CoinApiMessageType {
   EXRATE = 'exrate',
   TRADE = 'TRADE',
@@ -18,7 +16,3 @@ export interface CoinApiExrateMessage {
 }
 
 export type CoinApiMessage = CoinApiBaseMessage | CoinApiExrateMessage;
-
-export type GetAssetPriceResponse = Omit<AssetPrice, 'updatedAt' | 'createdAt'>;
-
-export type GetAssetPricesResponse = GetAssetPriceResponse[];

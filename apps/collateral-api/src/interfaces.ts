@@ -12,6 +12,8 @@ export interface AssetInformation {
   fireblocks_id: string;
   coinapi_id: string;
   network: AssetType;
+  ltv: number;
+  interest: number;
 }
 
 export enum ConfigVariables {
@@ -27,4 +29,5 @@ export enum ConfigVariables {
   FIREBLOCKS_API_KEY = 'FIREBLOCKS_API_KEY',
   FIREBLOCKS_PRIVATE_KEY = 'FIREBLOCKS_PRIVATE_KEY',
   FIREBLOCKS_PUBLIC_KEY = 'FIREBLOCKS_PUBLIC_KEY',
+  INTERNAL_API_URL = 'INTERNAL_API_URL',
 }

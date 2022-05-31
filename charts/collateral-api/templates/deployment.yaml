@@ -133,6 +133,11 @@ spec:
                 secretKeyRef:
                   name: asset-secrets
                   key: enabled-assets
+            - name: INTERNAL_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: internal-api-secrets
+                  key: internal-api-url
       imagePullSecrets:
         - name: regcred
 ---

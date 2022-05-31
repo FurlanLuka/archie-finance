@@ -37,6 +37,7 @@ describe('OnboardingService', () => {
         })
         .mockResolvedValue(onboardingEntity);
 
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { userId: _onboardingUserId, ...onboardingRecord } =
         onboardingEntity;
 
