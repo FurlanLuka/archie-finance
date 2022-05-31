@@ -1,7 +1,18 @@
 import { AuthGuard } from '@archie-microservices/auth0';
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { KycDto } from './kyc.dto';
-import { CreateKycResponse, GetKycResponse } from './kyc.interfaces';
+import {
+  CreateKycResponse,
+  GetKycResponse,
+} from '@archie-microservices/api-interfaces/kyc';
 import { KycService } from './kyc.service';
 
 @Controller('v1/kyc')
@@ -20,15 +31,16 @@ export class KycController {
     @Body() body: KycDto,
     @Req() request,
   ): Promise<CreateKycResponse> {
-    return this.kycService.createKyc(
-      body.firstName,
-      body.lastName,
-      body.dateOfBirth.toISOString(),
-      body.address,
-      body.phoneNumberCountryCode,
-      body.phoneNumber,
-      body.ssn,
-      request.user.sub,
-    );
+    return this.kycService.createKyc(body, request.user.sub);
+  }
+}
+
+@Controller('internal/kyc')
+export class InternalKycController {
+  constructor(private readonly kycService: KycService) {}
+
+  @Get(':userId')
+  async getKyc(@Param('userId') userId: string): Promise<GetKycResponse> {
+    return this.kycService.getKyc(userId);
   }
 }

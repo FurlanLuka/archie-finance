@@ -23,7 +23,22 @@ export class Kyc {
   dateOfBirth: string;
 
   @Column('varchar', { nullable: false })
-  address: string;
+  addressStreet: string;
+
+  @Column('varchar', { nullable: false })
+  addressStreetNumber: string;
+
+  @Column('varchar', { nullable: false })
+  addressLocality: string;
+
+  @Column('varchar', { nullable: false })
+  addressCountry: string;
+
+  @Column('varchar', { nullable: false })
+  addressRegion: string;
+
+  @Column('varchar', { nullable: false })
+  addressPostalCode: string;
 
   @Column('varchar', { nullable: true })
   phoneNumberCountryCode: string;

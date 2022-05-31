@@ -14,7 +14,22 @@ export class KycDto {
   dateOfBirth: Date;
 
   @IsString()
-  address: string;
+  addressStreet: string;
+
+  @IsString()
+  addressStreetNumber: string;
+
+  @IsString()
+  addressLocality: string;
+
+  @IsString()
+  addressRegion: string;
+
+  @IsString()
+  addressPostalCode: string;
+
+  @IsString()
+  addressCountry: string;
 
   @IsString()
   phoneNumber: string;
