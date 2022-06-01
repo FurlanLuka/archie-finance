@@ -6,10 +6,15 @@ export const CollateralCurencyStyled = styled.div`
 
   p {
     line-height: 1.1;
+    letter-spacing: 0.02em;
   }
 
   .icon {
     display: flex;
+    background-color: ${({ theme }) => theme.textDisabled};
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 100%;
     margin-right: 0.5rem;
   }
 

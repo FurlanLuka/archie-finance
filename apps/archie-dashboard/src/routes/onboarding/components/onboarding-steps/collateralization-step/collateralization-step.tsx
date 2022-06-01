@@ -56,7 +56,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
                   short={selectedCollateralDeposit?.short}
                 />
               ) : (
-                <ParagraphXS>Select your collateral currency</ParagraphXS>
+                <CollateralCurency name="Select your collateral currency" short="BTC, ETH, SOL, or USDC" />
               )}
               <Caret className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
             </div>

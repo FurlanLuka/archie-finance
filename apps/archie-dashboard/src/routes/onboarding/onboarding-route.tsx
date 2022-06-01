@@ -5,6 +5,7 @@ import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-
 import { Step } from '../../constants/onboarding-steps';
 import Loading from '../../components/_generic/loading/loading';
 import { KycStep } from './components/onboarding-steps/kyc-step/kyc-step';
+import { VerifyStep } from './components/onboarding-steps/verify-step/verify-step';
 import { CollateralizationStep } from './components/onboarding-steps/collateralization-step/collateralization-step';
 import { CardStep } from './components/onboarding-steps/card-step/card-step';
 import { OnboardingStyled } from './onboarding-route.styled';
@@ -19,7 +20,7 @@ export const OnboardingRoute: React.FC = () => {
   useEffect(() => {
     if (queryResponse.state === RequestState.SUCCESS) {
       if (queryResponse.data.kycStage === false) {
-        setCurrentStep(Step.KYC);
+        setCurrentStep(Step.VERIFY);
       } else if (queryResponse.data.collateralizationStage === false) {
         setCurrentStep(Step.COLLATERALIZE);
       }
@@ -30,6 +31,8 @@ export const OnboardingRoute: React.FC = () => {
     switch (state) {
       case Step.KYC:
         return <KycStep setCurrentStep={setCurrentStep} />;
+      case Step.VERIFY:
+        return <VerifyStep setCurrentStep={setCurrentStep} />;
       case Step.COLLATERALIZE:
         return <CollateralizationStep setCurrentStep={setCurrentStep} />;
       case Step.CARD:
