@@ -5,7 +5,7 @@ import { iconProps } from './icons.interface';
 export const Solana: FC<iconProps> = ({ className }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <circle cx="12" cy="12" r="12" fill="#F9F9F9" />
-    <g clip-path="url(#clip0_2749_9469)">
+    <g clipPath="url(#clip0_2749_9469)">
       <path
         d="M7.27405 15.3956C7.35854 15.3109 7.47471 15.2615 7.59792 15.2615H18.7712C18.9753 15.2615 19.0774 15.5085 18.9331 15.6532L16.7259 17.8659C16.6414 17.9506 16.5252 18 16.402 18H5.22879C5.02462 18 4.92253 17.753 5.06686 17.6083L7.27405 15.3956Z"
         fill="url(#paint0_linear_2749_9469)"
@@ -28,8 +28,8 @@ export const Solana: FC<iconProps> = ({ className }) => (
         y2="20.5107"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#00FFA3" />
-        <stop offset="1" stop-color="#DC1FFF" />
+        <stop stopColor="#00FFA3" />
+        <stop offset="1" stopColor="#DC1FFF" />
       </linearGradient>
       <linearGradient
         id="paint1_linear_2749_9469"
@@ -39,8 +39,8 @@ export const Solana: FC<iconProps> = ({ className }) => (
         y2="18.741"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#00FFA3" />
-        <stop offset="1" stop-color="#DC1FFF" />
+        <stop stopColor="#00FFA3" />
+        <stop offset="1" stopColor="#DC1FFF" />
       </linearGradient>
       <linearGradient
         id="paint2_linear_2749_9469"
@@ -50,8 +50,8 @@ export const Solana: FC<iconProps> = ({ className }) => (
         y2="19.6202"
         gradientUnits="userSpaceOnUse"
       >
-        <stop stop-color="#00FFA3" />
-        <stop offset="1" stop-color="#DC1FFF" />
+        <stop stopColor="#00FFA3" />
+        <stop offset="1" stopColor="#DC1FFF" />
       </linearGradient>
       <clipPath id="clip0_2749_9469">
         <rect width="14" height="11" fill="white" transform="translate(5 7)" />

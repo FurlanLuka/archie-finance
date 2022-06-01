@@ -42,7 +42,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
       <CollateralizationStepStyled>
         <SubtitleS className="title">Send crypto to your collateral wallet</SubtitleS>
         <ParagraphXS className="subtitle">
-          Choose your desired initial line of credit and which crypto asset you'd like to collateralize.
+          Choose your desired initial line of credit and which crypto asset you'd like to collateralize
         </ParagraphXS>
 
         <div className="inputs">

@@ -38,8 +38,6 @@ export const VerifyStepStyled = styled.div`
     }
   }
 
-  
-
   .resend-text {
     margin-bottom: 0.5rem;
   }
