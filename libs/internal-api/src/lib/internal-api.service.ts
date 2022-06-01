@@ -10,6 +10,7 @@ import {
   GetAssetInformationResponse,
   GetAssetListResponse,
 } from '@archie-microservices/api-interfaces/asset_information';
+import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
 
 @Injectable()
 export class InternalApiService {
@@ -33,6 +34,14 @@ export class InternalApiService {
         },
       },
     );
+  }
+
+  public async getKyc(userId: string): Promise<GetKycResponse> {
+    const response: AxiosResponse<GetKycResponse> = await axios.get(
+      `${this.config.internalApiUrl}/internal/kyc/${userId}`,
+    );
+
+    return response.data;
   }
 
   public async getAssetList(): Promise<GetAssetListResponse> {

@@ -6,6 +6,7 @@ import { ConfigVariables } from './interfaces';
 import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
 import { CreditModule } from './modules/credit/credit.module';
+import { AptoController } from './modules/apto/apto.controller';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { CreditModule } from './modules/credit/credit.module';
     }),
     HealthModule,
     CreditModule,
+    AptoController,
   ],
   controllers: [],
   providers: [],
