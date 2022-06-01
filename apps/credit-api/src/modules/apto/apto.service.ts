@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { AptoApiService } from './api/apto_api.service';
-import { StartVerificationResponse } from './apto.interfaces';
+import { StartVerificationResponse } from './api/apto_api.interfaces';
 import { AptoVerification } from './apto_verification.entity';
 import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
 
@@ -28,7 +28,7 @@ export class AptoService {
         kyc.phoneNumberCountryCode,
         kyc.phoneNumber,
       );
-
+  
     await this.aptoVerificationRepository.save({
       userId,
       verificationId: startPhoneVerificationResponse.verification_id,
