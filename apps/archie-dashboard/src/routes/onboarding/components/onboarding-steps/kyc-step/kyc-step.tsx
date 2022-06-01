@@ -1,7 +1,9 @@
 import { FC, useState } from 'react';
-import { Formik, Form, Field, FormikValues } from 'formik';
+import { Formik, Form, Field, FormikValues, FieldProps } from 'formik';
 import { format, differenceInYears } from 'date-fns';
 import Autocomplete from 'react-google-autocomplete';
+import { templateFormatter, templateParser, parseDigit } from 'input-format';
+import ReactInput from 'input-format/react';
 import PhoneInput, { Country } from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import * as Yup from 'yup';
@@ -50,6 +52,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
       .test('dob', 'Should be older than 18', (value) => minYears(value ?? today))
       .max(today, 'Date cannot be in the future')
       .required('Please enter your date of birth'),
+    phoneNumber: Yup.string().required('Please enter your last name'),
     ssnDigits: Yup.string()
       .matches(/^[0-9]+$/, 'Only digits')
       .test('len', 'Must be exactly 9 digits', (value) => value?.length === 9)
@@ -64,7 +67,6 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const [phoneNumberCountryCode, setPhoneNumberCountryCode] = useState('+1');
 
   const addAddress = (place: GooglePlace) => {
-    console.log(place);
     const streetNumberComponent = place.address_components.find((item) => item.types.includes('street_number'));
     const streetNameComponent = place.address_components.find((item) => item.types.includes('route'));
     const localityComponent = place.address_components.find((item) => item.types.includes('locality'));
@@ -112,20 +114,18 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
     }
   };
 
-  const hasLength = (value: string) => value.length > 0;
-
   const handleSubmit = (values: FormikValues) => {
     const payload = {
       firstName: values.firstName,
       lastName: values.lastName,
       dateOfBirth: values.dateOfBirth,
       ...address,
-      phoneNumber,
+      phoneNumber: values.phoneNumber,
       phoneNumberCountryCode,
       ssn: values.ssnDigits,
     };
 
-    if (address !== undefined && hasLength(phoneNumber)) {
+    if (address !== undefined && phoneNumber.length > 0) {
       if (mutationRequest.state === RequestState.IDLE) {
         mutationRequest.mutate(payload);
 
@@ -135,6 +135,18 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
       }
     }
   };
+
+  const DATE_OF_BIRTH_TEMPLATE = 'xx-xx-xxxx';
+  const PHONE_NUMBER_TEMPLATE = '(xxx) xxx-xxxx';
+  const SSN_TEMPLATE = 'xxx-xx-xxxx';
+
+  const parseDateOfBirth = templateParser(DATE_OF_BIRTH_TEMPLATE, parseDigit);
+  const parsePhoneNumber = templateParser(PHONE_NUMBER_TEMPLATE, parseDigit);
+  const parseSsn = templateParser(SSN_TEMPLATE, parseDigit);
+
+  const formatDateOfBirth = templateFormatter(DATE_OF_BIRTH_TEMPLATE);
+  const formatPhoneNumber = templateFormatter(PHONE_NUMBER_TEMPLATE);
+  const formatSsn = templateFormatter(SSN_TEMPLATE);
 
   return (
     <KycStepStyled>
@@ -148,6 +160,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
           firstName: '',
           lastName: '',
           dateOfBirth: format(today, 'MM-dd-yyyy'),
+          phoneNumber: '',
           ssnDigits: '',
         }}
         validationSchema={validationSchema}
@@ -180,7 +193,18 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
             </div>
             <InputText>
               Date of birth*
-              <Field name="dateOfBirth" placeholder="Date of birth" />
+              <Field
+                name="dateOfBirth"
+                render={({ field: { name, value, onChange } }: FieldProps) => (
+                  <ReactInput
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    parse={parseDateOfBirth}
+                    format={formatDateOfBirth}
+                  />
+                )}
+              />
               {errors.dateOfBirth && touched.dateOfBirth ? (
                 <ParagraphXS className="error" color={theme.textDanger}>
                   {errors.dateOfBirth}
@@ -202,7 +226,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
             </InputText>
             <InputText>
               Phone Number*
-              <PhoneInput
+              {/* <PhoneInput
                 defaultCountry={'US'}
                 international={false}
                 addInternationalOption={false}
@@ -212,7 +236,29 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
                 value={phoneNumber}
                 onChange={(value) => setPhoneNumber(value as string)}
                 onCountryChange={(country: Country) => setPhoneNumberCountryCode(country)}
+              /> */}
+              {/* Only formatter */}
+              <ReactInput
+                name="phoneNumber"
+                value={phoneNumber}
+                placeholder="Enter phone number"
+                onChange={(value) => setPhoneNumber(value as string)}
+                parse={parsePhoneNumber}
+                format={formatPhoneNumber}
               />
+              {/* With Formik */}
+              {/* <Field name="phoneNumber">
+                {({ field: { name, value, onChange, onBlur } }: FieldProps) => (
+                  <ReactInput
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    parse={parsePhoneNumber}
+                    format={formatPhoneNumber}
+                  />
+                )}
+              </Field> */}
               {phoneNumberError && (
                 <ParagraphXS className="error" color={theme.textDanger}>
                   {phoneNumberError}
