@@ -61,8 +61,8 @@ spec:
           ## User api service
           - path: /internal/user
             pathType: Prefix
-              backend:
-                service:
-                  name: archie-user-api-service
-                  port:
-                  number: 80
+            backend:
+              service:
+                name: archie-user-api-service
+                port:
+                number: 80
