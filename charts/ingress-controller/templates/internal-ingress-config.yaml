@@ -65,4 +65,4 @@ spec:
               service:
                 name: archie-user-api-service
                 port:
-                number: 80
+                  number: 80
