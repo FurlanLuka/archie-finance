@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigVariables } from '../../interfaces';
-import { KycController } from './kyc.controller';
+import { InternalKycController, KycController } from './kyc.controller';
 import { Kyc } from './kyc.entity';
 import { KycService } from './kyc.service';
 import { InternalApiModule } from '@archie-microservices/internal-api';
@@ -20,7 +20,7 @@ import { InternalApiModule } from '@archie-microservices/internal-api';
       }),
     }),
   ],
-  controllers: [KycController],
+  controllers: [KycController, InternalKycController],
   providers: [KycService],
 })
 export class KycModule {}
