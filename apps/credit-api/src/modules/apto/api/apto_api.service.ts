@@ -6,6 +6,7 @@ import {
   CompleteVerificationResponse,
   CreateUserResponse,
   EmailDataPoint,
+  IdDocumentDataPoint,
   NameDataPoint,
   PhoneDataPoint,
   StartVerificationResponse,
@@ -119,6 +120,7 @@ export class AptoApiService {
     birthdateDataPoint: BirthdateDataPoint,
     nameDataPoint: NameDataPoint,
     addressDataPoint: AddressDataPoint,
+    idDocumentDataPoint: IdDocumentDataPoint,
   ): Promise<CreateUserResponse> {
     const response: AxiosResponse<CreateUserResponse> = await axios.post(
       this.constructAptoUrl(`/v1/user`),
@@ -132,6 +134,7 @@ export class AptoApiService {
             birthdateDataPoint,
             nameDataPoint,
             addressDataPoint,
+            idDocumentDataPoint,
           ],
         },
       },

@@ -70,7 +70,7 @@ export interface NameDataPoint {
 export interface AddressDataPoint {
   type: DataType.ADDRESS;
   street_one: string;
-  street_two: string;
+  street_two?: string;
   locality: string;
   region: string;
   postal_code: string;

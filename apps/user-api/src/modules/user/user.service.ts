@@ -1,7 +1,12 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { User } from 'auth0';
 import { Auth0Service } from '../auth0/auth0.service';
 import { GetEmailVerificationResponse } from './user.interfaces';
+import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
 
 @Injectable()
 export class UserService {
@@ -14,6 +19,20 @@ export class UserService {
 
     return {
       isVerified: user.email_verified,
+    };
+  }
+
+  async getEmailAddress(userId: string): Promise<GetEmailAddressResponse> {
+    const user: User = await this.auth0Service.getManagmentClient().getUser({
+      id: userId,
+    });
+
+    if (user.email === undefined) {
+      throw new NotFoundException();
+    }
+
+    return {
+      email: user.email,
     };
   }
 
