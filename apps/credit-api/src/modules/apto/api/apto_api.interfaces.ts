@@ -52,23 +52,23 @@ export interface PhoneDataPoint {
 }
 
 export interface EmailDataPoint {
-  type: DataType.EMAIL;
+  data_type: DataType.EMAIL;
   email: string;
 }
 
 export interface BirthdateDataPoint {
-  type: DataType.BIRTHDATE;
+  data_type: DataType.BIRTHDATE;
   date: string;
 }
 
 export interface NameDataPoint {
-  type: DataType.NAME;
+  data_type: DataType.NAME;
   first_name: string;
   last_name: string;
 }
 
 export interface AddressDataPoint {
-  type: DataType.ADDRESS;
+  data_type: DataType.ADDRESS;
   street_one: string;
   street_two?: string;
   locality: string;

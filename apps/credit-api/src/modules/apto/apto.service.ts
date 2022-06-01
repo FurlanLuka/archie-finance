@@ -123,23 +123,23 @@ export class AptoService {
         await this.internalApiService.getUserEmailAddress(userId);
 
       const birthdateDataPoint: BirthdateDataPoint = {
-        type: DataType.BIRTHDATE,
+        data_type: DataType.BIRTHDATE,
         date: kyc.dateOfBirth,
       };
 
       const emailDataPoint: EmailDataPoint = {
-        type: DataType.EMAIL,
+        data_type: DataType.EMAIL,
         email: emailAddressResponse.email,
       };
 
       const nameDataPoint: NameDataPoint = {
-        type: DataType.NAME,
+        data_type: DataType.NAME,
         first_name: kyc.firstName,
         last_name: kyc.lastName,
       };
 
       const addressDataPoint: AddressDataPoint = {
-        type: DataType.ADDRESS,
+        data_type: DataType.ADDRESS,
         street_one: `${kyc.addressStreet} ${kyc.addressStreetNumber}`,
         locality: kyc.addressLocality,
         region: kyc.addressRegion,
