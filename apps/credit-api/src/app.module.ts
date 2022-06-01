@@ -6,7 +6,8 @@ import { ConfigVariables } from './interfaces';
 import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
 import { CreditModule } from './modules/credit/credit.module';
-import { AptoController } from './modules/apto/apto.controller';
+import { InternalApiModule } from '@archie-microservices/internal-api';
+import { AptoModule } from './modules/apto/apto.module';
 
 @Module({
   imports: [
@@ -45,9 +46,16 @@ import { AptoController } from './modules/apto/apto.controller';
       }),
       inject: [ConfigService],
     }),
+    InternalApiModule.register({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        internalApiUrl: configService.get(ConfigVariables.INTERNAL_API_URL),
+      }),
+    }),
     HealthModule,
     CreditModule,
-    AptoController,
+    AptoModule,
   ],
   controllers: [],
   providers: [],

@@ -17,6 +17,7 @@ export class InternalApiModule {
         InternalApiService,
       ],
       exports: [InternalApiService],
+      global: true,
     };
   }
 }

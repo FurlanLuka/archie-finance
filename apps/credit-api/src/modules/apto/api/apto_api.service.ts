@@ -9,9 +9,9 @@ import {
   NameDataPoint,
   PhoneDataPoint,
   StartVerificationResponse,
-} from './apto.interfaces';
+} from '../apto.interfaces';
 import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
-import { ConfigVariables } from '../../interfaces';
+import { ConfigVariables } from '../../../interfaces';
 
 @Injectable()
 export class AptoApiService {
