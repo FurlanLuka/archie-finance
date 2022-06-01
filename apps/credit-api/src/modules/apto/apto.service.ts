@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -187,6 +188,8 @@ export class AptoService {
       return user;
     } catch (error) {
       Logger.log((error as AxiosError).toJSON());
+
+      throw new InternalServerErrorException();
     }
   }
 }
