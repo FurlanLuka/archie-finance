@@ -103,6 +103,16 @@ spec:
                 secretKeyRef:
                   name: internal-api-secrets
                   key: internal-api-url
+            - name: APTO_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: apto-secrets
+                  key: api-key
+            - name: APTO_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: apto-secrets
+                  key: api-url
       imagePullSecrets:
         - name: regcred
 ---
