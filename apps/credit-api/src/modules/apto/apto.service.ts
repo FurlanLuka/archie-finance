@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -22,6 +23,7 @@ import { AptoVerification } from './apto_verification.entity';
 import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
 import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
 import { AptoUser } from './apto_user.entity';
+import { AxiosError } from 'axios';
 
 @Injectable()
 export class AptoService {
@@ -114,73 +116,77 @@ export class AptoService {
       throw new BadRequestException('PHONE_VERIFICATION_REQUIRED_ERROR');
     }
 
-    const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
-    const emailAddressResponse: GetEmailAddressResponse =
-      await this.internalApiService.getUserEmailAddress(userId);
+    try {
+      const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
+      const emailAddressResponse: GetEmailAddressResponse =
+        await this.internalApiService.getUserEmailAddress(userId);
 
-    const birthdateDataPoint: BirthdateDataPoint = {
-      type: DataType.BIRTHDATE,
-      date: kyc.dateOfBirth,
-    };
+      const birthdateDataPoint: BirthdateDataPoint = {
+        type: DataType.BIRTHDATE,
+        date: kyc.dateOfBirth,
+      };
 
-    const emailDataPoint: EmailDataPoint = {
-      type: DataType.EMAIL,
-      email: emailAddressResponse.email,
-    };
+      const emailDataPoint: EmailDataPoint = {
+        type: DataType.EMAIL,
+        email: emailAddressResponse.email,
+      };
 
-    const nameDataPoint: NameDataPoint = {
-      type: DataType.NAME,
-      first_name: kyc.firstName,
-      last_name: kyc.lastName,
-    };
+      const nameDataPoint: NameDataPoint = {
+        type: DataType.NAME,
+        first_name: kyc.firstName,
+        last_name: kyc.lastName,
+      };
 
-    const addressDataPoint: AddressDataPoint = {
-      type: DataType.ADDRESS,
-      street_one: `${kyc.addressStreet} ${kyc.addressStreetNumber}`,
-      locality: kyc.addressLocality,
-      region: kyc.addressRegion,
-      postal_code: kyc.addressPostalCode,
-      country: kyc.addressCountry,
-    };
+      const addressDataPoint: AddressDataPoint = {
+        type: DataType.ADDRESS,
+        street_one: `${kyc.addressStreet} ${kyc.addressStreetNumber}`,
+        locality: kyc.addressLocality,
+        region: kyc.addressRegion,
+        postal_code: kyc.addressPostalCode,
+        country: kyc.addressCountry,
+      };
 
-    const idDocumentDataPoint: IdDocumentDataPoint = {
-      data_type: DataType.ID_DOCUMENT,
-      value: kyc.ssn,
-      country: kyc.addressCountry,
-      doc_type: 'SSN',
-    };
+      const idDocumentDataPoint: IdDocumentDataPoint = {
+        data_type: DataType.ID_DOCUMENT,
+        value: kyc.ssn,
+        country: kyc.addressCountry,
+        doc_type: 'SSN',
+      };
 
-    const phoneDataPoint: PhoneDataPoint = {
-      data_type: DataType.PHONE,
-      verified: true,
-      verification: {
-        type: 'verification',
-        verification_id: aptoVerification.verificationId,
-        status: 'passed',
-        verification_mechanism: 'phone',
-        verification_type: 'phone',
-      },
-      not_specified: false,
-      country_code: kyc.phoneNumberCountryCode.replace('+', ''),
-      phone_number: kyc.phoneNumber,
-    };
+      const phoneDataPoint: PhoneDataPoint = {
+        data_type: DataType.PHONE,
+        verified: true,
+        verification: {
+          type: 'verification',
+          verification_id: aptoVerification.verificationId,
+          status: 'passed',
+          verification_mechanism: 'phone',
+          verification_type: 'phone',
+        },
+        not_specified: false,
+        country_code: kyc.phoneNumberCountryCode.replace('+', ''),
+        phone_number: kyc.phoneNumber,
+      };
 
-    const user: CreateUserResponse = await this.aptoApiService.createUser(
-      userId,
-      phoneDataPoint,
-      emailDataPoint,
-      birthdateDataPoint,
-      nameDataPoint,
-      addressDataPoint,
-      idDocumentDataPoint,
-    );
+      const user: CreateUserResponse = await this.aptoApiService.createUser(
+        userId,
+        phoneDataPoint,
+        emailDataPoint,
+        birthdateDataPoint,
+        nameDataPoint,
+        addressDataPoint,
+        idDocumentDataPoint,
+      );
 
-    await this.aptoUserRepository.save({
-      userId,
-      aptoUserId: user.user_id,
-      accessToken: user.user_token,
-    });
+      await this.aptoUserRepository.save({
+        userId,
+        aptoUserId: user.user_id,
+        accessToken: user.user_token,
+      });
 
-    return user;
+      return user;
+    } catch (error) {
+      Logger.log((error as AxiosError).toJSON());
+    }
   }
 }
