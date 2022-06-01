@@ -20,8 +20,21 @@ interface KycStepProps {
 }
 
 interface GooglePlace {
-  address_components: Array<{ types: Array<string> }>;
+  address_components: Array<{
+    types: string[];
+    long_name: string;
+    short_name: string;
+  }>;
   formatted_address: string;
+}
+
+interface Address {
+  addressStreet: string;
+  addressStreetNumber: string;
+  addressLocality: string;
+  addressRegion: string;
+  addressPostalCode: string;
+  addressCountry: string;
 }
 
 export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
@@ -43,7 +56,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
       .required('Please enter your SSN/TIN'),
   });
 
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState<Address>();
   const [addressError, setAddressError] = useState('');
 
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -51,10 +64,34 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const [phoneNumberCountryCode, setPhoneNumberCountryCode] = useState('+1');
 
   const addAddress = (place: GooglePlace) => {
-    const hasStreetNumber = place.address_components.find((item) => item.types.includes('street_number'));
+    console.log(place);
+    const streetNumberComponent = place.address_components.find((item) => item.types.includes('street_number'));
+    const streetNameComponent = place.address_components.find((item) => item.types.includes('route'));
+    const localityComponent = place.address_components.find((item) => item.types.includes('locality'));
+    const countryComponent = place.address_components.find((item) => item.types.includes('country'));
+    const postalCodeComponent = place.address_components.find((item) => item.types.includes('postal_code'));
+    const postalTownComponent = place.address_components.find((item) => item.types.includes('postal_town'));
+    const regionComponent = place.address_components.find((item) => item.types.includes('administrative_area_level_1'));
 
-    if (hasStreetNumber) {
-      setAddress(place.formatted_address);
+    if (
+      streetNumberComponent &&
+      streetNameComponent &&
+      (localityComponent || postalTownComponent) &&
+      countryComponent &&
+      postalCodeComponent &&
+      regionComponent
+    ) {
+      const addr: Address = {
+        addressStreet: streetNameComponent.long_name,
+        addressStreetNumber: streetNumberComponent.long_name,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        addressLocality: localityComponent ? localityComponent.short_name : postalTownComponent!.long_name,
+        addressCountry: countryComponent.short_name,
+        addressRegion: regionComponent.short_name,
+        addressPostalCode: postalCodeComponent.short_name,
+      };
+
+      setAddress(addr);
       setAddressError('');
     } else {
       setAddressError('Please enter your street number');
@@ -82,13 +119,13 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
       firstName: values.firstName,
       lastName: values.lastName,
       dateOfBirth: values.dateOfBirth,
-      address,
+      ...address,
       phoneNumber,
       phoneNumberCountryCode,
       ssn: values.ssnDigits,
     };
 
-    if (hasLength(address) && hasLength(phoneNumber)) {
+    if (address !== undefined && hasLength(phoneNumber)) {
       if (mutationRequest.state === RequestState.IDLE) {
         mutationRequest.mutate(payload);
 
