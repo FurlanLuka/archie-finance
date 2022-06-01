@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@archie-microservices/config';
 import {
   AddressDataPoint,
@@ -9,8 +9,8 @@ import {
   NameDataPoint,
   PhoneDataPoint,
   StartVerificationResponse,
-} from '../apto.interfaces';
-import axios, { AxiosRequestHeaders, AxiosResponse } from 'axios';
+} from './apto_api.interfaces';
+import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from 'axios';
 import { ConfigVariables } from '../../../interfaces';
 
 @Injectable()
@@ -33,54 +33,83 @@ export class AptoApiService {
     countryCode: string,
     phoneNumber: string,
   ): Promise<StartVerificationResponse> {
-    const response: AxiosResponse<StartVerificationResponse> = await axios.post(
-      this.constructAptoUrl(`/v1/verifications/start`),
-      {
-        datapoint_type: 'phone',
-        datapoint: {
-          data_type: 'phone',
-          country_code: countryCode,
-          phone_number: phoneNumber,
-        },
-      },
-      {
-        headers: this.getAptoHeaders(),
-      },
-    );
+    try {
+      const response: AxiosResponse<StartVerificationResponse> =
+        await axios.post(
+          this.constructAptoUrl(`/v1/verifications/start`),
+          {
+            datapoint_type: 'phone',
+            datapoint: {
+              data_type: 'phone',
+              country_code: countryCode,
+              phone_number: phoneNumber,
+            },
+          },
+          {
+            headers: this.getAptoHeaders(),
+          },
+        );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_STARTING_VERIFICATION_PROCESS',
+        metadata: {
+          error: (error as AxiosError).toJSON(),
+        },
+      });
+    }
   }
 
   public async restartVerificationProcess(
     verificationId: string,
   ): Promise<StartVerificationResponse> {
-    const response: AxiosResponse<StartVerificationResponse> = await axios.post(
-      this.constructAptoUrl(`/v1/verifications/${verificationId}/restart`),
-      {},
-      {
-        headers: this.getAptoHeaders(),
-      },
-    );
+    try {
+      const response: AxiosResponse<StartVerificationResponse> =
+        await axios.post(
+          this.constructAptoUrl(`/v1/verifications/${verificationId}/restart`),
+          {},
+          {
+            headers: this.getAptoHeaders(),
+          },
+        );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_RESTARTING_VERIFICATION_PROCESS',
+        metadata: {
+          error: (error as AxiosError).toJSON(),
+        },
+      });
+    }
   }
 
   public async completeVerificationProcess(
     verificationId: string,
     secret: string,
   ): Promise<CompleteVerificationResponse> {
-    const response: AxiosResponse<CompleteVerificationResponse> =
-      await axios.post(
-        this.constructAptoUrl(`/v1/verifications/${verificationId}/finish`),
-        {
-          secret,
-        },
-        {
-          headers: this.getAptoHeaders(),
-        },
-      );
+    try {
+      const response: AxiosResponse<CompleteVerificationResponse> =
+        await axios.post(
+          this.constructAptoUrl(`/v1/verifications/${verificationId}/finish`),
+          {
+            secret,
+          },
+          {
+            headers: this.getAptoHeaders(),
+          },
+        );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_COMPLETING_VERIFICATION_PROCESS',
+        metadata: {
+          error: (error as AxiosError).toJSON(),
+        },
+      });
+    }
   }
 
   public async createUser(

@@ -72,7 +72,7 @@ export class FireblocksWebhookService {
         payload.data.status,
       );
     } catch (error) {
-      Logger.log({
+      Logger.error({
         code: 'FIREBLOCKS_WEBHOOK_ERROR',
         metadata: {
           transactionId: payload.data.id,
