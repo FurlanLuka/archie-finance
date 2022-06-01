@@ -10,6 +10,7 @@ import { AptoApiService } from './api/apto_api.service';
 import {
   AddressDataPoint,
   BirthdateDataPoint,
+  CreateUserResponse,
   DataType,
   EmailDataPoint,
   IdDocumentDataPoint,
@@ -20,6 +21,7 @@ import {
 import { AptoVerification } from './apto_verification.entity';
 import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
 import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
+import { AptoUser } from './apto_user.entity';
 
 @Injectable()
 export class AptoService {
@@ -28,6 +30,8 @@ export class AptoService {
     private internalApiService: InternalApiService,
     @InjectRepository(AptoVerification)
     private aptoVerificationRepository: Repository<AptoVerification>,
+    @InjectRepository(AptoUser)
+    private aptoUserRepository: Repository<AptoUser>,
   ) {}
 
   public async startPhoneVerification(userId: string): Promise<void> {
@@ -96,7 +100,7 @@ export class AptoService {
     );
   }
 
-  public async createAptoUser(userId: string): Promise<void> {
+  public async createAptoUser(userId: string): Promise<CreateUserResponse> {
     const aptoVerification: AptoVerification =
       await this.aptoVerificationRepository.findOne({
         userId,
@@ -161,7 +165,7 @@ export class AptoService {
       phone_number: kyc.phoneNumber,
     };
 
-    await this.aptoApiService.createUser(
+    const user: CreateUserResponse = await this.aptoApiService.createUser(
       userId,
       phoneDataPoint,
       emailDataPoint,
@@ -170,5 +174,13 @@ export class AptoService {
       addressDataPoint,
       idDocumentDataPoint,
     );
+
+    await this.aptoUserRepository.save({
+      userId,
+      aptoUserId: user.user_id,
+      accessToken: user.user_token,
+    });
+
+    return user;
   }
 }
