@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
-import qrCode from '../../../../../assets/images/qr-code.png';
+import { RequestState } from '@archie/api-consumer/interface';
 import { collateralCurrencies, CollateralCurrency } from '../../../../../constants/collateral-curencies';
 import { Step } from '../../../../../constants/onboarding-steps';
 import { CollateralDeposit } from '../../../../../components/collateral-deposit/collateral-deposit';
@@ -15,6 +15,9 @@ import { InputRange } from '../../../../../components/_generic/input-range/input
 import { ExternalLink } from '../../../../../components/_generic/icons/external-link';
 import { CollateralCurency } from '../../../../../components/collateral-curency/collateral-curency';
 import { theme } from '../../../../../constants/theme';
+import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
+import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
+import { QueryResponse } from '../../../../../../../../libs/archie-api-consumer/src/interface';
 
 interface CollateralizationStepProps {
   setCurrentStep: (step: Step) => void;
@@ -26,6 +29,25 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
   const [selectedCollateralDeposit, setSelectedCollateralDeposit] = useState<CollateralCurrency>();
   const [collateralDeposit, setCollateralDeposit] = useState({ id: '', address: '' });
   const [requiredCollateral, setRequiredCollateral] = useState(0); // TBD
+  const [shouldCall, setShouldCall] = useState(false);
+  const [selectedAssetId, setSelectedAssetId] = useState<string>('');
+
+  const getDepositAddressResponse: QueryResponse<GetDepositAddressResponse> = useGetDepositAddress(
+    selectedAssetId,
+    shouldCall,
+  );
+
+  useEffect(() => {
+    if (selectedAssetId.length > 0) {
+      setShouldCall(true);
+    }
+  }, [selectedAssetId]);
+
+  useEffect(() => {
+    if (getDepositAddressResponse.state === RequestState.SUCCESS) {
+      setCollateralDeposit({ id: selectedAssetId, address: getDepositAddressResponse.data.address });
+    }
+  }, [getDepositAddressResponse]);
 
   useEffect(() => {
     const curency: CollateralCurrency | undefined = collateralCurrencies.find(
@@ -64,7 +86,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
               <div className="select-list">
                 {collateralCurrencies.map((asset, index) => (
                   <div className="select-option" key={index} onClick={() => setSelectOpen(false)}>
-                    <CollateralDeposit assetId={asset.id} setCollateralDeposit={setCollateralDeposit} />
+                    <CollateralDeposit assetId={asset.id} setSelectedAsset={setSelectedAssetId} />
                   </div>
                 ))}
               </div>
