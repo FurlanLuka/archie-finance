@@ -13,8 +13,8 @@ export const CardStep: FC = () => (
     <StepsIndicator currentStep={Step.CARD} />
     <EmailVerification />
     <CardStepStyled>
-      <SubtitleS>Your Archie Card is Ready!</SubtitleS>
-      <ParagraphXS>
+      <SubtitleS className="title">Your Archie Card is Ready!</SubtitleS>
+      <ParagraphXS className="subtitle">
         You collateralized 0.15 BTC and have a $2,000 line of credit. Make sure <br /> your email is verified before
         continuing.
       </ParagraphXS>

@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import ReactCodeInput from 'react-verification-code-input';
+
 import { Step } from '../../../../../constants/onboarding-steps';
 import { SubtitleS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';

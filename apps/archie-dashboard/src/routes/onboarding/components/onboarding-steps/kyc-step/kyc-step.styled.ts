@@ -13,11 +13,11 @@ export const KycStepStyled = styled.div`
   padding: 1.5rem;
   text-align: center;
 
-  h4 {
+  .title {
     margin-bottom: 0.5rem;
   }
 
-  p {
+  .subtitle {
     margin-bottom: 2rem;
   }
 
@@ -30,12 +30,19 @@ export const KycStepStyled = styled.div`
     gap: 1rem;
   }
 
-  .error {
-    margin: 0.25rem 0;
+  .phone-number {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+
+    p {    
+      margin-top: 0.35rem;
+    }
   }
 
-  .PhoneInput {
-    width: 100%;
+  .error {
+    margin: 0.25rem 0;
   }
 
   .divider {

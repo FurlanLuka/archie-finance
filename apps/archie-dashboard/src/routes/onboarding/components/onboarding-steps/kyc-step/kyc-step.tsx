@@ -1,16 +1,14 @@
 import { FC, useState } from 'react';
-import { Formik, Form, Field, FormikValues, FieldProps } from 'formik';
-import { format, differenceInYears } from 'date-fns';
+import { Formik, Form } from 'formik';
+import { format, differenceInYears, isValid, parse, isFuture } from 'date-fns';
 import Autocomplete from 'react-google-autocomplete';
 import { templateFormatter, templateParser, parseDigit } from 'input-format';
 import ReactInput from 'input-format/react';
-import PhoneInput, { Country } from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
-import * as Yup from 'yup';
+
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
 import { Step } from '../../../../../constants/onboarding-steps';
-import { SubtitleS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
+import { SubtitleS, ParagraphXS, ParagraphS } from '../../../../../components/_generic/typography/typography.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { InputText } from '../../../../../components/_generic/input-text/input-text.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
@@ -43,28 +41,27 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   const mutationRequest = useCreateKyc();
 
   const today = new Date();
-  const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) >= 18;
+  const parsedDate = (value: string) => parse(value, 'MMddyyyy', new Date());
+  const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) < 18;
 
-  const validationSchema = Yup.object().shape({
-    firstName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter your first name'),
-    lastName: Yup.string().min(2, 'Too Short!').max(50, 'Too Long!').required('Please enter your last name'),
-    dateOfBirth: Yup.date()
-      .test('dob', 'Should be older than 18', (value) => minYears(value ?? today))
-      .max(today, 'Date cannot be in the future')
-      .required('Please enter your date of birth'),
-    phoneNumber: Yup.string().required('Please enter your last name'),
-    ssnDigits: Yup.string()
-      .matches(/^[0-9]+$/, 'Only digits')
-      .test('len', 'Must be exactly 9 digits', (value) => value?.length === 9)
-      .required('Please enter your SSN/TIN'),
-  });
+  const [firstName, setFirstName] = useState('');
+  const [firstNameError, setFirstNameError] = useState('');
+
+  const [lastName, setLastName] = useState('');
+  const [lastNameError, setLastNameError] = useState('');
+
+  const [dateOfBirth, setDateOfBirth] = useState(format(today, 'MMddyyyy'));
+  const [dateOfBirthError, setDateOfBirthError] = useState('');
 
   const [address, setAddress] = useState<Address>();
   const [addressError, setAddressError] = useState('');
 
   const [phoneNumber, setPhoneNumber] = useState('');
   const [phoneNumberError, setPhoneNumberError] = useState('');
-  const [phoneNumberCountryCode, setPhoneNumberCountryCode] = useState('+1');
+  const phoneNumberCountryCode = '+1';
+
+  const [ssn, setSsn] = useState('');
+  const [ssnError, setSsnError] = useState('');
 
   const addAddress = (place: GooglePlace) => {
     const streetNumberComponent = place.address_components.find((item) => item.types.includes('street_number'));
@@ -101,6 +98,38 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
   };
 
   const validate = () => {
+    if (!firstName) {
+      setFirstNameError('Please enter your first name');
+    } else if (firstName.length < 2) {
+      setFirstNameError('Too Short!');
+    } else if (firstName.length > 50) {
+      setFirstNameError('Too Long!');
+    } else {
+      setFirstNameError('');
+    }
+
+    if (!lastName) {
+      setLastNameError('Please enter your last name');
+    } else if (lastName.length < 2) {
+      setLastNameError('Too Short!');
+    } else if (lastName.length > 50) {
+      setLastNameError('Too Long!');
+    } else {
+      setLastNameError('');
+    }
+
+    if (!dateOfBirth) {
+      setDateOfBirthError('Please enter your date of birth');
+    } else if (!isValid(parsedDate(dateOfBirth))) {
+      setDateOfBirthError('Not a valid date');
+    } else if (minYears(parsedDate(dateOfBirth) ?? new Date())) {
+      setDateOfBirthError('Should be older than 18');
+    } else if (isFuture(parsedDate(dateOfBirth))) {
+      setDateOfBirthError('Date cannot be in the future');
+    } else {
+      setDateOfBirthError('');
+    }
+
     if (!address) {
       setAddressError('Please enter your address');
     } else {
@@ -109,23 +138,47 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
 
     if (!phoneNumber) {
       setPhoneNumberError('Please enter your phone number');
+    } else if (phoneNumber.length < 10) {
+      setPhoneNumberError('Must consist of 10 digits');
     } else {
       setPhoneNumberError('');
     }
+
+    if (!ssn) {
+      setSsnError('Please enter your SSN/TIN');
+    } else if (ssn.length < 9) {
+      setSsnError('Must be exactly 9 digits');
+    } else {
+      setSsnError('');
+    }
   };
 
-  const handleSubmit = (values: FormikValues) => {
+  const hasLenght = (value: string | Array<string>) => value.length > 0;
+
+  const handleSubmit = () => {
     const payload = {
-      firstName: values.firstName,
-      lastName: values.lastName,
-      dateOfBirth: values.dateOfBirth,
+      firstName,
+      lastName,
+      dateOfBirth,
       ...address,
-      phoneNumber: values.phoneNumber,
+      phoneNumber,
       phoneNumberCountryCode,
-      ssn: values.ssnDigits,
+      ssn,
     };
 
-    if (address !== undefined && phoneNumber.length > 0) {
+    if (
+      hasLenght(firstName) &&
+      !hasLenght(firstNameError) &&
+      hasLenght(lastName) &&
+      !hasLenght(lastNameError) &&
+      hasLenght(dateOfBirth) &&
+      !hasLenght(dateOfBirthError) &&
+      address !== undefined &&
+      hasLenght(phoneNumber) &&
+      !hasLenght(phoneNumberError) &&
+      hasLenght(ssn) &&
+      !hasLenght(ssnError)
+    ) {
       if (mutationRequest.state === RequestState.IDLE) {
         mutationRequest.mutate(payload);
 
@@ -136,151 +189,115 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
     }
   };
 
-  const DATE_OF_BIRTH_TEMPLATE = 'xx-xx-xxxx';
-  const PHONE_NUMBER_TEMPLATE = '(xxx) xxx-xxxx';
-  const SSN_TEMPLATE = 'xxx-xx-xxxx';
-
-  const parseDateOfBirth = templateParser(DATE_OF_BIRTH_TEMPLATE, parseDigit);
-  const parsePhoneNumber = templateParser(PHONE_NUMBER_TEMPLATE, parseDigit);
-  const parseSsn = templateParser(SSN_TEMPLATE, parseDigit);
-
-  const formatDateOfBirth = templateFormatter(DATE_OF_BIRTH_TEMPLATE);
-  const formatPhoneNumber = templateFormatter(PHONE_NUMBER_TEMPLATE);
-  const formatSsn = templateFormatter(SSN_TEMPLATE);
-
   return (
     <KycStepStyled>
-      <SubtitleS>A bit about you</SubtitleS>
-      <ParagraphXS>
+      <SubtitleS className="title">A bit about you</SubtitleS>
+      <ParagraphXS className="subtitle">
         We need to ask some personal information for compliance reasons. This information will not impact your credit
         score or your ability to get the Archie Card.
       </ParagraphXS>
       <Formik
-        initialValues={{
-          firstName: '',
-          lastName: '',
-          dateOfBirth: format(today, 'MM-dd-yyyy'),
-          phoneNumber: '',
-          ssnDigits: '',
-        }}
-        validationSchema={validationSchema}
-        onSubmit={(values) => handleSubmit(values)}
+        initialValues={{}}
+        onSubmit={handleSubmit}
         validate={validate}
         validateOnBlur={false}
         validateOnChange={false}
       >
-        {({ errors, touched }) => (
-          <Form>
-            <div className="input-group">
-              <InputText>
-                First Name*
-                <Field name="firstName" placeholder="John" />
-                {errors.firstName && touched.firstName && (
-                  <ParagraphXS className="error" color={theme.textDanger}>
-                    {errors.firstName}
-                  </ParagraphXS>
-                )}
-              </InputText>
-              <InputText>
-                Last Name*
-                <Field name="lastName" placeholder="Doe" />
-                {errors.lastName && touched.lastName && (
-                  <ParagraphXS className="error" color={theme.textDanger}>
-                    {errors.lastName}
-                  </ParagraphXS>
-                )}
-              </InputText>
-            </div>
+        <Form>
+          <div className="input-group">
             <InputText>
-              Date of birth*
-              <Field
-                name="dateOfBirth"
-                render={({ field: { name, value, onChange } }: FieldProps) => (
-                  <ReactInput
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    parse={parseDateOfBirth}
-                    format={formatDateOfBirth}
-                  />
-                )}
+              First Name*
+              <input
+                name="firstName"
+                value={firstName}
+                placeholder="Joe"
+                onChange={(e) => setFirstName(e.target.value)}
               />
-              {errors.dateOfBirth && touched.dateOfBirth ? (
+              {firstNameError && (
                 <ParagraphXS className="error" color={theme.textDanger}>
-                  {errors.dateOfBirth}
-                </ParagraphXS>
-              ) : null}
-            </InputText>
-            <InputText>
-              Address*
-              <Autocomplete
-                apiKey="AIzaSyA-k_VEX0soa2kljYKTjtFUg4irF3hKZwQ"
-                onPlaceSelected={(place) => addAddress(place)}
-                options={{ types: ['address'] }}
-              />
-              {addressError && (
-                <ParagraphXS className="error" color={theme.textDanger}>
-                  {addressError}
+                  {firstNameError}
                 </ParagraphXS>
               )}
             </InputText>
             <InputText>
-              Phone Number*
-              {/* <PhoneInput
-                defaultCountry={'US'}
-                international={false}
-                addInternationalOption={false}
-                countryCallingCodeEditable={false}
-                placeholder="Enter phone number"
-                name="phoneNumber"
-                value={phoneNumber}
-                onChange={(value) => setPhoneNumber(value as string)}
-                onCountryChange={(country: Country) => setPhoneNumberCountryCode(country)}
-              /> */}
-              {/* Only formatter */}
+              Last Name*
+              <input name="lastName" value={lastName} placeholder="Doe" onChange={(e) => setLastName(e.target.value)} />
+              {lastNameError && (
+                <ParagraphXS className="error" color={theme.textDanger}>
+                  {lastNameError}
+                </ParagraphXS>
+              )}
+            </InputText>
+          </div>
+          <InputText>
+            Date of birth*
+            <ReactInput
+              name="dateOfBirth"
+              value={dateOfBirth}
+              onChange={(value) => setDateOfBirth(value as string)}
+              parse={templateParser('xx-xx-xxxx', parseDigit)}
+              format={templateFormatter('xx-xx-xxxx')}
+            />
+            {dateOfBirthError && (
+              <ParagraphXS className="error" color={theme.textDanger}>
+                {dateOfBirthError}
+              </ParagraphXS>
+            )}
+          </InputText>
+          <InputText>
+            Address*
+            <Autocomplete
+              apiKey="AIzaSyA-k_VEX0soa2kljYKTjtFUg4irF3hKZwQ"
+              onPlaceSelected={(place) => addAddress(place)}
+              options={{ types: ['address'] }}
+            />
+            {addressError && (
+              <ParagraphXS className="error" color={theme.textDanger}>
+                {addressError}
+              </ParagraphXS>
+            )}
+          </InputText>
+          <InputText>
+            Phone Number*
+            <div className="phone-number">
+              <ParagraphS weight={700}>+1</ParagraphS>
               <ReactInput
                 name="phoneNumber"
                 value={phoneNumber}
                 placeholder="Enter phone number"
                 onChange={(value) => setPhoneNumber(value as string)}
-                parse={parsePhoneNumber}
-                format={formatPhoneNumber}
+                parse={templateParser('(xxx) xxx-xxxx', parseDigit)}
+                format={templateFormatter('(xxx) xxx-xxxx')}
               />
-              {/* With Formik */}
-              {/* <Field name="phoneNumber">
-                {({ field: { name, value, onChange, onBlur } }: FieldProps) => (
-                  <ReactInput
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    onBlur={onBlur}
-                    parse={parsePhoneNumber}
-                    format={formatPhoneNumber}
-                  />
-                )}
-              </Field> */}
-              {phoneNumberError && (
-                <ParagraphXS className="error" color={theme.textDanger}>
-                  {phoneNumberError}
-                </ParagraphXS>
-              )}
-            </InputText>
-            <InputText>
-              SSN/TIN*
-              <Field name="ssnDigits" placeholder="XXX-XX-XXXX" />
-              {errors.ssnDigits && touched.ssnDigits && (
-                <ParagraphXS className="error" color={theme.textDanger}>
-                  {errors.ssnDigits}
-                </ParagraphXS>
-              )}
-            </InputText>
-            <hr className="divider" />
-            <ButtonPrimary type="submit">
-              Next
-              <ArrowRight fill={colors.white} />
-            </ButtonPrimary>
-          </Form>
-        )}
+            </div>
+            {phoneNumberError && (
+              <ParagraphXS className="error" color={theme.textDanger}>
+                {phoneNumberError}
+              </ParagraphXS>
+            )}
+          </InputText>
+          <InputText>
+            SSN/TIN*
+            <ReactInput
+              name="ssn"
+              value={ssn}
+              placeholder="XXX-XX-XXXX"
+              onChange={(value) => setSsn(value as string)}
+              parse={templateParser('xxx-xx-xxxx', parseDigit)}
+              format={templateFormatter('xxx-xx-xxxx')}
+            />
+            {ssnError && (
+              <ParagraphXS className="error" color={theme.textDanger}>
+                {ssnError}
+              </ParagraphXS>
+            )}
+          </InputText>
+          <hr className="divider" />
+          <ButtonPrimary type="submit">
+            Next
+            <ArrowRight fill={colors.white} />
+          </ButtonPrimary>
+        </Form>
       </Formik>
     </KycStepStyled>
   );

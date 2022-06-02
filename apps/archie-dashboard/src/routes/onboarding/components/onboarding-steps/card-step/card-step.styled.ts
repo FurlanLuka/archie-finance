@@ -13,11 +13,11 @@ export const CardStepStyled = styled.div`
   padding: 2.5rem 7% 3.5rem;
   text-align: center;
 
-  h4 {
+  .title {
     margin-bottom: 0.5rem;
   }
 
-  p {
+  .subtitle {
     margin-bottom: 2rem;
   }
 
