@@ -43,7 +43,7 @@ export enum DataType {
 }
 
 export interface PhoneDataPoint {
-  data_type: DataType.PHONE;
+  type: DataType.PHONE;
   verification: {
     verification_id: string,
   };

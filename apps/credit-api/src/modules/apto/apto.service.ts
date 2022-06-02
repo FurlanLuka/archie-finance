@@ -224,7 +224,7 @@ export class AptoService {
     };
 
     const phoneDataPoint: PhoneDataPoint = {
-      data_type: DataType.PHONE,
+      type: DataType.PHONE,
       verification: {
         verification_id: aptoVerification.verificationId,
       },
