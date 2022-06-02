@@ -20,9 +20,13 @@ export const OnboardingRoute: React.FC = () => {
   useEffect(() => {
     if (queryResponse.state === RequestState.SUCCESS) {
       if (queryResponse.data.kycStage === false) {
+        setCurrentStep(Step.KYC);
+      } else if (queryResponse.data.phoneVerificationStage === false) {
         setCurrentStep(Step.VERIFY);
       } else if (queryResponse.data.collateralizationStage === false) {
         setCurrentStep(Step.COLLATERALIZE);
+      } else if (queryResponse.data.cardActivationStage === false) {
+        setCurrentStep(Step.CARD);
       }
     }
   }, [queryResponse]);

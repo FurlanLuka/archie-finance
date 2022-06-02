@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import ReactCodeInput from 'react-verification-code-input';
 
 import { Step } from '../../../../../constants/onboarding-steps';
@@ -7,6 +7,9 @@ import { ButtonPrimary } from '../../../../../components/_generic/button/button.
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
 import { colors, theme } from '../../../../../constants/theme';
 import { VerifyStepStyled } from './verify-step.styled';
+import { useCompleteAptoVerification } from '@archie/api-consumer/credit/hooks/use-complete-apto-verification';
+import { useStartAptoVerification } from '@archie/api-consumer/credit/hooks/use-start-apto-verification';
+import { MutationQueryResponse, RequestState } from '@archie/api-consumer/interface';
 
 interface VerifyStepProps {
   setCurrentStep: (step: Step) => void;
@@ -14,10 +17,32 @@ interface VerifyStepProps {
 
 export const VerifyStep: FC<VerifyStepProps> = ({ setCurrentStep }) => {
   const [code, setCode] = useState('');
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const useCompleteAptoVerificationQuery: MutationQueryResponse<unknown> = useCompleteAptoVerification();
+  const useStartAptoVerificationQuery: MutationQueryResponse<unknown> = useStartAptoVerification();
+
+  useEffect(() => {
+    if (useStartAptoVerificationQuery.state === RequestState.IDLE) {
+      useStartAptoVerificationQuery.mutate({});
+
+      return;
+    }
+
+    if (useStartAptoVerificationQuery.state === RequestState.SUCCESS) {
+      setIsInitialLoading(false);
+    }
+  }, [useStartAptoVerificationQuery]);
 
   const handleSubmit = () => {
-    console.log(code);
-    // setCurrentStep(Step.COLLATERALIZE);
+    if (isInitialLoading || code.length !== 6) {
+      return;
+    }
+
+    if (useCompleteAptoVerificationQuery.state === RequestState.IDLE) {
+      useCompleteAptoVerificationQuery.mutate({
+        secret: new String(code),
+      });
+    }
   };
 
   const handleResend = () => {

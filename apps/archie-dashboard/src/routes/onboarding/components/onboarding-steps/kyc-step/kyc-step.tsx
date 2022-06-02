@@ -159,7 +159,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
     const payload = {
       firstName,
       lastName,
-      dateOfBirth,
+      dateOfBirth: parsedDate(dateOfBirth).toISOString(),
       ...address,
       phoneNumber,
       phoneNumberCountryCode,

@@ -18,6 +18,7 @@ import { theme } from '../../../../../constants/theme';
 import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
 import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
 import { QueryResponse } from '../../../../../../../../libs/archie-api-consumer/src/interface';
+import { Collateral } from 'apps/archie-dashboard/src/components/collateral/collateral';
 
 interface CollateralizationStepProps {
   setCurrentStep: (step: Step) => void;
@@ -59,6 +60,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
 
   return (
     <Container column mobileColumn alignItems="center">
+      <Collateral />
       <StepsIndicator currentStep={Step.COLLATERALIZE} />
       <EmailVerification />
       <CollateralizationStepStyled>

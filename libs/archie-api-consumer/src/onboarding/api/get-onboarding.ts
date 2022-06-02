@@ -6,6 +6,7 @@ export interface GetOnboardingResponse {
   emailVerificationStage: boolean;
   collateralizationStage: boolean;
   cardActivationStage: boolean;
+  phoneVerificationStage: boolean;
   completed: boolean;
 }
 
