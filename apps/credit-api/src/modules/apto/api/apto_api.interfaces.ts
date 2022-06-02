@@ -44,31 +44,31 @@ export enum DataType {
 
 export interface PhoneDataPoint {
   data_type: DataType.PHONE;
-  verified: boolean;
-  verification: StartVerificationResponse;
-  not_specified: boolean;
+  verification: {
+    verification_id: string,
+  };
   country_code: string;
   phone_number: string;
 }
 
 export interface EmailDataPoint {
-  data_type: DataType.EMAIL;
+  type: DataType.EMAIL;
   email: string;
 }
 
 export interface BirthdateDataPoint {
-  data_type: DataType.BIRTHDATE;
+  type: DataType.BIRTHDATE;
   date: string;
 }
 
 export interface NameDataPoint {
-  data_type: DataType.NAME;
+  type: DataType.NAME;
   first_name: string;
   last_name: string;
 }
 
 export interface AddressDataPoint {
-  data_type: DataType.ADDRESS;
+  type: DataType.ADDRESS;
   street_one: string;
   street_two?: string;
   locality: string;

@@ -136,6 +136,10 @@ export class AptoApiService {
             addressDataPoint,
             idDocumentDataPoint,
           ],
+          has_more: false,
+          page: 0,
+          rows: 1,
+          total_count: 1,
         },
       },
       {

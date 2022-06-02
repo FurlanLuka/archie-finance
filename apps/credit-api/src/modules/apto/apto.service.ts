@@ -123,23 +123,23 @@ export class AptoService {
         await this.internalApiService.getUserEmailAddress(userId);
 
       const birthdateDataPoint: BirthdateDataPoint = {
-        data_type: DataType.BIRTHDATE,
+        type: DataType.BIRTHDATE,
         date: kyc.dateOfBirth,
       };
 
       const emailDataPoint: EmailDataPoint = {
-        data_type: DataType.EMAIL,
+        type: DataType.EMAIL,
         email: emailAddressResponse.email,
       };
 
       const nameDataPoint: NameDataPoint = {
-        data_type: DataType.NAME,
+        type: DataType.NAME,
         first_name: kyc.firstName,
         last_name: kyc.lastName,
       };
 
       const addressDataPoint: AddressDataPoint = {
-        data_type: DataType.ADDRESS,
+        type: DataType.ADDRESS,
         street_one: `${kyc.addressStreet} ${kyc.addressStreetNumber}`,
         locality: kyc.addressLocality,
         region: kyc.addressRegion,
@@ -156,15 +156,9 @@ export class AptoService {
 
       const phoneDataPoint: PhoneDataPoint = {
         data_type: DataType.PHONE,
-        verified: true,
         verification: {
-          type: 'verification',
           verification_id: aptoVerification.verificationId,
-          status: 'passed',
-          verification_mechanism: 'phone',
-          verification_type: 'phone',
         },
-        not_specified: false,
         country_code: kyc.phoneNumberCountryCode.replace('+', ''),
         phone_number: kyc.phoneNumber,
       };
