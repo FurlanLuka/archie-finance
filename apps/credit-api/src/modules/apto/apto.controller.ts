@@ -51,4 +51,10 @@ export class AptoController {
   public async applyForCard(@Request() req): Promise<CardApplicationResponse> {
     return this.aptoService.applyForCard(req.user.sub);
   }
+
+  @Post('user/card/agreements')
+  @UseGuards(AuthGuard)
+  public async acceptCardAgreements(@Request() req): Promise<void> {
+    return this.aptoService.acceptAgreements(req.user.sub);
+  }
 }

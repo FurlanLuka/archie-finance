@@ -307,4 +307,24 @@ export class AptoService {
 
     return cardApplicationResponse;
   }
+
+  public async acceptAgreements(userId: string): Promise<void> {
+    const aptoUser: AptoUser | undefined =
+      await this.aptoUserRepository.findOne({
+        userId,
+      });
+
+    if (aptoUser === undefined) {
+      Logger.error({
+        code: 'APTO_USER_DOESNT_EXIST_ERROR',
+        metadata: {
+          userId,
+        },
+      });
+
+      throw new BadRequestException();
+    }
+
+    await this.aptoApiService.acceptAgreements(aptoUser.accessToken);
+  }
 }

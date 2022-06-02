@@ -202,4 +202,34 @@ export class AptoApiService {
       throw new InternalServerErrorException();
     }
   }
+
+  public async acceptAgreements(userAccessToken: string): Promise<void> {
+    try {
+      await axios.post(
+        this.constructAptoUrl(`/v1/user/accounts/apply`),
+        {
+          agreements_keys: [
+            'evolve_eua',
+            'evolve_privacy',
+            'apto_cha',
+            'apto_privacy',
+          ],
+          user_action: 'ACCEPTED',
+        },
+        {
+          headers: {
+            ...this.getAptoHeaders(),
+            Authorization: `Bearer ${userAccessToken}`,
+          },
+        },
+      );
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_ACCEPTING_APTO_AGREEMENTS',
+        metadata: {
+          error: (error as AxiosError).toJSON(),
+        },
+      });
+    }
+  }
 }
