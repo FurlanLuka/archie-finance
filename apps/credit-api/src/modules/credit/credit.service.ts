@@ -13,7 +13,10 @@ import {
   GetCollateralValueResponse,
   CollateralValue,
 } from '@archie-microservices/api-interfaces/collateral';
-import { GetAssetListResponse, AssetInformation } from '@archie-microservices/api-interfaces/asset_information';
+import {
+  GetAssetListResponse,
+  AssetInformation,
+} from '@archie-microservices/api-interfaces/asset_information';
 
 @Injectable()
 export class CreditService {
@@ -40,7 +43,8 @@ export class CreditService {
     const collateralValue: GetCollateralValueResponse =
       await this.internalApiService.getUserCollateralValue(userId);
 
-    const assetList: GetAssetListResponse = await this.internalApiService.getAssetList();
+    const assetList: GetAssetListResponse =
+      await this.internalApiService.getAssetList();
 
     let totalCollateralValue: number = collateralValue.reduce(
       (sum: number, value: CollateralValue) => {
@@ -82,6 +86,11 @@ export class CreditService {
 
       totalCollateralValue = this.MAXIMUM_CREDIT;
     }
+
+    await this.internalApiService.completeOnboardingStage(
+      'collateralizationStage',
+      userId,
+    );
 
     await this.creditRepository.save({
       userId,
