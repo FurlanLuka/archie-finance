@@ -42,7 +42,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
 
   const today = new Date();
   const parsedDate = (value: string) => parse(value, 'MMddyyyy', new Date());
-  const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) < 18;
+  const minYears = (value: Date) => differenceInYears(today, new Date(value)) < 18;
 
   const [firstName, setFirstName] = useState('');
   const [firstNameError, setFirstNameError] = useState('');
@@ -122,7 +122,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
       setDateOfBirthError('Please enter your date of birth');
     } else if (!isValid(parsedDate(dateOfBirth))) {
       setDateOfBirthError('Not a valid date');
-    } else if (minYears(parsedDate(dateOfBirth) ?? new Date())) {
+    } else if (minYears(parsedDate(dateOfBirth) ?? today)) {
       setDateOfBirthError('Should be older than 18');
     } else if (isFuture(parsedDate(dateOfBirth))) {
       setDateOfBirthError('Date cannot be in the future');
@@ -184,7 +184,7 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
 
         console.log(payload);
 
-        // setCurrentStep(step.COLLATERALIZE);
+        // setCurrentStep(Step.VERIFY);
       }
     }
   };

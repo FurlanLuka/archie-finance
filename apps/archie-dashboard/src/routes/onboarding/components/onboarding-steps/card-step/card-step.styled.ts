@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import breakpoints from '../../../../../constants/breakpoints'
+
 export const CardStepStyled = styled.div`
   display: flex;
   flex-direction: column;
@@ -12,6 +14,10 @@ export const CardStepStyled = styled.div`
   max-width: 928px;
   padding: 2.5rem 7% 3.5rem;
   text-align: center;
+
+  @media (max-width: ${breakpoints.screenSM}) {
+    padding: 2.5rem 1.5rem 3.5rem;
+  }  
 
   .title {
     margin-bottom: 0.5rem;
