@@ -1,5 +1,5 @@
 import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
-import { FinishPhoneVerificationPayload } from '@archie-microservices/api-interfaces/apto';
+import { FinishPhoneVerificationDto } from '@archie-microservices/api-interfaces/apto';
 import { AptoService } from './apto.service';
 import { AuthGuard } from '@archie-microservices/auth0';
 import { CreateUserResponse } from './api/apto_api.interfaces';
@@ -24,7 +24,7 @@ export class AptoController {
   @UseGuards(AuthGuard)
   public async finishPhoneVerification(
     @Request() req,
-    @Body() body: FinishPhoneVerificationPayload,
+    @Body() body: FinishPhoneVerificationDto,
   ): Promise<CompletePhoneVerificationResponse> {
     return this.aptoService.finishPhoneVerification(req.user.sub, body.secret);
   }

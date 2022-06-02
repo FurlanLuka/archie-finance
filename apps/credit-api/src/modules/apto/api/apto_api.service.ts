@@ -103,7 +103,7 @@ export class AptoApiService {
         await axios.post(
           this.constructAptoUrl(`/v1/verifications/${verificationId}/finish`),
           {
-            secret,
+            secret: secret,
           },
           {
             headers: this.getAptoHeaders(),

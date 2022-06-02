@@ -93,6 +93,11 @@ export class AptoService {
       throw new BadRequestException();
     }
 
+    Logger.log({
+      code: 'finish_phone_verification_secret',
+      secret: secret,
+    });
+
     const completePhoneVerificationResponse: CompleteVerificationResponse =
       await this.aptoApiService.completeVerificationProcess(
         aptoVerification.verificationId,

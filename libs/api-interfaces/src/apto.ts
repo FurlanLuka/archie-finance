@@ -1,3 +1,6 @@
-export class FinishPhoneVerificationPayload {
+import { IsString } from 'class-validator';
+
+export class FinishPhoneVerificationDto {
+  @IsString()
   secret: string;
 }
