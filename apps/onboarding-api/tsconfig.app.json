@@ -10,9 +10,10 @@
   "exclude": [
     "jest.config.ts",
     "**/*.spec.ts",
+    "**/*.spec.skip.ts",
     "**/*.test.ts",
-    "**/__data__",
-    "**/__mocks__",
+    "**/__data__/**",
+    "**/__mocks__/**",
     "test"
   ],
   "include": ["**/*.ts"]
