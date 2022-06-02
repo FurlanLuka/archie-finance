@@ -2,7 +2,10 @@ import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { FinishPhoneVerificationDto } from '@archie-microservices/api-interfaces/apto';
 import { AptoService } from './apto.service';
 import { AuthGuard } from '@archie-microservices/auth0';
-import { CreateUserResponse } from './api/apto_api.interfaces';
+import {
+  CardApplicationResponse,
+  CreateUserResponse,
+} from './api/apto_api.interfaces';
 import {
   StartPhoneVerificationResponse,
   CompletePhoneVerificationResponse,
@@ -31,7 +34,9 @@ export class AptoController {
 
   @Post('verification/restart')
   @UseGuards(AuthGuard)
-  public async restartPhoneVerification(@Request() req): Promise<StartPhoneVerificationResponse> {
+  public async restartPhoneVerification(
+    @Request() req,
+  ): Promise<StartPhoneVerificationResponse> {
     return this.aptoService.restartVerification(req.user.sub);
   }
 
@@ -39,5 +44,11 @@ export class AptoController {
   @UseGuards(AuthGuard)
   public async createUser(@Request() req): Promise<CreateUserResponse> {
     return this.aptoService.createAptoUser(req.user.sub);
+  }
+
+  @Post('user/card/apply')
+  @UseGuards(AuthGuard)
+  public async applyForCard(@Request() req): Promise<CardApplicationResponse> {
+    return this.aptoService.applyForCard(req.user.sub);
   }
 }

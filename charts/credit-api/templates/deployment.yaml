@@ -113,6 +113,11 @@ spec:
                 secretKeyRef:
                   name: apto-secrets
                   key: api-url
+            - name: APTO_CARD_PROGRAME_ID
+              valueFrom:
+                secretKeyRef:
+                  name: apto-secrets
+                  key: card-programe-id
       imagePullSecrets:
         - name: regcred
 ---

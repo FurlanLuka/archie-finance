@@ -7,6 +7,7 @@ import { ConfigService } from '@archie-microservices/config';
 import {
   AddressDataPoint,
   BirthdateDataPoint,
+  CardApplicationResponse,
   CompleteVerificationResponse,
   CreateUserResponse,
   EmailDataPoint,
@@ -155,6 +156,37 @@ export class AptoApiService {
         },
         {
           headers: this.getAptoHeaders(),
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_CREATING_APTO_USER',
+        metadata: {
+          error: (error as AxiosError).toJSON(),
+        },
+      });
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  public async applyForCardPrograme(
+    userAccessToken: string,
+    cardProgrameId: string,
+  ): Promise<CardApplicationResponse> {
+    try {
+      const response: AxiosResponse<CardApplicationResponse> = await axios.post(
+        this.constructAptoUrl(`/v1/user/accounts/apply`),
+        {
+          card_product_id: cardProgrameId,
+        },
+        {
+          headers: {
+            ...this.getAptoHeaders(),
+            Authorization: `Bearer ${userAccessToken}`,
+          },
         },
       );
 

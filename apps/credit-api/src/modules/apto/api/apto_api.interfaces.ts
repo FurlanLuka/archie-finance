@@ -91,3 +91,11 @@ export interface CreateUserResponse {
   user_data: object;
   metadata: string;
 }
+
+export interface CardApplicationResponse {
+  type: string;
+  id: string;
+  status: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+}

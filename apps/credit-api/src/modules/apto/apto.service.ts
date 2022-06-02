@@ -11,6 +11,7 @@ import { AptoApiService } from './api/apto_api.service';
 import {
   AddressDataPoint,
   BirthdateDataPoint,
+  CardApplicationResponse,
   CompleteVerificationResponse,
   CreateUserResponse,
   DataType,
@@ -28,16 +29,22 @@ import {
   CompletePhoneVerificationResponse,
   StartPhoneVerificationResponse,
 } from './apto.interfaces';
+import { AptoCardApplication } from './apto_card_application.entity';
+import { ConfigService } from '@archie-microservices/config';
+import { ConfigVariables } from '../../interfaces';
 
 @Injectable()
 export class AptoService {
   constructor(
     private aptoApiService: AptoApiService,
     private internalApiService: InternalApiService,
+    private configService: ConfigService,
     @InjectRepository(AptoVerification)
     private aptoVerificationRepository: Repository<AptoVerification>,
     @InjectRepository(AptoUser)
     private aptoUserRepository: Repository<AptoUser>,
+    @InjectRepository(AptoCardApplication)
+    private aptoCardApplication: Repository<AptoCardApplication>,
   ) {}
 
   public async startPhoneVerification(
@@ -184,7 +191,8 @@ export class AptoService {
           userId,
         },
       });
-      throw new BadRequestException('PHONE_VERIFICATION_REQUIRED_ERROR');
+
+      throw new BadRequestException();
     }
 
     const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
@@ -250,5 +258,53 @@ export class AptoService {
     });
 
     return user;
+  }
+
+  public async applyForCard(userId: string): Promise<CardApplicationResponse> {
+    const aptoUser: AptoUser | undefined =
+      await this.aptoUserRepository.findOne({
+        userId,
+      });
+
+    if (aptoUser === undefined) {
+      Logger.error({
+        code: 'APTO_USER_DOESNT_EXIST_ERROR',
+        metadata: {
+          userId,
+        },
+      });
+
+      throw new BadRequestException();
+    }
+
+    const cardApplication: AptoCardApplication | undefined =
+      await this.aptoCardApplication.findOne({
+        userId,
+      });
+
+    if (cardApplication !== undefined) {
+      Logger.error({
+        code: 'APTO_CARD_APPLICATION_ALREADY_SEMT_ERROR',
+        metadata: {
+          userId,
+        },
+      });
+
+      throw new BadRequestException();
+    }
+
+    const cardApplicationResponse: CardApplicationResponse =
+      await this.aptoApiService.applyForCardPrograme(
+        aptoUser.accessToken,
+        this.configService.get(ConfigVariables.APTO_CARD_PROGRAME_ID),
+      );
+
+    this.aptoCardApplication.save({
+      userId,
+      applicationId: cardApplicationResponse.id,
+      applicationStatus: cardApplicationResponse.status,
+    });
+
+    return cardApplicationResponse;
   }
 }
