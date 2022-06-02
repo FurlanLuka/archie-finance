@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels:
       app: archie-credit-api
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
