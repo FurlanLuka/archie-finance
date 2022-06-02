@@ -10,4 +10,10 @@ export interface CompletePhoneVerificationResponse {
 
 export enum AptoCardApplicationNextAction {
   SHOW_CARDHOLDER_AGREEMENT = 'show_cardholder_agreement',
+  ISSUE_CARD = 'issue_card',
+}
+
+export enum AptoCardApplicationStatus {
+  APPROVED = 'approved',
+  CREATED = 'created',
 }

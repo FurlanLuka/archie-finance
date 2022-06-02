@@ -1,4 +1,8 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
+import {
+  AptoCardApplicationNextAction,
+  AptoCardApplicationStatus,
+} from './apto.interfaces';
 
 @Entity({
   name: 'apto_card_application',
@@ -11,7 +15,10 @@ export class AptoCardApplication {
   applicationId: string;
 
   @Column('varchar')
-  applicationStatus: string;
+  applicationStatus: AptoCardApplicationStatus;
+
+  @Column('varchar')
+  nextAction: AptoCardApplicationNextAction;
 
   @Column('varchar')
   workflowObjectId: string;

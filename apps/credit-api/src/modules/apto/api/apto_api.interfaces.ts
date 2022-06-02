@@ -1,3 +1,8 @@
+import {
+  AptoCardApplicationNextAction,
+  AptoCardApplicationStatus,
+} from '../apto.interfaces';
+
 export interface StartVerificationPayload {
   datapoint_type: 'phone';
   datapoint: {
@@ -95,12 +100,30 @@ export interface CreateUserResponse {
 export interface CardApplicationResponse {
   type: string;
   id: string;
-  status: string;
+  status: AptoCardApplicationStatus;
   application_type: string;
   workflow_object_id: string;
   next_action: {
+    name: AptoCardApplicationNextAction;
     action_id: string;
   };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
+}
+
+export interface IssueCardResponse {
+  type: string;
+  account_id: string;
+  lastFour: string;
+  cardNetwork: string;
+  card_brand: string;
+  expiration: string;
+  pan: string;
+  ccv: string;
+  kyc_status: string;
+  kyc_reason: string;
+  cardholder_first_name: string;
+  cardholder_last_name: string;
+  issued_at: string;
+  name_on_card: string;
 }

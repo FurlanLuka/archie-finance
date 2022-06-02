@@ -12,6 +12,7 @@ import {
   CreateUserResponse,
   EmailDataPoint,
   IdDocumentDataPoint,
+  IssueCardResponse,
   NameDataPoint,
   PhoneDataPoint,
   StartVerificationResponse,
@@ -203,6 +204,36 @@ export class AptoApiService {
     }
   }
 
+  public async getCardApplication(
+    userAccessToken: string,
+    applicationId: string,
+  ): Promise<CardApplicationResponse> {
+    try {
+      const response: AxiosResponse<CardApplicationResponse> = await axios.get(
+        this.constructAptoUrl(
+          `/v1/user/accounts/applications/${applicationId}/status`,
+        ),
+        {
+          headers: {
+            ...this.getAptoHeaders(),
+            Authorization: `Bearer ${userAccessToken}`,
+          },
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_GETTING_CARD_APPLICATION',
+        metadata: {
+          error: (error as AxiosError).toJSON(),
+        },
+      });
+
+      throw new InternalServerErrorException();
+    }
+  }
+
   public async setAgreementStatus(userAccessToken: string): Promise<void> {
     try {
       await axios.post(
@@ -252,6 +283,35 @@ export class AptoApiService {
           },
         },
       );
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_ACCEPTING_APTO_AGREEMENTS',
+        metadata: {
+          error: (error as AxiosError).toJSON(),
+        },
+      });
+    }
+  }
+
+  public async issueCard(
+    userAccessToken: string,
+    applicationId: string,
+  ): Promise<IssueCardResponse> {
+    try {
+      const response: AxiosResponse<IssueCardResponse> = await axios.post(
+        this.constructAptoUrl(`/v1/user/accounts/issuecard`),
+        {
+          application_id: applicationId,
+        },
+        {
+          headers: {
+            ...this.getAptoHeaders(),
+            Authorization: `Bearer ${userAccessToken}`,
+          },
+        },
+      );
+
+      return response.data;
     } catch (error) {
       Logger.error({
         code: 'ERROR_ACCEPTING_APTO_AGREEMENTS',

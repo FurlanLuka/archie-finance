@@ -3,8 +3,8 @@ import { FinishPhoneVerificationDto } from '@archie-microservices/api-interfaces
 import { AptoService } from './apto.service';
 import { AuthGuard } from '@archie-microservices/auth0';
 import {
-  CardApplicationResponse,
   CreateUserResponse,
+  IssueCardResponse,
 } from './api/apto_api.interfaces';
 import {
   StartPhoneVerificationResponse,
@@ -46,15 +46,21 @@ export class AptoController {
     return this.aptoService.createAptoUser(req.user.sub);
   }
 
-  @Post('user/card/apply')
+  @Post('user/card')
   @UseGuards(AuthGuard)
-  public async applyForCard(@Request() req): Promise<CardApplicationResponse> {
-    return this.aptoService.applyForCard(req.user.sub);
+  public async applyForCard(@Request() req): Promise<IssueCardResponse> {
+    return this.aptoService.issueCard(req.user.sub);
   }
 
-  @Post('user/card/agreements')
-  @UseGuards(AuthGuard)
-  public async acceptCardAgreements(@Request() req): Promise<void> {
-    return this.aptoService.acceptAgreements(req.user.sub);
-  }
+  // @Post('user/card/agreements')
+  // @UseGuards(AuthGuard)
+  // public async acceptCardAgreements(@Request() req): Promise<void> {
+  //   return this.aptoService.acceptAgreements(req.user.sub);
+  // }
+
+  // @Post('user/card/issue')
+  // @UseGuards(AuthGuard)
+  // public async issueCard(@Request() req): Promise<void> {
+  //   return this.aptoService.acceptAgreements(req.user.sub);
+  // }
 }

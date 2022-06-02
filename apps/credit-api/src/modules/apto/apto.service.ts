@@ -17,6 +17,7 @@ import {
   DataType,
   EmailDataPoint,
   IdDocumentDataPoint,
+  IssueCardResponse,
   NameDataPoint,
   PhoneDataPoint,
   StartVerificationResponse,
@@ -26,12 +27,15 @@ import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
 import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
 import { AptoUser } from './apto_user.entity';
 import {
+  AptoCardApplicationNextAction,
+  AptoCardApplicationStatus,
   CompletePhoneVerificationResponse,
   StartPhoneVerificationResponse,
 } from './apto.interfaces';
 import { AptoCardApplication } from './apto_card_application.entity';
 import { ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '../../interfaces';
+import { AptoCard } from './apto_card.entity';
 
 @Injectable()
 export class AptoService {
@@ -44,7 +48,9 @@ export class AptoService {
     @InjectRepository(AptoUser)
     private aptoUserRepository: Repository<AptoUser>,
     @InjectRepository(AptoCardApplication)
-    private aptoCardApplication: Repository<AptoCardApplication>,
+    private aptoCardApplicationRepository: Repository<AptoCardApplication>,
+    @InjectRepository(AptoCard)
+    private aptoCardRepository: Repository<AptoCard>,
   ) {}
 
   public async startPhoneVerification(
@@ -260,7 +266,43 @@ export class AptoService {
     return user;
   }
 
-  public async applyForCard(userId: string): Promise<CardApplicationResponse> {
+  private async acceptAgreements(
+    userAccessToken: string,
+    workflowObjectId: string,
+    nextActionId: string,
+  ): Promise<void> {
+    await this.aptoApiService.setAgreementStatus(userAccessToken);
+    await this.aptoApiService.acceptAgreements(
+      userAccessToken,
+      workflowObjectId,
+      nextActionId,
+    );
+  }
+
+  private async getAndUpdateCardApplication(
+    userAccessToken: string,
+    aptoCardApplication: AptoCardApplication,
+  ): Promise<AptoCardApplication> {
+    const cardApplicationResponse: CardApplicationResponse =
+      await this.aptoApiService.getCardApplication(
+        userAccessToken,
+        aptoCardApplication.applicationId,
+      );
+
+    const cardApplication: AptoCardApplication = {
+      ...aptoCardApplication,
+      applicationStatus: cardApplicationResponse.status,
+      nextAction: cardApplicationResponse.next_action.name,
+      nextActionId: cardApplicationResponse.next_action.action_id,
+      workflowObjectId: cardApplicationResponse.workflow_object_id,
+    };
+
+    await this.aptoCardApplicationRepository.save(cardApplication);
+
+    return cardApplication;
+  }
+
+  public async issueCard(userId: string): Promise<IssueCardResponse> {
     const aptoUser: AptoUser | undefined =
       await this.aptoUserRepository.findOne({
         userId,
@@ -277,20 +319,30 @@ export class AptoService {
       throw new BadRequestException();
     }
 
-    const cardApplication: AptoCardApplication | undefined =
-      await this.aptoCardApplication.findOne({
+    const aptoCardApplication: AptoCardApplication | undefined =
+      await this.aptoCardApplicationRepository.findOne({
         userId,
       });
 
-    if (cardApplication !== undefined) {
-      Logger.error({
-        code: 'APTO_CARD_APPLICATION_ALREADY_SENT_ERROR',
-        metadata: {
-          userId,
-        },
-      });
+    if (aptoCardApplication) {
+      if (
+        aptoCardApplication.applicationStatus ===
+        AptoCardApplicationStatus.APPROVED
+      ) {
+        Logger.error({
+          code: 'CARD_APPLICATION_ALREADY_APPROVED',
+          metadata: {
+            userId,
+          },
+        });
 
-      throw new BadRequestException();
+        throw new BadRequestException();
+      }
+
+      return this.completeCardIssuanceSteps(
+        aptoUser.accessToken,
+        aptoCardApplication,
+      );
     }
 
     const cardApplicationResponse: CardApplicationResponse =
@@ -299,55 +351,67 @@ export class AptoService {
         this.configService.get(ConfigVariables.APTO_CARD_PROGRAME_ID),
       );
 
-    this.aptoCardApplication.save({
+    const cardApplication: AptoCardApplication = {
       userId,
       applicationId: cardApplicationResponse.id,
       applicationStatus: cardApplicationResponse.status,
+      nextAction: cardApplicationResponse.next_action.name,
       nextActionId: cardApplicationResponse.next_action.action_id,
       workflowObjectId: cardApplicationResponse.workflow_object_id,
-    });
+    };
 
-    return cardApplicationResponse;
+    this.aptoCardApplicationRepository.save(cardApplication);
+
+    return this.completeCardIssuanceSteps(
+      aptoUser.accessToken,
+      cardApplication,
+    );
   }
 
-  public async acceptAgreements(userId: string): Promise<void> {
-    const aptoUser: AptoUser | undefined =
-      await this.aptoUserRepository.findOne({
-        userId,
-      });
+  private async completeCardIssuanceSteps(
+    userAccessToken: string,
+    aptoCardApplication: AptoCardApplication,
+  ): Promise<IssueCardResponse> {
+    if (
+      aptoCardApplication.nextAction ===
+      AptoCardApplicationNextAction.SHOW_CARDHOLDER_AGREEMENT
+    ) {
+      await this.acceptAgreements(
+        userAccessToken,
+        aptoCardApplication.workflowObjectId,
+        aptoCardApplication.nextActionId,
+      );
 
-    if (aptoUser === undefined) {
-      Logger.error({
-        code: 'APTO_USER_DOESNT_EXIST_ERROR',
-        metadata: {
-          userId,
-        },
-      });
+      const updatedCardApplication: AptoCardApplication =
+        await this.getAndUpdateCardApplication(
+          userAccessToken,
+          aptoCardApplication,
+        );
 
-      throw new BadRequestException();
+      return this.completeCardIssuanceSteps(
+        userAccessToken,
+        updatedCardApplication,
+      );
     }
 
-    const cardApplication: AptoCardApplication =
-      await this.aptoCardApplication.findOne({
-        userId,
+    if (
+      aptoCardApplication.nextAction ===
+      AptoCardApplicationNextAction.ISSUE_CARD
+    ) {
+      const issueCardResponse: IssueCardResponse =
+        await this.aptoApiService.issueCard(
+          userAccessToken,
+          aptoCardApplication.applicationId,
+        );
+
+      await this.aptoCardRepository.save({
+        userId: aptoCardApplication.userId,
+        cardId: issueCardResponse.account_id,
       });
 
-    if (cardApplication === undefined) {
-      Logger.error({
-        code: 'APTO_CARD_APPLICATION_DOESNT_EXIST_ERROR',
-        metadata: {
-          userId,
-        },
-      });
-
-      throw new BadRequestException();
+      return issueCardResponse;
     }
 
-    await this.aptoApiService.setAgreementStatus(aptoUser.accessToken);
-    await this.aptoApiService.acceptAgreements(
-      aptoUser.accessToken,
-      cardApplication.workflowObjectId,
-      cardApplication.nextActionId,
-    );
+    throw new BadRequestException();
   }
 }
