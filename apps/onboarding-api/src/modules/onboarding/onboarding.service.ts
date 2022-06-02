@@ -27,6 +27,7 @@ export class OnboardingService {
       return {
         kycStage: false,
         emailVerificationStage: false,
+        phoneVerificationStage: false,
         collateralizationStage: false,
         cardActivationStage: false,
         completed: false,

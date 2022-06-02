@@ -7,15 +7,24 @@ import { User } from 'auth0';
 import { Auth0Service } from '../auth0/auth0.service';
 import { GetEmailVerificationResponse } from './user.interfaces';
 import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
+import { InternalApiService } from '@archie-microservices/internal-api';
 
 @Injectable()
 export class UserService {
-  constructor(private auth0Service: Auth0Service) {}
+  constructor(
+    private auth0Service: Auth0Service,
+    private internalApiService: InternalApiService,
+  ) {}
 
   async isEmailVerified(userId: string): Promise<GetEmailVerificationResponse> {
     const user: User = await this.auth0Service.getManagmentClient().getUser({
       id: userId,
     });
+
+    this.internalApiService.completeOnboardingStage(
+      'emailVerificationStage',
+      userId,
+    );
 
     return {
       isVerified: user.email_verified,

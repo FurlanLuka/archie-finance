@@ -8,6 +8,7 @@ import { ConfigVariables } from './interfaces';
 import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
 import { VaultModule } from '@archie-microservices/vault';
+import { InternalApiModule } from '@archie-microservices/internal-api';
 
 @Module({
   imports: [
@@ -66,6 +67,13 @@ import { VaultModule } from '@archie-microservices/vault';
         VAULT_USERNAME: configService.get(ConfigVariables.VAULT_USERNAME),
       }),
       inject: [ConfigService],
+    }),
+    InternalApiModule.register({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        internalApiUrl: configService.get(ConfigVariables.INTERNAL_API_URL),
+      }),
     }),
     KycModule,
     HealthModule,

@@ -117,6 +117,11 @@ export class AptoService {
         secret,
       );
 
+    await this.internalApiService.completeOnboardingStage(
+      'phoneVerificationStage',
+      userId,
+    );
+
     await this.aptoVerificationRepository.update(
       {
         userId,
@@ -408,6 +413,11 @@ export class AptoService {
         userId: aptoCardApplication.userId,
         cardId: issueCardResponse.account_id,
       });
+
+      await this.internalApiService.completeOnboardingStage(
+        'phoneVerificationStage',
+        aptoCardApplication.userId,
+      );
 
       return issueCardResponse;
     }
