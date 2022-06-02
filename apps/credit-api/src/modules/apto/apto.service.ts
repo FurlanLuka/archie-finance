@@ -210,6 +210,7 @@ export class AptoService {
     const addressDataPoint: AddressDataPoint = {
       type: DataType.ADDRESS,
       street_one: `${kyc.addressStreet} ${kyc.addressStreetNumber}`,
+      street_two: '',
       locality: kyc.addressLocality,
       region: kyc.addressRegion,
       postal_code: kyc.addressPostalCode,
