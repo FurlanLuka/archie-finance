@@ -1,23 +1,18 @@
 import { FC, useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
-import { RequestState } from '@archie/api-consumer/interface';
-import { collateralCurrencies, CollateralCurrency } from '../../../../../constants/collateral-curencies';
+import { CollateralAsset, collateralAssets } from '../../../../../constants/collateral-assets';
 import { Step } from '../../../../../constants/onboarding-steps';
-import { CollateralDeposit } from '../../../../../components/collateral-deposit/collateral-deposit';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
 import { SubtitleS, ParagraphS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
 import { Copy } from '../../../../../components/_generic/icons/copy';
-import { Caret } from '../../../../../components/_generic/icons/caret';
 import { StepsIndicator } from '../../steps-indicator/steps-indicator';
 import { EmailVerification } from '../../email-verification/email-verification';
 import { CollateralizationStepStyled } from './collateralization-step.styled';
 import { InputRange } from '../../../../../components/_generic/input-range/input-range';
+import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
 import { ExternalLink } from '../../../../../components/_generic/icons/external-link';
-import { CollateralCurency } from '../../../../../components/collateral-curency/collateral-curency';
+
 import { theme } from '../../../../../constants/theme';
-import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
-import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
-import { QueryResponse } from '../../../../../../../../libs/archie-api-consumer/src/interface';
 
 interface CollateralizationStepProps {
   setCurrentStep: (step: Step) => void;
@@ -25,34 +20,12 @@ interface CollateralizationStepProps {
 
 export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurrentStep }) => {
   const [lineOfCredit, setLineOfCredit] = useState(100);
-  const [selectOpen, setSelectOpen] = useState(false);
-  const [selectedCollateralDeposit, setSelectedCollateralDeposit] = useState<CollateralCurrency>();
+  const [selectedCollateralDeposit, setSelectedCollateralDeposit] = useState<CollateralAsset>();
   const [collateralDeposit, setCollateralDeposit] = useState({ id: '', address: '' });
   const [requiredCollateral, setRequiredCollateral] = useState(0); // TBD
-  const [shouldCall, setShouldCall] = useState(false);
-  const [selectedAssetId, setSelectedAssetId] = useState<string>('');
-
-  const getDepositAddressResponse: QueryResponse<GetDepositAddressResponse> = useGetDepositAddress(
-    selectedAssetId,
-    shouldCall,
-  );
 
   useEffect(() => {
-    if (selectedAssetId.length > 0) {
-      setShouldCall(true);
-    }
-  }, [selectedAssetId]);
-
-  useEffect(() => {
-    if (getDepositAddressResponse.state === RequestState.SUCCESS) {
-      setCollateralDeposit({ id: selectedAssetId, address: getDepositAddressResponse.data.address });
-    }
-  }, [getDepositAddressResponse]);
-
-  useEffect(() => {
-    const curency: CollateralCurrency | undefined = collateralCurrencies.find(
-      (currency) => currency.id === collateralDeposit.id,
-    );
+    const curency: CollateralAsset | undefined = collateralAssets.find((asset) => asset.id === collateralDeposit.id);
 
     setSelectedCollateralDeposit(curency);
   }, [collateralDeposit.id]);
@@ -68,31 +41,11 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
         </ParagraphXS>
 
         <div className="inputs">
-          <div className="select">
-            <ParagraphXS weight={700}>Collateral</ParagraphXS>
-            <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
-              {collateralDeposit.address ? (
-                <CollateralCurency
-                  icon={selectedCollateralDeposit?.icon}
-                  name={selectedCollateralDeposit?.name}
-                  short={selectedCollateralDeposit?.short}
-                />
-              ) : (
-                <CollateralCurency name="Select your collateral currency" short="BTC, ETH, SOL, or USDC" />
-              )}
-              <Caret className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
-            </div>
-            {selectOpen && (
-              <div className="select-list">
-                {collateralCurrencies.map((asset, index) => (
-                  <div className="select-option" key={index} onClick={() => setSelectOpen(false)}>
-                    <CollateralDeposit assetId={asset.id} setSelectedAsset={setSelectedAssetId} />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
+          <InputSelect
+            collateralDeposit={collateralDeposit}
+            setCollateralDeposit={setCollateralDeposit}
+            selectedCollateralDeposit={selectedCollateralDeposit}
+          />
           <InputRange label="Credit Amount" min={0} max={1500} value={lineOfCredit} onChange={setLineOfCredit} />
         </div>
 

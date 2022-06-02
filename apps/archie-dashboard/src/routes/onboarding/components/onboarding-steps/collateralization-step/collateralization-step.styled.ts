@@ -62,62 +62,6 @@ export const CollateralizationStepStyled = styled.div`
     margin-bottom: 4rem;
   }
 
-  .select {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-  }
-
-  .select-header {
-    position: relative;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    border-radius: 0.5rem;
-    border: 1px solid ${({ theme }) => theme.borderHighlight};
-    height: 3rem;
-    width: 100%;
-    padding: 0 1rem;
-    margin-top: 0.75rem;
-    cursor: pointer;
-  } 
-
-  .select-header-caret {
-    position: absolute;
-    right: 0.75rem;
-    transform: rotate(0);
-    transition: transform 0.3s linear;
-
-    &.open {
-      transform: rotate(180deg);
-    }
-  }
-
-  .select-list {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    background-color: ${({ theme }) => theme.backgroundPrimary};
-    box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.08);
-    border-radius: 0.5rem;
-    width: 100%;
-    margin-top: 5.5rem;
-    z-index: 1;
-  }
-
-  .select-option {
-    border-bottom: 1px solid ${({ theme }) => theme.borderPrimary};
-    width: 100%;
-    cursor: pointer;
-
-    :last-child {
-      border-bottom: 0;
-    }
-  }
-
   .result {
     display: flex;
     justify-content: space-between;

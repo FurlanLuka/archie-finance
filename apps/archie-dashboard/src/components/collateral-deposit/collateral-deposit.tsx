@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { collateralCurrencies, CollateralCurrency } from '../../constants/collateral-curencies';
+import { collateralAssets, CollateralAsset } from '../../constants/collateral-assets';
+import { CollateralCurrency } from '../collateral-currency/collateral-currency';
 import { CollateralDepositStyled } from './collateral-deposit.styled';
-import { CollateralCurency } from '../collateral-curency/collateral-curency';
 
 interface CollateralDepositProps {
   assetId: string;
@@ -9,11 +9,11 @@ interface CollateralDepositProps {
 }
 
 export const CollateralDeposit: FC<CollateralDepositProps> = ({ assetId, setSelectedAsset }) => {
-  const curency: CollateralCurrency | undefined = collateralCurrencies.find((currency) => currency.id === assetId);
+  const curency: CollateralAsset | undefined = collateralAssets.find((asset) => asset.id === assetId);
 
   return (
     <CollateralDepositStyled onClick={() => setSelectedAsset(assetId)}>
-      <CollateralCurency icon={curency?.icon} name={curency?.name} short={curency?.short} />
+      <CollateralCurrency icon={curency?.icon} name={curency?.name} short={curency?.short} />
     </CollateralDepositStyled>
   );
 };

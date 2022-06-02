@@ -32,7 +32,7 @@ export const OnboardingRoute: React.FC = () => {
       case Step.KYC:
         return <KycStep setCurrentStep={setCurrentStep} />;
       case Step.VERIFY:
-        return <VerifyStep setCurrentStep={setCurrentStep} />;
+        return <CollateralizationStep setCurrentStep={setCurrentStep} />;
       case Step.COLLATERALIZE:
         return <CollateralizationStep setCurrentStep={setCurrentStep} />;
       case Step.CARD:

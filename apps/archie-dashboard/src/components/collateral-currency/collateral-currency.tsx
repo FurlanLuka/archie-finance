@@ -1,16 +1,16 @@
 import { FC, ReactElement } from 'react';
-import { CollateralCurencyStyled } from './collateral-curency.styled';
 import { ParagraphXS } from '../_generic/typography/typography.styled';
 import { theme } from '../../constants/theme';
+import { CollateralCurrencyStyled } from './collateral-currency.styled';
 
-interface CollateralCurencyProps {
+interface CollateralCurrencyProps {
   icon?: ReactElement;
   name?: string;
   short?: string;
 }
 
-export const CollateralCurency: FC<CollateralCurencyProps> = ({ icon, name, short }) => (
-  <CollateralCurencyStyled>
+export const CollateralCurrency: FC<CollateralCurrencyProps> = ({ icon, name, short }) => (
+  <CollateralCurrencyStyled>
     <div className="icon">{icon}</div>
     <div className="name">
       <ParagraphXS weight={700}>{name}</ParagraphXS>
@@ -18,5 +18,5 @@ export const CollateralCurency: FC<CollateralCurencyProps> = ({ icon, name, shor
         {short}
       </ParagraphXS>
     </div>
-  </CollateralCurencyStyled>
+  </CollateralCurrencyStyled>
 );
