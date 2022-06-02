@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-export const CollateralCurencyStyled = styled.div`
+export const CollateralCurrencyStyled = styled.div`
   display: flex;
   align-items: center;
 

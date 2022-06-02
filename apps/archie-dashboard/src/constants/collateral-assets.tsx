@@ -4,7 +4,7 @@ import { Ethereum } from '../components/_generic/icons/ethereum';
 import { Solana } from '../components/_generic/icons/solana';
 import { Usdcoin } from '../components/_generic/icons/usdcoin';
 
-export interface CollateralCurrency {
+export interface CollateralAsset {
   id: string;
   name: string;
   short: string;
@@ -14,7 +14,7 @@ export interface CollateralCurrency {
   url: string;
 }
 
-export const collateralCurrencies: CollateralCurrency[] = [
+export const collateralAssets: CollateralAsset[] = [
   {
     id: 'BTC',
     name: 'Bitcoin',
