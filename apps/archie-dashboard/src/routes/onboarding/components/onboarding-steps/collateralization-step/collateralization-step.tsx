@@ -22,17 +22,17 @@ interface CollateralizationStepProps {
 }
 
 export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurrentStep }) => {
-  const queryResponse: QueryResponse<AssetPrice[]> = useGetAssetPrice();
-
   const [lineOfCredit, setLineOfCredit] = useState(100);
   const [selectedCollateralAsset, setSelectedCollateralAsset] = useState<CollateralAsset>();
   const [collateralDeposit, setCollateralDeposit] = useState({ id: '', address: '' });
-  const [requiredCollateral, setRequiredCollateral] = useState(0); // TBD
+  const [requiredCollateral, setRequiredCollateral] = useState(0);
+
+  const getAssetPriceResponse: QueryResponse<AssetPrice[]> = useGetAssetPrice();
 
   useEffect(() => {
-    if (queryResponse.state === RequestState.SUCCESS) {
+    if (getAssetPriceResponse.state === RequestState.SUCCESS) {
       if (selectedCollateralAsset) {
-        const asset = queryResponse.data.find((asset) => asset.asset === selectedCollateralAsset.id);
+        const asset = getAssetPriceResponse.data.find((asset) => asset.asset === selectedCollateralAsset.id);
 
         if (asset) {
           const assetPrice = 1 / asset.price;
@@ -42,7 +42,8 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
         }
       }
     }
-  }, [queryResponse]);
+  }, [getAssetPriceResponse]);
+
   useEffect(() => {
     const asset: CollateralAsset | undefined = collateralAssets.find((asset) => asset.id === collateralDeposit.id);
 
@@ -73,43 +74,29 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
           <div className="result-item">
             <ParagraphXS weight={700}>Required Collateral</ParagraphXS>
             <SubtitleS weight={400}>
-              {requiredCollateral} {selectedCollateralAsset?.short}
-            </SubtitleS>
-            <SubtitleS
-              weight={400}
-              color={theme.textDisabled}
-              className={`placeholder ${collateralDeposit.address && 'fade-out'}`}
-            >
-              -/-
+              {requiredCollateral.toFixed(4)} {selectedCollateralAsset?.short}
+              <span className={`placeholder ${collateralDeposit.address && 'fade-out'}`}>-/-</span>
             </SubtitleS>
           </div>
           <div className="result-item">
             <ParagraphXS weight={700}>Loan-to-Value</ParagraphXS>
-            <SubtitleS weight={400}>{selectedCollateralAsset?.loan_to_value}</SubtitleS>
-            <SubtitleS
-              weight={400}
-              color={theme.textDisabled}
-              className={`placeholder ${collateralDeposit.address && 'fade-out'}`}
-            >
-              -/-
+            <SubtitleS weight={400}>
+              {selectedCollateralAsset?.loan_to_value}
+              <span className={`placeholder ${collateralDeposit.address && 'fade-out'}`}>-/-</span>
             </SubtitleS>
           </div>
           <div className="result-item">
             <ParagraphXS weight={700}>Interest Rate</ParagraphXS>
-            <SubtitleS weight={400}>{selectedCollateralAsset?.interest_rate}</SubtitleS>
-            <SubtitleS
-              weight={400}
-              color={theme.textDisabled}
-              className={`placeholder ${collateralDeposit.address && 'fade-out'}`}
-            >
-              -/-
+            <SubtitleS weight={400}>
+              {selectedCollateralAsset?.interest_rate}{' '}
+              <span className={`placeholder ${collateralDeposit.address && 'fade-out'}`}>-/-</span>
             </SubtitleS>
           </div>
         </div>
 
         <div className="address">
           <ParagraphXS weight={700}>
-            Send {requiredCollateral} {selectedCollateralAsset?.short} to:
+            Send {requiredCollateral.toFixed(4)} {selectedCollateralAsset?.short} to:
           </ParagraphXS>
           <div className="address-copy">
             <ParagraphS>{collateralDeposit.address}</ParagraphS>

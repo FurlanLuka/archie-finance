@@ -33,7 +33,7 @@ export const InputSelect: FC<InputSelectProps> = ({
     if (getDepositAddressResponse.state === RequestState.SUCCESS) {
       setCollateralDeposit({ id: selectedAssetId, address: getDepositAddressResponse.data.address });
     }
-  }, [getDepositAddressResponse, selectedAssetId, setCollateralDeposit]);
+  }, [getDepositAddressResponse]);
 
   const handleSelect = (assetId: string) => {
     setSelectedAssetId(assetId);

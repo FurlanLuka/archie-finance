@@ -70,12 +70,16 @@ export const CollateralizationStepStyled = styled.div`
   }
 
   .result-item {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     width: 33.33%;
     max-width: 10rem;
+
+    h4 {
+      position: relative;
+      white-space: nowrap;
+    }
 
     p {
       margin-bottom: 0.5rem;
@@ -84,9 +88,10 @@ export const CollateralizationStepStyled = styled.div`
 
   .placeholder {
     position: absolute;
-    top: 1.5rem;
+    top: 0;
     display: flex;
     justify-content: flex-start;
+    color: ${({ theme }) => theme.textDisabled};
     background-color: ${({ theme }) => theme.backgroundPrimary};
     width: 100%;
 
