@@ -415,7 +415,7 @@ export class AptoService {
       });
 
       await this.internalApiService.completeOnboardingStage(
-        'phoneVerificationStage',
+        'cardActivationStage',
         aptoCardApplication.userId,
       );
 

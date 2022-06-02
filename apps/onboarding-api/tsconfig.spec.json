@@ -12,5 +12,5 @@
     "**/*.d.ts",
     "**/__data__",
     "**/__mocks__"
-  ]
+, "src/modules/onboarding/onboarding.service.spec.skip.ts"  ]
 }

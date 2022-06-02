@@ -12,5 +12,5 @@
     "**/*.d.ts",
     "**/__data__",
     "**/__mocks__"
-, "src/modules/kyc/kyc.service.spec.skip.ts"  ]
+, "src/modules/kyc/kyc.service.spec.skip.ts", "src/modules/user/user.service.spec.skip.ts"  ]
 }
