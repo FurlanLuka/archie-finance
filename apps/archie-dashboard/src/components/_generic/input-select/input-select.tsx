@@ -12,13 +12,13 @@ import { InputSelectStyled } from './input-select.styled';
 interface InputSelectProps {
   collateralDeposit: { id: string; address: string };
   setCollateralDeposit: (params: { id: string; address: string }) => void;
-  selectedCollateralDeposit?: CollateralAsset;
+  selectedCollateralAsset?: CollateralAsset;
 }
 
 export const InputSelect: FC<InputSelectProps> = ({
   collateralDeposit,
   setCollateralDeposit,
-  selectedCollateralDeposit,
+  selectedCollateralAsset,
 }) => {
   const [selectOpen, setSelectOpen] = useState(false);
   const [shouldCall, setShouldCall] = useState(false);
@@ -29,34 +29,17 @@ export const InputSelect: FC<InputSelectProps> = ({
     shouldCall,
   );
 
-  // useEffect(() => {
-  //   if (selectedAssetId.length > 0) {
-  //     setShouldCall(true);
-  //   }
-  // }, [selectedAssetId]);
-
   useEffect(() => {
     if (getDepositAddressResponse.state === RequestState.SUCCESS) {
       setCollateralDeposit({ id: selectedAssetId, address: getDepositAddressResponse.data.address });
     }
-  }, [getDepositAddressResponse, selectedAssetId]);
+  }, [getDepositAddressResponse, selectedAssetId, setCollateralDeposit]);
 
   const handleSelect = (assetId: string) => {
     setSelectedAssetId(assetId);
-
     setShouldCall(true);
     setSelectOpen(false);
   };
-
-  // const handleSelect = (assetId: string) => {
-  //   setSelectedAssetId(assetId);
-  //   setShouldCall(true);
-
-  //   if (getDepositAddressResponse.state === RequestState.SUCCESS) {
-  //     setSelectOpen(false);
-  //     setCollateralDeposit({ id: selectedAssetId, address: getDepositAddressResponse.data.address });
-  //   }
-  // };
 
   return (
     <InputSelectStyled>
@@ -64,9 +47,9 @@ export const InputSelect: FC<InputSelectProps> = ({
       <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
         {collateralDeposit.address ? (
           <CollateralCurrency
-            icon={selectedCollateralDeposit?.icon}
-            name={selectedCollateralDeposit?.name}
-            short={selectedCollateralDeposit?.short}
+            icon={selectedCollateralAsset?.icon}
+            name={selectedCollateralAsset?.name}
+            short={selectedCollateralAsset?.short}
           />
         ) : (
           <CollateralCurrency name="Select your collateral currency" short="BTC, ETH, SOL, or USDC" />

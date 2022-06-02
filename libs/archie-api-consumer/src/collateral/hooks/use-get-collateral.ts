@@ -2,7 +2,7 @@ import { QueryResponse } from '../../interface';
 import { getCollateral, Collateral } from '../api/get-collateral';
 import { useExtendedQuery } from '@archie/api-consumer/helper-hooks';
 
-export const COLLATERAL_RECORD_QUERY_KEY: string = 'collateral_record';
+export const COLLATERAL_RECORD_QUERY_KEY = 'collateral_record';
 
 export const useGetCollateral = (): QueryResponse<Collateral[]> => {
   return useExtendedQuery(
