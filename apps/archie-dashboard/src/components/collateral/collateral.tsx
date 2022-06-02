@@ -1,12 +1,12 @@
 import { MutationQueryResponse, QueryResponse, RequestState } from '@archie/api-consumer/interface';
-import { useGetCollateralTotalValue } from '@archie/api-consumer/collateral/hooks/use-get-collateral-total-value';
+import { usePollCollateralTotalValue } from '@archie/api-consumer/collateral/hooks/use-poll-collateral-total-value';
 import { TotalCollateralValue } from '@archie/api-consumer/collateral/api/get-collateral-total-value';
 import { useCreateCreditLine } from '@archie/api-consumer/credit/hooks/use-create-credit-line';
 import { useEffect, useState } from 'react';
 
 export const Collateral: React.FC = () => {
   const [shouldPoll, setShouldPoll] = useState(true);
-  const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = useGetCollateralTotalValue(shouldPoll);
+  const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = usePollCollateralTotalValue(shouldPoll);
   const createCreditLine: MutationQueryResponse = useCreateCreditLine();
 
   useEffect(() => {

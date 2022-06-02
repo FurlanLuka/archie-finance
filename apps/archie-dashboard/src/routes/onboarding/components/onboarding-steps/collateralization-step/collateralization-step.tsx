@@ -15,7 +15,7 @@ import { InputRange } from '../../../../../components/_generic/input-range/input
 import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
 import { ExternalLink } from '../../../../../components/_generic/icons/external-link';
 import { theme } from '../../../../../constants/theme';
-import { Collateral } from '../../../../../components/collateral/collateral'
+import { Collateral } from '../../../../../components/collateral/collateral';
 
 interface CollateralizationStepProps {
   setCurrentStep: (step: Step) => void;
@@ -29,19 +29,20 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
   const [collateralDeposit, setCollateralDeposit] = useState({ id: '', address: '' });
   const [requiredCollateral, setRequiredCollateral] = useState(0); // TBD
 
-  if (queryResponse.state === RequestState.SUCCESS) {
-    if (selectedCollateralAsset) {
-      const asset = queryResponse.data.find((asset) => asset.asset === selectedCollateralAsset.id);
+  useEffect(() => {
+    if (queryResponse.state === RequestState.SUCCESS) {
+      if (selectedCollateralAsset) {
+        const asset = queryResponse.data.find((asset) => asset.asset === selectedCollateralAsset.id);
 
-      if (asset) {
-        const assetPrice = 1 / asset.price;
-        const result = (lineOfCredit / 0.5) * assetPrice;
+        if (asset) {
+          const assetPrice = 1 / asset.price;
+          const result = (lineOfCredit / 0.5) * assetPrice;
 
-        setRequiredCollateral(result);
+          setRequiredCollateral(result);
+        }
       }
     }
-  }
-
+  }, [queryResponse]);
   useEffect(() => {
     const asset: CollateralAsset | undefined = collateralAssets.find((asset) => asset.id === collateralDeposit.id);
 

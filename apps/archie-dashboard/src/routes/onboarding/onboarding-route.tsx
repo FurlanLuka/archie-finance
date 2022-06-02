@@ -19,6 +19,7 @@ export const OnboardingRoute: React.FC = () => {
 
   useEffect(() => {
     if (queryResponse.state === RequestState.SUCCESS) {
+      console.log(queryResponse.data.collateralizationStage);
       if (queryResponse.data.kycStage === false) {
         setCurrentStep(Step.KYC);
       } else if (queryResponse.data.phoneVerificationStage === false) {
@@ -36,7 +37,7 @@ export const OnboardingRoute: React.FC = () => {
       case Step.KYC:
         return <KycStep setCurrentStep={setCurrentStep} />;
       case Step.VERIFY:
-        return <CollateralizationStep setCurrentStep={setCurrentStep} />;
+        return <VerifyStep setCurrentStep={setCurrentStep} />;
       case Step.COLLATERALIZE:
         return <CollateralizationStep setCurrentStep={setCurrentStep} />;
       case Step.CARD:

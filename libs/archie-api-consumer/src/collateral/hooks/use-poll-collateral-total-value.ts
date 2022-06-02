@@ -5,9 +5,13 @@ import { getCollateralTotalValue, TotalCollateralValue } from '../api/get-collat
 
 export const COLLATERAL_VALUE_RECORD_QUERY_KEY = 'collateral_value_record';
 
-export const useGetCollateralTotalValue = (): QueryResponse<TotalCollateralValue> => {
+export const usePollCollateralTotalValue = (enabled: boolean = true): QueryResponse<TotalCollateralValue> => {
   return useExtendedQuery(
     COLLATERAL_VALUE_RECORD_QUERY_KEY,
     async (accessToken: string) => getCollateralTotalValue(accessToken),
+    {
+      enabled,
+      refetchInterval: () => 10000,
+    },
   );
 };
