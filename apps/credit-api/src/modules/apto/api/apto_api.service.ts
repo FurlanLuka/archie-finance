@@ -1,4 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { ConfigService } from '@archie-microservices/config';
 import {
   AddressDataPoint,
@@ -59,6 +63,8 @@ export class AptoApiService {
           error: (error as AxiosError).toJSON(),
         },
       });
+
+      throw new InternalServerErrorException();
     }
   }
 
@@ -83,6 +89,8 @@ export class AptoApiService {
           error: (error as AxiosError).toJSON(),
         },
       });
+
+      throw new InternalServerErrorException();
     }
   }
 
@@ -110,6 +118,8 @@ export class AptoApiService {
           error: (error as AxiosError).toJSON(),
         },
       });
+
+      throw new InternalServerErrorException();
     }
   }
 
@@ -122,31 +132,42 @@ export class AptoApiService {
     addressDataPoint: AddressDataPoint,
     idDocumentDataPoint: IdDocumentDataPoint,
   ): Promise<CreateUserResponse> {
-    const response: AxiosResponse<CreateUserResponse> = await axios.post(
-      this.constructAptoUrl(`/v1/user`),
-      {
-        custodian_id: userId,
-        data_points: {
-          type: 'list',
-          data: [
-            phoneDataPoint,
-            emailDataPoint,
-            birthdateDataPoint,
-            nameDataPoint,
-            addressDataPoint,
-            idDocumentDataPoint,
-          ],
-          has_more: false,
-          page: 0,
-          rows: 1,
-          total_count: 1,
+    try {
+      const response: AxiosResponse<CreateUserResponse> = await axios.post(
+        this.constructAptoUrl(`/v1/user`),
+        {
+          custodian_id: userId,
+          data_points: {
+            type: 'list',
+            data: [
+              phoneDataPoint,
+              emailDataPoint,
+              birthdateDataPoint,
+              nameDataPoint,
+              addressDataPoint,
+              idDocumentDataPoint,
+            ],
+            has_more: false,
+            page: 0,
+            rows: 1,
+            total_count: 1,
+          },
         },
-      },
-      {
-        headers: this.getAptoHeaders(),
-      },
-    );
+        {
+          headers: this.getAptoHeaders(),
+        },
+      );
 
-    return response.data;
+      return response.data;
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_CREATING_APTO_USER',
+        metadata: {
+          error: (error as AxiosError).toJSON(),
+        },
+      });
+
+      throw new InternalServerErrorException();
+    }
   }
 }

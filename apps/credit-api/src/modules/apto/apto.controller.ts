@@ -3,6 +3,10 @@ import { FinishPhoneVerificationPayload } from '@archie-microservices/api-interf
 import { AptoService } from './apto.service';
 import { AuthGuard } from '@archie-microservices/auth0';
 import { CreateUserResponse } from './api/apto_api.interfaces';
+import {
+  StartPhoneVerificationResponse,
+  CompletePhoneVerificationResponse,
+} from './apto.interfaces';
 
 @Controller('v1/apto')
 export class AptoController {
@@ -10,7 +14,9 @@ export class AptoController {
 
   @Post('verification/start')
   @UseGuards(AuthGuard)
-  public async startPhoneVerification(@Request() req): Promise<void> {
+  public async startPhoneVerification(
+    @Request() req,
+  ): Promise<StartPhoneVerificationResponse> {
     return this.aptoService.startPhoneVerification(req.user.sub);
   }
 
@@ -19,13 +25,13 @@ export class AptoController {
   public async finishPhoneVerification(
     @Request() req,
     @Body() body: FinishPhoneVerificationPayload,
-  ): Promise<void> {
+  ): Promise<CompletePhoneVerificationResponse> {
     return this.aptoService.finishPhoneVerification(req.user.sub, body.secret);
   }
 
   @Post('verification/restart')
   @UseGuards(AuthGuard)
-  public async restartPhoneVerification(@Request() req): Promise<void> {
+  public async restartPhoneVerification(@Request() req): Promise<StartPhoneVerificationResponse> {
     return this.aptoService.restartVerification(req.user.sub);
   }
 

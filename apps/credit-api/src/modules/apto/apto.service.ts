@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -12,6 +11,7 @@ import { AptoApiService } from './api/apto_api.service';
 import {
   AddressDataPoint,
   BirthdateDataPoint,
+  CompleteVerificationResponse,
   CreateUserResponse,
   DataType,
   EmailDataPoint,
@@ -24,7 +24,10 @@ import { AptoVerification } from './apto_verification.entity';
 import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
 import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
 import { AptoUser } from './apto_user.entity';
-import { AxiosError } from 'axios';
+import {
+  CompletePhoneVerificationResponse,
+  StartPhoneVerificationResponse,
+} from './apto.interfaces';
 
 @Injectable()
 export class AptoService {
@@ -37,7 +40,9 @@ export class AptoService {
     private aptoUserRepository: Repository<AptoUser>,
   ) {}
 
-  public async startPhoneVerification(userId: string): Promise<void> {
+  public async startPhoneVerification(
+    userId: string,
+  ): Promise<StartPhoneVerificationResponse> {
     const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
 
     const startPhoneVerificationResponse: StartVerificationResponse =
@@ -50,29 +55,49 @@ export class AptoService {
       userId,
       verificationId: startPhoneVerificationResponse.verification_id,
     });
+
+    return {
+      verificationId: startPhoneVerificationResponse.verification_id,
+      status: startPhoneVerificationResponse.status,
+    };
   }
 
   public async finishPhoneVerification(
     userId: string,
     secret: string,
-  ): Promise<void> {
+  ): Promise<CompletePhoneVerificationResponse> {
     const aptoVerification: AptoVerification =
       await this.aptoVerificationRepository.findOne({
         userId,
       });
 
     if (aptoVerification === undefined) {
+      Logger.error({
+        code: 'APTO_VERIFICATION_NOT_STARTED_ERROR',
+        metadata: {
+          userId,
+        },
+      });
+
       throw new NotFoundException();
     }
 
     if (aptoVerification.isVerificationCompleted) {
+      Logger.error({
+        code: 'APTO_VERIFICATION_ALREADY_COMPLETED_ERROR',
+        metadata: {
+          userId,
+        },
+      });
+
       throw new BadRequestException();
     }
 
-    await this.aptoApiService.completeVerificationProcess(
-      aptoVerification.verificationId,
-      secret,
-    );
+    const completePhoneVerificationResponse: CompleteVerificationResponse =
+      await this.aptoApiService.completeVerificationProcess(
+        aptoVerification.verificationId,
+        secret,
+      );
 
     await this.aptoVerificationRepository.update(
       {
@@ -82,25 +107,52 @@ export class AptoService {
         isVerificationCompleted: true,
       },
     );
+
+    return {
+      verificationId: completePhoneVerificationResponse.verification_id,
+      status: completePhoneVerificationResponse.status,
+    };
   }
 
-  public async restartVerification(userId: string): Promise<void> {
+  public async restartVerification(
+    userId: string,
+  ): Promise<StartPhoneVerificationResponse> {
     const aptoVerification: AptoVerification =
       await this.aptoVerificationRepository.findOne({
         userId,
       });
 
     if (aptoVerification === undefined) {
+      Logger.error({
+        code: 'APTO_VERIFICATION_NOT_STARTED_ERROR',
+        metadata: {
+          userId,
+        },
+      });
+
       throw new NotFoundException();
     }
 
     if (aptoVerification.isVerificationCompleted) {
+      Logger.error({
+        code: 'APTO_VERIFICATION_ALREADY_COMPLETED_ERROR',
+        metadata: {
+          userId,
+        },
+      });
+
       throw new BadRequestException();
     }
 
-    await this.aptoApiService.restartVerificationProcess(
-      aptoVerification.verificationId,
-    );
+    const restartPhoneVerificationResponse: StartVerificationResponse =
+      await this.aptoApiService.restartVerificationProcess(
+        aptoVerification.verificationId,
+      );
+
+    return {
+      verificationId: restartPhoneVerificationResponse.verification_id,
+      status: restartPhoneVerificationResponse.status,
+    };
   }
 
   public async createAptoUser(userId: string): Promise<CreateUserResponse> {
@@ -110,80 +162,87 @@ export class AptoService {
       });
 
     if (aptoVerification === undefined) {
+      Logger.error({
+        code: 'APTO_VERIFICATION_NOT_STARTED_ERROR',
+        metadata: {
+          userId,
+        },
+      });
+
       throw new NotFoundException();
     }
 
     if (!aptoVerification.isVerificationCompleted) {
+      Logger.error({
+        code: 'APTO_VERIFICATION_NOT_COMPLETED_ERROR',
+        metadata: {
+          userId,
+        },
+      });
       throw new BadRequestException('PHONE_VERIFICATION_REQUIRED_ERROR');
     }
 
-    try {
-      const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
-      const emailAddressResponse: GetEmailAddressResponse =
-        await this.internalApiService.getUserEmailAddress(userId);
+    const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
+    const emailAddressResponse: GetEmailAddressResponse =
+      await this.internalApiService.getUserEmailAddress(userId);
 
-      const birthdateDataPoint: BirthdateDataPoint = {
-        type: DataType.BIRTHDATE,
-        date: kyc.dateOfBirth,
-      };
+    const birthdateDataPoint: BirthdateDataPoint = {
+      type: DataType.BIRTHDATE,
+      date: kyc.dateOfBirth,
+    };
 
-      const emailDataPoint: EmailDataPoint = {
-        type: DataType.EMAIL,
-        email: emailAddressResponse.email,
-      };
+    const emailDataPoint: EmailDataPoint = {
+      type: DataType.EMAIL,
+      email: emailAddressResponse.email,
+    };
 
-      const nameDataPoint: NameDataPoint = {
-        type: DataType.NAME,
-        first_name: kyc.firstName,
-        last_name: kyc.lastName,
-      };
+    const nameDataPoint: NameDataPoint = {
+      type: DataType.NAME,
+      first_name: kyc.firstName,
+      last_name: kyc.lastName,
+    };
 
-      const addressDataPoint: AddressDataPoint = {
-        type: DataType.ADDRESS,
-        street_one: `${kyc.addressStreet} ${kyc.addressStreetNumber}`,
-        locality: kyc.addressLocality,
-        region: kyc.addressRegion,
-        postal_code: kyc.addressPostalCode,
-        country: kyc.addressCountry,
-      };
+    const addressDataPoint: AddressDataPoint = {
+      type: DataType.ADDRESS,
+      street_one: `${kyc.addressStreet} ${kyc.addressStreetNumber}`,
+      locality: kyc.addressLocality,
+      region: kyc.addressRegion,
+      postal_code: kyc.addressPostalCode,
+      country: kyc.addressCountry,
+    };
 
-      const idDocumentDataPoint: IdDocumentDataPoint = {
-        data_type: DataType.ID_DOCUMENT,
-        value: kyc.ssn,
-        country: kyc.addressCountry,
-        doc_type: 'SSN',
-      };
+    const idDocumentDataPoint: IdDocumentDataPoint = {
+      data_type: DataType.ID_DOCUMENT,
+      value: kyc.ssn,
+      country: kyc.addressCountry,
+      doc_type: 'SSN',
+    };
 
-      const phoneDataPoint: PhoneDataPoint = {
-        data_type: DataType.PHONE,
-        verification: {
-          verification_id: aptoVerification.verificationId,
-        },
-        country_code: kyc.phoneNumberCountryCode.replace('+', ''),
-        phone_number: kyc.phoneNumber,
-      };
+    const phoneDataPoint: PhoneDataPoint = {
+      data_type: DataType.PHONE,
+      verification: {
+        verification_id: aptoVerification.verificationId,
+      },
+      country_code: kyc.phoneNumberCountryCode.replace('+', ''),
+      phone_number: kyc.phoneNumber,
+    };
 
-      const user: CreateUserResponse = await this.aptoApiService.createUser(
-        userId,
-        phoneDataPoint,
-        emailDataPoint,
-        birthdateDataPoint,
-        nameDataPoint,
-        addressDataPoint,
-        idDocumentDataPoint,
-      );
+    const user: CreateUserResponse = await this.aptoApiService.createUser(
+      userId,
+      phoneDataPoint,
+      emailDataPoint,
+      birthdateDataPoint,
+      nameDataPoint,
+      addressDataPoint,
+      idDocumentDataPoint,
+    );
 
-      await this.aptoUserRepository.save({
-        userId,
-        aptoUserId: user.user_id,
-        accessToken: user.user_token,
-      });
+    await this.aptoUserRepository.save({
+      userId,
+      aptoUserId: user.user_id,
+      accessToken: user.user_token,
+    });
 
-      return user;
-    } catch (error) {
-      Logger.log((error as AxiosError).toJSON());
-
-      throw new InternalServerErrorException();
-    }
+    return user;
   }
 }
