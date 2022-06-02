@@ -284,7 +284,7 @@ export class AptoService {
 
     if (cardApplication !== undefined) {
       Logger.error({
-        code: 'APTO_CARD_APPLICATION_ALREADY_SEMT_ERROR',
+        code: 'APTO_CARD_APPLICATION_ALREADY_SENT_ERROR',
         metadata: {
           userId,
         },
@@ -303,6 +303,8 @@ export class AptoService {
       userId,
       applicationId: cardApplicationResponse.id,
       applicationStatus: cardApplicationResponse.status,
+      nextActionId: cardApplicationResponse.next_action.action_id,
+      workflowObjectId: cardApplicationResponse.workflow_object_id,
     });
 
     return cardApplicationResponse;
@@ -325,6 +327,27 @@ export class AptoService {
       throw new BadRequestException();
     }
 
-    await this.aptoApiService.acceptAgreements(aptoUser.accessToken);
+    const cardApplication: AptoCardApplication =
+      await this.aptoCardApplication.findOne({
+        userId,
+      });
+
+    if (cardApplication === undefined) {
+      Logger.error({
+        code: 'APTO_CARD_APPLICATION_DOESNT_EXIST_ERROR',
+        metadata: {
+          userId,
+        },
+      });
+
+      throw new BadRequestException();
+    }
+
+    await this.aptoApiService.setAgreementStatus(aptoUser.accessToken);
+    await this.aptoApiService.acceptAgreements(
+      aptoUser.accessToken,
+      cardApplication.workflowObjectId,
+      cardApplication.nextActionId,
+    );
   }
 }

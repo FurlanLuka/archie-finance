@@ -203,7 +203,7 @@ export class AptoApiService {
     }
   }
 
-  public async acceptAgreements(userAccessToken: string): Promise<void> {
+  public async setAgreementStatus(userAccessToken: string): Promise<void> {
     try {
       await axios.post(
         this.constructAptoUrl(`/v1/user/accounts/apply`),
@@ -215,6 +215,35 @@ export class AptoApiService {
             'apto_privacy',
           ],
           user_action: 'ACCEPTED',
+        },
+        {
+          headers: {
+            ...this.getAptoHeaders(),
+            Authorization: `Bearer ${userAccessToken}`,
+          },
+        },
+      );
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_SETTING_APTO_AGREEMENTS',
+        metadata: {
+          error: (error as AxiosError).toJSON(),
+        },
+      });
+    }
+  }
+
+  public async acceptAgreements(
+    userAccessToken: string,
+    workflowObjectId: string,
+    actionId: string,
+  ): Promise<void> {
+    try {
+      await axios.post(
+        this.constructAptoUrl(`/v1/disclaimers/accept`),
+        {
+          workflow_object_id: workflowObjectId,
+          action_id: actionId,
         },
         {
           headers: {

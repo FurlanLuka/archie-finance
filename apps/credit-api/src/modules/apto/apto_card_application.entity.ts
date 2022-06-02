@@ -12,4 +12,10 @@ export class AptoCardApplication {
 
   @Column('varchar')
   applicationStatus: string;
+
+  @Column('varchar')
+  workflowObjectId: string;
+
+  @Column('varchar')
+  nextActionId: string;
 }

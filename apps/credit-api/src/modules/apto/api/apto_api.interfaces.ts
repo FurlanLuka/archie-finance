@@ -45,7 +45,7 @@ export enum DataType {
 export interface PhoneDataPoint {
   type: DataType.PHONE;
   verification: {
-    verification_id: string,
+    verification_id: string;
   };
   country_code: string;
   phone_number: string;
@@ -96,6 +96,11 @@ export interface CardApplicationResponse {
   type: string;
   id: string;
   status: string;
+  application_type: string;
+  workflow_object_id: string;
+  next_action: {
+    action_id: string;
+  };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
