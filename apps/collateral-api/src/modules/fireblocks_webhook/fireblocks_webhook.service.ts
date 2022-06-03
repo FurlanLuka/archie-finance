@@ -13,7 +13,6 @@ import {
 import { ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '../../interfaces';
 import {
-  AssetInformation,
   AssetList,
 } from '@archie-microservices/api-interfaces/asset_information';
 
