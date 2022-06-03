@@ -61,7 +61,7 @@ export const CollateralizationStepStyled = styled.div`
     width: 100%;
     margin-bottom: 4rem;
 
-    @media (max-width: ${breakpoints.screenSM}) {
+    @media (max-width: ${breakpoints.screenMD}) {
       flex-direction: column;
     }  
   }
@@ -204,11 +204,21 @@ export const CollateralizationStepStyled = styled.div`
     margin: 1rem 0 1.5rem;
   } 
 
+  .info-link {
+    display: flex;
+    gap: 0.25rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      flex-direction: column;
+      gap: 0;
+    } 
+  }
+
   .info-link-url {
     display: flex;
     align-items: center;
     color: ${({ theme }) => theme.textHighlight};
-    margin-left: 0.25rem;
+
     margin-top: 0.05rem;
   }
 
@@ -218,12 +228,21 @@ export const CollateralizationStepStyled = styled.div`
 
   .terms {
     display: flex;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      flex-direction: column;
+    } 
   }
 
   .terms-title {
     display: flex;
     justify-content: flex-start;
     width: 30%;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    } 
   }
 
   .terms-list {
@@ -232,6 +251,11 @@ export const CollateralizationStepStyled = styled.div`
     align-items: flex-start;
     width: 70%;
     margin: 0;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      width: 100%;
+      padding-left: 1rem;
+    } 
   }
 
   .terms-list-item {
