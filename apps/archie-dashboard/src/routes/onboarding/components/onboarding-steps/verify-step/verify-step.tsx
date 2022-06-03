@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import ReactCodeInput from 'react-verification-code-input';
 
-import { Step } from '../../../../../constants/onboarding-steps';
 import { SubtitleS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
@@ -11,11 +10,7 @@ import { useCompleteAptoVerification } from '@archie/api-consumer/credit/hooks/u
 import { useStartAptoVerification } from '@archie/api-consumer/credit/hooks/use-start-apto-verification';
 import { MutationQueryResponse, RequestState } from '@archie/api-consumer/interface';
 
-interface VerifyStepProps {
-  setCurrentStep: (step: Step) => void;
-}
-
-export const VerifyStep: FC<VerifyStepProps> = ({ setCurrentStep }) => {
+export const VerifyStep: FC = () => {
   const [code, setCode] = useState('');
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const useCompleteAptoVerificationQuery: MutationQueryResponse<unknown> = useCompleteAptoVerification();
