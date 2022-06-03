@@ -44,18 +44,33 @@ export class FireblocksWebhookService {
           payload.data.destinationAddress,
         );
 
+      Logger.log({
+        code: 'FIREBLOCKS_PAYLOAD',
+        ...payload,
+      });
+
       const assetList: AssetList = this.configService.get(
         ConfigVariables.ASSET_LIST,
       );
 
+      Logger.log({
+        code: 'ASSET_LIST',
+        ...assetList,
+      });
+
       const assetInformation: AssetInformation[] = Object.keys(
         assetList,
-      ).flatMap((key) => {
-        if (assetList[key] === undefined) {
+      ).flatMap(() => {
+        if (assetList[payload.data.assetId] === undefined) {
           return [];
         }
 
-        return [assetList[key]];
+        return [assetList[payload.data.assetId]];
+      });
+      
+      Logger.log({
+        code: 'ASSET_INFORMATION',
+        ...assetInformation,
       });
 
       const assetId: string =
