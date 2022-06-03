@@ -12,6 +12,7 @@ import { VerifyStepStyled } from './verify-step.styled';
 export const VerifyStep: FC = () => {
   const [code, setCode] = useState('');
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+
   const useCompleteAptoVerificationQuery: MutationQueryResponse<unknown> = useCompleteAptoVerification();
   const useStartAptoVerificationQuery: MutationQueryResponse<unknown> = useStartAptoVerification();
 
@@ -27,8 +28,10 @@ export const VerifyStep: FC = () => {
     }
   }, [useStartAptoVerificationQuery]);
 
+  const isValid = code.length === 6;
+
   const handleSubmit = () => {
-    if (isInitialLoading || code.length !== 6) {
+    if (isInitialLoading || !isValid) {
       return;
     }
 
@@ -55,7 +58,7 @@ export const VerifyStep: FC = () => {
         </ParagraphXS>
       </button>
       <hr className="divider" />
-      <ButtonPrimary type="submit" onClick={handleSubmit}>
+      <ButtonPrimary type="submit" onClick={handleSubmit} isDisabled={!isValid}>
         Next
         <ArrowRight fill={colors.white} />
       </ButtonPrimary>

@@ -84,8 +84,13 @@ export const KycStep: FC = () => {
         addressPostalCode: postalCodeComponent.short_name,
       };
 
-      setAddress(addr);
-      setAddressError('');
+      if (countryComponent.short_name !== 'US') {
+        setAddressError('Must be a U.S. address');
+        console.log('vleze tuka');
+      } else {
+        setAddress(addr);
+        setAddressError('');
+      }
     } else {
       setAddressError('Please enter your street number');
     }
@@ -126,8 +131,6 @@ export const KycStep: FC = () => {
 
     if (!address) {
       setAddressError('Please enter your address');
-    } else if (address.addressCountry !== 'US') {
-      setAddressError('Must be a U.S. address');
     } else {
       setAddressError('');
     }

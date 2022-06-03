@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import breakpoints from '../../../constants/breakpoints';
+
 export const InputSelectStyled = styled.div`
   position: relative;
   display: flex;
@@ -19,6 +21,10 @@ export const InputSelectStyled = styled.div`
     padding: 0 1rem;
     margin-top: 0.75rem;
     cursor: pointer;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      padding: 0 0.5rem;
+    } 
   } 
 
   .select-header-caret {
@@ -26,6 +32,10 @@ export const InputSelectStyled = styled.div`
     right: 0.75rem;
     transform: rotate(0);
     transition: transform 0.3s linear;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      right: 0.5rem;
+    } 
 
     &.open {
       transform: rotate(180deg);
