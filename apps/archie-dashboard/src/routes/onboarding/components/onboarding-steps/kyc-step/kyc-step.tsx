@@ -4,7 +4,6 @@ import { format, differenceInYears, isValid, parse, isFuture } from 'date-fns';
 import Autocomplete from 'react-google-autocomplete';
 import { templateFormatter, templateParser, parseDigit } from 'input-format';
 import ReactInput from 'input-format/react';
-
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
 import { SubtitleS, ParagraphXS, ParagraphS } from '../../../../../components/_generic/typography/typography.styled';
@@ -127,6 +126,8 @@ export const KycStep: FC = () => {
 
     if (!address) {
       setAddressError('Please enter your address');
+    } else if (address.addressCountry !== 'US') {
+      setAddressError('Must be a U.S. address');
     } else {
       setAddressError('');
     }

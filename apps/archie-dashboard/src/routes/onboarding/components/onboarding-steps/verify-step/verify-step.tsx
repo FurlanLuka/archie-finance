@@ -1,14 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import ReactCodeInput from 'react-verification-code-input';
-
+import { useCompleteAptoVerification } from '@archie/api-consumer/credit/hooks/use-complete-apto-verification';
+import { useStartAptoVerification } from '@archie/api-consumer/credit/hooks/use-start-apto-verification';
+import { MutationQueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { SubtitleS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
 import { colors, theme } from '../../../../../constants/theme';
 import { VerifyStepStyled } from './verify-step.styled';
-import { useCompleteAptoVerification } from '@archie/api-consumer/credit/hooks/use-complete-apto-verification';
-import { useStartAptoVerification } from '@archie/api-consumer/credit/hooks/use-start-apto-verification';
-import { MutationQueryResponse, RequestState } from '@archie/api-consumer/interface';
 
 export const VerifyStep: FC = () => {
   const [code, setCode] = useState('');

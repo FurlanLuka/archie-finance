@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
-
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { useGetAssetPrice } from '@archie/api-consumer/asset_price/hooks/use-get-asset-price';
 import { AssetPrice } from '@archie/api-consumer/asset_price/api/get-asset-price';

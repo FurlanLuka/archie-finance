@@ -1,4 +1,11 @@
 import { FC, useEffect, useState } from 'react';
+import { MutationQueryResponse, QueryResponse, RequestState } from '@archie/api-consumer/interface';
+import { useCreateAptoUser } from '@archie/api-consumer/credit/hooks/use-create-apto-user';
+import { useIssueCard } from '@archie/api-consumer/credit/hooks/use-issue-card';
+import { useGetCredit } from '@archie/api-consumer/credit/hooks/use-get-credit';
+import { GetCreditResponse } from '@archie/api-consumer/credit/api/get-credit';
+import { useGetCollateralTotalValue } from '@archie/api-consumer/collateral/hooks/use-get-collateral-total-value';
+import { TotalCollateralValue } from '@archie/api-consumer/collateral/api/get-collateral-total-value';
 import { Step } from '../../../../../constants/onboarding-steps';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
 import { SubtitleS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
@@ -7,13 +14,6 @@ import { EmailVerification } from '../../email-verification/email-verification';
 import imgCardReady from '../../../../../assets/images/img-card-ready.png';
 import { CardStepStyled } from './card-step.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
-import { MutationQueryResponse, QueryResponse, RequestState } from '@archie/api-consumer/interface';
-import { useCreateAptoUser } from '@archie/api-consumer/credit/hooks/use-create-apto-user';
-import { useIssueCard } from '@archie/api-consumer/credit/hooks/use-issue-card';
-import { useGetCredit } from '@archie/api-consumer/credit/hooks/use-get-credit';
-import { GetCreditResponse } from '@archie/api-consumer/credit/api/get-credit';
-import { useGetCollateralTotalValue } from '@archie/api-consumer/collateral/hooks/use-get-collateral-total-value';
-import { TotalCollateralValue } from '@archie/api-consumer/collateral/api/get-collateral-total-value';
 
 enum Stage {
   CREATE_USER,
