@@ -14,20 +14,33 @@ import { CollateralizationStepStyled } from './collateralization-step.styled';
 import { InputRange } from '../../../../../components/_generic/input-range/input-range';
 import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
 import { ExternalLink } from '../../../../../components/_generic/icons/external-link';
-import { theme } from '../../../../../constants/theme';
 import { Collateral } from '../../../../../components/collateral/collateral';
+import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
+import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
 
 interface CollateralizationStepProps {
   setCurrentStep: (step: Step) => void;
 }
 
 export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurrentStep }) => {
-  const [lineOfCredit, setLineOfCredit] = useState(100);
+  const [lineOfCredit, setLineOfCredit] = useState(200);
   const [selectedCollateralAsset, setSelectedCollateralAsset] = useState<CollateralAsset>();
-  const [collateralDeposit, setCollateralDeposit] = useState({ id: '', address: '' });
   const [requiredCollateral, setRequiredCollateral] = useState(0);
+  const [shouldCall, setShouldCall] = useState(false);
 
   const getAssetPriceResponse: QueryResponse<AssetPrice[]> = useGetAssetPrice();
+  const getDepositAddressResponse: QueryResponse<GetDepositAddressResponse> = useGetDepositAddress(
+    selectedCollateralAsset?.id ?? '',
+    shouldCall,
+  );
+
+  useEffect(() => {
+    if (selectedCollateralAsset !== undefined) {
+      setShouldCall(true);
+    } else {
+      setShouldCall(false);
+    }
+  }, [selectedCollateralAsset]);
 
   useEffect(() => {
     if (getAssetPriceResponse.state === RequestState.SUCCESS) {
@@ -38,17 +51,19 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
           const assetPrice = 1 / asset.price;
           const result = (lineOfCredit / 0.5) * assetPrice;
 
-          setRequiredCollateral(result);
+          setRequiredCollateral(Math.ceil(result * 10000) / 10000);
         }
       }
     }
   }, [getAssetPriceResponse]);
 
-  useEffect(() => {
-    const asset: CollateralAsset | undefined = collateralAssets.find((asset) => asset.id === collateralDeposit.id);
+  const getDepositAddress = (): string | undefined => {
+    if (getDepositAddressResponse.state === RequestState.SUCCESS) {
+      return getDepositAddressResponse.data.address;
+    }
 
-    setSelectedCollateralAsset(asset);
-  }, [collateralDeposit.id]);
+    return undefined;
+  };
 
   return (
     <Container column mobileColumn alignItems="center">
@@ -62,34 +77,30 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
         </ParagraphXS>
 
         <div className="inputs">
-          <InputSelect
-            collateralDeposit={collateralDeposit}
-            setCollateralDeposit={setCollateralDeposit}
-            selectedCollateralAsset={selectedCollateralAsset}
-          />
-          <InputRange label="Credit Amount" min={0} max={1500} value={lineOfCredit} onChange={setLineOfCredit} />
+          <InputSelect setSelectedAsset={setSelectedCollateralAsset} />
+          <InputRange label="Credit Amount" min={200} max={1500} value={lineOfCredit} onChange={setLineOfCredit} />
         </div>
 
         <div className="result">
           <div className="result-item">
             <ParagraphXS weight={700}>Required Collateral</ParagraphXS>
             <SubtitleS weight={400}>
-              {requiredCollateral.toFixed(4)} {selectedCollateralAsset?.short}
-              <span className={`placeholder ${collateralDeposit.address && 'fade-out'}`}>-/-</span>
+              {Number(requiredCollateral.toFixed(4)) * 1} {selectedCollateralAsset?.short}
+              <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
             </SubtitleS>
           </div>
           <div className="result-item">
             <ParagraphXS weight={700}>Loan-to-Value</ParagraphXS>
             <SubtitleS weight={400}>
               {selectedCollateralAsset?.loan_to_value}
-              <span className={`placeholder ${collateralDeposit.address && 'fade-out'}`}>-/-</span>
+              <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
             </SubtitleS>
           </div>
           <div className="result-item">
             <ParagraphXS weight={700}>Interest Rate</ParagraphXS>
             <SubtitleS weight={400}>
               {selectedCollateralAsset?.interest_rate}{' '}
-              <span className={`placeholder ${collateralDeposit.address && 'fade-out'}`}>-/-</span>
+              <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
             </SubtitleS>
           </div>
         </div>
@@ -99,14 +110,14 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
             Send {requiredCollateral.toFixed(4)} {selectedCollateralAsset?.short} to:
           </ParagraphXS>
           <div className="address-copy">
-            <ParagraphS>{collateralDeposit.address}</ParagraphS>
-            <button className="btn-copy" onClick={() => navigator.clipboard.writeText(collateralDeposit.address)}>
+            <ParagraphS>{getDepositAddress()}</ParagraphS>
+            <button className="btn-copy" onClick={() => navigator.clipboard.writeText(getDepositAddress() ?? '')}>
               <Copy className="icon-copy" />
             </button>
           </div>
           <div className="address-code">
             <div className="code">
-              <QRCode value={collateralDeposit.address} size={96} />
+              <QRCode value={getDepositAddress() ?? ''} size={96} />
             </div>
             <div className="info">
               <div className="info-group">
@@ -119,7 +130,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
                 <ParagraphXS className="info-link">
                   Follow along on
                   <a
-                    href={`${selectedCollateralAsset?.url}/${collateralDeposit.address}`}
+                    href={`${selectedCollateralAsset?.url}/${getDepositAddress()}`}
                     target="_blank"
                     rel="noreferrer"
                     className="info-link-url"
@@ -154,7 +165,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
               </li>
             </ul>
           </div>
-          <div className={`overlay ${collateralDeposit.address && 'fade-out'}`} />
+          <div className={`overlay ${getDepositAddress() && 'fade-out'}`} />
         </div>
       </CollateralizationStepStyled>
     </Container>
