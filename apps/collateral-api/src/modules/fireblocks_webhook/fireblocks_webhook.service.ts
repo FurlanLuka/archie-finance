@@ -58,25 +58,21 @@ export class FireblocksWebhookService {
         ...assetList,
       });
 
-      const assetInformation: AssetInformation[] = Object.keys(
-        assetList,
-      ).flatMap(() => {
-        if (assetList[payload.data.assetId] === undefined) {
+      const asset: string[] = Object.keys(assetList).flatMap((key) => {
+        if (assetList[key].fireblocks_id !== payload.data.assetId) {
           return [];
         }
 
-        return [assetList[payload.data.assetId]];
+        return [key];
       });
-      
+
       Logger.log({
         code: 'ASSET_INFORMATION',
-        ...assetInformation,
+        ...asset,
       });
 
       const assetId: string =
-        assetInformation.length > 0
-          ? assetInformation[0].fireblocks_id
-          : payload.data.assetId;
+        asset.length > 0 ? asset[0] : payload.data.assetId;
 
       await this.collateralService.createDeposit(
         payload.data.id,
