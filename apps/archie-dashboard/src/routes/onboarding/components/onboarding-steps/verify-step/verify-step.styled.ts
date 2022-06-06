@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import breakpoints from '../../../../../constants/breakpoints';
+
 export const VerifyStepStyled = styled.div`
   display: flex;
   flex-direction: column;
@@ -37,7 +39,11 @@ export const VerifyStepStyled = styled.div`
       border: 1px solid ${({ theme }) => theme.borderHighlight} !important;
       border-radius: 0.5rem;
       height: 6rem !important;
-      width: 4rem !important;
+      width: 15% !important;
+
+      @media (max-width: ${breakpoints.screenSM}) {
+        height: 4.5rem !important;
+      }  
     }
   }
 

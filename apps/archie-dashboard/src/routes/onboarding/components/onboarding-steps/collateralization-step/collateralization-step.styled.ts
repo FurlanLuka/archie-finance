@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components'
 
-import breakpoints from '../../../../../constants/breakpoints'
+import breakpoints from '../../../../../constants/breakpoints';
 
 const load = keyframes`
   0% {
@@ -60,6 +60,10 @@ export const CollateralizationStepStyled = styled.div`
     gap: 2rem;
     width: 100%;
     margin-bottom: 4rem;
+
+    @media (max-width: ${breakpoints.screenMD}) {
+      flex-direction: column;
+    }  
   }
 
   .result {
@@ -67,6 +71,10 @@ export const CollateralizationStepStyled = styled.div`
     justify-content: space-between;
     width: 100%;
     margin-bottom: 1.5rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      flex-direction: column;
+    }  
   }
 
   .result-item {
@@ -75,6 +83,11 @@ export const CollateralizationStepStyled = styled.div`
     align-items: flex-start;
     width: 33.33%;
     max-width: 10rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
 
     h4 {
       position: relative;
@@ -161,10 +174,19 @@ export const CollateralizationStepStyled = styled.div`
 
   .address-code {
     display: flex;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      flex-direction: column;
+    } 
   }
 
   .info {
     margin-left: 2rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      margin-left: 0;
+      margin-top: 1rem;
+    } 
   }
 
   .info-group {
@@ -184,13 +206,19 @@ export const CollateralizationStepStyled = styled.div`
 
   .info-link {
     display: flex;
+    gap: 0.25rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      flex-direction: column;
+      gap: 0;
+    } 
   }
 
   .info-link-url {
     display: flex;
     align-items: center;
     color: ${({ theme }) => theme.textHighlight};
-    margin-left: 0.25rem;
+
     margin-top: 0.05rem;
   }
 
@@ -200,12 +228,21 @@ export const CollateralizationStepStyled = styled.div`
 
   .terms {
     display: flex;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      flex-direction: column;
+    } 
   }
 
   .terms-title {
     display: flex;
     justify-content: flex-start;
     width: 30%;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    } 
   }
 
   .terms-list {
@@ -214,6 +251,11 @@ export const CollateralizationStepStyled = styled.div`
     align-items: flex-start;
     width: 70%;
     margin: 0;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      width: 100%;
+      padding-left: 1rem;
+    } 
   }
 
   .terms-list-item {

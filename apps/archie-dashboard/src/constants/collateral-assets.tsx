@@ -10,7 +10,7 @@ export interface CollateralAsset {
   short: string;
   icon: ReactElement;
   loan_to_value: number;
-  interest_rate: string;
+  interest_rate: number;
   url: string;
 }
 
@@ -21,7 +21,7 @@ export const collateralAssets: CollateralAsset[] = [
     short: 'BTC',
     icon: <Bitcoin />,
     loan_to_value: 50,
-    interest_rate: '15%',
+    interest_rate: 15,
     url: 'https://www.blockchain.com/btc/address',
   },
   {
@@ -30,7 +30,7 @@ export const collateralAssets: CollateralAsset[] = [
     short: 'ETH',
     icon: <Ethereum />,
     loan_to_value: 50,
-    interest_rate: '15%',
+    interest_rate: 15,
     url: 'https://etherscan.io/address',
   },
   {
@@ -39,7 +39,7 @@ export const collateralAssets: CollateralAsset[] = [
     short: 'SOL',
     icon: <Solana />,
     loan_to_value: 50,
-    interest_rate: '15%',
+    interest_rate: 15,
     url: 'https://explorer.solana.com/address',
   },
   {
@@ -48,7 +48,7 @@ export const collateralAssets: CollateralAsset[] = [
     short: 'USDC',
     icon: <Usdcoin />,
     loan_to_value: 50,
-    interest_rate: '15%',
+    interest_rate: 15,
     url: 'https://etherscan.io/address',
   },
 ];

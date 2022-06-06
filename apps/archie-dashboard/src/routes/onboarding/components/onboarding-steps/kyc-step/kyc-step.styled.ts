@@ -1,5 +1,7 @@
 import styled from 'styled-components'
 
+import breakpoints from '../../../../../constants/breakpoints';
+
 export const KycStepStyled = styled.div`
   display: flex;
   flex-direction: column;
@@ -28,6 +30,11 @@ export const KycStepStyled = styled.div`
   .input-group {
     display: flex;
     gap: 1rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      flex-direction: column;
+      gap: 0;
+    }  
   }
 
   .phone-number {

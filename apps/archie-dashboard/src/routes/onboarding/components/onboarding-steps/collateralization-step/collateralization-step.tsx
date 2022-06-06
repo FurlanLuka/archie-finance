@@ -3,7 +3,9 @@ import QRCode from 'react-qr-code';
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { useGetAssetPrice } from '@archie/api-consumer/asset_price/hooks/use-get-asset-price';
 import { AssetPrice } from '@archie/api-consumer/asset_price/api/get-asset-price';
-import { CollateralAsset, collateralAssets } from '../../../../../constants/collateral-assets';
+import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
+import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
+import { CollateralAsset } from '../../../../../constants/collateral-assets';
 import { Step } from '../../../../../constants/onboarding-steps';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
 import { SubtitleS, ParagraphS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
@@ -15,14 +17,8 @@ import { InputRange } from '../../../../../components/_generic/input-range/input
 import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
 import { ExternalLink } from '../../../../../components/_generic/icons/external-link';
 import { Collateral } from '../../../../../components/collateral/collateral';
-import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
-import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
 
-interface CollateralizationStepProps {
-  setCurrentStep: (step: Step) => void;
-}
-
-export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurrentStep }) => {
+export const CollateralizationStep: FC = () => {
   const [lineOfCredit, setLineOfCredit] = useState(200);
   const [selectedCollateralAsset, setSelectedCollateralAsset] = useState<CollateralAsset>();
   const [requiredCollateral, setRequiredCollateral] = useState(0);
@@ -99,7 +95,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
           <div className="result-item">
             <ParagraphXS weight={700}>Interest Rate</ParagraphXS>
             <SubtitleS weight={400}>
-              {selectedCollateralAsset?.interest_rate}{' '}
+              {selectedCollateralAsset?.interest_rate}%
               <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
             </SubtitleS>
           </div>
@@ -151,7 +147,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
             <ul className="terms-list">
               <li className="terms-list-item">
                 <ParagraphXS>
-                  You can only spend up to <b>{selectedCollateralAsset?.loan_to_value}</b> of your line of credit.
+                  You can only spend up to <b>{selectedCollateralAsset?.loan_to_value}%</b> of your line of credit.
                 </ParagraphXS>
               </li>
               <li className="terms-list-item">

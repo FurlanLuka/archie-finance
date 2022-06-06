@@ -7,16 +7,18 @@ import { ParagraphXS } from '../typography/typography.styled';
 import { InputSelectStyled } from './input-select.styled';
 
 interface InputSelectProps {
-  setSelectedAsset: (asset: CollateralAsset | undefined) => void;
+  setSelectedAsset: (asset?: CollateralAsset) => void;
 }
 
 export const InputSelect: FC<InputSelectProps> = ({ setSelectedAsset }) => {
   const [selectOpen, setSelectOpen] = useState(false);
   const [selectedAssetId, setSelectedAssetId] = useState('');
 
+  const findAsset = (assetId: string) => collateralAssets.find((asset) => asset.id === assetId);
+
   const handleSelect = (assetId: string) => {
     setSelectedAssetId(assetId);
-    setSelectedAsset(collateralAssets.find((asset) => asset.id === assetId));
+    setSelectedAsset(findAsset(assetId));
     setSelectOpen(false);
   };
 
@@ -26,9 +28,9 @@ export const InputSelect: FC<InputSelectProps> = ({ setSelectedAsset }) => {
       <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
         {selectedAssetId ? (
           <CollateralCurrency
-            icon={collateralAssets.find((asset) => asset.id === selectedAssetId)?.icon}
-            name={collateralAssets.find((asset) => asset.id === selectedAssetId)?.name}
-            short={collateralAssets.find((asset) => asset.id === selectedAssetId)?.short}
+            icon={findAsset(selectedAssetId)?.icon}
+            name={findAsset(selectedAssetId)?.name}
+            short={findAsset(selectedAssetId)?.short}
           />
         ) : (
           <CollateralCurrency name="Select your collateral currency" short="BTC, ETH, SOL, or USDC" />

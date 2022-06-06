@@ -4,20 +4,14 @@ import { format, differenceInYears, isValid, parse, isFuture } from 'date-fns';
 import Autocomplete from 'react-google-autocomplete';
 import { templateFormatter, templateParser, parseDigit } from 'input-format';
 import ReactInput from 'input-format/react';
-
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
-import { Step } from '../../../../../constants/onboarding-steps';
 import { SubtitleS, ParagraphXS, ParagraphS } from '../../../../../components/_generic/typography/typography.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { InputText } from '../../../../../components/_generic/input-text/input-text.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
 import { colors, theme } from '../../../../../constants/theme';
 import { KycStepStyled } from './kyc-step.styled';
-
-interface KycStepProps {
-  setCurrentStep: (step: Step) => void;
-}
 
 interface GooglePlace {
   address_components: Array<{
@@ -37,7 +31,7 @@ interface Address {
   addressCountry: string;
 }
 
-export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
+export const KycStep: FC = () => {
   const mutationRequest = useCreateKyc();
 
   const today = new Date();
@@ -90,8 +84,13 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
         addressPostalCode: postalCodeComponent.short_name,
       };
 
-      setAddress(addr);
-      setAddressError('');
+      if (countryComponent.short_name !== 'US') {
+        setAddressError('Must be a U.S. address');
+        console.log('vleze tuka');
+      } else {
+        setAddress(addr);
+        setAddressError('');
+      }
     } else {
       setAddressError('Please enter your street number');
     }
@@ -183,8 +182,6 @@ export const KycStep: FC<KycStepProps> = ({ setCurrentStep }) => {
         mutationRequest.mutate(payload);
 
         console.log(payload);
-
-        // setCurrentStep(Step.VERIFY);
       }
     }
   };
