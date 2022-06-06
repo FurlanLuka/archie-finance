@@ -2,7 +2,6 @@
   "version": 2,
   "projects": {
     "archie-api-consumer": "libs/archie-api-consumer",
-    "archie-auth": "apps/archie-auth",
     "archie-dashboard": "apps/archie-dashboard",
     "archie-session": "libs/archie-session"
   }

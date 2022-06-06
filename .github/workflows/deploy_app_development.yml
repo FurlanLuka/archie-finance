@@ -73,15 +73,13 @@ jobs:
         env:
           APP_NAME: ${{ needs.build.outputs.app_name }}
         run: |
-          if [ ${{ env.APP_NAME }} = "archie-auth" ]; then export BUCKET=${{env.ARCHIE_AUTH_DEV_BUCKET}}; 
-          elif [ ${{ env.APP_NAME }} = "archie-dashboard" ]; then export BUCKET=${{env.ARCHIE_DASHBOARD_DEV_BUCKET}}; 
+          if [ ${{ env.APP_NAME }} = "archie-dashboard" ]; then export BUCKET=${{env.ARCHIE_DASHBOARD_DEV_BUCKET}}; 
           else exit 1; fi
           aws s3 sync build s3://${BUCKET}/
       - name: Invalidate Cloudfront Cache
         env:
           APP_NAME: ${{ needs.build.outputs.app_name }}
         run: |
-          if [ ${{ env.APP_NAME }} = "archie-auth" ]; then export CLOUDFRONT_ID=${{env.ARCHIE_AUTH_DEV_CLOUDFRONT_ID}}; 
-          elif [ ${{ env.APP_NAME }} = "archie-dashboard" ]; then export CLOUDFRONT_ID=${{env.ARCHIE_DASHBOARD_DEV_CLOUDFRONT_ID}}; 
+          if [ ${{ env.APP_NAME }} = "archie-dashboard" ]; then export CLOUDFRONT_ID=${{env.ARCHIE_DASHBOARD_DEV_CLOUDFRONT_ID}}; 
           else exit 1; fi
           aws cloudfront create-invalidation --distribution-id ${CLOUDFRONT_ID} --paths "/*"
