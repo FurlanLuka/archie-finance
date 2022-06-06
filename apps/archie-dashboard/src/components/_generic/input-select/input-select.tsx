@@ -1,7 +1,4 @@
-import { FC, useState, useEffect } from 'react';
-import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
-import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
-import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
+import { FC, useState } from 'react';
 import { CollateralDeposit } from '../../../components/collateral-deposit/collateral-deposit';
 import { CollateralAsset, collateralAssets } from '../../../constants/collateral-assets';
 import { CollateralCurrency } from '../../../components/collateral-currency/collateral-currency';

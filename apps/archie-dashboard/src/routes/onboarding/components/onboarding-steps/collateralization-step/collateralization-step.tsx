@@ -49,7 +49,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
 
         if (asset) {
           const assetPrice = 1 / asset.price;
-          const result = (lineOfCredit / 0.5) * assetPrice;
+          const result = (lineOfCredit / (selectedCollateralAsset.loan_to_value / 100)) * assetPrice;
 
           setRequiredCollateral(Math.ceil(result * 10000) / 10000);
         }
@@ -92,7 +92,7 @@ export const CollateralizationStep: FC<CollateralizationStepProps> = ({ setCurre
           <div className="result-item">
             <ParagraphXS weight={700}>Loan-to-Value</ParagraphXS>
             <SubtitleS weight={400}>
-              {selectedCollateralAsset?.loan_to_value}
+              {selectedCollateralAsset?.loan_to_value}%
               <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
             </SubtitleS>
           </div>

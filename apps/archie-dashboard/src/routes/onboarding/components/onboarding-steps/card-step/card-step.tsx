@@ -87,8 +87,12 @@ export const CardStep: FC = () => {
       <CardStepStyled>
         <SubtitleS className="title">{getTitle()}</SubtitleS>
         <ParagraphXS className="subtitle">
-          You collateralized ${getCollateralTotalValue()} worth of crypto and have a ${getCreditValue()} line of credit.
-          Make sure <br /> your email is verified before continuing.
+          {stage === Stage.COMPLETE && (
+            <>
+              You collateralized ${getCollateralTotalValue()} worth of crypto and have a ${getCreditValue()} line of
+              credit. Make sure <br /> your email is verified before continuing.
+            </>
+          )}
         </ParagraphXS>
         <div className="image">
           <img src={imgCardReady} alt="Your Archie card is ready" />
