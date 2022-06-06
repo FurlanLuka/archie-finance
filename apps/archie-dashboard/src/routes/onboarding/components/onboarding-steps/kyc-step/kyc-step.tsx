@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Formik, Form } from 'formik';
 import { format, differenceInYears, isValid, parse, isFuture } from 'date-fns';
 import Autocomplete from 'react-google-autocomplete';
@@ -32,6 +33,8 @@ interface Address {
 }
 
 export const KycStep: FC = () => {
+  const { t } = useTranslation();
+
   const mutationRequest = useCreateKyc();
 
   const today = new Date();
@@ -85,68 +88,67 @@ export const KycStep: FC = () => {
       };
 
       if (countryComponent.short_name !== 'US') {
-        setAddressError('Must be a U.S. address');
-        console.log('vleze tuka');
+        setAddressError(t('kyc_step.error.not_us_address'));
       } else {
         setAddress(addr);
         setAddressError('');
       }
     } else {
-      setAddressError('Please enter your street number');
+      setAddressError(t('kyc_step.error.no_street_number'));
     }
   };
 
   const validate = () => {
     if (!firstName) {
-      setFirstNameError('Please enter your first name');
+      setFirstNameError(t('kyc_step.error.missing_first_name'));
     } else if (firstName.length < 2) {
-      setFirstNameError('Too Short!');
+      setFirstNameError(t('kyc_step.error.too_short'));
     } else if (firstName.length > 50) {
-      setFirstNameError('Too Long!');
+      setFirstNameError(t('kyc_step.error.too_long'));
     } else {
       setFirstNameError('');
     }
 
     if (!lastName) {
-      setLastNameError('Please enter your last name');
+      setLastNameError(t('kyc_step.error.missing_last_name'));
     } else if (lastName.length < 2) {
-      setLastNameError('Too Short!');
+      setLastNameError(t('kyc_step.error.too_short'));
     } else if (lastName.length > 50) {
-      setLastNameError('Too Long!');
+      setLastNameError(t('kyc_step.error.too_long'));
     } else {
       setLastNameError('');
     }
 
     if (!dateOfBirth) {
-      setDateOfBirthError('Please enter your date of birth');
+      setDateOfBirthError(t('kyc_step.error.missing_date_of_birth'));
     } else if (!isValid(parsedDate(dateOfBirth))) {
-      setDateOfBirthError('Not a valid date');
+      setDateOfBirthError(t('kyc_step.error.not_valid_date'));
     } else if (minYears(parsedDate(dateOfBirth) ?? today)) {
-      setDateOfBirthError('Should be older than 18');
+      setDateOfBirthError(t('kyc_step.error.should_be_older'));
     } else if (isFuture(parsedDate(dateOfBirth))) {
-      setDateOfBirthError('Date cannot be in the future');
+      setDateOfBirthError(t('kyc_step.error.cannot_be_future'));
     } else {
       setDateOfBirthError('');
     }
 
     if (!address) {
-      setAddressError('Please enter your address');
+      setAddressError(t('kyc_step.error.missing_address'));
     } else {
       setAddressError('');
     }
 
     if (!phoneNumber) {
-      setPhoneNumberError('Please enter your phone number');
+      setPhoneNumberError(t('kyc_step.error.missing_phone_number'));
     } else if (phoneNumber.length < 10) {
-      setPhoneNumberError('Must consist of 10 digits');
+      setPhoneNumberError(t('kyc_step.error.phone_number_digits'));
     } else {
       setPhoneNumberError('');
     }
 
     if (!ssn) {
-      setSsnError('Please enter your SSN/TIN');
+      setSsnError(t('kyc_step.error.missing_ssn'));
     } else if (ssn.length < 9) {
-      setSsnError('Must be exactly 9 digits');
+      setSsnError(t('kyc_step.error.ssn_digits'));
     } else {
       setSsnError('');
     }
@@ -155,16 +157,6 @@ export const KycStep: FC = () => {
   const hasLenght = (value: string | Array<string>) => value.length > 0;
 
   const handleSubmit = () => {
-    const payload = {
-      firstName,
-      lastName,
-      dateOfBirth: parsedDate(dateOfBirth).toISOString(),
-      ...address,
-      phoneNumber,
-      phoneNumberCountryCode,
-      ssn,
-    };
-
     if (
       hasLenght(firstName) &&
       !hasLenght(firstNameError) &&
@@ -179,20 +171,23 @@ export const KycStep: FC = () => {
       !hasLenght(ssnError)
     ) {
       if (mutationRequest.state === RequestState.IDLE) {
-        mutationRequest.mutate(payload);
-
-        console.log(payload);
+        mutationRequest.mutate({
+          firstName,
+          lastName,
+          dateOfBirth: parsedDate(dateOfBirth).toISOString(),
+          ...address,
+          phoneNumber,
+          phoneNumberCountryCode,
+          ssn,
+        });
       }
     }
   };
 
   return (
     <KycStepStyled>
-      <SubtitleS className="title">A bit about you</SubtitleS>
-      <ParagraphXS className="subtitle">
-        We need to ask some personal information for compliance reasons. This information will not impact your credit
-        score or your ability to get the Archie Card.
-      </ParagraphXS>
+      <SubtitleS className="title">{t('kyc_step.title')}</SubtitleS>
+      <ParagraphXS className="subtitle">{t('kyc_step.subtitle')}</ParagraphXS>
       <Formik
         initialValues={{}}
         onSubmit={handleSubmit}
@@ -203,11 +198,11 @@ export const KycStep: FC = () => {
         <Form>
           <div className="input-group">
             <InputText>
-              First Name*
+              {t('kyc_step.label.first_name')}
               <input
                 name="firstName"
                 value={firstName}
-                placeholder="Joe"
+                placeholder={t('kyc_step.placeholder.first_name')}
                 onChange={(e) => setFirstName(e.target.value)}
               />
               {firstNameError && (
@@ -217,8 +212,13 @@ export const KycStep: FC = () => {
               )}
             </InputText>
             <InputText>
-              Last Name*
-              <input name="lastName" value={lastName} placeholder="Doe" onChange={(e) => setLastName(e.target.value)} />
+              {t('kyc_step.label.last_name')}
+              <input
+                name="lastName"
+                value={lastName}
+                placeholder={t('kyc_step.placeholder.last_name')}
+                onChange={(e) => setLastName(e.target.value)}
+              />
               {lastNameError && (
                 <ParagraphXS className="error" color={theme.textDanger}>
                   {lastNameError}
@@ -227,7 +227,7 @@ export const KycStep: FC = () => {
             </InputText>
           </div>
           <InputText>
-            Date of birth*
+            {t('kyc_step.label.date_of_birth')}
             <ReactInput
               name="dateOfBirth"
               value={dateOfBirth}
@@ -242,10 +242,11 @@ export const KycStep: FC = () => {
             )}
           </InputText>
           <InputText>
-            Address*
+            {t('kyc_step.label.address')}
             <Autocomplete
               apiKey="AIzaSyA-k_VEX0soa2kljYKTjtFUg4irF3hKZwQ"
               onPlaceSelected={(place) => addAddress(place)}
+              placeholder={t('kyc_step.placeholder.address')}
               options={{ types: ['address'] }}
             />
             {addressError && (
@@ -255,13 +256,13 @@ export const KycStep: FC = () => {
             )}
           </InputText>
           <InputText>
-            Phone Number*
+            {t('kyc_step.label.phone_number')}
             <div className="phone-number">
               <ParagraphS weight={700}>+1</ParagraphS>
               <ReactInput
                 name="phoneNumber"
                 value={phoneNumber}
-                placeholder="Enter phone number"
+                placeholder={t('kyc_step.placeholder.phone_number')}
                 onChange={(value) => setPhoneNumber(value as string)}
                 parse={templateParser('(xxx) xxx-xxxx', parseDigit)}
                 format={templateFormatter('(xxx) xxx-xxxx')}
@@ -274,11 +275,11 @@ export const KycStep: FC = () => {
             )}
           </InputText>
           <InputText>
-            SSN/TIN*
+            {t('kyc_step.label.ssn')}
             <ReactInput
               name="ssn"
               value={ssn}
-              placeholder="XXX-XX-XXXX"
+              placeholder={t('kyc_step.placeholder.ssn')}
               onChange={(value) => setSsn(value as string)}
               parse={templateParser('xxx-xx-xxxx', parseDigit)}
               format={templateFormatter('xxx-xx-xxxx')}
@@ -291,7 +292,7 @@ export const KycStep: FC = () => {
           </InputText>
           <hr className="divider" />
           <ButtonPrimary type="submit">
-            Next
+            {t('btn_next')}
             <ArrowRight fill={colors.white} />
           </ButtonPrimary>
         </Form>
