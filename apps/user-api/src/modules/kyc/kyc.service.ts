@@ -9,6 +9,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, QueryRunner, Repository } from 'typeorm';
 import { InternalApiService } from '@archie-microservices/internal-api';
+import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
+import { SendgridService } from '@archie-microservices/sendgrid';
 import { Kyc } from './kyc.entity';
 import {
   CreateKycResponse,
@@ -16,6 +18,7 @@ import {
 } from '@archie-microservices/api-interfaces/kyc';
 import { KycDto } from './kyc.dto';
 import { DateTime } from 'luxon';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class KycService {
@@ -24,6 +27,8 @@ export class KycService {
     private vaultService: VaultService,
     private connection: Connection,
     private internalApiService: InternalApiService,
+    private userService: UserService,
+    private sendgridService: SendgridService,
   ) {}
 
   async getKyc(userId: string): Promise<GetKycResponse> {
@@ -135,6 +140,14 @@ export class KycService {
       await this.internalApiService.completeOnboardingStage('kycStage', userId);
 
       await queryRunner.commitTransaction();
+
+      const userEmailAddress: GetEmailAddressResponse =
+        await this.userService.getEmailAddress(userId);
+
+      await this.sendgridService.sendWelcomeEmail(
+        payload.firstName,
+        userEmailAddress.email,
+      );
     } catch (error) {
       await queryRunner.rollbackTransaction();
 
