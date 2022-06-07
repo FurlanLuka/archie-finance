@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels:
       app: archie-credit-api
-  replicas: 2
+  replicas: 1
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -103,6 +103,21 @@ spec:
                 secretKeyRef:
                   name: internal-api-secrets
                   key: internal-api-url
+            - name: APTO_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: apto-secrets
+                  key: api-key
+            - name: APTO_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: apto-secrets
+                  key: api-url
+            - name: APTO_CARD_PROGRAME_ID
+              valueFrom:
+                secretKeyRef:
+                  name: apto-secrets
+                  key: card-programe-id
       imagePullSecrets:
         - name: regcred
 ---

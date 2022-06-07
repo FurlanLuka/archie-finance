@@ -1,11 +1,20 @@
 import { Module } from '@nestjs/common';
+import { InternalApiModule } from '@archie-microservices/internal-api';
 import { Auth0Module } from '../auth0/auth0.module';
-import { UserController } from './user.controller';
+import { InternalUserController, UserController } from './user.controller';
 import { UserService } from './user.service';
+import { ConfigModule, ConfigService } from '@archie-microservices/config'
+import { ConfigVariables } from '../../interfaces';
 
 @Module({
-  imports: [Auth0Module],
+  imports: [Auth0Module, InternalApiModule.register({
+    imports: [ConfigModule],
+    inject: [ConfigService],
+    useFactory: (configService: ConfigService) => ({
+      internalApiUrl: configService.get(ConfigVariables.INTERNAL_API_URL),
+    }),
+  })],
   providers: [UserService],
-  controllers: [UserController],
+  controllers: [UserController, InternalUserController],
 })
 export class UserModule {}

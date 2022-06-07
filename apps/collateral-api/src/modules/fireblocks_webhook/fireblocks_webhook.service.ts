@@ -13,7 +13,6 @@ import {
 import { ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '../../interfaces';
 import {
-  AssetInformation,
   AssetList,
 } from '@archie-microservices/api-interfaces/asset_information';
 
@@ -44,24 +43,35 @@ export class FireblocksWebhookService {
           payload.data.destinationAddress,
         );
 
+      Logger.log({
+        code: 'FIREBLOCKS_PAYLOAD',
+        ...payload,
+      });
+
       const assetList: AssetList = this.configService.get(
         ConfigVariables.ASSET_LIST,
       );
 
-      const assetInformation: AssetInformation[] = Object.keys(
-        assetList,
-      ).flatMap((key) => {
-        if (assetList[key] === undefined) {
+      Logger.log({
+        code: 'ASSET_LIST',
+        ...assetList,
+      });
+
+      const asset: string[] = Object.keys(assetList).flatMap((key) => {
+        if (assetList[key].fireblocks_id !== payload.data.assetId) {
           return [];
         }
 
-        return [assetList[key]];
+        return [key];
+      });
+
+      Logger.log({
+        code: 'ASSET_INFORMATION',
+        ...asset,
       });
 
       const assetId: string =
-        assetInformation.length > 0
-          ? assetInformation[0].fireblocks_id
-          : payload.data.assetId;
+        asset.length > 0 ? asset[0] : payload.data.assetId;
 
       await this.collateralService.createDeposit(
         payload.data.id,
@@ -72,7 +82,7 @@ export class FireblocksWebhookService {
         payload.data.status,
       );
     } catch (error) {
-      Logger.log({
+      Logger.error({
         code: 'FIREBLOCKS_WEBHOOK_ERROR',
         metadata: {
           transactionId: payload.data.id,

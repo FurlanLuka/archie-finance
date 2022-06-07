@@ -83,3 +83,10 @@ spec:
                 name: archie-credit-api-service
                 port:
                   number: 80
+          - path: /v1/apto
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-credit-api-service
+                port:
+                  number: 80

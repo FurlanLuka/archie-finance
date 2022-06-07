@@ -10,7 +10,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, QueryRunner, Repository } from 'typeorm';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { Kyc } from './kyc.entity';
-import { CreateKycResponse, GetKycResponse } from './kyc.interfaces';
+import {
+  CreateKycResponse,
+  GetKycResponse,
+} from '@archie-microservices/api-interfaces/kyc';
+import { KycDto } from './kyc.dto';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class KycService {
@@ -44,9 +49,14 @@ export class KycService {
       kycRecord.firstName,
       kycRecord.lastName,
       kycRecord.dateOfBirth,
-      kycRecord.address,
-      kycRecord.phoneNumberCountryCode,
+      kycRecord.addressCountry,
+      kycRecord.addressLocality,
+      kycRecord.addressPostalCode,
+      kycRecord.addressRegion,
+      kycRecord.addressStreet,
+      kycRecord.addressStreetNumber,
       kycRecord.phoneNumber,
+      kycRecord.phoneNumberCountryCode,
       kycRecord.ssn,
     ]);
 
@@ -54,23 +64,19 @@ export class KycService {
       firstName: decryptedData[0],
       lastName: decryptedData[1],
       dateOfBirth: decryptedData[2],
-      address: decryptedData[3],
-      phoneNumberCountryCode: decryptedData[4],
-      phoneNumber: decryptedData[5],
-      ssn: decryptedData[6],
+      addressCountry: decryptedData[3],
+      addressLocality: decryptedData[4],
+      addressPostalCode: decryptedData[5],
+      addressRegion: decryptedData[6],
+      addressStreet: decryptedData[7],
+      addressStreetNumber: decryptedData[8],
+      phoneNumber: decryptedData[9],
+      phoneNumberCountryCode: decryptedData[10],
+      ssn: decryptedData[11],
     };
   }
 
-  async createKyc(
-    firstName: string,
-    lastName: string,
-    dateOfBirth: string,
-    address: string,
-    phoneNumberCountryCode: string,
-    phoneNumber: string,
-    ssn: string,
-    userId: string,
-  ): Promise<CreateKycResponse> {
+  async createKyc(payload: KycDto, userId: string): Promise<CreateKycResponse> {
     const kycRecord: Kyc | undefined = await this.kycRepository.findOne({
       userId,
     });
@@ -90,13 +96,18 @@ export class KycService {
     }
 
     const encryptedData: string[] = await this.vaultService.encryptStrings([
-      firstName,
-      lastName,
-      dateOfBirth,
-      address,
-      phoneNumberCountryCode,
-      phoneNumber,
-      ssn,
+      payload.firstName,
+      payload.lastName,
+      DateTime.fromJSDate(payload.dateOfBirth).toISODate(),
+      payload.addressCountry,
+      payload.addressLocality,
+      payload.addressPostalCode,
+      payload.addressRegion,
+      payload.addressStreet,
+      payload.addressStreetNumber,
+      payload.phoneNumber,
+      payload.phoneNumberCountryCode,
+      payload.ssn,
     ]);
 
     const queryRunner: QueryRunner = this.connection.createQueryRunner();
@@ -110,10 +121,15 @@ export class KycService {
         firstName: encryptedData[0],
         lastName: encryptedData[1],
         dateOfBirth: encryptedData[2],
-        address: encryptedData[3],
-        phoneNumberCountryCode: encryptedData[4],
-        phoneNumber: encryptedData[5],
-        ssn: encryptedData[6],
+        addressCountry: encryptedData[3],
+        addressLocality: encryptedData[4],
+        addressPostalCode: encryptedData[5],
+        addressRegion: encryptedData[6],
+        addressStreet: encryptedData[7],
+        addressStreetNumber: encryptedData[8],
+        phoneNumber: encryptedData[9],
+        phoneNumberCountryCode: encryptedData[10],
+        ssn: encryptedData[11],
       });
 
       await this.internalApiService.completeOnboardingStage('kycStage', userId);
@@ -139,13 +155,18 @@ export class KycService {
     }
 
     return {
-      firstName,
-      lastName,
-      dateOfBirth,
-      address,
-      phoneNumberCountryCode,
-      phoneNumber,
-      ssn,
+      firstName: payload.firstName,
+      lastName: payload.lastName,
+      dateOfBirth: DateTime.fromJSDate(payload.dateOfBirth).toISODate(),
+      addressCountry: payload.addressCountry,
+      addressLocality: payload.addressLocality,
+      addressPostalCode: payload.addressPostalCode,
+      addressRegion: payload.addressRegion,
+      addressStreet: payload.addressStreet,
+      addressStreetNumber: payload.addressStreetNumber,
+      phoneNumber: payload.phoneNumber,
+      phoneNumberCountryCode: payload.phoneNumberCountryCode,
+      ssn: payload.ssn,
     };
   }
 }

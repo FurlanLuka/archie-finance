@@ -10,6 +10,8 @@ import {
   GetAssetInformationResponse,
   GetAssetListResponse,
 } from '@archie-microservices/api-interfaces/asset_information';
+import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
+import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
 
 @Injectable()
 export class InternalApiService {
@@ -33,6 +35,14 @@ export class InternalApiService {
         },
       },
     );
+  }
+
+  public async getKyc(userId: string): Promise<GetKycResponse> {
+    const response: AxiosResponse<GetKycResponse> = await axios.get(
+      `${this.config.internalApiUrl}/internal/kyc/${userId}`,
+    );
+
+    return response.data;
   }
 
   public async getAssetList(): Promise<GetAssetListResponse> {
@@ -75,6 +85,14 @@ export class InternalApiService {
   public async getUserCollateral(userId: string): Promise<GetUserCollateral> {
     const response: AxiosResponse<GetUserCollateral> = await axios.get(
       `${this.config.internalApiUrl}/internal/collateral/${userId}`,
+    );
+
+    return response.data;
+  }
+
+  public async getUserEmailAddress(userId: string): Promise<GetEmailAddressResponse> {
+    const response: AxiosResponse<GetEmailAddressResponse> = await axios.get(
+      `${this.config.internalApiUrl}/internal/user/email-address/${userId}`,
     );
 
     return response.data;

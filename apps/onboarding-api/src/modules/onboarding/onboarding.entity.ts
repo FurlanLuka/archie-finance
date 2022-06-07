@@ -20,6 +20,9 @@ export class Onboarding {
   emailVerificationStage: boolean;
 
   @Column('boolean', { default: false })
+  phoneVerificationStage: boolean;
+
+  @Column('boolean', { default: false })
   collateralizationStage: boolean;
 
   @Column('boolean', { default: false })

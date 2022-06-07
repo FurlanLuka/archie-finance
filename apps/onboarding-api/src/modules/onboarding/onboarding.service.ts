@@ -27,6 +27,7 @@ export class OnboardingService {
       return {
         kycStage: false,
         emailVerificationStage: false,
+        phoneVerificationStage: false,
         collateralizationStage: false,
         cardActivationStage: false,
         completed: false,
@@ -56,10 +57,11 @@ export class OnboardingService {
       [stage]: true,
     };
 
-    const isFinalOnboardingStep: boolean =
+    const isFinalRequiredOnboardingStep: boolean =
       updatedOnboardingRecord.cardActivationStage &&
       updatedOnboardingRecord.collateralizationStage &&
-      updatedOnboardingRecord.kycStage;
+      updatedOnboardingRecord.kycStage &&
+      updatedOnboardingRecord.phoneVerificationStage;
 
     await this.onboardingRepository.update(
       {
@@ -67,13 +69,13 @@ export class OnboardingService {
       },
       {
         [stage]: true,
-        completed: isFinalOnboardingStep,
+        completed: isFinalRequiredOnboardingStep,
       },
     );
 
     return {
       ...updatedOnboardingRecord,
-      completed: isFinalOnboardingStep,
+      completed: isFinalRequiredOnboardingStep,
     };
   }
 }
