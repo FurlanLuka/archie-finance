@@ -33,7 +33,6 @@
     "luxon": "^2.4.0",
     "mysql2": "^2.3.3",
     "nest-winston": "^1.6.2",
-    "nodejs-base64": "^2.0.0",
     "passport-custom": "^1.1.1",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.13",

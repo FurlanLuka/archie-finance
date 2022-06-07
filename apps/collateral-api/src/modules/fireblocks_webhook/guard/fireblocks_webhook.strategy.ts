@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-custom';
 import { ConfigService } from '@archie-microservices/config';
 import * as crypto from 'crypto';
-import { base64decode } from 'nodejs-base64';
+import { CryptoService } from '@archie-microservices/crypto';
 import { ConfigVariables } from '../../../interfaces';
 
 @Injectable()
@@ -11,7 +11,10 @@ export class FireblocksWebhookStrategy extends PassportStrategy(
   Strategy,
   'fireblocks-webhook',
 ) {
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private cryptoService: CryptoService,
+  ) {
     super();
   }
 
@@ -24,7 +27,7 @@ export class FireblocksWebhookStrategy extends PassportStrategy(
     verifier.end();
 
     const isVerified: boolean = verifier.verify(
-      base64decode(
+      this.cryptoService.base64decode(
         this.configService.get(ConfigVariables.FIREBLOCKS_PUBLIC_KEY),
       ),
       signature,

@@ -5,18 +5,21 @@ import {
   Logger,
 } from '@nestjs/common';
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import { base64decode, base64encode } from 'nodejs-base64';
 import {
   VaultConfig,
   VaultDecryptionData,
   VaultEncryptionData,
 } from './vault.interfaces';
+import { CryptoService } from '@archie-microservices/crypto';
 
 @Injectable()
 export class VaultService {
   private vaultAccessToken: string;
 
-  constructor(@Inject('VAULT_CONFIG') private vaultConfig: VaultConfig) {}
+  constructor(
+    @Inject('VAULT_CONFIG') private vaultConfig: VaultConfig,
+    private cryptoService: CryptoService,
+  ) {}
 
   private async authenticateVault(): Promise<string> {
     try {
@@ -64,7 +67,7 @@ export class VaultService {
           {
             batch_input: strings.map((string: string) => {
               return {
-                plaintext: base64encode(string),
+                plaintext: this.cryptoService.base64encode(string),
               };
             }),
           },
@@ -123,7 +126,7 @@ export class VaultService {
         );
 
       return response.data.data.batch_results.map((result) =>
-        base64decode(result.plaintext),
+        this.cryptoService.base64decode(result.plaintext),
       );
     } catch (err) {
       const error: AxiosError = err;
