@@ -47,6 +47,34 @@
     "resend_text": "Didn’t get it?",
     "resend_btn": "Resend"
   },
+  "collateralization_step": {
+    "title": "Send crypto to your collateral wallet",
+    "subtitle": "Choose your desired initial line of credit and which crypto asset you'd like to collateralize",
+    "inputs": {
+      "input_range_label": "Credit amount",
+      "input_select_label": "Collateral",
+      "input_select_empty_name": "Select your collateral currency",
+      "input_select_empty_short": "BTC, ETH, SOL, or USDC"
+    },
+    "result": {
+      "first": "Required Collateral",
+      "second": "Loan-to-Value",
+      "third": "Interest Rate"
+    },
+    "address": {
+      "title": "Send {{required_collateral}} {{selected_collateral_asset}} to:",
+      "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address.",
+      "info_text_2": "We will wait for 3 confirmations before your collateral is accepted.",
+      "info_link_1": "Follow along on",
+      "info_link_2": "this blockchain explorer "
+    },
+    "terms": {
+      "title": "Terms & Conditions",
+      "first": "You can only spend up to <b>{{selected_collateral_asset}}%</b> of your line of credit.",
+      "second": "Pay monthly. We'll be sure to send you a reminder each month!",
+      "third": "You will be asked to pay down your balance or add collateral if <br /> your card balance goes about your credit utilization."
+    }
+  },
   "card_step": {
     "title": {
       "create": "Creating apto user...",
