@@ -18,7 +18,7 @@ export const usePollEmailVerification = (): QueryResponse<GetEmailVerificationRe
           return false;
         }
 
-        return 1000;
+        return 10000;
       },
       onSuccess: (data) => {
         if (data.isVerified) {
