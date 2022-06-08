@@ -280,7 +280,7 @@ export class AptoService {
     workflowObjectId: string,
     nextActionId: string,
   ): Promise<void> {
-    await this.aptoApiService.setAgreementStatus(userAccessToken);
+    // await this.aptoApiService.setAgreementStatus(userAccessToken);
     await this.aptoApiService.acceptAgreements(
       userAccessToken,
       workflowObjectId,
