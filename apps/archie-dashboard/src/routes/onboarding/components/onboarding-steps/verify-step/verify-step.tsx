@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import ReactCodeInput from 'react-verification-code-input';
 import { useCompleteAptoVerification } from '@archie/api-consumer/credit/hooks/use-complete-apto-verification';
 import { useStartAptoVerification } from '@archie/api-consumer/credit/hooks/use-start-apto-verification';
@@ -10,6 +11,8 @@ import { colors, theme } from '../../../../../constants/theme';
 import { VerifyStepStyled } from './verify-step.styled';
 
 export const VerifyStep: FC = () => {
+  const { t } = useTranslation();
+
   const [code, setCode] = useState('');
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
@@ -48,18 +51,18 @@ export const VerifyStep: FC = () => {
 
   return (
     <VerifyStepStyled>
-      <SubtitleS className="title">Verify phone number</SubtitleS>
-      <ParagraphXS className="subtitle">Enter the 6-digit code you received via text message.</ParagraphXS>
+      <SubtitleS className="title">{t('verify_step.title')}</SubtitleS>
+      <ParagraphXS className="subtitle">{t('verify_step.subtitle')}</ParagraphXS>
       <ReactCodeInput onComplete={(values) => setCode(values)} className="code-input" />
-      <ParagraphXS className="resend-text">Didn’t get it?</ParagraphXS>
+      <ParagraphXS className="resend-text">{t('verify_step.resend_text')}</ParagraphXS>
       <button className="resend-btn" onClick={handleResend}>
         <ParagraphXS weight={700} color={theme.textHighlight}>
-          Resend
+          {t('verify_step.resend_btn')}
         </ParagraphXS>
       </button>
       <hr className="divider" />
       <ButtonPrimary type="submit" onClick={handleSubmit} isDisabled={!isValid}>
-        Next
+        {t('btn_next')}
         <ArrowRight fill={colors.white} />
       </ButtonPrimary>
     </VerifyStepStyled>
