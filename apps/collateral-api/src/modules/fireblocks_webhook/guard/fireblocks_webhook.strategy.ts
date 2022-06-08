@@ -19,6 +19,13 @@ export class FireblocksWebhookStrategy extends PassportStrategy(
   }
 
   async validate(request: Request): Promise<boolean> {
+    if (
+      request.headers['fireblocks-signature'] === undefined ||
+      request.body === undefined
+    ) {
+      return false;
+    }
+
     const signature: string = request.headers['fireblocks-signature'];
     const message: string = JSON.stringify(request.body);
 

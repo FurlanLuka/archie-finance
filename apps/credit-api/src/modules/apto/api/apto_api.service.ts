@@ -406,7 +406,7 @@ export class AptoApiService {
   ): Promise<void> {
     try {
       await axios.post(
-        this.constructAptoUrl(`/v1/cards/${cardId}/load_funds`),
+        this.constructAptoUrl(`/cards/${cardId}/load_funds`),
         {
           amount: {
             currency: 'USD',
