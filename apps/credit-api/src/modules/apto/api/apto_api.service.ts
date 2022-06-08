@@ -256,7 +256,7 @@ export class AptoApiService {
   public async setAgreementStatus(userAccessToken: string): Promise<void> {
     try {
       await axios.post(
-        this.constructAptoUrl(`/v1/user/accounts/apply`),
+        this.constructAptoUrl(`/v1/agreements`),
         {
           agreements_keys: [
             'evolve_eua',
@@ -283,6 +283,8 @@ export class AptoApiService {
           errorResponse: axiosError.response,
         },
       });
+
+      throw new InternalServerErrorException();
     }
   }
 
@@ -315,6 +317,8 @@ export class AptoApiService {
           errorResponse: axiosError.response,
         },
       });
+
+      throw new InternalServerErrorException();
     }
   }
 
@@ -347,6 +351,8 @@ export class AptoApiService {
           errorResponse: axiosError.response,
         },
       });
+
+      throw new InternalServerErrorException();
     }
   }
 
@@ -376,6 +382,8 @@ export class AptoApiService {
           errorResponse: axiosError.response,
         },
       });
+
+      throw new InternalServerErrorException();
     }
   }
 
@@ -404,12 +412,14 @@ export class AptoApiService {
       const axiosError: AxiosError = error;
 
       Logger.error({
-        code: 'ERROR_GETTING_CARD_BALANCE',
+        code: 'ERROR_LOADING_FUNDS',
         metadata: {
           error: axiosError.toJSON(),
           errorResponse: axiosError.response,
         },
       });
+
+      throw new InternalServerErrorException();
     }
   }
 }
