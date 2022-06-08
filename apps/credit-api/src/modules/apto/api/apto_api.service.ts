@@ -8,6 +8,7 @@ import {
   AddressDataPoint,
   BirthdateDataPoint,
   CardApplicationResponse,
+  CardBalanceResponse,
   CompleteVerificationResponse,
   CreateUserResponse,
   EmailDataPoint,
@@ -341,6 +342,69 @@ export class AptoApiService {
 
       Logger.error({
         code: 'ERROR_ACCEPTING_APTO_AGREEMENTS',
+        metadata: {
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response,
+        },
+      });
+    }
+  }
+
+  public async getCardBalance(
+    userAccessToken: string,
+    cardId: string,
+  ): Promise<CardBalanceResponse> {
+    try {
+      const response: AxiosResponse<CardBalanceResponse> = await axios.get(
+        this.constructAptoUrl(`/v1/user/accounts/${cardId}/balance`),
+        {
+          headers: {
+            ...this.getAptoHeaders(),
+            Authorization: `Bearer ${userAccessToken}`,
+          },
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      const axiosError: AxiosError = error;
+
+      Logger.error({
+        code: 'ERROR_GETTING_CARD_BALANCE',
+        metadata: {
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response,
+        },
+      });
+    }
+  }
+
+  public async loadFunds(
+    cardId: string,
+    balanceId: string,
+    amount: number,
+  ): Promise<void> {
+    try {
+      await axios.post(
+        this.constructAptoUrl(`/v1/cards/${cardId}/load_funds`),
+        {
+          amount: {
+            currency: 'USD',
+            amount,
+          },
+          source_balance_id: balanceId,
+        },
+        {
+          headers: {
+            ...this.getAptoHeaders(),
+          },
+        },
+      );
+    } catch (error) {
+      const axiosError: AxiosError = error;
+
+      Logger.error({
+        code: 'ERROR_GETTING_CARD_BALANCE',
         metadata: {
           error: axiosError.toJSON(),
           errorResponse: axiosError.response,

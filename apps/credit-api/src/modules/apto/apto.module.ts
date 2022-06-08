@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CreditModule } from '../credit/credit.module';
 import { AptoApiModule } from './api/apto_api.module';
 import { AptoController } from './apto.controller';
 import { AptoService } from './apto.service';
@@ -19,6 +20,7 @@ import { AptoVerification } from './apto_verification.entity';
       AptoCard,
     ]),
     AptoApiModule,
+    CreditModule
   ],
 })
 export class AptoModule {}
