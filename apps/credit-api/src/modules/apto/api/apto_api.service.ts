@@ -59,10 +59,13 @@ export class AptoApiService {
 
       return response.data;
     } catch (error) {
+      const axiosError: AxiosError = error;
+
       Logger.error({
         code: 'ERROR_STARTING_VERIFICATION_PROCESS',
         metadata: {
-          error: (error as AxiosError).toJSON(),
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response,
         },
       });
 
@@ -85,10 +88,13 @@ export class AptoApiService {
 
       return response.data;
     } catch (error) {
+      const axiosError: AxiosError = error;
+
       Logger.error({
         code: 'ERROR_RESTARTING_VERIFICATION_PROCESS',
         metadata: {
-          error: (error as AxiosError).toJSON(),
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response,
         },
       });
 
@@ -114,10 +120,13 @@ export class AptoApiService {
 
       return response.data;
     } catch (error) {
+      const axiosError: AxiosError = error;
+
       Logger.error({
         code: 'ERROR_COMPLETING_VERIFICATION_PROCESS',
         metadata: {
-          error: (error as AxiosError).toJSON(),
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response,
         },
       });
 
@@ -162,10 +171,13 @@ export class AptoApiService {
 
       return response.data;
     } catch (error) {
+      const axiosError: AxiosError = error;
+
       Logger.error({
         code: 'ERROR_CREATING_APTO_USER',
         metadata: {
-          error: (error as AxiosError).toJSON(),
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response,
         },
       });
 
@@ -193,10 +205,13 @@ export class AptoApiService {
 
       return response.data;
     } catch (error) {
+      const axiosError: AxiosError = error;
+
       Logger.error({
         code: 'ERROR_CREATING_APTO_USER',
         metadata: {
-          error: (error as AxiosError).toJSON(),
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response,
         },
       });
 
@@ -223,10 +238,13 @@ export class AptoApiService {
 
       return response.data;
     } catch (error) {
+      const axiosError: AxiosError = error;
+
       Logger.error({
         code: 'ERROR_GETTING_CARD_APPLICATION',
         metadata: {
-          error: (error as AxiosError).toJSON(),
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response,
         },
       });
 
@@ -255,10 +273,13 @@ export class AptoApiService {
         },
       );
     } catch (error) {
+      const axiosError: AxiosError = error;
+
       Logger.error({
         code: 'ERROR_SETTING_APTO_AGREEMENTS',
         metadata: {
-          error: (error as AxiosError).toJSON(),
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response,
         },
       });
     }
@@ -284,10 +305,13 @@ export class AptoApiService {
         },
       );
     } catch (error) {
+      const axiosError: AxiosError = error;
+
       Logger.error({
         code: 'ERROR_ACCEPTING_APTO_AGREEMENTS',
         metadata: {
-          error: (error as AxiosError).toJSON(),
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response,
         },
       });
     }
@@ -313,10 +337,13 @@ export class AptoApiService {
 
       return response.data;
     } catch (error) {
+      const axiosError: AxiosError = error;
+
       Logger.error({
         code: 'ERROR_ACCEPTING_APTO_AGREEMENTS',
         metadata: {
-          error: (error as AxiosError).toJSON(),
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response,
         },
       });
     }
