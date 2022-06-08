@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-custom';
 import { ConfigService } from '@archie-microservices/config';
@@ -33,6 +33,11 @@ export class FireblocksWebhookStrategy extends PassportStrategy(
       signature,
       'base64',
     );
+
+    Logger.log({
+      code: 'FIREBLOCKS_IS_CALL_VERIFIED',
+      isVerified,
+    });
 
     return isVerified;
   }
