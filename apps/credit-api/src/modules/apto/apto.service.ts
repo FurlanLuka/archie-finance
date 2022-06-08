@@ -450,12 +450,8 @@ export class AptoService {
       userId,
     );
 
-    const cardBalance: CardBalanceResponse =
-      await this.aptoApiService.getCardBalance(userAccessToken, cardId);
-
     await this.aptoApiService.loadFunds(
       cardId,
-      cardBalance.id,
       credit.availableCredit,
     );
   }

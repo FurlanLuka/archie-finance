@@ -402,7 +402,6 @@ export class AptoApiService {
 
   public async loadFunds(
     cardId: string,
-    balanceId: string,
     amount: number,
   ): Promise<void> {
     try {
@@ -413,7 +412,7 @@ export class AptoApiService {
             currency: 'USD',
             amount,
           },
-          source_balance_id: balanceId,
+          source_balance_id: this.configService.get(ConfigVariables.APTO_FUNDING_BALANCE_ID),
         },
         {
           headers: {
