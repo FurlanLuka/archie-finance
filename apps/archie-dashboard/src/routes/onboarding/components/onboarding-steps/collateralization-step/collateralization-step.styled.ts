@@ -82,7 +82,7 @@ export const CollateralizationStepStyled = styled.div`
     flex-direction: column;
     align-items: flex-start;
     width: 33.33%;
-    max-width: 10rem;
+    max-width: 9rem;
 
     @media (max-width: ${breakpoints.screenSM}) {
       width: 100%;
@@ -109,7 +109,7 @@ export const CollateralizationStepStyled = styled.div`
     width: 100%;
 
     &.fade-out {
-      animation: ${fadeOut} 0.4s ease-out 2s forwards;
+      animation: ${fadeOut} 0.4s ease-out 2s forwards, ${hide} 0s linear 2s forwards;
     }
   }
 

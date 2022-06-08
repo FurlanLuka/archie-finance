@@ -9,16 +9,17 @@
     "title": "A bit about you",
     "subtitle": "We need to ask some personal information for compliance reasons. This information will not impact your credit score or your ability to get the Archie Card.",
     "label": {
-      "first_name": "First Name*",
-      "last_name": "Last Name*",
-      "date_of_birth": "Date of birth*",
-      "address": "Address*",
-      "phone_number": "Phone Number*",
-      "ssn": "SSN/TIN*"
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "date_of_birth": "Date of birth",
+      "address": "Address",
+      "phone_number": "Phone Number",
+      "ssn": "SSN/TIN"
     },
     "placeholder": {
       "first_name": "Joe",
       "last_name": "Doe",
+      "date_of_birth": "mm-dd-yyyy",
       "address": "Enter a location",
       "phone_number": "Enter phone number",
       "ssn": "XXX-XX-XXXX"
@@ -29,11 +30,12 @@
       "too_short": "Too short!",
       "too_long": "Too long!",
       "missing_address": "Please enter your address",
-      "no_street_number": "Please enter your street number",
       "not_us_address": "Must be a U.S. address",
+      "not_full_address": "Please enter your full address",
       "missing_date_of_birth": "Please enter your date of birth",
       "not_valid_date": "Not a valid date",
       "should_be_older": "Should be older than 18",
+      "should_be_under": "Should be under 122 years old",
       "cannot_be_future": "Date cannot be in the future",
       "missing_phone_number": "Please enter your phone number",
       "phone_number_digits": "Must consist of 10 digits",
@@ -62,7 +64,7 @@
       "third": "Interest Rate"
     },
     "address": {
-      "title": "Send {{required_collateral}} {{selected_collateral_asset}} to:",
+      "title": "Send {{required_collateral}} to:",
       "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address.",
       "info_text_2": "We will wait for 3 confirmations before your collateral is accepted.",
       "info_link_1": "Follow along on",

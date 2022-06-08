@@ -28,12 +28,9 @@ export const EmailVerificationStyled = styled.div`
     }  
   }
 
-  img {
-    height: 100%;
-  }
-
   button {
     border: 0;
+    font-size: inherit;
     background-color: ${({ theme }) => theme.buttonOutline};
     font-weight: 700;
     padding: 0 0.25rem;

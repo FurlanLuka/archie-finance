@@ -64,6 +64,15 @@ export const CollateralizationStep: FC = () => {
     return undefined;
   };
 
+  const getFormattedCollateral = () => {
+    const value =
+      selectedCollateralAsset?.short === 'USDC'
+        ? Number(requiredCollateral.toFixed(2)) * 1
+        : Number(requiredCollateral.toFixed(4)) * 1;
+
+    return `${value} ${selectedCollateralAsset?.short}`;
+  };
+
   return (
     <Container column mobileColumn alignItems="center">
       <Collateral />
@@ -88,7 +97,7 @@ export const CollateralizationStep: FC = () => {
           <div className="result-item">
             <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
             <SubtitleS weight={400}>
-              {Number(requiredCollateral.toFixed(4)) * 1} {selectedCollateralAsset?.short}
+              {getFormattedCollateral()}
               <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
             </SubtitleS>
           </div>
@@ -112,8 +121,7 @@ export const CollateralizationStep: FC = () => {
           <ParagraphXS weight={700}>
             <Trans
               values={{
-                required_collateral: requiredCollateral.toFixed(4),
-                selected_collateral_asset: selectedCollateralAsset?.short,
+                required_collateral: getFormattedCollateral(),
               }}
             >
               collateralization_step.address.title
