@@ -20,10 +20,14 @@ import {
 } from './apto_api.interfaces';
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from 'axios';
 import { ConfigVariables } from '../../../interfaces';
+import { CryptoService } from '@archie-microservices/crypto';
 
 @Injectable()
 export class AptoApiService {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private cryptoService: CryptoService,
+  ) {}
 
   private constructAptoUrl(path: string): string {
     return `${this.configService.get(ConfigVariables.APTO_API_URL)}${path}`;
@@ -37,6 +41,15 @@ export class AptoApiService {
     };
   }
 
+  private getAptoBasicAuthHeaders(): AxiosRequestHeaders {
+    return {
+      Authorization: `Basic ${this.cryptoService.base64encode(
+        `${this.configService.get(
+          ConfigVariables.APTO_PUBLIC_KEY,
+        )}:${this.configService.get(ConfigVariables.APTO_PRIVATE_KEY)}`,
+      )}`,
+    };
+  }
   public async startVerificationProcess(
     countryCode: string,
     phoneNumber: string,
@@ -404,7 +417,7 @@ export class AptoApiService {
         },
         {
           headers: {
-            ...this.getAptoHeaders(),
+            ...this.getAptoBasicAuthHeaders(),
           },
         },
       );
