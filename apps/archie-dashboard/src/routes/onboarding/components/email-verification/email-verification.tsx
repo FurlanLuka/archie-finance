@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { GetOnboardingResponse } from '@archie/api-consumer/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-onboarding';
@@ -9,6 +10,8 @@ import imgResend from '../../../../assets/images/img-resend.png';
 import { EmailVerificationStyled } from './email-verification.styled';
 
 export const EmailVerification: FC = () => {
+  const { t } = useTranslation();
+
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
   usePollEmailVerification();
 
@@ -32,11 +35,11 @@ export const EmailVerification: FC = () => {
         <img src={imgResend} alt="Resend verification email" />
       </div>
       <div className="text">
-        <ParagraphS weight={700}>Please verify your email</ParagraphS>
+        <ParagraphS weight={700}>{t('email_verification.title')}</ParagraphS>
         <ParagraphXS>
-          Check your email for a verification link from Archie. Click
-          <button onClick={handleClick}>here</button>
-          to resend it.
+          {t('email_verification.text_1')}
+          <button onClick={handleClick}>{t('email_verification.btn')}</button>
+          {t('email_verification.text_2')}
         </ParagraphXS>
       </div>
     </EmailVerificationStyled>

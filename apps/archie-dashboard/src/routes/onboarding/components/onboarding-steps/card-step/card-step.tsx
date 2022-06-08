@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { MutationQueryResponse, QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { useCreateAptoUser } from '@archie/api-consumer/credit/hooks/use-create-apto-user';
 import { useIssueCard } from '@archie/api-consumer/credit/hooks/use-issue-card';
@@ -22,6 +23,8 @@ enum Stage {
 }
 
 export const CardStep: FC = () => {
+  const { t } = useTranslation();
+
   const [stage, setStage] = useState(Stage.CREATE_USER);
 
   const createUserQuery: MutationQueryResponse = useCreateAptoUser();
@@ -56,11 +59,11 @@ export const CardStep: FC = () => {
   const getTitle = () => {
     switch (stage) {
       case Stage.CREATE_USER:
-        return 'Creating apto user...';
+        return `${t('card_step.title.create')}`;
       case Stage.ISSUE_CARD:
-        return 'Issuing credit card...';
+        return `${t('card_step.title.issue')}`;
       case Stage.COMPLETE:
-        return 'Your Archie Card is Ready!';
+        return `${t('card_step.title.complete')}`;
     }
   };
 
@@ -88,20 +91,22 @@ export const CardStep: FC = () => {
         <SubtitleS className="title">{getTitle()}</SubtitleS>
         <ParagraphXS className="subtitle">
           {stage === Stage.COMPLETE && (
-            <>
-              You collateralized ${getCollateralTotalValue()} worth of crypto and have a ${getCreditValue()} line of
-              credit. Make sure <br /> your email is verified before continuing.
-            </>
+            <Trans
+              components={{ br: <br /> }}
+              values={{ total_value: getCollateralTotalValue(), credit_value: getCreditValue() }}
+            >
+              card_step.subtitle
+            </Trans>
           )}
         </ParagraphXS>
         <div className="image">
-          <img src={imgCardReady} alt="Your Archie card is ready" />
+          <img src={imgCardReady} alt={t('card_step.img_alt')} />
         </div>
         <ButtonPrimary
           maxWidth="16rem"
           // isDisabled={isEmailVerified} TBD
         >
-          Go to dashboard
+          {t('card_step.btn')}
         </ButtonPrimary>
       </CardStepStyled>
     </Container>

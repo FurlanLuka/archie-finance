@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import { CollateralDeposit } from '../../../components/collateral-deposit/collateral-deposit';
 import { CollateralAsset, collateralAssets } from '../../../constants/collateral-assets';
 import { CollateralCurrency } from '../../../components/collateral-currency/collateral-currency';
@@ -11,6 +12,8 @@ interface InputSelectProps {
 }
 
 export const InputSelect: FC<InputSelectProps> = ({ setSelectedAsset }) => {
+  const { t } = useTranslation();
+
   const [selectOpen, setSelectOpen] = useState(false);
   const [selectedAssetId, setSelectedAssetId] = useState('');
 
@@ -24,7 +27,7 @@ export const InputSelect: FC<InputSelectProps> = ({ setSelectedAsset }) => {
 
   return (
     <InputSelectStyled>
-      <ParagraphXS weight={700}>Collateral</ParagraphXS>
+      <ParagraphXS weight={700}>{t('collateralization_step.inputs.input_select_label')}</ParagraphXS>
       <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
         {selectedAssetId ? (
           <CollateralCurrency

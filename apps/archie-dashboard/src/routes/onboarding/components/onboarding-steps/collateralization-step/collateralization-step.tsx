@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { useTranslation, Trans } from 'react-i18next';
 import QRCode from 'react-qr-code';
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { useGetAssetPrice } from '@archie/api-consumer/asset_price/hooks/use-get-asset-price';
@@ -19,6 +20,8 @@ import { ExternalLink } from '../../../../../components/_generic/icons/external-
 import { Collateral } from '../../../../../components/collateral/collateral';
 
 export const CollateralizationStep: FC = () => {
+  const { t } = useTranslation();
+
   const [lineOfCredit, setLineOfCredit] = useState(200);
   const [selectedCollateralAsset, setSelectedCollateralAsset] = useState<CollateralAsset>();
   const [requiredCollateral, setRequiredCollateral] = useState(0);
@@ -67,33 +70,37 @@ export const CollateralizationStep: FC = () => {
       <StepsIndicator currentStep={Step.COLLATERALIZE} />
       <EmailVerification />
       <CollateralizationStepStyled>
-        <SubtitleS className="title">Send crypto to your collateral wallet</SubtitleS>
-        <ParagraphXS className="subtitle">
-          Choose your desired initial line of credit and which crypto asset you'd like to collateralize
-        </ParagraphXS>
+        <SubtitleS className="title">{t('collateralization_step.title')}</SubtitleS>
+        <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
 
         <div className="inputs">
           <InputSelect setSelectedAsset={setSelectedCollateralAsset} />
-          <InputRange label="Credit Amount" min={200} max={1500} value={lineOfCredit} onChange={setLineOfCredit} />
+          <InputRange
+            label={t('collateralization_step.inputs.input_range_label')}
+            min={200}
+            max={1500}
+            value={lineOfCredit}
+            onChange={setLineOfCredit}
+          />
         </div>
 
         <div className="result">
           <div className="result-item">
-            <ParagraphXS weight={700}>Required Collateral</ParagraphXS>
+            <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
             <SubtitleS weight={400}>
               {Number(requiredCollateral.toFixed(4)) * 1} {selectedCollateralAsset?.short}
               <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
             </SubtitleS>
           </div>
           <div className="result-item">
-            <ParagraphXS weight={700}>Loan-to-Value</ParagraphXS>
+            <ParagraphXS weight={700}>{t('collateralization_step.result.second')}</ParagraphXS>
             <SubtitleS weight={400}>
               {selectedCollateralAsset?.loan_to_value}%
               <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
             </SubtitleS>
           </div>
           <div className="result-item">
-            <ParagraphXS weight={700}>Interest Rate</ParagraphXS>
+            <ParagraphXS weight={700}>{t('collateralization_step.result.third')}</ParagraphXS>
             <SubtitleS weight={400}>
               {selectedCollateralAsset?.interest_rate}%
               <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
@@ -103,7 +110,14 @@ export const CollateralizationStep: FC = () => {
 
         <div className="address">
           <ParagraphXS weight={700}>
-            Send {requiredCollateral.toFixed(4)} {selectedCollateralAsset?.short} to:
+            <Trans
+              values={{
+                required_collateral: requiredCollateral.toFixed(4),
+                selected_collateral_asset: selectedCollateralAsset?.short,
+              }}
+            >
+              collateralization_step.address.title
+            </Trans>
           </ParagraphXS>
           <div className="address-copy">
             <ParagraphS>{getDepositAddress()}</ParagraphS>
@@ -118,20 +132,26 @@ export const CollateralizationStep: FC = () => {
             <div className="info">
               <div className="info-group">
                 <ParagraphXS>
-                  Make sure you <b>only</b> send {selectedCollateralAsset?.short} to this address.
+                  <Trans
+                    components={{ b: <b /> }}
+                    values={{ selected_collateral_asset: selectedCollateralAsset?.short }}
+                  >
+                    collateralization_step.address.info_text_1
+                  </Trans>
                 </ParagraphXS>
               </div>
               <div className="info-group">
-                <ParagraphXS>We will wait for 3 confirmations before your collateral is accepted.</ParagraphXS>
+                <ParagraphXS>{t('collateralization_step.address.info_text_2')}</ParagraphXS>
                 <ParagraphXS className="info-link">
-                  Follow along on
+                  {t('collateralization_step.address.info_link_1')}
                   <a
                     href={`${selectedCollateralAsset?.url}/${getDepositAddress()}`}
                     target="_blank"
                     rel="noreferrer"
                     className="info-link-url"
                   >
-                    this blockchain explorer <ExternalLink className="info-link-icon" />
+                    {t('collateralization_step.address.info_link_2')}
+                    <ExternalLink className="info-link-icon" />
                   </a>
                 </ParagraphXS>
               </div>
@@ -142,21 +162,30 @@ export const CollateralizationStep: FC = () => {
 
           <div className="terms">
             <div className="terms-title">
-              <ParagraphXS weight={700}>Terms & Conditions</ParagraphXS>
+              <ParagraphXS weight={700}>{t('collateralization_step.terms.title')}</ParagraphXS>
             </div>
             <ul className="terms-list">
               <li className="terms-list-item">
                 <ParagraphXS>
-                  You can only spend up to <b>{selectedCollateralAsset?.loan_to_value}%</b> of your line of credit.
+                  <Trans
+                    components={{ b: <b /> }}
+                    values={{ selected_collateral_asset: selectedCollateralAsset?.loan_to_value }}
+                  >
+                    collateralization_step.terms.first
+                  </Trans>
                 </ParagraphXS>
               </li>
               <li className="terms-list-item">
-                <ParagraphXS>Pay monthly. We’ll be sure to send you a reminder each month!</ParagraphXS>
+                <ParagraphXS>{t('collateralization_step.terms.second')}</ParagraphXS>
               </li>
               <li className="terms-list-item">
                 <ParagraphXS>
-                  You will be asked to pay down your balance or add collateral if <br /> your card balance goes about
-                  your credit utilization.
+                  <Trans
+                    components={{ br: <br /> }}
+                    values={{ selected_collateral_asset: selectedCollateralAsset?.loan_to_value }}
+                  >
+                    collateralization_step.terms.third
+                  </Trans>
                 </ParagraphXS>
               </li>
             </ul>

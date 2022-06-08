@@ -12,6 +12,7 @@ import { SessionProvider } from '@archie/session/session-provider';
 import { OnboardingRoute } from './routes/onboarding/onboarding-route';
 import GlobalStyles from './components/_generic/global-styles/global-styles.styled';
 import { theme } from './constants/theme';
+import './utils/i18next';
 
 const queryClient: QueryClient = new QueryClient();
 
