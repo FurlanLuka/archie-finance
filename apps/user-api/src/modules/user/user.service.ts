@@ -21,10 +21,12 @@ export class UserService {
       id: userId,
     });
 
-    await this.internalApiService.completeOnboardingStage(
-      'emailVerificationStage',
-      userId,
-    );
+    if (user.email_verified) {
+      await this.internalApiService.completeOnboardingStage(
+        'emailVerificationStage',
+        userId,
+      );
+    }
 
     return {
       isVerified: user.email_verified,
