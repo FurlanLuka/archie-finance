@@ -8,6 +8,7 @@
     "collateral-api": "apps/collateral-api",
     "config": "libs/config",
     "credit-api": "apps/credit-api",
+    "crypto": "libs/crypto",
     "health": "libs/health",
     "internal-api": "libs/internal-api",
     "onboarding-api": "apps/onboarding-api",

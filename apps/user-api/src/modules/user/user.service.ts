@@ -21,7 +21,7 @@ export class UserService {
       id: userId,
     });
 
-    this.internalApiService.completeOnboardingStage(
+    await this.internalApiService.completeOnboardingStage(
       'emailVerificationStage',
       userId,
     );

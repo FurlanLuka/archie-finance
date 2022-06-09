@@ -6,17 +6,20 @@ import {
   VaultAccountResponse,
   VaultAssetResponse,
 } from 'fireblocks-sdk';
-import { base64decode, base64encode } from 'nodejs-base64';
 import { ConfigVariables } from '../../interfaces';
 import { ConfigService } from '@archie-microservices/config';
+import { CryptoService } from '@archie-microservices/crypto';
 
 @Injectable()
 export class FireblocksService {
   private fireblocksClient: FireblocksSDK;
 
-  constructor(private configService: ConfigService) {
+  constructor(
+    private configService: ConfigService,
+    private cryptoService: CryptoService,
+  ) {
     this.fireblocksClient = new FireblocksSDK(
-      base64decode(
+      cryptoService.base64decode(
         this.configService.get(ConfigVariables.FIREBLOCKS_PRIVATE_KEY),
       ),
       this.configService.get(ConfigVariables.FIREBLOCKS_API_KEY),
@@ -28,7 +31,7 @@ export class FireblocksService {
     assetId: string,
     userId: string,
   ): Promise<GenerateAddressResponse> {
-    const encodedUserId: string = base64encode(userId) as string;
+    const encodedUserId: string = this.cryptoService.sha256(userId);
 
     return this.fireblocksClient.generateNewAddress(
       vaultAccountId,
@@ -48,7 +51,7 @@ export class FireblocksService {
   public async createVaultAccount(
     userId: string,
   ): Promise<VaultAccountResponse> {
-    const encodedUserId: string = base64encode(userId) as string;
+    const encodedUserId: string = this.cryptoService.sha256(userId);
 
     return this.fireblocksClient.createVaultAccount(
       encodedUserId,
