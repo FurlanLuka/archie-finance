@@ -1,55 +1,55 @@
 {
   "btn_next": "Next",
   "steps_indicator": {
-    "first": "Sign-up",
+    "first": "Sign up",
     "second": "Collateralize",
     "third": "Get Archie Card"
   },
   "kyc_step": {
-    "title": "A bit about you",
-    "subtitle": "We need to ask some personal information for compliance reasons. This information will not impact your credit score or your ability to get the Archie Card.",
+    "title": "Let's get started",
+    "subtitle": "We are required to collect this information from you in order to issue you a credit card.",
     "label": {
-      "first_name": "First Name*",
-      "last_name": "Last Name*",
+      "first_name": "Legal first name*",
+      "last_name": "Legal last name*",
       "date_of_birth": "Date of birth*",
       "address": "Address*",
       "phone_number": "Phone Number*",
       "ssn": "SSN/TIN*"
     },
     "placeholder": {
-      "first_name": "Joe",
-      "last_name": "Doe",
-      "address": "Enter a location",
-      "phone_number": "Enter phone number",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "address": "Mailing address (no P.O. Boxes)",
+      "phone_number": "Phone number",
       "ssn": "XXX-XX-XXXX"
     },
     "error": {
-      "missing_first_name": "Please enter your first name",
-      "missing_last_name": "Please enter your last name",
-      "too_short": "Too short!",
-      "too_long": "Too long!",
-      "missing_address": "Please enter your address",
+      "missing_first_name": "This field is required",
+      "missing_last_name": "This field is required",
+      "too_short": "This name is too short",
+      "too_long": "This name is too long",
+      "missing_address": "This field is required",
       "no_street_number": "Please enter your street number",
       "not_us_address": "Must be a U.S. address",
-      "missing_date_of_birth": "Please enter your date of birth",
-      "not_valid_date": "Not a valid date",
-      "should_be_older": "Should be older than 18",
+      "missing_date_of_birth": "This field is required",
+      "not_valid_date": "Invalid date",
+      "should_be_older": "You must be at least 18 years old",
       "cannot_be_future": "Date cannot be in the future",
-      "missing_phone_number": "Please enter your phone number",
-      "phone_number_digits": "Must consist of 10 digits",
+      "missing_phone_number": "This field is required",
+      "phone_number_digits": "Invalid phone number",
       "missing_ssn": "Please enter your  SSN/TIN",
-      "ssn_digits": "Must be exactly 9 digits"
+      "ssn_digits": "Invalid SSN/TIN"
     }
   },
   "verify_step": {
     "title": "Verify phone number",
-    "subtitle": "Enter the 6-digit code you received via text message.",
+    "subtitle": "Enter the 6-digit code you received via SMS",
     "resend_text": "Didn’t get it?",
     "resend_btn": "Resend"
   },
   "collateralization_step": {
-    "title": "Send crypto to your collateral wallet",
-    "subtitle": "Choose your desired initial line of credit and which crypto asset you'd like to collateralize",
+    "title": "Create your credit line",
+    "subtitle": "Select the crypto asset you'd like to collateralize and your desired credit limit",
     "inputs": {
       "input_range_label": "Credit amount",
       "input_select_label": "Collateral",
@@ -57,37 +57,37 @@
       "input_select_empty_short": "BTC, ETH, SOL, or USDC"
     },
     "result": {
-      "first": "Required Collateral",
+      "first": "Collateral Required",
       "second": "Loan-to-Value",
       "third": "Interest Rate"
     },
     "address": {
       "title": "Send {{required_collateral}} {{selected_collateral_asset}} to:",
-      "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address.",
-      "info_text_2": "We will wait for 3 confirmations before your collateral is accepted.",
+      "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address. Please select another asset above if you’d like to collateralize a different currency.",
+      "info_text_2": "We will settle receipt of your collateral after <b>three</b> confirmations.",
       "info_link_1": "Follow along on",
       "info_link_2": "this blockchain explorer "
     },
     "terms": {
       "title": "Terms & Conditions",
-      "first": "You can only spend up to <b>{{selected_collateral_asset}}%</b> of your line of credit.",
-      "second": "Pay monthly. We'll be sure to send you a reminder each month!",
-      "third": "You will be asked to pay down your balance or add collateral if <br /> your card balance goes about your credit utilization."
+      "first": "ou may spend up to <b>{{selected_collateral_asset}}%</b> of your line of credit.",
+      "second": "Your minimum payment is due monthly. You will receive an email reminder when your payment is due.",
+      "third": "You will be notified to pay down your balance or add collateral if <br /> your loan-to-value ratio exceeds 50%"
     }
   },
   "card_step": {
     "title": {
-      "create": "Creating apto user...",
+      "create": "We're getting things in order...",
       "issue": "Issuing credit card...",
-      "complete": "Your Archie Card is Ready!"
+      "complete": "Your Archie Card is ready!"
     },
-    "subtitle": "You collateralized {{total_value}} worth of crypto and have a {{credit_value}} line of credit. Make sure <br /> your email is verified before continuing.",
-    "img_alt": "Your Archie card is ready",
-    "btn": "Go to dashboard"
+    "subtitle": "You have submitted {{total_value}} worth of collateral and have a {{credit_value}} credit limit. Make sure <br /> your email is verified before continuing.",
+    "img_alt": "Your Archie Card is ready",
+    "btn": "Go to my dashboard"
   },
   "email_verification": {
     "title": "Please verify your email",
-    "text_1": "Check your email for a verification link from Archie. Click",
+    "text_1": "Check your email for a verification link from Archie. If you did not receive a verification email, click",
     "btn": "here",
     "text_2": "to resend it."
   }
