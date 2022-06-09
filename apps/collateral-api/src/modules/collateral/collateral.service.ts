@@ -115,7 +115,7 @@ export class CollateralService {
   }
 
   public async getUserCollateral(userId: string): Promise<GetUserCollateral> {
-    const userCollateral: Collateral[] = await this.collateralRepository.find({
+    const userCollateral: Collateral[] = await this.collateralRepository.findBy({
       userId,
     });
 
