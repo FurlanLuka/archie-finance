@@ -64,7 +64,7 @@ describe('DepositAddressService', () => {
     it('should return the deposit address without creating a new one', async () => {
       const depositAddressData: DepositAddress = getDepositAddressData('BTC');
 
-      when(depositAddressRepository.findOne)
+      when(depositAddressRepository.findOneBy)
         .calledWith({
           asset: 'BTC',
           userId: user.id,
@@ -81,7 +81,7 @@ describe('DepositAddressService', () => {
     it('should create and returna new personal deposit wallet address', async () => {
       const depositAddress = 'depositAddress';
 
-      when(depositAddressRepository.findOne)
+      when(depositAddressRepository.findOneBy)
         .calledWith({
           asset: 'ETH',
           userId: user.id,
@@ -102,7 +102,7 @@ describe('DepositAddressService', () => {
     it('should throw internal server error exception because personal deposit wallet creation failed', async () => {
       const walletCreationError: Error = new Error();
 
-      when(depositAddressRepository.findOne)
+      when(depositAddressRepository.findOneBy)
         .calledWith({
           asset: 'ETH',
           userId: user.id,
@@ -121,7 +121,7 @@ describe('DepositAddressService', () => {
     it('should create and returna new omnibus deposit wallet address', async () => {
       const depositAddress = 'depositAddress';
 
-      when(depositAddressRepository.findOne)
+      when(depositAddressRepository.findOneBy)
         .calledWith({
           asset: 'BTC',
           userId: user.id,
@@ -144,7 +144,7 @@ describe('DepositAddressService', () => {
     it('should throw internal server error exception because omnibus deposit wallet creation failed', async () => {
       const walletCreationError: Error = new Error();
 
-      when(depositAddressRepository.findOne)
+      when(depositAddressRepository.findOneBy)
         .calledWith({
           asset: 'BTC',
           userId: user.id,

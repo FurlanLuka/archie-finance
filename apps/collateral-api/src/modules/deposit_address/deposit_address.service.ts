@@ -52,7 +52,7 @@ export class DepositAddressService {
     const assetInformation: AssetInformation | undefined = assetList[asset];
 
     const depositAddress: DepositAddress | undefined =
-      await this.depositAddressRepository.findOne({
+      await this.depositAddressRepository.findOneBy({
         asset,
         userId,
       });
@@ -136,7 +136,7 @@ export class DepositAddressService {
 
   public async getUserIdForDepositAddress(address: string): Promise<string> {
     const depositAddress: DepositAddress | undefined =
-      await this.depositAddressRepository.findOne({
+      await this.depositAddressRepository.findOneBy({
         address: address,
       });
 

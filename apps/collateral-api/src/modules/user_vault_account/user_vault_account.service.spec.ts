@@ -55,7 +55,7 @@ describe('UserVaultAccountService', () => {
       const createVaultAccountResponse: VaultAccountResponse =
         getVaultAccountResponseData();
 
-      when(userVaultAccountRepository.findOne)
+      when(userVaultAccountRepository.findOneBy)
         .calledWith({
           userId: user.id,
         })
@@ -83,7 +83,7 @@ describe('UserVaultAccountService', () => {
     const getVaultAccountResponse: VaultAccountResponse =
       getVaultAccountResponseData();
 
-    when(userVaultAccountRepository.findOne)
+    when(userVaultAccountRepository.findOneBy)
       .calledWith({
         userId: user.id,
       })

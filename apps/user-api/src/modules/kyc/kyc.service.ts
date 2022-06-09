@@ -27,7 +27,7 @@ export class KycService {
   ) {}
 
   async getKyc(userId: string): Promise<GetKycResponse> {
-    const kycRecord: Kyc | undefined = await this.kycRepository.findOne({
+    const kycRecord: Kyc | undefined = await this.kycRepository.findOneBy({
       userId,
     });
 
@@ -77,7 +77,7 @@ export class KycService {
   }
 
   async createKyc(payload: KycDto, userId: string): Promise<CreateKycResponse> {
-    const kycRecord: Kyc | undefined = await this.kycRepository.findOne({
+    const kycRecord: Kyc | undefined = await this.kycRepository.findOneBy({
       userId,
     });
 

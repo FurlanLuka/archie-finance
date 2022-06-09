@@ -63,11 +63,11 @@ describe('CollateralService', () => {
     const destinationAddress = 'destinationAddress';
 
     it('should save the deposit and increment the collateral amount', async () => {
-      when(collateralDepositRepository.findOne)
+      when(collateralDepositRepository.findOneBy)
         .calledWith({ transactionId })
         .mockResolvedValue(undefined);
 
-      when(collateralRepository.findOne)
+      when(collateralRepository.findOneBy)
         .calledWith({
           userId: user.id,
           asset: 'BTC',
@@ -110,7 +110,7 @@ describe('CollateralService', () => {
     });
 
     it('should save the deposit but not increment collateral amount because the transaction is not completed', async () => {
-      when(collateralDepositRepository.findOne)
+      when(collateralDepositRepository.findOneBy)
         .calledWith({ transactionId })
         .mockResolvedValue(undefined);
 
@@ -141,7 +141,7 @@ describe('CollateralService', () => {
     });
 
     it('should throw internal server error exception and rollback the transaction because something failed', async () => {
-      when(collateralDepositRepository.findOne)
+      when(collateralDepositRepository.findOneBy)
         .calledWith({ transactionId })
         .mockResolvedValue(undefined);
 

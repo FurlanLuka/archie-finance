@@ -84,7 +84,7 @@ export class AptoService {
     secret: string,
   ): Promise<CompletePhoneVerificationResponse> {
     const aptoVerification: AptoVerification =
-      await this.aptoVerificationRepository.findOne({
+      await this.aptoVerificationRepository.findOneBy({
         userId,
       });
 
@@ -145,7 +145,7 @@ export class AptoService {
     userId: string,
   ): Promise<StartPhoneVerificationResponse> {
     const aptoVerification: AptoVerification =
-      await this.aptoVerificationRepository.findOne({
+      await this.aptoVerificationRepository.findOneBy({
         userId,
       });
 
@@ -184,7 +184,7 @@ export class AptoService {
 
   public async createAptoUser(userId: string): Promise<CreateUserResponse> {
     const aptoVerification: AptoVerification =
-      await this.aptoVerificationRepository.findOne({
+      await this.aptoVerificationRepository.findOneBy({
         userId,
       });
 
@@ -313,7 +313,7 @@ export class AptoService {
 
   public async getAptoUser(userId: string): Promise<AptoUser> {
     const aptoUser: AptoUser | undefined =
-      await this.aptoUserRepository.findOne({
+      await this.aptoUserRepository.findOneBy({
         userId,
       });
 
@@ -335,7 +335,7 @@ export class AptoService {
     const aptoUser: AptoUser = await this.getAptoUser(userId);
 
     const aptoCardApplication: AptoCardApplication | undefined =
-      await this.aptoCardApplicationRepository.findOne({
+      await this.aptoCardApplicationRepository.findOneBy({
         userId,
       });
 
@@ -450,9 +450,6 @@ export class AptoService {
       userId,
     );
 
-    await this.aptoApiService.loadFunds(
-      cardId,
-      credit.availableCredit,
-    );
+    await this.aptoApiService.loadFunds(cardId, credit.availableCredit);
   }
 }

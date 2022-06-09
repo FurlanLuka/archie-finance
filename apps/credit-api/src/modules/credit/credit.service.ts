@@ -29,7 +29,7 @@ export class CreditService {
   ) {}
 
   public async createCredit(userId: string): Promise<GetCreditResponse> {
-    const creditRecord: Credit = await this.creditRepository.findOne({
+    const creditRecord: Credit = await this.creditRepository.findOneBy({
       userId,
     });
 
@@ -105,7 +105,7 @@ export class CreditService {
   }
 
   public async getCredit(userId: string): Promise<GetCreditResponse> {
-    const credit: Credit | undefined = await this.creditRepository.findOne({
+    const credit: Credit | undefined = await this.creditRepository.findOneBy({
       userId,
     });
 

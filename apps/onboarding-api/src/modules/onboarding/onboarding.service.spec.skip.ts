@@ -17,10 +17,7 @@ describe('OnboardingService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        OnboardingService,
-        getMockRepositoryProvider(Onboarding),
-      ],
+      providers: [OnboardingService, getMockRepositoryProvider(Onboarding)],
     }).compile();
 
     service = module.get(OnboardingService);
@@ -31,7 +28,7 @@ describe('OnboardingService', () => {
     it('should return the onboarding record for user', async () => {
       const onboardingEntity = getOnboardingEntityData();
 
-      when(onboardingRepository.findOne)
+      when(onboardingRepository.findOneBy)
         .calledWith({
           userId: user.id,
         })
@@ -47,7 +44,7 @@ describe('OnboardingService', () => {
     });
 
     it("should create new onboarding record and return it if it doesn't exist", async () => {
-      when(onboardingRepository.findOne)
+      when(onboardingRepository.findOneBy)
         .calledWith({
           userId: user.id,
         })
@@ -71,7 +68,7 @@ describe('OnboardingService', () => {
 
   describe('#completeOnboardingStage', () => {
     it('should throw an error because onboarding is already finished', async () => {
-      when(onboardingRepository.findOne)
+      when(onboardingRepository.findOneBy)
         .calledWith({
           userId: user.id,
         })
@@ -92,7 +89,7 @@ describe('OnboardingService', () => {
         kycStage: true,
       });
 
-      when(onboardingRepository.findOne)
+      when(onboardingRepository.findOneBy)
         .calledWith({
           userId: user.id,
         })
@@ -130,7 +127,7 @@ describe('OnboardingService', () => {
         emailVerificationStage: true,
       });
 
-      when(onboardingRepository.findOne)
+      when(onboardingRepository.findOneBy)
         .calledWith({
           userId: user.id,
         })

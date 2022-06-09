@@ -41,7 +41,7 @@ export class CollateralService {
     const queryRunner = this.connection.createQueryRunner();
 
     const collateralDeposit: CollateralDeposit | undefined =
-      await this.collateralDepositRepository.findOne({
+      await this.collateralDepositRepository.findOneBy({
         transactionId,
       });
 
@@ -98,7 +98,7 @@ export class CollateralService {
     amount: number,
   ): Promise<Partial<Collateral>> {
     const collateral: Collateral | undefined =
-      await this.collateralRepository.findOne({
+      await this.collateralRepository.findOneBy({
         userId,
         asset,
       });

@@ -15,7 +15,7 @@ export class OnboardingService {
     userId: string,
   ): Promise<GetOnboardingResponse> {
     const onboardingRecord: Onboarding | undefined =
-      await this.onboardingRepository.findOne({
+      await this.onboardingRepository.findOneBy({
         userId,
       });
 
@@ -44,7 +44,7 @@ export class OnboardingService {
     stage: string,
   ): Promise<Onboarding> {
     const onboardingRecord: Onboarding | undefined =
-      await this.onboardingRepository.findOne({
+      await this.onboardingRepository.findOneBy({
         userId,
       });
 
