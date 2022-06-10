@@ -23,6 +23,7 @@ export const theme: { [key: string]: string } = {
   // background
   backgroundPrimary: colors.white,
   backgroundSecondary: colors.neutralgray_100,
+  backgroundDisabled: colors.neutralgray_200,
   backgroundAlert: colors.yellow_500,
   // text
   textPrimary: colors.black,
@@ -43,6 +44,7 @@ export const theme: { [key: string]: string } = {
   // border
   borderPrimary: colors.alabaster,
   borderHighlight: colors.coral,
+  borderDisabled: colors.neutralgray_200,
   // loader
   loaderBackground: colors.teal_800,
 };

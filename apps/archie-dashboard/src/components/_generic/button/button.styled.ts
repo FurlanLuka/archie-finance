@@ -39,9 +39,11 @@ const Button = styled.button<ButtonProps>`
   :before {
     content: '';
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: inherit;
+    top: -1px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    background-color: ${({ theme }) => theme.backgroundDisabled};
     border-radius: inherit;
     display: ${({ isLoading }) => isLoading ? 'flex' : 'none'};
   }
@@ -49,12 +51,11 @@ const Button = styled.button<ButtonProps>`
   :after {
     content: '';
     position: absolute;
-    border: 6px solid ${({ theme }) => theme.backgroundSecondary};
-    border-radius: 50%;
-    border-top: 6px solid ${({ theme }) => theme.textDisabled};
-    width: 20px;
-    height: 20px;
-    opacity: 0.4;
+    border: 2px solid #c5c5c5; //TBD
+    border-top: 2px solid #9b9b9b; //TBD
+    border-radius: 100%;
+    width: 1.75rem;
+    height: 1.75rem;
     animation: ${spin} 0.8s linear infinite;
     display: ${({ isLoading }) => isLoading ? 'flex' : 'none'};
   }
