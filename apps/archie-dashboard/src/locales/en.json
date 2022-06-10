@@ -32,7 +32,7 @@
       "not_full_address": "Please enter your full address",
       "not_valid_date": "Invalid date",
       "should_be_older": "You must be at least 18 years old",
-      "should_be_under": "You must be younger that 122 years",
+      "should_be_under": "You must be under 122 years old",
       "cannot_be_future": "Date cannot be in the future",
       "phone_number_digits": "Invalid phone number",
       "ssn_digits": "Invalid SSN/TIN"
