@@ -71,6 +71,10 @@ const GlobalStyles = createGlobalStyle`
     }
   }
 
+  .clickable {
+    cursor: pointer;
+  }
+
   ::-moz-selection { 
     color: #fff;
     background: #ff8577;

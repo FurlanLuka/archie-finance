@@ -45,6 +45,9 @@ export const theme: { [key: string]: string } = {
   borderPrimary: colors.alabaster,
   borderHighlight: colors.coral,
   borderDisabled: colors.neutralgray_200,
+  // tooltip
+  tooltipBackground: colors.black,
+  tooltipText: colors.white,
   // loader
   loaderBackground: colors.teal_800,
 };
