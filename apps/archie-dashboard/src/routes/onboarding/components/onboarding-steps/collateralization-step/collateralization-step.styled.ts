@@ -101,18 +101,19 @@ export const CollateralizationStepStyled = styled.div`
 
   .placeholder {
     position: absolute;
-    top: 0;
+    top: -5%;
     display: flex;
     justify-content: flex-start;
     color: ${({ theme }) => theme.textDisabled};
     background-color: ${({ theme }) => theme.backgroundPrimary};
+    height: 110%;
     width: 100%;
 
     &.fade-out {
       animation: ${fadeOut} 0.4s ease-out 2s forwards, ${hide} 0s linear 2s forwards;
     }
   }
-
+  
   .address {
     position: relative;
     background-color: ${({ theme }) => theme.backgroundSecondary};

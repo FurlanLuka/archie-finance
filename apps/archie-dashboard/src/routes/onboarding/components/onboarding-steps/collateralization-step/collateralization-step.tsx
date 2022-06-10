@@ -1,12 +1,14 @@
 import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import QRCode from 'react-qr-code';
+import ReactTooltip from 'react-tooltip';
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { useGetAssetPrice } from '@archie/api-consumer/asset_price/hooks/use-get-asset-price';
 import { AssetPrice } from '@archie/api-consumer/asset_price/api/get-asset-price';
 import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
 import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
 import { CollateralAsset } from '../../../../../constants/collateral-assets';
+import { theme } from '../../../../../constants/theme';
 import { Step } from '../../../../../constants/onboarding-steps';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
 import { SubtitleS, ParagraphS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
@@ -97,9 +99,21 @@ export const CollateralizationStep: FC = () => {
           <div className="result-item">
             <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
             <SubtitleS weight={400}>
-              {getFormattedCollateral()}
+              <span
+                className="clickable"
+                data-tip="Click to copy"
+                onClick={() => navigator.clipboard.writeText((requiredCollateral as unknown as string) ?? '')}
+              >
+                {getFormattedCollateral()}
+              </span>
               <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
             </SubtitleS>
+            <ReactTooltip
+              textColor={theme.tooltipText}
+              backgroundColor={theme.tooltipBackgrond}
+              effect="solid"
+              delayHide={1000}
+            />
           </div>
           <div className="result-item">
             <ParagraphXS weight={700}>{t('collateralization_step.result.second')}</ParagraphXS>
@@ -128,7 +142,21 @@ export const CollateralizationStep: FC = () => {
             </Trans>
           </ParagraphXS>
           <div className="address-copy">
-            <ParagraphS>{getDepositAddress()}</ParagraphS>
+            <ParagraphS>
+              <span
+                className="clickable"
+                data-tip="Click to copy"
+                onClick={() => navigator.clipboard.writeText(getDepositAddress() ?? '')}
+              >
+                {getDepositAddress()}
+              </span>
+            </ParagraphS>
+            <ReactTooltip
+              textColor={theme.tooltipText}
+              backgroundColor={theme.tooltipBackgrond}
+              effect="solid"
+              delayHide={1000}
+            />
             <button className="btn-copy" onClick={() => navigator.clipboard.writeText(getDepositAddress() ?? '')}>
               <Copy className="icon-copy" />
             </button>
