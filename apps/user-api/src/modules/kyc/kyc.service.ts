@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, QueryRunner, Repository } from 'typeorm';
+import { DataSource, QueryRunner, Repository, TreeLevelColumn } from 'typeorm';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { Kyc } from './kyc.entity';
 import {
@@ -22,7 +22,7 @@ export class KycService {
   constructor(
     @InjectRepository(Kyc) private kycRepository: Repository<Kyc>,
     private vaultService: VaultService,
-    private connection: Connection,
+    private dataSource: DataSource,
     private internalApiService: InternalApiService,
   ) {}
 
@@ -104,13 +104,13 @@ export class KycService {
       payload.addressPostalCode,
       payload.addressRegion,
       payload.addressStreet,
-      payload.addressStreetNumber,
+      payload.addressStreetNumber,TreeLevelColumn
       payload.phoneNumber,
       payload.phoneNumberCountryCode,
       payload.ssn,
     ]);
 
-    const queryRunner: QueryRunner = this.connection.createQueryRunner();
+    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();

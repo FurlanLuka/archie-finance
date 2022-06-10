@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
-import { Connection, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Collateral } from './collateral.entity';
 import { CollateralDeposit } from './collateral_deposit.entity';
 import {
@@ -26,7 +26,7 @@ export class CollateralService {
     private collateralRepository: Repository<Collateral>,
     @InjectRepository(CollateralDeposit)
     private collateralDepositRepository: Repository<CollateralDeposit>,
-    private connection: Connection,
+    private dataSource: DataSource,
     private internalApiService: InternalApiService,
   ) {}
 
@@ -38,7 +38,7 @@ export class CollateralService {
     destinationAddress: string,
     status: TransactionStatus,
   ): Promise<void> {
-    const queryRunner = this.connection.createQueryRunner();
+    const queryRunner = this.dataSource.createQueryRunner();
 
     const collateralDeposit: CollateralDeposit | undefined =
       await this.collateralDepositRepository.findOneBy({
