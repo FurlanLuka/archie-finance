@@ -40,7 +40,7 @@ export class CollateralService {
   ): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
 
-    const collateralDeposit: CollateralDeposit | undefined =
+    const collateralDeposit: CollateralDeposit | null =
       await this.collateralDepositRepository.findOneBy({
         transactionId,
       });
@@ -60,8 +60,8 @@ export class CollateralService {
 
       if (status === TransactionStatus.COMPLETED) {
         if (
-          collateralDeposit === undefined ||
-          (collateralDeposit !== undefined &&
+          collateralDeposit === null ||
+          (collateralDeposit !== null &&
             collateralDeposit.status !== TransactionStatus.COMPLETED)
         ) {
           const collateralRecord: Partial<Collateral> =
@@ -98,14 +98,14 @@ export class CollateralService {
     asset: string,
     amount: number,
   ): Promise<Partial<Collateral>> {
-    const collateral: Collateral | undefined =
+    const collateral: Collateral | null =
       await this.collateralRepository.findOneBy({
         userId,
         asset,
       });
 
     const collateralAmount: number =
-      collateral === undefined ? amount : collateral.amount + amount;
+      collateral === null ? amount : collateral.amount + amount;
 
     return {
       ...collateral,

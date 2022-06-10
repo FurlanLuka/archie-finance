@@ -83,12 +83,12 @@ export class AptoService {
     userId: string,
     secret: string,
   ): Promise<CompletePhoneVerificationResponse> {
-    const aptoVerification: AptoVerification =
+    const aptoVerification: AptoVerification | null =
       await this.aptoVerificationRepository.findOneBy({
         userId,
       });
 
-    if (aptoVerification === undefined) {
+    if (aptoVerification === null) {
       Logger.error({
         code: 'APTO_VERIFICATION_NOT_STARTED_ERROR',
         metadata: {
@@ -144,12 +144,12 @@ export class AptoService {
   public async restartVerification(
     userId: string,
   ): Promise<StartPhoneVerificationResponse> {
-    const aptoVerification: AptoVerification =
+    const aptoVerification: AptoVerification | null =
       await this.aptoVerificationRepository.findOneBy({
         userId,
       });
 
-    if (aptoVerification === undefined) {
+    if (aptoVerification === null) {
       Logger.error({
         code: 'APTO_VERIFICATION_NOT_STARTED_ERROR',
         metadata: {
@@ -183,12 +183,12 @@ export class AptoService {
   }
 
   public async createAptoUser(userId: string): Promise<CreateUserResponse> {
-    const aptoVerification: AptoVerification =
+    const aptoVerification: AptoVerification | null =
       await this.aptoVerificationRepository.findOneBy({
         userId,
       });
 
-    if (aptoVerification === undefined) {
+    if (aptoVerification === null) {
       Logger.error({
         code: 'APTO_VERIFICATION_NOT_STARTED_ERROR',
         metadata: {
@@ -312,12 +312,12 @@ export class AptoService {
   }
 
   public async getAptoUser(userId: string): Promise<AptoUser> {
-    const aptoUser: AptoUser | undefined =
+    const aptoUser: AptoUser | null =
       await this.aptoUserRepository.findOneBy({
         userId,
       });
 
-    if (aptoUser === undefined) {
+    if (aptoUser === null) {
       Logger.error({
         code: 'APTO_USER_DOESNT_EXIST_ERROR',
         metadata: {
@@ -334,7 +334,7 @@ export class AptoService {
   public async issueCard(userId: string): Promise<IssueCardResponse> {
     const aptoUser: AptoUser = await this.getAptoUser(userId);
 
-    const aptoCardApplication: AptoCardApplication | undefined =
+    const aptoCardApplication: AptoCardApplication | null =
       await this.aptoCardApplicationRepository.findOneBy({
         userId,
       });

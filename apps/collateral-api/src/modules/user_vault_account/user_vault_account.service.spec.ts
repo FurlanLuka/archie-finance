@@ -59,7 +59,7 @@ describe('UserVaultAccountService', () => {
         .calledWith({
           userId: user.id,
         })
-        .mockResolvedValue(undefined);
+        .mockResolvedValue(null);
 
       when(fireblocksService.createVaultAccount)
         .calledWith(user.id)

@@ -14,12 +14,12 @@ export class OnboardingService {
   async getOrCreateOnboardingRecord(
     userId: string,
   ): Promise<GetOnboardingResponse> {
-    const onboardingRecord: Onboarding | undefined =
+    const onboardingRecord: Onboarding | null =
       await this.onboardingRepository.findOneBy({
         userId,
       });
 
-    if (onboardingRecord === undefined) {
+    if (onboardingRecord === null) {
       await this.onboardingRepository.save({
         userId,
       });
@@ -43,7 +43,7 @@ export class OnboardingService {
     userId: string,
     stage: string,
   ): Promise<Onboarding> {
-    const onboardingRecord: Onboarding | undefined =
+    const onboardingRecord: Onboarding | null =
       await this.onboardingRepository.findOneBy({
         userId,
       });

@@ -27,11 +27,11 @@ export class KycService {
   ) {}
 
   async getKyc(userId: string): Promise<GetKycResponse> {
-    const kycRecord: Kyc | undefined = await this.kycRepository.findOneBy({
+    const kycRecord: Kyc | null = await this.kycRepository.findOneBy({
       userId,
     });
 
-    if (kycRecord === undefined) {
+    if (kycRecord === null) {
       Logger.error({
         code: 'GET_KYC_ERROR',
         metadata: {
@@ -77,7 +77,7 @@ export class KycService {
   }
 
   async createKyc(payload: KycDto, userId: string): Promise<CreateKycResponse> {
-    const kycRecord: Kyc | undefined = await this.kycRepository.findOneBy({
+    const kycRecord: Kyc | null = await this.kycRepository.findOneBy({
       userId,
     });
 

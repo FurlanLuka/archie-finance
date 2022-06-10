@@ -29,7 +29,7 @@ export class CreditService {
   ) {}
 
   public async createCredit(userId: string): Promise<GetCreditResponse> {
-    const creditRecord: Credit = await this.creditRepository.findOneBy({
+    const creditRecord: Credit | null = await this.creditRepository.findOneBy({
       userId,
     });
 
@@ -105,11 +105,11 @@ export class CreditService {
   }
 
   public async getCredit(userId: string): Promise<GetCreditResponse> {
-    const credit: Credit | undefined = await this.creditRepository.findOneBy({
+    const credit: Credit | null = await this.creditRepository.findOneBy({
       userId,
     });
 
-    if (credit === undefined) {
+    if (credit === null) {
       throw new NotFoundException();
     }
 
