@@ -85,6 +85,7 @@ export class CollateralService {
           destinationAddress,
           status,
           error: JSON.stringify(error),
+          errorMessage: error.message,
         },
       });
 
@@ -115,9 +116,11 @@ export class CollateralService {
   }
 
   public async getUserCollateral(userId: string): Promise<GetUserCollateral> {
-    const userCollateral: Collateral[] = await this.collateralRepository.findBy({
-      userId,
-    });
+    const userCollateral: Collateral[] = await this.collateralRepository.findBy(
+      {
+        userId,
+      },
+    );
 
     return userCollateral.map((collateral: Collateral) => ({
       asset: collateral.asset,

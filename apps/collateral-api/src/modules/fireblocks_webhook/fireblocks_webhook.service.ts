@@ -33,7 +33,7 @@ export class FireblocksWebhookService {
       payload.type === EventType.TRANSACTION_STATUS_UPDATED ||
       payload.type === EventType.TRANSACTION_APPROVAL_STATUS_UPDATED
     ) {
-      this.handleTransactionWebhook(payload as FireblocksWebhookPayload);
+      await this.handleTransactionWebhook(payload as FireblocksWebhookPayload);
     }
   }
 
