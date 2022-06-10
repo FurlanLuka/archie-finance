@@ -13,6 +13,7 @@ import { OnboardingRoute } from './routes/onboarding/onboarding-route';
 import GlobalStyles from './components/_generic/global-styles/global-styles.styled';
 import { theme } from './constants/theme';
 import './utils/i18next';
+import { LogoutRoute } from './routes/logout/logout-route';
 
 const queryClient: QueryClient = new QueryClient();
 
@@ -48,6 +49,7 @@ ReactDOM.render(
                   }
                 />
                 <Route path="/login" element={<LoginRoute />} />
+                <Route path="/logout" element={<LogoutRoute />} />
               </Routes>
             </BrowserRouter>
           </ThemeProvider>
