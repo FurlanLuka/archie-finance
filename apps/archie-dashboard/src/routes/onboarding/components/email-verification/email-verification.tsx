@@ -23,6 +23,10 @@ export const EmailVerification: FC = () => {
     }
   };
 
+  if (queryResponse.state === RequestState.LOADING) {
+    return <></>;
+  }
+
   if (queryResponse.state === RequestState.SUCCESS) {
     if (queryResponse.data.emailVerificationStage) {
       return <></>;

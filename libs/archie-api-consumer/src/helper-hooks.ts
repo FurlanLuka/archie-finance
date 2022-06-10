@@ -43,7 +43,12 @@ export const useExtendedQuery = <TQueryFnData>(
       setSessionState,
       getAccessTokenSilently,
     ),
-    options,
+    {
+      ...options,
+      refetchOnWindowFocus: false,
+      cacheTime: 1000 * 60 * 15,
+      staleTime: 1000 * 60 * 15,
+    },
   );
 
   if (request.status === 'error') {
