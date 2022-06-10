@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, QueryRunner, Repository, TreeLevelColumn } from 'typeorm';
+import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { Kyc } from './kyc.entity';
 import {
@@ -104,7 +104,7 @@ export class KycService {
       payload.addressPostalCode,
       payload.addressRegion,
       payload.addressStreet,
-      payload.addressStreetNumber,TreeLevelColumn
+      payload.addressStreetNumber,
       payload.phoneNumber,
       payload.phoneNumberCountryCode,
       payload.ssn,
