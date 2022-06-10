@@ -30,6 +30,7 @@ export class OnboardingService {
         phoneVerificationStage: false,
         collateralizationStage: false,
         cardActivationStage: false,
+        mfaEnrollmentStage: false,
         completed: false,
       };
     }

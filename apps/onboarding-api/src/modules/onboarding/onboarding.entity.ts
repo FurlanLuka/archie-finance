@@ -29,6 +29,9 @@ export class Onboarding {
   cardActivationStage: boolean;
 
   @Column('boolean', { default: false })
+  mfaEnrollmentStage: boolean;
+
+  @Column('boolean', { default: false })
   completed: boolean;
 
   @CreateDateColumn({ select: false })

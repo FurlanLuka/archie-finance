@@ -3,9 +3,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { User } from 'auth0';
+import {
+  Enrollment,
+  SendEnrollmentTicketData,
+  SendEnrollmentTicketResponse,
+  User,
+} from 'auth0';
 import { Auth0Service } from '../auth0/auth0.service';
-import { GetEmailVerificationResponse } from './user.interfaces';
+import {
+  GetEmailVerificationResponse,
+  GetMfaEnrollmentResponse,
+} from './user.interfaces';
 import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
 import { InternalApiService } from '@archie-microservices/internal-api';
 
@@ -61,6 +69,50 @@ export class UserService {
 
     await this.auth0Service.getManagmentClient().sendEmailVerification({
       user_id: userId,
+    });
+  }
+
+  async enrollMfa(userId: string): Promise<SendEnrollmentTicketResponse> {
+    return this.auth0Service
+      .getManagmentClient()
+      .createGuardianEnrollmentTicket({
+        user_id: userId,
+      });
+  }
+
+  async isMfaEnrolled(userId: string): Promise<GetMfaEnrollmentResponse> {
+    const enrollments: Enrollment[] = await this.auth0Service
+      .getManagmentClient()
+      .getGuardianEnrollments({
+        id: userId,
+      });
+
+    const hasEnrolledAuthenticator: Enrollment | undefined = enrollments.find(
+      (enrollment) => {
+        return (
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          enrollment.auth_method === 'authenticator' &&
+          enrollment.status === 'confirmed'
+        );
+      },
+    );
+
+    if (hasEnrolledAuthenticator !== undefined) {
+      await this.internalApiService.completeOnboardingStage(
+        'mfaEnrollmentStage',
+        userId,
+      );
+    }
+
+    return {
+      isEnrolled: hasEnrolledAuthenticator !== undefined,
+    };
+  }
+
+  async getMfaEnrollments(userId: string): Promise<Enrollment[]> {
+    return this.auth0Service.getManagmentClient().getGuardianEnrollments({
+      id: userId,
     });
   }
 }
