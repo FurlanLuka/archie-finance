@@ -47,7 +47,7 @@ export const collateralAssets: CollateralAsset[] = [
     name: 'USD Coin',
     short: 'USDC',
     icon: <Usdcoin />,
-    loan_to_value: 50,
+    loan_to_value: 70,
     interest_rate: 15,
     url: 'https://etherscan.io/address',
   },

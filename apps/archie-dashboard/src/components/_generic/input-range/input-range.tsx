@@ -19,7 +19,14 @@ export const InputRange: FC<InputRangeProps> = ({ label, min, max, value, onChan
         <ParagraphXS weight={700}>{label}</ParagraphXS>
         <ParagraphS>${value}</ParagraphS>
       </div>
-      <input type="range" min={min} max={max} value={value} onChange={(e) => onChange(e.target.valueAsNumber)} />
+      <input
+        type="range"
+        min={min}
+        max={max}
+        value={value}
+        step="50"
+        onChange={(e) => onChange(e.target.valueAsNumber)}
+      />
     </InputRangeStyled>
   );
 };

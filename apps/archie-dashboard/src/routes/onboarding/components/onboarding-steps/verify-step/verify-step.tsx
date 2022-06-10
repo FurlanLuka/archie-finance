@@ -61,7 +61,12 @@ export const VerifyStep: FC = () => {
         </ParagraphXS>
       </button>
       <hr className="divider" />
-      <ButtonPrimary type="submit" onClick={handleSubmit} isDisabled={!isValid}>
+      <ButtonPrimary
+        type="submit"
+        onClick={handleSubmit}
+        isDisabled={!isValid}
+        isLoading={useCompleteAptoVerificationQuery.state === RequestState.LOADING}
+      >
         {t('btn_next')}
         <ArrowRight fill={colors.white} />
       </ButtonPrimary>

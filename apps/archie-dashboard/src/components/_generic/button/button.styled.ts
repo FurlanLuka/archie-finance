@@ -1,13 +1,19 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 import breakpoints from '../../../constants/breakpoints'
 
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`
 interface ButtonProps {
+  isLoading?: boolean;
   isDisabled?: boolean;
   maxWidth?: string;
 }
 
 const Button = styled.button<ButtonProps>`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,7 +26,7 @@ const Button = styled.button<ButtonProps>`
   border: 1px solid;
   max-height: 3rem;
   width: ${({ maxWidth }) => maxWidth ?? '100%'};
-  cursor: ${({ isDisabled }) => isDisabled ? 'not-allowed' : 'pointer'};
+  cursor: ${({ isDisabled, isLoading }) => isDisabled || isLoading ? 'not-allowed' : 'pointer'};
 
   @media (max-width: ${breakpoints.screenSM}) {
     width: 100%;
@@ -28,6 +34,30 @@ const Button = styled.button<ButtonProps>`
 
   :hover {
     opacity: ${({ isDisabled }) => isDisabled ? '1' : '0.8'};
+  }
+
+  :before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    background-color: ${({ theme }) => theme.backgroundDisabled};
+    border-radius: inherit;
+    display: ${({ isLoading }) => isLoading ? 'flex' : 'none'};
+  }
+
+  :after {
+    content: '';
+    position: absolute;
+    border: 2px solid #c5c5c5; //TBD
+    border-top: 2px solid #9b9b9b; //TBD
+    border-radius: 100%;
+    width: 1.75rem;
+    height: 1.75rem;
+    animation: ${spin} 0.8s linear infinite;
+    display: ${({ isLoading }) => isLoading ? 'flex' : 'none'};
   }
 `
 

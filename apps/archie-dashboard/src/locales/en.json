@@ -9,35 +9,32 @@
     "title": "Let's get started",
     "subtitle": "We are required to collect this information from you in order to issue you a credit card.",
     "label": {
-      "first_name": "Legal first name*",
-      "last_name": "Legal last name*",
-      "date_of_birth": "Date of birth*",
-      "address": "Address*",
-      "phone_number": "Phone Number*",
-      "ssn": "SSN/TIN*"
+      "first_name": "Legal first name",
+      "last_name": "Legal last name",
+      "date_of_birth": "Date of birth",
+      "address": "Address",
+      "phone_number": "Phone Number",
+      "ssn": "SSN/TIN"
     },
     "placeholder": {
       "first_name": "First Name",
       "last_name": "Last Name",
+      "date_of_birth": "mm-dd-yyyy",
       "address": "Mailing address (no P.O. Boxes)",
       "phone_number": "Phone number",
       "ssn": "XXX-XX-XXXX"
     },
     "error": {
-      "missing_first_name": "This field is required",
-      "missing_last_name": "This field is required",
+      "required_field": "This field is required",
       "too_short": "This name is too short",
       "too_long": "This name is too long",
-      "missing_address": "This field is required",
-      "no_street_number": "Please enter your street number",
       "not_us_address": "Must be a U.S. address",
-      "missing_date_of_birth": "This field is required",
+      "not_full_address": "Please enter your full address",
       "not_valid_date": "Invalid date",
       "should_be_older": "You must be at least 18 years old",
+      "should_be_under": "You must be under 122 years old",
       "cannot_be_future": "Date cannot be in the future",
-      "missing_phone_number": "This field is required",
       "phone_number_digits": "Invalid phone number",
-      "missing_ssn": "Please enter your  SSN/TIN",
       "ssn_digits": "Invalid SSN/TIN"
     }
   },
@@ -62,7 +59,7 @@
       "third": "Interest Rate"
     },
     "address": {
-      "title": "Send {{required_collateral}} {{selected_collateral_asset}} to:",
+      "title": "Send {{required_collateral}} to:",
       "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address. Please select another asset above if you’d like to collateralize a different currency.",
       "info_text_2": "We will settle receipt of your collateral after <b>three</b> confirmations.",
       "info_link_1": "Follow along on",
@@ -70,9 +67,9 @@
     },
     "terms": {
       "title": "Terms & Conditions",
-      "first": "ou may spend up to <b>{{selected_collateral_asset}}%</b> of your line of credit.",
+      "first": "You may spend up to <b>{{selected_collateral_asset}}%</b> of your line of credit.",
       "second": "Your minimum payment is due monthly. You will receive an email reminder when your payment is due.",
-      "third": "You will be notified to pay down your balance or add collateral if <br /> your loan-to-value ratio exceeds 50%"
+      "third": "You will be notified to pay down your balance or add collateral if <br /> your loan-to-value ratio exceeds {{selected_collateral_asset}}%."
     }
   },
   "card_step": {

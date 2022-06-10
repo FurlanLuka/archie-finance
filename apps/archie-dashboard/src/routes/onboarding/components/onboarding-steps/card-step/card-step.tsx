@@ -104,6 +104,7 @@ export const CardStep: FC = () => {
         </div>
         <ButtonPrimary
           maxWidth="16rem"
+          isLoading={getCollateralTotalValueResponse.state === RequestState.LOADING}
           // isDisabled={isEmailVerified} TBD
         >
           {t('card_step.btn')}
