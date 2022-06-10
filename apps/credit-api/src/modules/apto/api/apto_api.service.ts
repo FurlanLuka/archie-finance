@@ -79,7 +79,7 @@ export class AptoApiService {
         code: 'ERROR_STARTING_VERIFICATION_PROCESS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -108,7 +108,7 @@ export class AptoApiService {
         code: 'ERROR_RESTARTING_VERIFICATION_PROCESS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -140,7 +140,7 @@ export class AptoApiService {
         code: 'ERROR_COMPLETING_VERIFICATION_PROCESS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -191,7 +191,7 @@ export class AptoApiService {
         code: 'ERROR_CREATING_APTO_USER',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -225,7 +225,7 @@ export class AptoApiService {
         code: 'ERROR_CREATING_APTO_USER',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -258,7 +258,7 @@ export class AptoApiService {
         code: 'ERROR_GETTING_CARD_APPLICATION',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -293,7 +293,7 @@ export class AptoApiService {
         code: 'ERROR_SETTING_APTO_AGREEMENTS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -327,7 +327,7 @@ export class AptoApiService {
         code: 'ERROR_ACCEPTING_APTO_AGREEMENTS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -361,7 +361,7 @@ export class AptoApiService {
         code: 'ERROR_ACCEPTING_APTO_AGREEMENTS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -392,7 +392,7 @@ export class AptoApiService {
         code: 'ERROR_GETTING_CARD_BALANCE',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -427,7 +427,7 @@ export class AptoApiService {
         code: 'ERROR_LOADING_FUNDS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
