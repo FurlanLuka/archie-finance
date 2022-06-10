@@ -119,7 +119,7 @@ export const CollateralizationStepStyled = styled.div`
     border-top: 1px solid ${({ theme }) => theme.borderPrimary};
     border-bottom: 1px solid ${({ theme }) => theme.borderPrimary};
     width: 100%;
-    min-height: 436px;
+    min-height: 470px;
     padding: 1.5rem 1rem;
   }
 
