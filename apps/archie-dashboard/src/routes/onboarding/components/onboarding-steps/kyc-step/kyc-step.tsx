@@ -100,7 +100,7 @@ export const KycStep: FC = () => {
 
   const validate = () => {
     if (!firstName) {
-      setFirstNameError(t('kyc_step.error.missing_first_name'));
+      setFirstNameError(t('kyc_step.error.required_field'));
     } else if (firstName.length < 2) {
       setFirstNameError(t('kyc_step.error.too_short'));
     } else if (firstName.length > 50) {
@@ -110,7 +110,7 @@ export const KycStep: FC = () => {
     }
 
     if (!lastName) {
-      setLastNameError(t('kyc_step.error.missing_last_name'));
+      setLastNameError(t('kyc_step.error.required_field'));
     } else if (lastName.length < 2) {
       setLastNameError(t('kyc_step.error.too_short'));
     } else if (lastName.length > 50) {
@@ -120,7 +120,7 @@ export const KycStep: FC = () => {
     }
 
     if (!dateOfBirth) {
-      setDateOfBirthError(t('kyc_step.error.missing_date_of_birth'));
+      setDateOfBirthError(t('kyc_step.error.required_field'));
     } else if (!isValid(parsedDate(dateOfBirth))) {
       setDateOfBirthError(t('kyc_step.error.not_valid_date'));
     } else if (minYears(parsedDate(dateOfBirth))) {
@@ -134,13 +134,13 @@ export const KycStep: FC = () => {
     }
 
     if (!address) {
-      setAddressError(t('kyc_step.error.missing_address'));
+      setAddressError(t('kyc_step.error.required_field'));
     } else {
       setAddressError('');
     }
 
     if (!phoneNumber) {
-      setPhoneNumberError(t('kyc_step.error.missing_phone_number'));
+      setPhoneNumberError(t('kyc_step.error.required_field'));
     } else if (phoneNumber.length < 10) {
       setPhoneNumberError(t('kyc_step.error.phone_number_digits'));
     } else {
@@ -148,7 +148,7 @@ export const KycStep: FC = () => {
     }
 
     if (!ssn) {
-      setSsnError(t('kyc_step.error.missing_ssn'));
+      setSsnError(t('kyc_step.error.required_field'));
     } else if (ssn.length < 9) {
       setSsnError(t('kyc_step.error.ssn_digits'));
     } else {

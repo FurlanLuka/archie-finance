@@ -149,7 +149,14 @@ export const CollateralizationStep: FC = () => {
                 </ParagraphXS>
               </div>
               <div className="info-group">
-                <ParagraphXS>{t('collateralization_step.address.info_text_2')}</ParagraphXS>
+                <ParagraphXS>
+                  <Trans
+                    components={{ b: <b /> }}
+                    values={{ selected_collateral_asset: selectedCollateralAsset?.short }}
+                  >
+                    collateralization_step.address.info_text_2
+                  </Trans>
+                </ParagraphXS>
                 <ParagraphXS className="info-link">
                   {t('collateralization_step.address.info_link_1')}
                   <a
