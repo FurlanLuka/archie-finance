@@ -12,6 +12,7 @@ import {
   AddressDataPoint,
   BirthdateDataPoint,
   CardApplicationResponse,
+  CardBalanceResponse,
   CompleteVerificationResponse,
   CreateUserResponse,
   DataType,
@@ -36,6 +37,8 @@ import { AptoCardApplication } from './apto_card_application.entity';
 import { ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '../../interfaces';
 import { AptoCard } from './apto_card.entity';
+import { CreditService } from '../credit/credit.service';
+import { GetCreditResponse } from '../credit/credit.interfaces';
 
 @Injectable()
 export class AptoService {
@@ -51,6 +54,7 @@ export class AptoService {
     private aptoCardApplicationRepository: Repository<AptoCardApplication>,
     @InjectRepository(AptoCard)
     private aptoCardRepository: Repository<AptoCard>,
+    private creditService: CreditService,
   ) {}
 
   public async startPhoneVerification(
@@ -79,12 +83,12 @@ export class AptoService {
     userId: string,
     secret: string,
   ): Promise<CompletePhoneVerificationResponse> {
-    const aptoVerification: AptoVerification =
-      await this.aptoVerificationRepository.findOne({
+    const aptoVerification: AptoVerification | null =
+      await this.aptoVerificationRepository.findOneBy({
         userId,
       });
 
-    if (aptoVerification === undefined) {
+    if (aptoVerification === null) {
       Logger.error({
         code: 'APTO_VERIFICATION_NOT_STARTED_ERROR',
         metadata: {
@@ -140,12 +144,12 @@ export class AptoService {
   public async restartVerification(
     userId: string,
   ): Promise<StartPhoneVerificationResponse> {
-    const aptoVerification: AptoVerification =
-      await this.aptoVerificationRepository.findOne({
+    const aptoVerification: AptoVerification | null =
+      await this.aptoVerificationRepository.findOneBy({
         userId,
       });
 
-    if (aptoVerification === undefined) {
+    if (aptoVerification === null) {
       Logger.error({
         code: 'APTO_VERIFICATION_NOT_STARTED_ERROR',
         metadata: {
@@ -179,12 +183,12 @@ export class AptoService {
   }
 
   public async createAptoUser(userId: string): Promise<CreateUserResponse> {
-    const aptoVerification: AptoVerification =
-      await this.aptoVerificationRepository.findOne({
+    const aptoVerification: AptoVerification | null =
+      await this.aptoVerificationRepository.findOneBy({
         userId,
       });
 
-    if (aptoVerification === undefined) {
+    if (aptoVerification === null) {
       Logger.error({
         code: 'APTO_VERIFICATION_NOT_STARTED_ERROR',
         metadata: {
@@ -276,7 +280,7 @@ export class AptoService {
     workflowObjectId: string,
     nextActionId: string,
   ): Promise<void> {
-    await this.aptoApiService.setAgreementStatus(userAccessToken);
+    // await this.aptoApiService.setAgreementStatus(userAccessToken);
     await this.aptoApiService.acceptAgreements(
       userAccessToken,
       workflowObjectId,
@@ -307,13 +311,13 @@ export class AptoService {
     return cardApplication;
   }
 
-  public async issueCard(userId: string): Promise<IssueCardResponse> {
-    const aptoUser: AptoUser | undefined =
-      await this.aptoUserRepository.findOne({
+  public async getAptoUser(userId: string): Promise<AptoUser> {
+    const aptoUser: AptoUser | null =
+      await this.aptoUserRepository.findOneBy({
         userId,
       });
 
-    if (aptoUser === undefined) {
+    if (aptoUser === null) {
       Logger.error({
         code: 'APTO_USER_DOESNT_EXIST_ERROR',
         metadata: {
@@ -324,8 +328,14 @@ export class AptoService {
       throw new BadRequestException();
     }
 
-    const aptoCardApplication: AptoCardApplication | undefined =
-      await this.aptoCardApplicationRepository.findOne({
+    return aptoUser;
+  }
+
+  public async issueCard(userId: string): Promise<IssueCardResponse> {
+    const aptoUser: AptoUser = await this.getAptoUser(userId);
+
+    const aptoCardApplication: AptoCardApplication | null =
+      await this.aptoCardApplicationRepository.findOneBy({
         userId,
       });
 
@@ -419,9 +429,27 @@ export class AptoService {
         aptoCardApplication.userId,
       );
 
+      await this.initiallyLoadCard(
+        aptoCardApplication.userId,
+        userAccessToken,
+        issueCardResponse.account_id,
+      );
+
       return issueCardResponse;
     }
 
     throw new BadRequestException();
+  }
+
+  public async initiallyLoadCard(
+    userId: string,
+    userAccessToken: string,
+    cardId: string,
+  ): Promise<void> {
+    const credit: GetCreditResponse = await this.creditService.getCredit(
+      userId,
+    );
+
+    await this.aptoApiService.loadFunds(cardId, credit.availableCredit);
   }
 }

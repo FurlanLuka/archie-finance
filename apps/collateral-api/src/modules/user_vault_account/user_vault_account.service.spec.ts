@@ -55,11 +55,11 @@ describe('UserVaultAccountService', () => {
       const createVaultAccountResponse: VaultAccountResponse =
         getVaultAccountResponseData();
 
-      when(userVaultAccountRepository.findOne)
+      when(userVaultAccountRepository.findOneBy)
         .calledWith({
           userId: user.id,
         })
-        .mockResolvedValue(undefined);
+        .mockResolvedValue(null);
 
       when(fireblocksService.createVaultAccount)
         .calledWith(user.id)
@@ -83,7 +83,7 @@ describe('UserVaultAccountService', () => {
     const getVaultAccountResponse: VaultAccountResponse =
       getVaultAccountResponseData();
 
-    when(userVaultAccountRepository.findOne)
+    when(userVaultAccountRepository.findOneBy)
       .calledWith({
         userId: user.id,
       })

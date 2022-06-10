@@ -105,12 +105,12 @@ export class AssetPriceService {
   }
 
   public async getAssetPrice(asset: string): Promise<GetAssetPriceResponse> {
-    const assetPrice: AssetPrice | undefined =
-      await this.assetPriceRepository.findOne({
+    const assetPrice: AssetPrice | null =
+      await this.assetPriceRepository.findOneBy({
         asset,
       });
 
-    if (assetPrice === undefined) {
+    if (assetPrice === null) {
       throw new NotFoundException();
     }
 

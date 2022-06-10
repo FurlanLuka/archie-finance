@@ -16,8 +16,8 @@ export class UserVaultAccountService {
   public async getUserVaultAccount(
     userId: string,
   ): Promise<VaultAccountResponse> {
-    const userVaultAccount: UserVaultAccount | undefined =
-      await this.userVaultAccount.findOne({
+    const userVaultAccount: UserVaultAccount | null =
+      await this.userVaultAccount.findOneBy({
         userId,
       });
 

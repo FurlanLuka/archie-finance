@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
-import { Connection, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Collateral } from './collateral.entity';
 import { CollateralDeposit } from './collateral_deposit.entity';
 import {
@@ -26,7 +26,7 @@ export class CollateralService {
     private collateralRepository: Repository<Collateral>,
     @InjectRepository(CollateralDeposit)
     private collateralDepositRepository: Repository<CollateralDeposit>,
-    private connection: Connection,
+    private dataSource: DataSource,
     private internalApiService: InternalApiService,
   ) {}
 
@@ -38,10 +38,10 @@ export class CollateralService {
     destinationAddress: string,
     status: TransactionStatus,
   ): Promise<void> {
-    const queryRunner = this.connection.createQueryRunner();
+    const queryRunner = this.dataSource.createQueryRunner();
 
-    const collateralDeposit: CollateralDeposit | undefined =
-      await this.collateralDepositRepository.findOne({
+    const collateralDeposit: CollateralDeposit | null =
+      await this.collateralDepositRepository.findOneBy({
         transactionId,
       });
 
@@ -60,8 +60,8 @@ export class CollateralService {
 
       if (status === TransactionStatus.COMPLETED) {
         if (
-          collateralDeposit === undefined ||
-          (collateralDeposit !== undefined &&
+          collateralDeposit === null ||
+          (collateralDeposit !== null &&
             collateralDeposit.status !== TransactionStatus.COMPLETED)
         ) {
           const collateralRecord: Partial<Collateral> =
@@ -85,6 +85,7 @@ export class CollateralService {
           destinationAddress,
           status,
           error: JSON.stringify(error),
+          errorMessage: error.message,
         },
       });
 
@@ -97,14 +98,14 @@ export class CollateralService {
     asset: string,
     amount: number,
   ): Promise<Partial<Collateral>> {
-    const collateral: Collateral | undefined =
-      await this.collateralRepository.findOne({
+    const collateral: Collateral | null =
+      await this.collateralRepository.findOneBy({
         userId,
         asset,
       });
 
     const collateralAmount: number =
-      collateral === undefined ? amount : collateral.amount + amount;
+      collateral === null ? amount : collateral.amount + amount;
 
     return {
       ...collateral,
@@ -115,9 +116,11 @@ export class CollateralService {
   }
 
   public async getUserCollateral(userId: string): Promise<GetUserCollateral> {
-    const userCollateral: Collateral[] = await this.collateralRepository.find({
-      userId,
-    });
+    const userCollateral: Collateral[] = await this.collateralRepository.findBy(
+      {
+        userId,
+      },
+    );
 
     return userCollateral.map((collateral: Collateral) => ({
       asset: collateral.asset,

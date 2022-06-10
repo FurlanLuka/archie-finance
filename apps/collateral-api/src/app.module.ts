@@ -48,6 +48,8 @@ import { AssetInformationModule } from './modules/asset_information/asset_inform
         synchronize: true,
         autoLoadEntities: true,
         keepConnectionAlive: true,
+        logging: ['error', 'schema', 'log'],
+        logger: 'advanced-console',
       }),
       inject: [ConfigService],
     }),

@@ -41,7 +41,7 @@
 
 //   describe('getKyc', () => {
 //     it('should throw not found exception because KYC record does not exist for the user', async () => {
-//       when(kycRepository.findOne)
+//       when(kycRepository.findOneBy)
 //         .calledWith({
 //           userId: user.id,
 //         })
@@ -56,7 +56,7 @@
 //       const encryptedKycRecord: Kyc = getEncryptedKycEntityData(user.id);
 //       const kycRecord: Kyc = getKycEntityData(user.id);
 
-//       when(kycRepository.findOne)
+//       when(kycRepository.findOneBy)
 //         .calledWith({
 //           userId: user.id,
 //         })
@@ -121,7 +121,7 @@
 //     });
 
 //     it('should throw bad request exception because KYC record already exists for the user', async () => {
-//       when(kycRepository.findOne)
+//       when(kycRepository.findOneBy)
 //         .calledWith({
 //           userId: user.id,
 //         })

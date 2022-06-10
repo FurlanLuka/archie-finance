@@ -127,3 +127,31 @@ export interface IssueCardResponse {
   issued_at: string;
   name_on_card: string;
 }
+
+export interface CardBalanceResponse {
+  type: string;
+  id: string;
+  balance: {
+    type: string;
+    currency: string;
+    amount: number;
+  };
+  amount_spendable: {
+    type: string;
+    currency: string;
+    amount: number;
+  };
+  amount_held: {
+    type: string;
+    currency: string;
+    amount: number;
+  };
+}
+
+export interface LoadFundsPayload {
+  amount: {
+    currency: string;
+    amount: number;
+  };
+  source_balance_id: string;
+}

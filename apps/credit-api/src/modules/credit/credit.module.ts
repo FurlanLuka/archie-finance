@@ -10,5 +10,6 @@ import { CreditService } from './credit.service';
   controllers: [CreditController, InternalCreditController],
   imports: [TypeOrmModule.forFeature([Credit])],
   providers: [CreditService],
+  exports: [CreditService],
 })
 export class CreditModule {}

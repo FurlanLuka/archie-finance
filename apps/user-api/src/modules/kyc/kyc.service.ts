@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Connection, QueryRunner, Repository } from 'typeorm';
+import { DataSource, QueryRunner, Repository } from 'typeorm';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { Kyc } from './kyc.entity';
 import {
@@ -22,16 +22,16 @@ export class KycService {
   constructor(
     @InjectRepository(Kyc) private kycRepository: Repository<Kyc>,
     private vaultService: VaultService,
-    private connection: Connection,
+    private dataSource: DataSource,
     private internalApiService: InternalApiService,
   ) {}
 
   async getKyc(userId: string): Promise<GetKycResponse> {
-    const kycRecord: Kyc | undefined = await this.kycRepository.findOne({
+    const kycRecord: Kyc | null = await this.kycRepository.findOneBy({
       userId,
     });
 
-    if (kycRecord === undefined) {
+    if (kycRecord === null) {
       Logger.error({
         code: 'GET_KYC_ERROR',
         metadata: {
@@ -77,7 +77,7 @@ export class KycService {
   }
 
   async createKyc(payload: KycDto, userId: string): Promise<CreateKycResponse> {
-    const kycRecord: Kyc | undefined = await this.kycRepository.findOne({
+    const kycRecord: Kyc | null = await this.kycRepository.findOneBy({
       userId,
     });
 
@@ -110,7 +110,7 @@ export class KycService {
       payload.ssn,
     ]);
 
-    const queryRunner: QueryRunner = this.connection.createQueryRunner();
+    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();

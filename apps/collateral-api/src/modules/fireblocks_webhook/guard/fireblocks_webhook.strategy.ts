@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-custom';
 import { ConfigService } from '@archie-microservices/config';
@@ -19,6 +19,13 @@ export class FireblocksWebhookStrategy extends PassportStrategy(
   }
 
   async validate(request: Request): Promise<boolean> {
+    if (
+      request.headers['fireblocks-signature'] === undefined ||
+      request.body === undefined
+    ) {
+      return false;
+    }
+
     const signature: string = request.headers['fireblocks-signature'];
     const message: string = JSON.stringify(request.body);
 
@@ -33,6 +40,11 @@ export class FireblocksWebhookStrategy extends PassportStrategy(
       signature,
       'base64',
     );
+
+    Logger.log({
+      code: 'FIREBLOCKS_IS_CALL_VERIFIED',
+      isVerified,
+    });
 
     return isVerified;
   }

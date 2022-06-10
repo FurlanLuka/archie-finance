@@ -12,9 +12,7 @@ import {
 } from './fireblocks_webhook.interfaces';
 import { ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '../../interfaces';
-import {
-  AssetList,
-} from '@archie-microservices/api-interfaces/asset_information';
+import { AssetList } from '@archie-microservices/api-interfaces/asset_information';
 
 @Injectable()
 export class FireblocksWebhookService {
@@ -25,12 +23,17 @@ export class FireblocksWebhookService {
   ) {}
 
   public async webhookHandler(payload: FireblocksWebhookDto): Promise<void> {
+    Logger.log({
+      code: 'FIREBLOCKS_WEBHOOK',
+      ...payload,
+    });
+
     if (
       payload.type === EventType.TRANSACTION_CREATED ||
       payload.type === EventType.TRANSACTION_STATUS_UPDATED ||
       payload.type === EventType.TRANSACTION_APPROVAL_STATUS_UPDATED
     ) {
-      this.handleTransactionWebhook(payload as FireblocksWebhookPayload);
+      await this.handleTransactionWebhook(payload as FireblocksWebhookPayload);
     }
   }
 

@@ -8,6 +8,7 @@ import {
   AddressDataPoint,
   BirthdateDataPoint,
   CardApplicationResponse,
+  CardBalanceResponse,
   CompleteVerificationResponse,
   CreateUserResponse,
   EmailDataPoint,
@@ -19,10 +20,14 @@ import {
 } from './apto_api.interfaces';
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from 'axios';
 import { ConfigVariables } from '../../../interfaces';
+import { CryptoService } from '@archie-microservices/crypto';
 
 @Injectable()
 export class AptoApiService {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private cryptoService: CryptoService,
+  ) {}
 
   private constructAptoUrl(path: string): string {
     return `${this.configService.get(ConfigVariables.APTO_API_URL)}${path}`;
@@ -36,6 +41,15 @@ export class AptoApiService {
     };
   }
 
+  private getAptoBasicAuthHeaders(): AxiosRequestHeaders {
+    return {
+      Authorization: `Basic ${this.cryptoService.base64encode(
+        `${this.configService.get(
+          ConfigVariables.APTO_PUBLIC_KEY,
+        )}:${this.configService.get(ConfigVariables.APTO_PRIVATE_KEY)}`,
+      )}`,
+    };
+  }
   public async startVerificationProcess(
     countryCode: string,
     phoneNumber: string,
@@ -65,7 +79,7 @@ export class AptoApiService {
         code: 'ERROR_STARTING_VERIFICATION_PROCESS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -94,7 +108,7 @@ export class AptoApiService {
         code: 'ERROR_RESTARTING_VERIFICATION_PROCESS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -126,7 +140,7 @@ export class AptoApiService {
         code: 'ERROR_COMPLETING_VERIFICATION_PROCESS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -177,7 +191,7 @@ export class AptoApiService {
         code: 'ERROR_CREATING_APTO_USER',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -211,7 +225,7 @@ export class AptoApiService {
         code: 'ERROR_CREATING_APTO_USER',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -244,7 +258,7 @@ export class AptoApiService {
         code: 'ERROR_GETTING_CARD_APPLICATION',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
 
@@ -255,7 +269,7 @@ export class AptoApiService {
   public async setAgreementStatus(userAccessToken: string): Promise<void> {
     try {
       await axios.post(
-        this.constructAptoUrl(`/v1/user/accounts/apply`),
+        this.constructAptoUrl(`/v1/agreements`),
         {
           agreements_keys: [
             'evolve_eua',
@@ -279,9 +293,11 @@ export class AptoApiService {
         code: 'ERROR_SETTING_APTO_AGREEMENTS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
+
+      throw new InternalServerErrorException();
     }
   }
 
@@ -311,9 +327,11 @@ export class AptoApiService {
         code: 'ERROR_ACCEPTING_APTO_AGREEMENTS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
+
+      throw new InternalServerErrorException();
     }
   }
 
@@ -343,9 +361,77 @@ export class AptoApiService {
         code: 'ERROR_ACCEPTING_APTO_AGREEMENTS',
         metadata: {
           error: axiosError.toJSON(),
-          errorResponse: axiosError.response,
+          errorResponse: axiosError.response.data,
         },
       });
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  public async getCardBalance(
+    userAccessToken: string,
+    cardId: string,
+  ): Promise<CardBalanceResponse> {
+    try {
+      const response: AxiosResponse<CardBalanceResponse> = await axios.get(
+        this.constructAptoUrl(`/v1/user/accounts/${cardId}/balance`),
+        {
+          headers: {
+            ...this.getAptoHeaders(),
+            Authorization: `Bearer ${userAccessToken}`,
+          },
+        },
+      );
+
+      return response.data;
+    } catch (error) {
+      const axiosError: AxiosError = error;
+
+      Logger.error({
+        code: 'ERROR_GETTING_CARD_BALANCE',
+        metadata: {
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response.data,
+        },
+      });
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  public async loadFunds(
+    cardId: string,
+    amount: number,
+  ): Promise<void> {
+    try {
+      await axios.post(
+        this.constructAptoUrl(`/cards/${cardId}/load_funds`),
+        {
+          amount: {
+            currency: 'USD',
+            amount,
+          },
+          source_balance_id: this.configService.get(ConfigVariables.APTO_FUNDING_BALANCE_ID),
+        },
+        {
+          headers: {
+            ...this.getAptoBasicAuthHeaders(),
+          },
+        },
+      );
+    } catch (error) {
+      const axiosError: AxiosError = error;
+
+      Logger.error({
+        code: 'ERROR_LOADING_FUNDS',
+        metadata: {
+          error: axiosError.toJSON(),
+          errorResponse: axiosError.response.data,
+        },
+      });
+
+      throw new InternalServerErrorException();
     }
   }
 }
