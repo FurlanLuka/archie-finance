@@ -1,11 +1,17 @@
 import styled from 'styled-components'
 
+import bgOnboarding from '../../../assets/images/bg-onboarding.png'
+
 import breakpoints from '../../../constants/breakpoints'
 
 export const Page = styled.div`
   display: flex;
-  background-color: ${({ theme }) => theme.backgroundPrimary};
   color: ${({ theme }) => theme.textPrimary};
+  background-color: ${({ theme }) => theme.backgroundSecondary};
+  background-image: url(${bgOnboarding});
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: bottom;
   width: 100%;
   min-height: calc(100vh - 78px); // Header's height, TBD
 
