@@ -87,5 +87,9 @@
     "text_1": "Check your email for a verification link from Archie. If you did not receive a verification email, click",
     "btn": "here",
     "text_2": "to resend it."
+  },
+  "dashboard": {
+    "title": "Hi, {{name}}",
+    "subtitle": "Member since {{date}}"
   }
 }

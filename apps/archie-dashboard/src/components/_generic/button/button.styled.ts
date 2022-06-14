@@ -11,6 +11,7 @@ interface ButtonProps {
   isLoading?: boolean;
   isDisabled?: boolean;
   maxWidth?: string;
+  small?: boolean;
 }
 
 const Button = styled.button<ButtonProps>`
@@ -19,11 +20,11 @@ const Button = styled.button<ButtonProps>`
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-size: 1rem;
+  font-size: ${({ small }) => small ? '0.75rem' : '1rem'};
   line-height: 1;
   font-weight: 700;
-  padding: 1rem 2rem;
-  border-radius: 0.5rem;
+  padding: ${({ small }) => small ? '0.25rem 1rem' : '1rem 2rem'};
+  border-radius: ${({ small }) => small ? '0.25rem' : '0.5rem'};
   border: 1px solid;
   max-height: 3rem;
   width: ${({ maxWidth }) => maxWidth ?? '100%'};
@@ -76,6 +77,6 @@ export const ButtonOutline = styled(Button)`
 
 export const ButtonGhost = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
-  color: ${({ theme }) => theme.textLight};
-  border-color: ${({ theme }) => theme.textLight};
+  color: ${({ theme }) => theme.buttonGhost};
+  border-color: ${({ theme }) => theme.buttonGhost};
 `

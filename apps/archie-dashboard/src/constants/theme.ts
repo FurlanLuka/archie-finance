@@ -9,9 +9,9 @@ export const colors: { [color: string]: string } = {
   teal: "#70d1df",
   teal_800: "#24464b",
   neutralgray: "#9fa3a4",
+  neutralgray_300: "#bdc0c1",
   neutralgray_200: "#dbdcdd",
   neutralgray_100: "#f9f9f9",
-  lightgray: "#bdc0c1",
   yellow_500: "#ffea00",
   red_600: "#d50000",
   transparent: "transparent",
@@ -36,9 +36,10 @@ export const theme: { [key: string]: string } = {
   // button
   buttonPrimary: colors.coral,
   buttonOutline: colors.transparent,
+  buttonGhost: colors.neutralgray_300,
   // input
   inputText: colors.black,
-  inputTextPlaceholder: colors.lightgray,
+  inputTextPlaceholder: colors.neutralgray_300,
   inputRange: colors.coral_200,
   inputRangeFilled: colors.coral,
   // border

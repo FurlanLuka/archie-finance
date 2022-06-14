@@ -5,7 +5,9 @@ export const IndexStyled = styled.div`
   width: 100%;
 
   .content {
-    padding: 3rem 12%;
+    width: 100%;
+    max-width: 930px;
+    margin: 3rem auto;
   }
 
   .title {
@@ -17,13 +19,14 @@ export const IndexStyled = styled.div`
     letter-spacing: 0.02em;
   }
 
-  .cards {
+  .section-cards {
     display: flex;
     gap: 2rem;
+    margin-bottom: 2rem;
   }
 
-  .card {
-    max-width: 50%;
+  .section-table {
+    padding-top: 2rem;
   }
 `
 
