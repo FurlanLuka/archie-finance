@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { History } from 'history';
 import { useAuthenticatedSession } from '@archie/session/hooks/use-session';
 import { ParagraphXXS } from '../../../../components/_generic/typography/typography.styled';
 import { dashboardNavItems } from '../../../../constants/dashboard-nav-items';

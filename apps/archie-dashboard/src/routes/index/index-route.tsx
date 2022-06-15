@@ -1,6 +1,5 @@
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTable } from 'react-table';
 import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-onboarding';
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { GetOnboardingResponse } from '@archie/api-consumer/onboarding/api/get-onboarding';
@@ -13,31 +12,38 @@ import {
   ParagraphXS,
   ParagraphXXS,
 } from '../../components/_generic/typography/typography.styled';
+import { ButtonOutline, ButtonGhost } from '../../components/_generic/button/button.styled';
 import { Card } from '../../components/_generic/card/card.styled';
 import Loading from '../../components/_generic/loading/loading';
 import { Page } from '../../components/_generic/layout/layout.styled';
 import Header from '../../components/_generic/header/header';
 import { Navigation } from './components/navigation/navigation';
+import { Table } from './components/table/table';
 import { IndexStyled } from './index-route.styled';
-import { ButtonOutline, ButtonGhost } from 'apps/archie-dashboard/src/components/_generic/button/button.styled';
 
 export const DashboardRoute: FC = () => {
   const { t } = useTranslation();
 
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
 
-  if (queryResponse.state === RequestState.LOADING) {
-    return <Loading />;
-  }
-
-  // if (queryResponse.state === RequestState.SUCCESS) {
-  //   if (!queryResponse.data.completed) {
-  //     return <Navigate to="/onboarding" />;
-  //   }
-  // }
-
-  const name = 'Lando';
-  const date = 'February, 2022';
+  const columns = useMemo(
+    () => [
+      {
+        Header: 'Header',
+        columns: [
+          {
+            Header: 'Column 1',
+            accessor: 'col1',
+          },
+          {
+            Header: 'Column 2',
+            accessor: 'col2',
+          },
+        ],
+      },
+    ],
+    [],
+  );
 
   const data = useMemo(
     () => [
@@ -57,21 +63,18 @@ export const DashboardRoute: FC = () => {
     [],
   );
 
-  const columns = useMemo(
-    () => [
-      {
-        Header: 'Column 1',
-        accessor: 'col1', // accessor is the "key" in the data
-      },
-      {
-        Header: 'Column 2',
-        accessor: 'col2',
-      },
-    ],
-    [],
-  );
+  if (queryResponse.state === RequestState.LOADING) {
+    return <Loading />;
+  }
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
+  // if (queryResponse.state === RequestState.SUCCESS) {
+  //   if (!queryResponse.data.completed) {
+  //     return <Navigate to="/onboarding" />;
+  //   }
+  // }
+
+  const name = 'Lando';
+  const date = 'February, 2022';
 
   return (
     <>
@@ -86,11 +89,12 @@ export const DashboardRoute: FC = () => {
             <ParagraphXXS color={theme.textSecondary} className="subtitle">
               {t('dashboard.subtitle', { date })}
             </ParagraphXXS>
+
             <div className="section-cards">
               <Card>
                 <img src={imgCard} />
               </Card>
-              <Card padding="1.5rem">
+              <Card justifyContent="space-between" padding="1.5rem">
                 <div className="card-group">
                   <div className="card-group p-bottom">
                     <ParagraphXS weight={700} className="card-title">
@@ -120,6 +124,7 @@ export const DashboardRoute: FC = () => {
                 </div>
               </Card>
             </div>
+
             <div className="section-cards">
               <Card padding="1.5rem">
                 <div className="card-group">
@@ -168,57 +173,15 @@ export const DashboardRoute: FC = () => {
             </div>
 
             <div className="section-table">
-              <ParagraphM weight={800} className="title">
-                Recent Transactions
-              </ParagraphM>
-              <ButtonOutline maxWidth="auto" small>
-                View More
-              </ButtonOutline>
-
-              <table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
-                <thead>
-                  {headerGroups.map((headerGroup) => (
-                    <tr {...headerGroup.getHeaderGroupProps()}>
-                      {headerGroup.headers.map((column) => (
-                        <th
-                          {...column.getHeaderProps()}
-                          style={{
-                            borderBottom: 'solid 3px red',
-                            background: 'aliceblue',
-                            color: 'black',
-                            fontWeight: 'bold',
-                          }}
-                        >
-                          {column.render('Header')}
-                        </th>
-                      ))}
-                    </tr>
-                  ))}
-                </thead>
-                <tbody {...getTableBodyProps()}>
-                  {rows.map((row) => {
-                    prepareRow(row);
-                    return (
-                      <tr {...row.getRowProps()}>
-                        {row.cells.map((cell) => {
-                          return (
-                            <td
-                              {...cell.getCellProps()}
-                              style={{
-                                padding: '10px',
-                                border: 'solid 1px gray',
-                                background: 'papayawhip',
-                              }}
-                            >
-                              {cell.render('Cell')}
-                            </td>
-                          );
-                        })}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+              <Card column alignItems="flex-start" padding="1.5rem">
+                <ParagraphM weight={800} className="table-title">
+                  Recent Transactions
+                </ParagraphM>
+                <ButtonOutline maxWidth="auto" small className="table-title">
+                  View More
+                </ButtonOutline>
+                <Table columns={columns} data={data} />
+              </Card>
             </div>
           </div>
         </IndexStyled>

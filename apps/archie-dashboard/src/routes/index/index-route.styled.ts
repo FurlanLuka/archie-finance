@@ -25,8 +25,12 @@ export const IndexStyled = styled.div`
     margin-bottom: 2rem;
   }
 
-  .section-table {
-    padding-top: 2rem;
+  .table-title {
+    margin-bottom: 1.5rem;
+  }
+
+  .table-btn {
+    margin-bottom: 2rem;
   }
 `
 
