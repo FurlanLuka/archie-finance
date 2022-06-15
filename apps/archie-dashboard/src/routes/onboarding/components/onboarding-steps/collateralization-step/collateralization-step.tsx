@@ -11,7 +11,7 @@ import { CollateralAsset } from '../../../../../constants/collateral-assets';
 import { theme } from '../../../../../constants/theme';
 import { Step } from '../../../../../constants/onboarding-steps';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
-import { SubtitleS, ParagraphS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
+import { SubtitleM, ParagraphS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
 import { Copy } from '../../../../../components/_generic/icons/copy';
 import { StepsIndicator } from '../../steps-indicator/steps-indicator';
 import { EmailVerification } from '../../email-verification/email-verification';
@@ -91,7 +91,7 @@ export const CollateralizationStep: FC = () => {
       <StepsIndicator currentStep={Step.COLLATERALIZE} />
       <EmailVerification />
       <CollateralizationStepStyled>
-        <SubtitleS className="title">{t('collateralization_step.title')}</SubtitleS>
+        <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
         <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
 
         <div className="inputs">
@@ -108,7 +108,7 @@ export const CollateralizationStep: FC = () => {
         <div className="result">
           <div className="result-item">
             <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
-            <SubtitleS weight={400} id="collateral">
+            <SubtitleM weight={400} id="collateral">
               <span
                 className="clickable"
                 data-tip="Click to copy"
@@ -117,7 +117,7 @@ export const CollateralizationStep: FC = () => {
                 {getFormattedCollateral()}
               </span>
               <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
-            </SubtitleS>
+            </SubtitleM>
             <ReactTooltip
               textColor={theme.tooltipText}
               backgroundColor={theme.tooltipBackgrond}
@@ -127,17 +127,17 @@ export const CollateralizationStep: FC = () => {
           </div>
           <div className="result-item">
             <ParagraphXS weight={700}>{t('collateralization_step.result.second')}</ParagraphXS>
-            <SubtitleS weight={400}>
+            <SubtitleM weight={400}>
               {selectedCollateralAsset?.loan_to_value}%
               <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
-            </SubtitleS>
+            </SubtitleM>
           </div>
           <div className="result-item">
             <ParagraphXS weight={700}>{t('collateralization_step.result.third')}</ParagraphXS>
-            <SubtitleS weight={400}>
+            <SubtitleM weight={400}>
               {selectedCollateralAsset?.interest_rate}%
               <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
-            </SubtitleS>
+            </SubtitleM>
           </div>
         </div>
 

@@ -19,14 +19,14 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
         <thead>
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-              ))}
+              {headerGroup.headers.map((column) =>
+                column.id.includes('hidden') ? null : <th {...column.getHeaderProps()}>{column.render('Header')}</th>,
+              )}
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row, i) => {
+          {rows.map((row) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>

@@ -9,7 +9,7 @@ import { useGetCollateralTotalValue } from '@archie/api-consumer/collateral/hook
 import { TotalCollateralValue } from '@archie/api-consumer/collateral/api/get-collateral-total-value';
 import { Step } from '../../../../../constants/onboarding-steps';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
-import { SubtitleS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
+import { SubtitleM, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
 import { StepsIndicator } from '../../steps-indicator/steps-indicator';
 import { EmailVerification } from '../../email-verification/email-verification';
 import imgCardReady from '../../../../../assets/images/img-card-ready.png';
@@ -88,7 +88,7 @@ export const CardStep: FC = () => {
       <StepsIndicator currentStep={Step.CARD} />
       <EmailVerification />
       <CardStepStyled>
-        <SubtitleS className="title">{getTitle()}</SubtitleS>
+        <SubtitleM className="title">{getTitle()}</SubtitleM>
         <ParagraphXS className="subtitle">
           {stage === Stage.COMPLETE && (
             <Trans

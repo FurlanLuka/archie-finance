@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-onboarding';
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
@@ -18,50 +18,20 @@ import Loading from '../../components/_generic/loading/loading';
 import { Page } from '../../components/_generic/layout/layout.styled';
 import Header from '../../components/_generic/header/header';
 import { Navigation } from './components/navigation/navigation';
-import { Table } from './components/table/table';
+import { Table } from '../../components/_generic/table/table';
 import { IndexStyled } from './index-route.styled';
+import { tableColumns } from './fixtures/table-fixture';
+import { tableData } from './constants/table-data';
 
 export const DashboardRoute: FC = () => {
   const { t } = useTranslation();
 
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
 
-  const columns = useMemo(
-    () => [
-      {
-        Header: 'Header',
-        columns: [
-          {
-            Header: 'Column 1',
-            accessor: 'col1',
-          },
-          {
-            Header: 'Column 2',
-            accessor: 'col2',
-          },
-        ],
-      },
-    ],
-    [],
-  );
+  const [revealCardData, setRevealCardData] = useState(false);
 
-  const data = useMemo(
-    () => [
-      {
-        col1: 'Hello',
-        col2: 'World',
-      },
-      {
-        col1: 'react-table',
-        col2: 'rocks',
-      },
-      {
-        col1: 'whatever',
-        col2: 'you want',
-      },
-    ],
-    [],
-  );
+  const columns = useMemo(() => tableColumns, []);
+  const data = useMemo(() => tableData, []);
 
   if (queryResponse.state === RequestState.LOADING) {
     return <Loading />;
@@ -83,16 +53,25 @@ export const DashboardRoute: FC = () => {
         <IndexStyled>
           <Navigation />
           <div className="content">
-            <ParagraphM weight={800} className="title">
-              {t('dashboard.title', { name })}
-            </ParagraphM>
-            <ParagraphXXS color={theme.textSecondary} className="subtitle">
+            <SubtitleS className="title">{t('dashboard.title', { name })}</SubtitleS>
+            <ParagraphXS color={theme.textSecondary} className="subtitle">
               {t('dashboard.subtitle', { date })}
-            </ParagraphXXS>
+            </ParagraphXS>
 
             <div className="section-cards">
-              <Card>
-                <img src={imgCard} />
+              <Card backgroundImage={imgCard} onClick={() => setRevealCardData(!revealCardData)}>
+                {revealCardData ? (
+                  <div className="card-data">
+                    <div>3443 6546 6457 8021</div>
+                    <div>EXP 09/12 CVV 675</div>
+                  </div>
+                ) : (
+                  <div className="card-data">
+                    <div>•••• •••• •••• 8021</div>
+                    <div>EXP ••/••CVV •••</div>
+                  </div>
+                )}
+                <div className="card-status">Active</div>
               </Card>
               <Card justifyContent="space-between" padding="1.5rem">
                 <div className="card-group">
@@ -114,9 +93,9 @@ export const DashboardRoute: FC = () => {
                     <SubtitleS weight={400} className="card-info border-default">
                       $4,000.00
                     </SubtitleS>
-                    <ParagraphXS color={theme.textSecondary} weight={500} className="card-text">
+                    <ParagraphXXS color={theme.textSecondary} weight={500} className="card-text">
                       Line of Credit: $5,000.00
-                    </ParagraphXS>
+                    </ParagraphXXS>
                   </div>
                 </div>
                 <div className="card-group">
@@ -173,11 +152,11 @@ export const DashboardRoute: FC = () => {
             </div>
 
             <div className="section-table">
-              <Card column alignItems="flex-start" padding="1.5rem">
+              <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
                 <ParagraphM weight={800} className="table-title">
                   Recent Transactions
                 </ParagraphM>
-                <ButtonOutline maxWidth="auto" small className="table-title">
+                <ButtonOutline maxWidth="auto" small className="table-btn">
                   View More
                 </ButtonOutline>
                 <Table columns={columns} data={data} />

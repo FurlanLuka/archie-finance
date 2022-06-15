@@ -7,7 +7,7 @@ import { templateFormatter, templateParser, parseDigit } from 'input-format';
 import ReactInput from 'input-format/react';
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
-import { SubtitleS, ParagraphXS, ParagraphS } from '../../../../../components/_generic/typography/typography.styled';
+import { SubtitleM, ParagraphXS, ParagraphS } from '../../../../../components/_generic/typography/typography.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { InputText } from '../../../../../components/_generic/input-text/input-text.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
@@ -188,7 +188,7 @@ export const KycStep: FC = () => {
 
   return (
     <KycStepStyled>
-      <SubtitleS className="title">{t('kyc_step.title')}</SubtitleS>
+      <SubtitleM className="title">{t('kyc_step.title')}</SubtitleM>
       <ParagraphXS className="subtitle">{t('kyc_step.subtitle')}</ParagraphXS>
       <Formik
         initialValues={{}}

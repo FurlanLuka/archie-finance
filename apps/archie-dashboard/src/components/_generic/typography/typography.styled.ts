@@ -37,7 +37,7 @@ export const Title = styled.h2<TypographyProps>`
   }
 `
 
-export const SubtitleM = styled.h3<TypographyProps>` 
+export const SubtitleL = styled.h3<TypographyProps>` 
   font-size: 3rem; //48
   line-height: 1.1;
   color: ${({ theme, color }) => color ?? theme.textPrimary};
@@ -48,7 +48,7 @@ export const SubtitleM = styled.h3<TypographyProps>`
   }
 `
 
-export const SubtitleS = styled.h4<TypographyProps>`  
+export const SubtitleM = styled.h4<TypographyProps>`  
   font-size: 2.5rem; //40
   line-height: 1.2;
   color: ${({ theme, color }) => color ?? theme.textPrimary};
@@ -56,6 +56,17 @@ export const SubtitleS = styled.h4<TypographyProps>`
 
   @media (max-width: ${breakpoints.screenMD}) {
     font-size: 2rem; //32
+  }
+`
+
+export const SubtitleS = styled.h4<TypographyProps>`  
+  font-size: 2rem; //32
+  line-height: 1.2;
+  color: ${({ theme, color }) => color ?? theme.textPrimary};
+  font-weight: ${({ weight }) => weight ?? 800};
+
+  @media (max-width: ${breakpoints.screenMD}) {
+    font-size: 1.5rem; //24
   }
 `
 

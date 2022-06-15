@@ -26,11 +26,25 @@ export const IndexStyled = styled.div`
   }
 
   .table-title {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
 
   .table-btn {
     margin-bottom: 2rem;
+  }
+
+  .card-data {
+    position: absolute;
+    top: 50%;
+    left: 1.5rem;
+    transform: translateY(-50%);
+  }
+
+  .card-status {
+    position: absolute;
+    bottom: 10%;
+    left: 0;
+    transform: translateY(-10%);
   }
 `
 

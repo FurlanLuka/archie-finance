@@ -6,9 +6,18 @@ export const colors: { [color: string]: string } = {
   coral_300: "#fcbfb8",
   coral_200: "#fbdcd9",
   alabaster: "#d8e2dc",
-  teal: "#70d1df",
   teal_800: "#24464b",
+  teal_700: "#40777f",
+  teal_600: "#5ca8b3",
+  teal_500: "#70d1df",
+  teal_400: '98e1ec',
+  teal_300: 'b9e9f0',
+  teal_200: "#d9f1f4",
+  green_600: '#00c853',
+  green_500: '#00e676',
+  green_400: '#69f0ae',
   neutralgray: "#9fa3a4",
+  neutralgray_500: '#818788',
   neutralgray_300: "#bdc0c1",
   neutralgray_200: "#dbdcdd",
   neutralgray_100: "#f9f9f9",
@@ -29,7 +38,7 @@ export const theme: { [key: string]: string } = {
   textPrimary: colors.black,
   textSecondary: colors.neutralgray,
   textLight: colors.white,
-  textPositive: colors.teal,
+  textPositive: colors.teal_500,
   textHighlight: colors.coral,
   textDisabled: colors.neutralgray_200,
   textDanger: colors.red_600,
@@ -51,4 +60,13 @@ export const theme: { [key: string]: string } = {
   tooltipText: colors.white,
   // loader
   loaderBackground: colors.teal_800,
+  // table
+  tableBorderOuther: colors.neutralgray_500,
+  tableBorderInner: colors.neutralgray_200,
+  // chars
+  loanToValueDefault: colors.teal_200,
+  loanToValueActive: colors.green_500,
+  // status
+  statusSettled: colors.green_500,
+  statusPending: colors.black,
 };

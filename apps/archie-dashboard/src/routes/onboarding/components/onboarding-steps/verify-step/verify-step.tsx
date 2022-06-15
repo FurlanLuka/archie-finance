@@ -4,7 +4,7 @@ import ReactCodeInput from 'react-verification-code-input';
 import { useCompleteAptoVerification } from '@archie/api-consumer/credit/hooks/use-complete-apto-verification';
 import { useStartAptoVerification } from '@archie/api-consumer/credit/hooks/use-start-apto-verification';
 import { MutationQueryResponse, RequestState } from '@archie/api-consumer/interface';
-import { SubtitleS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
+import { SubtitleM, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
 import { colors, theme } from '../../../../../constants/theme';
@@ -51,7 +51,7 @@ export const VerifyStep: FC = () => {
 
   return (
     <VerifyStepStyled>
-      <SubtitleS className="title">{t('verify_step.title')}</SubtitleS>
+      <SubtitleM className="title">{t('verify_step.title')}</SubtitleM>
       <ParagraphXS className="subtitle">{t('verify_step.subtitle')}</ParagraphXS>
       <ReactCodeInput onComplete={(values) => setCode(values)} className="code-input" />
       <ParagraphXS className="resend-text">{t('verify_step.resend_text')}</ParagraphXS>
