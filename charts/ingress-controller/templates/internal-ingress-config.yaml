@@ -4,9 +4,13 @@ metadata:
   namespace: default
   name: archie-development-internal-ingress
   annotations:
+    {{- if .Values.local }}
+    kubernetes.io/ingress.class: nginx
+    {{- else }}
     alb.ingress.kubernetes.io/group.name: archie-development
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internal
+    {{- end }}
 spec:
   rules:
     - http:

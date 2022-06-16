@@ -4,18 +4,7 @@ const exec = util.promisify(require('child_process').exec);
 const chalk = require('chalk');
 const clear = require('clear');
 
-program
-  .requiredOption(
-    '-e, --exclude <app>',
-    'app that should be excluded from the deployment',
-  )
-  .option('-d, --debug');
-
-program.parse();
-
-const { exclude, debug: debugEnabled } = program.opts();
-
-async function checkRequirements() {
+async function checkRequirements(debugEnabled) {
   try {
     await exec('minikube');
   } catch {
@@ -42,7 +31,7 @@ async function checkRequirements() {
   }
 }
 
-async function setupCluster() {
+async function setupCluster(debugEnabled) {
   try {
     console.log('Deleting old cluster...');
     await exec('minikube delete');
@@ -58,20 +47,7 @@ async function setupCluster() {
   }
 }
 
-async function connectDocker() {
-  try {
-    console.log('Setting up docker environment');
-    await exec('eval $(minikube docker-env)');
-    console.log('Docker environment setup ✅');
-  } catch (error) {
-    if (debugEnabled) {
-      console.error(error);
-    }
-    throw new Error('Issue while setting up docker, is your docker running?');
-  }
-}
-
-async function cleanup() {
+async function cleanup(debugEnabled) {
   try {
     console.log('Cleaning up...');
     await exec('eval $(minikube -u minikube docker-env)');
@@ -84,16 +60,16 @@ async function cleanup() {
   }
 }
 
-async function getMicroservices() {
+async function getMicroservices(debugEnabled) {
   try {
     const { stdout } = await exec('ls apps');
 
     const microservices = stdout
       .split(/\r?\n/)
-      .filter((service) => service.length > 0 && service !== exclude);
+      .filter((service) => service.length > 0);
 
     if (debugEnabled) {
-      console.log('Microservices to be deployed', microservices);
+      console.log('Microservices ', microservices);
     }
 
     return microservices;
@@ -105,31 +81,39 @@ async function getMicroservices() {
   }
 }
 
-async function buildMicroservices(microservices) {
+async function buildMicroservices(microservices, debugEnabled) {
   try {
     const buildCommands = [];
 
     for (let i = 0; i < microservices.length; i++) {
       const microservice = microservices[i];
 
-      console.log(`Building ${microservice}...`);
       buildCommands.push(
         `docker build -f ./apps/${microservice}/Dockerfile -t ${microservice} --build-arg LOCAL=true .`,
       );
-      console.log('Build successful ✅');
     }
 
     console.log(
-      `eval $(minikube docker-env) ${buildCommands
-        .map((command) => `&& ${command}`)
-        .join(' ')}`,
+      `Building ${
+        microservices.length === 1 ? 'microservice' : 'microservices'
+      }...(this might take a while)`,
     );
+
+    if (debugEnabled) {
+      console.log(
+        `eval $(minikube docker-env) ${buildCommands
+          .map((command) => `&& ${command}`)
+          .join(' ')}`,
+      );
+    }
 
     await exec(
       `eval $(minikube docker-env) ${buildCommands
         .map((command) => `&& ${command}`)
         .join(' ')}`,
     );
+
+    console.log('Build successful ✅');
   } catch (error) {
     if (debugEnabled) {
       console.error(error);
@@ -138,20 +122,101 @@ async function buildMicroservices(microservices) {
   }
 }
 
-(async () => {
-  clear();
-
-  console.log(chalk.inverse.bold('Starting local microservice deployment...'));
-
+async function deployMicroservices(microservices, debugEnabled) {
   try {
-    await checkRequirements();
-    await setupCluster();
-    // await connectDocker();
-    const microservices = await getMicroservices();
-    await buildMicroservices(microservices);
-  } catch (error) {
-    console.log(chalk.red.bold(error.message));
-  }
+    for (let i = 0; i < microservices.length; i++) {
+      const microservice = microservices[i];
 
-  await cleanup();
-})();
+      console.log(`Deploying ${microservice}...`);
+
+      await exec(
+        `helm upgrade --install ${microservice} charts/${microservice} --set tag=latest --set image=${microservice} --set local=true`,
+      );
+      console.log(`${microservice} deployed ✅`);
+    }
+  } catch (error) {
+    if (debugEnabled) {
+      console.error(error);
+    }
+    throw new Error('Error while deploying microservices');
+  }
+}
+
+async function deployIngressController(install = true, debugEnabled) {
+  try {
+    console.log('Enabling ingress controller...');
+    if (install) {
+      await exec('minikube addons enable ingress');
+      await sleep(30000);
+      console.log('Ingress controller enabled ✅');
+    }
+
+    console.log('Installing ingress controller');
+    await exec(
+      'helm upgrade --install ingress charts/ingress-controller --set local=true',
+    );
+  } catch (error) {
+    if (debugEnabled) {
+      console.error(error);
+    }
+    throw new Error('Error while deploying ingress controller');
+  }
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
+program
+  .command('install')
+  .alias('i')
+  .option('-d, --debug')
+  .action(async ({ debug }) => {
+    clear();
+
+    console.log(
+      chalk.inverse.bold('Starting local microservice deployment...'),
+    );
+
+    try {
+      await checkRequirements(debug);
+      await setupCluster(debug);
+      const microservices = await getMicroservices(debug);
+      await buildMicroservices(microservices, debug);
+      await deployMicroservices(microservices, debug);
+      await deployIngressController(debug);
+    } catch (error) {
+      console.log(chalk.red.bold(error.message));
+    }
+
+    await cleanup();
+  });
+
+program
+  .command('upgrade')
+  .alias('u')
+  .requiredOption('-s, --service <service>', 'service that should be upgraded')
+  .option('-d, --debug')
+  .action(async ({ service, debug }) => {
+    console.log(chalk.inverse.bold(`Starting ${service} upgrade...`));
+
+    if (service === 'ingress') {
+      await deployIngressController(false, debug);
+    } else {
+      const microservices = await getMicroservices();
+
+      if (!microservices.includes(service)) {
+        console.log(chalk.red.bold('Service does not exist. Aborting ❌'));
+
+        return;
+      }
+
+      await buildMicroservices([service], debug);
+      await deployMicroservices([service], debug);
+    }
+    console.log(chalk.inverse.bold('Upgrade completed ✅'));
+  });
+
+program.parse();

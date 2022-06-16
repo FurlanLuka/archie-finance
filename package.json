@@ -10,7 +10,8 @@
     "build:credit-api": "nx run credit-api:build",
     "build:user-api": "nx run user-api:build",
     "build:onboarding-api": "nx run onboarding-api:build",
-    "test": "nx test"
+    "test": "nx test",
+    "local-deploy": "node ./deploy-localhost.js"
   },
   "private": true,
   "dependencies": {
