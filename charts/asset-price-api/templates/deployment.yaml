@@ -4,14 +4,20 @@ metadata:
   name: archie-asset-price-api
   labels:
     app: archie-asset-price-api
+    {{- if not .Values.local }}
     tags.datadoghq.com/env: '{{ .Values.environment }}'
     tags.datadoghq.com/service: 'archie-asset-price-api'
     tags.datadoghq.com/version: '{{ .Values.tag }}'
+    {{- end }}
 spec:
   selector:
     matchLabels:
       app: archie-asset-price-api
+  {{- if not .Values.local }}
   replicas: 1
+  {{- else }}
+  replicas: 1
+  {{- end }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -21,14 +27,20 @@ spec:
     metadata:
       labels:
         app: archie-asset-price-api
+        {{- if not .Values.local }}
         tags.datadoghq.com/env: '{{ .Values.environment }}'
         tags.datadoghq.com/service: 'archie-asset-price-api'
         tags.datadoghq.com/version: '{{ .Values.tag }}'
+        {{- end }}
     spec:
       containers:
         - name: archie-asset-price-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
+          {{- if not .Values.local }}
           imagePullPolicy: Always
+          {{- else }}
+          imagePullPolicy: Never
+          {{- end }}
           ports:
             - containerPort: 80
           livenessProbe:
@@ -44,6 +56,7 @@ spec:
             limits:
               memory: '256Mi'
               cpu: '500m'
+          {{- if not .Values.local }}
           env:
             - name: DD_AGENT_HOST
               valueFrom:
@@ -99,6 +112,7 @@ spec:
                 secretKeyRef:
                   name: coinapi-secrets
                   key: websocket-uri
+          {{- end }}
       imagePullSecrets:
         - name: regcred
 ---
