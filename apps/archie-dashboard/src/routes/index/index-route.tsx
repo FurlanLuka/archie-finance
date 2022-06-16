@@ -10,6 +10,7 @@ import { theme } from '../../constants/ui/theme';
 import {
   SubtitleS,
   ParagraphM,
+  ParagraphS,
   ParagraphXS,
   ParagraphXXS,
 } from '../../components/_generic/typography/typography.styled';
@@ -19,6 +20,7 @@ import Loading from '../../components/_generic/loading/loading';
 import { Page } from '../../components/_generic/layout/layout.styled';
 import Header from '../../components/_generic/header/header';
 import { Navigation } from './components/navigation/navigation';
+import { RevealCardModal } from './components/reveal-card-modal/reveal-card-modal';
 import { Table } from '../../components/_generic/table/table';
 import { IndexStyled } from './index-route.styled';
 import { tableColumns } from './fixtures/table-fixture';
@@ -29,6 +31,7 @@ export const DashboardRoute: FC = () => {
 
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
 
+  const [revealCardModalOpen, setRevealCardModalOpen] = useState(false);
   const [revealCardData, setRevealCardData] = useState(false);
 
   const columns = useMemo(() => tableColumns, []);
@@ -60,20 +63,35 @@ export const DashboardRoute: FC = () => {
             </ParagraphXS>
 
             <div className="section-cards">
-              <Card backgroundImage={imgCard} onClick={() => setRevealCardData(!revealCardData)}>
-                {revealCardData ? (
-                  <div className="card-data">
-                    <div>3443 6546 6457 8021</div>
-                    <div>EXP 09/12 CVV 675</div>
+              <Card
+                backgroundImage={imgCard}
+                className="clickable"
+                onClick={() => (revealCardData ? setRevealCardModalOpen(false) : setRevealCardModalOpen(true))}
+              >
+                <div className="card-data">
+                  <ParagraphS weight={500}>{revealCardData ? '3443 6546 6457 8021' : '•••• •••• •••• 8021'}</ParagraphS>
+                  <div className="card-data-group">
+                    <ParagraphS weight={500}>
+                      <span>EXP</span>
+                      {revealCardData ? '09/12' : '••/••'}
+                    </ParagraphS>
+                    <ParagraphS weight={500}>
+                      <span>CVV</span>
+                      {revealCardData ? '675' : '•••'}
+                    </ParagraphS>
                   </div>
-                ) : (
-                  <div className="card-data">
-                    <div>•••• •••• •••• 8021</div>
-                    <div>EXP ••/••CVV •••</div>
-                  </div>
-                )}
-                <div className="card-status">Active</div>
+                </div>
+                <div className="card-status">
+                  <ParagraphXXS weight={800} color={theme.textLight}>
+                    Active
+                  </ParagraphXXS>
+                </div>
               </Card>
+              <RevealCardModal
+                isOpen={revealCardModalOpen}
+                close={() => setRevealCardModalOpen(false)}
+                onConfirm={() => setRevealCardData(true)}
+              />
               <Card justifyContent="space-between" padding="1.5rem">
                 <div className="card-group">
                   <div className="card-group p-bottom">

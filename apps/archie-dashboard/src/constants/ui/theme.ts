@@ -34,6 +34,7 @@ export const theme: { [key: string]: string } = {
   backgroundSecondary: colors.neutralgray_100,
   backgroundDisabled: colors.neutralgray_200,
   backgroundAlert: colors.yellow_500,
+  backgroundSuccess: colors.green_500,
   // text
   textPrimary: colors.black,
   textSecondary: colors.neutralgray,

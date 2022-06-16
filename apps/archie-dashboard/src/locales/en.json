@@ -1,5 +1,8 @@
 {
   "btn_next": "Next",
+  "btn_ok": "Ok",
+  "btn_yes": "Yes",
+  "btn_cancel": "Cancel",
   "steps_indicator": {
     "first": "Sign up",
     "second": "Collateralize",
@@ -90,6 +93,7 @@
   },
   "dashboard": {
     "title": "Hi, {{name}}",
-    "subtitle": "Member since {{date}}"
+    "subtitle": "Member since {{date}}",
+    "reveal_card_modal": "Show card details?"
   }
 }

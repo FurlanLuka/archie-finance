@@ -15,7 +15,7 @@ export const dashboardNavItems: DashboardNavItem[] = [
   {
     icon: <Wallet />,
     name: 'Wallet & Collateral',
-    path: '/wallet-and-collateral',
+    path: '/',
   },
   {
     icon: <BitcoinOutline />,

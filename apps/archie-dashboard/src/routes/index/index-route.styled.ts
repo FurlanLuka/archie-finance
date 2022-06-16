@@ -37,16 +37,36 @@ export const IndexStyled = styled.div`
 
   .card-data {
     position: absolute;
-    top: 50%;
+    top: 45%;
     left: 1.5rem;
-    transform: translateY(-50%);
+    transform: translateY(-45%);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    letter-spacing: 0.15em;
+  }
+
+  .card-data-group {
+    display: flex;
+    gap: 1.5rem;
+
+    span {
+      font-size: 0.75rem;
+      margin-right: 0.25rem;
+    }
   }
 
   .card-status {
     position: absolute;
-    bottom: 10%;
+    bottom: 1.25rem;
     left: 0;
     transform: translateY(-10%);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    background-color: ${({ theme }) => theme.backgroundSuccess};
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    padding: 0.5rem 1.5rem;
   }
 `
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { HEADER_HEIGHT, HEADER_HEIGHT_MOBILE } from '../../../../constants/ui/elements'
+import { HEADER_HEIGHT } from '../../../../constants/ui/elements'
 import breakpoints from '../../../../constants/ui/breakpoints'
 
 export const NavigationStyled = styled.div`
@@ -15,8 +15,8 @@ export const NavigationStyled = styled.div`
   margin-top: ${HEADER_HEIGHT};
   z-index: 1;
 
-  @media (max-width: ${breakpoints.screenSM}) {
-    margin-top: ${HEADER_HEIGHT_MOBILE};
+  @media (max-width: ${breakpoints.screenMD}) {
+   display: none;
   }  
 
   .nav-item {
