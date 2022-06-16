@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { CollateralDeposit } from '../../../components/collateral-deposit/collateral-deposit';
-import { CollateralAsset, collateralAssets } from '../../../constants/collateral-assets';
+import { CollateralAsset, collateralAssets } from '../../../constants/data/collateral-assets';
 import { CollateralCurrency } from '../../../components/collateral-currency/collateral-currency';
 import { Caret } from '../../../components/_generic/icons/caret';
 import { ParagraphXS } from '../typography/typography.styled';

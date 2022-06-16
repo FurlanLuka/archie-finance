@@ -1,10 +1,10 @@
 import { FC } from 'react';
 
-import { colors } from '../../../constants/theme';
+import { theme } from '../../../constants/ui/theme';
 
 import { iconProps } from './icons.interface';
 
-export const IndicatorDone: FC<iconProps> = ({ fill = colors.teal, className }) => (
+export const IndicatorDone: FC<iconProps> = ({ fill = theme.textPositive, className }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <rect x="0.5" y="0.5" width="23" height="23" rx="11.5" fill={fill} stroke={fill} />
     <path

@@ -7,7 +7,7 @@ import { MutationQueryResponse, RequestState } from '@archie/api-consumer/interf
 import { SubtitleM, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
-import { colors, theme } from '../../../../../constants/theme';
+import { theme } from '../../../../../constants/ui/theme';
 import { VerifyStepStyled } from './verify-step.styled';
 
 export const VerifyStep: FC = () => {
@@ -68,7 +68,7 @@ export const VerifyStep: FC = () => {
         isLoading={useCompleteAptoVerificationQuery.state === RequestState.LOADING}
       >
         {t('btn_next')}
-        <ArrowRight fill={colors.white} />
+        <ArrowRight fill={theme.textLight} />
       </ButtonPrimary>
     </VerifyStepStyled>
   );

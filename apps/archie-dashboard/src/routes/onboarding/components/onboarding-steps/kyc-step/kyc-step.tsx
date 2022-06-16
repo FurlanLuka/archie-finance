@@ -11,7 +11,7 @@ import { SubtitleM, ParagraphXS, ParagraphS } from '../../../../../components/_g
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { InputText } from '../../../../../components/_generic/input-text/input-text.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
-import { colors, theme } from '../../../../../constants/theme';
+import { theme } from '../../../../../constants/ui/theme';
 import { KycStepStyled } from './kyc-step.styled';
 
 interface GooglePlace {
@@ -296,7 +296,7 @@ export const KycStep: FC = () => {
           <hr className="divider" />
           <ButtonPrimary type="submit" isLoading={mutationRequest.state === RequestState.LOADING}>
             {t('btn_next')}
-            <ArrowRight fill={colors.white} />
+            <ArrowRight fill={theme.textLight} />
           </ButtonPrimary>
         </Form>
       </Formik>

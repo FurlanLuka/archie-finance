@@ -1,4 +1,4 @@
-export const colors: { [color: string]: string } = {
+const colors: { [color: string]: string } = {
   black: "#081517",
   white: "#fff",
   coral: "#ff8577",

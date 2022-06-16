@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { collateralAssets, CollateralAsset } from '../../constants/collateral-assets';
+import { collateralAssets, CollateralAsset } from '../../constants/data/collateral-assets';
 import { CollateralCurrency } from '../collateral-currency/collateral-currency';
 import { CollateralDepositStyled } from './collateral-deposit.styled';
 

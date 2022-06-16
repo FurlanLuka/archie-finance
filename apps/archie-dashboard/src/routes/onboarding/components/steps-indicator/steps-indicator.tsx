@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Step } from '../../../../constants/onboarding-steps';
-import { theme } from '../../../../constants/theme';
+import { theme } from '../../../../constants/ui/theme';
 import { IndicatorDone } from '../../../../components/_generic/icons/indicator-done';
 import { IndicatorActive } from '../../../../components/_generic/icons/indicator-active';
 import { ArrowIndicatorRight } from '../../../../components/_generic/icons/arrow-indicator-right';

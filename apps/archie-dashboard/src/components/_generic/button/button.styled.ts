@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components'
 
-import breakpoints from '../../../constants/breakpoints'
+import breakpoints from '../../../constants/ui/breakpoints'
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }

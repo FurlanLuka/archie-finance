@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components'
 
-import breakpoints from '../../../../../constants/breakpoints';
+import breakpoints from '../../../../../constants/ui/breakpoints';
 
 const load = keyframes`
   0% {

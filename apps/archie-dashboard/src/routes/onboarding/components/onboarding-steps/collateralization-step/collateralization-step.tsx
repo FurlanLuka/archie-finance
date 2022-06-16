@@ -7,8 +7,8 @@ import { useGetAssetPrice } from '@archie/api-consumer/asset_price/hooks/use-get
 import { AssetPrice } from '@archie/api-consumer/asset_price/api/get-asset-price';
 import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
 import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
-import { CollateralAsset } from '../../../../../constants/collateral-assets';
-import { theme } from '../../../../../constants/theme';
+import { CollateralAsset } from '../../../../../constants/data/collateral-assets';
+import { theme } from '../../../../../constants/ui/theme';
 import { Step } from '../../../../../constants/onboarding-steps';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
 import { SubtitleM, ParagraphS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';

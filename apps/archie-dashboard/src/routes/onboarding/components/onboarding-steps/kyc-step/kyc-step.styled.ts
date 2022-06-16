@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import breakpoints from '../../../../../constants/breakpoints';
+import breakpoints from '../../../../../constants/ui/breakpoints';
 
 export const KycStepStyled = styled.div`
   display: flex;

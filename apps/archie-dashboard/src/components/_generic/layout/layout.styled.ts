@@ -1,8 +1,7 @@
 import styled from 'styled-components'
-
 import bgOnboarding from '../../../assets/images/bg-onboarding.png'
-
-import breakpoints from '../../../constants/breakpoints'
+import { HEADER_HEIGHT, HEADER_HEIGHT_MOBILE } from '../../../constants/ui/elements'
+import breakpoints from '../../../constants/ui/breakpoints'
 
 export const Page = styled.div`
   display: flex;
@@ -13,10 +12,12 @@ export const Page = styled.div`
   background-size: 100%;
   background-position: bottom;
   width: 100%;
-  min-height: calc(100vh - 78px); // Header's height, TBD
+  min-height: calc(100vh - ${HEADER_HEIGHT});
+  padding-top: ${HEADER_HEIGHT};
 
   @media (max-width: ${breakpoints.screenSM}) {
-    min-height: calc(100vh - 54px); // Header's height, TBD
+    min-height: calc(100vh - ${HEADER_HEIGHT_MOBILE});
+    padding-top: ${HEADER_HEIGHT_MOBILE};
   }
 `
 

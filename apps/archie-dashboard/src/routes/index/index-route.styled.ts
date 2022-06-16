@@ -1,13 +1,15 @@
 import styled from 'styled-components';
+import { NAV_WIDTH } from '../../constants/ui/elements'
 
 export const IndexStyled = styled.div`
   display: flex;
+  justify-content: center;
   width: 100%;
 
   .content {
     width: 100%;
     max-width: 930px;
-    margin: 3rem auto;
+    margin: 3rem 0 3rem ${NAV_WIDTH};
   }
 
   .title {
