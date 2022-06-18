@@ -1,11 +1,11 @@
 import { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
+import { ResponsivePie } from '@nivo/pie';
 import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-onboarding';
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { GetOnboardingResponse } from '@archie/api-consumer/onboarding/api/get-onboarding';
 import imgCard from '../../assets/images/card-placeholder.png';
-import imgCharSample from '../../assets/images/char-sample.png';
 import { theme } from '../../constants/ui/theme';
 import {
   SubtitleS,
@@ -19,9 +19,10 @@ import { Card } from '../../components/_generic/card/card.styled';
 import Loading from '../../components/_generic/loading/loading';
 import { Page } from '../../components/_generic/layout/layout.styled';
 import Header from '../../components/_generic/header/header';
+import { Table } from '../../components/_generic/table/table';
 import { Navigation } from './components/navigation/navigation';
 import { RevealCardModal } from './components/reveal-card-modal/reveal-card-modal';
-import { Table } from '../../components/_generic/table/table';
+import { LoanToValue } from './components/chars/loan-to-value/loan-to-value';
 import { IndexStyled } from './index-route.styled';
 import { tableColumns } from './fixtures/table-fixture';
 import { tableData } from './constants/table-data';
@@ -118,7 +119,7 @@ export const DashboardRoute: FC = () => {
                   </div>
                 </div>
                 <div className="card-group">
-                  <img src={imgCharSample} width="216" />
+                  <LoanToValue />
                 </div>
               </Card>
             </div>
