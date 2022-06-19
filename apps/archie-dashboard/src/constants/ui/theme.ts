@@ -23,6 +23,8 @@ const colors: { [color: string]: string } = {
   neutralgray_100: "#f9f9f9",
   yellow_500: "#ffea00",
   red_600: "#d50000",
+  red_500: "#ff1744",
+  red_400: "ff8a80",
   transparent: "transparent",
 };
 
@@ -34,6 +36,7 @@ export const theme: { [key: string]: string } = {
   backgroundSecondary: colors.neutralgray_100,
   backgroundDisabled: colors.neutralgray_200,
   backgroundAlert: colors.yellow_500,
+  backgroundNegative: colors.red_500,
   backgroundSuccess: colors.green_500,
   // text
   textPrimary: colors.black,
@@ -47,6 +50,7 @@ export const theme: { [key: string]: string } = {
   buttonPrimary: colors.coral,
   buttonOutline: colors.transparent,
   buttonGhost: colors.neutralgray_300,
+  buttonLight: colors.white,
   // input
   inputText: colors.black,
   inputTextPlaceholder: colors.neutralgray_300,

@@ -12,6 +12,7 @@ interface ButtonProps {
   isDisabled?: boolean;
   maxWidth?: string;
   small?: boolean;
+  color?: string;
 }
 
 const Button = styled.button<ButtonProps>`
@@ -79,4 +80,10 @@ export const ButtonGhost = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
   color: ${({ theme }) => theme.buttonGhost};
   border-color: ${({ theme }) => theme.buttonGhost};
+`
+
+export const ButtonLight = styled(Button)`
+  background-color: ${({ theme }) => theme.buttonLight};
+  color: ${({ theme, color }) => color ?? theme.textDanger};
+  border-color: ${({ theme }) => theme.buttonLight};
 `
