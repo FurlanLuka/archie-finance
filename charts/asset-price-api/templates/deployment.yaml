@@ -31,6 +31,8 @@ spec:
         tags.datadoghq.com/env: '{{ .Values.environment }}'
         tags.datadoghq.com/service: 'archie-asset-price-api'
         tags.datadoghq.com/version: '{{ .Values.tag }}'
+        {{- else }}
+        helm-revision: '{{ .Release.Revision }}'
         {{- end }}
     spec:
       containers:

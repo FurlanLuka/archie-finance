@@ -130,7 +130,7 @@ async function deployMicroservices(microservices, debugEnabled) {
       console.log(`Deploying ${microservice}...`);
 
       await exec(
-        `helm upgrade --install ${microservice} charts/${microservice} --set tag=latest --set image=${microservice} --set local=true`,
+        `helm upgrade --install ${microservice} charts/${microservice} --set tag=latest --set image=${microservice} --set local=true --force`,
       );
       console.log(`${microservice} deployed ✅`);
     }
