@@ -4,14 +4,20 @@ metadata:
   name: archie-user-api
   labels:
     app: archie-user-api
+    {{- if not .Values.local }}
     tags.datadoghq.com/env: '{{ .Values.environment }}'
     tags.datadoghq.com/service: 'archie-user-api'
     tags.datadoghq.com/version: '{{ .Values.tag }}'
+    {{- end }}
 spec:
   selector:
     matchLabels:
       app: archie-user-api
+  {{- if not .Values.local }}
   replicas: 1
+  {{- else }}
+  replicas: 1
+  {{- end }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -21,14 +27,22 @@ spec:
     metadata:
       labels:
         app: archie-user-api
+        {{- if not .Values.local }}
         tags.datadoghq.com/env: '{{ .Values.environment }}'
         tags.datadoghq.com/service: 'archie-user-api'
         tags.datadoghq.com/version: '{{ .Values.tag }}'
+        {{- else }}
+        helm-revision: '{{ .Release.Revision }}'
+        {{- end }}
     spec:
       containers:
         - name: archie-user-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
+          {{- if not .Values.local }}
           imagePullPolicy: Always
+          {{- else }}
+          imagePullPolicy: Never
+          {{- end }}
           ports:
             - containerPort: 80
           livenessProbe:
@@ -44,6 +58,7 @@ spec:
             limits:
               memory: '256Mi'
               cpu: '500m'
+          {{- if not .Values.local }}
           env:
             - name: DD_AGENT_HOST
               valueFrom:
@@ -148,6 +163,7 @@ spec:
                 secretKeyRef:
                   name: internal-api-secrets
                   key: internal-api-url
+          {{- end }}
       imagePullSecrets:
         - name: regcred
 ---

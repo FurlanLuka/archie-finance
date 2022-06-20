@@ -4,16 +4,24 @@ metadata:
   namespace: default
   name: test-ingress
   annotations:
+    {{- if .Values.local }}
+    kubernetes.io/ingress.class: nginx
+    {{- else }}
     alb.ingress.kubernetes.io/group.name: test
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:108827241267:certificate/25948e51-ba06-4736-9396-d591481e72f7
+    {{- end }}
 spec:
   rules:
+    {{- if .Values.local }}
+    - http:
+    {{- else }}
     - host: 'api.dev.archie.finance'
       http:
+    {{- end }}
         paths:
           ## Asset price api service
           - path: /v1/asset_price

@@ -12,7 +12,6 @@ import {
   AddressDataPoint,
   BirthdateDataPoint,
   CardApplicationResponse,
-  CardBalanceResponse,
   CompleteVerificationResponse,
   CreateUserResponse,
   DataType,
