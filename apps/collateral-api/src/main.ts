@@ -13,7 +13,8 @@ async function bootstrap() {
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.ms(),
-            winston.format.json(),          ),
+            winston.format.json(),
+          ),
         }),
       ],
     }),
