@@ -90,6 +90,8 @@ export class CollateralService {
       });
 
       throw new InternalServerErrorException();
+    } finally {
+      await queryRunner.release();
     }
   }
 
