@@ -10,14 +10,20 @@ import { AssetPriceModule } from './modules/asset_price/asset_price.module';
     ConfigModule.register({
       requiredEnvironmentVariables: [
         ConfigVariables.ASSET_LIST,
-        ConfigVariables.COINAPI_KEY,
-        ConfigVariables.COINAPI_WEBSOCKET_URI,
+        ConfigVariables.COINGECKO_API_URI,
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.TYPEORM_HOST,
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_PORT,
         ConfigVariables.TYPEORM_USERNAME,
       ],
+      parse: (configVariable: ConfigVariables, value) => {
+        if (configVariable === ConfigVariables.ASSET_LIST) {
+          return JSON.parse(value);
+        }
+
+        return value;
+      },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
