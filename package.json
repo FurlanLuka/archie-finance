@@ -42,7 +42,7 @@
     "typeorm": "^0.3.6",
     "uuid": "^8.3.2",
     "validator": "^13.7.0",
-    "winston": "^3.7.2",
+    "winston": "^3.7.2"
   },
   "devDependencies": {
     "@nestjs/schematics": "^8.0.0",
