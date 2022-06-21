@@ -104,16 +104,11 @@ spec:
                 secretKeyRef:
                   name: asset-secrets
                   key: enabled-assets
-            - name: COINAPI_KEY
+            - name: COINGECKO_API_URI
               valueFrom:
                 secretKeyRef:
-                  name: coinapi-secrets
-                  key: api-key
-            - name: COINAPI_WEBSOCKET_URI
-              valueFrom:
-                secretKeyRef:
-                  name: coinapi-secrets
-                  key: websocket-uri
+                  name: coingecko-secrets
+                  key: api-url
           {{- end }}
       imagePullSecrets:
         - name: regcred
