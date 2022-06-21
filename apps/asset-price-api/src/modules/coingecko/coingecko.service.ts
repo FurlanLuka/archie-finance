@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import axios from 'axios';
 import { ConfigService } from '@archie-microservices/config';
 import { CoinPriceResponse } from './coingecko.interfaces';
