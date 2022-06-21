@@ -45,15 +45,9 @@ export class AssetPriceService {
       ConfigVariables.ASSET_LIST,
     );
 
-    Logger.log(assetList);
-
     const assets: string[] = Object.keys(assetList).map(
       (asset: string) => assetList[asset].coingecko_id,
     );
-
-    Logger.log({
-      assets: assets,
-    });
 
     const prices: CoinPriceResponse =
       await this.coingeckoService.getCoinInformation(assets);

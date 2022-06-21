@@ -17,8 +17,6 @@ export class CoingeckoService {
       )}/v3/simple/price?ids=${coinIds.join(',')}&vs_currencies=usd`,
     );
 
-    Logger.log(response.data);
-
     return response.data;
   }
 

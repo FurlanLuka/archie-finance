@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Param } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import {
   GetAssetPriceResponse,
   GetAssetPricesResponse,
@@ -28,13 +28,11 @@ export class InternalAssetPriceController {
 
   @Get()
   async getAssetPrices(): Promise<GetAssetPricesResponse> {
-    Logger.log('tetete');
     return this.assetPriceService.getAssetPrices();
   }
 
   @Get('fetch')
   async fetchAssetPrices(): Promise<void> {
-    Logger.log('test');
     return this.assetPriceService.getCoinPrices();
   }
 
