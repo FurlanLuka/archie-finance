@@ -23,6 +23,7 @@ import { SendgridModule } from '@archie-microservices/sendgrid';
         ConfigVariables.SENDGRID_API_KEY,
         ConfigVariables.SENDGRID_MAILING_LIST_ID,
         ConfigVariables.SENDGRID_API_URL,
+        ConfigVariables.SENDGRID_VERIFY_EMAIL_TEMPLATAE_ID,
         ConfigVariables.ARCHIE_MARKETING_WEBSITE_URL,
       ],
       parse: (_configVariable, value) => value,

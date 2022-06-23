@@ -98,3 +98,11 @@ spec:
                 name: archie-credit-api-service
                 port:
                   number: 80
+          ## Referral system service
+          - path: /v1/waitlist
+            pathType: Prefix
+            backend:
+              service:
+                name: referral-system-api-service
+                port:
+                  number: 80

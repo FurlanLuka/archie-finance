@@ -14,6 +14,9 @@ import {
   GetWaitlistRecordResponse,
   ReferralRankQueryResult,
 } from './waitlist.interfaces';
+import { ConfigService } from '@archie-microservices/config';
+import { ConfigVariables } from '../../interfaces';
+import { v4 } from 'uuid';
 
 @Injectable({})
 export class WaitlistService {
@@ -23,6 +26,7 @@ export class WaitlistService {
     private cryptoService: CryptoService,
     private vaultService: VaultService,
     private sendgridService: SendgridService,
+    private configService: ConfigService,
   ) {}
 
   public async create(emailAddress: string, referrer?: string): Promise<void> {
@@ -42,18 +46,33 @@ export class WaitlistService {
       await this.vaultService.encryptStrings([emailAddress])
     )[0];
 
+    const id: string = v4();
+
+    await queryRunner.startTransaction();
+
     try {
-      await this.waitlist.insert({
+      await queryRunner.manager.insert(Waitlist, {
+        id,
         emailAddress: encryptedEmail,
         emailIdentifier,
         referrer,
       });
 
-
+      await this.sendgridService.sendEmail(
+        emailAddress,
+        this.configService.get(
+          ConfigVariables.SENDGRID_VERIFY_EMAIL_TEMPLATAE_ID,
+        ),
+        {
+          verifyAddress: `${this.configService.get(
+            ConfigVariables.ARCHIE_MARKETING_WEBSITE_URL,
+          )}/verify/${id}`,
+        },
+      );
 
       await queryRunner.commitTransaction();
     } catch {
-      await queryRunner.rollbackTransaction()
+      await queryRunner.rollbackTransaction();
     } finally {
       await queryRunner.release();
     }
@@ -89,13 +108,15 @@ export class WaitlistService {
       FROM (
         SELECT
           w.id AS id,
-          ROW_NUMBER() OVER (ORDER BY COUNT(DISTINCT w1.id) DESC, w."createdAt" ASC) AS rowNumber,
+          ROW_NUMBER() OVER (ORDER BY COUNT(DISTINCT w2.id) DESC, w."createdAt" ASC) AS rowNumber,
           COUNT(w1.id) AS referralCount,
           COUNT(w2.id) AS verifiedReferralCount
         FROM
           waitlist w
           LEFT JOIN waitlist w1 ON w1. "referrer" = w. "referralCode"
           LEFT JOIN waitlist w2 ON w2. "referrer" = w. "referralCode" AND w2."isEmailVerified" = true
+        WHERE
+          w."isEmailVerified" = TRUE
         GROUP BY
           w.id
       ) list WHERE list.id = '${waitlistEntityId}'
@@ -137,7 +158,20 @@ export class WaitlistService {
         waitlistEntity.emailAddress,
       ]);
 
+      const referralRankData: ReferralRankQueryResult =
+        await this.getReferralRankData(waitlistEntity.id, queryRunner);
+
       await this.sendgridService.addToWaitlist(emailAddress, waitlistEntity.id);
+      await this.sendgridService.sendEmail(
+        emailAddress,
+        this.configService.get(
+          ConfigVariables.SENDGRID_WELCOME_EMAIL_TEMPLATE_ID,
+        ),
+        {
+          rank: referralRankData.rownumber,
+          referralCode: waitlistEntity.referralCode,
+        },
+      );
 
       await queryRunner.commitTransaction();
     } catch {
@@ -151,6 +185,5 @@ export class WaitlistService {
     } finally {
       await queryRunner.release();
     }
-    
   }
 }

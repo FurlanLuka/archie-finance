@@ -3,7 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   Generated,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -11,7 +11,7 @@ import {
   name: 'waitlist',
 })
 export class Waitlist {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryColumn('uuid')
   id: string;
 
   @Column('varchar')

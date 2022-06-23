@@ -4,7 +4,7 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { SendgridConfig } from './sendgrid.interfaces';
 
 @Injectable()
@@ -47,7 +47,7 @@ export class SendgridService {
     emailData: unknown,
   ) {
     try {
-      await axios.put(
+      await axios.post(
         `${this.config.API_URL}/v3/mail/send`,
         {
           from: {
@@ -63,7 +63,7 @@ export class SendgridService {
               dynamic_template_data: emailData,
             },
           ],
-          template_id: [emailTemplateId],
+          template_id: emailTemplateId,
         },
         {
           headers: {
@@ -72,10 +72,12 @@ export class SendgridService {
         },
       );
     } catch (error) {
+      Logger.log('here')
       Logger.error({
         code: 'ERROR_SENDING_EMAIL',
         metadata: {
           id: emailTemplateId,
+          error: JSON.stringify((error as AxiosError))
         },
       });
 
