@@ -101,17 +101,12 @@ export const MobileNav = styled.div<HeaderProps>`
   transition: transform 0.3s linear;
   padding: 3.75rem 1rem;
   z-index: 1;
-
-  @media (max-width: ${breakpoints.screenSM}) {
-    align-items: flex-start;
-    text-align: left;
-    padding: 3.75rem 1rem 2.25rem;
-  }
-
+  
   .links {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    align-items: center;
+    gap: 3rem;
     padding-top: 6rem;
 
     @media (max-width: ${breakpoints.screenSM}) {
@@ -121,5 +116,10 @@ export const MobileNav = styled.div<HeaderProps>`
     p {
       font-size: 1rem;
     }
+  }
+
+  .link-item {
+    display: flex;
+    gap: 0.5rem;
   }
 `

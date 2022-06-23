@@ -50,7 +50,7 @@ const Header: FC<HeaderProps> = ({ maxWidth }) => {
         <div className="links">
           {dashboardNavItems.map((item, index) => (
             <div
-              className="nav-item"
+              className="link-item"
               key={index}
               onClick={() => (item.name === 'logout' ? logout : navigate(item.path))}
             >

@@ -2,6 +2,8 @@ import styled from 'styled-components';
 
 export const LoanToValueStyled = styled.div`
   position: relative;
+  height: 216px;
+  width: 216px;
 
   .centered-metrics {
     position: absolute;

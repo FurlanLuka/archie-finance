@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { NAV_WIDTH } from '../../constants/ui/elements'
+import breakpoints from '../../constants/ui/breakpoints'
 
 export const IndexStyled = styled.div`
   display: flex;
@@ -8,8 +9,17 @@ export const IndexStyled = styled.div`
 
   .content {
     width: 100%;
-    max-width: 930px;
-    margin: 3rem 0 3rem ${NAV_WIDTH};
+    max-width: calc(1000px + 4rem);
+    margin-left: ${NAV_WIDTH};
+    padding: 3rem 2rem;
+
+    @media (max-width: ${breakpoints.screenMD}) {
+      margin: 0;
+    }
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      padding: 1.5rem 1rem;
+    }
   }
 
   .title {
@@ -17,14 +27,23 @@ export const IndexStyled = styled.div`
   }
 
   .subtitle {
-    margin-bottom: 3rem;
     letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
   }
 
   .section-cards {
     display: flex;
     gap: 2rem;
     margin-bottom: 2rem;
+
+    @media (max-width: ${breakpoints.screenMD}) {
+      flex-wrap: wrap;
+    }
+  }
+
+  .archie-card {
+    max-width: 420px;
+    min-height: 270px;
   }
 
   .table-title {

@@ -1,4 +1,4 @@
-import { Status } from '../../../constants/transactions-status';
+import { TransactionStatus } from '../../../constants/transactions-status';
 
 export const tableData = [
   {
@@ -7,7 +7,7 @@ export const tableData = [
       title: 'Merchant Name',
       code: 'Merchant code',
     },
-    status: Status.PENDING,
+    status: TransactionStatus.PENDING,
     amount: '$22.31',
   },
   {
@@ -16,7 +16,7 @@ export const tableData = [
       title: 'SquareSpace',
       code: 'Merchant code',
     },
-    status: Status.SETTLED,
+    status: TransactionStatus.COMPLETED,
     amount: '$16.00',
   },
   {
@@ -25,7 +25,7 @@ export const tableData = [
       title: 'TST*TST Annie Baileys Lancaster',
       code: 'Merchant code',
     },
-    status: Status.SETTLED,
+    status: TransactionStatus.COMPLETED,
     amount: '$118.01',
   },
   {
@@ -34,7 +34,7 @@ export const tableData = [
       title: 'TST* Zoetropolis Cinema Lancaster PA',
       code: 'Merchant code',
     },
-    status: Status.SETTLED,
+    status: TransactionStatus.COMPLETED,
     amount: '$22.31',
   },
   {
@@ -43,7 +43,7 @@ export const tableData = [
       title: 'Sunoco 0363427601',
       code: 'Merchant code',
     },
-    status: Status.SETTLED,
+    status: TransactionStatus.COMPLETED,
     amount: '$104.28',
   },
 ];

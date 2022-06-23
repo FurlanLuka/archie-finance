@@ -1,7 +1,5 @@
 import styled from 'styled-components'
 
-import breakpoints from '../../../constants/ui/breakpoints'
-
 interface CardProps {
   column?: boolean;
   alignItems?: string;
@@ -22,7 +20,8 @@ export const Card = styled.div<CardProps>`
   align-items: ${({ alignItems }) => alignItems};
   background-color: ${({ theme }) => theme.backgroundPrimary};
   background-image: ${({ backgroundImage }) => `url(${backgroundImage})`};
-  background-size: 100%;
+  background-size: cover;
+  background-position: right;
   box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.08);
   border-radius: 0.5rem;
   width: 100%;
@@ -40,7 +39,7 @@ export const Card = styled.div<CardProps>`
 
   .card-info {
     position: relative;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 
     :before {
       content: '';

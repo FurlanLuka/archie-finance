@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Pie, ComputedDatum } from '@nivo/pie';
+import { ResponsivePie } from '@nivo/pie';
 import { theme } from '../../../../../constants/ui/theme';
 import { SubtitleM, ParagraphXXS } from '../../../../../components/_generic/typography/typography.styled';
 import { LoanToValueStyled } from './loan-to-value.styled';
@@ -17,22 +17,17 @@ const data = [
   },
 ];
 
-const colors = { good: 'red', 'not-good': 'green' };
-
 export const LoanToValue: FC = () => (
   <LoanToValueStyled>
-    <Pie
+    <ResponsivePie
       data={data}
-      height={216}
-      width={216}
       innerRadius={0.9}
       padAngle={0.5}
       cornerRadius={50}
       colors={{ datum: 'data.color' }}
       enableArcLabels={false}
       enableArcLinkLabels={false}
-      isInteractive={false}
-      animate={false}
+      animate={true}
     />
     <div className="centered-metrics">
       <ParagraphXXS weight={700}>Loan-to-value</ParagraphXXS>

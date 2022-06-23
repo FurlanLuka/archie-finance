@@ -71,6 +71,9 @@ export const theme: { [key: string]: string } = {
   // chars
   loanToValueDefault: colors.teal_200,
   loanToValueActive: colors.green_500,
+  nextPaymentDefault: colors.neutralgray_200,
+  nextPaymentActive: colors.teal_500,
+  collateralValue: colors.green_500,
   // status
   statusSettled: colors.green_500,
   statusPending: colors.black,

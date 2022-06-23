@@ -23,6 +23,8 @@ import { Navigation } from './components/navigation/navigation';
 import { RevealCardModal } from './components/reveal-card-modal/reveal-card-modal';
 import { MarginCallAlert } from './components/margin-call-alert/margin-call-alert';
 import { LoanToValue } from './components/chars/loan-to-value/loan-to-value';
+import { NextPayment } from './components/chars/next-payment/next-payment';
+import { CollateralValue } from './components/chars/collateral-value/collateral-value';
 import { IndexStyled } from './index-route.styled';
 import { tableColumns } from './fixtures/table-fixture';
 import { tableData } from './constants/table-data';
@@ -62,12 +64,11 @@ export const DashboardRoute: FC = () => {
             <ParagraphXS color={theme.textSecondary} className="subtitle">
               {t('dashboard.subtitle', { date })}
             </ParagraphXS>
-            <MarginCallAlert />
-
+            {/* <MarginCallAlert /> */}
             <div className="section-cards">
               <Card
                 backgroundImage={imgCard}
-                className="clickable"
+                className="archie-card clickable"
                 onClick={() => (revealCardData ? setRevealCardModalOpen(false) : setRevealCardModalOpen(true))}
               >
                 <div className="card-data">
@@ -126,49 +127,45 @@ export const DashboardRoute: FC = () => {
             </div>
 
             <div className="section-cards">
-              <Card padding="1.5rem">
-                <div className="card-group">
-                  <ParagraphXS weight={700} className="card-title">
-                    Collateral Value
-                  </ParagraphXS>
-                  <SubtitleS weight={400} className="card-info">
-                    $10,000
-                  </SubtitleS>
-                  <div className="btn-group">
-                    <ButtonOutline maxWidth="auto" small>
-                      Add
-                    </ButtonOutline>
-                    <ButtonGhost maxWidth="auto" small>
-                      Redeem
-                    </ButtonGhost>
-                  </div>
+              <Card column alignItems="flex-start" padding="1.5rem">
+                <ParagraphXS weight={700} className="card-title">
+                  Next Payment
+                </ParagraphXS>
+                <SubtitleS weight={400} className="card-info">
+                  June 3
+                </SubtitleS>
+                <NextPayment />
+                <ButtonOutline maxWidth="auto" small>
+                  Pay now
+                </ButtonOutline>
+              </Card>
+              <Card column alignItems="flex-start" padding="1.5rem">
+                <ParagraphXS weight={700} className="card-title">
+                  Collateral Value
+                </ParagraphXS>
+                <SubtitleS weight={400} className="card-info">
+                  $10,000
+                </SubtitleS>
+                <CollateralValue />
+                <div className="btn-group">
+                  <ButtonOutline maxWidth="auto" small>
+                    Add
+                  </ButtonOutline>
+                  <ButtonGhost maxWidth="auto" small>
+                    Redeem
+                  </ButtonGhost>
                 </div>
               </Card>
-              <Card padding="1.5rem">
-                <div className="card-group">
-                  <ParagraphXS weight={700} className="card-title">
-                    Next Payment
-                  </ParagraphXS>
-                  <SubtitleS weight={400} className="card-info">
-                    June 3
-                  </SubtitleS>
-                  <ButtonOutline maxWidth="auto" small>
-                    Pay now
-                  </ButtonOutline>
-                </div>
-              </Card>
-              <Card padding="1.5rem">
-                <div className="card-group">
-                  <ParagraphXS weight={700} className="card-title">
-                    My Rewards
-                  </ParagraphXS>
-                  <SubtitleS weight={400} className="card-info">
-                    1,801
-                  </SubtitleS>
-                  <ButtonOutline maxWidth="auto" small>
-                    Claim
-                  </ButtonOutline>
-                </div>
+              <Card column alignItems="flex-start" padding="1.5rem">
+                <ParagraphXS weight={700} className="card-title">
+                  My Rewards
+                </ParagraphXS>
+                <SubtitleS weight={400} className="card-info">
+                  1,801
+                </SubtitleS>
+                <ButtonOutline maxWidth="auto" small>
+                  Claim
+                </ButtonOutline>
               </Card>
             </div>
 
