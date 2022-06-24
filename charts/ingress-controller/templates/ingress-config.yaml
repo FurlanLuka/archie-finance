@@ -103,6 +103,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: referral-system-api-service
+                name: archie-referral-system-api-service
                 port:
                   number: 80

@@ -10,6 +10,7 @@
     "build:credit-api": "nx run credit-api:build",
     "build:user-api": "nx run user-api:build",
     "build:onboarding-api": "nx run onboarding-api:build",
+    "build:referral-system-api": "nx run referral-system-api:build",
     "test": "nx test",
     "local-deploy": "node ./deploy-localhost.js"
   },
