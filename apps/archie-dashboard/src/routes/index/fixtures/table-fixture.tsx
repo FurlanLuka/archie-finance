@@ -1,12 +1,18 @@
 import { FC } from 'react';
-import { Status } from '../../../constants/transactions-status';
+import {
+  TransactionStatus,
+  TransactionStatusText,
+  TransactionStatusColor,
+} from '../../../constants/transactions-status';
 import { StatusCellStyled, DescriptionCellStyled } from './table-fixtures.styled';
 
 interface StatusCellProps {
-  status: Status;
+  status: TransactionStatus;
 }
 
-const StatusCell: FC<StatusCellProps> = ({ status }) => <StatusCellStyled status={status}>{status}</StatusCellStyled>;
+const StatusCell: FC<StatusCellProps> = ({ status }) => (
+  <StatusCellStyled color={TransactionStatusColor[status]}>{TransactionStatusText[status]}</StatusCellStyled>
+);
 
 interface DescriptionCellProps {
   title: string;

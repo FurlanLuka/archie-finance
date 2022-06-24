@@ -1,12 +1,11 @@
 import styled from 'styled-components'
-import { TransactionStatus } from '../../../constants/transactions-status';
 
 interface StatusCellStyledProps {
-  status: TransactionStatus;
+  color: string;
 }
 
 export const StatusCellStyled = styled.div<StatusCellStyledProps>`
-  color: ${({ theme, status }) => status === TransactionStatus.COMPLETED ? theme.statusSettled : theme.statusPending};  
+  color: ${({ color }) => color};  
 `
 
 export const DescriptionCellStyled = styled.div`

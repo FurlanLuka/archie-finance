@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const TableStyled = styled.div`
   width: 100%;
+  overflow-x: scroll;
   
   table {
     border-spacing: 0;

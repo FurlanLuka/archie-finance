@@ -43,7 +43,7 @@ export const IndexStyled = styled.div`
 
   .archie-card {
     max-width: 420px;
-    min-height: 270px;
+    min-height: 240px;
   }
 
   .table-title {

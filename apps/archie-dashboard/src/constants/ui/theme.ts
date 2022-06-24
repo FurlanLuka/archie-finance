@@ -22,6 +22,7 @@ const colors: { [color: string]: string } = {
   neutralgray_200: "#dbdcdd",
   neutralgray_100: "#f9f9f9",
   yellow_500: "#ffea00",
+  orange_500: "ff9100",
   red_600: "#d50000",
   red_500: "#ff1744",
   red_400: "ff8a80",
@@ -46,6 +47,8 @@ export const theme: { [key: string]: string } = {
   textHighlight: colors.coral,
   textDisabled: colors.neutralgray_200,
   textDanger: colors.red_600,
+  textSuccess: colors.green_500,
+  textWarning: colors.orange_500,
   // button
   buttonPrimary: colors.coral,
   buttonOutline: colors.transparent,

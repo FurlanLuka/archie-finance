@@ -163,6 +163,9 @@ export const DashboardRoute: FC = () => {
                 <SubtitleS weight={400} className="card-info">
                   1,801
                 </SubtitleS>
+                <ParagraphXS color={theme.textSecondary} weight={500} className="card-text">
+                  +$1,400 Projected Value
+                </ParagraphXS>
                 <ButtonOutline maxWidth="auto" small>
                   Claim
                 </ButtonOutline>
