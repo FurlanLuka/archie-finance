@@ -2,7 +2,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: default
+  {{- if .Values.production }}
+  name: production-ingress
+  {{- else }}
   name: test-ingress
+  {{- end }}
   annotations:
     {{- if .Values.local }}
     kubernetes.io/ingress.class: nginx
@@ -12,12 +16,19 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/ssl-redirect: '443'
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    {{- if .Values.production }}
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:248649311686:certificate/676861e0-ab15-4cc1-afae-67ff9e8a41f0
+    {{- else }}
     alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:108827241267:certificate/25948e51-ba06-4736-9396-d591481e72f7
+    {{- end }}
     {{- end }}
 spec:
   rules:
     {{- if .Values.local }}
     - http:
+    {{- else if .Values.production }}
+    - host: 'api.archie.finance'
+      http:
     {{- else }}
     - host: 'api.dev.archie.finance'
       http:
