@@ -3,6 +3,7 @@
   "projects": {
     "archie-api-consumer": "libs/archie-api-consumer",
     "archie-dashboard": "apps/archie-dashboard",
-    "archie-session": "libs/archie-session"
+    "archie-session": "libs/archie-session",
+    "ui-design-system": "libs/ui-design-system"
   }
 }

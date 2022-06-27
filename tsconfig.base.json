@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@archie-webapps/ui-design-system": ["libs/ui-design-system/src/index.ts"],
       "@archie/api-consumer/*": ["libs/archie-api-consumer/src/*"],
       "@archie/session/*": ["libs/archie-session/src/*"]
     }
