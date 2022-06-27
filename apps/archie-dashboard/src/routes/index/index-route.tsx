@@ -143,9 +143,12 @@ export const DashboardRoute: FC = () => {
                 <ParagraphXS weight={700} className="card-title">
                   Collateral Value
                 </ParagraphXS>
-                <SubtitleS weight={400} className="card-info">
-                  $10,000
-                </SubtitleS>
+                <div className="text-group card-info">
+                  <SubtitleS weight={400}>$10,000</SubtitleS>
+                  <ParagraphXS weight={500} color={theme.textSuccess}>
+                    ↑
+                  </ParagraphXS>
+                </div>
                 <CollateralValue />
                 <div className="btn-group">
                   <ButtonOutline maxWidth="auto" small>
@@ -160,12 +163,18 @@ export const DashboardRoute: FC = () => {
                 <ParagraphXS weight={700} className="card-title">
                   My Rewards
                 </ParagraphXS>
-                <SubtitleS weight={400} className="card-info">
-                  1,801
-                </SubtitleS>
-                <ParagraphXS color={theme.textSecondary} weight={500} className="card-text">
-                  +$1,400 Projected Value
-                </ParagraphXS>
+                <div className="text-group card-info">
+                  <SubtitleS weight={400}>1,801</SubtitleS>
+                  <ParagraphXS weight={500}>Points</ParagraphXS>
+                </div>
+                <div className="text-group card-info">
+                  <ParagraphXS color={theme.textSuccess} weight={500} className="card-text">
+                    +$1,400
+                  </ParagraphXS>
+                  <ParagraphXXS color={theme.textSecondary} weight={500} className="card-text">
+                    Projected Value
+                  </ParagraphXXS>
+                </div>
                 <ButtonOutline maxWidth="auto" small>
                   Claim
                 </ButtonOutline>

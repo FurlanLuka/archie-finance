@@ -77,8 +77,5 @@ export const Card = styled.div<CardProps>`
   .btn-group {
     display: flex;
     gap: 0.5rem;
-  }
-
-
-  
+  }  
 `

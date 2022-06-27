@@ -87,5 +87,15 @@ export const IndexStyled = styled.div`
     border-bottom-right-radius: 0.5rem;
     padding: 0.5rem 1.5rem;
   }
+
+  .text-group {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.25rem;
+
+    p {
+      padding-bottom: 0.25rem;
+    }
+  }
 `
 
