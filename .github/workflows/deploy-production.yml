@@ -1,0 +1,110 @@
+name: Production
+
+on:
+  push:
+    tags:
+      - app-*-v*-prod
+
+env:
+  ECR_REPOSITORY: archie-production-container-repository
+  AWS_REGION: us-east-1
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v2
+      - name: Install dependencies
+        run: npm ci
+      - name: Workspace lint
+        run: npx nx workspace-lint
+      - name: Affected lint
+        run: npx nx affected --target=lint --parallel=3
+      - name: Affected test
+        run: npx nx affected --target=test --parallel=3 --ci --code-coverage
+      - name: Affected build
+        run: npx nx affected --target=build --parallel=3
+  publish:
+    name: Publish image
+    needs: test
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Extract details from Git
+      id: git_details
+      run: |
+        echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+        echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+        echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+        export TAG=${GITHUB_REF#refs/tags/}
+        export TAG_WITHOUT_TYPE=${TAG#app-}
+        echo ::set-output name=APP_NAME::${TAG_WITHOUT_TYPE%-v*}
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+        aws-region: ${{ env.AWS_REGION }}
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: Build, tag, and push image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
+        APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
+      run: |
+        docker build -f ./apps/$APP_NAME/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+    outputs:
+      image_tag: ${{ steps.git_details.outputs.SOURCE_TAG }}
+  deploy:
+    name: Deploy production
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Extract details from Git
+      id: git_details
+      run: |
+        echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+        echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+        echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+        export TAG=${GITHUB_REF#refs/tags/}
+        export TAG_WITHOUT_TYPE=${TAG#app-}
+        echo ::set-output name=APP_NAME::${TAG_WITHOUT_TYPE%-v*}
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+        aws-region: ${{ env.AWS_REGION }}
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+    - name: Test
+      env:
+        CHART: ./charts/${{ steps.git_details.outputs.APP_NAME }}
+      run: |
+        cd $CHART
+        ls 
+    - name: Deploy
+      uses: koslib/helm-eks-action@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_PRODUCTION }}
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ needs.publish.outputs.image_tag }}
+        CHART: ./charts/${{ steps.git_details.outputs.APP_NAME }}
+        APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
+      with:
+        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment="production"
