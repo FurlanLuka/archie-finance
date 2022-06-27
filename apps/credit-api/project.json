@@ -10,6 +10,7 @@
         "outputPath": "dist/apps/credit-api",
         "main": "apps/credit-api/src/main.ts",
         "tsConfig": "apps/credit-api/tsconfig.app.json",
+        "tsPlugins": ["@nestjs/swagger/plugin"],
         "assets": ["apps/credit-api/src/assets"]
       },
       "configurations": {

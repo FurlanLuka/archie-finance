@@ -10,6 +10,7 @@ import { GetOnboardingResponse } from './onboarding.interfaces';
 import { OnboardingService } from './onboarding.service';
 import { AuthGuard } from '@archie-microservices/auth0';
 import { OnboardingDto } from './onboarding.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('v1/onboarding')
 export class OnboardingController {
@@ -17,6 +18,7 @@ export class OnboardingController {
 
   @Get()
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async getOnboardingRecord(@Request() req): Promise<GetOnboardingResponse> {
     return this.onboardingService.getOrCreateOnboardingRecord(req.user.sub);
   }

@@ -10,6 +10,7 @@
         "outputPath": "dist/apps/onboarding-api",
         "main": "apps/onboarding-api/src/main.ts",
         "tsConfig": "apps/onboarding-api/tsconfig.app.json",
+        "tsPlugins": ["@nestjs/swagger/plugin"],
         "assets": ["apps/onboarding-api/src/assets"]
       },
       "configurations": {
@@ -26,6 +27,28 @@
         }
       }
     },
+//    "build-sdk": {
+//      "executor": "@nrwl/workspace:run-commands",
+//      "options": {
+//        "command": "npm run build onboarding-api --verbose && node dist/apps/onboarding-api/main build-swagger"
+//      }
+//    },
+    "build-sdk": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "ts-node apps/onboarding-api/src/main build-swagger"
+      }
+    },
+//    "build-sdk": {
+//      "executor": "@nrwl/node:node",
+//      "options": {
+//        "buildTarget": "onboarding-api:build",
+//        "args": [
+//          "build-swagger"
+//        ]
+//      },
+//      "watch": false
+//    },
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {

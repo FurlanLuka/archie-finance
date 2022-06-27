@@ -10,6 +10,7 @@
         "outputPath": "dist/apps/collateral-api",
         "main": "apps/collateral-api/src/main.ts",
         "tsConfig": "apps/collateral-api/tsconfig.app.json",
+        "tsPlugins": ["@nestjs/swagger/plugin"],
         "assets": ["apps/collateral-api/src/assets"]
       },
       "configurations": {

@@ -10,6 +10,7 @@
         "outputPath": "dist/apps/asset-price-api",
         "main": "apps/asset-price-api/src/main.ts",
         "tsConfig": "apps/asset-price-api/tsconfig.app.json",
+        "tsPlugins": ["@nestjs/swagger/plugin"],
         "assets": ["apps/asset-price-api/src/assets"]
       },
       "configurations": {
