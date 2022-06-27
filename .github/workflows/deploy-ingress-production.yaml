@@ -1,4 +1,4 @@
-name: Development
+name: Production
 
 on:
   push:
@@ -10,7 +10,7 @@ env:
 
 jobs:
   deploy:
-    name: Deploy development
+    name: Deploy production
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -26,4 +26,4 @@ jobs:
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_PRODUCTION }}
       with:
-        command: helm upgrade --install ingress-proxy ./charts/ingress-controller
+        command: helm upgrade --install ingress-proxy ./charts/ingress-controller --set production="true"
