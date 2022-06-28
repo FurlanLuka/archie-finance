@@ -37,11 +37,14 @@ export class VaultService {
       );
 
       return tokenData.data.auth.client_token;
-    } catch (error) {
+    } catch (err) {
+      const error: AxiosError = err;
+
       Logger.error({
         code: 'VAULT_AUTHENTICATION_ERROR',
         metadata: {
           error: JSON.stringify(error),
+          response: JSON.stringify(error.response ?? {}),
         },
       });
 
@@ -89,6 +92,7 @@ export class VaultService {
         code: 'ENCRYPT_STRINGS_ERROR',
         metadata: {
           error: JSON.stringify(error),
+          response: JSON.stringify(error.response ?? {}),
         },
       });
 
@@ -135,6 +139,7 @@ export class VaultService {
         code: 'DECRYPT_STRINGS_ERROR',
         metadata: {
           error: JSON.stringify(error),
+          response: JSON.stringify(error.response ?? {}),
         },
       });
 
