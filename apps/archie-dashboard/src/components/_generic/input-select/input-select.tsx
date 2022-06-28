@@ -5,7 +5,7 @@ import { CollateralAsset, collateralAssets } from '../../../constants/data/colla
 import { CollateralCurrency } from '../../../components/collateral-currency/collateral-currency';
 import { InputSelectStyled } from './input-select.styled';
 import { ParagraphXS } from '@archie-webapps/ui-design-system';
-import { Caret } from '@archie-webapps/ui-icons';
+import { Icon } from '@archie-webapps/ui-icons';
 
 interface InputSelectProps {
   setSelectedAsset: (asset?: CollateralAsset) => void;
@@ -38,7 +38,7 @@ export const InputSelect: FC<InputSelectProps> = ({ setSelectedAsset }) => {
         ) : (
           <CollateralCurrency name="Select your collateral currency" short="BTC, ETH, SOL, or USDC" />
         )}
-        <Caret className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
+        <Icon name="caret" className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
       </div>
       {selectOpen && (
         <div className="select-list">

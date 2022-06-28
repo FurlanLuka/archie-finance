@@ -3,7 +3,7 @@ import { theme } from '@archie-webapps/ui-theme';
 
 import { iconProps } from './icons.interface';
 
-export const Logo: FC<iconProps> = ({ fill = theme.textPrimary, className }) => (
+const Logo: FC<iconProps> = ({ fill = theme.textPrimary, className }) => (
   <svg width="86" height="26" viewBox="0 0 86 26" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <path
       d="M34.2943 18.2258L33.8174 22.729H30.0957L32.8163 3.875H38.2437L41.0309 22.7344H37.2355L36.7014 18.2312L34.2943 18.2258ZM36.3845 15.0416C36.1095 12.5999 35.7245 8.96566 35.5446 7.13669H35.4005C35.3328 8.46656 34.8763 12.6952 34.6166 15.0427L36.3845 15.0416Z"
@@ -35,3 +35,5 @@ export const Logo: FC<iconProps> = ({ fill = theme.textPrimary, className }) => 
     />
   </svg>
 );
+
+export default Logo;

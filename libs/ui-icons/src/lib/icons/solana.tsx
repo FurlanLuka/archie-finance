@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { iconProps } from './icons.interface';
 
-export const Solana: FC<iconProps> = ({ className }) => (
+const Solana: FC<iconProps> = ({ className }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <circle cx="12" cy="12" r="12" fill="#F9F9F9" />
     <g clipPath="url(#clip0_2749_9469)">
@@ -59,3 +59,5 @@ export const Solana: FC<iconProps> = ({ className }) => (
     </defs>
   </svg>
 );
+
+export default Solana;

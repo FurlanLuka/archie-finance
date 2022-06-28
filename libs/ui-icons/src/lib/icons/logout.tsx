@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { iconProps } from './icons.interface';
 
-export const Logout: FC<iconProps> = ({ className }) => (
+const Logout: FC<iconProps> = ({ className }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <path
       fillRule="evenodd"
@@ -32,3 +32,5 @@ export const Logout: FC<iconProps> = ({ className }) => (
     />
   </svg>
 );
+
+export default Logout;

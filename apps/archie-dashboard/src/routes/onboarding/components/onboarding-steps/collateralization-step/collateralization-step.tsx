@@ -16,7 +16,7 @@ import { Collateral } from '../../../../../components/collateral/collateral';
 import { theme } from '@archie-webapps/ui-theme';
 import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
-import { Copy, ExternalLink } from '@archie-webapps/ui-icons';
+import { Icon } from '@archie-webapps/ui-icons';
 
 export const CollateralizationStep: FC = () => {
   const { t } = useTranslation();
@@ -165,7 +165,7 @@ export const CollateralizationStep: FC = () => {
               delayHide={1000}
             />
             <button className="btn-copy" onClick={() => handleCopyToClipboard('address', getDepositAddress())}>
-              <Copy className="icon-copy" />
+              <Icon name="copy" className="icon-copy" />
             </button>
           </div>
           <div className="address-code">
@@ -201,7 +201,7 @@ export const CollateralizationStep: FC = () => {
                     className="info-link-url"
                   >
                     {t('collateralization_step.address.info_link_2')}
-                    <ExternalLink className="info-link-icon" />
+                    <Icon name="external-link" className="info-link-icon" />
                   </a>
                 </ParagraphXS>
               </div>

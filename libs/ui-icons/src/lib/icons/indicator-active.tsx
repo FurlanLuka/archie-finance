@@ -3,7 +3,7 @@ import { theme } from '@archie-webapps/ui-theme';
 
 import { iconProps } from './icons.interface';
 
-export const IndicatorActive: FC<iconProps> = ({ fill = theme.textHighlight, className = 'active' }) => (
+const IndicatorActive: FC<iconProps> = ({ fill = theme.textHighlight, className = 'active' }) => (
   <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <rect x="1" y="1" width="32" height="32" rx="16" stroke={fill} />
     <rect x="5.5" y="5.5" width="23" height="23" rx="11.5" fill={fill} stroke={fill} />
@@ -13,3 +13,5 @@ export const IndicatorActive: FC<iconProps> = ({ fill = theme.textHighlight, cla
     />
   </svg>
 );
+
+export default IndicatorActive;

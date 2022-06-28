@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthenticatedSession } from '@archie/session/hooks/use-session';
 import { Container } from '../layout/layout.styled';
 import { ParagraphS } from '../typography/typography.styled';
-import { dashboardNavItems } from '../../../constants/dashboard-nav-items';
 import { HeaderStyled, MobileNav } from './header.styled';
-import { Logo, Close } from '@archie-webapps/ui-icons';
+import { Icon } from '@archie-webapps/ui-icons';
+import { dashboardNavItems } from '@archie-webapps/util-constants';
 
 interface HeaderProps {
   maxWidth?: string;
@@ -36,11 +36,11 @@ export const Header: FC<HeaderProps> = ({ maxWidth }) => {
     <>
       <HeaderStyled isOpen={mobileNavOpen}>
         <Container alignItems="center" justifyContent="space-between" maxWidth={maxWidth}>
-          <Logo className="logo" />
+          <Icon name="logo" className="logo" />
           <button className="menu-button hide-lg" onClick={toggleMobileNav}>
             <div className="line one"></div>
             <div className="line two"></div>
-            <Close className="close" />
+            <Icon name="close" className="close" />
           </button>
         </Container>
       </HeaderStyled>
@@ -53,7 +53,9 @@ export const Header: FC<HeaderProps> = ({ maxWidth }) => {
               key={index}
               onClick={() => (item.name === 'logout' ? logout : navigate(item.path))}
             >
-              <div className="icon">{item.icon}</div>
+              <div className="icon">
+                <Icon name={item.icon} />
+              </div>
               <ParagraphS weight={700}>{item.name}</ParagraphS>
             </div>
           ))}

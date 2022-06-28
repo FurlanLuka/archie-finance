@@ -1,35 +1,35 @@
-import { BitcoinOutline, Logout, Paper, Settings, Wallet } from '@archie-webapps/ui-icons';
-import { ReactElement } from 'react';
+import { IconName } from '@archie-webapps/ui-icons';
 
-export interface DashboardNavItem {
-  icon: ReactElement;
+// TODO check why we need babelrc here and in ui-theme
+interface DashboardNavItem {
+  icon: IconName;
   name: string;
   path: string;
 }
 
 export const dashboardNavItems: DashboardNavItem[] = [
   {
-    icon: <Wallet />,
+    icon: 'wallet',
     name: 'Wallet & Collateral',
     path: '/',
   },
   {
-    icon: <BitcoinOutline />,
+    icon: 'bitcoin-outline',
     name: 'Rewards',
     path: '/rewards',
   },
   {
-    icon: <Paper />,
+    icon: 'paper',
     name: 'History',
     path: '/history',
   },
   {
-    icon: <Settings />,
+    icon: 'settings',
     name: 'Settings',
     path: '/settings',
   },
   {
-    icon: <Logout />,
+    icon: 'logout',
     name: 'Logout',
     path: '/logout',
   },

@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { iconProps } from './icons.interface';
 
-export const Bitcoin: FC<iconProps> = ({ className }) => (
+const Bitcoin: FC<iconProps> = ({ className }) => (
   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <path
       d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z"
@@ -14,3 +14,5 @@ export const Bitcoin: FC<iconProps> = ({ className }) => (
     />
   </svg>
 );
+
+export default Bitcoin;

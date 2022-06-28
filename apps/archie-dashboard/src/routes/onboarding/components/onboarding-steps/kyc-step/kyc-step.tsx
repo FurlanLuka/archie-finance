@@ -10,7 +10,7 @@ import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
 import { KycStepStyled } from './kyc-step.styled';
 import { theme } from '@archie-webapps/ui-theme';
 import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
-import { ArrowRight } from '@archie-webapps/ui-icons';
+import { Icon } from '@archie-webapps/ui-icons';
 
 interface GooglePlace {
   address_components: Array<{
@@ -294,7 +294,7 @@ export const KycStep: FC = () => {
           <hr className="divider" />
           <ButtonPrimary type="submit" isLoading={mutationRequest.state === RequestState.LOADING}>
             {t('btn_next')}
-            <ArrowRight fill={theme.textLight} />
+            <Icon name="arrow-right" fill={theme.textLight} />
           </ButtonPrimary>
         </Form>
       </Formik>

@@ -1,7 +1,8 @@
-import { Bitcoin, Ethereum, Solana, Usdcoin } from '@archie-webapps/ui-icons';
+import { Icon } from '@archie-webapps/ui-icons';
 import { ReactElement } from 'react';
 
 export interface CollateralAsset {
+  // TODO icon to string
   id: string;
   name: string;
   short: string;
@@ -16,7 +17,7 @@ export const collateralAssets: CollateralAsset[] = [
     id: 'BTC',
     name: 'Bitcoin',
     short: 'BTC',
-    icon: <Bitcoin />,
+    icon: <Icon name="bitcoin" />,
     loan_to_value: 50,
     interest_rate: 15,
     url: 'https://www.blockchain.com/btc/address',
@@ -25,7 +26,7 @@ export const collateralAssets: CollateralAsset[] = [
     id: 'ETH',
     name: 'Ethereum',
     short: 'ETH',
-    icon: <Ethereum />,
+    icon: <Icon name="ethereum" />,
     loan_to_value: 50,
     interest_rate: 15,
     url: 'https://etherscan.io/address',
@@ -34,7 +35,7 @@ export const collateralAssets: CollateralAsset[] = [
     id: 'SOL',
     name: 'Solana',
     short: 'SOL',
-    icon: <Solana />,
+    icon: <Icon name="solana" />,
     loan_to_value: 50,
     interest_rate: 15,
     url: 'https://explorer.solana.com/address',
@@ -43,7 +44,7 @@ export const collateralAssets: CollateralAsset[] = [
     id: 'USDC',
     name: 'USD Coin',
     short: 'USDC',
-    icon: <Usdcoin />,
+    icon: <Icon name="usdcoin" />,
     loan_to_value: 70,
     interest_rate: 15,
     url: 'https://etherscan.io/address',
