@@ -64,6 +64,11 @@ export class SendgridService {
             },
           ],
           template_id: emailTemplateId,
+          mail_settings: {
+            sandbox_mode: {
+              enable: true,
+            },
+          },
         },
         {
           headers: {
@@ -72,12 +77,11 @@ export class SendgridService {
         },
       );
     } catch (error) {
-      Logger.log('here')
       Logger.error({
         code: 'ERROR_SENDING_EMAIL',
         metadata: {
           id: emailTemplateId,
-          error: JSON.stringify((error as AxiosError))
+          error: JSON.stringify(error as AxiosError),
         },
       });
 
