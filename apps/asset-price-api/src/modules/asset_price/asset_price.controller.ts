@@ -1,6 +1,6 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import {
-  GetAssetPriceResponse,
+  GetAssetPriceResponseDto,
 } from './asset_price.dto';
 import { AssetPriceService } from './asset_price.service';
 
@@ -9,14 +9,14 @@ export class AssetPriceController {
   constructor(private assetPriceService: AssetPriceService) {}
 
   @Get()
-  async getAssetPrices(): Promise<GetAssetPriceResponse[]> {
+  async getAssetPrices(): Promise<GetAssetPriceResponseDto[]> {
     return this.assetPriceService.getAssetPrices();
   }
 
   @Get(':asset')
   async getAssetPrice(
     @Param('asset') asset: string,
-  ): Promise<GetAssetPriceResponse> {
+  ): Promise<GetAssetPriceResponseDto> {
     return this.assetPriceService.getAssetPrice(asset);
   }
 }
@@ -26,7 +26,7 @@ export class InternalAssetPriceController {
   constructor(private assetPriceService: AssetPriceService) {}
 
   @Get()
-  async getAssetPrices(): Promise<GetAssetPriceResponse[]> {
+  async getAssetPrices(): Promise<GetAssetPriceResponseDto[]> {
     return this.assetPriceService.getAssetPrices();
   }
 
@@ -38,7 +38,7 @@ export class InternalAssetPriceController {
   @Get(':asset')
   async getAssetPrice(
     @Param('asset') asset: string,
-  ): Promise<GetAssetPriceResponse> {
+  ): Promise<GetAssetPriceResponseDto> {
     return this.assetPriceService.getAssetPrice(asset);
   }
 }

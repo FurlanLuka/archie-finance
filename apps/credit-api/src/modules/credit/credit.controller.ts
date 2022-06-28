@@ -6,7 +6,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { GetCreditResponse } from './credit.dto';
+import { GetCreditResponseDto } from './credit.dto';
 import { CreditService } from './credit.service';
 import { AuthGuard } from '@archie-microservices/auth0';
 
@@ -16,13 +16,13 @@ export class CreditController {
 
   @Post()
   @UseGuards(AuthGuard)
-  async createCreditLine(@Request() req): Promise<GetCreditResponse> {
+  async createCreditLine(@Request() req): Promise<GetCreditResponseDto> {
     return this.creditService.createCredit(req.user.sub);
   }
 
   @Get()
   @UseGuards(AuthGuard)
-  async getCreditLine(@Request() req): Promise<GetCreditResponse> {
+  async getCreditLine(@Request() req): Promise<GetCreditResponseDto> {
     return this.creditService.createCredit(req.user.sub);
   }
 }
@@ -34,14 +34,14 @@ export class InternalCreditController {
   @Post(':userId')
   async createCreditLine(
     @Param('userId') userId: string,
-  ): Promise<GetCreditResponse> {
+  ): Promise<GetCreditResponseDto> {
     return this.creditService.createCredit(userId);
   }
 
   @Get(':userId')
   async getCreditLine(
     @Param('userId') userId: string,
-  ): Promise<GetCreditResponse> {
+  ): Promise<GetCreditResponseDto> {
     return this.creditService.getCredit(userId);
   }
 }

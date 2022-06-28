@@ -1,5 +1,5 @@
-import * as i from './deposit_address.interfaces';
+import { GetDepositAddressResponse } from './deposit_address.interfaces';
 
-export class GetDepositAddressResponse implements i.GetDepositAddressResponse {
+export class GetDepositAddressResponseDto implements GetDepositAddressResponse {
     address: string;
 }

@@ -1,6 +1,6 @@
 import { AuthGuard } from '@archie-microservices/auth0';
 import { Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { GetEmailVerificationResponse, GetEmailAddressResponse } from './user.dto';
+import { GetEmailVerificationResponseDto, GetEmailAddressResponseDto } from './user.dto';
 import { UserService } from './user.service';
 
 @Controller('v1/user')
@@ -11,7 +11,7 @@ export class UserController {
   @UseGuards(AuthGuard)
   async checkEmailVerification(
     @Req() request,
-  ): Promise<GetEmailVerificationResponse> {
+  ): Promise<GetEmailVerificationResponseDto> {
     return this.userService.isEmailVerified(request.user.sub);
   }
 
@@ -29,7 +29,7 @@ export class InternalUserController {
   @Get('email-address/:userId')
   async getEmailAddress(
     @Param('userId') userId: string,
-  ): Promise<GetEmailAddressResponse> {
+  ): Promise<GetEmailAddressResponseDto> {
     return this.userService.getEmailAddress(userId);
   }
 }

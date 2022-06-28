@@ -1,6 +1,6 @@
-import * as i from './credit.interfaces';
+import { GetCreditResponse } from './credit.interfaces';
 
-export class GetCreditResponse implements i.GetCreditResponse {
+export class GetCreditResponseDto implements GetCreditResponse {
     totalCredit: number;
     availableCredit: number;
 }

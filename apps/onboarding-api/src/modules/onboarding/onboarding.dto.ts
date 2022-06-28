@@ -1,5 +1,5 @@
 import { IsString } from 'class-validator';
-import * as i from './onboarding.interfaces';
+import { GetOnboardingResponse } from './onboarding.interfaces';
 
 export class OnboardingDto {
   @IsString()
@@ -9,7 +9,7 @@ export class OnboardingDto {
   userId: string;
 }
 
-export class GetOnboardingResponse implements i.GetOnboardingResponse {
+export class GetOnboardingResponseDto implements GetOnboardingResponse {
   kycStage: boolean;
   emailVerificationStage: boolean;
   phoneVerificationStage: boolean;

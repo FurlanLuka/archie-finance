@@ -1,15 +1,19 @@
-import * as i from '@archie-microservices/api-interfaces/asset_information';
+import {
+    AssetInformation,
+    AssetType,
+    GetAssetListResponse
+} from '@archie-microservices/api-interfaces/asset_information';
 
-export class GetAssetListResponse implements i.GetAssetListResponse {
-    [key: string]: AssetInformation;
+export class GetAssetListResponseDto implements GetAssetListResponse {
+    [key: string]: AssetInformationDto;
 }
 
-class AssetInformation implements i.AssetInformation {
+class AssetInformationDto implements AssetInformation {
     fireblocks_id: string;
     coinapi_id: string;
-    network: i.AssetType;
+    network: AssetType;
     ltv: number;
     interest: number;
 }
 
-export class GetAssetInformationResponse extends AssetInformation {}
+export class GetAssetInformationResponseDto extends AssetInformationDto {}

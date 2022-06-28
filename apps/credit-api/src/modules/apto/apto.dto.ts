@@ -1,25 +1,23 @@
-// import {
-//     StartPhoneVerificationResponse,
-//     CompletePhoneVerificationResponse,
-// } from './apto.interfaces';
-// import {
-//     CreateUserResponse,
-//     IssueCardResponse,
-// } from './api/apto_api.interfaces';
-import * as i from './apto.interfaces'
-import * as apiI from './api/apto_api.interfaces'
+import {
+    StartPhoneVerificationResponse,
+    CompletePhoneVerificationResponse,
+} from './apto.interfaces';
+import {
+    CreateUserResponse,
+    IssueCardResponse,
+} from './api/apto_api.interfaces';
 
-export class StartPhoneVerificationResponse implements i.StartPhoneVerificationResponse {
+export class StartPhoneVerificationResponseDto implements StartPhoneVerificationResponse {
     verificationId: string;
     status: string;
 }
 
-export class CompletePhoneVerificationResponse implements i.CompletePhoneVerificationResponse {
+export class CompletePhoneVerificationResponseDto implements CompletePhoneVerificationResponse {
     verificationId: string;
     status: string;
 }
 
-export class CreateUserResponse implements apiI.CreateUserResponse {
+export class CreateUserResponseDto implements CreateUserResponse {
     type: string;
     user_id: string;
     user_token: string;
@@ -27,7 +25,7 @@ export class CreateUserResponse implements apiI.CreateUserResponse {
     metadata: string;
 }
 
-export class IssueCardResponse implements apiI.IssueCardResponse {
+export class IssueCardResponseDto implements IssueCardResponse {
     type: string;
     account_id: string;
     lastFour: string;

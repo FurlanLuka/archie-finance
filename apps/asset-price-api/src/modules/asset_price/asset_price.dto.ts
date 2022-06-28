@@ -1,6 +1,6 @@
-import * as i from '@archie-microservices/api-interfaces/asset_price';
+import { GetAssetPriceResponse } from '@archie-microservices/api-interfaces/asset_price';
 
-export class GetAssetPriceResponse implements i.GetAssetPriceResponse {
+export class GetAssetPriceResponseDto implements GetAssetPriceResponse {
     asset: string;
     price: number;
     currency: string;

@@ -8,7 +8,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { KycDto, CreateKycResponse, GetKycResponse } from './kyc.dto';
+import { KycDto, CreateKycResponseDto, GetKycResponseDto } from './kyc.dto';
 import { KycService } from './kyc.service';
 
 @Controller('v1/kyc')
@@ -17,7 +17,7 @@ export class KycController {
 
   @Get()
   @UseGuards(AuthGuard)
-  async getKyc(@Req() request): Promise<GetKycResponse> {
+  async getKyc(@Req() request): Promise<GetKycResponseDto> {
     return this.kycService.getKyc(request.user.sub);
   }
 
@@ -26,7 +26,7 @@ export class KycController {
   async createKyc(
     @Body() body: KycDto,
     @Req() request,
-  ): Promise<CreateKycResponse> {
+  ): Promise<CreateKycResponseDto> {
     return this.kycService.createKyc(body, request.user.sub);
   }
 }
@@ -36,7 +36,7 @@ export class InternalKycController {
   constructor(private readonly kycService: KycService) {}
 
   @Get(':userId')
-  async getKyc(@Param('userId') userId: string): Promise<GetKycResponse> {
+  async getKyc(@Param('userId') userId: string): Promise<GetKycResponseDto> {
     return this.kycService.getKyc(userId);
   }
 }
