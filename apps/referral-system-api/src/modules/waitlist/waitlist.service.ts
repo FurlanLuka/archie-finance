@@ -66,7 +66,7 @@ export class WaitlistService {
         {
           verifyAddress: `${this.configService.get(
             ConfigVariables.ARCHIE_MARKETING_WEBSITE_URL,
-          )}/verify/${id}`,
+          )}/verify?id=${id}`,
         },
       );
 
@@ -94,6 +94,7 @@ export class WaitlistService {
       numberOfReferrals: Number(referralRankData.referralcount),
       numberOfVerifiedReferrals: Number(referralRankData.verifiedreferralcount),
       waitlistRank: Number(referralRankData.rownumber),
+      referralCode: waitlistEntity.referralCode,
     };
   }
 
@@ -141,6 +142,10 @@ export class WaitlistService {
       throw new NotFoundException();
     }
 
+    if (waitlistEntity.isEmailVerified) {
+      return;
+    }
+
     const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
 
     try {
@@ -158,20 +163,20 @@ export class WaitlistService {
         waitlistEntity.emailAddress,
       ]);
 
-      const referralRankData: ReferralRankQueryResult =
-        await this.getReferralRankData(waitlistEntity.id, queryRunner);
-
       await this.sendgridService.addToWaitlist(emailAddress, waitlistEntity.id);
-      await this.sendgridService.sendEmail(
-        emailAddress,
-        this.configService.get(
-          ConfigVariables.SENDGRID_WELCOME_EMAIL_TEMPLATE_ID,
-        ),
-        {
-          rank: referralRankData.rownumber,
-          referralCode: waitlistEntity.referralCode,
-        },
-      );
+
+      // Disabled for now, might need later
+
+      // await this.sendgridService.sendEmail(
+      //   emailAddress,
+      //   this.configService.get(
+      //     ConfigVariables.SENDGRID_WELCOME_EMAIL_TEMPLATE_ID,
+      //   ),
+      //   {
+      //     rank: referralRankData.rownumber,
+      //     referralCode: waitlistEntity.referralCode,
+      //   },
+      // );
 
       await queryRunner.commitTransaction();
     } catch {

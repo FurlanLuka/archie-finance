@@ -1,10 +1,15 @@
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsOptional, IsUUID } from 'class-validator';
 
-export class CreatetDto {
+export class CreateDto {
   @IsEmail()
   emailAddress: string;
 
   @IsOptional()
-  @IsString()
+  @IsUUID()
   referrer?: string;
+}
+
+export class IdParamsDto {
+  @IsUUID()
+  id: string;
 }
