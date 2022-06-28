@@ -43,8 +43,8 @@ export class VaultService {
       Logger.error({
         code: 'VAULT_AUTHENTICATION_ERROR',
         metadata: {
-          error: JSON.stringify(error),
-          response: JSON.stringify(error.response ?? {}),
+          error: error.toJSON(),
+          response: error.response.data,
         },
       });
 
@@ -91,8 +91,8 @@ export class VaultService {
       Logger.error({
         code: 'ENCRYPT_STRINGS_ERROR',
         metadata: {
-          error: JSON.stringify(error),
-          response: JSON.stringify(error.response ?? {}),
+          error: error.toJSON(),
+          response: error.response.data,
         },
       });
 
@@ -138,8 +138,8 @@ export class VaultService {
       Logger.error({
         code: 'DECRYPT_STRINGS_ERROR',
         metadata: {
-          error: JSON.stringify(error),
-          response: JSON.stringify(error.response ?? {}),
+          error: error.toJSON(),
+          response: error.response.data,
         },
       });
 
