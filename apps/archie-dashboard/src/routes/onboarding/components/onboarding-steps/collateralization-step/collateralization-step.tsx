@@ -120,7 +120,7 @@ export const CollateralizationStep: FC = () => {
             </SubtitleM>
             <ReactTooltip
               textColor={theme.tooltipText}
-              backgroundColor={theme.tooltipBackgrond}
+              backgroundColor={theme.tooltipBackground}
               effect="solid"
               delayHide={1000}
             />
@@ -163,7 +163,7 @@ export const CollateralizationStep: FC = () => {
             </ParagraphS>
             <ReactTooltip
               textColor={theme.tooltipText}
-              backgroundColor={theme.tooltipBackgrond}
+              backgroundColor={theme.tooltipBackground}
               effect="solid"
               delayHide={1000}
             />
