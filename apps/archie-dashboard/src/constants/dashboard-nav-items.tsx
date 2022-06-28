@@ -1,9 +1,5 @@
+import { BitcoinOutline, Logout, Paper, Settings, Wallet } from '@archie-webapps/ui-icons';
 import { ReactElement } from 'react';
-import { Wallet } from '../components/_generic/icons/wallet';
-import { BitcoinOutline } from '../components/_generic/icons/bitcoin-outline';
-import { Paper } from '../components/_generic/icons/paper';
-import { Settings } from '../components/_generic/icons/settings';
-import { Logout } from '../components/_generic/icons/logout';
 
 export interface DashboardNavItem {
   icon: ReactElement;

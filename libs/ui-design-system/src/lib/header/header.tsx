@@ -1,12 +1,11 @@
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthenticatedSession } from '@archie/session/hooks/use-session';
-import { Logo } from '../icons/logo';
-import { Close } from '../icons/close';
 import { Container } from '../layout/layout.styled';
 import { ParagraphS } from '../typography/typography.styled';
 import { dashboardNavItems } from '../../../constants/dashboard-nav-items';
 import { HeaderStyled, MobileNav } from './header.styled';
+import { Logo, Close } from '@archie-webapps/ui-icons';
 
 interface HeaderProps {
   maxWidth?: string;

@@ -4,7 +4,8 @@ import { CollateralDeposit } from '../../../components/collateral-deposit/collat
 import { CollateralAsset, collateralAssets } from '../../../constants/data/collateral-assets';
 import { CollateralCurrency } from '../../../components/collateral-currency/collateral-currency';
 import { InputSelectStyled } from './input-select.styled';
-import { Caret, ParagraphXS } from '@archie-webapps/ui-design-system';
+import { ParagraphXS } from '@archie-webapps/ui-design-system';
+import { Caret } from '@archie-webapps/ui-icons';
 
 interface InputSelectProps {
   setSelectedAsset: (asset?: CollateralAsset) => void;

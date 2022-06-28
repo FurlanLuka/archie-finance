@@ -1,8 +1,5 @@
+import { Bitcoin, Ethereum, Solana, Usdcoin } from '@archie-webapps/ui-icons';
 import { ReactElement } from 'react';
-import { Bitcoin } from '../../components/_generic/icons/bitcoin';
-import { Ethereum } from '../../components/_generic/icons/ethereum';
-import { Solana } from '../../components/_generic/icons/solana';
-import { Usdcoin } from '../../components/_generic/icons/usdcoin';
 
 export interface CollateralAsset {
   id: string;

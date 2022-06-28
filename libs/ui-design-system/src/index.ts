@@ -8,4 +8,3 @@ export * from './lib/loading/loading';
 export * from './lib/modal/modal';
 export * from './lib/table/table';
 export * from './lib/typography/typography.styled';
-export * from './lib/icons';

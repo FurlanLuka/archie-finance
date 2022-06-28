@@ -9,14 +9,8 @@ import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
 import { KycStepStyled } from './kyc-step.styled';
 import { theme } from '@archie-webapps/ui-theme';
-import {
-  ArrowRight,
-  ButtonPrimary,
-  InputText,
-  ParagraphS,
-  ParagraphXS,
-  SubtitleM,
-} from '@archie-webapps/ui-design-system';
+import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
+import { ArrowRight } from '@archie-webapps/ui-icons';
 
 interface GooglePlace {
   address_components: Array<{

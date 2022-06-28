@@ -6,7 +6,8 @@ import { useStartAptoVerification } from '@archie/api-consumer/credit/hooks/use-
 import { MutationQueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { VerifyStepStyled } from './verify-step.styled';
 import { theme } from '@archie-webapps/ui-theme';
-import { ArrowRight, ButtonPrimary, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
+import { ButtonPrimary, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
+import { ArrowRight } from '@archie-webapps/ui-icons';
 
 export const VerifyStep: FC = () => {
   const { t } = useTranslation();

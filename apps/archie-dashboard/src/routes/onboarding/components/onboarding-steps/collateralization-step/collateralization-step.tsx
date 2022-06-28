@@ -14,16 +14,9 @@ import { EmailVerification } from '../../email-verification/email-verification';
 import { CollateralizationStepStyled } from './collateralization-step.styled';
 import { Collateral } from '../../../../../components/collateral/collateral';
 import { theme } from '@archie-webapps/ui-theme';
-import {
-  Container,
-  Copy,
-  ExternalLink,
-  InputRange,
-  ParagraphS,
-  ParagraphXS,
-  SubtitleM,
-} from '@archie-webapps/ui-design-system';
+import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
+import { Copy, ExternalLink } from '@archie-webapps/ui-icons';
 
 export const CollateralizationStep: FC = () => {
   const { t } = useTranslation();

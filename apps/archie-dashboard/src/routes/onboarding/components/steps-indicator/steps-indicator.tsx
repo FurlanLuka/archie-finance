@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Step } from '../../../../constants/onboarding-steps';
 import { StepsIndicatorStyled } from './steps-indicator.styled';
 import { theme } from '@archie-webapps/ui-theme';
-import { ArrowIndicatorRight, IndicatorActive, IndicatorDone, ParagraphXXS } from '@archie-webapps/ui-design-system';
+import { ParagraphXXS } from '@archie-webapps/ui-design-system';
+import { ArrowIndicatorRight, IndicatorActive, IndicatorDone } from '@archie-webapps/ui-icons';
 
 interface StepsIndicatorProps {
   currentStep: string;
