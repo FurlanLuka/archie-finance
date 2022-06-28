@@ -2,10 +2,10 @@ import { AuthGuard } from '@archie-microservices/auth0';
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { CollateralService } from './collateral.service';
 import {
-  GetUserCollateral,
-  GetCollateralValueResponse,
+  Collateral,
+  CollateralValue,
   GetTotalCollateralValueResponse,
-} from '@archie-microservices/api-interfaces/collateral';
+} from './collateral.dto';
 
 @Controller('v1/collateral')
 export class CollateralController {
@@ -13,7 +13,7 @@ export class CollateralController {
 
   @Get()
   @UseGuards(AuthGuard)
-  async getCollateral(@Req() request): Promise<GetUserCollateral> {
+  async getCollateral(@Req() request): Promise<Collateral[]> {
     return this.collateralService.getUserCollateral(request.user.sub);
   }
 
@@ -21,7 +21,7 @@ export class CollateralController {
   @UseGuards(AuthGuard)
   async getUserCollateralValue(
     @Req() request,
-  ): Promise<GetCollateralValueResponse> {
+  ): Promise<CollateralValue[]> {
     return this.collateralService.getUserCollateralValue(request.user.sub);
   }
 
@@ -41,14 +41,14 @@ export class InternalCollateralController {
   @Get(':userId')
   async getCollateral(
     @Param('userId') userId: string,
-  ): Promise<GetUserCollateral> {
+  ): Promise<Collateral[]> {
     return this.collateralService.getUserCollateral(userId);
   }
 
   @Get('value/:userId')
   async getUserCollateralValue(
     @Param('userId') userId: string,
-  ): Promise<GetCollateralValueResponse> {
+  ): Promise<CollateralValue[]> {
     return this.collateralService.getUserCollateralValue(userId);
   }
 

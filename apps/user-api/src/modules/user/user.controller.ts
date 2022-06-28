@@ -1,7 +1,6 @@
 import { AuthGuard } from '@archie-microservices/auth0';
-import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
 import { Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
-import { GetEmailVerificationResponse } from './user.interfaces';
+import { GetEmailVerificationResponse, GetEmailAddressResponse } from './user.dto';
 import { UserService } from './user.service';
 
 @Controller('v1/user')

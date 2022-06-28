@@ -1,8 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import {
   GetAssetPriceResponse,
-  GetAssetPricesResponse,
-} from '@archie-microservices/api-interfaces/asset_price';
+} from './asset_price.dto';
 import { AssetPriceService } from './asset_price.service';
 
 @Controller(['v1/asset_price'])
@@ -10,7 +9,7 @@ export class AssetPriceController {
   constructor(private assetPriceService: AssetPriceService) {}
 
   @Get()
-  async getAssetPrices(): Promise<GetAssetPricesResponse> {
+  async getAssetPrices(): Promise<GetAssetPriceResponse[]> {
     return this.assetPriceService.getAssetPrices();
   }
 
@@ -27,7 +26,7 @@ export class InternalAssetPriceController {
   constructor(private assetPriceService: AssetPriceService) {}
 
   @Get()
-  async getAssetPrices(): Promise<GetAssetPricesResponse> {
+  async getAssetPrices(): Promise<GetAssetPriceResponse[]> {
     return this.assetPriceService.getAssetPrices();
   }
 

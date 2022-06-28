@@ -1,6 +1,6 @@
 import { AuthGuard } from '@archie-microservices/auth0';
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
-import { GetDepositAddressResponse } from './deposit_address.interfaces';
+import { GetDepositAddressResponse } from './deposit_address.dto';
 import { DepositAddressService } from './deposit_address.service';
 
 @Controller('v1/deposit_address')

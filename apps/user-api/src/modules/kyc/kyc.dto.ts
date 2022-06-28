@@ -2,6 +2,8 @@ import { Transform, Type } from 'class-transformer';
 import { Equals, IsString, Length, MaxDate } from 'class-validator';
 import { DateTime } from 'luxon';
 
+import * as i from '@archie-microservices/api-interfaces/kyc';
+
 export class KycDto {
   @IsString()
   firstName: string;
@@ -43,3 +45,21 @@ export class KycDto {
   @Length(9, 9)
   ssn: string;
 }
+
+
+export class GetKycResponse implements i.GetKycResponse {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  addressStreet: string;
+  addressStreetNumber: string;
+  addressLocality: string;
+  addressCountry: string;
+  addressRegion: string;
+  addressPostalCode: string;
+  phoneNumberCountryCode: string;
+  phoneNumber: string;
+  ssn: string;
+}
+
+export class CreateKycResponse extends GetKycResponse implements i.CreateKycResponse {}

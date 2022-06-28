@@ -2,7 +2,7 @@ import { Controller, Get, Param } from '@nestjs/common';
 import {
   GetAssetListResponse,
   GetAssetInformationResponse,
-} from '@archie-microservices/api-interfaces/asset_information';
+} from './asset_information.dto';
 import { AssetInformationService } from './asset_information.service';
 
 @Controller('internal/asset_information')

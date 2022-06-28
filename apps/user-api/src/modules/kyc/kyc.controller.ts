@@ -8,11 +8,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { KycDto } from './kyc.dto';
-import {
-  CreateKycResponse,
-  GetKycResponse,
-} from '@archie-microservices/api-interfaces/kyc';
+import { KycDto, CreateKycResponse, GetKycResponse } from './kyc.dto';
 import { KycService } from './kyc.service';
 
 @Controller('v1/kyc')

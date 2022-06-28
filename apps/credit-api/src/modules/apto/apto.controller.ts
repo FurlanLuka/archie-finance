@@ -5,11 +5,9 @@ import { AuthGuard } from '@archie-microservices/auth0';
 import {
   CreateUserResponse,
   IssueCardResponse,
-} from './api/apto_api.interfaces';
-import {
   StartPhoneVerificationResponse,
   CompletePhoneVerificationResponse,
-} from './apto.interfaces';
+} from './apto.dto';
 
 @Controller('v1/apto')
 export class AptoController {

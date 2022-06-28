@@ -6,7 +6,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { GetCreditResponse } from './credit.interfaces';
+import { GetCreditResponse } from './credit.dto';
 import { CreditService } from './credit.service';
 import { AuthGuard } from '@archie-microservices/auth0';
 
