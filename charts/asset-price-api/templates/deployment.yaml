@@ -151,7 +151,7 @@ spec:
                   name: internal-api-secrets
                   key: internal-api-url
               {{- else }}
-              value: http://host.minikube.internal:3000
+              value: http://host.minikube.internal
               {{- end }}
             command:
             - /bin/sh
