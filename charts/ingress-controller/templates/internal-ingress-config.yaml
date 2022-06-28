@@ -18,6 +18,8 @@ metadata:
     {{- end }}
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internal
+    alb.ingress.kubernetes.io/healthcheck-path: /health
+    alb.ingress.kubernetes.io/healthcheck-interval-seconds: '10'
     {{- end }}
 spec:
   rules:
