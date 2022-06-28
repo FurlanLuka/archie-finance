@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, QueryRunner, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CryptoService } from '@archie-microservices/crypto';
 import { Waitlist } from './waitlist.entity';
 import { VaultService } from '@archie-microservices/vault';
@@ -39,25 +39,13 @@ export class WaitlistService {
     if (waitlistEntity !== null) {
       return;
     }
-
-    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
-
     const encryptedEmail: string = (
       await this.vaultService.encryptStrings([emailAddress])
     )[0];
 
     const id: string = v4();
 
-    await queryRunner.startTransaction();
-
     try {
-      await queryRunner.manager.insert(Waitlist, {
-        id,
-        emailAddress: encryptedEmail,
-        emailIdentifier,
-        referrer,
-      });
-
       await this.sendgridService.sendEmail(
         emailAddress,
         this.configService.get(
@@ -70,11 +58,21 @@ export class WaitlistService {
         },
       );
 
-      await queryRunner.commitTransaction();
-    } catch {
-      await queryRunner.rollbackTransaction();
-    } finally {
-      await queryRunner.release();
+      await this.waitlist.insert({
+        id,
+        emailAddress: encryptedEmail,
+        emailIdentifier,
+        referrer,
+      });
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_CREATING_WAITLIST_RECORD',
+        metadata: {
+          error: JSON.stringify(error),
+        },
+      });
+
+      throw new InternalServerErrorException();
     }
   }
 
@@ -100,7 +98,6 @@ export class WaitlistService {
 
   private async getReferralRankData(
     waitlistEntityId,
-    queryRunner?: QueryRunner,
   ): Promise<ReferralRankQueryResult> {
     const queryResult: ReferralRankQueryResult[] = await this.dataSource.query(
       `
@@ -122,8 +119,6 @@ export class WaitlistService {
           w.id
       ) list WHERE list.id = '${waitlistEntityId}'
     `,
-      undefined,
-      queryRunner,
     );
 
     if (queryResult.length === 0) {
@@ -146,24 +141,19 @@ export class WaitlistService {
       return;
     }
 
-    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
-
     try {
-      await queryRunner.startTransaction();
-
-      await queryRunner.manager.update(
-        Waitlist,
-        {
-          id: waitlistEntity.id,
-        },
-        { isEmailVerified: true },
-      );
-
       const [emailAddress] = await this.vaultService.decryptStrings([
         waitlistEntity.emailAddress,
       ]);
 
       await this.sendgridService.addToWaitlist(emailAddress, waitlistEntity.id);
+
+      this.waitlist.update(
+        {
+          id: waitlistEntity.id,
+        },
+        { isEmailVerified: true },
+      );
 
       // Disabled for now, might need later
 
@@ -177,18 +167,15 @@ export class WaitlistService {
       //     referralCode: waitlistEntity.referralCode,
       //   },
       // );
-
-      await queryRunner.commitTransaction();
-    } catch {
-      await queryRunner.rollbackTransaction();
-
+    } catch (error) {
       Logger.error({
         code: 'ERROR_VERIFYING_WAITLIST_EMAIL',
+        metadata: {
+          error: JSON.stringify(error),
+        },
       });
 
       throw new InternalServerErrorException();
-    } finally {
-      await queryRunner.release();
     }
   }
 }

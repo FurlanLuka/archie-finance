@@ -37,3 +37,4 @@ lerna-debug.log*
 .env
 
 local/vault/*
+local/vault/secrets.txt
