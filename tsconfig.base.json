@@ -22,6 +22,7 @@
       "@archie-microservices/health": ["libs/health/src/index.ts"],
       "@archie-microservices/internal-api": ["libs/internal-api/src/index.ts"],
       "@archie-microservices/openapi": ["libs/openapi/src/index.ts"],
+      "@archie-microservices/sendgrid": ["libs/sendgrid/src/index.ts"],
       "@archie-microservices/vault": ["libs/vault/src/index.ts"]
     }
   },
