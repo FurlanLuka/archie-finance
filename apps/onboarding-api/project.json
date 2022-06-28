@@ -27,28 +27,12 @@
         }
       }
     },
-//    "build-sdk": {
-//      "executor": "@nrwl/workspace:run-commands",
-//      "options": {
-//        "command": "npm run build onboarding-api --verbose && node dist/apps/onboarding-api/main build-swagger"
-//      }
-//    },
-    "build-sdk": {
+    "build-openapi": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "ts-node apps/onboarding-api/src/main build-swagger"
+        "command": "npm run build onboarding-api && node dist/apps/onboarding-api/main build-swagger"
       }
     },
-//    "build-sdk": {
-//      "executor": "@nrwl/node:node",
-//      "options": {
-//        "buildTarget": "onboarding-api:build",
-//        "args": [
-//          "build-swagger"
-//        ]
-//      },
-//      "watch": false
-//    },
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {

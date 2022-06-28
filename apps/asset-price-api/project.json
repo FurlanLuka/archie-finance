@@ -27,6 +27,12 @@
         }
       }
     },
+    "build-openapi": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build asset-price-api && node dist/apps/asset-price-api/main build-swagger"
+      }
+    },
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {

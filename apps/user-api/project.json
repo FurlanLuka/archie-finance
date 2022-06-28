@@ -31,6 +31,12 @@
         }
       }
     },
+    "build-openapi": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build user-api && node dist/apps/user-api/main build-swagger"
+      }
+    },
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {

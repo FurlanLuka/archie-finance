@@ -27,6 +27,12 @@
         }
       }
     },
+    "build-openapi": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build collateral-api && node dist/apps/collateral-api/main build-swagger"
+      }
+    },
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
