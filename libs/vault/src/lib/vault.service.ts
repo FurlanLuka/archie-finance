@@ -97,8 +97,8 @@ export class VaultService {
       });
 
       if (
-        error.code !== undefined &&
-        (error.code === '401' || error.code === '403')
+        error.status !== undefined &&
+        (error.status === '401' || error.status === '403')
       ) {
         this.vaultAccessToken = undefined;
 
@@ -144,8 +144,8 @@ export class VaultService {
       });
 
       if (
-        error.code !== undefined &&
-        (error.code === '401' || error.code === '403')
+        error.status !== undefined &&
+        (error.status === '401' || error.status === '403')
       ) {
         this.vaultAccessToken = undefined;
 
