@@ -107,4 +107,4 @@ jobs:
         CHART: ./charts/${{ steps.git_details.outputs.APP_NAME }}
         APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
       with:
-        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment="production"
+        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment="production" --set production="true"

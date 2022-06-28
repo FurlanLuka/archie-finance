@@ -14,7 +14,11 @@ spec:
     matchLabels:
       app: archie-referral-system-api
   {{- if not .Values.local }}
+  {{- if .Values.production }}
+  replicas: 2
+  {{- else }}
   replicas: 1
+  {{- end }}
   {{- else }}
   replicas: 1
   {{- end }}
