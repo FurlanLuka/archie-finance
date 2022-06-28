@@ -12,6 +12,8 @@
     "health": "libs/health",
     "internal-api": "libs/internal-api",
     "onboarding-api": "apps/onboarding-api",
+    "referral-system-api": "apps/referral-system-api",
+    "sendgrid": "libs/sendgrid",
     "user-api": "apps/user-api",
     "vault": "libs/vault"
   }
