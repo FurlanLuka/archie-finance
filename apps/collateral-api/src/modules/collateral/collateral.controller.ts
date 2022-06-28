@@ -6,6 +6,7 @@ import {
   CollateralValue,
   GetTotalCollateralValueResponse,
 } from './collateral.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('v1/collateral')
 export class CollateralController {
@@ -13,12 +14,14 @@ export class CollateralController {
 
   @Get()
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async getCollateral(@Req() request): Promise<Collateral[]> {
     return this.collateralService.getUserCollateral(request.user.sub);
   }
 
   @Get('value')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async getUserCollateralValue(
     @Req() request,
   ): Promise<CollateralValue[]> {
@@ -27,6 +30,7 @@ export class CollateralController {
 
   @Get('value/total')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async getUserTotalCollateralValue(
     @Req() request,
   ): Promise<GetTotalCollateralValueResponse> {

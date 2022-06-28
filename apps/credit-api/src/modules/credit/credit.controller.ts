@@ -9,6 +9,7 @@ import {
 import { GetCreditResponseDto } from './credit.dto';
 import { CreditService } from './credit.service';
 import { AuthGuard } from '@archie-microservices/auth0';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('v1/credit')
 export class CreditController {
@@ -16,12 +17,14 @@ export class CreditController {
 
   @Post()
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async createCreditLine(@Request() req): Promise<GetCreditResponseDto> {
     return this.creditService.createCredit(req.user.sub);
   }
 
   @Get()
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async getCreditLine(@Request() req): Promise<GetCreditResponseDto> {
     return this.creditService.createCredit(req.user.sub);
   }

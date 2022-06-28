@@ -2,6 +2,7 @@ import { AuthGuard } from '@archie-microservices/auth0';
 import { Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { GetEmailVerificationResponseDto, GetEmailAddressResponseDto } from './user.dto';
 import { UserService } from './user.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('v1/user')
 export class UserController {
@@ -9,6 +10,7 @@ export class UserController {
 
   @Get('email-verification')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async checkEmailVerification(
     @Req() request,
   ): Promise<GetEmailVerificationResponseDto> {
@@ -17,6 +19,7 @@ export class UserController {
 
   @Post('email-verification/resend')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async resendEmailVerification(@Req() request): Promise<void> {
     return this.userService.resendEmailVerification(request.user.sub);
   }

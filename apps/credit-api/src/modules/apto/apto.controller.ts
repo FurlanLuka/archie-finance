@@ -8,6 +8,7 @@ import {
   StartPhoneVerificationResponseDto,
   CompletePhoneVerificationResponseDto,
 } from './apto.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('v1/apto')
 export class AptoController {
@@ -15,6 +16,7 @@ export class AptoController {
 
   @Post('verification/start')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   public async startPhoneVerification(
     @Request() req,
   ): Promise<StartPhoneVerificationResponseDto> {
@@ -23,6 +25,7 @@ export class AptoController {
 
   @Post('verification/finish')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   public async finishPhoneVerification(
     @Request() req,
     @Body() body: FinishPhoneVerificationDto,
@@ -32,6 +35,7 @@ export class AptoController {
 
   @Post('verification/restart')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   public async restartPhoneVerification(
     @Request() req,
   ): Promise<StartPhoneVerificationResponseDto> {
@@ -40,12 +44,14 @@ export class AptoController {
 
   @Post('user')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   public async createUser(@Request() req): Promise<CreateUserResponseDto> {
     return this.aptoService.createAptoUser(req.user.sub);
   }
 
   @Post('user/card')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   public async applyForCard(@Request() req): Promise<IssueCardResponseDto> {
     return this.aptoService.issueCard(req.user.sub);
   }

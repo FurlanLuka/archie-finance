@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { KycDto, CreateKycResponseDto, GetKycResponseDto } from './kyc.dto';
 import { KycService } from './kyc.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('v1/kyc')
 export class KycController {
@@ -17,12 +18,14 @@ export class KycController {
 
   @Get()
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async getKyc(@Req() request): Promise<GetKycResponseDto> {
     return this.kycService.getKyc(request.user.sub);
   }
 
   @Post()
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async createKyc(
     @Body() body: KycDto,
     @Req() request,
