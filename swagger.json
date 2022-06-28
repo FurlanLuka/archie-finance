@@ -170,7 +170,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Collateral"
+                    "$ref": "#/components/schemas/CollateralDto"
                   }
                 }
               }
@@ -196,7 +196,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CollateralValue"
+                    "$ref": "#/components/schemas/CollateralValueDto"
                   }
                 }
               }
@@ -220,7 +220,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetTotalCollateralValueResponse"
+                  "$ref": "#/components/schemas/GetTotalCollateralValueResponseDto"
                 }
               }
             }
@@ -254,7 +254,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Collateral"
+                    "$ref": "#/components/schemas/CollateralDto"
                   }
                 }
               }
@@ -284,7 +284,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CollateralValue"
+                    "$ref": "#/components/schemas/CollateralValueDto"
                   }
                 }
               }
@@ -770,6 +770,74 @@
           }
         }
       }
+    },
+    "/v1/waitlist": {
+      "post": {
+        "operationId": "WaitlistController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/waitlist/verify/{id}": {
+      "post": {
+        "operationId": "WaitlistController_verify",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/waitlist/{id}": {
+      "get": {
+        "operationId": "WaitlistController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetWaitlistRecordResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -804,7 +872,7 @@
           "address"
         ]
       },
-      "Collateral": {
+      "CollateralDto": {
         "type": "object",
         "properties": {
           "asset": {
@@ -819,7 +887,7 @@
           "amount"
         ]
       },
-      "CollateralValue": {
+      "CollateralValueDto": {
         "type": "object",
         "properties": {
           "asset": {
@@ -838,7 +906,7 @@
           "price"
         ]
       },
-      "GetTotalCollateralValueResponse": {
+      "GetTotalCollateralValueResponseDto": {
         "type": "object",
         "properties": {
           "value": {
@@ -1269,6 +1337,43 @@
         },
         "required": [
           "emailAddress"
+        ]
+      },
+      "CreateDto": {
+        "type": "object",
+        "properties": {
+          "emailAddress": {
+            "type": "string"
+          },
+          "referrer": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "emailAddress"
+        ]
+      },
+      "GetWaitlistRecordResponseDto": {
+        "type": "object",
+        "properties": {
+          "numberOfReferrals": {
+            "type": "number"
+          },
+          "numberOfVerifiedReferrals": {
+            "type": "number"
+          },
+          "waitlistRank": {
+            "type": "number"
+          },
+          "referralCode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "numberOfReferrals",
+          "numberOfVerifiedReferrals",
+          "waitlistRank",
+          "referralCode"
         ]
       }
     },

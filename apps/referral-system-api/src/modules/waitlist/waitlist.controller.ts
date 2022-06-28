@@ -1,6 +1,9 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CreateDto, IdParamsDto } from './waitlist.dto';
-import { GetWaitlistRecordResponse } from './waitlist.interfaces';
+import {
+  CreateDto,
+  GetWaitlistRecordResponseDto,
+  IdParamsDto,
+} from './waitlist.dto';
 import { WaitlistService } from './waitlist.service';
 
 @Controller('v1/waitlist')
@@ -20,7 +23,7 @@ export class WaitlistController {
   @Get(':id')
   public async get(
     @Param() params: IdParamsDto,
-  ): Promise<GetWaitlistRecordResponse> {
+  ): Promise<GetWaitlistRecordResponseDto> {
     return this.waitlistService.get(params.id);
   }
 }
