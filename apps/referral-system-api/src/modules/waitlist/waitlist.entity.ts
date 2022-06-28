@@ -23,7 +23,7 @@ export class Waitlist {
   @Column('boolean', { default: false })
   isEmailVerified: boolean;
 
-  @Column('varchar')
+  @Column('uuid')
   @Generated('uuid')
   referralCode: string;
 
