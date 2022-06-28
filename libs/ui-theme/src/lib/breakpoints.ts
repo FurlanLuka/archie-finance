@@ -1,4 +1,4 @@
-const breakpoints: { [screenSize: string]: string } = {
+export const breakpoints: { [screenSize: string]: string } = {
   screenXS: '420px',
   screenSM: '640px',
   screenMD: '992px',
@@ -6,6 +6,4 @@ const breakpoints: { [screenSize: string]: string } = {
   screenL: '1500px',
   screenXL: '1700px',
   screenXXL: '1900px',
-}
-
-export default breakpoints
+};

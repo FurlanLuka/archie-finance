@@ -13,9 +13,11 @@
     "lib": ["es2017", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
+    "noPropertyAccessFromIndexSignature": false,
     "baseUrl": ".",
     "paths": {
       "@archie-webapps/ui-design-system": ["libs/ui-design-system/src/index.ts"],
+      "@archie-webapps/ui-theme": ["libs/ui-theme/src/index.ts"],
       "@archie/api-consumer/*": ["libs/archie-api-consumer/src/*"],
       "@archie/session/*": ["libs/archie-session/src/*"]
     }
