@@ -1,11 +1,10 @@
-import styled, { keyframes } from 'styled-components'
-
-import breakpoints from '../../../constants/ui/breakpoints'
+import styled, { keyframes } from 'styled-components';
+import { breakpoints } from '@archie-webapps/ui-theme';
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
-`
+`;
 
 interface ButtonProps {
   isLoading?: boolean;
@@ -14,29 +13,28 @@ interface ButtonProps {
   small?: boolean;
   color?: string;
 }
-
 const Button = styled.button<ButtonProps>`
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-size: ${({ small }) => small ? '0.75rem' : '1rem'};
+  font-size: ${({ small }) => (small ? '0.75rem' : '1rem')};
   line-height: 1;
   font-weight: 700;
-  padding: ${({ small }) => small ? '0.25rem 1rem' : '1rem 2rem'};
-  border-radius: ${({ small }) => small ? '0.25rem' : '0.5rem'};
+  padding: ${({ small }) => (small ? '0.25rem 1rem' : '1rem 2rem')};
+  border-radius: ${({ small }) => (small ? '0.25rem' : '0.5rem')};
   border: 1px solid;
   max-height: 3rem;
   width: ${({ maxWidth }) => maxWidth ?? '100%'};
-  cursor: ${({ isDisabled, isLoading }) => isDisabled || isLoading ? 'not-allowed' : 'pointer'};
+  cursor: ${({ isDisabled, isLoading }) => (isDisabled || isLoading ? 'not-allowed' : 'pointer')};
 
   @media (max-width: ${breakpoints.screenSM}) {
     width: 100%;
-  }  
+  }
 
   :hover {
-    opacity: ${({ isDisabled }) => isDisabled ? '1' : '0.8'};
+    opacity: ${({ isDisabled }) => (isDisabled ? '1' : '0.8')};
   }
 
   :before {
@@ -48,7 +46,7 @@ const Button = styled.button<ButtonProps>`
     height: calc(100% + 2px);
     background-color: ${({ theme }) => theme.backgroundDisabled};
     border-radius: inherit;
-    display: ${({ isLoading }) => isLoading ? 'flex' : 'none'};
+    display: ${({ isLoading }) => (isLoading ? 'flex' : 'none')};
   }
 
   :after {
@@ -60,30 +58,30 @@ const Button = styled.button<ButtonProps>`
     width: 1.75rem;
     height: 1.75rem;
     animation: ${spin} 0.8s linear infinite;
-    display: ${({ isLoading }) => isLoading ? 'flex' : 'none'};
+    display: ${({ isLoading }) => (isLoading ? 'flex' : 'none')};
   }
-`
+`;
 
 export const ButtonPrimary = styled(Button)`
   background-color: ${({ theme }) => theme.buttonPrimary};
   color: ${({ theme }) => theme.textLight};
   border-color: ${({ theme }) => theme.buttonPrimary};
-`
+`;
 
 export const ButtonOutline = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
   color: ${({ theme }) => theme.textHighlight};
   border-color: ${({ theme }) => theme.textHighlight};
-`
+`;
 
 export const ButtonGhost = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
   color: ${({ theme }) => theme.buttonGhost};
   border-color: ${({ theme }) => theme.buttonGhost};
-`
+`;
 
 export const ButtonLight = styled(Button)`
   background-color: ${({ theme }) => theme.buttonLight};
   color: ${({ theme, color }) => color ?? theme.textDanger};
   border-color: ${({ theme }) => theme.buttonLight};
-`
+`;

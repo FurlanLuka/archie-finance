@@ -1,6 +1,5 @@
 import styled from 'styled-components'
-
-import breakpoints from '../../../constants/ui/breakpoints'
+import { breakpoints } from '@archie-webapps/ui-theme'
 
 interface TypographyProps {
   color?: string;

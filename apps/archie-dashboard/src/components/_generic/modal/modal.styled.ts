@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import breakpoints from '../../../constants/ui/breakpoints'
+import { breakpoints } from '@archie-webapps/ui-theme';
 
 interface ModalProps {
   isOpen: boolean;
@@ -18,11 +18,11 @@ export const ModalStyled = styled.div<ModalProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  visibility: ${({ isOpen }) => isOpen ? `visible` : `hidden`};
-  opacity: ${({ isOpen }) => isOpen ? 1 : 0};
+  visibility: ${({ isOpen }) => (isOpen ? `visible` : `hidden`)};
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   transition: opacity 0.2s ease;
   z-index: 3;
-`
+`;
 
 export const ModalOverlay = styled.div`
   position: absolute;
@@ -30,9 +30,9 @@ export const ModalOverlay = styled.div`
   left: 0px;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0 ,0, .4);
+  background-color: rgba(0, 0, 0, 0.4);
   z-index: 1;
-`
+`;
 
 export const ModalContent = styled.div<ModalContentProps>`
   display: flex;
@@ -47,4 +47,4 @@ export const ModalContent = styled.div<ModalContentProps>`
   @media (max-width: ${breakpoints.screenSM}) {
     padding: 1.5rem 1rem 2.5rem;
   }
-`
+`;

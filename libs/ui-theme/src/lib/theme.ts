@@ -1,37 +1,90 @@
-const colors: { [color: string]: string } = {
-  black: "#081517",
-  white: "#fff",
-  coral: "#ff8577",
-  coral_400: "#fea298",
-  coral_300: "#fcbfb8",
-  coral_200: "#fbdcd9",
-  alabaster: "#d8e2dc",
-  teal_800: "#24464b",
-  teal_700: "#40777f",
-  teal_600: "#5ca8b3",
-  teal_500: "#70d1df",
+const colors = {
+  black: '#081517',
+  white: '#fff',
+  coral: '#ff8577',
+  coral_400: '#fea298',
+  coral_300: '#fcbfb8',
+  coral_200: '#fbdcd9',
+  alabaster: '#d8e2dc',
+  teal_800: '#24464b',
+  teal_700: '#40777f',
+  teal_600: '#5ca8b3',
+  teal_500: '#70d1df',
   teal_400: '98e1ec',
   teal_300: 'b9e9f0',
-  teal_200: "#d9f1f4",
+  teal_200: '#d9f1f4',
   green_600: '#00c853',
   green_500: '#00e676',
   green_400: '#69f0ae',
-  neutralgray: "#9fa3a4",
+  neutralgray: '#9fa3a4',
   neutralgray_500: '#818788',
-  neutralgray_300: "#bdc0c1",
-  neutralgray_200: "#dbdcdd",
-  neutralgray_100: "#f9f9f9",
-  yellow_500: "#ffea00",
-  orange_500: "ff9100",
-  red_600: "#d50000",
-  red_500: "#ff1744",
-  red_400: "ff8a80",
-  transparent: "transparent",
+  neutralgray_300: '#bdc0c1',
+  neutralgray_200: '#dbdcdd',
+  neutralgray_100: '#f9f9f9',
+  yellow_500: '#ffea00',
+  orange_500: 'ff9100',
+  red_600: '#d50000',
+  red_500: '#ff1744',
+  red_400: 'ff8a80',
+  transparent: 'transparent',
 };
 
-export const theme: { [key: string]: string } = {
+export interface Theme {
   // font
-  fontPrimary: "Inter",
+  fontPrimary: string;
+  // background
+  backgroundPrimary: string;
+  backgroundSecondary: string;
+  backgroundDisabled: string;
+  backgroundAlert: string;
+  backgroundNegative: string;
+  backgroundSuccess: string;
+  // text
+  textPrimary: string;
+  textSecondary: string;
+  textLight: string;
+  textPositive: string;
+  textHighlight: string;
+  textDisabled: string;
+  textDanger: string;
+  textSuccess: string;
+  textWarning: string;
+  // button
+  buttonPrimary: string;
+  buttonOutline: string;
+  buttonGhost: string;
+  buttonLight: string;
+  // input
+  inputText: string;
+  inputTextPlaceholder: string;
+  inputRange: string;
+  inputRangeFilled: string;
+  // border
+  borderPrimary: string;
+  borderHighlight: string;
+  borderDisabled: string;
+  // tooltip
+  tooltipBackground: string;
+  tooltipText: string;
+  // loader
+  loaderBackground: string;
+  // table
+  tableBorderOuther: string;
+  tableBorderInner: string;
+  // chars
+  loanToValueDefault: string;
+  loanToValueActive: string;
+  nextPaymentDefault: string;
+  nextPaymentActive: string;
+  collateralValue: string;
+  // status
+  statusSettled: string;
+  statusPending: string;
+}
+
+export const theme: Theme = {
+  // font
+  fontPrimary: 'Inter',
   // background
   backgroundPrimary: colors.white,
   backgroundSecondary: colors.neutralgray_100,

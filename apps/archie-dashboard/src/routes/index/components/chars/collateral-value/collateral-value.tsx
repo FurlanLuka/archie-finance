@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { linearGradientDef } from '@nivo/core';
 import { ResponsiveStream } from '@nivo/stream';
-import { theme } from '../../../../../constants/ui/theme';
 import { CollateralValueStyled } from './collateral-value.styled';
+import { theme } from '@archie-webapps/ui-theme';
 
 const data = [
   {

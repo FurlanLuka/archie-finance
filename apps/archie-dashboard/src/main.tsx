@@ -10,10 +10,9 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { SessionProvider } from '@archie/session/session-provider';
 import { OnboardingRoute } from './routes/onboarding/onboarding-route';
-import GlobalStyles from './components/_generic/global-styles/global-styles.styled';
-import { theme } from './constants/ui/theme';
 import './utils/i18next';
 import { LogoutRoute } from './routes/logout/logout-route';
+import { GlobalStyles, theme } from '@archie-webapps/ui-theme';
 
 const queryClient: QueryClient = new QueryClient();
 

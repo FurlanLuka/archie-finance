@@ -1,8 +1,8 @@
-import { createGlobalStyle } from 'styled-components'
+import { createGlobalStyle } from 'styled-components';
 
-import breakpoints from '../../../constants/ui/breakpoints'
+import { breakpoints } from './breakpoints';
 
-const GlobalStyles = createGlobalStyle`
+export const GlobalStyles = createGlobalStyle`
   * {
     box-sizing: border-box;
     word-wrap: break-word;
@@ -89,6 +89,4 @@ const GlobalStyles = createGlobalStyle`
   img {
     max-width: 100%;
   }
-`
-
-export default GlobalStyles
+`;

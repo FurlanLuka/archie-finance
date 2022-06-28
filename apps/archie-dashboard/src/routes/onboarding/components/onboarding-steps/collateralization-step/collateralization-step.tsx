@@ -8,7 +8,6 @@ import { AssetPrice } from '@archie/api-consumer/asset_price/api/get-asset-price
 import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
 import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
 import { CollateralAsset } from '../../../../../constants/data/collateral-assets';
-import { theme } from '../../../../../constants/ui/theme';
 import { Step } from '../../../../../constants/onboarding-steps';
 import { Container } from '../../../../../components/_generic/layout/layout.styled';
 import { SubtitleM, ParagraphS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
@@ -20,6 +19,7 @@ import { InputRange } from '../../../../../components/_generic/input-range/input
 import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
 import { ExternalLink } from '../../../../../components/_generic/icons/external-link';
 import { Collateral } from '../../../../../components/collateral/collateral';
+import { theme } from '@archie-webapps/ui-theme';
 
 export const CollateralizationStep: FC = () => {
   const { t } = useTranslation();

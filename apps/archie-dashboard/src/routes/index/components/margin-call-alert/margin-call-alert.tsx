@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { theme } from '../../../../constants/ui/theme';
 import { ParagraphS, ParagraphXS } from '../../../../components/_generic/typography/typography.styled';
 import { ButtonLight } from '../../../../components/_generic/button/button.styled';
 import { MarginCallAlertStyled } from './margin-call-alert.styled';
+import { theme } from '@archie-webapps/ui-theme';
 
 export const MarginCallAlert: FC = () => {
   const { t } = useTranslation();

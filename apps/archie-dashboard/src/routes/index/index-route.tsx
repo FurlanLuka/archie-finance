@@ -1,11 +1,9 @@
 import { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate } from 'react-router-dom';
 import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-onboarding';
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { GetOnboardingResponse } from '@archie/api-consumer/onboarding/api/get-onboarding';
 import imgCard from '../../assets/images/card-placeholder.png';
-import { theme } from '../../constants/ui/theme';
 import {
   SubtitleS,
   ParagraphM,
@@ -28,6 +26,7 @@ import { CollateralValue } from './components/chars/collateral-value/collateral-
 import { IndexStyled } from './index-route.styled';
 import { tableColumns } from './fixtures/table-fixture';
 import { tableData } from './constants/table-data';
+import { theme } from '@archie-webapps/ui-theme';
 
 export const DashboardRoute: FC = () => {
   const { t } = useTranslation();

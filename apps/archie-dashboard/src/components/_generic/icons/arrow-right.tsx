@@ -1,6 +1,5 @@
 import { FC } from 'react';
-
-import { theme } from '../../../constants/ui/theme';
+import { theme } from '@archie-webapps/ui-theme';
 
 import { iconProps } from './icons.interface';
 

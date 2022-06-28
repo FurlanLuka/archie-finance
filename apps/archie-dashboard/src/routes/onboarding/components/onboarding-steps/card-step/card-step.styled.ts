@@ -1,6 +1,5 @@
+import { breakpoints } from '@archie-webapps/ui-theme';
 import styled from 'styled-components';
-
-import breakpoints from '../../../../../constants/ui/breakpoints'
 
 export const CardStepStyled = styled.div`
   display: flex;
@@ -17,7 +16,7 @@ export const CardStepStyled = styled.div`
 
   @media (max-width: ${breakpoints.screenSM}) {
     padding: 2.5rem 1.5rem 3.5rem;
-  }  
+  }
 
   .title {
     margin-bottom: 0.5rem;

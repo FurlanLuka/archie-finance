@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
-import breakpoints from '../../../constants/ui/breakpoints'
+import styled from 'styled-components';
+import { breakpoints } from '@archie-webapps/ui-theme';
 
 interface HeaderProps {
   isOpen: boolean;
@@ -11,7 +10,7 @@ export const HeaderStyled = styled.div<HeaderProps>`
   display: flex;
   align-items: center;
   background-color: ${({ theme }) => theme.backgroundPrimary};
-  border-bottom: 1px solid ${({theme }) => theme.borderPrimary};
+  border-bottom: 1px solid ${({ theme }) => theme.borderPrimary};
   width: 100%;
   padding: 1.5rem 2rem;
   z-index: 2;
@@ -22,7 +21,7 @@ export const HeaderStyled = styled.div<HeaderProps>`
 
   .logo {
     margin-bottom: 4px;
-    
+
     @media (max-width: ${breakpoints.screenSM}) {
       width: 84px;
     }
@@ -56,12 +55,12 @@ export const HeaderStyled = styled.div<HeaderProps>`
   .line {
     width: 20px;
     height: 2px;
-    background-color: ${({theme }) => theme.textPrimary};
+    background-color: ${({ theme }) => theme.textPrimary};
     border-radius: 4px;
     margin: 3px 0;
-    transform: ${({ isOpen }) => isOpen ? `scaleX(0)` : `scaleX(1)`};
+    transform: ${({ isOpen }) => (isOpen ? `scaleX(0)` : `scaleX(1)`)};
     will-change: transform;
-    transition: ${({ isOpen }) => isOpen ? `transform .15s linear 0s` : `transform .15s linear 0.15s`};
+    transition: ${({ isOpen }) => (isOpen ? `transform .15s linear 0s` : `transform .15s linear 0.15s`)};
 
     &.one {
       transform-origin: 0 50%;
@@ -78,11 +77,11 @@ export const HeaderStyled = styled.div<HeaderProps>`
     right: 8px;
     width: 16px;
     height: 16px;
-    transform: ${({ isOpen }) => isOpen ? `scale(1)` : `scale(0)`};
+    transform: ${({ isOpen }) => (isOpen ? `scale(1)` : `scale(0)`)};
     will-change: transform;
-    transition: ${({ isOpen }) => isOpen ? `transform .15s linear 0.15s` : `transform .15s linear 0s`};
+    transition: ${({ isOpen }) => (isOpen ? `transform .15s linear 0.15s` : `transform .15s linear 0s`)};
   }
-`
+`;
 
 export const MobileNav = styled.div<HeaderProps>`
   position: fixed;
@@ -96,12 +95,12 @@ export const MobileNav = styled.div<HeaderProps>`
   justify-content: space-between;
   text-align: center;
   background-color: ${({ theme }) => theme.backgroundPrimary};
-  transform: ${({ isOpen }) => isOpen ? `translateY(0)` : `translateY(-100%)`};
+  transform: ${({ isOpen }) => (isOpen ? `translateY(0)` : `translateY(-100%)`)};
   will-change: transform;
   transition: transform 0.3s linear;
   padding: 3.75rem 1rem;
   z-index: 1;
-  
+
   .links {
     display: flex;
     flex-direction: column;
@@ -122,4 +121,4 @@ export const MobileNav = styled.div<HeaderProps>`
     display: flex;
     gap: 0.5rem;
   }
-`
+`;

@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
-import breakpoints from '../../../../../constants/ui/breakpoints';
+import styled from 'styled-components';
+import { breakpoints } from '@archie-webapps/ui-theme';
 
 export const VerifyStepStyled = styled.div`
   display: flex;
@@ -43,7 +42,7 @@ export const VerifyStepStyled = styled.div`
 
       @media (max-width: ${breakpoints.screenSM}) {
         height: 4.5rem !important;
-      }  
+      }
     }
   }
 
@@ -60,13 +59,13 @@ export const VerifyStepStyled = styled.div`
 
   .divider {
     height: 1px;
-  	width: 100%;
+    width: 100%;
     background-color: ${({ theme }) => theme.borderPrimary};
     border: 0;
     margin-bottom: 1.5rem;
-  }  
+  }
 
   button {
     margin-bottom: 0.5rem;
   }
-`
+`;

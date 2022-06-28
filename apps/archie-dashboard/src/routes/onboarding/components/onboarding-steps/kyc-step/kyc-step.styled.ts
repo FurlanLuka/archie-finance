@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
-import breakpoints from '../../../../../constants/ui/breakpoints';
+import { breakpoints } from '@archie-webapps/ui-theme';
+import styled from 'styled-components';
 
 export const KycStepStyled = styled.div`
   display: flex;
@@ -34,7 +33,7 @@ export const KycStepStyled = styled.div`
     @media (max-width: ${breakpoints.screenSM}) {
       flex-direction: column;
       gap: 0;
-    }  
+    }
   }
 
   .phone-number {
@@ -43,7 +42,7 @@ export const KycStepStyled = styled.div`
     gap: 0.5rem;
     width: 100%;
 
-    p {    
+    p {
       margin-top: 0.35rem;
     }
   }
@@ -54,13 +53,13 @@ export const KycStepStyled = styled.div`
 
   .divider {
     height: 1px;
-  	width: 100%;
+    width: 100%;
     background-color: ${({ theme }) => theme.borderPrimary};
     border: 0;
     margin-bottom: 1.5rem;
-  }  
+  }
 
   button {
     margin-bottom: 0.5rem;
   }
-`
+`;

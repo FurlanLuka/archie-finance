@@ -11,8 +11,8 @@ import { SubtitleM, ParagraphXS, ParagraphS } from '../../../../../components/_g
 import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
 import { InputText } from '../../../../../components/_generic/input-text/input-text.styled';
 import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
-import { theme } from '../../../../../constants/ui/theme';
 import { KycStepStyled } from './kyc-step.styled';
+import { theme } from '@archie-webapps/ui-theme';
 
 interface GooglePlace {
   address_components: Array<{

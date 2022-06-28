@@ -1,5 +1,5 @@
+import { theme } from '@archie-webapps/ui-theme';
 import { FC } from 'react';
-import { theme } from '../../../../../constants/ui/theme';
 import { ParagraphXXS } from '../../../../../components/_generic/typography/typography.styled';
 import { NextPaymentStyled } from './next-payment.styled';
 

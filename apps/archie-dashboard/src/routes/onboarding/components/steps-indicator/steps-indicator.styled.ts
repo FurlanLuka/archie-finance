@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
-import breakpoints from '../../../../constants/ui/breakpoints';
+import styled from 'styled-components';
+import { breakpoints } from '@archie-webapps/ui-theme';
 
 export const StepsIndicatorStyled = styled.div`
   display: flex;
@@ -9,7 +8,7 @@ export const StepsIndicatorStyled = styled.div`
 
   @media (max-width: ${breakpoints.screenSM}) {
     gap: 1.5rem;
-  }  
+  }
 
   .step {
     position: relative;
@@ -23,7 +22,7 @@ export const StepsIndicatorStyled = styled.div`
     width: 1.5rem;
     height: 1.5rem;
     border-radius: 100%;
-    background-color:  ${({ theme }) => theme.textDisabled};
+    background-color: ${({ theme }) => theme.textDisabled};
     margin-bottom: 0.5rem;
   }
 
@@ -40,6 +39,6 @@ export const StepsIndicatorStyled = styled.div`
     @media (max-width: ${breakpoints.screenSM}) {
       width: 4.5rem;
       right: -3rem;
-    }  
+    }
   }
-`
+`;
