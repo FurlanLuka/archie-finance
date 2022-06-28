@@ -7,11 +7,9 @@ interface ModalProps {
   maxWidth?: string;
 }
 
-const Modal: FC<ModalProps> = ({ children, isOpen, close, maxWidth }) => (
+export const Modal: FC<ModalProps> = ({ children, isOpen, close, maxWidth }) => (
   <ModalStyled isOpen={isOpen}>
     <ModalOverlay onClick={close} />
     <ModalContent maxWidth={maxWidth}>{children}</ModalContent>
   </ModalStyled>
 );
-
-export default Modal;

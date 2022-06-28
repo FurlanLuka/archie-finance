@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { ResponsivePie } from '@nivo/pie';
-import { SubtitleM, ParagraphXXS } from '../../../../../components/_generic/typography/typography.styled';
+import { SubtitleM, ParagraphXXS } from '@archie-webapps/ui-design-system';
 import { LoanToValueStyled } from './loan-to-value.styled';
 import { theme } from '@archie-webapps/ui-theme';
 

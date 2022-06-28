@@ -1,6 +1,6 @@
 import { theme } from '@archie-webapps/ui-theme';
 import { FC } from 'react';
-import { ParagraphXXS } from '../../../../../components/_generic/typography/typography.styled';
+import { ParagraphXXS } from '@archie-webapps/ui-design-system';
 import { NextPaymentStyled } from './next-payment.styled';
 
 const days = 13;

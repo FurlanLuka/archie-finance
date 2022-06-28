@@ -3,9 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { CollateralDeposit } from '../../../components/collateral-deposit/collateral-deposit';
 import { CollateralAsset, collateralAssets } from '../../../constants/data/collateral-assets';
 import { CollateralCurrency } from '../../../components/collateral-currency/collateral-currency';
-import { Caret } from '../../../components/_generic/icons/caret';
-import { ParagraphXS } from '../typography/typography.styled';
 import { InputSelectStyled } from './input-select.styled';
+import { Caret, ParagraphXS } from '@archie-webapps/ui-design-system';
 
 interface InputSelectProps {
   setSelectedAsset: (asset?: CollateralAsset) => void;

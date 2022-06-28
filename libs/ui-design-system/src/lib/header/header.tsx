@@ -17,7 +17,7 @@ interface HeaderProps {
  * @param {ComponentProps} props
  * @returns {StatelessComponent}
  */
-const Header: FC<HeaderProps> = ({ maxWidth }) => {
+export const Header: FC<HeaderProps> = ({ maxWidth }) => {
   const navigate = useNavigate();
   const { logout } = useAuthenticatedSession();
 
@@ -63,5 +63,3 @@ const Header: FC<HeaderProps> = ({ maxWidth }) => {
     </>
   );
 };
-
-export default Header;

@@ -9,17 +9,21 @@ import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/
 import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
 import { CollateralAsset } from '../../../../../constants/data/collateral-assets';
 import { Step } from '../../../../../constants/onboarding-steps';
-import { Container } from '../../../../../components/_generic/layout/layout.styled';
-import { SubtitleM, ParagraphS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
-import { Copy } from '../../../../../components/_generic/icons/copy';
 import { StepsIndicator } from '../../steps-indicator/steps-indicator';
 import { EmailVerification } from '../../email-verification/email-verification';
 import { CollateralizationStepStyled } from './collateralization-step.styled';
-import { InputRange } from '../../../../../components/_generic/input-range/input-range';
-import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
-import { ExternalLink } from '../../../../../components/_generic/icons/external-link';
 import { Collateral } from '../../../../../components/collateral/collateral';
 import { theme } from '@archie-webapps/ui-theme';
+import {
+  Container,
+  Copy,
+  ExternalLink,
+  InputRange,
+  ParagraphS,
+  ParagraphXS,
+  SubtitleM,
+} from '@archie-webapps/ui-design-system';
+import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
 
 export const CollateralizationStep: FC = () => {
   const { t } = useTranslation();

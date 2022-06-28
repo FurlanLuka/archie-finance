@@ -7,12 +7,16 @@ import { templateFormatter, templateParser, parseDigit } from 'input-format';
 import ReactInput from 'input-format/react';
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
-import { SubtitleM, ParagraphXS, ParagraphS } from '../../../../../components/_generic/typography/typography.styled';
-import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
-import { InputText } from '../../../../../components/_generic/input-text/input-text.styled';
-import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
 import { KycStepStyled } from './kyc-step.styled';
 import { theme } from '@archie-webapps/ui-theme';
+import {
+  ArrowRight,
+  ButtonPrimary,
+  InputText,
+  ParagraphS,
+  ParagraphXS,
+  SubtitleM,
+} from '@archie-webapps/ui-design-system';
 
 interface GooglePlace {
   address_components: Array<{

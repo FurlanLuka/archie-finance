@@ -1,6 +1,6 @@
 import { theme } from '@archie-webapps/ui-theme';
 import { FC, ReactElement } from 'react';
-import { ParagraphXS } from '../_generic/typography/typography.styled';
+import { ParagraphXS } from '@archie-webapps/ui-design-system';
 import { CollateralCurrencyStyled } from './collateral-currency.styled';
 
 interface CollateralCurrencyProps {

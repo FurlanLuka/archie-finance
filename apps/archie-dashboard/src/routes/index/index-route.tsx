@@ -4,19 +4,6 @@ import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-
 import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { GetOnboardingResponse } from '@archie/api-consumer/onboarding/api/get-onboarding';
 import imgCard from '../../assets/images/card-placeholder.png';
-import {
-  SubtitleS,
-  ParagraphM,
-  ParagraphS,
-  ParagraphXS,
-  ParagraphXXS,
-} from '../../components/_generic/typography/typography.styled';
-import { ButtonOutline, ButtonGhost } from '../../components/_generic/button/button.styled';
-import { Card } from '../../components/_generic/card/card.styled';
-import Loading from '../../components/_generic/loading/loading';
-import { Page } from '../../components/_generic/layout/layout.styled';
-import Header from '../../components/_generic/header/header';
-import { Table } from '../../components/_generic/table/table';
 import { Navigation } from './components/navigation/navigation';
 import { RevealCardModal } from './components/reveal-card-modal/reveal-card-modal';
 import { MarginCallAlert } from './components/margin-call-alert/margin-call-alert';
@@ -27,6 +14,20 @@ import { IndexStyled } from './index-route.styled';
 import { tableColumns } from './fixtures/table-fixture';
 import { tableData } from './constants/table-data';
 import { theme } from '@archie-webapps/ui-theme';
+import {
+  ButtonGhost,
+  ButtonOutline,
+  Card,
+  Header,
+  Loading,
+  Page,
+  ParagraphM,
+  ParagraphS,
+  ParagraphXS,
+  ParagraphXXS,
+  SubtitleS,
+  Table,
+} from '@archie-webapps/ui-design-system';
 
 export const DashboardRoute: FC = () => {
   const { t } = useTranslation();

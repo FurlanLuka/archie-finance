@@ -5,7 +5,7 @@ import { LoadingStyled } from './loading.styled';
  * @param {ComponentProps} props
  * @returns {StatelessComponent}
  */
-const Loading = () => (
+export const Loading = () => (
   <LoadingStyled>
     <div className="inner">
       <div className="rect rect1"></div>
@@ -16,5 +16,3 @@ const Loading = () => (
     </div>
   </LoadingStyled>
 );
-
-export default Loading;

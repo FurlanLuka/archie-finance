@@ -1,12 +1,9 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Step } from '../../../../constants/onboarding-steps';
-import { IndicatorDone } from '../../../../components/_generic/icons/indicator-done';
-import { IndicatorActive } from '../../../../components/_generic/icons/indicator-active';
-import { ArrowIndicatorRight } from '../../../../components/_generic/icons/arrow-indicator-right';
-import { ParagraphXXS } from '../../../../components/_generic/typography/typography.styled';
 import { StepsIndicatorStyled } from './steps-indicator.styled';
 import { theme } from '@archie-webapps/ui-theme';
+import { ArrowIndicatorRight, IndicatorActive, IndicatorDone, ParagraphXXS } from '@archie-webapps/ui-design-system';
 
 interface StepsIndicatorProps {
   currentStep: string;

@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSession } from '@archie/session/hooks/use-session';
 import { SessionState } from '@archie/session/context/session-context';
-import Loading from '../_generic/loading/loading';
+import { Loading } from '@archie-webapps/ui-design-system';
 
 export const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
   const { sessionState } = useSession();
