@@ -25,6 +25,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -52,6 +55,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -111,6 +117,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -138,6 +147,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "security": [
@@ -334,6 +346,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -352,6 +367,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
           }
         },
         "security": [
@@ -373,6 +391,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
           }
         },
         "security": [
@@ -405,6 +426,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
           }
         }
       },
@@ -430,6 +454,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
           }
         }
       }
@@ -504,6 +531,12 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "security": [
@@ -527,6 +560,12 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "security": [
@@ -550,6 +589,12 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
           }
         },
         "security": [
@@ -599,6 +644,9 @@
         "responses": {
           "201": {
             "description": ""
+          },
+          "400": {
+            "description": "Onboarding already completed"
           }
         }
       }
@@ -617,6 +665,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "KYC_NOT_FOUND"
           }
         },
         "security": [
@@ -648,6 +699,9 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "KYC_ALREADY_SUBMITTED"
           }
         },
         "security": [
@@ -680,6 +734,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "KYC_NOT_FOUND"
           }
         }
       }
@@ -714,6 +771,9 @@
         "responses": {
           "201": {
             "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
           }
         },
         "security": [
@@ -746,6 +806,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -808,6 +871,9 @@
         "responses": {
           "201": {
             "description": ""
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
@@ -835,6 +901,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }

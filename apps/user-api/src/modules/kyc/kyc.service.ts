@@ -16,6 +16,7 @@ import {
 } from '@archie-microservices/api-interfaces/kyc';
 import { KycDto } from './kyc.dto';
 import { DateTime } from 'luxon';
+import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
 
 @Injectable()
 export class KycService {
@@ -39,10 +40,7 @@ export class KycService {
         },
       });
 
-      throw new NotFoundException(
-        'KYC_NOT_FOUND',
-        'KYC record not found. Please submit your KYC or contact support.',
-      );
+      throw new KycNotFoundError();
     }
 
     const decryptedData: string[] = await this.vaultService.decryptStrings([
@@ -89,10 +87,7 @@ export class KycService {
         },
       });
 
-      throw new BadRequestException(
-        'KYC_ALREADY_SUBMITTED',
-        'You have already submitted your KYC. If you made a mistake, please contact support.',
-      );
+      throw new KycAlreadySubmitted();
     }
 
     const encryptedData: string[] = await this.vaultService.encryptStrings([

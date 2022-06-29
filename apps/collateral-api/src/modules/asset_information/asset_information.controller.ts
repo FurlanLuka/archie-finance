@@ -1,9 +1,10 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import {
   GetAssetListResponseDto,
   GetAssetInformationResponseDto,
 } from './asset_information.dto';
 import { AssetInformationService } from './asset_information.service';
+import { ApiErrorResponse } from '@archie-microservices/openapi';
 
 @Controller('internal/asset_information')
 export class InternalAssetInformationController {
@@ -15,6 +16,7 @@ export class InternalAssetInformationController {
   }
 
   @Get(':asset')
+  @ApiErrorResponse([NotFoundException])
   getAssetInformation(
     @Param('asset') asset: string,
   ): GetAssetInformationResponseDto {

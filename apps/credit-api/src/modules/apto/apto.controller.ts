@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  NotFoundException,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { FinishPhoneVerificationDto } from '@archie-microservices/api-interfaces/apto';
 import { AptoService } from './apto.service';
 import { AuthGuard } from '@archie-microservices/auth0';
@@ -9,6 +17,7 @@ import {
   CompletePhoneVerificationResponseDto,
 } from './apto.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiErrorResponse } from '@archie-microservices/openapi';
 
 @Controller('v1/apto')
 export class AptoController {
@@ -36,6 +45,7 @@ export class AptoController {
   @Post('verification/restart')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
+  @ApiErrorResponse([BadRequestException, NotFoundException])
   public async restartPhoneVerification(
     @Request() req,
   ): Promise<StartPhoneVerificationResponseDto> {
@@ -45,6 +55,7 @@ export class AptoController {
   @Post('user')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
+  @ApiErrorResponse([BadRequestException, NotFoundException])
   public async createUser(@Request() req): Promise<CreateUserResponseDto> {
     return this.aptoService.createAptoUser(req.user.sub);
   }
@@ -52,6 +63,7 @@ export class AptoController {
   @Post('user/card')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
+  @ApiErrorResponse([BadRequestException, NotFoundException])
   public async applyForCard(@Request() req): Promise<IssueCardResponseDto> {
     return this.aptoService.issueCard(req.user.sub);
   }
