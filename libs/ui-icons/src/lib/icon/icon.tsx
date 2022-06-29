@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import { theme } from '@archie-webapps/ui-theme';
 
 export type IconName =
   | 'arrow-indicator-right'
@@ -46,7 +47,7 @@ export const Icon: FC<IconProps> = ({ name, className, fill }) => {
 
     const Component = iconModule.ReactComponent;
 
-    return <Component fill={fill} className={className} />;
+    return <Component color={fill ?? theme.textPrimary} className={className} />;
   };
 
   return renderIcon();

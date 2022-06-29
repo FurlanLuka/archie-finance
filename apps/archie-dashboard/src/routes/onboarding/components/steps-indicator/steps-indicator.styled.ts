@@ -3,6 +3,7 @@ import { breakpoints } from '@archie-webapps/ui-theme';
 
 export const StepsIndicatorStyled = styled.div`
   display: flex;
+  align-items: flex-start;
   gap: 6rem;
   margin-bottom: 2rem;
 
@@ -24,6 +25,10 @@ export const StepsIndicatorStyled = styled.div`
     border-radius: 100%;
     background-color: ${({ theme }) => theme.textDisabled};
     margin-bottom: 0.5rem;
+  }
+
+  .stepIcon {
+    margin-top: -0.25rem; // so it gets aligned properly
   }
 
   .active {
