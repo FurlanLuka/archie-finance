@@ -1,20 +1,22 @@
 import {
-    Collateral,
-    CollateralValue,
-    GetTotalCollateralValueResponse
+  Collateral,
+  CollateralValue,
+  GetTotalCollateralValueResponse,
 } from '@archie-microservices/api-interfaces/collateral';
 
 export class CollateralDto implements Collateral {
-    asset: string;
-    amount: number;
+  asset: string;
+  amount: number;
 }
 
 export class CollateralValueDto implements CollateralValue {
-    asset: string;
-    assetAmount: number;
-    price: number;
+  asset: string;
+  assetAmount: number;
+  price: number;
 }
 
-export class GetTotalCollateralValueResponseDto implements GetTotalCollateralValueResponse {
-    value: number;
-};
+export class GetTotalCollateralValueResponseDto
+  implements GetTotalCollateralValueResponse
+{
+  value: number;
+}

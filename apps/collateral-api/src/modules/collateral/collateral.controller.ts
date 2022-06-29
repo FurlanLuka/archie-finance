@@ -22,9 +22,7 @@ export class CollateralController {
   @Get('value')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getUserCollateralValue(
-    @Req() request,
-  ): Promise<CollateralValueDto[]> {
+  async getUserCollateralValue(@Req() request): Promise<CollateralValueDto[]> {
     return this.collateralService.getUserCollateralValue(request.user.sub);
   }
 
@@ -55,5 +53,4 @@ export class InternalCollateralController {
   ): Promise<CollateralValueDto[]> {
     return this.collateralService.getUserCollateralValue(userId);
   }
-
 }

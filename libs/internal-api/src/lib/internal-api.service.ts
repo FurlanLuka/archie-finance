@@ -90,7 +90,9 @@ export class InternalApiService {
     return response.data;
   }
 
-  public async getUserEmailAddress(userId: string): Promise<GetEmailAddressResponse> {
+  public async getUserEmailAddress(
+    userId: string,
+  ): Promise<GetEmailAddressResponse> {
     const response: AxiosResponse<GetEmailAddressResponse> = await axios.get(
       `${this.config.internalApiUrl}/internal/user/email-address/${userId}`,
     );

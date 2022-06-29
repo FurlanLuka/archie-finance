@@ -1,7 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import {
-  GetAssetPriceResponseDto,
-} from './asset_price.dto';
+import { GetAssetPriceResponseDto } from './asset_price.dto';
 import { AssetPriceService } from './asset_price.service';
 
 @Controller(['v1/asset_price'])

@@ -6,10 +6,7 @@ import { Kyc } from './kyc.entity';
 import { KycService } from './kyc.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Kyc]),
-    VaultModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Kyc]), VaultModule],
   controllers: [KycController, InternalKycController],
   providers: [KycService],
 })
