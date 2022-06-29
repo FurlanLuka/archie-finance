@@ -17,7 +17,7 @@ export const StepsIndicator: FC<StepsIndicatorProps> = ({ currentStep }) => {
     <StepsIndicatorStyled>
       <div className="step">
         <div className="circle">
-          <Icon name="indicator-done" fill={theme.textSuccess} />
+          <Icon name="indicator-done" fill={theme.textPositive} />
         </div>
         <ParagraphXXS weight={700} color={theme.textPositive}>
           {t('steps_indicator.first')}
@@ -46,7 +46,7 @@ export const StepsIndicator: FC<StepsIndicatorProps> = ({ currentStep }) => {
       </div>
       <div className="step">
         {currentStep === Step.CARD ? (
-          <Icon name="indicator-done" fill={theme.textSuccess} />
+          <Icon name="indicator-done" fill={theme.textPositive} />
         ) : (
           <div className="circle" />
         )}
