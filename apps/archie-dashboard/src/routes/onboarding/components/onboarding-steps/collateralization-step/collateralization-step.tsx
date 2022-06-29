@@ -201,7 +201,7 @@ export const CollateralizationStep: FC = () => {
                     className="info-link-url"
                   >
                     {t('collateralization_step.address.info_link_2')}
-                    <Icon name="external-link" className="info-link-icon" />
+                    <Icon name="external-link" fill={theme.textHighlight} className="info-link-icon" />
                   </a>
                 </ParagraphXS>
               </div>
