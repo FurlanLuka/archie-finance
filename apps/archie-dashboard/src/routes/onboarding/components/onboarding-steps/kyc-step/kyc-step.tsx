@@ -11,6 +11,9 @@ import { KycStepStyled } from './kyc-step.styled';
 import { theme } from '@archie-webapps/ui-theme';
 import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 
 interface GooglePlace {
   address_components: Array<{
@@ -30,14 +33,55 @@ interface Address {
   addressCountry: string;
 }
 
+const parseDate = (value: string) => parse(value, 'MMddyyyy', new Date());
+const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) < 18;
+const maxYears = (value: Date) => differenceInYears(new Date(), new Date(value)) > 122;
+
+const schema = yup.object({
+  firstName: yup
+    .string()
+    .required('kyc_step.error.required_field')
+    .min(2, 'kyc_step.error.too_short')
+    .max(50, 'kyc_step.error.too_long'),
+  lastName: yup
+    .string()
+    .required('kyc_step.error.required_field')
+    .min(2, 'kyc_step.error.too_short')
+    .max(50, 'kyc_step.error.too_long'),
+  dateOfBirth: yup
+    .string()
+    .required('kyc_step.error.required_field')
+    .test('is_date_valid', 'kyc_step.error.not_valid_date', (value) => {
+      if (!value) {
+        return false;
+      }
+
+      return isValid(parseDate(value));
+    })
+    .test('minimum_age_test', 'kyc_step.error.should_be_older', (value) => {
+      if (!value) {
+        return false;
+      }
+      return !minYears(parseDate(value));
+    })
+    .test('maximum_age_test', 'kyc_step.error.should_be_under', (value) => {
+      if (!value) {
+        return false;
+      }
+      return !maxYears(parseDate(value));
+    })
+    .test('future_birthday_test', 'kyc_step.error.cannot_be_future', (value) => {
+      if (!value) {
+        return false;
+      }
+      return !isFuture(parseDate(value));
+    }),
+});
+
 export const KycStep: FC = () => {
   const { t } = useTranslation();
 
   const mutationRequest = useCreateKyc();
-
-  const parsedDate = (value: string) => parse(value, 'MMddyyyy', new Date());
-  const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) < 18;
-  const maxYears = (value: Date) => differenceInYears(new Date(), new Date(value)) > 122;
 
   const [firstName, setFirstName] = useState('');
   const [firstNameError, setFirstNameError] = useState('');
@@ -119,13 +163,13 @@ export const KycStep: FC = () => {
 
     if (!dateOfBirth) {
       setDateOfBirthError(t('kyc_step.error.required_field'));
-    } else if (!isValid(parsedDate(dateOfBirth))) {
+    } else if (!isValid(parseDate(dateOfBirth))) {
       setDateOfBirthError(t('kyc_step.error.not_valid_date'));
-    } else if (minYears(parsedDate(dateOfBirth))) {
+    } else if (minYears(parseDate(dateOfBirth))) {
       setDateOfBirthError(t('kyc_step.error.should_be_older'));
-    } else if (maxYears(parsedDate(dateOfBirth))) {
+    } else if (maxYears(parseDate(dateOfBirth))) {
       setDateOfBirthError(t('kyc_step.error.should_be_under'));
-    } else if (isFuture(parsedDate(dateOfBirth))) {
+    } else if (isFuture(parseDate(dateOfBirth))) {
       setDateOfBirthError(t('kyc_step.error.cannot_be_future'));
     } else {
       setDateOfBirthError('');
@@ -174,7 +218,7 @@ export const KycStep: FC = () => {
         mutationRequest.mutate({
           firstName,
           lastName,
-          dateOfBirth: parsedDate(dateOfBirth).toISOString(),
+          dateOfBirth: parseDate(dateOfBirth).toISOString(),
           ...address,
           phoneNumber,
           phoneNumberCountryCode,
