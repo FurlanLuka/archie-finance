@@ -1,10 +1,25 @@
 name: 'Extract metadata'
 description: 'Extract metadata'
 
+outputs:
+  SOURCE_NAME:
+    description: "Source name"
+    value: ${{ steps.extract.outputs.SOURCE_NAME }}
+  SOURCE_BRANCH:
+    description: "Source branch"
+    value: ${{ steps.extract.outputs.SOURCE_BRANCH }}
+  SOURCE_TAG:
+    description: "Source tag"
+    value: ${{ steps.extract.outputs.SOURCE_TAG }}
+  APP_NAME:
+    description: "Source name"
+    value: ${{ steps.extract.outputs.APP_NAME }}
+
 runs:
   using: "composite"
   steps:
-    - run: |
+    - id: extract
+      run: |
         echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
         echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
         echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
