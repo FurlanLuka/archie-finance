@@ -13,9 +13,9 @@ export default async function runExecutor(
   }
 
   const projectConfig = context.workspace.projects[context.projectName];
-  const versionTag = `${projectConfig.name}-${options.imageTag}`;
+  const versionTag = `${context.projectName}-${options.imageTag}`;
 
-  logger.info(`Building docker image for ${projectConfig.name}...`);
+  logger.info(`Building docker image for ${context.projectName}...`);
 
   execSync(
     `docker build -f ${projectConfig.root}/Dockerfile.ci -t ${options.ecrRegistry}/${options.ecrRepository}:${versionTag} .`,
