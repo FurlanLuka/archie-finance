@@ -3,9 +3,7 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
-    "types": [
-      "node"
-    ],
+    "types": ["node", "../../node_modules/@rizefinance/types/"],
     "emitDecoratorMetadata": true,
     "target": "es2015"
   },
