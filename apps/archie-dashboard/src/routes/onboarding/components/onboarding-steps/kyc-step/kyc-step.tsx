@@ -1,25 +1,20 @@
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { differenceInYears, isValid, parse, isFuture } from 'date-fns';
-import { Formik, Form } from 'formik';
 import { templateFormatter, templateParser, parseDigit } from 'input-format';
 import ReactInput from 'input-format/react';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import Autocomplete from 'react-google-autocomplete';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-
+import * as yup from 'yup';
 
 import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
-<<<<<<< HEAD
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
-=======
 import { theme } from '@archie-webapps/ui-theme';
 
 import { KycStepStyled } from './kyc-step.styled';
->>>>>>> feature/design-lib
 
 interface GooglePlace {
   address_components: Array<{
@@ -39,10 +34,20 @@ interface Address {
   addressCountry: string;
 }
 
+interface KycFormData {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  address: Address;
+  phoneNumber: string;
+  ssn: string;
+}
+
 const parseDate = (value: string) => parse(value, 'MMddyyyy', new Date());
 const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) < 18;
 const maxYears = (value: Date) => differenceInYears(new Date(), new Date(value)) > 122;
 
+const SUPPORTED_COUNTRIES = ['US'];
 const schema = yup.object({
   firstName: yup
     .string()
@@ -82,6 +87,16 @@ const schema = yup.object({
       }
       return !isFuture(parseDate(value));
     }),
+  address: yup.object({
+    addressStreet: yup.string().required('kyc_step.error.not_full_address'),
+    addressStreetNumber: yup.string().required('kyc_step.error.not_full_address'),
+    addressLocality: yup.string().required('kyc_step.error.not_full_address'),
+    addressCountry: yup.string().required('kyc_step.error.not_full_address').oneOf(SUPPORTED_COUNTRIES),
+    addressRegion: yup.string().required('kyc_step.error.not_full_address'),
+    addressPostalCode: yup.string().required('kyc_step.error.not_full_address'),
+  }),
+  phoneNumber: yup.string().required('kyc_step.error.required_field').min(10, 'kyc_step.error.phone_number_digits'),
+  ssn: yup.string().required('kyc_step.error.required_field').length(9, 'kyc_step.error.ssn_digits'),
 });
 
 export const KycStep: FC = () => {
@@ -89,26 +104,26 @@ export const KycStep: FC = () => {
 
   const mutationRequest = useCreateKyc();
 
-  const [firstName, setFirstName] = useState('');
-  const [firstNameError, setFirstNameError] = useState('');
-
-  const [lastName, setLastName] = useState('');
-  const [lastNameError, setLastNameError] = useState('');
-
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [dateOfBirthError, setDateOfBirthError] = useState('');
-
-  const [address, setAddress] = useState<Address>();
-  const [addressError, setAddressError] = useState('');
-
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [phoneNumberError, setPhoneNumberError] = useState('');
+  const {
+    control,
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<KycFormData>({
+    mode: 'all',
+    defaultValues: {
+      firstName: '',
+      lastName: '',
+      dateOfBirth: '',
+      address: {},
+      phoneNumber: '',
+      ssn: '',
+    },
+    resolver: yupResolver(schema),
+  });
   const phoneNumberCountryCode = '+1';
 
-  const [ssn, setSsn] = useState('');
-  const [ssnError, setSsnError] = useState('');
-
-  const addAddress = (place: GooglePlace) => {
+  const addAddress = (place: GooglePlace): Address | null => {
     const streetNumberComponent = place.address_components.find((item) => item.types.includes('street_number'));
     const streetNameComponent = place.address_components.find((item) => item.types.includes('route'));
     const localityComponent = place.address_components.find((item) => item.types.includes('locality'));
@@ -135,219 +150,150 @@ export const KycStep: FC = () => {
         addressPostalCode: postalCodeComponent.short_name,
       };
 
-      if (countryComponent.short_name !== 'US') {
-        setAddressError(t('kyc_step.error.not_us_address'));
-      } else {
-        setAddress(addr);
-        setAddressError('');
-      }
+      return addr;
     } else {
-      setAddressError(t('kyc_step.error.not_full_address'));
+      return null;
     }
   };
 
-  const validate = () => {
-    if (!firstName) {
-      setFirstNameError(t('kyc_step.error.required_field'));
-    } else if (firstName.length < 2) {
-      setFirstNameError(t('kyc_step.error.too_short'));
-    } else if (firstName.length > 50) {
-      setFirstNameError(t('kyc_step.error.too_long'));
-    } else {
-      setFirstNameError('');
-    }
-
-    if (!lastName) {
-      setLastNameError(t('kyc_step.error.required_field'));
-    } else if (lastName.length < 2) {
-      setLastNameError(t('kyc_step.error.too_short'));
-    } else if (lastName.length > 50) {
-      setLastNameError(t('kyc_step.error.too_long'));
-    } else {
-      setLastNameError('');
-    }
-
-    if (!dateOfBirth) {
-      setDateOfBirthError(t('kyc_step.error.required_field'));
-    } else if (!isValid(parseDate(dateOfBirth))) {
-      setDateOfBirthError(t('kyc_step.error.not_valid_date'));
-    } else if (minYears(parseDate(dateOfBirth))) {
-      setDateOfBirthError(t('kyc_step.error.should_be_older'));
-    } else if (maxYears(parseDate(dateOfBirth))) {
-      setDateOfBirthError(t('kyc_step.error.should_be_under'));
-    } else if (isFuture(parseDate(dateOfBirth))) {
-      setDateOfBirthError(t('kyc_step.error.cannot_be_future'));
-    } else {
-      setDateOfBirthError('');
-    }
-
-    if (!address) {
-      setAddressError(t('kyc_step.error.required_field'));
-    } else {
-      setAddressError('');
-    }
-
-    if (!phoneNumber) {
-      setPhoneNumberError(t('kyc_step.error.required_field'));
-    } else if (phoneNumber.length < 10) {
-      setPhoneNumberError(t('kyc_step.error.phone_number_digits'));
-    } else {
-      setPhoneNumberError('');
-    }
-
-    if (!ssn) {
-      setSsnError(t('kyc_step.error.required_field'));
-    } else if (ssn.length < 9) {
-      setSsnError(t('kyc_step.error.ssn_digits'));
-    } else {
-      setSsnError('');
-    }
-  };
-
-  const hasLenght = (value: string | Array<string>) => value.length > 0;
-
-  const handleSubmit = () => {
-    if (
-      hasLenght(firstName) &&
-      !hasLenght(firstNameError) &&
-      hasLenght(lastName) &&
-      !hasLenght(lastNameError) &&
-      hasLenght(dateOfBirth) &&
-      !hasLenght(dateOfBirthError) &&
-      address !== undefined &&
-      hasLenght(phoneNumber) &&
-      !hasLenght(phoneNumberError) &&
-      hasLenght(ssn) &&
-      !hasLenght(ssnError)
-    ) {
+  const onSubmit = handleSubmit((data) => {
+    if (!errors) {
       if (mutationRequest.state === RequestState.IDLE) {
         mutationRequest.mutate({
-          firstName,
-          lastName,
-          dateOfBirth: parseDate(dateOfBirth).toISOString(),
-          ...address,
-          phoneNumber,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          dateOfBirth: parseDate(data.dateOfBirth).toISOString(),
+          phoneNumber: data.phoneNumber,
+          ssn: data.ssn,
           phoneNumberCountryCode,
-          ssn,
+          ...data.address,
         });
       }
     }
-  };
+  });
 
   return (
     <KycStepStyled>
       <SubtitleM className="title">{t('kyc_step.title')}</SubtitleM>
       <ParagraphXS className="subtitle">{t('kyc_step.subtitle')}</ParagraphXS>
-      <Formik
-        initialValues={{}}
-        onSubmit={handleSubmit}
-        validate={validate}
-        validateOnBlur={false}
-        validateOnChange={false}
-      >
-        <Form>
-          <div className="input-group">
-            <InputText>
-              {t('kyc_step.label.first_name')}
-              <input
-                name="firstName"
-                value={firstName}
-                placeholder={t('kyc_step.placeholder.first_name')}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-              {firstNameError && (
-                <ParagraphXS className="error" color={theme.textDanger}>
-                  {firstNameError}
-                </ParagraphXS>
-              )}
-            </InputText>
-            <InputText>
-              {t('kyc_step.label.last_name')}
-              <input
-                name="lastName"
-                value={lastName}
-                placeholder={t('kyc_step.placeholder.last_name')}
-                onChange={(e) => setLastName(e.target.value)}
-              />
-              {lastNameError && (
-                <ParagraphXS className="error" color={theme.textDanger}>
-                  {lastNameError}
-                </ParagraphXS>
-              )}
-            </InputText>
-          </div>
+      <form onSubmit={onSubmit}>
+        <div className="input-group">
           <InputText>
-            {t('kyc_step.label.date_of_birth')}
-            <ReactInput
-              name="dateOfBirth"
-              value={dateOfBirth}
-              placeholder={t('kyc_step.placeholder.date_of_birth')}
-              onChange={(value) => setDateOfBirth(value as string)}
-              parse={templateParser('xx-xx-xxxx', parseDigit)}
-              format={templateFormatter('xx-xx-xxxx')}
-            />
-            {dateOfBirthError && (
+            {t('kyc_step.label.first_name')}
+            <input placeholder={t('kyc_step.placeholder.first_name')} {...register('firstName')} />
+            {errors.firstName && (
               <ParagraphXS className="error" color={theme.textDanger}>
-                {dateOfBirthError}
+                {errors.firstName}
               </ParagraphXS>
             )}
           </InputText>
           <InputText>
-            {t('kyc_step.label.address')}
-            <Autocomplete
-              apiKey="AIzaSyA-k_VEX0soa2kljYKTjtFUg4irF3hKZwQ"
-              onPlaceSelected={(place) => addAddress(place)}
-              placeholder={t('kyc_step.placeholder.address')}
-              options={{ types: ['address'] }}
-            />
-            {addressError && (
+            {t('kyc_step.label.last_name')}
+            <input placeholder={t('kyc_step.placeholder.last_name')} {...register('lastName')} />
+            {errors.lastName && (
               <ParagraphXS className="error" color={theme.textDanger}>
-                {addressError}
+                {errors.lastName}
               </ParagraphXS>
             )}
           </InputText>
-          <InputText>
-            {t('kyc_step.label.phone_number')}
-            <div className="phone-number">
-              <ParagraphS weight={700}>+1</ParagraphS>
+        </div>
+        <InputText>
+          {t('kyc_step.label.date_of_birth')}
+          <Controller
+            control={control}
+            name="dateOfBirth"
+            render={({ field: { onChange, value } }) => (
               <ReactInput
-                name="phoneNumber"
-                value={phoneNumber}
-                placeholder={t('kyc_step.placeholder.phone_number')}
-                onChange={(value) => setPhoneNumber(value as string)}
-                parse={templateParser('(xxx) xxx-xxxx', parseDigit)}
-                format={templateFormatter('(xxx) xxx-xxxx')}
+                value={value}
+                placeholder={t('kyc_step.placeholder.date_of_birth')}
+                onChange={onChange}
+                parse={templateParser('xx-xx-xxxx', parseDigit)}
+                format={templateFormatter('xx-xx-xxxx')}
               />
-            </div>
-            {phoneNumberError && (
-              <ParagraphXS className="error" color={theme.textDanger}>
-                {phoneNumberError}
-              </ParagraphXS>
             )}
-          </InputText>
-          <InputText>
-            {t('kyc_step.label.ssn')}
-            <ReactInput
-              name="ssn"
-              value={ssn}
-              placeholder={t('kyc_step.placeholder.ssn')}
-              onChange={(value) => setSsn(value as string)}
-              parse={templateParser('xxx-xx-xxxx', parseDigit)}
-              format={templateFormatter('xxx-xx-xxxx')}
+          />
+          {errors.dateOfBirth && (
+            <ParagraphXS className="error" color={theme.textDanger}>
+              {errors.dateOfBirth}
+            </ParagraphXS>
+          )}
+        </InputText>
+        <InputText>
+          {t('kyc_step.label.address')}
+          <Controller
+            control={control}
+            name="address"
+            render={({ field: { onChange, value } }) => (
+              <Autocomplete
+                apiKey="AIzaSyA-k_VEX0soa2kljYKTjtFUg4irF3hKZwQ"
+                onPlaceSelected={(place) => {
+                  const add = addAddress(place);
+                  if (add) {
+                    onChange(add);
+                  }
+                }}
+                placeholder={t('kyc_step.placeholder.address')}
+                options={{ types: ['address'] }}
+              />
+            )}
+          />
+          {errors.address && (
+            <ParagraphXS className="error" color={theme.textDanger}>
+              {errors.address}
+            </ParagraphXS>
+          )}
+        </InputText>
+        <InputText>
+          {t('kyc_step.label.phone_number')}
+          <div className="phone-number">
+            <ParagraphS weight={700}>+1</ParagraphS>
+            <Controller
+              control={control}
+              name="phoneNumber"
+              render={({ field: { onChange, value } }) => (
+                <ReactInput
+                  value={value}
+                  placeholder={t('kyc_step.placeholder.phone_number')}
+                  onChange={onChange}
+                  parse={templateParser('(xxx) xxx-xxxx', parseDigit)}
+                  format={templateFormatter('(xxx) xxx-xxxx')}
+                />
+              )}
             />
-            {ssnError && (
-              <ParagraphXS className="error" color={theme.textDanger}>
-                {ssnError}
-              </ParagraphXS>
+          </div>
+          {errors.phoneNumber && (
+            <ParagraphXS className="error" color={theme.textDanger}>
+              {errors.phoneNumber}
+            </ParagraphXS>
+          )}
+        </InputText>
+        <InputText>
+          {t('kyc_step.label.ssn')}
+          <Controller
+            control={control}
+            name="ssn"
+            render={({ field: { onChange, value } }) => (
+              <ReactInput
+                value={value}
+                onChange={onChange}
+                placeholder={t('kyc_step.placeholder.ssn')}
+                parse={templateParser('xxx-xx-xxxx', parseDigit)}
+                format={templateFormatter('xxx-xx-xxxx')}
+              />
             )}
-          </InputText>
-          <hr className="divider" />
-          <ButtonPrimary type="submit" isLoading={mutationRequest.state === RequestState.LOADING}>
-            {t('btn_next')}
-            <Icon name="arrow-right" fill={theme.textLight} />
-          </ButtonPrimary>
-        </Form>
-      </Formik>
+          />
+          {errors.ssn && (
+            <ParagraphXS className="error" color={theme.textDanger}>
+              {errors.ssn}
+            </ParagraphXS>
+          )}
+        </InputText>
+        <hr className="divider" />
+        <ButtonPrimary type="submit" isLoading={mutationRequest.state === RequestState.LOADING}>
+          {t('btn_next')}
+          <Icon name="arrow-right" fill={theme.textLight} />
+        </ButtonPrimary>
+      </form>
     </KycStepStyled>
   );
 };
