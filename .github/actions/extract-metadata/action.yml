@@ -26,4 +26,5 @@ runs:
         export TAG=${GITHUB_REF#refs/tags/}
         export TAG_WITHOUT_TYPE=${TAG#app-}
         echo ::set-output name=APP_NAME::${TAG_WITHOUT_TYPE%-v*}
+        echo ::set-output name=COMMIT_HASH::$(git rev-parse HEAD)
       shell: bash
