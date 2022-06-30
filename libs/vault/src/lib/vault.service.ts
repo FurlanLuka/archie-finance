@@ -37,11 +37,14 @@ export class VaultService {
       );
 
       return tokenData.data.auth.client_token;
-    } catch (error) {
+    } catch (err) {
+      const error: AxiosError = err;
+
       Logger.error({
         code: 'VAULT_AUTHENTICATION_ERROR',
         metadata: {
-          error: JSON.stringify(error),
+          error: error.toJSON(),
+          response: error.response.data,
         },
       });
 
@@ -88,13 +91,14 @@ export class VaultService {
       Logger.error({
         code: 'ENCRYPT_STRINGS_ERROR',
         metadata: {
-          error: JSON.stringify(error),
+          error: error.toJSON(),
+          response: error.response.data,
         },
       });
 
       if (
-        error.code !== undefined &&
-        (error.code === '401' || error.code === '403')
+        error.status !== undefined &&
+        (error.status === '401' || error.status === '403')
       ) {
         this.vaultAccessToken = undefined;
 
@@ -134,13 +138,14 @@ export class VaultService {
       Logger.error({
         code: 'DECRYPT_STRINGS_ERROR',
         metadata: {
-          error: JSON.stringify(error),
+          error: error.toJSON(),
+          response: error.response.data,
         },
       });
 
       if (
-        error.code !== undefined &&
-        (error.code === '401' || error.code === '403')
+        error.status !== undefined &&
+        (error.status === '401' || error.status === '403')
       ) {
         this.vaultAccessToken = undefined;
 
