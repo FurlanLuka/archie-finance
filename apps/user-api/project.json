@@ -12,6 +12,7 @@
         "outputPath": "dist/apps/user-api",
         "main": "apps/user-api/src/main.ts",
         "tsConfig": "apps/user-api/tsconfig.app.json",
+        "tsPlugins": ["@nestjs/swagger/plugin"],
         "assets": [
           "apps/user-api/src/assets"
         ]
@@ -28,6 +29,12 @@
             }
           ]
         }
+      }
+    },
+    "build-openapi": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build user-api && node dist/apps/user-api/main build-swagger"
       }
     },
     "serve": {

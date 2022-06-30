@@ -1,23 +1,23 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import {
-  GetAssetPriceResponse,
-  GetAssetPricesResponse,
-} from '@archie-microservices/api-interfaces/asset_price';
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import { GetAssetPriceResponseDto } from './asset_price.dto';
 import { AssetPriceService } from './asset_price.service';
+import { ApiErrorResponse } from '@archie-microservices/openapi';
 
 @Controller(['v1/asset_price'])
 export class AssetPriceController {
   constructor(private assetPriceService: AssetPriceService) {}
 
   @Get()
-  async getAssetPrices(): Promise<GetAssetPricesResponse> {
+  @ApiErrorResponse([NotFoundException])
+  async getAssetPrices(): Promise<GetAssetPriceResponseDto[]> {
     return this.assetPriceService.getAssetPrices();
   }
 
   @Get(':asset')
+  @ApiErrorResponse([NotFoundException])
   async getAssetPrice(
     @Param('asset') asset: string,
-  ): Promise<GetAssetPriceResponse> {
+  ): Promise<GetAssetPriceResponseDto> {
     return this.assetPriceService.getAssetPrice(asset);
   }
 }
@@ -27,7 +27,7 @@ export class InternalAssetPriceController {
   constructor(private assetPriceService: AssetPriceService) {}
 
   @Get()
-  async getAssetPrices(): Promise<GetAssetPricesResponse> {
+  async getAssetPrices(): Promise<GetAssetPriceResponseDto[]> {
     return this.assetPriceService.getAssetPrices();
   }
 
@@ -37,9 +37,10 @@ export class InternalAssetPriceController {
   }
 
   @Get(':asset')
+  @ApiErrorResponse([NotFoundException])
   async getAssetPrice(
     @Param('asset') asset: string,
-  ): Promise<GetAssetPriceResponse> {
+  ): Promise<GetAssetPriceResponseDto> {
     return this.assetPriceService.getAssetPrice(asset);
   }
 }

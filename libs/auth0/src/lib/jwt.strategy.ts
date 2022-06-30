@@ -1,10 +1,6 @@
 import { passportJwtSecret } from 'jwks-rsa';
 import { ExtractJwt, Strategy, VerifiedCallback } from 'passport-jwt';
-import {
-  Inject,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { AuthConfig } from './auth.interfaces';
 

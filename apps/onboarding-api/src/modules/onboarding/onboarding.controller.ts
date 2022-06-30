@@ -6,10 +6,12 @@ import {
   Post,
   Body,
 } from '@nestjs/common';
-import { GetOnboardingResponse } from './onboarding.interfaces';
 import { OnboardingService } from './onboarding.service';
 import { AuthGuard } from '@archie-microservices/auth0';
-import { OnboardingDto } from './onboarding.dto';
+import { OnboardingDto, GetOnboardingResponseDto } from './onboarding.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { OnboardingAlreadyCompletedError } from './onboarding.errors';
 
 @Controller('v1/onboarding')
 export class OnboardingController {
@@ -17,7 +19,8 @@ export class OnboardingController {
 
   @Get()
   @UseGuards(AuthGuard)
-  async getOnboardingRecord(@Request() req): Promise<GetOnboardingResponse> {
+  @ApiBearerAuth()
+  async getOnboardingRecord(@Request() req): Promise<GetOnboardingResponseDto> {
     return this.onboardingService.getOrCreateOnboardingRecord(req.user.sub);
   }
 }
@@ -27,6 +30,7 @@ export class InternalOnboardingController {
   constructor(private onboardingService: OnboardingService) {}
 
   @Post('complete')
+  @ApiErrorResponse([OnboardingAlreadyCompletedError])
   async completeOnboardingStage(@Body() body: OnboardingDto): Promise<void> {
     await this.onboardingService.completeOnboardingStage(
       body.userId,
