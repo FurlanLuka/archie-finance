@@ -9,4 +9,4 @@ echo "running entrypoint command(s)"
 
 echo Your container args are: "$*"
 
-sh -c "nx affected --base=origin/main --target=deploy $*"
+sh -c "nx affected $*"

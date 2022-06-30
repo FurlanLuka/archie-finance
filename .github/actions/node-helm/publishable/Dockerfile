@@ -15,6 +15,8 @@ RUN chmod +x /usr/bin/aws-iam-authenticator
 RUN wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz -O - | tar -xzO linux-amd64/helm > /usr/local/bin/helm
 RUN chmod +x /usr/local/bin/helm
 
+RUN npm install -g nx
+
 COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x entrypoint.sh

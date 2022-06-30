@@ -40,8 +40,8 @@ jobs:
           name: services-build-development
           path: ./dist
           retention-days: 1
-  deploy:
-    name: Build image, publish and deploy 
+  build_and_public:
+    name: Build docker image and publish 
     needs: check_and_build
     runs-on: ubuntu-latest
     environment: development
@@ -54,8 +54,6 @@ jobs:
       id: git_details
       uses: ./.github/actions/extract-metadata
     - uses: nrwl/nx-set-shas@v2
-      with:
-        main-branch-name: main
     - uses: ./.github/actions/install-dependencies
       name: Install dependencies
     - name: Download build artifacts
@@ -77,10 +75,25 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ steps.git_details.outputs.COMMIT_HASH }}
       run: npx nx affected --base=origin/main --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+  deploy:
+    name: Deploy to kubernetes cluster
+    needs: build_and_public
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+    - uses: actions/checkout@v2
+      name: Checkout
+      with:
+        fetch-depth: 0
+    - name: Extract details from Git
+      id: git_details
+      uses: ./.github/actions/extract-metadata
+    - uses: nrwl/nx-set-shas@v2
+    - uses: ./.github/actions/install-dependencies
+      name: Install dependencies
     - name: Affected deploy
       uses: ./.github/actions/node-helm
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
-        INPUT_COMMAND: "npx nx affected --base=origin/main --target=deploy "
       with:
-        args: --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.COMMIT_HASH }} --environment=development
+        args: --base=origin/main --target=deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.COMMIT_HASH }} --environment=development
