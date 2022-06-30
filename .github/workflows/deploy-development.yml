@@ -31,12 +31,14 @@ jobs:
           main-branch-name: main
       - uses: ./.github/actions/install-dependencies
         name: Install dependencies
-      - name: Affected check & build
-        run: |
-          npx nx workspace-lint
-          npx nx affected --target=lint --parallel=3
-          npx nx affected --target=test --parallel=3 --ci --code-coverage
-          npx nx affected --target=build --parallel=3
+      - name: Workspace Lint
+        run: npx nx --base=origin/main workspace-lint
+      - name: Affected Lint
+        run: npx nx affected --base=origin/main --target=lint --parallel=3
+      - name: Affected Test
+        run: npx nx affected --base=origin/main --target=test --parallel=3 --ci --code-coverage
+      - name: Affected Build
+        run: npx nx affected --base=origin/main --target=build --parallel=3
       - name: Store build artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -80,7 +82,7 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
         APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
-      run: nx affected --target=build-docker --ercRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+      run: nx affected --base=origin/main --target=build-docker --ercRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
     - name: Affected deploy
       uses: koslib/helm-eks-action@master
       env:
@@ -90,4 +92,4 @@ jobs:
         CHART: ./charts/${{ steps.git_details.outputs.APP_NAME }}
         APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
       with:
-        command: nx affected --target=deploy --ercRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG --environment=development
+        command: nx affected --base=origin/main --target=deploy --ercRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG --environment=development
