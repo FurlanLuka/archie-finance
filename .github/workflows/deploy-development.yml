@@ -41,7 +41,7 @@ jobs:
           path: ./dist
           retention-days: 1
   deploy:
-    name: Build image, publish and deploy
+    name: Build image, publish and deploy 
     needs: check_and_build
     runs-on: ubuntu-latest
     environment: development
