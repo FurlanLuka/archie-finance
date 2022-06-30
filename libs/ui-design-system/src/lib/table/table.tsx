@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import { useTable, Column } from 'react-table';
+
 import { TableStyled } from './table.styled';
 
 interface TableProps {
-  columns: Column<Object>[];
-  data: Object[];
+  columns: Column<Record<string, unknown>>[];
+  data: Record<string, unknown>[];
 }
 
 export const Table: FC<TableProps> = ({ columns, data }) => {

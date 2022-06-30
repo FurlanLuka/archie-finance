@@ -1,6 +1,8 @@
-import { theme } from '@archie-webapps/ui-theme';
 import { FC } from 'react';
+
 import { ParagraphXXS } from '@archie-webapps/ui-design-system';
+import { theme } from '@archie-webapps/ui-theme';
+
 import { NextPaymentStyled } from './next-payment.styled';
 
 const days = 13;

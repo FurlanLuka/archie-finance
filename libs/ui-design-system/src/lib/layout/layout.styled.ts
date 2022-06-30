@@ -1,5 +1,7 @@
-import { breakpoints, HEADER_HEIGHT, HEADER_HEIGHT_MOBILE } from '@archie-webapps/ui-theme';
 import styled from 'styled-components';
+
+import { breakpoints, HEADER_HEIGHT, HEADER_HEIGHT_MOBILE } from '@archie-webapps/ui-theme';
+
 import bgOnboarding from '../../assets/bg-onboarding.png';
 
 export const Page = styled.div`

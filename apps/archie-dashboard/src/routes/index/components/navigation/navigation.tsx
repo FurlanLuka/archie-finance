@@ -1,11 +1,12 @@
+import { useAuthenticatedSession } from '@archie/session/hooks/use-session';
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthenticatedSession } from '@archie/session/hooks/use-session';
+
 import { ParagraphXXS } from '@archie-webapps/ui-design-system';
+import { Icon } from '@archie-webapps/ui-icons';
 import { dashboardNavItems } from '@archie-webapps/util-constants';
 
 import { NavigationStyled } from './navigation.styled';
-import { Icon } from '@archie-webapps/ui-icons';
 
 export const Navigation: FC = () => {
   const navigate = useNavigate();

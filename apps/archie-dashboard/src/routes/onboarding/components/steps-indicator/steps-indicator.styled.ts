@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import { breakpoints } from '@archie-webapps/ui-theme';
 
 export const StepsIndicatorStyled = styled.div`

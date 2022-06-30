@@ -1,4 +1,5 @@
 import { FC } from 'react';
+
 import { ModalStyled, ModalOverlay, ModalContent } from './modal.styled';
 
 interface ModalProps {

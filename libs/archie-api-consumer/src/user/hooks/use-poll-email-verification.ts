@@ -1,8 +1,11 @@
-import { QueryResponse } from '../../interface';
-import { useExtendedQuery } from '../../helper-hooks';
-import { getEmailVerification, GetEmailVerificationResponse } from '../api/get-email-verification';
 import { QueryClient, useQueryClient } from 'react-query';
+
+import { useExtendedQuery } from '../../helper-hooks';
+import { QueryResponse } from '../../interface';
 import { ONBOARDING_RECORD_QUERY_KEY } from '../../onboarding/hooks/use-get-onboarding';
+import { getEmailVerification, GetEmailVerificationResponse } from '../api/get-email-verification';
+
+
 
 export const EMAIL_VERIFICATION_QUERY_KEY = 'email_verification_record';
 

@@ -1,5 +1,7 @@
 import { FC } from 'react';
+
 import { ParagraphS, ParagraphXS } from '../typography/typography.styled';
+
 import { InputRangeStyled } from './input-range.styled';
 
 interface InputRangeProps {

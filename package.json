@@ -7,6 +7,8 @@
     "build": "nx build",
     "test": "nx test",
     "execute": "nx run",
+    "lint": "nx workspace-lint && nx lint",
+    "lint:all": "nx run-many --target=lint --parallel --all",
     "generate": "nx g"
   },
   "private": true,

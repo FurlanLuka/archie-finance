@@ -1,10 +1,13 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Step } from '../../../../constants/onboarding-steps';
-import { StepsIndicatorStyled } from './steps-indicator.styled';
-import { theme } from '@archie-webapps/ui-theme';
+
 import { ParagraphXXS } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
+import { theme } from '@archie-webapps/ui-theme';
+
+import { Step } from '../../../../constants/onboarding-steps';
+
+import { StepsIndicatorStyled } from './steps-indicator.styled';
 
 interface StepsIndicatorProps {
   currentStep: string;

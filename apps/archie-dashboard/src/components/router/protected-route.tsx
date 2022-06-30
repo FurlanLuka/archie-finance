@@ -1,10 +1,11 @@
+import { SessionState } from '@archie/session/context/session-context';
+import { useSession } from '@archie/session/hooks/use-session';
 import { PropsWithChildren } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useSession } from '@archie/session/hooks/use-session';
-import { SessionState } from '@archie/session/context/session-context';
+
 import { Loading } from '@archie-webapps/ui-design-system';
 
-export const ProtectedRoute: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+export const ProtectedRoute: React.FC<PropsWithChildren<unknown>> = ({ children }) => {
   const { sessionState } = useSession();
 
   if (sessionState === SessionState.INITIALIZING) {

@@ -1,13 +1,16 @@
-import { FC, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import ReactCodeInput from 'react-verification-code-input';
 import { useCompleteAptoVerification } from '@archie/api-consumer/credit/hooks/use-complete-apto-verification';
 import { useStartAptoVerification } from '@archie/api-consumer/credit/hooks/use-start-apto-verification';
 import { MutationQueryResponse, RequestState } from '@archie/api-consumer/interface';
-import { VerifyStepStyled } from './verify-step.styled';
-import { theme } from '@archie-webapps/ui-theme';
+import { FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import ReactCodeInput from 'react-verification-code-input';
+
+
 import { ButtonPrimary, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
+import { theme } from '@archie-webapps/ui-theme';
+
+import { VerifyStepStyled } from './verify-step.styled';
 
 export const VerifyStep: FC = () => {
   const { t } = useTranslation();

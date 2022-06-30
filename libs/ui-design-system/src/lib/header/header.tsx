@@ -1,11 +1,15 @@
+import { useAuthenticatedSession } from '@archie/session/hooks/use-session';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthenticatedSession } from '@archie/session/hooks/use-session';
-import { Container } from '../layout/layout.styled';
-import { ParagraphS } from '../typography/typography.styled';
-import { HeaderStyled, MobileNav } from './header.styled';
+
 import { Icon } from '@archie-webapps/ui-icons';
 import { dashboardNavItems } from '@archie-webapps/util-constants';
+
+import { Container } from '../layout/layout.styled';
+import { ParagraphS } from '../typography/typography.styled';
+
+import { HeaderStyled, MobileNav } from './header.styled';
+
 
 interface HeaderProps {
   maxWidth?: string;
