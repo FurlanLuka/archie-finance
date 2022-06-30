@@ -22,6 +22,10 @@ jobs:
       - name: Extract details from Git
         id: git_details
         uses: ./.github/actions/extract-metadata
+      - name: Git check few things
+        run: |
+          git checkout main
+          git rev-parse HEAD
       - uses: nrwl/nx-set-shas@v2
         with:
           main-branch-name: main
