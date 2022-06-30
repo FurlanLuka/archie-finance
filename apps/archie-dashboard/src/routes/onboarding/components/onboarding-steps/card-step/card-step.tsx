@@ -1,20 +1,22 @@
+import { TotalCollateralValue } from '@archie/api-consumer/collateral/api/get-collateral-total-value';
+import { useGetCollateralTotalValue } from '@archie/api-consumer/collateral/hooks/use-get-collateral-total-value';
+import { GetCreditResponse } from '@archie/api-consumer/credit/api/get-credit';
+import { useCreateAptoUser } from '@archie/api-consumer/credit/hooks/use-create-apto-user';
+import { useGetCredit } from '@archie/api-consumer/credit/hooks/use-get-credit';
+import { useIssueCard } from '@archie/api-consumer/credit/hooks/use-issue-card';
+import { MutationQueryResponse, QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { MutationQueryResponse, QueryResponse, RequestState } from '@archie/api-consumer/interface';
-import { useCreateAptoUser } from '@archie/api-consumer/credit/hooks/use-create-apto-user';
-import { useIssueCard } from '@archie/api-consumer/credit/hooks/use-issue-card';
-import { useGetCredit } from '@archie/api-consumer/credit/hooks/use-get-credit';
-import { GetCreditResponse } from '@archie/api-consumer/credit/api/get-credit';
-import { useGetCollateralTotalValue } from '@archie/api-consumer/collateral/hooks/use-get-collateral-total-value';
-import { TotalCollateralValue } from '@archie/api-consumer/collateral/api/get-collateral-total-value';
-import { Step } from '../../../../../constants/onboarding-steps';
-import { Container } from '../../../../../components/_generic/layout/layout.styled';
-import { SubtitleM, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
-import { StepsIndicator } from '../../steps-indicator/steps-indicator';
-import { EmailVerification } from '../../email-verification/email-verification';
+
+import { ButtonPrimary, Container, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
+
 import imgCardReady from '../../../../../assets/images/img-card-ready.png';
+import { Step } from '../../../../../constants/onboarding-steps';
+import { EmailVerification } from '../../email-verification/email-verification';
+import { StepsIndicator } from '../../steps-indicator/steps-indicator';
+
 import { CardStepStyled } from './card-step.styled';
-import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
+
 
 enum Stage {
   CREATE_USER,

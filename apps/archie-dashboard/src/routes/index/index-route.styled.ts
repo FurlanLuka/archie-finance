@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { NAV_WIDTH } from '../../constants/ui/elements'
-import breakpoints from '../../constants/ui/breakpoints'
+
+import { breakpoints, NAV_WIDTH } from '@archie-webapps/ui-theme';
 
 export const IndexStyled = styled.div`
   display: flex;

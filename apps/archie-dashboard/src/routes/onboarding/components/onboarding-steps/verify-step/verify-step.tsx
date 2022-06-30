@@ -1,13 +1,15 @@
-import { FC, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import ReactCodeInput from 'react-verification-code-input';
 import { useCompleteAptoVerification } from '@archie/api-consumer/credit/hooks/use-complete-apto-verification';
 import { useStartAptoVerification } from '@archie/api-consumer/credit/hooks/use-start-apto-verification';
 import { MutationQueryResponse, RequestState } from '@archie/api-consumer/interface';
-import { SubtitleM, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
-import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
-import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
-import { theme } from '../../../../../constants/ui/theme';
+import { FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import ReactCodeInput from 'react-verification-code-input';
+
+
+import { ButtonPrimary, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
+import { Icon } from '@archie-webapps/ui-icons';
+import { theme } from '@archie-webapps/ui-theme';
+
 import { VerifyStepStyled } from './verify-step.styled';
 
 export const VerifyStep: FC = () => {
@@ -68,7 +70,7 @@ export const VerifyStep: FC = () => {
         isLoading={useCompleteAptoVerificationQuery.state === RequestState.LOADING}
       >
         {t('btn_next')}
-        <ArrowRight fill={theme.textLight} />
+        <Icon name="arrow-right" fill={theme.textLight} />
       </ButtonPrimary>
     </VerifyStepStyled>
   );

@@ -1,17 +1,18 @@
-import { FC, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Formik, Form } from 'formik';
-import { differenceInYears, isValid, parse, isFuture } from 'date-fns';
-import Autocomplete from 'react-google-autocomplete';
-import { templateFormatter, templateParser, parseDigit } from 'input-format';
-import ReactInput from 'input-format/react';
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
-import { SubtitleM, ParagraphXS, ParagraphS } from '../../../../../components/_generic/typography/typography.styled';
-import { ButtonPrimary } from '../../../../../components/_generic/button/button.styled';
-import { InputText } from '../../../../../components/_generic/input-text/input-text.styled';
-import { ArrowRight } from '../../../../../components/_generic/icons/arrow-right';
-import { theme } from '../../../../../constants/ui/theme';
+import { differenceInYears, isValid, parse, isFuture } from 'date-fns';
+import { Formik, Form } from 'formik';
+import { templateFormatter, templateParser, parseDigit } from 'input-format';
+import ReactInput from 'input-format/react';
+import { FC, useState } from 'react';
+import Autocomplete from 'react-google-autocomplete';
+import { useTranslation } from 'react-i18next';
+
+
+import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
+import { Icon } from '@archie-webapps/ui-icons';
+import { theme } from '@archie-webapps/ui-theme';
+
 import { KycStepStyled } from './kyc-step.styled';
 
 interface GooglePlace {
@@ -296,7 +297,7 @@ export const KycStep: FC = () => {
           <hr className="divider" />
           <ButtonPrimary type="submit" isLoading={mutationRequest.state === RequestState.LOADING}>
             {t('btn_next')}
-            <ArrowRight fill={theme.textLight} />
+            <Icon name="arrow-right" fill={theme.textLight} />
           </ButtonPrimary>
         </Form>
       </Formik>

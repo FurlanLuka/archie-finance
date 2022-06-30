@@ -1,6 +1,6 @@
-import styled from 'styled-components'
-import { HEADER_HEIGHT } from '../../../../constants/ui/elements'
-import breakpoints from '../../../../constants/ui/breakpoints'
+import styled from 'styled-components';
+
+import { breakpoints, HEADER_HEIGHT } from '@archie-webapps/ui-theme';
 
 export const NavigationStyled = styled.div`
   position: fixed;
@@ -16,8 +16,8 @@ export const NavigationStyled = styled.div`
   z-index: 1;
 
   @media (max-width: ${breakpoints.screenMD}) {
-   display: none;
-  }  
+    display: none;
+  }
 
   .nav-item {
     display: flex;
@@ -30,5 +30,4 @@ export const NavigationStyled = styled.div`
   p {
     padding-bottom: 0.2rem;
   }
-`
-
+`;

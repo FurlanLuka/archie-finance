@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
-import breakpoints from '../../../../constants/ui/breakpoints';
-
-export const MarginCallAlertStyled = styled.div` 
+export const MarginCallAlertStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -19,5 +17,4 @@ export const MarginCallAlertStyled = styled.div`
   button {
     margin-top: 0.5rem;
   }
-
-`
+`;

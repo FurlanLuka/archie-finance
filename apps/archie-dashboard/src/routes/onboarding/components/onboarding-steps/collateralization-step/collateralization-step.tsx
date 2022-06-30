@@ -1,25 +1,25 @@
+import { AssetPrice } from '@archie/api-consumer/asset_price/api/get-asset-price';
+import { useGetAssetPrice } from '@archie/api-consumer/asset_price/hooks/use-get-asset-price';
+import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
+import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
+import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import QRCode from 'react-qr-code';
 import ReactTooltip from 'react-tooltip';
-import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
-import { useGetAssetPrice } from '@archie/api-consumer/asset_price/hooks/use-get-asset-price';
-import { AssetPrice } from '@archie/api-consumer/asset_price/api/get-asset-price';
-import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
-import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
-import { CollateralAsset } from '../../../../../constants/data/collateral-assets';
-import { theme } from '../../../../../constants/ui/theme';
-import { Step } from '../../../../../constants/onboarding-steps';
-import { Container } from '../../../../../components/_generic/layout/layout.styled';
-import { SubtitleM, ParagraphS, ParagraphXS } from '../../../../../components/_generic/typography/typography.styled';
-import { Copy } from '../../../../../components/_generic/icons/copy';
-import { StepsIndicator } from '../../steps-indicator/steps-indicator';
-import { EmailVerification } from '../../email-verification/email-verification';
-import { CollateralizationStepStyled } from './collateralization-step.styled';
-import { InputRange } from '../../../../../components/_generic/input-range/input-range';
+
+import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
+import { Icon } from '@archie-webapps/ui-icons';
+import { theme } from '@archie-webapps/ui-theme';
+
 import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
-import { ExternalLink } from '../../../../../components/_generic/icons/external-link';
 import { Collateral } from '../../../../../components/collateral/collateral';
+import { CollateralAsset } from '../../../../../constants/data/collateral-assets';
+import { Step } from '../../../../../constants/onboarding-steps';
+import { EmailVerification } from '../../email-verification/email-verification';
+import { StepsIndicator } from '../../steps-indicator/steps-indicator';
+
+import { CollateralizationStepStyled } from './collateralization-step.styled';
 
 export const CollateralizationStep: FC = () => {
   const { t } = useTranslation();
@@ -120,7 +120,7 @@ export const CollateralizationStep: FC = () => {
             </SubtitleM>
             <ReactTooltip
               textColor={theme.tooltipText}
-              backgroundColor={theme.tooltipBackgrond}
+              backgroundColor={theme.tooltipBackground}
               effect="solid"
               delayHide={1000}
             />
@@ -163,12 +163,12 @@ export const CollateralizationStep: FC = () => {
             </ParagraphS>
             <ReactTooltip
               textColor={theme.tooltipText}
-              backgroundColor={theme.tooltipBackgrond}
+              backgroundColor={theme.tooltipBackground}
               effect="solid"
               delayHide={1000}
             />
             <button className="btn-copy" onClick={() => handleCopyToClipboard('address', getDepositAddress())}>
-              <Copy className="icon-copy" />
+              <Icon name="copy" className="icon-copy" />
             </button>
           </div>
           <div className="address-code">
@@ -204,7 +204,7 @@ export const CollateralizationStep: FC = () => {
                     className="info-link-url"
                   >
                     {t('collateralization_step.address.info_link_2')}
-                    <ExternalLink className="info-link-icon" />
+                    <Icon name="external-link" fill={theme.textHighlight} className="info-link-icon" />
                   </a>
                 </ParagraphXS>
               </div>

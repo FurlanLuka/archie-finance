@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import Modal from '../../../../components/_generic/modal/modal';
-import { ButtonPrimary, ButtonOutline } from '../../../../components/_generic/button/button.styled';
-import { ParagraphM } from 'apps/archie-dashboard/src/components/_generic/typography/typography.styled';
+
+import { ButtonOutline, ButtonPrimary, Modal, ParagraphM } from '@archie-webapps/ui-design-system';
+
 import { RevealCardModalStyled } from './reveal-card-modal.styled';
 
 interface RevealCardModalProps {

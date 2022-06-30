@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
-import breakpoints from '../../constants/ui/breakpoints';
+import { breakpoints } from '@archie-webapps/ui-theme';
 
 export const CollateralDepositStyled = styled.div`
   display: flex;
@@ -10,5 +10,5 @@ export const CollateralDepositStyled = styled.div`
 
   @media (max-width: ${breakpoints.screenSM}) {
     padding: 0.6rem 0.5rem;
-  } 
-`
+  }
+`;

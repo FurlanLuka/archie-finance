@@ -1,5 +1,5 @@
-import { FC, useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
+import { FC, useEffect } from 'react';
 
 export const LogoutRoute: FC = () => {
   const { logout } = useAuth0();

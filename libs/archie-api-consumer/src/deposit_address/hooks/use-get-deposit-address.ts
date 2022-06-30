@@ -1,9 +1,9 @@
+import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';
 import {
   getDepositAddress,
   GetDepositAddressResponse,
 } from '../api/get-deposit-address';
-import { useExtendedQuery } from '../../helper-hooks';
 
 const getDepositAddressQueryKey = (assetId: string) =>
   `deposit_address_${assetId}`;
