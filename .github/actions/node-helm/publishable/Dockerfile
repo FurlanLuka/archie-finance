@@ -4,10 +4,6 @@ ARG AWSCLI_VERSION="1.23.13"
 ARG HELM_VERSION="3.8.0"
 ARG KUBECTL_VERSION="1.24.0"
 
-ARG AWSCLI_VERSION="1.23.13"
-ARG HELM_VERSION="3.8.0"
-ARG KUBECTL_VERSION="1.24.0"
-
 RUN apk add py-pip curl wget ca-certificates git bash jq gcc alpine-sdk
 RUN pip install "awscli==${AWSCLI_VERSION}"
 RUN curl -L -o /usr/bin/kubectl https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl
@@ -20,5 +16,7 @@ RUN wget https://get.helm.sh/helm-v${HELM_VERSION}-linux-amd64.tar.gz -O - | tar
 RUN chmod +x /usr/local/bin/helm
 
 COPY entrypoint.sh /entrypoint.sh
+
+RUN chmod +x entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]:

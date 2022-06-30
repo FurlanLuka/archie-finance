@@ -1,5 +1,4 @@
 #!/bin/sh
-
 set -e
 
 echo ${KUBE_CONFIG_DATA} | base64 -d > kubeconfig
@@ -8,8 +7,9 @@ chmod 600 ${PWD}/kubeconfig
 
 echo "running entrypoint command(s)"
 
-response=$(sh -c " $INPUT_COMMAND")
+echo Your container args are: "$1"
+echo Environment variable: "$INPUT_COMMAND"
 
-ls
+response=$(eval $INPUT_COMMAND)
 
 echo "::set-output name=response::$response"

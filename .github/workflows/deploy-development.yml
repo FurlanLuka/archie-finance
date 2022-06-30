@@ -81,7 +81,6 @@ jobs:
       uses: ./.github/actions/node-helm
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ steps.git_details.outputs.COMMIT_HASH }}
+        INPUT_COMMAND: "npx nx affected --base=origin/main --target=deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.COMMIT_HASH }} --environment=development"
       with:
-        command: npx nx affected --base=origin/main --target=deploy --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG --environment=development
+        command: $INPUT_COMMAND
