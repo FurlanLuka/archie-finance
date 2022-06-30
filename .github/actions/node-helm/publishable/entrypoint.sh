@@ -7,9 +7,6 @@ chmod 600 ${PWD}/kubeconfig
 
 echo "running entrypoint command(s)"
 
-echo Your container args are: "$1"
-echo Environment variable: "$INPUT_COMMAND"
+echo Your container args are: "$*"
 
-response=$(eval $INPUT_COMMAND)
-
-echo "::set-output name=response::$response"
+sh -c "nx affected --base=origin/main --target=deploy $*"
