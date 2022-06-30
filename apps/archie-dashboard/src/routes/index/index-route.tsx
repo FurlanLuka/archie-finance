@@ -3,6 +3,7 @@ import { GetOnboardingResponse } from '@archie/api-consumer/onboarding/api/get-o
 import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-onboarding';
 import { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
 import {
   ButtonGhost,
@@ -47,11 +48,11 @@ export const DashboardRoute: FC = () => {
     return <Loading />;
   }
 
-  // if (queryResponse.state === RequestState.SUCCESS) {
-  //   if (!queryResponse.data.completed) {
-  //     return <Navigate to="/onboarding" />;
-  //   }
-  // }
+  if (queryResponse.state === RequestState.SUCCESS) {
+    if (!queryResponse.data.completed) {
+      return <Navigate to="/onboarding" />;
+    }
+  }
 
   const name = 'Lando';
   const date = 'February, 2022';

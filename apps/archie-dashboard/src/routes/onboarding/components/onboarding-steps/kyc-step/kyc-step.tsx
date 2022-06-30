@@ -6,7 +6,7 @@ import { templateFormatter, templateParser, parseDigit } from 'input-format';
 import ReactInput from 'input-format/react';
 import { FC } from 'react';
 import Autocomplete from 'react-google-autocomplete';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, FieldErrors, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
@@ -42,6 +42,31 @@ interface KycFormData {
   phoneNumber: string;
   ssn: string;
 }
+
+export function getAddressError(errors: FieldErrors<Address>): string {
+  return Object.values(errors)[0].message ?? '';
+}
+const addAddress = (place: GooglePlace): Partial<Address> => {
+  const streetNumberComponent = place.address_components.find((item) => item.types.includes('street_number'));
+  const streetNameComponent = place.address_components.find((item) => item.types.includes('route'));
+  const localityComponent = place.address_components.find((item) => item.types.includes('locality'));
+  const countryComponent = place.address_components.find((item) => item.types.includes('country'));
+  const postalCodeComponent = place.address_components.find((item) => item.types.includes('postal_code'));
+  const postalTownComponent = place.address_components.find((item) => item.types.includes('postal_town'));
+  const regionComponent = place.address_components.find((item) => item.types.includes('administrative_area_level_1'));
+
+  const addr: Partial<Address> = {
+    addressStreet: streetNameComponent?.long_name,
+    addressStreetNumber: streetNumberComponent?.long_name,
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    addressLocality: localityComponent ? localityComponent.short_name : postalTownComponent!.long_name,
+    addressCountry: countryComponent?.short_name,
+    addressRegion: regionComponent?.short_name,
+    addressPostalCode: postalCodeComponent?.short_name,
+  };
+
+  return addr;
+};
 
 const parseDate = (value: string) => parse(value, 'MMddyyyy', new Date());
 const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) < 18;
@@ -91,7 +116,10 @@ const schema = yup.object({
     addressStreet: yup.string().required('kyc_step.error.not_full_address'),
     addressStreetNumber: yup.string().required('kyc_step.error.not_full_address'),
     addressLocality: yup.string().required('kyc_step.error.not_full_address'),
-    addressCountry: yup.string().required('kyc_step.error.not_full_address').oneOf(SUPPORTED_COUNTRIES),
+    addressCountry: yup
+      .string()
+      .required('kyc_step.error.not_full_address')
+      .oneOf(SUPPORTED_COUNTRIES, 'kyc_step.error.not_us_address'),
     addressRegion: yup.string().required('kyc_step.error.not_full_address'),
     addressPostalCode: yup.string().required('kyc_step.error.not_full_address'),
   }),
@@ -110,51 +138,19 @@ export const KycStep: FC = () => {
     register,
     formState: { errors },
   } = useForm<KycFormData>({
-    mode: 'all',
+    mode: 'onSubmit',
+    reValidateMode: 'onSubmit',
     defaultValues: {
       firstName: '',
       lastName: '',
       dateOfBirth: '',
-      address: {},
+      address: undefined,
       phoneNumber: '',
       ssn: '',
     },
     resolver: yupResolver(schema),
   });
   const phoneNumberCountryCode = '+1';
-
-  const addAddress = (place: GooglePlace): Address | null => {
-    const streetNumberComponent = place.address_components.find((item) => item.types.includes('street_number'));
-    const streetNameComponent = place.address_components.find((item) => item.types.includes('route'));
-    const localityComponent = place.address_components.find((item) => item.types.includes('locality'));
-    const countryComponent = place.address_components.find((item) => item.types.includes('country'));
-    const postalCodeComponent = place.address_components.find((item) => item.types.includes('postal_code'));
-    const postalTownComponent = place.address_components.find((item) => item.types.includes('postal_town'));
-    const regionComponent = place.address_components.find((item) => item.types.includes('administrative_area_level_1'));
-
-    if (
-      streetNumberComponent &&
-      streetNameComponent &&
-      (localityComponent || postalTownComponent) &&
-      countryComponent &&
-      postalCodeComponent &&
-      regionComponent
-    ) {
-      const addr: Address = {
-        addressStreet: streetNameComponent.long_name,
-        addressStreetNumber: streetNumberComponent.long_name,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        addressLocality: localityComponent ? localityComponent.short_name : postalTownComponent!.long_name,
-        addressCountry: countryComponent.short_name,
-        addressRegion: regionComponent.short_name,
-        addressPostalCode: postalCodeComponent.short_name,
-      };
-
-      return addr;
-    } else {
-      return null;
-    }
-  };
 
   const onSubmit = handleSubmit((data) => {
     if (!errors) {
@@ -181,18 +177,18 @@ export const KycStep: FC = () => {
           <InputText>
             {t('kyc_step.label.first_name')}
             <input placeholder={t('kyc_step.placeholder.first_name')} {...register('firstName')} />
-            {errors.firstName && (
+            {errors.firstName?.message && (
               <ParagraphXS className="error" color={theme.textDanger}>
-                {errors.firstName}
+                {t(errors.firstName.message)}
               </ParagraphXS>
             )}
           </InputText>
           <InputText>
             {t('kyc_step.label.last_name')}
             <input placeholder={t('kyc_step.placeholder.last_name')} {...register('lastName')} />
-            {errors.lastName && (
+            {errors.lastName?.message && (
               <ParagraphXS className="error" color={theme.textDanger}>
-                {errors.lastName}
+                {t(errors.lastName.message)}
               </ParagraphXS>
             )}
           </InputText>
@@ -212,9 +208,9 @@ export const KycStep: FC = () => {
               />
             )}
           />
-          {errors.dateOfBirth && (
+          {errors.dateOfBirth?.message && (
             <ParagraphXS className="error" color={theme.textDanger}>
-              {errors.dateOfBirth}
+              {t(errors.dateOfBirth.message)}
             </ParagraphXS>
           )}
         </InputText>
@@ -224,24 +220,24 @@ export const KycStep: FC = () => {
             control={control}
             name="address"
             render={({ field: { onChange, value } }) => (
-              <Autocomplete
-                apiKey="AIzaSyA-k_VEX0soa2kljYKTjtFUg4irF3hKZwQ"
-                onPlaceSelected={(place) => {
-                  const add = addAddress(place);
-                  if (add) {
+              <>
+                <Autocomplete
+                  apiKey="AIzaSyA-k_VEX0soa2kljYKTjtFUg4irF3hKZwQ"
+                  onPlaceSelected={(place) => {
+                    const add = addAddress(place);
                     onChange(add);
-                  }
-                }}
-                placeholder={t('kyc_step.placeholder.address')}
-                options={{ types: ['address'] }}
-              />
+                  }}
+                  placeholder={t('kyc_step.placeholder.address')}
+                  options={{ types: ['address'] }}
+                />
+                {errors.address && (
+                  <ParagraphXS className="error" color={theme.textDanger}>
+                    {!value ? t('kyc_step.error.required_field') : t(getAddressError(errors.address))}
+                  </ParagraphXS>
+                )}
+              </>
             )}
           />
-          {errors.address && (
-            <ParagraphXS className="error" color={theme.textDanger}>
-              {errors.address}
-            </ParagraphXS>
-          )}
         </InputText>
         <InputText>
           {t('kyc_step.label.phone_number')}
@@ -261,9 +257,9 @@ export const KycStep: FC = () => {
               )}
             />
           </div>
-          {errors.phoneNumber && (
+          {errors.phoneNumber?.message && (
             <ParagraphXS className="error" color={theme.textDanger}>
-              {errors.phoneNumber}
+              {t(errors.phoneNumber.message)}
             </ParagraphXS>
           )}
         </InputText>
@@ -282,9 +278,9 @@ export const KycStep: FC = () => {
               />
             )}
           />
-          {errors.ssn && (
+          {errors.ssn?.message && (
             <ParagraphXS className="error" color={theme.textDanger}>
-              {errors.ssn}
+              {t(errors.ssn.message)}
             </ParagraphXS>
           )}
         </InputText>
