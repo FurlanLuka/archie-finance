@@ -1,19 +1,25 @@
-import { FC, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Formik, Form } from 'formik';
-import { differenceInYears, isValid, parse, isFuture } from 'date-fns';
-import Autocomplete from 'react-google-autocomplete';
-import { templateFormatter, templateParser, parseDigit } from 'input-format';
-import ReactInput from 'input-format/react';
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
-import { KycStepStyled } from './kyc-step.styled';
-import { theme } from '@archie-webapps/ui-theme';
+import { differenceInYears, isValid, parse, isFuture } from 'date-fns';
+import { Formik, Form } from 'formik';
+import { templateFormatter, templateParser, parseDigit } from 'input-format';
+import ReactInput from 'input-format/react';
+import { FC, useState } from 'react';
+import Autocomplete from 'react-google-autocomplete';
+import { useTranslation } from 'react-i18next';
+
+
 import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
+<<<<<<< HEAD
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+=======
+import { theme } from '@archie-webapps/ui-theme';
+
+import { KycStepStyled } from './kyc-step.styled';
+>>>>>>> feature/design-lib
 
 interface GooglePlace {
   address_components: Array<{

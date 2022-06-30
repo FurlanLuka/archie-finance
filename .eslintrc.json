@@ -1,13 +1,13 @@
 {
   "root": true,
   "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "plugins": ["@nrwl/nx", "import"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
         "@nrwl/nx/enforce-module-boundaries": [
-          "warning",
+          "error",
           {
             "enforceBuildableLibDependency": true,
             "allow": [],
@@ -17,6 +17,19 @@
                 "onlyDependOnLibsWithTags": ["*"]
               }
             ]
+          }
+        ],
+        "import/order": [
+          "error",
+          {
+            "alphabetize": {
+              "caseInsensitive": true,
+              "order": "asc"
+            },
+            "groups": [["builtin", "external", "internal"], "parent", "sibling", "index"],
+            "newlines-between": "always",
+            "pathGroupsExcludedImportTypes": ["internal"],
+            "pathGroups": [{ "pattern": "@archie-webapps/**", "group": "internal", "position": "after" }]
           }
         ]
       }

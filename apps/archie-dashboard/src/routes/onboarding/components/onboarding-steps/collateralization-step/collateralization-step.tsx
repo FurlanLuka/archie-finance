@@ -1,22 +1,27 @@
+import { AssetPrice } from '@archie/api-consumer/asset_price/api/get-asset-price';
+import { useGetAssetPrice } from '@archie/api-consumer/asset_price/hooks/use-get-asset-price';
+import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
+import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
+import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import QRCode from 'react-qr-code';
 import ReactTooltip from 'react-tooltip';
-import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
-import { useGetAssetPrice } from '@archie/api-consumer/asset_price/hooks/use-get-asset-price';
-import { AssetPrice } from '@archie/api-consumer/asset_price/api/get-asset-price';
-import { GetDepositAddressResponse } from '@archie/api-consumer/deposit_address/api/get-deposit-address';
-import { useGetDepositAddress } from '@archie/api-consumer/deposit_address/hooks/use-get-deposit-address';
+
+import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
+import { Icon } from '@archie-webapps/ui-icons';
+import { theme } from '@archie-webapps/ui-theme';
+
+import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
+import { Collateral } from '../../../../../components/collateral/collateral';
 import { CollateralAsset } from '../../../../../constants/data/collateral-assets';
 import { Step } from '../../../../../constants/onboarding-steps';
-import { StepsIndicator } from '../../steps-indicator/steps-indicator';
 import { EmailVerification } from '../../email-verification/email-verification';
+import { StepsIndicator } from '../../steps-indicator/steps-indicator';
+
 import { CollateralizationStepStyled } from './collateralization-step.styled';
-import { Collateral } from '../../../../../components/collateral/collateral';
-import { theme } from '@archie-webapps/ui-theme';
-import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
-import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
-import { Icon } from '@archie-webapps/ui-icons';
+
+
 
 export const CollateralizationStep: FC = () => {
   const { t } = useTranslation();
@@ -201,7 +206,7 @@ export const CollateralizationStep: FC = () => {
                     className="info-link-url"
                   >
                     {t('collateralization_step.address.info_link_2')}
-                    <Icon name="external-link" className="info-link-icon" />
+                    <Icon name="external-link" fill={theme.textHighlight} className="info-link-icon" />
                   </a>
                 </ParagraphXS>
               </div>

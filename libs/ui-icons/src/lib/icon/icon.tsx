@@ -1,5 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 
+import { theme } from '@archie-webapps/ui-theme';
+
 export type IconName =
   | 'arrow-indicator-right'
   | 'arrow-right'
@@ -27,10 +29,10 @@ interface IconProps {
 }
 
 export const Icon: FC<IconProps> = ({ name, className, fill }) => {
-  const [iconModule, setIconModule] = useState<any>();
+  const [iconModule, setIconModule] = useState<typeof import('*.svg')>();
 
   useEffect(() => {
-    import(`../icons/${name}.tsx` /* webpackMode: "eager" */)
+    import(`../../assets/${name}.svg` /* webpackMode: "eager" */)
       .then((module) => {
         setIconModule(module);
       })
@@ -44,9 +46,9 @@ export const Icon: FC<IconProps> = ({ name, className, fill }) => {
       return <span>□</span>;
     }
 
-    const Component = iconModule.default;
+    const Component = iconModule.ReactComponent;
 
-    return <Component fill={fill} className={className} />;
+    return <Component color={fill ?? theme.textPrimary} className={className} />;
   };
 
   return renderIcon();

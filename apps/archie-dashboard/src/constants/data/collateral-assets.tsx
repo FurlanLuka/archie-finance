@@ -1,5 +1,6 @@
-import { Icon } from '@archie-webapps/ui-icons';
 import { ReactElement } from 'react';
+
+import { Icon } from '@archie-webapps/ui-icons';
 
 export interface CollateralAsset {
   // TODO icon to string

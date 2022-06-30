@@ -1,14 +1,8 @@
-import { useExtendedMutation } from '@archie/api-consumer/helper-hooks';
-import { DefaultVariables } from '@archie/api-consumer/helpers';
-import { MutationQueryResponse } from '@archie/api-consumer/interface';
+import { useExtendedMutation } from '../../helper-hooks';
+import { DefaultVariables } from '../../helpers';
+import { MutationQueryResponse } from '../../interface';
 import { resendEmailVerification } from '../api/resend-email-verification';
 
-export const useResendEmailVerification = (): MutationQueryResponse<
-  DefaultVariables,
-  void
-> => {
-  return useExtendedMutation(
-    'resend_email_verification',
-    resendEmailVerification,
-  );
+export const useResendEmailVerification = (): MutationQueryResponse<DefaultVariables, void> => {
+  return useExtendedMutation('resend_email_verification', resendEmailVerification);
 };

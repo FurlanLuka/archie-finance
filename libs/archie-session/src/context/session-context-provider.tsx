@@ -1,5 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { PropsWithChildren, useEffect, useState } from 'react';
+
 import { SessionContext, SessionState } from './session-context';
 
 interface SessionProviderProps {

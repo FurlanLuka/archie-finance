@@ -1,5 +1,6 @@
 import { Auth0Provider } from '@auth0/auth0-react';
 import { PropsWithChildren } from 'react';
+
 import { SessionContextProvider } from './context/session-context-provider';
 
 interface SessionProviderProps {

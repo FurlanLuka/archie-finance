@@ -1,5 +1,6 @@
-import { breakpoints, HEADER_HEIGHT } from '@archie-webapps/ui-theme';
 import styled from 'styled-components';
+
+import { breakpoints, HEADER_HEIGHT } from '@archie-webapps/ui-theme';
 
 export const NavigationStyled = styled.div`
   position: fixed;

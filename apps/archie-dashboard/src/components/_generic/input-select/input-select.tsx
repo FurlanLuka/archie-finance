@@ -1,11 +1,15 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CollateralDeposit } from '../../../components/collateral-deposit/collateral-deposit';
-import { CollateralAsset, collateralAssets } from '../../../constants/data/collateral-assets';
-import { CollateralCurrency } from '../../../components/collateral-currency/collateral-currency';
-import { InputSelectStyled } from './input-select.styled';
+
 import { ParagraphXS } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
+
+import { CollateralCurrency } from '../../../components/collateral-currency/collateral-currency';
+import { CollateralDeposit } from '../../../components/collateral-deposit/collateral-deposit';
+import { CollateralAsset, collateralAssets } from '../../../constants/data/collateral-assets';
+
+import { InputSelectStyled } from './input-select.styled';
+
 
 interface InputSelectProps {
   setSelectedAsset: (asset?: CollateralAsset) => void;

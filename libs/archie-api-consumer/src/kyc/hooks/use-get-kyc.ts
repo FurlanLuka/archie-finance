@@ -1,6 +1,7 @@
+import { useQuery } from 'react-query';
+
 import { ApiError } from '../../api-error';
 import { QueryResponse, RequestState } from '../../interface';
-import { useQuery } from 'react-query';
 import { getKyc, GetKycResponse } from '../api/get-kyc';
 
 export const useGetKyc = (
