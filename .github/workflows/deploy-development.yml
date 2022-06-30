@@ -78,16 +78,11 @@ jobs:
     - name: Affected docker build
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
-        APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
-      run: nx affected --base=origin/main --target=build-docker --ercRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+      run: npx nx affected --base=origin/main --target=build-docker --ercRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=development
     - name: Affected deploy
       uses: koslib/helm-eks-action@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
-        CHART: ./charts/${{ steps.git_details.outputs.APP_NAME }}
-        APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
       with:
-        command: nx affected --base=origin/main --target=deploy --ercRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG --environment=development
+        command: npx nx affected --base=origin/main --target=deploy --ercRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=development --environment=development
