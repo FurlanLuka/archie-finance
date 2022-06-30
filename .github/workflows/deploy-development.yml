@@ -39,51 +39,51 @@ jobs:
           name: services-build-development-${{ steps.git_details.outputs.SOURCE_TAG }}
           path: ./dist
           retention-days: 1
-  deploy:
-    name: Build image, publish and deploy
-    needs: check_and_build
-    runs-on: ubuntu-latest
-    environment: development
-    steps:
-    - uses: actions/checkout@v2
-      name: Checkout
-      with:
-        fetch-depth: 0
-    - name: Extract details from Git
-      id: git_details
-      uses: ./.github/actions/extract-metadata
-    - uses: nrwl/nx-set-shas@v2
-      with:
-        main-branch-name: main
-    - uses: ./.github/actions/install-dependencies
-      name: Install dependencies
-    - name: Download build artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: services-build-development-${{ steps.git_details.outputs.SOURCE_TAG }}
-        path: ./dist
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-    - name: Affected docker build
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
-        APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
-      run: nx affected --base=origin/main --target=build-docker --ercRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
-    - name: Affected deploy
-      uses: koslib/helm-eks-action@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
-        CHART: ./charts/${{ steps.git_details.outputs.APP_NAME }}
-        APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
-      with:
-        command: nx affected --base=origin/main --target=deploy --ercRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG --environment=development
+  # deploy:
+  #   name: Build image, publish and deploy
+  #   needs: check_and_build
+  #   runs-on: ubuntu-latest
+  #   environment: development
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #     name: Checkout
+  #     with:
+  #       fetch-depth: 0
+  #   - name: Extract details from Git
+  #     id: git_details
+  #     uses: ./.github/actions/extract-metadata
+  #   - uses: nrwl/nx-set-shas@v2
+  #     with:
+  #       main-branch-name: main
+  #   - uses: ./.github/actions/install-dependencies
+  #     name: Install dependencies
+  #   - name: Download build artifacts
+  #     uses: actions/download-artifact@v2
+  #     with:
+  #       name: services-build-development-${{ steps.git_details.outputs.SOURCE_TAG }}
+  #       path: ./dist
+  #   - name: Configure AWS credentials
+  #     uses: aws-actions/configure-aws-credentials@v1
+  #     with:
+  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       aws-region: ${{ env.AWS_REGION }}
+  #   - name: Login to Amazon ECR
+  #     id: login-ecr
+  #     uses: aws-actions/amazon-ecr-login@v1
+  #   - name: Affected docker build
+  #     env:
+  #       ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  #       IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
+  #       APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
+  #     run: nx affected --base=origin/main --target=build-docker --ercRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+  #   - name: Affected deploy
+  #     uses: koslib/helm-eks-action@master
+  #     env:
+  #       KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
+  #       ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  #       IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
+  #       CHART: ./charts/${{ steps.git_details.outputs.APP_NAME }}
+  #       APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
+  #     with:
+  #       command: nx affected --base=origin/main --target=deploy --ercRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG --environment=development
