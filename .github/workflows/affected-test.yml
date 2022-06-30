@@ -1,0 +1,37 @@
+name: Development
+
+on:
+  push:
+    branches:
+      - "affected/v*"
+
+jobs:
+  check_and_build:
+    name: Check and Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+        with:
+          fetch-depth: 0
+      # - name: Git check few things
+      #   run: |
+      #     git checkout main
+      #     git rev-parse HEAD
+      - uses: nrwl/nx-set-shas@v2
+        # with:
+        #   main-branch-name: main
+      - uses: ./.github/actions/install-dependencies
+        name: Install dependencies
+      - name: Affected check & build
+        run: |
+          npx nx workspace-lint
+          npx nx affected --target=lint --parallel=3
+          npx nx affected --target=test --parallel=3 --ci --code-coverage
+          npx nx affected --target=build --parallel=3
+      # - name: Store build artifacts
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: services-build-development-${{ steps.git_details.outputs.SOURCE_TAG }}
+      #     path: ./dist
+      #     retention-days: 1
