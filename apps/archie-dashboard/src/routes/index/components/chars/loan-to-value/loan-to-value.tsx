@@ -1,7 +1,9 @@
-import { FC } from 'react';
 import { ResponsivePie } from '@nivo/pie';
-import { theme } from '../../../../../constants/ui/theme';
-import { SubtitleM, ParagraphXXS } from '../../../../../components/_generic/typography/typography.styled';
+import { FC } from 'react';
+
+import { SubtitleM, ParagraphXXS } from '@archie-webapps/ui-design-system';
+import { theme } from '@archie-webapps/ui-theme';
+
 import { LoanToValueStyled } from './loan-to-value.styled';
 
 const data = [

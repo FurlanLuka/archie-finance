@@ -1,6 +1,6 @@
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes } from 'styled-components';
 
-import breakpoints from '../../../../../constants/ui/breakpoints';
+import { breakpoints } from '@archie-webapps/ui-theme';
 
 const load = keyframes`
   0% {
@@ -9,7 +9,7 @@ const load = keyframes`
   100% {
     background-position: 500px 0;
   }
-`
+`;
 
 const fadeOut = keyframes`
   0% {
@@ -18,7 +18,7 @@ const fadeOut = keyframes`
   100% {
     opacity: 0;
   }
-`
+`;
 
 const hide = keyframes`
   0% {
@@ -27,7 +27,7 @@ const hide = keyframes`
   100% {
     visibility: hidden;
   }
-`
+`;
 
 const scale = keyframes`
   0% {
@@ -36,7 +36,7 @@ const scale = keyframes`
   100% {
     transform: scale(1);
   }
-`
+`;
 
 export const CollateralizationStepStyled = styled.div`
   display: flex;
@@ -52,7 +52,7 @@ export const CollateralizationStepStyled = styled.div`
 
   @media (max-width: ${breakpoints.screenSM}) {
     padding: 2.5rem 1.5rem 3.5rem;
-  }  
+  }
 
   .title {
     margin-bottom: 0.5rem;
@@ -72,7 +72,7 @@ export const CollateralizationStepStyled = styled.div`
 
     @media (max-width: ${breakpoints.screenMD}) {
       flex-direction: column;
-    }  
+    }
   }
 
   .result {
@@ -83,7 +83,7 @@ export const CollateralizationStepStyled = styled.div`
 
     @media (max-width: ${breakpoints.screenSM}) {
       flex-direction: column;
-    }  
+    }
   }
 
   .result-item {
@@ -149,7 +149,8 @@ export const CollateralizationStepStyled = styled.div`
     &.fade-out {
       background: linear-gradient(to right, #f9f9f9 8%, #ececec 38%, #f9f9f9 54%);
       background-size: 1000px 500px;
-      animation: ${load} 1s linear infinite forwards, ${fadeOut} 0.4s ease-out 2s forwards, ${hide} 0s linear 2s forwards;
+      animation: ${load} 1s linear infinite forwards, ${fadeOut} 0.4s ease-out 2s forwards,
+        ${hide} 0s linear 2s forwards;
     }
   }
 
@@ -192,7 +193,7 @@ export const CollateralizationStepStyled = styled.div`
 
     @media (max-width: ${breakpoints.screenSM}) {
       flex-direction: column;
-    } 
+    }
   }
 
   .info {
@@ -201,7 +202,7 @@ export const CollateralizationStepStyled = styled.div`
     @media (max-width: ${breakpoints.screenSM}) {
       margin-left: 0;
       margin-top: 1rem;
-    } 
+    }
   }
 
   .info-group {
@@ -213,11 +214,11 @@ export const CollateralizationStepStyled = styled.div`
 
   .divider {
     height: 1px;
-  	width: 100%;
+    width: 100%;
     background-color: ${({ theme }) => theme.borderPrimary};
     border: 0;
     margin: 1rem 0 1.5rem;
-  } 
+  }
 
   .info-link {
     display: flex;
@@ -226,7 +227,7 @@ export const CollateralizationStepStyled = styled.div`
     @media (max-width: ${breakpoints.screenSM}) {
       flex-direction: column;
       gap: 0;
-    } 
+    }
   }
 
   .info-link-url {
@@ -246,7 +247,7 @@ export const CollateralizationStepStyled = styled.div`
 
     @media (max-width: ${breakpoints.screenSM}) {
       flex-direction: column;
-    } 
+    }
   }
 
   .terms-title {
@@ -257,7 +258,7 @@ export const CollateralizationStepStyled = styled.div`
     @media (max-width: ${breakpoints.screenSM}) {
       width: 100%;
       margin-bottom: 0.5rem;
-    } 
+    }
   }
 
   .terms-list {
@@ -270,11 +271,11 @@ export const CollateralizationStepStyled = styled.div`
     @media (max-width: ${breakpoints.screenSM}) {
       width: 100%;
       padding-left: 1rem;
-    } 
+    }
   }
 
   .terms-list-item {
     margin-bottom: 1rem;
     text-align: left;
   }
-`
+`;

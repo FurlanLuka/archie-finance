@@ -1,4 +1,4 @@
-import { theme } from "../constants/ui/theme"
+import { theme } from "@archie-webapps/ui-theme"
 
 export enum TransactionStatus {
   PENDING = "pending",

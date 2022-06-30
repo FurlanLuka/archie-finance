@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
-import breakpoints from '../../../constants/ui/breakpoints';
+import { breakpoints } from '@archie-webapps/ui-theme';
 
 export const InputSelectStyled = styled.div`
   position: relative;
@@ -24,8 +24,8 @@ export const InputSelectStyled = styled.div`
 
     @media (max-width: ${breakpoints.screenSM}) {
       padding: 0 0.5rem;
-    } 
-  } 
+    }
+  }
 
   .select-header-caret {
     position: absolute;
@@ -35,7 +35,7 @@ export const InputSelectStyled = styled.div`
 
     @media (max-width: ${breakpoints.screenSM}) {
       right: 0.5rem;
-    } 
+    }
 
     &.open {
       transform: rotate(180deg);
@@ -64,5 +64,4 @@ export const InputSelectStyled = styled.div`
       border-bottom: 0;
     }
   }
-`
-
+`;

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import breakpoints from '../../../../constants/ui/breakpoints';
+import { breakpoints } from '@archie-webapps/ui-theme';
 
 export const EmailVerificationStyled = styled.div`
   display: flex;
@@ -16,7 +16,7 @@ export const EmailVerificationStyled = styled.div`
 
   @media (max-width: ${breakpoints.screenSM}) {
     padding: 0.75rem 1rem;
-  }  
+  }
 
   .image {
     max-height: 3rem;
@@ -25,7 +25,7 @@ export const EmailVerificationStyled = styled.div`
 
     @media (max-width: ${breakpoints.screenSM}) {
       margin-right: 0;
-    }  
+    }
   }
 
   button {
@@ -36,4 +36,4 @@ export const EmailVerificationStyled = styled.div`
     padding: 0 0.25rem;
     cursor: pointer;
   }
-`
+`;

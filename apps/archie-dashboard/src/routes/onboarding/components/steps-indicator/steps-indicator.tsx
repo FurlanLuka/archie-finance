@@ -1,11 +1,12 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { ParagraphXXS } from '@archie-webapps/ui-design-system';
+import { Icon } from '@archie-webapps/ui-icons';
+import { theme } from '@archie-webapps/ui-theme';
+
 import { Step } from '../../../../constants/onboarding-steps';
-import { theme } from '../../../../constants/ui/theme';
-import { IndicatorDone } from '../../../../components/_generic/icons/indicator-done';
-import { IndicatorActive } from '../../../../components/_generic/icons/indicator-active';
-import { ArrowIndicatorRight } from '../../../../components/_generic/icons/arrow-indicator-right';
-import { ParagraphXXS } from '../../../../components/_generic/typography/typography.styled';
+
 import { StepsIndicatorStyled } from './steps-indicator.styled';
 
 interface StepsIndicatorProps {
@@ -19,28 +20,41 @@ export const StepsIndicator: FC<StepsIndicatorProps> = ({ currentStep }) => {
     <StepsIndicatorStyled>
       <div className="step">
         <div className="circle">
-          <IndicatorDone />
+          <Icon name="indicator-done" fill={theme.textPositive} />
         </div>
         <ParagraphXXS weight={700} color={theme.textPositive}>
           {t('steps_indicator.first')}
         </ParagraphXXS>
-        <ArrowIndicatorRight className="arrow" fill={theme.textPositive} />
+        <Icon name="arrow-indicator-right" className="arrow" fill={theme.textPositive} />
       </div>
       <div className="step">
-        <div className="circle">{currentStep === Step.COLLATERALIZE ? <IndicatorActive /> : <IndicatorDone />}</div>
+        <div className="circle">
+          {currentStep === Step.COLLATERALIZE ? (
+            <Icon name="indicator-active" fill={theme.textHighlight} className="icon-active" />
+          ) : (
+            <Icon name="indicator-done" fill={theme.textPositive} />
+          )}
+        </div>
         <ParagraphXXS
           weight={700}
           color={currentStep === Step.COLLATERALIZE ? theme.textHighlight : theme.textPositive}
         >
           {t('steps_indicator.second')}
         </ParagraphXXS>
-        <ArrowIndicatorRight
+        <Icon
+          name="arrow-indicator-right"
           className="arrow"
           fill={currentStep === Step.CARD ? theme.textPositive : theme.textDisabled}
         />
       </div>
       <div className="step">
-        <div className="circle">{currentStep === Step.CARD && <IndicatorDone />}</div>
+        <div className="circle">
+          {currentStep === Step.CARD ? (
+            <Icon name="indicator-done" fill={theme.textPositive} />
+          ) : (
+            <div className="circle" />
+          )}
+        </div>
         <ParagraphXXS weight={700} color={currentStep === Step.CARD ? theme.textPositive : theme.textDisabled}>
           {t('steps_indicator.third')}
         </ParagraphXXS>

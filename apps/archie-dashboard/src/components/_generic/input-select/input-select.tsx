@@ -1,11 +1,15 @@
 import { FC, useState } from 'react';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+
+import { ParagraphXS } from '@archie-webapps/ui-design-system';
+import { Icon } from '@archie-webapps/ui-icons';
+
+import { CollateralCurrency } from '../../../components/collateral-currency/collateral-currency';
 import { CollateralDeposit } from '../../../components/collateral-deposit/collateral-deposit';
 import { CollateralAsset, collateralAssets } from '../../../constants/data/collateral-assets';
-import { CollateralCurrency } from '../../../components/collateral-currency/collateral-currency';
-import { Caret } from '../../../components/_generic/icons/caret';
-import { ParagraphXS } from '../typography/typography.styled';
+
 import { InputSelectStyled } from './input-select.styled';
+
 
 interface InputSelectProps {
   setSelectedAsset: (asset?: CollateralAsset) => void;
@@ -38,7 +42,7 @@ export const InputSelect: FC<InputSelectProps> = ({ setSelectedAsset }) => {
         ) : (
           <CollateralCurrency name="Select your collateral currency" short="BTC, ETH, SOL, or USDC" />
         )}
-        <Caret className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
+        <Icon name="caret" className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
       </div>
       {selectOpen && (
         <div className="select-list">

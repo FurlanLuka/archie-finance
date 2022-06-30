@@ -1,6 +1,6 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
-import breakpoints from '../../constants/ui/breakpoints';
+import { breakpoints } from '@archie-webapps/ui-theme';
 
 export const OnboardingStyled = styled.div`
   display: flex;
@@ -12,4 +12,4 @@ export const OnboardingStyled = styled.div`
   @media (max-width: ${breakpoints.screenSM}) {
     padding: 1.5rem 1rem;
   }
-`
+`;
