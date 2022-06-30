@@ -28,11 +28,7 @@ export const StepsIndicatorStyled = styled.div`
     margin-bottom: 0.5rem;
   }
 
-  .stepIcon {
-    margin-top: -0.25rem; // so it gets aligned properly
-  }
-
-  .active {
+  .icon-active {
     margin-top: -5px;
     margin-left: -5px;
   }
