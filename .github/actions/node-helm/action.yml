@@ -1,0 +1,13 @@
+name: Helm with nodejs
+description: Access helm commands with nodejs environment
+
+inputs:
+  command:
+    description: "Your command (kubectl or helm)"
+    required: true
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
+  args:
+    - ${{ inputs.command }}
