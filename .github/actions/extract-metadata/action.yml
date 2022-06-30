@@ -14,6 +14,10 @@ outputs:
   APP_NAME:
     description: "Source name"
     value: ${{ steps.extract.outputs.APP_NAME }}
+  COMMIT_HASH:
+    description: "Commit hash"
+    value: ${{ steps.extract.outputs.COMMIT_HASH }}
+
 
 runs:
   using: "composite"
