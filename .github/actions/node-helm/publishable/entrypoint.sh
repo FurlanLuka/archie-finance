@@ -7,6 +7,4 @@ chmod 600 ${PWD}/kubeconfig
 
 git config --global --add safe.directory /github/workspace
 
-echo "running entrypoint command(s)"
-
 sh -c "nx affected $*"
