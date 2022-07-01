@@ -25,13 +25,13 @@ jobs:
     - uses: ./.github/actions/install-dependencies
       name: Install dependencies
     - name: Workspace Lint
-      run: npx nx --base=origin/main workspace-lint
+      run: npx nx --base=origin/master workspace-lint
     - name: Affected Lint
-      run: npx nx affected --base=origin/main --target=lint --parallel=3
+      run: npx nx affected --base=origin/master --target=lint --parallel=3
     - name: Affected Test
-      run: npx nx affected --base=origin/main --target=test --parallel=3 --ci --code-coverage
+      run: npx nx affected --base=origin/master --target=test --parallel=3 --ci --code-coverage
     - name: Affected Build
-      run: npx nx affected --base=origin/main --target=build --parallel=3
+      run: npx nx affected --base=origin/master --target=build --parallel=3
     - name: Store build artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -74,7 +74,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
-      run: npx nx affected --base=origin/main --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+      run: npx nx affected --base=origin/master --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
   deploy:
     name: Deploy to kubernetes cluster
     needs: build_and_public
@@ -105,4 +105,4 @@ jobs:
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_PRODUCTION }}
       with:
-        args: --base=origin/main --target=deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.SOURCE_TAG }} --environment=production
+        args: --base=origin/master --target=deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.SOURCE_TAG }} --environment=production
