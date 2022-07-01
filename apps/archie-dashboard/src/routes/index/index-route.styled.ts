@@ -52,9 +52,11 @@ export const IndexStyled = styled.div`
 
   .archie-card {
     max-width: 420px;
+    min-width: 420px;
     min-height: 264px;
 
     @media (max-width: ${breakpoints.screenSM}) {
+      min-width: 100%;
       min-height: 225px;
     }
   }
