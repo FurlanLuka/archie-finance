@@ -98,7 +98,7 @@ export const DashboardRoute: FC = () => {
                 close={() => setRevealCardModalOpen(false)}
                 onConfirm={() => setRevealCardData(true)}
               />
-              <Card justifyContent="space-between" padding="1.5rem">
+              <Card justifyContent="space-between" columnReverse padding="1.5rem">
                 <div className="card-group">
                   <div className="card-group p-bottom">
                     <ParagraphXS weight={700} className="card-title">
@@ -107,9 +107,11 @@ export const DashboardRoute: FC = () => {
                     <SubtitleS weight={400} className="card-info border-active">
                       $1,000.00
                     </SubtitleS>
-                    <ButtonOutline maxWidth="auto" small>
-                      Pay now
-                    </ButtonOutline>
+                    <div className="btn-group">
+                      <ButtonOutline maxWidth="auto" small>
+                        Pay now
+                      </ButtonOutline>
+                    </div>
                   </div>
                   <div className="card-group">
                     <ParagraphXS weight={700} className="card-title">
@@ -123,25 +125,13 @@ export const DashboardRoute: FC = () => {
                     </ParagraphXXS>
                   </div>
                 </div>
-                <div className="card-group">
+                <div className="card-group p-bottom-sm">
                   <LoanToValue />
                 </div>
               </Card>
             </div>
 
             <div className="section-cards">
-              <Card column alignItems="flex-start" padding="1.5rem">
-                <ParagraphXS weight={700} className="card-title">
-                  Next Payment
-                </ParagraphXS>
-                <SubtitleS weight={400} className="card-info">
-                  June 3
-                </SubtitleS>
-                <NextPayment />
-                <ButtonOutline maxWidth="auto" small>
-                  Pay now
-                </ButtonOutline>
-              </Card>
               <Card column alignItems="flex-start" padding="1.5rem">
                 <ParagraphXS weight={700} className="card-title">
                   Collateral Value
@@ -164,6 +154,20 @@ export const DashboardRoute: FC = () => {
               </Card>
               <Card column alignItems="flex-start" padding="1.5rem">
                 <ParagraphXS weight={700} className="card-title">
+                  Next Payment
+                </ParagraphXS>
+                <SubtitleS weight={400} className="card-info">
+                  June 3
+                </SubtitleS>
+                <NextPayment />
+                <div className="btn-group">
+                  <ButtonOutline maxWidth="auto" small>
+                    Pay now
+                  </ButtonOutline>
+                </div>
+              </Card>
+              <Card column alignItems="flex-start" padding="1.5rem">
+                <ParagraphXS weight={700} className="card-title">
                   My Rewards
                 </ParagraphXS>
                 <div className="text-group card-info">
@@ -178,9 +182,11 @@ export const DashboardRoute: FC = () => {
                     Projected Value
                   </ParagraphXXS>
                 </div>
-                <ButtonOutline maxWidth="auto" small>
-                  Claim
-                </ButtonOutline>
+                <div className="btn-group">
+                  <ButtonOutline maxWidth="auto" small>
+                    Claim
+                  </ButtonOutline>
+                </div>
               </Card>
             </div>
 
@@ -189,9 +195,11 @@ export const DashboardRoute: FC = () => {
                 <ParagraphM weight={800} className="table-title">
                   Recent Transactions
                 </ParagraphM>
-                <ButtonOutline maxWidth="auto" small className="table-btn">
-                  View More
-                </ButtonOutline>
+                <div className="btn-group">
+                  <ButtonOutline maxWidth="auto" small className="table-btn">
+                    View More
+                  </ButtonOutline>
+                </div>
                 <Table columns={columns} data={data} />
               </Card>
             </div>

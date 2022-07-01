@@ -16,10 +16,12 @@ export const Navigation: FC = () => {
     <NavigationStyled>
       {dashboardNavItems.map((item, index) => (
         <div className="nav-item" key={index} onClick={() => (item.name === 'logout' ? logout : navigate(item.path))}>
-          <div className="icon">
+          <div className="nav-item-icon">
             <Icon name={item.icon} />
           </div>
-          <ParagraphXXS weight={700}>{item.name}</ParagraphXXS>
+          <ParagraphXXS weight={700} className="nav-item-title">
+            {item.name}
+          </ParagraphXXS>
         </div>
       ))}
     </NavigationStyled>

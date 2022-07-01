@@ -22,22 +22,12 @@ export const HeaderStyled = styled.div<HeaderProps>`
 
   .logo {
     margin-bottom: 4px;
-
-    @media (max-width: ${breakpoints.screenSM}) {
-      width: 84px;
-    }
   }
 
   .menu {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
-
-  .logo {
-    @media (max-width: ${breakpoints.screenSM}) {
-      width: 84px;
-    }
   }
 
   .menu-button {

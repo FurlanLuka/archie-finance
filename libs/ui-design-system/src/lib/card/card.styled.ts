@@ -1,12 +1,15 @@
 import styled from 'styled-components'
 
+import { breakpoints } from '@archie-webapps/ui-theme';
+
 interface CardProps {
   column?: boolean;
   alignItems?: string;
   justifyContent?: string;
   maxWidth?: string
   padding?: string;
-  mobileColumn?: boolean;
+  mobileRow?: boolean;
+  columnReverse?: boolean;
   mobileJustifyContent?: string;
   mobileAlignItems?: string;
   backgroundImage?: string;
@@ -21,15 +24,32 @@ export const Card = styled.div<CardProps>`
   background-color: ${({ theme }) => theme.backgroundPrimary};
   background-image: ${({ backgroundImage }) => `url(${backgroundImage})`};
   background-size: cover;
-  background-position: right;
   box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.08);
   border-radius: 0.5rem;
   width: 100%;
   max-width: ${({ maxWidth }) => maxWidth ?? '100%'};
   padding: ${({ padding }) => padding};
 
+  @media (max-width: ${breakpoints.screenSM}) {
+    flex-direction: ${({ columnReverse, mobileRow }) => columnReverse ? 'column-reverse' : mobileRow ? 'row' : 'column'};
+    justify-content: ${({ mobileJustifyContent }) => mobileJustifyContent};
+    align-items: ${({ mobileAlignItems }) => mobileAlignItems};
+  }
+
   .p-bottom {
     padding-bottom: 1.5rem;
+  }
+
+  .p-bottom-sm {
+    @media (max-width: ${breakpoints.screenSM}) {
+      padding-bottom: 1.5rem;
+    }
+  }
+
+  .card-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .card-title {

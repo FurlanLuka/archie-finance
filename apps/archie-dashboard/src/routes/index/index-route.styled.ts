@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { breakpoints, NAV_WIDTH } from '@archie-webapps/ui-theme';
+import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/ui-theme';
 
 export const IndexStyled = styled.div`
   display: flex;
@@ -12,6 +12,10 @@ export const IndexStyled = styled.div`
     max-width: calc(1000px + 4rem);
     margin-left: ${NAV_WIDTH};
     padding: 3rem 2rem;
+
+    @media (max-width: ${breakpoints.screenLG}) {
+      margin-left: ${NAV_WIDTH_TABLET};
+    }
 
     @media (max-width: ${breakpoints.screenMD}) {
       margin: 0;
@@ -38,12 +42,21 @@ export const IndexStyled = styled.div`
 
     @media (max-width: ${breakpoints.screenMD}) {
       flex-wrap: wrap;
+      max-width: 70%;
+    }
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      max-width: 100%;
     }
   }
 
   .archie-card {
     max-width: 420px;
-    min-height: 240px;
+    min-height: 264px;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      min-height: 225px;
+    }
   }
 
   .table-title {
