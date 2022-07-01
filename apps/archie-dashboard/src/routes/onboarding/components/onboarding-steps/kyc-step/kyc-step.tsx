@@ -139,7 +139,7 @@ export const KycStep: FC = () => {
     formState: { errors },
   } = useForm<KycFormData>({
     mode: 'onSubmit',
-    reValidateMode: 'onSubmit',
+    reValidateMode: 'onBlur',
     defaultValues: {
       firstName: '',
       lastName: '',
@@ -153,18 +153,16 @@ export const KycStep: FC = () => {
   const phoneNumberCountryCode = '+1';
 
   const onSubmit = handleSubmit((data) => {
-    if (!errors) {
-      if (mutationRequest.state === RequestState.IDLE) {
-        mutationRequest.mutate({
-          firstName: data.firstName,
-          lastName: data.lastName,
-          dateOfBirth: parseDate(data.dateOfBirth).toISOString(),
-          phoneNumber: data.phoneNumber,
-          ssn: data.ssn,
-          phoneNumberCountryCode,
-          ...data.address,
-        });
-      }
+    if (mutationRequest.state === RequestState.IDLE) {
+      mutationRequest.mutate({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        dateOfBirth: parseDate(data.dateOfBirth).toISOString(),
+        phoneNumber: data.phoneNumber,
+        ssn: data.ssn,
+        phoneNumberCountryCode,
+        ...data.address,
+      });
     }
   });
 
