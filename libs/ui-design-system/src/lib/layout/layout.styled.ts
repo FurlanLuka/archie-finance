@@ -17,7 +17,7 @@ export const Page = styled.div`
   padding-top: ${HEADER_HEIGHT};
 
   @media (max-width: ${breakpoints.screenSM}) {
-    min-height: calc(100vh - ${HEADER_HEIGHT_MOBILE});
+    min-height: 100vh;
     padding-top: ${HEADER_HEIGHT_MOBILE};
   }
 `;

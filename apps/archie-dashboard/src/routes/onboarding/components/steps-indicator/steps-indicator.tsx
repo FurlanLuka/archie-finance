@@ -28,11 +28,11 @@ export const StepsIndicator: FC<StepsIndicatorProps> = ({ currentStep }) => {
         <Icon name="arrow-indicator-right" className="arrow" fill={theme.textPositive} />
       </div>
       <div className="step">
-        <div className="stepIcon">
+        <div className="circle">
           {currentStep === Step.COLLATERALIZE ? (
-            <Icon name="indicator-active" fill={theme.textHighlight} />
+            <Icon name="indicator-active" fill={theme.textHighlight} className="icon-active" />
           ) : (
-            <Icon name="indicator-done" fill={theme.textSuccess} />
+            <Icon name="indicator-done" fill={theme.textPositive} />
           )}
         </div>
         <ParagraphXXS
@@ -48,11 +48,13 @@ export const StepsIndicator: FC<StepsIndicatorProps> = ({ currentStep }) => {
         />
       </div>
       <div className="step">
-        {currentStep === Step.CARD ? (
-          <Icon name="indicator-done" fill={theme.textPositive} />
-        ) : (
-          <div className="circle" />
-        )}
+        <div className="circle">
+          {currentStep === Step.CARD ? (
+            <Icon name="indicator-done" fill={theme.textPositive} />
+          ) : (
+            <div className="circle" />
+          )}
+        </div>
         <ParagraphXXS weight={700} color={currentStep === Step.CARD ? theme.textPositive : theme.textDisabled}>
           {t('steps_indicator.third')}
         </ParagraphXXS>
