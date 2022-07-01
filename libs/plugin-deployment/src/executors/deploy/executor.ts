@@ -13,9 +13,9 @@ export default async function runExecutor(
   }
 
   const projectConfig = workspace.projects[projectName];
-  const versionTag = `${projectConfig.name}-${imageTag}`;
+  const versionTag = `${projectName}-${imageTag}`;
 
-  logger.info(`Deploying ${projectConfig.name}...`);
+  logger.info(`Deploying ${projectName}...`);
 
   execSync(
     `helm upgrade --install ${projectName} ${projectConfig.root}/chart --set tag=${versionTag} --set image=${ecrRegistry}/${ecrRepository} --set environment=${environment}`,
