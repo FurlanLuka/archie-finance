@@ -7,6 +7,8 @@ chmod 600 ${PWD}/kubeconfig
 
 echo "running entrypoint command(s)"
 
+ls
+
 echo Your container args are: "$*"
 
 sh -c "nx affected $*"

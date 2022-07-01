@@ -40,7 +40,7 @@ jobs:
           name: services-build-development
           path: ./dist
           retention-days: 1
-  build_and_public:
+  build_and_publish:
     name: Build docker image and publish 
     needs: check_and_build
     runs-on: ubuntu-latest
@@ -77,7 +77,7 @@ jobs:
       run: npx nx affected --base=origin/main --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
   deploy:
     name: Deploy to kubernetes cluster
-    needs: build_and_public
+    needs: build_and_publish
     runs-on: ubuntu-latest
     environment: development
     steps:
