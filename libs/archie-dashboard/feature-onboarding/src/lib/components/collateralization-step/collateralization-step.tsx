@@ -21,8 +21,6 @@ import { StepsIndicator } from '../../steps-indicator/steps-indicator';
 
 import { CollateralizationStepStyled } from './collateralization-step.styled';
 
-
-
 export const CollateralizationStep: FC = () => {
   const { t } = useTranslation();
 

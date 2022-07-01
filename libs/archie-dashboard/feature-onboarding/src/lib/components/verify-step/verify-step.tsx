@@ -5,7 +5,6 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactCodeInput from 'react-verification-code-input';
 
-
 import { ButtonPrimary, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/ui-theme';

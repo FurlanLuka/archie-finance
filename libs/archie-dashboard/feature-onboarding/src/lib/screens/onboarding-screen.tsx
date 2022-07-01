@@ -4,14 +4,29 @@ import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-
 import { FC, useEffect, useState } from 'react';
 
 import { Header, Loading, Page } from '@archie-webapps/ui-design-system';
+import { Step } from '@archie-webapps/util-constants';
 
-import { Step } from '../../constants/onboarding-steps';
+import { CardStep } from '../components/card-step/card-step';
+import { CollateralizationStep } from '../components/collateralization-step/collateralization-step';
+import { KycStep } from '../components/kyc-step/kyc-step';
+import { VerifyStep } from '../components/verify-step/verify-step';
 
-import { CardStep } from './components/onboarding-steps/card-step/card-step';
-import { CollateralizationStep } from './components/onboarding-steps/collateralization-step/collateralization-step';
-import { KycStep } from './components/onboarding-steps/kyc-step/kyc-step';
-import { VerifyStep } from './components/onboarding-steps/verify-step/verify-step';
-import { OnboardingStyled } from './onboarding-route.styled';
+import { OnboardingStyled } from './onboarding-screen.styled';
+
+function getCurrentStep(step: Step) {
+  switch (step) {
+    case Step.KYC:
+      return <KycStep />;
+    case Step.VERIFY:
+      return <VerifyStep />;
+    case Step.COLLATERALIZE:
+      return <CollateralizationStep />;
+    case Step.CARD:
+      return <CardStep />;
+    default:
+      return <KycStep />;
+  }
+}
 
 export const OnboardingRoute: FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
@@ -31,21 +46,6 @@ export const OnboardingRoute: FC = () => {
       }
     }
   }, [queryResponse]);
-
-  const getCurrentStep = (state: Step) => {
-    switch (state) {
-      case Step.KYC:
-        return <KycStep />;
-      case Step.VERIFY:
-        return <VerifyStep />;
-      case Step.COLLATERALIZE:
-        return <CollateralizationStep />;
-      case Step.CARD:
-        return <CardStep />;
-      default:
-        return <KycStep />;
-    }
-  };
 
   return (
     <>

@@ -17,7 +17,6 @@ import { StepsIndicator } from '../../steps-indicator/steps-indicator';
 
 import { CardStepStyled } from './card-step.styled';
 
-
 enum Stage {
   CREATE_USER,
   ISSUE_CARD,
