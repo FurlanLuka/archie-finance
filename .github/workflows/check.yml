@@ -17,6 +17,8 @@ jobs:
         with:
           fetch-depth: 0
       - uses: nrwl/nx-set-shas@v2
+      - name: Add github npm repository
+        run: echo "@rizefinance:registry=https://npm.pkg.github.com/" >> .npmrc
       - name: Install dependencies
         run: npm i
       - name: Workspace lint
