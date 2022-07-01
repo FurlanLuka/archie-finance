@@ -23,7 +23,8 @@
       "@archie-microservices/internal-api": ["libs/internal-api/src/index.ts"],
       "@archie-microservices/openapi": ["libs/openapi/src/index.ts"],
       "@archie-microservices/sendgrid": ["libs/sendgrid/src/index.ts"],
-      "@archie-microservices/vault": ["libs/vault/src/index.ts"]
+      "@archie-microservices/vault": ["libs/vault/src/index.ts"],
+      "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"]
     }
   },
   "exclude": [

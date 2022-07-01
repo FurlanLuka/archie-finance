@@ -63,6 +63,12 @@
         "jestConfig": "apps/user-api/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
     }
   },
   "tags": []
