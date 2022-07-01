@@ -17,8 +17,6 @@ jobs:
         with:
           fetch-depth: 0
       - uses: nrwl/nx-set-shas@v2
-      - name: Add Rize finance npm repository
-        run: npm set @rizefinance:registry=https://npm.pkg.github.com/
       - name: Install dependencies
         run: npm i
       - name: Workspace lint
