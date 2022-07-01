@@ -10,7 +10,9 @@ export class RizeController {
   @HttpCode(204)
   // @ApiBearerAuth()
   public async createUser(@Request() req, @Ip() ip): Promise<void> {
-    const userId = 'test239';
-    return this.rizeService.createUser(userId, req.connection.remoteAddress);
+    return this.rizeService.createUser(
+      req.user.sub,
+      req.headers['x-forwarded-for'],
+    );
   }
 }

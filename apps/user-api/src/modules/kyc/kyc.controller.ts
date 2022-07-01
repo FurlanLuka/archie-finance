@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Ip,
   Param,
   Post,
   Req,
@@ -21,7 +22,7 @@ export class KycController {
 
   @Get()
   @UseGuards(AuthGuard)
-  async getKyc(@Req() request): Promise<GetKycResponse> {
+  async getKyc(@Req() request, @Ip() ipDec): Promise<GetKycResponse> {
     return this.kycService.getKyc(request.user.sub);
   }
 

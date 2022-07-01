@@ -5,7 +5,8 @@ import { InternalApiService } from '@archie-microservices/internal-api';
 import { RizeApiService } from './api/rize_api.service';
 import {
   ComplianceDocumentAcknowledgementRequest,
-  ComplianceDocuments,
+  ComplianceWorkflow,
+  ComplianceWorkflowMeta,
   Customer,
   CustomerDetails,
 } from './api/rize_api.interfaces';
@@ -13,43 +14,46 @@ import { CustomerAlreadyExists } from './rize.errors';
 
 @Injectable()
 export class RizeService {
+  MAX_STEPS = 10;
+
   constructor(
     private internalApiService: InternalApiService,
     private rizeApiService: RizeApiService,
   ) {}
 
-  public async createUser(userId: string, userIp): Promise<void> {
-    // optimization only fetch if create returns error
+  public async createUser(
+    userId: string,
+    userIp: string | undefined,
+  ): Promise<void> {
     const existingCustomer: Customer | null =
       await this.rizeApiService.searchCustomers(userId);
-    console.log('ip', userIp);
 
     if (existingCustomer !== null && existingCustomer.status === 'active') {
       throw new CustomerAlreadyExists();
     }
 
-    // const kyc: GetKycResponse = await this.internalApiService.getKyc(userId); // format ssn as ###-##-### TODO!!
-    // const emailAddressResponse: GetEmailAddressResponse =
-    //   await this.internalApiService.getUserEmailAddress(userId);
+    const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
+    const emailAddressResponse: GetEmailAddressResponse =
+      await this.internalApiService.getUserEmailAddress(userId);
 
-    const kyc: GetKycResponse = {
-      firstName: 'Andraz1',
-      lastName: 'Cudermands',
-      dateOfBirth: '1997-03-25',
-      addressCountry: 'US',
-      addressLocality: 'Los Angeles',
-      addressPostalCode: '90012',
-      addressRegion: 'CA',
-      addressStreet: 'South Los Angeles Street',
-      addressStreetNumber: '120',
-      phoneNumber: '5754200097',
-      phoneNumberCountryCode: '+1',
-      ssn: '232-43-3007',
-    };
-    const emailAddressResponse: GetEmailAddressResponse = {
-      email: 'test24@test.com',
-    };
-    console.log('here1');
+    // const kyc: GetKycResponse = {
+    //   firstName: 'Andraz1',
+    //   lastName: 'Cudermands',
+    //   dateOfBirth: '1997-03-25',
+    //   addressCountry: 'US',
+    //   addressLocality: 'Los Angeles',
+    //   addressPostalCode: '90012',
+    //   addressRegion: 'CA',
+    //   addressStreet: 'South Los Angeles Street',
+    //   addressStreetNumber: '120',
+    //   phoneNumber: '5754200103',
+    //   phoneNumberCountryCode: '+1',
+    //   ssn: '232433012',
+    // };
+    // const emailAddressResponse: GetEmailAddressResponse = {
+    //   email: 'test29@test.com',
+    // };
+
     const customerId: string =
       existingCustomer !== null
         ? existingCustomer.uid
@@ -57,7 +61,6 @@ export class RizeService {
             userId,
             emailAddressResponse.email,
           );
-    console.log('here2');
 
     await this.rizeApiService.addCustomerPii(
       customerId,
@@ -65,39 +68,71 @@ export class RizeService {
       this.createCustomerDetails(kyc),
     );
 
-    const complianceDocuments: ComplianceDocuments =
-      await this.rizeApiService.createCheckingComplianceDocuments(customerId);
-
-    const docs: ComplianceDocumentAcknowledgementRequest[] =
-      complianceDocuments.document_ids.map((documentId) =>
-        this.createAcceptedComplianceDocument(documentId, userIp, userId),
+    let complianceWorkflow: ComplianceWorkflowMeta;
+    try {
+      complianceWorkflow =
+        await this.rizeApiService.createCheckingComplianceWorkflow(customerId);
+    } catch {
+      complianceWorkflow = await this.rizeApiService.getLastComplianceWorkflow(
+        customerId,
       );
-    console.log(customerId);
+    }
 
-    // TODO: accept in 2 steps
-    await this.rizeApiService.acceptComplianceDocuments(
+    await this.acceptAllDocuments(
       customerId,
-      complianceDocuments.compliance_workflow_uid,
-      docs,
+      userId,
+      userIp,
+      complianceWorkflow,
     );
 
     await this.rizeApiService.createCustomerProduct(
       customerId,
-      complianceDocuments.product_uid,
+      complianceWorkflow.product_uid,
     );
-    console.log('here7');
+  }
+
+  private async acceptAllDocuments(
+    customerId: string,
+    userId: string,
+    userIp: string,
+    complianceWorkflow: ComplianceWorkflowMeta,
+  ) {
+    for (
+      let step = complianceWorkflow.current_step;
+      step <= complianceWorkflow.last_step;
+      step++
+    ) {
+      const complianceWorkflowDocuments =
+        step === complianceWorkflow.current_step
+          ? complianceWorkflow
+          : await this.rizeApiService.getLastComplianceWorkflow(customerId);
+
+      if (complianceWorkflowDocuments.pending_documents.length === 0) {
+        break;
+      }
+      const docs: ComplianceDocumentAcknowledgementRequest[] =
+        complianceWorkflowDocuments.pending_documents.map((documentId) =>
+          this.createAcceptedComplianceDocument(documentId, userIp, userId),
+        );
+
+      await this.rizeApiService.acceptComplianceDocuments(
+        customerId,
+        complianceWorkflowDocuments.compliance_workflow_uid,
+        docs,
+      );
+    }
   }
 
   private createAcceptedComplianceDocument(
     documentId: string,
-    userIp: string,
+    userIp: string | undefined,
     userId: string,
   ): ComplianceDocumentAcknowledgementRequest {
     return {
       accept: 'yes',
       document_uid: documentId,
       user_name: userId,
-      ip_address: '123.56.3.12',
+      ip_address: userIp ?? '123.56.3.12', //TODO: remove optional
     };
   }
 
@@ -114,7 +149,7 @@ export class RizeService {
       first_name: kyc.firstName,
       last_name: kyc.lastName,
       phone: kyc.phoneNumber,
-      ssn: kyc.ssn,
+      ssn: `${kyc.ssn.slice(0, 3)}-${kyc.ssn.slice(3, 5)}-${kyc.ssn.slice(5)}`,
     };
   }
 }

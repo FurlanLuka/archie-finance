@@ -4,10 +4,12 @@ import { ConfigVariables } from '../../../interfaces';
 import Rize from '@rizefinance/rize-js';
 import {
   ComplianceDocumentAcknowledgementRequest,
-  ComplianceDocuments,
+  ComplianceWorkflow,
+  ComplianceWorkflowMeta,
   Customer,
   CustomerDetails,
 } from './rize_api.interfaces';
+import { strictEqual } from 'assert';
 
 @Injectable()
 export class RizeApiService {
@@ -26,7 +28,6 @@ export class RizeApiService {
       external_uid: userId,
       include_initiated: true,
     });
-    console.log(customers);
 
     return customers.data[0] ?? null;
   }
@@ -53,28 +54,31 @@ export class RizeApiService {
     );
   }
 
-  public async createCheckingComplianceDocuments(
+  public async createCheckingComplianceWorkflow(
     customerId: string,
-  ): Promise<ComplianceDocuments> {
+  ): Promise<ComplianceWorkflowMeta> {
     const products = await this.rizeClient.product.getList();
-    console.log('prodi', products);
+
     const product = products.data.find(
       (product) => product.compliance_plan_name === this.COMPLIANCE_PLAN_NAME,
     );
-    console.log('prodi', product);
 
-    // fallback check if compliance workflow already in progress
     const complianceWorkflow = await this.rizeClient.complianceWorkflow.create(
       customerId,
       product.product_compliance_plan_uid,
     );
-    console.log('prodi', complianceWorkflow);
+
+    const steps: number[] = complianceWorkflow.all_documents.map(
+      (document) => document.step,
+    );
 
     return {
       product_uid: product.uid,
       compliance_workflow_uid: complianceWorkflow.uid,
-      document_ids: complianceWorkflow.current_step_documents_pending.map(
-        (document) => document.uid,
+      last_step: Math.max(...steps),
+      current_step: complianceWorkflow.summary.current_step,
+      pending_documents: complianceWorkflow.current_step_documents_pending.map(
+        (doc) => doc.uid,
       ),
     };
   }
@@ -89,6 +93,27 @@ export class RizeApiService {
       customerId,
       documents,
     );
+  }
+
+  public async getLastComplianceWorkflow(
+    customerId: string,
+  ): Promise<ComplianceWorkflowMeta> {
+    const complianceWorkflow: ComplianceWorkflow =
+      await this.rizeClient.complianceWorkflow.viewLatest(customerId);
+
+    const steps: number[] = complianceWorkflow.all_documents.map(
+      (step) => step.step,
+    );
+
+    return {
+      product_uid: complianceWorkflow.product_uid,
+      compliance_workflow_uid: complianceWorkflow.uid,
+      last_step: Math.max(...steps),
+      current_step: complianceWorkflow.summary.current_step,
+      pending_documents: complianceWorkflow.current_step_documents_pending.map(
+        (doc) => doc.uid,
+      ),
+    };
   }
 
   public async createCustomerProduct(
