@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const CollateralCurrencyStyled = styled.div`
   display: flex;
@@ -24,5 +24,4 @@ export const CollateralCurrencyStyled = styled.div`
     align-items: flex-start;
     letter-spacing: 0.02em;
   }
-  
-`
+`;

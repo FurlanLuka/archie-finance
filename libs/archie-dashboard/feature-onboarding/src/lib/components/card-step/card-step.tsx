@@ -9,11 +9,11 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { ButtonPrimary, Container, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
+import { Step } from '@archie-webapps/util-constants';
 
-import imgCardReady from '../../../../../assets/images/img-card-ready.png';
-import { Step } from '../../../../../constants/onboarding-steps';
-import { EmailVerification } from '../../email-verification/email-verification';
-import { StepsIndicator } from '../../steps-indicator/steps-indicator';
+import imgCardReady from '../../../assets/img-card-ready.png';
+import { EmailVerification } from '../email-verification/email-verification';
+import { StepsIndicator } from '../steps-indicator/steps-indicator';
 
 import { CardStepStyled } from './card-step.styled';
 

@@ -11,13 +11,12 @@ import ReactTooltip from 'react-tooltip';
 import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/ui-theme';
+import { CollateralAsset, Step } from '@archie-webapps/util-constants';
 
-import { InputSelect } from '../../../../../components/_generic/input-select/input-select';
-import { Collateral } from '../../../../../components/collateral/collateral';
-import { CollateralAsset } from '../../../../../constants/data/collateral-assets';
-import { Step } from '../../../../../constants/onboarding-steps';
-import { EmailVerification } from '../../email-verification/email-verification';
-import { StepsIndicator } from '../../steps-indicator/steps-indicator';
+import { CollateralAssetSelect } from '../collateral-asset-select/collateral-asset-select';
+import { Collateral } from '../collateral/collateral';
+import { EmailVerification } from '../email-verification/email-verification';
+import { StepsIndicator } from '../steps-indicator/steps-indicator';
 
 import { CollateralizationStepStyled } from './collateralization-step.styled';
 
@@ -28,7 +27,6 @@ export const CollateralizationStep: FC = () => {
   const [selectedCollateralAsset, setSelectedCollateralAsset] = useState<CollateralAsset>();
   const [requiredCollateral, setRequiredCollateral] = useState(0);
   const [shouldCall, setShouldCall] = useState(false);
-  const [isCopied, setIsCopied] = useState(false);
 
   const getAssetPriceResponse: QueryResponse<AssetPrice[]> = useGetAssetPrice();
   const getDepositAddressResponse: QueryResponse<GetDepositAddressResponse> = useGetDepositAddress(
@@ -95,7 +93,7 @@ export const CollateralizationStep: FC = () => {
         <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
 
         <div className="inputs">
-          <InputSelect setSelectedAsset={setSelectedCollateralAsset} />
+          <CollateralAssetSelect setSelectedAsset={setSelectedCollateralAsset} />
           <InputRange
             label={t('collateralization_step.inputs.input_range_label')}
             min={200}

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints } from '@archie-webapps/ui-theme';
 
-export const InputSelectStyled = styled.div`
+export const CollateralCurrencySelect = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -54,14 +54,22 @@ export const InputSelectStyled = styled.div`
     margin-top: 5.5rem;
     z-index: 1;
   }
+`;
 
-  .select-option {
-    border-bottom: 1px solid ${({ theme }) => theme.borderPrimary};
-    width: 100%;
-    cursor: pointer;
+export const CollateralDeposit = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  padding: 0.6rem 1rem;
 
-    :last-child {
-      border-bottom: 0;
-    }
+  border-bottom: 1px solid ${({ theme }) => theme.borderPrimary};
+  cursor: pointer;
+
+  :last-child {
+    border-bottom: 0;
+  }
+
+  @media (max-width: ${breakpoints.screenSM}) {
+    padding: 0.6rem 0.5rem;
   }
 `;
