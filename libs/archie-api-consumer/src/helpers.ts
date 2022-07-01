@@ -1,14 +1,12 @@
-import { SessionState } from '@archie/session/context/session-context';
 import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import { MutationFunction, QueryFunction, QueryKey } from 'react-query';
+
+import { SessionState } from '@archie-webapps/shared/data-access-session';
 
 import { ApiError, UnauthenticatedApiError } from './api-error';
 import { ApiErrorResponse } from './interface';
 
-export const mapErrorResponse = (
-  apiErrorResponse: ApiErrorResponse,
-  errorList: Map<string, string>,
-): ApiError => {
+export const mapErrorResponse = (apiErrorResponse: ApiErrorResponse, errorList: Map<string, string>): ApiError => {
   if (apiErrorResponse.statusCode === 401) {
     return new UnauthenticatedApiError();
   }
@@ -34,19 +32,13 @@ export const getRequest = async <Response = any>(
   errorList: Map<string, string>,
 ): Promise<Response> => {
   try {
-    const response: AxiosResponse<Response> = await axios.get(
-      endpoint,
-      requestConfig,
-    );
+    const response: AxiosResponse<Response> = await axios.get(endpoint, requestConfig);
 
     return response.data;
   } catch (error: any) {
     const errorObject: AxiosError<ApiErrorResponse> = error;
 
-    throw mapErrorResponse(
-      (errorObject.response as AxiosResponse<ApiErrorResponse>).data,
-      errorList,
-    );
+    throw mapErrorResponse((errorObject.response as AxiosResponse<ApiErrorResponse>).data, errorList);
   }
 };
 
@@ -57,20 +49,13 @@ export const postRequest = async <Payload = any, Response = any>(
   errorList: Map<string, string>,
 ): Promise<Response> => {
   try {
-    const response: AxiosResponse<Response> = await axios.post(
-      endpoint,
-      payload,
-      requestConfig,
-    );
+    const response: AxiosResponse<Response> = await axios.post(endpoint, payload, requestConfig);
 
     return response.data;
   } catch (error: any) {
     const errorObject: AxiosError<ApiErrorResponse> = error;
 
-    throw mapErrorResponse(
-      (errorObject.response as AxiosResponse<ApiErrorResponse>).data,
-      errorList,
-    );
+    throw mapErrorResponse((errorObject.response as AxiosResponse<ApiErrorResponse>).data, errorList);
   }
 };
 
@@ -109,19 +94,14 @@ export interface DefaultVariables {
   [key: string]: unknown;
 }
 
-export const sessionRefreshWrapperMutation = <
-  TData,
-  TVariables extends DefaultVariables,
->(
+export const sessionRefreshWrapperMutation = <TData, TVariables extends DefaultVariables>(
   mutationFn: MutationFunction<TData, DefaultVariables>,
   accessToken: string,
   setAccessToken: React.Dispatch<React.SetStateAction<string | undefined>>,
   setSessionState: React.Dispatch<React.SetStateAction<SessionState>>,
   getAccessTokenSilently: () => Promise<string>,
 ): MutationFunction<TData, Omit<TVariables, 'accessToken'>> => {
-  const wrapper = async (
-    payload: Omit<TVariables, 'accessToken'>,
-  ): Promise<TData> => {
+  const wrapper = async (payload: Omit<TVariables, 'accessToken'>): Promise<TData> => {
     try {
       return await mutationFn({
         ...payload,

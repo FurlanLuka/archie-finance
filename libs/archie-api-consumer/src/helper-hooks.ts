@@ -1,4 +1,3 @@
-import { useAuthenticatedSession } from '@archie/session/hooks/use-session';
 import { useAuth0 } from '@auth0/auth0-react';
 import {
   MutationFunction,
@@ -10,40 +9,24 @@ import {
   UseQueryOptions,
 } from 'react-query';
 
+import { useAuthenticatedSession } from '@archie-webapps/shared/data-access-session';
+
 import { ApiErrors } from './api-error';
-import {
-  DefaultVariables,
-  sessionRefreshWrapper,
-  sessionRefreshWrapperMutation,
-} from './helpers';
-import {
-  MutationQueryResponse,
-  QueryResponse,
-  RequestState,
-} from './interface';
+import { DefaultVariables, sessionRefreshWrapper, sessionRefreshWrapperMutation } from './helpers';
+import { MutationQueryResponse, QueryResponse, RequestState } from './interface';
 
 export const useExtendedQuery = <TQueryFnData>(
   queryKey: string,
   queryFn: (accessToken: string) => Promise<TQueryFnData>,
-  options?: Omit<
-    UseQueryOptions<TQueryFnData, ApiErrors, TQueryFnData, QueryKey>,
-    'queryKey' | 'queryFn'
-  >,
+  options?: Omit<UseQueryOptions<TQueryFnData, ApiErrors, TQueryFnData, QueryKey>, 'queryKey' | 'queryFn'>,
 ): QueryResponse<TQueryFnData> => {
-  const { setAccessToken, setSessionState, accessToken } =
-    useAuthenticatedSession();
+  const { setAccessToken, setSessionState, accessToken } = useAuthenticatedSession();
 
   const { getAccessTokenSilently } = useAuth0();
 
   const request = useQuery<TQueryFnData, ApiErrors>(
     queryKey,
-    sessionRefreshWrapper(
-      queryFn,
-      accessToken,
-      setAccessToken,
-      setSessionState,
-      getAccessTokenSilently,
-    ),
+    sessionRefreshWrapper(queryFn, accessToken, setAccessToken, setSessionState, getAccessTokenSilently),
     {
       ...options,
       refetchOnWindowFocus: false,
@@ -80,13 +63,9 @@ export const useExtendedQuery = <TQueryFnData>(
 export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
   mutationKey: MutationKey,
   mutationFn: MutationFunction<TData, DefaultVariables>,
-  options?: Omit<
-    UseMutationOptions<TData, ApiErrors, TVariables, unknown>,
-    'mutationKey' | 'mutationFn'
-  >,
+  options?: Omit<UseMutationOptions<TData, ApiErrors, TVariables, unknown>, 'mutationKey' | 'mutationFn'>,
 ): MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData> => {
-  const { setAccessToken, setSessionState, accessToken } =
-    useAuthenticatedSession();
+  const { setAccessToken, setSessionState, accessToken } = useAuthenticatedSession();
 
   const { getAccessTokenSilently } = useAuth0();
 

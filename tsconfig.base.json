@@ -18,13 +18,13 @@
     "paths": {
       "@archie-webapps/archie-dashboard/feature-dashboard": ["libs/archie-dashboard/feature-dashboard/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature-onboarding": ["libs/archie-dashboard/feature-onboarding/src/index.ts"],
+      "@archie-webapps/shared/data-access-session": ["libs/shared/data-access-session/src/index.ts"],
       "@archie-webapps/shared/feature-routing": ["libs/shared/feature-routing/src/index.ts"],
       "@archie-webapps/ui-design-system": ["libs/ui-design-system/src/index.ts"],
       "@archie-webapps/ui-icons": ["libs/ui-icons/src/index.ts"],
       "@archie-webapps/ui-theme": ["libs/ui-theme/src/index.ts"],
       "@archie-webapps/util-constants": ["libs/util-constants/src/index.ts"],
-      "@archie/api-consumer/*": ["libs/archie-api-consumer/src/*"],
-      "@archie/session/*": ["libs/archie-session/src/*"]
+      "@archie/api-consumer/*": ["libs/archie-api-consumer/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

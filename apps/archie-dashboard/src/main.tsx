@@ -1,4 +1,3 @@
-import { SessionProvider } from '@archie/session/session-provider';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -8,6 +7,7 @@ import { ThemeProvider } from 'styled-components';
 
 import { DashboardScreen } from '@archie-webapps/archie-dashboard/feature-dashboard';
 import { OnboardingScreen } from '@archie-webapps/archie-dashboard/feature-onboarding';
+import { SessionProvider } from '@archie-webapps/shared/data-access-session';
 import { ProtectedRoute } from '@archie-webapps/shared/feature-routing';
 import { GlobalStyles, theme } from '@archie-webapps/ui-theme';
 
