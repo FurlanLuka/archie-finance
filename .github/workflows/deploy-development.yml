@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - develop
-
+ 
 env:
   ECR_REPOSITORY: archie-development-container-repository
   AWS_REGION: us-east-1
