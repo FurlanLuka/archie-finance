@@ -6,6 +6,8 @@ export {
   CustomerDetails,
   Customer,
 } from '@rizefinance/rize-js/types/lib/core/typedefs/customer.typedefs';
+export { RizeList } from '@rizefinance/rize-js/types/lib/core/typedefs/common.typedefs';
+export { Product } from '@rizefinance/rize-js/types/lib/core/typedefs/product.typedefs';
 
 export interface ComplianceWorkflowMeta {
   product_uid: string;

@@ -14,8 +14,6 @@ import { CustomerAlreadyExists } from './rize.errors';
 
 @Injectable()
 export class RizeService {
-  MAX_STEPS = 10;
-
   constructor(
     private internalApiService: InternalApiService,
     private rizeApiService: RizeApiService,
@@ -35,24 +33,6 @@ export class RizeService {
     const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
     const emailAddressResponse: GetEmailAddressResponse =
       await this.internalApiService.getUserEmailAddress(userId);
-
-    // const kyc: GetKycResponse = {
-    //   firstName: 'Andraz1',
-    //   lastName: 'Cudermands',
-    //   dateOfBirth: '1997-03-25',
-    //   addressCountry: 'US',
-    //   addressLocality: 'Los Angeles',
-    //   addressPostalCode: '90012',
-    //   addressRegion: 'CA',
-    //   addressStreet: 'South Los Angeles Street',
-    //   addressStreetNumber: '120',
-    //   phoneNumber: '5754200103',
-    //   phoneNumberCountryCode: '+1',
-    //   ssn: '232433012',
-    // };
-    // const emailAddressResponse: GetEmailAddressResponse = {
-    //   email: 'test29@test.com',
-    // };
 
     const customerId: string =
       existingCustomer !== null

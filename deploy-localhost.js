@@ -3,7 +3,6 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const chalk = require('chalk');
 const clear = require('clear');
-const { skip } = require('rxjs');
 
 async function checkRequirements(debugEnabled) {
   try {
@@ -88,11 +87,10 @@ async function buildMicroservices(microservices, debugEnabled) {
 
     for (let i = 0; i < microservices.length; i++) {
       const microservice = microservices[i];
-      if (microservice != 'credit-api') {
-        buildCommands.push(
-          `docker build -f ./apps/${microservice}/Dockerfile -t ${microservice} --build-arg LOCAL=true .`,
-        );
-      }
+
+      buildCommands.push(
+        `docker build -f ./apps/${microservice}/Dockerfile -t ${microservice} --build-arg LOCAL=true .`,
+      );
     }
 
     console.log(

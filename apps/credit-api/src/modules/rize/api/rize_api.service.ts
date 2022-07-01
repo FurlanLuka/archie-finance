@@ -8,8 +8,9 @@ import {
   ComplianceWorkflowMeta,
   Customer,
   CustomerDetails,
+  RizeList,
+  Product,
 } from './rize_api.interfaces';
-import { strictEqual } from 'assert';
 
 @Injectable()
 export class RizeApiService {
@@ -24,10 +25,11 @@ export class RizeApiService {
   }
 
   public async searchCustomers(userId: string): Promise<Customer | null> {
-    const customers = await this.rizeClient.customer.getList({
-      external_uid: userId,
-      include_initiated: true,
-    });
+    const customers: RizeList<Customer> =
+      await this.rizeClient.customer.getList({
+        external_uid: userId,
+        include_initiated: true,
+      });
 
     return customers.data[0] ?? null;
   }
@@ -57,16 +59,17 @@ export class RizeApiService {
   public async createCheckingComplianceWorkflow(
     customerId: string,
   ): Promise<ComplianceWorkflowMeta> {
-    const products = await this.rizeClient.product.getList();
+    const products: RizeList<Product> = await this.rizeClient.product.getList();
 
-    const product = products.data.find(
+    const product: Product = products.data.find(
       (product) => product.compliance_plan_name === this.COMPLIANCE_PLAN_NAME,
     );
 
-    const complianceWorkflow = await this.rizeClient.complianceWorkflow.create(
-      customerId,
-      product.product_compliance_plan_uid,
-    );
+    const complianceWorkflow: ComplianceWorkflow =
+      await this.rizeClient.complianceWorkflow.create(
+        customerId,
+        product.product_compliance_plan_uid,
+      );
 
     const steps: number[] = complianceWorkflow.all_documents.map(
       (document) => document.step,
