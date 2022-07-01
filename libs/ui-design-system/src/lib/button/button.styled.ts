@@ -14,6 +14,7 @@ interface ButtonProps {
   small?: boolean;
   color?: string;
 }
+
 const Button = styled.button<ButtonProps>`
   position: relative;
   display: flex;
@@ -23,11 +24,11 @@ const Button = styled.button<ButtonProps>`
   font-size: ${({ small }) => (small ? '0.75rem' : '1rem')};
   line-height: 1;
   font-weight: 700;
-  padding: ${({ small }) => (small ? '0.25rem 1rem' : '1rem 2rem')};
-  border-radius: ${({ small }) => (small ? '0.25rem' : '0.5rem')};
   border: 1px solid;
+  border-radius: ${({ small }) => (small ? '0.25rem' : '0.5rem')};
   max-height: 3rem;
   width: ${({ maxWidth }) => maxWidth ?? '100%'};
+  padding: ${({ small }) => (small ? '0.25rem 1rem' : '1rem 2rem')};
   cursor: ${({ isDisabled, isLoading }) => (isDisabled || isLoading ? 'not-allowed' : 'pointer')};
 
   @media (max-width: ${breakpoints.screenSM}) {
@@ -35,7 +36,7 @@ const Button = styled.button<ButtonProps>`
   }
 
   :hover {
-    opacity: ${({ isDisabled }) => (isDisabled ? '1' : '0.8')};
+    opacity: ${({ isDisabled, isLoading }) => (isDisabled || isLoading ? '1' : '0.5')};
   }
 
   :before {
@@ -45,7 +46,7 @@ const Button = styled.button<ButtonProps>`
     left: -1px;
     width: calc(100% + 2px);
     height: calc(100% + 2px);
-    background-color: ${({ theme }) => theme.backgroundDisabled};
+    background-color: ${({ theme }) => theme.buttonDisabled};
     border-radius: inherit;
     display: ${({ isLoading }) => (isLoading ? 'flex' : 'none')};
   }
@@ -53,8 +54,8 @@ const Button = styled.button<ButtonProps>`
   :after {
     content: '';
     position: absolute;
-    border: 2px solid #c5c5c5; //TBD
-    border-top: 2px solid #9b9b9b; //TBD
+    border: 2px solid ${({ theme }) => theme.loaderBorder};
+    border-top: 2px solid ${({ theme }) => theme.loaderBorderTop};
     border-radius: 100%;
     width: 1.75rem;
     height: 1.75rem;
@@ -64,25 +65,25 @@ const Button = styled.button<ButtonProps>`
 `;
 
 export const ButtonPrimary = styled(Button)`
-  background-color: ${({ theme }) => theme.buttonPrimary};
+  background-color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonPrimary)};
   color: ${({ theme }) => theme.textLight};
-  border-color: ${({ theme }) => theme.buttonPrimary};
+  border-color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonPrimary)};
 `;
 
 export const ButtonOutline = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
-  color: ${({ theme }) => theme.textHighlight};
-  border-color: ${({ theme }) => theme.textHighlight};
+  color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonPrimary)};
+  border-color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonPrimary)};
 `;
 
 export const ButtonGhost = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
-  color: ${({ theme }) => theme.buttonGhost};
-  border-color: ${({ theme }) => theme.buttonGhost};
+  color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonGhost)};
+  border-color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonGhost)};
 `;
 
 export const ButtonLight = styled(Button)`
-  background-color: ${({ theme }) => theme.buttonLight};
-  color: ${({ theme, color }) => color ?? theme.textDanger};
-  border-color: ${({ theme }) => theme.buttonLight};
+  background-color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonLight)};
+  color: ${({ theme, color }) => color ?? theme.textPrimary};
+  border-color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonLight)};
 `;

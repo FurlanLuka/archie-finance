@@ -19,7 +19,7 @@ export const MarginCallAlert: FC = () => {
         {t('margin_call_alert.title')}
       </ParagraphS>
       <ParagraphXS color={theme.textLight}>{t('margin_call_alert.text')}</ParagraphXS>
-      <ButtonLight onClick={handleClick} maxWidth="fit-content">
+      <ButtonLight maxWidth="fit-content" color={theme.textDanger} onClick={handleClick}>
         {t('margin_call_alert.btn')}
       </ButtonLight>
     </MarginCallAlertStyled>
