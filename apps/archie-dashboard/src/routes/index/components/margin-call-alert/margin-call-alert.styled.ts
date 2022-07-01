@@ -5,7 +5,7 @@ export const MarginCallAlertStyled = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5rem;
-  background-color: ${({ theme }) => theme.backgroundNegative};
+  background-color: ${({ theme }) => theme.backgroundDanger};
   box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.08);
   border: 0;
   border-radius: 0.5rem;
