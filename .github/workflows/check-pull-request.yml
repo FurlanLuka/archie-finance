@@ -3,7 +3,7 @@ name: Check
 on:
   push:
     branches:
-      - 'main'
+      - 'master'
       - 'feature/*'
       - 'patch/*'
 
@@ -17,12 +17,12 @@ jobs:
         with:
           fetch-depth: 0
       - uses: nrwl/nx-set-shas@v2
-      - name: Install dependencies
-        run: npm i
+        with:
+          main-branch-name: 'develop'
+      - uses: ./.github/actions/install-dependencies
+        name: Install dependencies
       - name: Workspace lint
         run: npx nx workspace-lint
-      # - name: Format check
-      #   run: npx nx format:check
       - name: Affected lint
         run: npx nx affected --target=lint --parallel=3
       - name: Affected test
