@@ -1,10 +1,6 @@
 import { FC } from 'react';
 
-import {
-  TransactionStatus,
-  TransactionStatusText,
-  TransactionStatusColor,
-} from '../../../constants/transactions-status';
+import { TransactionStatus, TransactionStatusColor, TransactionStatusText } from '../constants/transactions-status';
 
 import { StatusCellStyled, DescriptionCellStyled } from './table-fixtures.styled';
 

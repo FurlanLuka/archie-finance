@@ -6,12 +6,12 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
+import { DashboardScreen } from '@archie-webapps/archie-dashboard/feature-dashboard';
 import { OnboardingScreen } from '@archie-webapps/archie-dashboard/feature-onboarding';
 import { ProtectedRoute } from '@archie-webapps/shared/feature-routing';
 import { GlobalStyles, theme } from '@archie-webapps/ui-theme';
 
-import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants';
-import { DashboardRoute } from './routes/index/index-route';
+import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants/auth';
 import { LoginRoute } from './routes/login/login-route';
 import { LogoutRoute } from './routes/logout/logout-route';
 import './utils/i18next';
@@ -37,7 +37,7 @@ ReactDOM.render(
                   path="/"
                   element={
                     <ProtectedRoute>
-                      <DashboardRoute />
+                      <DashboardScreen />
                     </ProtectedRoute>
                   }
                 />

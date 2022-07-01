@@ -21,19 +21,19 @@ import {
 } from '@archie-webapps/ui-design-system';
 import { theme } from '@archie-webapps/ui-theme';
 
-import imgCard from '../../assets/images/card-placeholder.png';
+import imgCard from '../../assets/card-placeholder.png';
+import { CollateralValue } from '../components/charts/collateral-value/collateral-value';
+import { LoanToValue } from '../components/charts/loan-to-value/loan-to-value';
+import { NextPayment } from '../components/charts/next-payment/next-payment';
+import { MarginCallAlert } from '../components/margin-call-alert/margin-call-alert';
+import { Navigation } from '../components/navigation/navigation';
+import { RevealCardModal } from '../components/reveal-card-modal/reveal-card-modal';
+import { tableData } from '../constants/table-data';
+import { tableColumns } from '../fixtures/table-fixture';
 
-import { CollateralValue } from './components/chars/collateral-value/collateral-value';
-import { LoanToValue } from './components/chars/loan-to-value/loan-to-value';
-import { NextPayment } from './components/chars/next-payment/next-payment';
-import { MarginCallAlert } from './components/margin-call-alert/margin-call-alert';
-import { Navigation } from './components/navigation/navigation';
-import { RevealCardModal } from './components/reveal-card-modal/reveal-card-modal';
-import { tableData } from './constants/table-data';
-import { tableColumns } from './fixtures/table-fixture';
-import { IndexStyled } from './index-route.styled';
+import { DashboardStyled } from './dashboard-screen.styled';
 
-export const DashboardRoute: FC = () => {
+export const DashboardScreen: FC = () => {
   const { t } = useTranslation();
 
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
@@ -61,7 +61,7 @@ export const DashboardRoute: FC = () => {
     <>
       <Header maxWidth="100%" />
       <Page>
-        <IndexStyled>
+        <DashboardStyled>
           <Navigation />
           <div className="content">
             <SubtitleS className="title">{t('dashboard.title', { name })}</SubtitleS>
@@ -188,7 +188,7 @@ export const DashboardRoute: FC = () => {
               </Card>
             </div>
           </div>
-        </IndexStyled>
+        </DashboardStyled>
       </Page>
     </>
   );

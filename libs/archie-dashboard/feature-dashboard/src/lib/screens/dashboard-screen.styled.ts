@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints, NAV_WIDTH } from '@archie-webapps/ui-theme';
 
-export const IndexStyled = styled.div`
+export const DashboardStyled = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
@@ -87,5 +87,4 @@ export const IndexStyled = styled.div`
     border-bottom-right-radius: 0.5rem;
     padding: 0.5rem 1.5rem;
   }
-`
-
+`;

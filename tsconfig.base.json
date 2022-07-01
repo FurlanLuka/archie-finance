@@ -16,6 +16,7 @@
     "noPropertyAccessFromIndexSignature": false,
     "baseUrl": ".",
     "paths": {
+      "@archie-webapps/archie-dashboard/feature-dashboard": ["libs/archie-dashboard/feature-dashboard/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature-onboarding": ["libs/archie-dashboard/feature-onboarding/src/index.ts"],
       "@archie-webapps/shared/feature-routing": ["libs/shared/feature-routing/src/index.ts"],
       "@archie-webapps/ui-design-system": ["libs/ui-design-system/src/index.ts"],

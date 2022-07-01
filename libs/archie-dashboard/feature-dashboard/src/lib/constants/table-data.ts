@@ -1,4 +1,4 @@
-import { TransactionStatus } from '../../../constants/transactions-status';
+import { TransactionStatus } from './transactions-status';
 
 export const tableData = [
   {
