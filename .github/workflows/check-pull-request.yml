@@ -23,8 +23,8 @@ jobs:
       - name: Workspace lint
         run: npx nx workspace-lint
       - name: Affected lint
-        run: npx nx affected --target=lint --parallel=3
+        run: npx nx affected --base=origin/develop --target=lint --parallel=3
       - name: Affected test
-        run: npx nx affected --target=test --parallel=3 --ci --code-coverage
+        run: npx nx affected --base=origin/develop --target=test --parallel=3 --ci --code-coverage
       - name: Affected build
-        run: npx nx affected --target=build --parallel=3
+        run: npx nx affected --base=origin/develop --target=build --parallel=3
