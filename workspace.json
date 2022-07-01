@@ -5,6 +5,7 @@
     "archie-dashboard": "apps/archie-dashboard",
     "archie-dashboard-feature-onboarding": "libs/archie-dashboard/feature-onboarding",
     "archie-session": "libs/archie-session",
+    "shared-feature-routing": "libs/shared/feature-routing",
     "ui-design-system": "libs/ui-design-system",
     "ui-icons": "libs/ui-icons",
     "ui-theme": "libs/ui-theme",
