@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Onboarding } from './onboarding.entity';
 import { GetOnboardingResponse } from './onboarding.interfaces';
+import { OnboardingAlreadyCompletedError } from './onboarding.errors';
 
 @Injectable()
 export class OnboardingService {
@@ -49,7 +50,7 @@ export class OnboardingService {
       });
 
     if (onboardingRecord.completed) {
-      throw new BadRequestException('Onboarding already completed');
+      throw new OnboardingAlreadyCompletedError();
     }
 
     const updatedOnboardingRecord: Onboarding = {

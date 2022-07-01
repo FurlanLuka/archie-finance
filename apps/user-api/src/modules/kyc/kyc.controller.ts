@@ -8,12 +8,11 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { KycDto } from './kyc.dto';
-import {
-  CreateKycResponse,
-  GetKycResponse,
-} from '@archie-microservices/api-interfaces/kyc';
+import { KycDto, CreateKycResponseDto, GetKycResponseDto } from './kyc.dto';
 import { KycService } from './kyc.service';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
 
 @Controller('v1/kyc')
 export class KycController {
@@ -21,16 +20,20 @@ export class KycController {
 
   @Get()
   @UseGuards(AuthGuard)
-  async getKyc(@Req() request): Promise<GetKycResponse> {
+  @ApiBearerAuth()
+  @ApiErrorResponse([KycNotFoundError])
+  async getKyc(@Req() request): Promise<GetKycResponseDto> {
     return this.kycService.getKyc(request.user.sub);
   }
 
   @Post()
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiErrorResponse([KycAlreadySubmitted])
   async createKyc(
     @Body() body: KycDto,
     @Req() request,
-  ): Promise<CreateKycResponse> {
+  ): Promise<CreateKycResponseDto> {
     return this.kycService.createKyc(body, request.user.sub);
   }
 }
@@ -40,7 +43,8 @@ export class InternalKycController {
   constructor(private readonly kycService: KycService) {}
 
   @Get(':userId')
-  async getKyc(@Param('userId') userId: string): Promise<GetKycResponse> {
+  @ApiErrorResponse([KycNotFoundError])
+  async getKyc(@Param('userId') userId: string): Promise<GetKycResponseDto> {
     return this.kycService.getKyc(userId);
   }
 }

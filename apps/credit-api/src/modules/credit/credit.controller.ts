@@ -6,9 +6,12 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { GetCreditResponse } from './credit.interfaces';
+import { GetCreditResponseDto } from './credit.dto';
 import { CreditService } from './credit.service';
 import { AuthGuard } from '@archie-microservices/auth0';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { CreateCreditMinimumCollateralError } from './credit.errors';
+import { ApiErrorResponse } from '@archie-microservices/openapi';
 
 @Controller('v1/credit')
 export class CreditController {
@@ -16,13 +19,17 @@ export class CreditController {
 
   @Post()
   @UseGuards(AuthGuard)
-  async createCreditLine(@Request() req): Promise<GetCreditResponse> {
+  @ApiBearerAuth()
+  @ApiErrorResponse([CreateCreditMinimumCollateralError])
+  async createCreditLine(@Request() req): Promise<GetCreditResponseDto> {
     return this.creditService.createCredit(req.user.sub);
   }
 
   @Get()
   @UseGuards(AuthGuard)
-  async getCreditLine(@Request() req): Promise<GetCreditResponse> {
+  @ApiBearerAuth()
+  @ApiErrorResponse([CreateCreditMinimumCollateralError])
+  async getCreditLine(@Request() req): Promise<GetCreditResponseDto> {
     return this.creditService.createCredit(req.user.sub);
   }
 }
@@ -32,16 +39,18 @@ export class InternalCreditController {
   constructor(private creditService: CreditService) {}
 
   @Post(':userId')
+  @ApiErrorResponse([CreateCreditMinimumCollateralError])
   async createCreditLine(
     @Param('userId') userId: string,
-  ): Promise<GetCreditResponse> {
+  ): Promise<GetCreditResponseDto> {
     return this.creditService.createCredit(userId);
   }
 
   @Get(':userId')
+  @ApiErrorResponse([CreateCreditMinimumCollateralError])
   async getCreditLine(
     @Param('userId') userId: string,
-  ): Promise<GetCreditResponse> {
+  ): Promise<GetCreditResponseDto> {
     return this.creditService.getCredit(userId);
   }
 }

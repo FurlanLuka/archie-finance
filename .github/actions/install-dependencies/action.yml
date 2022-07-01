@@ -1,0 +1,17 @@
+name: Install dependencies
+description: Install node modules or pull them from cache
+
+runs:
+  using: composite
+  steps:
+    - name: Cache dependencies
+      id: cache
+      uses: actions/cache@v2
+      with:
+        path: ./node_modules
+        key: dependencies-${{ hashFiles('package-lock.json') }}
+
+    - name: Install dependencies
+      shell: bash
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: npm i

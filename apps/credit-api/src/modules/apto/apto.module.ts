@@ -20,7 +20,7 @@ import { AptoVerification } from './apto_verification.entity';
       AptoCard,
     ]),
     AptoApiModule,
-    CreditModule
+    CreditModule,
   ],
 })
 export class AptoModule {}

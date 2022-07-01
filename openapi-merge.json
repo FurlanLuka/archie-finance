@@ -1,0 +1,23 @@
+{
+  "inputs": [
+    {
+      "inputFile": "./dist/apps/asset-price-api/target/generated/swagger.json"
+    },
+    {
+      "inputFile": "./dist/apps/collateral-api/target/generated/swagger.json"
+    },
+    {
+      "inputFile": "./dist/apps/credit-api/target/generated/swagger.json"
+    },
+    {
+      "inputFile": "./dist/apps/onboarding-api/target/generated/swagger.json"
+    },
+    {
+      "inputFile": "./dist/apps/user-api/target/generated/swagger.json"
+    },
+    {
+      "inputFile": "./dist/apps/referral-system-api/target/generated/swagger.json"
+    }
+  ],
+  "output": "./swagger.json"
+}
