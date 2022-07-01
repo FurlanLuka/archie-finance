@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ParagraphS, ParagraphXS } from '@archie-webapps/ui-design-system';
 
-import imgResend from '../../../../assets/images/img-resend.png';
+import imgResend from '../../../assets/img-resend.png';
 
 import { EmailVerificationStyled } from './email-verification.styled';
 

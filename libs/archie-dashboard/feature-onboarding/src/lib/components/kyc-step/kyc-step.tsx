@@ -153,6 +153,7 @@ export const KycStep: FC = () => {
   const phoneNumberCountryCode = '+1';
 
   const onSubmit = handleSubmit((data) => {
+    console.log('errar', errors);
     if (!errors) {
       if (mutationRequest.state === RequestState.IDLE) {
         mutationRequest.mutate({

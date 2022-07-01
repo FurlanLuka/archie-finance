@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
+import { OnboardingScreen } from '@archie-webapps/archie-dashboard-feature-onboarding';
 import { GlobalStyles, theme } from '@archie-webapps/ui-theme';
 
 import { ProtectedRoute } from './components/router/protected-route';
@@ -13,7 +14,6 @@ import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants';
 import { DashboardRoute } from './routes/index/index-route';
 import { LoginRoute } from './routes/login/login-route';
 import { LogoutRoute } from './routes/logout/logout-route';
-import { OnboardingRoute } from './routes/onboarding/onboarding-route';
 import './utils/i18next';
 
 const queryClient: QueryClient = new QueryClient();
@@ -45,7 +45,7 @@ ReactDOM.render(
                   path="/onboarding"
                   element={
                     <ProtectedRoute>
-                      <OnboardingRoute />
+                      <OnboardingScreen />
                     </ProtectedRoute>
                   }
                 />

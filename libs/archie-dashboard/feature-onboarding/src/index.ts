@@ -1,1 +1,1 @@
-export * from './lib/archie-dashboard-feature-onboarding';
+export * from './lib/screens/onboarding-screen';

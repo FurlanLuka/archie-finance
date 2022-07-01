@@ -28,7 +28,7 @@ function getCurrentStep(step: Step) {
   }
 }
 
-export const OnboardingRoute: FC = () => {
+export const OnboardingScreen: FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
 
   const [currentStep, setCurrentStep] = useState<Step>();

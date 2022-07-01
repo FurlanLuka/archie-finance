@@ -13,7 +13,7 @@ export const Page = styled.div`
   background-size: 100%;
   background-position: bottom;
   width: 100%;
-  min-height: calc(100vh - ${HEADER_HEIGHT});
+  min-height: 100vh;
   padding-top: ${HEADER_HEIGHT};
 
   @media (max-width: ${breakpoints.screenSM}) {
