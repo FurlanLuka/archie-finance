@@ -12,6 +12,8 @@ export default async function runExecutor(
     return { success: false };
   }
 
+  logger.info(`Ecr registry url ${ecrRegistry}`)
+
   const projectConfig = workspace.projects[projectName];
   const versionTag = `${projectName}-${imageTag}`;
 
