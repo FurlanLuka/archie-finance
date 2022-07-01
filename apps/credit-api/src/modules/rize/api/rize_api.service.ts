@@ -10,6 +10,7 @@ import {
   CustomerDetails,
   RizeList,
   Product,
+  DebitCard,
 } from './rize_api.interfaces';
 
 @Injectable()
@@ -124,5 +125,13 @@ export class RizeApiService {
     productId: string,
   ): Promise<void> {
     await this.rizeClient.customerProduct.create(customerId, productId);
+  }
+
+  public async createDebitCard(
+    userId: string,
+    customerId: string,
+    poolId,
+  ): Promise<DebitCard> {
+    return this.rizeClient.debitCard.create(userId, customerId, poolId);
   }
 }

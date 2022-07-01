@@ -10,7 +10,10 @@ import {
   Customer,
   CustomerDetails,
 } from './api/rize_api.interfaces';
-import { CustomerAlreadyExists } from './rize.errors';
+import {
+  CustomerAlreadyExists,
+  ActiveCustomerDoesNotExist,
+} from './rize.errors';
 
 @Injectable()
 export class RizeService {
@@ -18,6 +21,22 @@ export class RizeService {
     private internalApiService: InternalApiService,
     private rizeApiService: RizeApiService,
   ) {}
+
+  public async createCard(userId: string): Promise<void> {
+    const customer: Customer | null = await this.rizeApiService.searchCustomers(
+      userId,
+    );
+
+    if (customer === null || customer.status !== 'active') {
+      throw new ActiveCustomerDoesNotExist();
+    }
+
+    await this.rizeApiService.createDebitCard(
+      userId,
+      customer.uid,
+      customer.pool_uids[0],
+    );
+  }
 
   public async createUser(
     userId: string,
