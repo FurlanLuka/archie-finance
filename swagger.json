@@ -604,6 +604,44 @@
         ]
       }
     },
+    "/v1/rize/users": {
+      "post": {
+        "operationId": "RizeController_createUser",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "409": {
+            "description": "ERR_CUSTOMER_ALREADY_EXISTS"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/rize/users/cards": {
+      "post": {
+        "operationId": "RizeController_createCard",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/v1/onboarding": {
       "get": {
         "operationId": "OnboardingController_getOnboardingRecord",
