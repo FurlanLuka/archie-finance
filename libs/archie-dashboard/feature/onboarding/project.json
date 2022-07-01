@@ -1,0 +1,23 @@
+{
+  "root": "libs/archie-dashboard/feature/onboarding",
+  "sourceRoot": "libs/archie-dashboard/feature/onboarding/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/archie-dashboard/feature/onboarding/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/archie-dashboard/feature/onboarding"],
+      "options": {
+        "jestConfig": "libs/archie-dashboard/feature/onboarding/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

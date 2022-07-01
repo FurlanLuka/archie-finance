@@ -4,6 +4,7 @@ import { useCreateCreditLine } from '@archie/api-consumer/credit/hooks/use-creat
 import { MutationQueryResponse, QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { useEffect, useState } from 'react';
 
+// TODO rewrite into just a hook?
 export const Collateral: React.FC = () => {
   const [shouldPoll, setShouldPoll] = useState(true);
   const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = usePollCollateralTotalValue(shouldPoll);
