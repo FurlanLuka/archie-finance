@@ -7,6 +7,8 @@ COPY . /service
 
 ENV NX_DAEMON=false
 
+#RUN echo "@rizefinance:registry=https://npm.pkg.github.com/" >> ~.npmrc
+
 RUN npm i
 RUN npm run build:credit-api --skip-nx-cache
 RUN if [ "$LOCAL" != "" ] ; then cp apps/credit-api/.env dist/apps/credit-api ; fi
