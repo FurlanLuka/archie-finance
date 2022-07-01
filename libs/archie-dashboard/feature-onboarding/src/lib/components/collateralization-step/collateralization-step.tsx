@@ -93,7 +93,10 @@ export const CollateralizationStep: FC = () => {
         <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
 
         <div className="inputs">
-          <CollateralAssetSelect setSelectedAsset={setSelectedCollateralAsset} />
+          <CollateralAssetSelect
+            selectedAsset={selectedCollateralAsset}
+            setSelectedAsset={setSelectedCollateralAsset}
+          />
           <InputRange
             label={t('collateralization_step.inputs.input_range_label')}
             min={200}
