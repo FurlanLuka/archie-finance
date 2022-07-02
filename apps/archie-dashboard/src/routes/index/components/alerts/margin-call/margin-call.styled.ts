@@ -10,7 +10,6 @@ export const MarginCallAlertStyled = styled.div`
   border: 0;
   border-radius: 0.5rem;
   width: 100%;
-  max-width: 928px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
 

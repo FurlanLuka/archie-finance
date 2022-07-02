@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ButtonLight, ParagraphS, ParagraphXS } from '@archie-webapps/ui-design-system';
 import { theme } from '@archie-webapps/ui-theme';
 
-import { MarginCallAlertStyled } from './margin-call-alert.styled';
+import { MarginCallAlertStyled } from './margin-call.styled';
 
 export const MarginCallAlert: FC = () => {
   const { t } = useTranslation();
