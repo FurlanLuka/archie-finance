@@ -13,7 +13,7 @@ import { History } from './history/history';
 import { Rewards } from './rewards/rewards';
 import { Settings } from './settings/settings';
 
-export const DashboardRouter: FC = () => {
+export const DashboardRoute: FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
 
   if (queryResponse.state === RequestState.LOADING) {

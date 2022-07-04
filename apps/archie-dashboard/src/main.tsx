@@ -5,16 +5,16 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
-import { OnboardingScreen } from '@archie-webapps/archie-dashboard/feature-onboarding';
 import { SessionProvider } from '@archie-webapps/shared/data-access-session';
 import { ProtectedRoute } from '@archie-webapps/shared/feature-routing';
 import { GlobalStyles, theme } from '@archie-webapps/ui-theme';
 
 import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants/auth';
-import { DashboardRouter } from './routes/dashboard-router/dashboard-router';
+import { DashboardRoute } from './routes/dashboard-route/dashboard-route';
 import { LoginRoute } from './routes/login/login-route';
 import { LogoutRoute } from './routes/logout/logout-route';
 import './utils/i18next';
+import { OnboardingRoute } from './routes/onboarding-route/onboarding-route';
 
 const queryClient: QueryClient = new QueryClient();
 
@@ -37,18 +37,11 @@ ReactDOM.render(
                   path="*"
                   element={
                     <ProtectedRoute>
-                      <DashboardRouter />
+                      <DashboardRoute />
                     </ProtectedRoute>
                   }
                 />
-                <Route
-                  path="/onboarding"
-                  element={
-                    <ProtectedRoute>
-                      <OnboardingScreen />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="/onboarding" element={<OnboardingRoute />} />
                 <Route path="/login" element={<LoginRoute />} />
                 <Route path="/logout" element={<LogoutRoute />} />
               </Routes>
