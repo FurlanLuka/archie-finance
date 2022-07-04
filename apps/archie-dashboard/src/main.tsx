@@ -1,4 +1,3 @@
-import { SessionProvider } from '@archie/session/session-provider';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
@@ -6,15 +5,16 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
+import { SessionProvider } from '@archie-webapps/shared/data-access-session';
 import { GlobalStyles, theme } from '@archie-webapps/ui-theme';
 
-import { ProtectedRoute } from './components/router/protected-route';
-import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants';
-import { DashboardRoute } from './routes/index/index-route';
+import { ProtectedRoute } from './components/protected-route/protected-route';
+import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants/auth';
+import { DashboardRoute } from './routes/dashboard/dashboard-route';
 import { LoginRoute } from './routes/login/login-route';
 import { LogoutRoute } from './routes/logout/logout-route';
-import { OnboardingRoute } from './routes/onboarding/onboarding-route';
 import './utils/i18next';
+import { OnboardingRoute } from './routes/onboarding/onboarding-route';
 
 const queryClient: QueryClient = new QueryClient();
 
