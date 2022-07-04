@@ -20,7 +20,7 @@ export class RizeController {
   public async createUser(@Request() req): Promise<void> {
     return this.rizeService.createUser(
       req.user.sub,
-      req.headers['x-forwarded-for'],
+      req.headers['x-forwarded-for'] ?? '123.56.3.12', //TODO: remove optional,
     );
   }
 

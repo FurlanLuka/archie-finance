@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
 import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
 import { InternalApiService } from '@archie-microservices/internal-api';
@@ -28,6 +28,14 @@ export class RizeService {
     );
 
     if (customer === null || customer.status !== 'active') {
+      Logger.error({
+        code: 'CUSTOMER_DOES_NOT_EXIST',
+        metadata: {
+          userId,
+          customerId: customer.uid,
+        },
+      });
+
       throw new ActiveCustomerDoesNotExist();
     }
 
@@ -38,14 +46,19 @@ export class RizeService {
     );
   }
 
-  public async createUser(
-    userId: string,
-    userIp: string | undefined,
-  ): Promise<void> {
+  public async createUser(userId: string, userIp: string): Promise<void> {
     const existingCustomer: Customer | null =
       await this.rizeApiService.searchCustomers(userId);
 
     if (existingCustomer !== null && existingCustomer.status === 'active') {
+      Logger.error({
+        code: 'CUSTOMER_ALREADY_EXISTS',
+        metadata: {
+          userId,
+          customerId: existingCustomer.uid,
+        },
+      });
+
       throw new CustomerAlreadyExists();
     }
 
@@ -72,9 +85,8 @@ export class RizeService {
       complianceWorkflow =
         await this.rizeApiService.createCheckingComplianceWorkflow(customerId);
     } catch {
-      complianceWorkflow = await this.rizeApiService.getLastComplianceWorkflow(
-        customerId,
-      );
+      complianceWorkflow =
+        await this.rizeApiService.getLatestComplianceWorkflow(customerId);
     }
 
     await this.acceptAllDocuments(
@@ -104,7 +116,7 @@ export class RizeService {
       const complianceWorkflowDocuments =
         step === complianceWorkflow.current_step
           ? complianceWorkflow
-          : await this.rizeApiService.getLastComplianceWorkflow(customerId);
+          : await this.rizeApiService.getLatestComplianceWorkflow(customerId);
 
       if (complianceWorkflowDocuments.pending_documents.length === 0) {
         break;
@@ -124,14 +136,14 @@ export class RizeService {
 
   private createAcceptedComplianceDocument(
     documentId: string,
-    userIp: string | undefined,
+    userIp: string,
     userId: string,
   ): ComplianceDocumentAcknowledgementRequest {
     return {
       accept: 'yes',
       document_uid: documentId,
       user_name: userId,
-      ip_address: userIp ?? '123.56.3.12', //TODO: remove optional
+      ip_address: userIp,
     };
   }
 
