@@ -11,7 +11,7 @@ import { ProtectedRoute } from '@archie-webapps/shared/feature-routing';
 import { GlobalStyles, theme } from '@archie-webapps/ui-theme';
 
 import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants/auth';
-import { DashboardRouter } from './routes/dashboard-routes/dashboard-router';
+import { DashboardRouter } from './routes/dashboard-router/dashboard-router';
 import { LoginRoute } from './routes/login/login-route';
 import { LogoutRoute } from './routes/logout/logout-route';
 import './utils/i18next';
