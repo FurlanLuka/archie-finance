@@ -18,7 +18,6 @@ import {
 import { UserService } from './user.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie-microservices/openapi';
-import { SendEnrollmentTicketResponse, Enrollment } from 'auth0';
 import { GetMfaEnrollmentResponse } from './user.interfaces';
 
 @Controller('v1/user')
