@@ -3,7 +3,7 @@ import { templateFormatter, templateParser, parseDigit } from 'input-format';
 import ReactInput from 'input-format/react';
 import { FC } from 'react';
 import Autocomplete from 'react-google-autocomplete';
-import { Controller, FieldErrors, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
@@ -12,27 +12,9 @@ import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@a
 import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/ui-theme';
 
-import { parseDate } from './kyc-form.helpers';
+import { parseDate, addAddress, getAddressError, Address } from './kyc-form.helpers';
 import { KycSchema } from './kyc-form.schema';
 import { KycScreenStyled } from './kyc-screen.styled';
-
-interface GooglePlace {
-  address_components: Array<{
-    types: string[];
-    long_name: string;
-    short_name: string;
-  }>;
-  formatted_address: string;
-}
-
-interface Address {
-  addressStreet: string;
-  addressStreetNumber: string;
-  addressLocality: string;
-  addressRegion: string;
-  addressPostalCode: string;
-  addressCountry: string;
-}
 
 interface KycFormData {
   firstName: string;
@@ -42,32 +24,6 @@ interface KycFormData {
   phoneNumber: string;
   ssn: string;
 }
-
-export function getAddressError(errors: FieldErrors<Address>): string {
-  return Object.values(errors)[0].message ?? '';
-}
-
-const addAddress = (place: GooglePlace): Partial<Address> => {
-  const streetNumberComponent = place.address_components.find((item) => item.types.includes('street_number'));
-  const streetNameComponent = place.address_components.find((item) => item.types.includes('route'));
-  const localityComponent = place.address_components.find((item) => item.types.includes('locality'));
-  const countryComponent = place.address_components.find((item) => item.types.includes('country'));
-  const postalCodeComponent = place.address_components.find((item) => item.types.includes('postal_code'));
-  const postalTownComponent = place.address_components.find((item) => item.types.includes('postal_town'));
-  const regionComponent = place.address_components.find((item) => item.types.includes('administrative_area_level_1'));
-
-  const addr: Partial<Address> = {
-    addressStreet: streetNameComponent?.long_name,
-    addressStreetNumber: streetNumberComponent?.long_name,
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    addressLocality: localityComponent ? localityComponent.short_name : postalTownComponent!.long_name,
-    addressCountry: countryComponent?.short_name,
-    addressRegion: regionComponent?.short_name,
-    addressPostalCode: postalCodeComponent?.short_name,
-  };
-
-  return addr;
-};
 
 export const KycScreen: FC = () => {
   const { t } = useTranslation();
