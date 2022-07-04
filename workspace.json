@@ -9,7 +9,6 @@
     "archie-dashboard-feature-wallet-and-collateral": "libs/archie-dashboard/feature-wallet-and-collateral",
     "shared-data-access-archie-api": "libs/shared/data-access-archie-api",
     "shared-data-access-session": "libs/shared/data-access-session",
-    "shared-feature-routing": "libs/shared/feature-routing",
     "ui-design-system": "libs/ui-design-system",
     "ui-icons": "libs/ui-icons",
     "ui-theme": "libs/ui-theme",
