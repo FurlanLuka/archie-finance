@@ -1,5 +1,3 @@
-import { RequestState } from '@archie/api-consumer/interface';
-import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { differenceInYears, isValid, parse, isFuture } from 'date-fns';
 import { templateFormatter, templateParser, parseDigit } from 'input-format';
@@ -10,6 +8,8 @@ import { Controller, FieldErrors, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
+import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
+import { useCreateKyc } from '@archie-webapps/shared/data-access-archie-api/kyc/hooks/use-create-kyc';
 import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/ui-theme';

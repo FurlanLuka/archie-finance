@@ -1,8 +1,8 @@
-import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
-import { GetOnboardingResponse } from '@archie/api-consumer/onboarding/api/get-onboarding';
-import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-onboarding';
 import { FC, useEffect, useState } from 'react';
 
+import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
+import { GetOnboardingResponse } from '@archie-webapps/shared/data-access-archie-api/onboarding/api/get-onboarding';
+import { useGetOnboarding } from '@archie-webapps/shared/data-access-archie-api/onboarding/hooks/use-get-onboarding';
 import { Header, Loading, Page } from '@archie-webapps/ui-design-system';
 import { Step } from '@archie-webapps/util-constants';
 

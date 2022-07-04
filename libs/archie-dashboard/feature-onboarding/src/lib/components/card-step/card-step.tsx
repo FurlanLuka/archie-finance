@@ -1,13 +1,17 @@
-import { TotalCollateralValue } from '@archie/api-consumer/collateral/api/get-collateral-total-value';
-import { useGetCollateralTotalValue } from '@archie/api-consumer/collateral/hooks/use-get-collateral-total-value';
-import { GetCreditResponse } from '@archie/api-consumer/credit/api/get-credit';
-import { useCreateAptoUser } from '@archie/api-consumer/credit/hooks/use-create-apto-user';
-import { useGetCredit } from '@archie/api-consumer/credit/hooks/use-get-credit';
-import { useIssueCard } from '@archie/api-consumer/credit/hooks/use-issue-card';
-import { MutationQueryResponse, QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
+import { TotalCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-total-value';
+import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-total-value';
+import { GetCreditResponse } from '@archie-webapps/shared/data-access-archie-api/credit/api/get-credit';
+import { useCreateAptoUser } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-create-apto-user';
+import { useGetCredit } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-get-credit';
+import { useIssueCard } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-issue-card';
+import {
+  MutationQueryResponse,
+  QueryResponse,
+  RequestState,
+} from '@archie-webapps/shared/data-access-archie-api/interface';
 import { ButtonPrimary, Container, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { Step } from '@archie-webapps/util-constants';
 

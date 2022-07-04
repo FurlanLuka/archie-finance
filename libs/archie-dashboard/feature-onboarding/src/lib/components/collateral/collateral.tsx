@@ -1,8 +1,13 @@
-import { TotalCollateralValue } from '@archie/api-consumer/collateral/api/get-collateral-total-value';
-import { usePollCollateralTotalValue } from '@archie/api-consumer/collateral/hooks/use-poll-collateral-total-value';
-import { useCreateCreditLine } from '@archie/api-consumer/credit/hooks/use-create-credit-line';
-import { MutationQueryResponse, QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { useEffect, useState } from 'react';
+
+import { TotalCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-total-value';
+import { usePollCollateralTotalValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-poll-collateral-total-value';
+import { useCreateCreditLine } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-create-credit-line';
+import {
+  MutationQueryResponse,
+  QueryResponse,
+  RequestState,
+} from '@archie-webapps/shared/data-access-archie-api/interface';
 
 // TODO rewrite into just a hook?
 export const Collateral: React.FC = () => {
