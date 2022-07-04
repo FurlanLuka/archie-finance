@@ -11,6 +11,7 @@
     "crypto": "libs/crypto",
     "health": "libs/health",
     "internal-api": "libs/internal-api",
+    "microservice": "libs/microservice",
     "onboarding-api": "apps/onboarding-api",
     "openapi": "libs/openapi",
     "plugin-deployment": "libs/plugin-deployment",

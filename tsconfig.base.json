@@ -24,6 +24,7 @@
       "@archie-microservices/openapi": ["libs/openapi/src/index.ts"],
       "@archie-microservices/sendgrid": ["libs/sendgrid/src/index.ts"],
       "@archie-microservices/vault": ["libs/vault/src/index.ts"],
+      "@archie/microservice": ["libs/microservice/src/index.ts"],
       "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"]
     }
   },
