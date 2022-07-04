@@ -17,6 +17,7 @@ import {
   GetAssetListResponse,
   AssetInformation,
 } from '@archie-microservices/api-interfaces/asset_information';
+import { CreateCreditMinimumCollateralError } from './credit.errors';
 
 @Injectable()
 export class CreditService {
@@ -70,10 +71,7 @@ export class CreditService {
         },
       });
 
-      throw new BadRequestException(
-        'ERR_CREATE_CREDIT_MINIMUM_COLLATERAL',
-        `Collateralized assets must be worth at least ${this.MINIMUM_CREDIT} USD`,
-      );
+      throw new CreateCreditMinimumCollateralError(this.MINIMUM_CREDIT);
     }
 
     if (totalCollateralValue > this.MAXIMUM_CREDIT) {

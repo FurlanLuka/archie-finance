@@ -1,0 +1,7 @@
+.git
+dist
+coverage
+.github
+local
+tmp
+node_modules/.cache

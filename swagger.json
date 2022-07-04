@@ -1,0 +1,1457 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Archie finance API",
+    "description": "",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "servers": [],
+  "paths": {
+    "/v1/asset_price": {
+      "get": {
+        "operationId": "AssetPriceController_getAssetPrices",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetAssetPriceResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/asset_price/{asset}": {
+      "get": {
+        "operationId": "AssetPriceController_getAssetPrice",
+        "parameters": [
+          {
+            "name": "asset",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAssetPriceResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/internal/asset_price": {
+      "get": {
+        "operationId": "InternalAssetPriceController_getAssetPrices",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetAssetPriceResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/asset_price/fetch": {
+      "get": {
+        "operationId": "InternalAssetPriceController_fetchAssetPrices",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/internal/asset_price/{asset}": {
+      "get": {
+        "operationId": "InternalAssetPriceController_getAssetPrice",
+        "parameters": [
+          {
+            "name": "asset",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAssetPriceResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/deposit_address/{asset}": {
+      "get": {
+        "operationId": "DepositAddressController_getDepositAddress",
+        "parameters": [
+          {
+            "name": "asset",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDepositAddressResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/fireblocks/webhook": {
+      "post": {
+        "operationId": "FireblocksWebhookController_webhook",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/collateral": {
+      "get": {
+        "operationId": "CollateralController_getCollateral",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CollateralDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/collateral/value": {
+      "get": {
+        "operationId": "CollateralController_getUserCollateralValue",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CollateralValueDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/collateral/value/total": {
+      "get": {
+        "operationId": "CollateralController_getUserTotalCollateralValue",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTotalCollateralValueResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/internal/collateral/{userId}": {
+      "get": {
+        "operationId": "InternalCollateralController_getCollateral",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CollateralDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/collateral/value/{userId}": {
+      "get": {
+        "operationId": "InternalCollateralController_getUserCollateralValue",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CollateralValueDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/asset_information": {
+      "get": {
+        "operationId": "InternalAssetInformationController_getAssetList",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAssetListResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/asset_information/{asset}": {
+      "get": {
+        "operationId": "InternalAssetInformationController_getAssetInformation",
+        "parameters": [
+          {
+            "name": "asset",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAssetInformationResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/credit": {
+      "post": {
+        "operationId": "CreditController_createCreditLine",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCreditResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "CreditController_getCreditLine",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCreditResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/internal/credit/{userId}": {
+      "post": {
+        "operationId": "InternalCreditController_createCreditLine",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCreditResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
+          }
+        }
+      },
+      "get": {
+        "operationId": "InternalCreditController_getCreditLine",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetCreditResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
+          }
+        }
+      }
+    },
+    "/v1/apto/verification/start": {
+      "post": {
+        "operationId": "AptoController_startPhoneVerification",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartPhoneVerificationResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/apto/verification/finish": {
+      "post": {
+        "operationId": "AptoController_finishPhoneVerification",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FinishPhoneVerificationDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CompletePhoneVerificationResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/apto/verification/restart": {
+      "post": {
+        "operationId": "AptoController_restartPhoneVerification",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StartPhoneVerificationResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/apto/user": {
+      "post": {
+        "operationId": "AptoController_createUser",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateUserResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/apto/user/card": {
+      "post": {
+        "operationId": "AptoController_applyForCard",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueCardResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/onboarding": {
+      "get": {
+        "operationId": "OnboardingController_getOnboardingRecord",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetOnboardingResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/internal/onboarding/complete": {
+      "post": {
+        "operationId": "InternalOnboardingController_completeOnboardingStage",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnboardingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "400": {
+            "description": "Onboarding already completed"
+          }
+        }
+      }
+    },
+    "/v1/kyc": {
+      "get": {
+        "operationId": "KycController_getKyc",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetKycResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "KYC_NOT_FOUND"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "KycController_createKyc",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KycDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateKycResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "KYC_ALREADY_SUBMITTED"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/internal/kyc/{userId}": {
+      "get": {
+        "operationId": "InternalKycController_getKyc",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetKycResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "KYC_NOT_FOUND"
+          }
+        }
+      }
+    },
+    "/v1/user/email-verification": {
+      "get": {
+        "operationId": "UserController_checkEmailVerification",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetEmailVerificationResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/user/email-verification/resend": {
+      "post": {
+        "operationId": "UserController_resendEmailVerification",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/internal/user/email-address/{userId}": {
+      "get": {
+        "operationId": "InternalUserController_getEmailAddress",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetEmailAddressResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/email_waitlist": {
+      "put": {
+        "operationId": "EmailWaitlistController_addToWaitlist",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmailWaitlistDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/waitlist": {
+      "post": {
+        "operationId": "WaitlistController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/waitlist/verify/{id}": {
+      "post": {
+        "operationId": "WaitlistController_verify",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/v1/waitlist/{id}": {
+      "get": {
+        "operationId": "WaitlistController_get",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetWaitlistRecordResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "GetAssetPriceResponseDto": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset",
+          "price",
+          "currency"
+        ]
+      },
+      "GetDepositAddressResponseDto": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "address"
+        ]
+      },
+      "CollateralDto": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "asset",
+          "amount"
+        ]
+      },
+      "CollateralValueDto": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string"
+          },
+          "assetAmount": {
+            "type": "number"
+          },
+          "price": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "asset",
+          "assetAmount",
+          "price"
+        ]
+      },
+      "GetTotalCollateralValueResponseDto": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "value"
+        ]
+      },
+      "GetAssetListResponseDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "GetAssetInformationResponseDto": {
+        "type": "object",
+        "properties": {
+          "fireblocks_id": {
+            "type": "string"
+          },
+          "coinapi_id": {
+            "type": "string"
+          },
+          "network": {
+            "type": "string",
+            "enum": [
+              "ERC20",
+              "SOL",
+              "BTC"
+            ]
+          },
+          "ltv": {
+            "type": "number"
+          },
+          "interest": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "fireblocks_id",
+          "coinapi_id",
+          "network",
+          "ltv",
+          "interest"
+        ]
+      },
+      "GetCreditResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalCredit": {
+            "type": "number"
+          },
+          "availableCredit": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "totalCredit",
+          "availableCredit"
+        ]
+      },
+      "StartPhoneVerificationResponseDto": {
+        "type": "object",
+        "properties": {
+          "verificationId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "verificationId",
+          "status"
+        ]
+      },
+      "FinishPhoneVerificationDto": {
+        "type": "object",
+        "properties": {}
+      },
+      "CompletePhoneVerificationResponseDto": {
+        "type": "object",
+        "properties": {
+          "verificationId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "verificationId",
+          "status"
+        ]
+      },
+      "CreateUserResponseDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "user_token": {
+            "type": "string"
+          },
+          "user_data": {
+            "type": "object"
+          },
+          "metadata": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "user_id",
+          "user_token",
+          "user_data",
+          "metadata"
+        ]
+      },
+      "IssueCardResponseDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "account_id": {
+            "type": "string"
+          },
+          "lastFour": {
+            "type": "string"
+          },
+          "cardNetwork": {
+            "type": "string"
+          },
+          "card_brand": {
+            "type": "string"
+          },
+          "expiration": {
+            "type": "string"
+          },
+          "pan": {
+            "type": "string"
+          },
+          "ccv": {
+            "type": "string"
+          },
+          "kyc_status": {
+            "type": "string"
+          },
+          "kyc_reason": {
+            "type": "string"
+          },
+          "cardholder_first_name": {
+            "type": "string"
+          },
+          "cardholder_last_name": {
+            "type": "string"
+          },
+          "issued_at": {
+            "type": "string"
+          },
+          "name_on_card": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "account_id",
+          "lastFour",
+          "cardNetwork",
+          "card_brand",
+          "expiration",
+          "pan",
+          "ccv",
+          "kyc_status",
+          "kyc_reason",
+          "cardholder_first_name",
+          "cardholder_last_name",
+          "issued_at",
+          "name_on_card"
+        ]
+      },
+      "GetOnboardingResponseDto": {
+        "type": "object",
+        "properties": {
+          "kycStage": {
+            "type": "boolean"
+          },
+          "emailVerificationStage": {
+            "type": "boolean"
+          },
+          "phoneVerificationStage": {
+            "type": "boolean"
+          },
+          "collateralizationStage": {
+            "type": "boolean"
+          },
+          "cardActivationStage": {
+            "type": "boolean"
+          },
+          "completed": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "kycStage",
+          "emailVerificationStage",
+          "phoneVerificationStage",
+          "collateralizationStage",
+          "cardActivationStage",
+          "completed"
+        ]
+      },
+      "OnboardingDto": {
+        "type": "object",
+        "properties": {
+          "stage": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "stage",
+          "userId"
+        ]
+      },
+      "GetKycResponseDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string"
+          },
+          "addressStreet": {
+            "type": "string"
+          },
+          "addressStreetNumber": {
+            "type": "string"
+          },
+          "addressLocality": {
+            "type": "string"
+          },
+          "addressCountry": {
+            "type": "string"
+          },
+          "addressRegion": {
+            "type": "string"
+          },
+          "addressPostalCode": {
+            "type": "string"
+          },
+          "phoneNumberCountryCode": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "ssn": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "dateOfBirth",
+          "addressStreet",
+          "addressStreetNumber",
+          "addressLocality",
+          "addressCountry",
+          "addressRegion",
+          "addressPostalCode",
+          "phoneNumberCountryCode",
+          "phoneNumber",
+          "ssn"
+        ]
+      },
+      "KycDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "addressStreet": {
+            "type": "string"
+          },
+          "addressStreetNumber": {
+            "type": "string"
+          },
+          "addressLocality": {
+            "type": "string"
+          },
+          "addressRegion": {
+            "type": "string"
+          },
+          "addressPostalCode": {
+            "type": "string"
+          },
+          "addressCountry": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "phoneNumberCountryCode": {
+            "type": "string"
+          },
+          "ssn": {
+            "type": "string",
+            "minLength": 9,
+            "maxLength": 9
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "dateOfBirth",
+          "addressStreet",
+          "addressStreetNumber",
+          "addressLocality",
+          "addressRegion",
+          "addressPostalCode",
+          "addressCountry",
+          "phoneNumber",
+          "phoneNumberCountryCode",
+          "ssn"
+        ]
+      },
+      "CreateKycResponseDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string"
+          },
+          "addressStreet": {
+            "type": "string"
+          },
+          "addressStreetNumber": {
+            "type": "string"
+          },
+          "addressLocality": {
+            "type": "string"
+          },
+          "addressCountry": {
+            "type": "string"
+          },
+          "addressRegion": {
+            "type": "string"
+          },
+          "addressPostalCode": {
+            "type": "string"
+          },
+          "phoneNumberCountryCode": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "ssn": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "dateOfBirth",
+          "addressStreet",
+          "addressStreetNumber",
+          "addressLocality",
+          "addressCountry",
+          "addressRegion",
+          "addressPostalCode",
+          "phoneNumberCountryCode",
+          "phoneNumber",
+          "ssn"
+        ]
+      },
+      "GetEmailVerificationResponseDto": {
+        "type": "object",
+        "properties": {
+          "isVerified": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "isVerified"
+        ]
+      },
+      "GetEmailAddressResponseDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "EmailWaitlistDto": {
+        "type": "object",
+        "properties": {
+          "emailAddress": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "emailAddress"
+        ]
+      },
+      "CreateDto": {
+        "type": "object",
+        "properties": {
+          "emailAddress": {
+            "type": "string"
+          },
+          "referrer": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "emailAddress"
+        ]
+      },
+      "GetWaitlistRecordResponseDto": {
+        "type": "object",
+        "properties": {
+          "numberOfReferrals": {
+            "type": "number"
+          },
+          "numberOfVerifiedReferrals": {
+            "type": "number"
+          },
+          "waitlistRank": {
+            "type": "number"
+          },
+          "referralCode": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "numberOfReferrals",
+          "numberOfVerifiedReferrals",
+          "waitlistRank",
+          "referralCode"
+        ]
+      }
+    },
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    }
+  }
+}

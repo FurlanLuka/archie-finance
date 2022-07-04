@@ -1,12 +1,23 @@
 import { AuthGuard } from '@archie-microservices/auth0';
-import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
-import { Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 import {
-  GetEmailVerificationResponse,
-  GetMfaEnrollmentResponse,
-} from './user.interfaces';
+  BadRequestException,
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  GetEmailVerificationResponseDto,
+  GetEmailAddressResponseDto,
+} from './user.dto';
 import { UserService } from './user.service';
-import { Enrollment, SendEnrollmentTicketResponse } from 'auth0';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { SendEnrollmentTicketResponse, Enrollment } from 'auth0';
+import { GetMfaEnrollmentResponse } from './user.interfaces';
 
 @Controller('v1/user')
 export class UserController {
@@ -14,14 +25,17 @@ export class UserController {
 
   @Get('email-verification')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async checkEmailVerification(
     @Req() request,
-  ): Promise<GetEmailVerificationResponse> {
+  ): Promise<GetEmailVerificationResponseDto> {
     return this.userService.isEmailVerified(request.user.sub);
   }
 
   @Post('email-verification/resend')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiErrorResponse([BadRequestException])
   async resendEmailVerification(@Req() request): Promise<void> {
     return this.userService.resendEmailVerification(request.user.sub);
   }
@@ -50,9 +64,10 @@ export class InternalUserController {
   constructor(private userService: UserService) {}
 
   @Get('email-address/:userId')
+  @ApiErrorResponse([NotFoundException])
   async getEmailAddress(
     @Param('userId') userId: string,
-  ): Promise<GetEmailAddressResponse> {
+  ): Promise<GetEmailAddressResponseDto> {
     return this.userService.getEmailAddress(userId);
   }
 }

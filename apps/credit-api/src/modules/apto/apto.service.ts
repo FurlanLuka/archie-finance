@@ -12,7 +12,6 @@ import {
   AddressDataPoint,
   BirthdateDataPoint,
   CardApplicationResponse,
-  CardBalanceResponse,
   CompleteVerificationResponse,
   CreateUserResponse,
   DataType,
@@ -312,10 +311,9 @@ export class AptoService {
   }
 
   public async getAptoUser(userId: string): Promise<AptoUser> {
-    const aptoUser: AptoUser | null =
-      await this.aptoUserRepository.findOneBy({
-        userId,
-      });
+    const aptoUser: AptoUser | null = await this.aptoUserRepository.findOneBy({
+      userId,
+    });
 
     if (aptoUser === null) {
       Logger.error({

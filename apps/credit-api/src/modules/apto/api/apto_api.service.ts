@@ -400,10 +400,7 @@ export class AptoApiService {
     }
   }
 
-  public async loadFunds(
-    cardId: string,
-    amount: number,
-  ): Promise<void> {
+  public async loadFunds(cardId: string, amount: number): Promise<void> {
     try {
       await axios.post(
         this.constructAptoUrl(`/cards/${cardId}/load_funds`),
@@ -412,7 +409,9 @@ export class AptoApiService {
             currency: 'USD',
             amount,
           },
-          source_balance_id: this.configService.get(ConfigVariables.APTO_FUNDING_BALANCE_ID),
+          source_balance_id: this.configService.get(
+            ConfigVariables.APTO_FUNDING_BALANCE_ID,
+          ),
         },
         {
           headers: {

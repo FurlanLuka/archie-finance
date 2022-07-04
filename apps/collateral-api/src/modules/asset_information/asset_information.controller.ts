@@ -1,23 +1,25 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import {
-  GetAssetListResponse,
-  GetAssetInformationResponse,
-} from '@archie-microservices/api-interfaces/asset_information';
+  GetAssetListResponseDto,
+  GetAssetInformationResponseDto,
+} from './asset_information.dto';
 import { AssetInformationService } from './asset_information.service';
+import { ApiErrorResponse } from '@archie-microservices/openapi';
 
 @Controller('internal/asset_information')
 export class InternalAssetInformationController {
   constructor(private assetInformationService: AssetInformationService) {}
 
   @Get()
-  getAssetList(): GetAssetListResponse {
+  getAssetList(): GetAssetListResponseDto {
     return this.assetInformationService.getAssetList();
   }
 
   @Get(':asset')
+  @ApiErrorResponse([NotFoundException])
   getAssetInformation(
     @Param('asset') asset: string,
-  ): GetAssetInformationResponse {
+  ): GetAssetInformationResponseDto {
     return this.assetInformationService.getAssetInformation(asset);
   }
 }

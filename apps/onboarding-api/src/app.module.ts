@@ -23,7 +23,7 @@ import { OnboardingModule } from './modules/onboarding/onboarding.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
+        type: 'postgres',
         host: configService.get(ConfigVariables.TYPEORM_HOST),
         username: configService.get(ConfigVariables.TYPEORM_USERNAME),
         password: configService.get(ConfigVariables.TYPEORM_PASSWORD),

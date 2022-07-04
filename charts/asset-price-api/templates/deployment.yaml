@@ -4,14 +4,20 @@ metadata:
   name: archie-asset-price-api
   labels:
     app: archie-asset-price-api
+    {{- if not .Values.local }}
     tags.datadoghq.com/env: '{{ .Values.environment }}'
     tags.datadoghq.com/service: 'archie-asset-price-api'
     tags.datadoghq.com/version: '{{ .Values.tag }}'
+    {{- end }}
 spec:
   selector:
     matchLabels:
       app: archie-asset-price-api
+  {{- if not .Values.local }}
   replicas: 1
+  {{- else }}
+  replicas: 1
+  {{- end }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -21,14 +27,22 @@ spec:
     metadata:
       labels:
         app: archie-asset-price-api
+        {{- if not .Values.local }}
         tags.datadoghq.com/env: '{{ .Values.environment }}'
         tags.datadoghq.com/service: 'archie-asset-price-api'
         tags.datadoghq.com/version: '{{ .Values.tag }}'
+        {{- else }}
+        helm-revision: '{{ .Release.Revision }}'
+        {{- end }}
     spec:
       containers:
         - name: archie-asset-price-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
+          {{- if not .Values.local }}
           imagePullPolicy: Always
+          {{- else }}
+          imagePullPolicy: Never
+          {{- end }}
           ports:
             - containerPort: 80
           livenessProbe:
@@ -44,6 +58,7 @@ spec:
             limits:
               memory: '256Mi'
               cpu: '500m'
+          {{- if not .Values.local }}
           env:
             - name: DD_AGENT_HOST
               valueFrom:
@@ -89,16 +104,12 @@ spec:
                 secretKeyRef:
                   name: asset-secrets
                   key: enabled-assets
-            - name: COINAPI_KEY
+            - name: COINGECKO_API_URI
               valueFrom:
                 secretKeyRef:
-                  name: coinapi-secrets
-                  key: api-key
-            - name: COINAPI_WEBSOCKET_URI
-              valueFrom:
-                secretKeyRef:
-                  name: coinapi-secrets
-                  key: websocket-uri
+                  name: coingecko-secrets
+                  key: api-url
+          {{- end }}
       imagePullSecrets:
         - name: regcred
 ---
@@ -115,3 +126,35 @@ spec:
       targetPort: 80
   selector:
     app: archie-asset-price-api
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: fetch-asset-prices
+spec:
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    metadata:
+      name: fetch-asset-prices
+    spec:
+      template:
+        spec:
+          containers:
+          - name: fetch-asset-prices-job
+            image: curlimages/curl
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: INTERNAL_API_URL
+              {{- if not .Values.local }}
+              valueFrom:
+                secretKeyRef:
+                  name: internal-api-secrets
+                  key: internal-api-url
+              {{- else }}
+              value: http://host.minikube.internal
+              {{- end }}
+            command:
+            - /bin/sh
+            - -c
+            - curl ${INTERNAL_API_URL}/internal/asset_price/fetch
+          restartPolicy: OnFailure

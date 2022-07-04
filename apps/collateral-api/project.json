@@ -10,6 +10,7 @@
         "outputPath": "dist/apps/collateral-api",
         "main": "apps/collateral-api/src/main.ts",
         "tsConfig": "apps/collateral-api/tsconfig.app.json",
+        "tsPlugins": ["@nestjs/swagger/plugin"],
         "assets": ["apps/collateral-api/src/assets"]
       },
       "configurations": {
@@ -24,6 +25,12 @@
             }
           ]
         }
+      }
+    },
+    "build-openapi": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build collateral-api && node dist/apps/collateral-api/main build-swagger"
       }
     },
     "serve": {

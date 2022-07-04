@@ -1,15 +1,23 @@
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  NotFoundException,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { FinishPhoneVerificationDto } from '@archie-microservices/api-interfaces/apto';
 import { AptoService } from './apto.service';
 import { AuthGuard } from '@archie-microservices/auth0';
 import {
-  CreateUserResponse,
-  IssueCardResponse,
-} from './api/apto_api.interfaces';
-import {
-  StartPhoneVerificationResponse,
-  CompletePhoneVerificationResponse,
-} from './apto.interfaces';
+  CreateUserResponseDto,
+  IssueCardResponseDto,
+  StartPhoneVerificationResponseDto,
+  CompletePhoneVerificationResponseDto,
+} from './apto.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiErrorResponse } from '@archie-microservices/openapi';
 
 @Controller('v1/apto')
 export class AptoController {
@@ -17,38 +25,46 @@ export class AptoController {
 
   @Post('verification/start')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   public async startPhoneVerification(
     @Request() req,
-  ): Promise<StartPhoneVerificationResponse> {
+  ): Promise<StartPhoneVerificationResponseDto> {
     return this.aptoService.startPhoneVerification(req.user.sub);
   }
 
   @Post('verification/finish')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   public async finishPhoneVerification(
     @Request() req,
     @Body() body: FinishPhoneVerificationDto,
-  ): Promise<CompletePhoneVerificationResponse> {
+  ): Promise<CompletePhoneVerificationResponseDto> {
     return this.aptoService.finishPhoneVerification(req.user.sub, body.secret);
   }
 
   @Post('verification/restart')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiErrorResponse([BadRequestException, NotFoundException])
   public async restartPhoneVerification(
     @Request() req,
-  ): Promise<StartPhoneVerificationResponse> {
+  ): Promise<StartPhoneVerificationResponseDto> {
     return this.aptoService.restartVerification(req.user.sub);
   }
 
   @Post('user')
   @UseGuards(AuthGuard)
-  public async createUser(@Request() req): Promise<CreateUserResponse> {
+  @ApiBearerAuth()
+  @ApiErrorResponse([BadRequestException, NotFoundException])
+  public async createUser(@Request() req): Promise<CreateUserResponseDto> {
     return this.aptoService.createAptoUser(req.user.sub);
   }
 
   @Post('user/card')
   @UseGuards(AuthGuard)
-  public async applyForCard(@Request() req): Promise<IssueCardResponse> {
+  @ApiBearerAuth()
+  @ApiErrorResponse([BadRequestException, NotFoundException])
+  public async applyForCard(@Request() req): Promise<IssueCardResponseDto> {
     return this.aptoService.issueCard(req.user.sub);
   }
 }

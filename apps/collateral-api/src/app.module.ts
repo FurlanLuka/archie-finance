@@ -39,7 +39,7 @@ import { AssetInformationModule } from './modules/asset_information/asset_inform
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
+        type: 'postgres',
         host: configService.get(ConfigVariables.TYPEORM_HOST),
         username: configService.get(ConfigVariables.TYPEORM_USERNAME),
         password: configService.get(ConfigVariables.TYPEORM_PASSWORD),
@@ -48,8 +48,6 @@ import { AssetInformationModule } from './modules/asset_information/asset_inform
         synchronize: true,
         autoLoadEntities: true,
         keepConnectionAlive: true,
-        logging: ['error', 'schema', 'log'],
-        logger: 'advanced-console',
       }),
       inject: [ConfigService],
     }),

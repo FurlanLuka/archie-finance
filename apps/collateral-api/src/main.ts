@@ -4,6 +4,7 @@ import { AppModule } from './app.module';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import './tracer';
+import { Openapi } from '@archie-microservices/openapi';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -13,11 +14,14 @@ async function bootstrap() {
           format: winston.format.combine(
             winston.format.timestamp(),
             winston.format.ms(),
-            winston.format.json(),          ),
+            winston.format.json(),
+          ),
         }),
       ],
     }),
   });
+
+  await Openapi.generate(app);
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors();
