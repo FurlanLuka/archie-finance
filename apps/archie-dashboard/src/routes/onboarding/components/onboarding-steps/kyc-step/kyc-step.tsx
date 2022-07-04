@@ -46,6 +46,7 @@ interface KycFormData {
 export function getAddressError(errors: FieldErrors<Address>): string {
   return Object.values(errors)[0].message ?? '';
 }
+
 const addAddress = (place: GooglePlace): Partial<Address> => {
   const streetNumberComponent = place.address_components.find((item) => item.types.includes('street_number'));
   const streetNameComponent = place.address_components.find((item) => item.types.includes('route'));
@@ -73,6 +74,7 @@ const minYears = (value: Date) => differenceInYears(new Date(), new Date(value))
 const maxYears = (value: Date) => differenceInYears(new Date(), new Date(value)) > 122;
 
 const SUPPORTED_COUNTRIES = ['US'];
+
 const schema = yup.object({
   firstName: yup
     .string()
@@ -114,7 +116,7 @@ const schema = yup.object({
     }),
   address: yup.object({
     addressStreet: yup.string().required('kyc_step.error.not_full_address'),
-    addressStreetNumber: yup.string().required('kyc_step.error.not_full_address'),
+    addressStreetNumber: yup.string().required('kyc_step.error.no_street_number'),
     addressLocality: yup.string().required('kyc_step.error.not_full_address'),
     addressCountry: yup
       .string()
@@ -150,6 +152,7 @@ export const KycStep: FC = () => {
     },
     resolver: yupResolver(schema),
   });
+
   const phoneNumberCountryCode = '+1';
 
   const onSubmit = handleSubmit((data) => {

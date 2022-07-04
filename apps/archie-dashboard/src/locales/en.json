@@ -33,6 +33,7 @@
       "too_long": "This name is too long",
       "not_us_address": "Must be a U.S. address",
       "not_full_address": "Please enter your full address",
+      "no_street_number": "Please enter your street number",
       "not_valid_date": "Invalid date",
       "should_be_older": "You must be at least 18 years old",
       "should_be_under": "You must be under 122 years old",
