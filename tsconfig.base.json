@@ -18,6 +18,7 @@
     "paths": {
       "@archie-webapps/archie-dashboard/feature-onboarding": ["libs/archie-dashboard/feature-onboarding/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature-rewards": ["libs/archie-dashboard/feature-rewards/src/index.ts"],
+      "@archie-webapps/archie-dashboard/feature-settings": ["libs/archie-dashboard/feature-settings/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature-wallet-and-collateral": [
         "libs/archie-dashboard/feature-wallet-and-collateral/src/index.ts"
       ],

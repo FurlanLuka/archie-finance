@@ -7,11 +7,11 @@ import { GetOnboardingResponse } from '@archie-webapps/shared/data-access-archie
 import { useGetOnboarding } from '@archie-webapps/shared/data-access-archie-api/onboarding/hooks/use-get-onboarding';
 import { Header, Loading, Page, Container } from '@archie-webapps/ui-design-system';
 import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature-rewards';
+import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature-settings';
 
 import { Navigation } from '../../components/navigation/navigation';
 
 import { History } from './history/history';
-import { Settings } from './settings/settings';
 
 export const DashboardRoute: FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
@@ -36,7 +36,7 @@ export const DashboardRoute: FC = () => {
             <Route path="/" element={<WalletAndCollateralScreen />} />
             <Route path="/rewards" element={<RewardsScreen />} />
             <Route path="/history" element={<History />} />
-            <Route path="/settings" element={<Settings />} />
+            <Route path="/settings" element={<SettingsScreen />} />
           </Routes>
         </Container>
       </Page>

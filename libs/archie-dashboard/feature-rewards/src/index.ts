@@ -1,1 +1,1 @@
-export * from './lib/screens/rewards-screen';
+export * from './lib/screens/rewards';

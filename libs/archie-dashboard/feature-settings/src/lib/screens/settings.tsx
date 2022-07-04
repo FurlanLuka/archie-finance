@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 
 import { SubtitleS } from '@archie-webapps/ui-design-system';
 
-import { RewardsStyled } from './rewards-screen.styled';
+import { SettingsStyled } from './settings.styled';
 
-export const RewardsScreen: FC = () => {
+export const SettingsScreen: FC = () => {
   const { t } = useTranslation();
 
   return (
-    <RewardsStyled>
-      <SubtitleS className="title">Rewards</SubtitleS>
-    </RewardsStyled>
+    <SettingsStyled>
+      <SubtitleS className="title">Settings</SubtitleS>
+    </SettingsStyled>
   );
 };
