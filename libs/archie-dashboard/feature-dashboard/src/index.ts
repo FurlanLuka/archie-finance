@@ -1,1 +1,1 @@
-export * from './lib/screens/dashboard-screen';
+export * from './lib/screens/wallet-and-collateral';

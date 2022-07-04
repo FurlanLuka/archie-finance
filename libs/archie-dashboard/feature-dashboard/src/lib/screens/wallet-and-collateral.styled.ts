@@ -2,13 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/ui-theme';
 
-<<<<<<< HEAD:libs/archie-dashboard/feature-dashboard/src/lib/screens/dashboard-screen.styled.ts
-export const DashboardStyled = styled.div`
-  display: flex;
-  justify-content: center;
-=======
 export const WalletAndCollateralStyled = styled.div`
->>>>>>> feature/forms:libs/archie-dashboard/feature-dashboard/src/lib/components/screens/wallet-and-collateral/wallet-and-collateral.styled.tsx
   width: 100%;
   max-width: calc(1000px + 4rem);
   margin-left: ${NAV_WIDTH};
@@ -102,8 +96,6 @@ export const WalletAndCollateralStyled = styled.div`
     border-bottom-right-radius: 0.5rem;
     padding: 0.5rem 1.5rem;
   }
-<<<<<<< HEAD:libs/archie-dashboard/feature-dashboard/src/lib/screens/dashboard-screen.styled.ts
-=======
 
   .text-group {
     display: flex;
@@ -114,5 +106,4 @@ export const WalletAndCollateralStyled = styled.div`
       padding-bottom: 0.25rem;
     }
   }
->>>>>>> feature/forms:libs/archie-dashboard/feature-dashboard/src/lib/components/screens/wallet-and-collateral/wallet-and-collateral.styled.tsx
 `;
