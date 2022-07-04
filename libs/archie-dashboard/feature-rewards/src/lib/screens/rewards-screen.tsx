@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { SubtitleS } from '@archie-webapps/ui-design-system';
 
-import { RewardsStyled } from './rewards.styled';
+import { RewardsStyled } from './rewards-screen.styled';
 
-export const Rewards: FC = () => {
+export const RewardsScreen: FC = () => {
   const { t } = useTranslation();
 
   return (

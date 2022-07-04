@@ -6,11 +6,11 @@ import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access-archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access-archie-api/onboarding/hooks/use-get-onboarding';
 import { Header, Loading, Page, Container } from '@archie-webapps/ui-design-system';
+import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature-rewards';
 
 import { Navigation } from '../../components/navigation/navigation';
 
 import { History } from './history/history';
-import { Rewards } from './rewards/rewards';
 import { Settings } from './settings/settings';
 
 export const DashboardRoute: FC = () => {
@@ -34,7 +34,7 @@ export const DashboardRoute: FC = () => {
           <Navigation />
           <Routes>
             <Route path="/" element={<WalletAndCollateralScreen />} />
-            <Route path="/rewards" element={<Rewards />} />
+            <Route path="/rewards" element={<RewardsScreen />} />
             <Route path="/history" element={<History />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
