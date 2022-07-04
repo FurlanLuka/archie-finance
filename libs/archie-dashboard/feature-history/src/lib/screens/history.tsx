@@ -5,7 +5,7 @@ import { SubtitleS } from '@archie-webapps/ui-design-system';
 
 import { HistoryStyled } from './history.styled';
 
-export const History: FC = () => {
+export const HistoryScreen: FC = () => {
   const { t } = useTranslation();
 
   return (
