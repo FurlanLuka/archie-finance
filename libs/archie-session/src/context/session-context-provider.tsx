@@ -7,19 +7,16 @@ interface SessionProviderProps {
   onLogout: () => void;
 }
 
-export const SessionContextProvider: React.FC<
-  PropsWithChildren<SessionProviderProps>
-> = (props: PropsWithChildren<SessionProviderProps>) => {
+export const SessionContextProvider: React.FC<PropsWithChildren<SessionProviderProps>> = (
+  props: PropsWithChildren<SessionProviderProps>,
+) => {
   const [accessToken, setAccessToken] = useState<string | undefined>(undefined);
   const [sessionState, setSessionState] = useState(SessionState.INITIALIZING);
 
   const { getAccessTokenSilently, logout } = useAuth0();
 
   useEffect(() => {
-    if (
-      sessionState === SessionState.INITIALIZING ||
-      sessionState === SessionState.REFRESHING
-    ) {
+    if (sessionState === SessionState.INITIALIZING || sessionState === SessionState.REFRESHING) {
       getAccessTokenSilently()
         .then((accessToken) => {
           setAccessToken(accessToken);

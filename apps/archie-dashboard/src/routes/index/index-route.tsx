@@ -2,7 +2,7 @@ import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
 import { GetOnboardingResponse } from '@archie/api-consumer/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-onboarding';
 import { FC } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Header, Loading, Page, Container } from '@archie-webapps/ui-design-system';
 
@@ -19,11 +19,11 @@ export const DashboardRoute: FC = () => {
     return <Loading />;
   }
 
-  // if (queryResponse.state === RequestState.SUCCESS) {
-  //   if (!queryResponse.data.completed) {
-  //     return <Navigate to="/onboarding" />;
-  //   }
-  // }
+  if (queryResponse.state === RequestState.SUCCESS) {
+    if (!queryResponse.data.completed) {
+      return <Navigate to="/onboarding" />;
+    }
+  }
 
   return (
     <>

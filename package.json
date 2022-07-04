@@ -14,18 +14,19 @@
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "^1.9.0",
+    "@hookform/resolvers": "^2.9.3",
     "@nivo/core": "^0.79.0",
     "@nivo/pie": "^0.79.1",
     "@nivo/stream": "^0.79.1",
     "axios": "^0.26.1",
     "core-js": "^3.6.5",
     "date-fns": "^2.28.0",
-    "formik": "^2.2.9",
     "i18next": "^21.8.8",
     "input-format": "^0.3.8",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-google-autocomplete": "^2.7.0",
+    "react-hook-form": "^7.33.0",
     "react-i18next": "^11.17.0",
     "react-loading-icons": "^1.0.8",
     "react-qr-code": "^2.0.7",
@@ -37,7 +38,8 @@
     "regenerator-runtime": "0.13.7",
     "styled-components": "^5.3.5",
     "tslib": "^2.0.0",
-    "use-async-effect": "^2.2.5"
+    "use-async-effect": "^2.2.5",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@nrwl/cypress": "13.9.0",
