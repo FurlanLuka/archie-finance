@@ -1,9 +1,21 @@
 import styled from 'styled-components';
 
+import { breakpoints } from '@archie-webapps/ui-theme';
+
 export const LoanToValueStyled = styled.div`
   position: relative;
   height: 216px;
   width: 216px;
+
+  @media (max-width: ${breakpoints.screenMD}) {
+    height: 200px;
+    width: 200px;
+  }
+
+  @media (max-width: ${breakpoints.screenSM}) {
+    height: 180px;
+    width: 180px;
+  }
 
   .centered-metrics {
     position: absolute;

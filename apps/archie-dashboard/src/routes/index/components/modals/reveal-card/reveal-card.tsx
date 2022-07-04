@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ButtonOutline, ButtonPrimary, Modal, ParagraphM } from '@archie-webapps/ui-design-system';
 
-import { RevealCardModalStyled } from './reveal-card-modal.styled';
+import { RevealCardModalStyled } from './reveal-card.styled';
 
 interface RevealCardModalProps {
   isOpen: boolean;

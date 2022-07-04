@@ -59,7 +59,7 @@ export const SubtitleM = styled.h4<TypographyProps>`
   }
 `
 
-export const SubtitleS = styled.h4<TypographyProps>`  
+export const SubtitleS = styled.h5<TypographyProps>`  
   font-size: 2rem; //32
   line-height: 1.2;
   color: ${({ theme, color }) => color ?? theme.textPrimary};
