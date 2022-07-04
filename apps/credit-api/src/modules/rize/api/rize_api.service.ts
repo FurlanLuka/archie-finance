@@ -16,6 +16,7 @@ import {
   Product,
   DebitCard,
 } from './rize_api.interfaces';
+import { DebitCardAccessToken } from '@rizefinance/rize-js/types/lib/core/typedefs/debit-card.typedefs';
 
 @Injectable()
 export class RizeApiService {
@@ -228,6 +229,70 @@ export class RizeApiService {
     } catch (error) {
       Logger.error({
         code: 'ERROR_CREATING_DEBIT_CARD',
+        metadata: {
+          error: error,
+          errorResponse: error.data,
+        },
+      });
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  public async getDebitCard(userId: string): Promise<DebitCard | null> {
+    try {
+      const debitCards: RizeList<DebitCard> =
+        await this.rizeClient.debitCard.getList({ external_uid: userId });
+
+      return debitCards.data[0] ?? null;
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_SEARCHING_EXISTING_DEBIT_CARDS',
+        metadata: {
+          error: error,
+          errorResponse: error.data,
+        },
+      });
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  public async getDebitCardAccessToken(
+    cardID: string,
+  ): Promise<DebitCardAccessToken> {
+    try {
+      const debitCardAccessToken: DebitCardAccessToken =
+        await this.rizeClient.debitCard.getAccessTokenData(cardID);
+
+      return debitCardAccessToken;
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_FETCHING_DEBIT_CARD_ACCESS_TOKEN',
+        metadata: {
+          error: error,
+          errorResponse: error.data,
+        },
+      });
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  public async getVirtualCardImage(
+    debitCardAccessToken: DebitCardAccessToken,
+  ): Promise<string> {
+    try {
+      const virtualCardImage: string =
+        await this.rizeClient.debitCard.getVirtualCardImage(
+          debitCardAccessToken.config_id,
+          debitCardAccessToken.token,
+        );
+
+      return virtualCardImage;
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_FETCHING_VIRTUAL_CARD_IMAGE',
         metadata: {
           error: error,
           errorResponse: error.data,

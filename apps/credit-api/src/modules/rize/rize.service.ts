@@ -13,7 +13,14 @@ import {
 import {
   CustomerAlreadyExists,
   ActiveCustomerDoesNotExist,
+  DebitCardAlreadyExists,
+  DebitCardDoesNotExist,
 } from './rize.errors';
+import { RizeList } from '@rizefinance/rize-js/types/lib/core/typedefs/common.typedefs';
+import {
+  DebitCard,
+  DebitCardAccessToken,
+} from '@rizefinance/rize-js/types/lib/core/typedefs/debit-card.typedefs';
 
 @Injectable()
 export class RizeService {
@@ -38,12 +45,46 @@ export class RizeService {
 
       throw new ActiveCustomerDoesNotExist();
     }
+    const debitCard: DebitCard = await this.rizeApiService.getDebitCard(
+      customer.uid,
+    );
+
+    if (debitCard !== null) {
+      Logger.error({
+        code: 'DEBIT_CARD_ALREADY_EXISTS',
+        metadata: {
+          userId,
+          customerId: customer.uid,
+        },
+      });
+
+      throw new DebitCardAlreadyExists();
+    }
 
     await this.rizeApiService.createDebitCard(
       userId,
       customer.uid,
       customer.pool_uids[0],
     );
+  }
+
+  public async getVirtualCard(userId: string): Promise<string> {
+    const debitCard: DebitCard = await this.rizeApiService.getDebitCard(userId);
+
+    if (debitCard === null) {
+      Logger.error({
+        code: 'DEBIT_CARD_DOES_NOT_EXIST',
+        metadata: {
+          userId,
+        },
+      });
+
+      throw new DebitCardDoesNotExist();
+    }
+    const debitCardAccessToken: DebitCardAccessToken =
+      await this.rizeApiService.getDebitCardAccessToken(debitCard.uid);
+
+    return this.rizeApiService.getVirtualCardImage(debitCardAccessToken);
   }
 
   public async createUser(userId: string, userIp: string): Promise<void> {
