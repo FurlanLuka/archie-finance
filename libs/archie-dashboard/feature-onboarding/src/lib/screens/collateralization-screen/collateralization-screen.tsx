@@ -13,9 +13,10 @@ import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/ui-theme';
 import { CollateralAsset, Step } from '@archie-webapps/util-constants';
 
+import { CollateralReceivedAlert } from '../../components/alerts/collateral-received/collateral-received';
+import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';
 import { CollateralAssetSelect } from '../../components/collateral-asset-select/collateral-asset-select';
 import { Collateral } from '../../components/collateral/collateral';
-import { EmailVerification } from '../../components/email-verification/email-verification';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
 import { CollateralizationScreenStyled } from './collateralization-screen.styled';
@@ -87,7 +88,8 @@ export const CollateralizationScreen: FC = () => {
     <Container column mobileColumn alignItems="center">
       <Collateral />
       <StepsIndicator currentStep={Step.COLLATERALIZE} />
-      <EmailVerification />
+      <EmailVerificationAlert />
+      <CollateralReceivedAlert />
       <CollateralizationScreenStyled>
         <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
         <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints } from '@archie-webapps/ui-theme';
 
-export const EmailVerificationStyled = styled.div`
+export const EmailVerificationAlertStyled = styled.div`
   display: flex;
   align-items: center;
   background-color: ${({ theme }) => theme.backgroundAlert};

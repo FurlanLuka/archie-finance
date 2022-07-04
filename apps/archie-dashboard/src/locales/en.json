@@ -3,6 +3,7 @@
   "btn_ok": "Ok",
   "btn_yes": "Yes",
   "btn_cancel": "Cancel",
+  "btn_continue": "Continue",
   "steps_indicator": {
     "first": "Sign up",
     "second": "Collateralize",
@@ -86,11 +87,17 @@
     "img_alt": "Your Archie Card is ready",
     "btn": "Go to my dashboard"
   },
-  "email_verification": {
+  "email_verification_alert": {
     "title": "Please verify your email",
     "text_1": "Check your email for a verification link from Archie. If you did not receive a verification email, click",
     "btn": "here",
-    "text_2": "to resend it."
+    "text_2": "to resend it.",
+    "img_alt": "Resend verification email"
+  },
+  "collateral_received_alert": {
+    "title": "We received your collateral!",
+    "text": "Your current collateral adds up to a $540 credit line.  Feel free to collateralize more assets. Note you can use  different cryptocurrencies as collateral! Click 'Next' when you're ready to get your Archie Card.",
+    "img_alt": "Collateral received"
   },
   "dashboard": {
     "title": "Hi, {{name}}",
@@ -101,5 +108,10 @@
     "title": "You have reached margin call",
     "text": "The value of your ArchCredit collateral has dropped and you have reached an LTV rate above 75%. Action is required to prevent liquidiating a portion of your collateral. We recommend sending more collateral to your ArchCredit; paying down your balance through your bank may take up to 3 days. Archie will automatically undergo a partial lidquidation if your LTV reaches 90%",
     "btn": "Cure"
+  },
+  "setup_2fa_alert": {
+    "title": "Protect your funds with 2FA",
+    "text": "Setup Dual Factor Authentication using your authenticator app",
+    "img_alt": "Setup 2FA"
   }
 }

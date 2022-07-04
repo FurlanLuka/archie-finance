@@ -8,11 +8,11 @@ import { usePollEmailVerification } from '@archie-webapps/shared/data-access-arc
 import { useResendEmailVerification } from '@archie-webapps/shared/data-access-archie-api/user/hooks/use-resend-email-verification';
 import { ParagraphS, ParagraphXS } from '@archie-webapps/ui-design-system';
 
-import imgResend from '../../../assets/img-resend.png';
+import imgResend from '../../../../assets/img-resend.png';
 
-import { EmailVerificationStyled } from './email-verification.styled';
+import { EmailVerificationAlertStyled } from './email-verification.styled';
 
-export const EmailVerification: FC = () => {
+export const EmailVerificationAlert: FC = () => {
   const { t } = useTranslation();
 
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
@@ -37,18 +37,18 @@ export const EmailVerification: FC = () => {
   }
 
   return (
-    <EmailVerificationStyled>
+    <EmailVerificationAlertStyled>
       <div className="image">
-        <img src={imgResend} alt="Resend verification email" />
+        <img src={imgResend} alt={t('email_verification_alert.img_alt')} />
       </div>
       <div className="text">
-        <ParagraphS weight={700}>{t('email_verification.title')}</ParagraphS>
+        <ParagraphS weight={700}>{t('email_verification_alert.title')}</ParagraphS>
         <ParagraphXS>
-          {t('email_verification.text_1')}
-          <button onClick={handleClick}>{t('email_verification.btn')}</button>
-          {t('email_verification.text_2')}
+          {t('email_verification_alert.text_1')}
+          <button onClick={handleClick}>{t('email_verification_alert.btn')}</button>
+          {t('email_verification_alert.text_2')}
         </ParagraphXS>
       </div>
-    </EmailVerificationStyled>
+    </EmailVerificationAlertStyled>
   );
 };

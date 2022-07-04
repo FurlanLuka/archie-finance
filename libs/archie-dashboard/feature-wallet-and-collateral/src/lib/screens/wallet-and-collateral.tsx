@@ -15,10 +15,10 @@ import {
 import { theme } from '@archie-webapps/ui-theme';
 
 import imgCard from '../../assets/card-placeholder.png';
+// import { MarginCallAlert } from '../components/alerts/margin-call/margin-call';
 import { CollateralValue } from '../components/charts/collateral-value/collateral-value';
 import { LoanToValue } from '../components/charts/loan-to-value/loan-to-value';
 import { NextPayment } from '../components/charts/next-payment/next-payment';
-// import { MarginCallAlert } from '../components/margin-call-alert/margin-call-alert';
 import { RevealCardModal } from '../components/modals/reveal-card/reveal-card';
 import { tableData } from '../constants/table-data';
 import { tableColumns } from '../fixtures/table-fixture';
@@ -123,9 +123,9 @@ export const WalletAndCollateralScreen: FC = () => {
             <ButtonOutline maxWidth="auto" small>
               Add
             </ButtonOutline>
-            <ButtonGhost maxWidth="auto" small>
+            <ButtonOutline maxWidth="auto" small isDisabled>
               Redeem
-            </ButtonGhost>
+            </ButtonOutline>
           </div>
         </Card>
         <Card column alignItems="flex-start" padding="1.5rem">

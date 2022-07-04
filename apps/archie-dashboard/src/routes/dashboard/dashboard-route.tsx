@@ -10,6 +10,7 @@ import { GetOnboardingResponse } from '@archie-webapps/shared/data-access-archie
 import { useGetOnboarding } from '@archie-webapps/shared/data-access-archie-api/onboarding/hooks/use-get-onboarding';
 import { Header, Loading, Page, Container } from '@archie-webapps/ui-design-system';
 
+import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
 import { Navigation } from '../../components/navigation/navigation';
 
 export const DashboardRoute: FC = () => {
@@ -19,24 +20,27 @@ export const DashboardRoute: FC = () => {
     return <Loading />;
   }
 
-  if (queryResponse.state === RequestState.SUCCESS) {
-    if (!queryResponse.data.completed) {
-      return <Navigate to="/onboarding" />;
-    }
-  }
+  // if (queryResponse.state === RequestState.SUCCESS) {
+  //   if (!queryResponse.data.completed) {
+  //     return <Navigate to="/onboarding" />;
+  //   }
+  // }
 
   return (
     <>
       <Header maxWidth="100%" />
       <Page>
-        <Container justifyContent="center" maxWidth="100%">
-          <Navigation />
-          <Routes>
-            <Route path="/" element={<WalletAndCollateralScreen />} />
-            <Route path="/rewards" element={<RewardsScreen />} />
-            <Route path="/history" element={<HistoryScreen />} />
-            <Route path="/settings" element={<SettingsScreen />} />
-          </Routes>
+        <Container column mobileColumn maxWidth="100%">
+          {/* <Setup2faBanner /> */}
+          <Container justifyContent="center" maxWidth="100%">
+            <Navigation />
+            <Routes>
+              <Route path="/" element={<WalletAndCollateralScreen />} />
+              <Route path="/rewards" element={<RewardsScreen />} />
+              <Route path="/history" element={<HistoryScreen />} />
+              <Route path="/settings" element={<SettingsScreen />} />
+            </Routes>
+          </Container>
         </Container>
       </Page>
     </>
