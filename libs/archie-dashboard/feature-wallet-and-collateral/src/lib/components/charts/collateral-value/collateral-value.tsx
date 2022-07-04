@@ -6,7 +6,6 @@ import { theme } from '@archie-webapps/ui-theme';
 
 import { CollateralValueStyled } from './collateral-value.styled';
 
-
 const data = [
   {
     Collateral: 5,
