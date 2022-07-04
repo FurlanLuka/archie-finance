@@ -1,19 +1,19 @@
 import { RequestState } from '@archie/api-consumer/interface';
 import { useCreateKyc } from '@archie/api-consumer/kyc/hooks/use-create-kyc';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { differenceInYears, isValid, parse, isFuture } from 'date-fns';
 import { templateFormatter, templateParser, parseDigit } from 'input-format';
 import ReactInput from 'input-format/react';
 import { FC } from 'react';
 import Autocomplete from 'react-google-autocomplete';
 import { Controller, FieldErrors, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import * as yup from 'yup';
 
 import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/ui-theme';
 
+import { KycSchema } from './kyc-form.schema';
+import { parseDate } from './kyc-step.helpers';
 import { KycStepStyled } from './kyc-step.styled';
 
 interface GooglePlace {
@@ -69,66 +69,6 @@ const addAddress = (place: GooglePlace): Partial<Address> => {
   return addr;
 };
 
-const parseDate = (value: string) => parse(value, 'MMddyyyy', new Date());
-const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) < 18;
-const maxYears = (value: Date) => differenceInYears(new Date(), new Date(value)) > 122;
-
-const SUPPORTED_COUNTRIES = ['US'];
-
-const schema = yup.object({
-  firstName: yup
-    .string()
-    .required('kyc_step.error.required_field')
-    .min(2, 'kyc_step.error.too_short')
-    .max(50, 'kyc_step.error.too_long'),
-  lastName: yup
-    .string()
-    .required('kyc_step.error.required_field')
-    .min(2, 'kyc_step.error.too_short')
-    .max(50, 'kyc_step.error.too_long'),
-  dateOfBirth: yup
-    .string()
-    .required('kyc_step.error.required_field')
-    .test('is_date_valid', 'kyc_step.error.not_valid_date', (value) => {
-      if (!value) {
-        return false;
-      }
-
-      return isValid(parseDate(value));
-    })
-    .test('minimum_age_test', 'kyc_step.error.should_be_older', (value) => {
-      if (!value) {
-        return false;
-      }
-      return !minYears(parseDate(value));
-    })
-    .test('maximum_age_test', 'kyc_step.error.should_be_under', (value) => {
-      if (!value) {
-        return false;
-      }
-      return !maxYears(parseDate(value));
-    })
-    .test('future_birthday_test', 'kyc_step.error.cannot_be_future', (value) => {
-      if (!value) {
-        return false;
-      }
-      return !isFuture(parseDate(value));
-    }),
-  address: yup.object({
-    addressStreet: yup.string().required('kyc_step.error.not_full_address'),
-    addressStreetNumber: yup.string().required('kyc_step.error.no_street_number'),
-    addressLocality: yup.string().required('kyc_step.error.not_full_address'),
-    addressCountry: yup
-      .string()
-      .required('kyc_step.error.not_full_address')
-      .oneOf(SUPPORTED_COUNTRIES, 'kyc_step.error.not_us_address'),
-    addressRegion: yup.string().required('kyc_step.error.not_full_address'),
-    addressPostalCode: yup.string().required('kyc_step.error.not_full_address'),
-  }),
-  phoneNumber: yup.string().required('kyc_step.error.required_field').min(10, 'kyc_step.error.phone_number_digits'),
-  ssn: yup.string().required('kyc_step.error.required_field').length(9, 'kyc_step.error.ssn_digits'),
-});
-
 export const KycStep: FC = () => {
   const { t } = useTranslation();
 
@@ -150,7 +90,7 @@ export const KycStep: FC = () => {
       phoneNumber: '',
       ssn: '',
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(KycSchema),
   });
 
   const phoneNumberCountryCode = '+1';
