@@ -10,11 +10,11 @@ import { ProtectedRoute } from '@archie-webapps/shared/feature-routing';
 import { GlobalStyles, theme } from '@archie-webapps/ui-theme';
 
 import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants/auth';
-import { DashboardRoute } from './routes/dashboard-route/dashboard-route';
+import { DashboardRoute } from './routes/dashboard/dashboard-route';
 import { LoginRoute } from './routes/login/login-route';
 import { LogoutRoute } from './routes/logout/logout-route';
 import './utils/i18next';
-import { OnboardingRoute } from './routes/onboarding-route/onboarding-route';
+import { OnboardingRoute } from './routes/onboarding/onboarding-route';
 
 const queryClient: QueryClient = new QueryClient();
 
@@ -41,7 +41,14 @@ ReactDOM.render(
                     </ProtectedRoute>
                   }
                 />
-                <Route path="/onboarding" element={<OnboardingRoute />} />
+                <Route
+                  path="/onboarding"
+                  element={
+                    <ProtectedRoute>
+                      <OnboardingRoute />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route path="/login" element={<LoginRoute />} />
                 <Route path="/logout" element={<LogoutRoute />} />
               </Routes>
