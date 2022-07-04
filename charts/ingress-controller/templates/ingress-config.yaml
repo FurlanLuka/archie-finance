@@ -125,7 +125,7 @@ spec:
                 name: archie-credit-api-service
                 port:
                   number: 80
-          - path: /v1/rize/users/cards/virtual
+          - path: /v1/rize/users/cards/image
             pathType: Prefix
             backend:
               service:

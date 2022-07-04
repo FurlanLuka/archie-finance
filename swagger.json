@@ -633,6 +633,28 @@
           },
           "404": {
             "description": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+          },
+          "409": {
+            "description": "ERR_DEBIT_CARD_ALREADY_EXISTS"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/rize/users/cards/image": {
+      "get": {
+        "operationId": "RizeController_getVirtualCard",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Debit card image"
+          },
+          "404": {
+            "description": "ERR_DEBIT_CARD_DOES_NOT_EXIST"
           }
         },
         "security": [

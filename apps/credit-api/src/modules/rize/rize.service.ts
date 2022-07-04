@@ -5,7 +5,6 @@ import { InternalApiService } from '@archie-microservices/internal-api';
 import { RizeApiService } from './api/rize_api.service';
 import {
   ComplianceDocumentAcknowledgementRequest,
-  ComplianceWorkflow,
   ComplianceWorkflowMeta,
   Customer,
   CustomerDetails,
@@ -16,11 +15,12 @@ import {
   DebitCardAlreadyExists,
   DebitCardDoesNotExist,
 } from './rize.errors';
-import { RizeList } from '@rizefinance/rize-js/types/lib/core/typedefs/common.typedefs';
 import {
   DebitCard,
   DebitCardAccessToken,
 } from '@rizefinance/rize-js/types/lib/core/typedefs/debit-card.typedefs';
+import { TransactionResponse } from './rize.interfaces';
+import { Transaction } from '@rizefinance/rize-js/types/lib/core/typedefs/transaction.typedefs';
 
 @Injectable()
 export class RizeService {
@@ -85,6 +85,32 @@ export class RizeService {
       await this.rizeApiService.getDebitCardAccessToken(debitCard.uid);
 
     return this.rizeApiService.getVirtualCardImage(debitCardAccessToken);
+  }
+
+  public async getTransactions(userId: string): Promise<TransactionResponse[]> {
+    const debitCard: DebitCard = await this.rizeApiService.getDebitCard(userId);
+
+    if (debitCard === null) {
+      Logger.error({
+        code: 'DEBIT_CARD_DOES_NOT_EXIST',
+        metadata: {
+          userId,
+        },
+      });
+
+      throw new DebitCardDoesNotExist();
+    }
+    const transactions: Transaction[] =
+      await this.rizeApiService.getTransactions(debitCard.uid);
+
+    return transactions.map((txn) => ({
+      status: txn.status,
+      amount: txn.us_dollar_amount,
+      created_at: txn.created_at,
+      settled_at: txn.settled_at,
+      description: txn.description,
+      type: txn.type,
+    }));
   }
 
   public async createUser(userId: string, userIp: string): Promise<void> {

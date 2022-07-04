@@ -17,6 +17,7 @@ import {
   DebitCard,
 } from './rize_api.interfaces';
 import { DebitCardAccessToken } from '@rizefinance/rize-js/types/lib/core/typedefs/debit-card.typedefs';
+import { Transaction } from '@rizefinance/rize-js/types/lib/core/typedefs/transaction.typedefs';
 
 @Injectable()
 export class RizeApiService {
@@ -293,6 +294,27 @@ export class RizeApiService {
     } catch (error) {
       Logger.error({
         code: 'ERROR_FETCHING_VIRTUAL_CARD_IMAGE',
+        metadata: {
+          error: error,
+          errorResponse: error.data,
+        },
+      });
+
+      throw new InternalServerErrorException();
+    }
+  }
+
+  public async getTransactions(customerId: string): Promise<Transaction[]> {
+    try {
+      const transactions: RizeList<Transaction> =
+        await this.rizeClient.transaction.getList({
+          customer_uid: [customerId],
+        });
+
+      return transactions.data;
+    } catch (error) {
+      Logger.error({
+        code: 'ERROR_FETCHING_TRANSACTIONS',
         metadata: {
           error: error,
           errorResponse: error.data,

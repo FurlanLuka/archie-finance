@@ -9,7 +9,7 @@ import {
   Response,
 } from '@nestjs/common';
 import { RizeService } from './rize.service';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie-microservices/openapi';
 import {
   CustomerAlreadyExists,
@@ -17,6 +17,7 @@ import {
   DebitCardAlreadyExists,
   DebitCardDoesNotExist,
 } from './rize.errors';
+import { TransactionResponseDto } from './rize.dto';
 
 @Controller('v1/rize')
 export class RizeController {
@@ -43,16 +44,30 @@ export class RizeController {
     return this.rizeService.createCard(req.user.sub);
   }
 
-  @Get('users/cards/virtual')
+  @Get('users/cards/image')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([DebitCardDoesNotExist])
+  @ApiOkResponse({
+    status: 200,
+    description: 'Debit card image',
+  })
   public async getVirtualCard(@Request() req, @Response() res): Promise<void> {
     const virtualCard: string = await this.rizeService.getVirtualCard(
       req.user.sub,
     );
 
     res.writeHead(200, { 'Content-Type': 'image/png' });
-    res.sendFi(Buffer.from(virtualCard, 'base64'));
+    res.end(Buffer.from(virtualCard, 'base64'));
+  }
+
+  @Get('users/transactions')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiErrorResponse([DebitCardDoesNotExist])
+  public async getTransactions(
+    @Request() req,
+  ): Promise<TransactionResponseDto[]> {
+    return this.rizeService.getTransactions(req.user.sub);
   }
 }
