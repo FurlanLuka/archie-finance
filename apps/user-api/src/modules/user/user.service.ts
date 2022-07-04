@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import {
   Enrollment,
-  SendEnrollmentTicketData,
   SendEnrollmentTicketResponse,
   User,
 } from 'auth0';

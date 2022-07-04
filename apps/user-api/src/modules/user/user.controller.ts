@@ -12,6 +12,8 @@ import {
 import {
   GetEmailVerificationResponseDto,
   GetEmailAddressResponseDto,
+  GetSendEnrollmentTicketResponseDto,
+  EnrollmentDto,
 } from './user.dto';
 import { UserService } from './user.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -42,18 +44,21 @@ export class UserController {
 
   @Post('mfa/enroll')
   @UseGuards(AuthGuard)
-  async enrollMfa(@Req() request): Promise<SendEnrollmentTicketResponse> {
+  @ApiBearerAuth()
+  async enrollMfa(@Req() request): Promise<GetSendEnrollmentTicketResponseDto> {
     return this.userService.enrollMfa(request.user.sub);
   }
 
   @Get('mfa/enrollments')
   @UseGuards(AuthGuard)
-  async getMfaEnrollments(@Req() request): Promise<Enrollment[]> {
+  @ApiBearerAuth()
+  async getMfaEnrollments(@Req() request): Promise<EnrollmentDto[]> {
     return this.userService.getMfaEnrollments(request.user.sub);
   }
 
   @Get('mfa/enrollment')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   async isMfaEnrolled(@Req() request): Promise<GetMfaEnrollmentResponse> {
     return this.userService.isMfaEnrolled(request.user.sub);
   }
