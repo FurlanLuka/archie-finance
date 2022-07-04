@@ -13,14 +13,14 @@ import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/ui-theme';
 import { CollateralAsset, Step } from '@archie-webapps/util-constants';
 
-import { CollateralAssetSelect } from '../collateral-asset-select/collateral-asset-select';
-import { Collateral } from '../collateral/collateral';
-import { EmailVerification } from '../email-verification/email-verification';
-import { StepsIndicator } from '../steps-indicator/steps-indicator';
+import { CollateralAssetSelect } from '../../components/collateral-asset-select/collateral-asset-select';
+import { Collateral } from '../../components/collateral/collateral';
+import { EmailVerification } from '../../components/email-verification/email-verification';
+import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
-import { CollateralizationStepStyled } from './collateralization-step.styled';
+import { CollateralizationScreenStyled } from './collateralization-screen.styled';
 
-export const CollateralizationStep: FC = () => {
+export const CollateralizationScreen: FC = () => {
   const { t } = useTranslation();
 
   const [lineOfCredit, setLineOfCredit] = useState(200);
@@ -88,7 +88,7 @@ export const CollateralizationStep: FC = () => {
       <Collateral />
       <StepsIndicator currentStep={Step.COLLATERALIZE} />
       <EmailVerification />
-      <CollateralizationStepStyled>
+      <CollateralizationScreenStyled>
         <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
         <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
 
@@ -246,7 +246,7 @@ export const CollateralizationStep: FC = () => {
           </div>
           <div className={`overlay ${getDepositAddress() && 'fade-out'}`} />
         </div>
-      </CollateralizationStepStyled>
+      </CollateralizationScreenStyled>
     </Container>
   );
 };

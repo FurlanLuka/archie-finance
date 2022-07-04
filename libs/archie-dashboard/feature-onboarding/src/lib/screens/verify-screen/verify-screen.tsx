@@ -9,9 +9,9 @@ import { ButtonPrimary, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design
 import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/ui-theme';
 
-import { VerifyStepStyled } from './verify-step.styled';
+import { VerifyScreenStyled } from './verify-screen.styled';
 
-export const VerifyStep: FC = () => {
+export const VerifyScreen: FC = () => {
   const { t } = useTranslation();
 
   const [code, setCode] = useState('');
@@ -51,7 +51,7 @@ export const VerifyStep: FC = () => {
   };
 
   return (
-    <VerifyStepStyled>
+    <VerifyScreenStyled>
       <SubtitleM className="title">{t('verify_step.title')}</SubtitleM>
       <ParagraphXS className="subtitle">{t('verify_step.subtitle')}</ParagraphXS>
       <ReactCodeInput onComplete={(values) => setCode(values)} className="code-input" />
@@ -71,6 +71,6 @@ export const VerifyStep: FC = () => {
         {t('btn_next')}
         <Icon name="arrow-right" fill={theme.textLight} />
       </ButtonPrimary>
-    </VerifyStepStyled>
+    </VerifyScreenStyled>
   );
 };

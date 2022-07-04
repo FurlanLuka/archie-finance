@@ -12,9 +12,9 @@ import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@a
 import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/ui-theme';
 
+import { parseDate } from './kyc-form.helpers';
 import { KycSchema } from './kyc-form.schema';
-import { parseDate } from './kyc-step.helpers';
-import { KycStepStyled } from './kyc-step.styled';
+import { KycScreenStyled } from './kyc-screen.styled';
 
 interface GooglePlace {
   address_components: Array<{
@@ -69,7 +69,7 @@ const addAddress = (place: GooglePlace): Partial<Address> => {
   return addr;
 };
 
-export const KycStep: FC = () => {
+export const KycScreen: FC = () => {
   const { t } = useTranslation();
 
   const mutationRequest = useCreateKyc();
@@ -110,7 +110,7 @@ export const KycStep: FC = () => {
   });
 
   return (
-    <KycStepStyled>
+    <KycScreenStyled>
       <SubtitleM className="title">{t('kyc_step.title')}</SubtitleM>
       <ParagraphXS className="subtitle">{t('kyc_step.subtitle')}</ParagraphXS>
       <form onSubmit={onSubmit}>
@@ -231,6 +231,6 @@ export const KycStep: FC = () => {
           <Icon name="arrow-right" fill={theme.textLight} />
         </ButtonPrimary>
       </form>
-    </KycStepStyled>
+    </KycScreenStyled>
   );
 };

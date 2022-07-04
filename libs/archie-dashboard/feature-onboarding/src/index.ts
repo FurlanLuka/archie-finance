@@ -1,1 +1,1 @@
-export * from './lib/screens/onboarding-screen';
+export * from './lib/screens/onboarding-handler/onboarding-handler';

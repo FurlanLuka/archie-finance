@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints } from '@archie-webapps/ui-theme';
 
-export const CardStepStyled = styled.div`
+export const CardScreenStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

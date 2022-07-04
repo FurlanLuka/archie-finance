@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { WalletAndCollateralScreen } from '@archie-webapps/archie-dashboard/feature-dashboard';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
@@ -20,11 +20,11 @@ export const DashboardRoute: FC = () => {
     return <Loading />;
   }
 
-  // if (queryResponse.state === RequestState.SUCCESS) {
-  //   if (!queryResponse.data.completed) {
-  //     return <Navigate to="/onboarding" />;
-  //   }
-  // }
+  if (queryResponse.state === RequestState.SUCCESS) {
+    if (!queryResponse.data.completed) {
+      return <Navigate to="/onboarding" />;
+    }
+  }
 
   return (
     <>

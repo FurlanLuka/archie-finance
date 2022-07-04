@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints } from '@archie-webapps/ui-theme';
 
-export const KycStepStyled = styled.div`
+export const KycScreenStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -1,7 +1,7 @@
 import { differenceInYears, isValid, isFuture } from 'date-fns';
 import * as yup from 'yup';
 
-import { parseDate } from './kyc-step.helpers';
+import { parseDate } from './kyc-form.helpers';
 
 const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) < 18;
 const maxYears = (value: Date) => differenceInYears(new Date(), new Date(value)) > 122;

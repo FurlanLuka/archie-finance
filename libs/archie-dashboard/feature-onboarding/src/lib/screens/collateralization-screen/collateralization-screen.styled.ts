@@ -38,7 +38,7 @@ const scale = keyframes`
   }
 `;
 
-export const CollateralizationStepStyled = styled.div`
+export const CollateralizationScreenStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;

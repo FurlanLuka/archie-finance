@@ -16,10 +16,10 @@ import { ButtonPrimary, Container, ParagraphXS, SubtitleM } from '@archie-webapp
 import { Step } from '@archie-webapps/util-constants';
 
 import imgCardReady from '../../../assets/img-card-ready.png';
-import { EmailVerification } from '../email-verification/email-verification';
-import { StepsIndicator } from '../steps-indicator/steps-indicator';
+import { EmailVerification } from '../../components/email-verification/email-verification';
+import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
-import { CardStepStyled } from './card-step.styled';
+import { CardScreenStyled } from './card-screen.styled';
 
 enum Stage {
   CREATE_USER,
@@ -27,7 +27,7 @@ enum Stage {
   COMPLETE,
 }
 
-export const CardStep: FC = () => {
+export const CardScreen: FC = () => {
   const { t } = useTranslation();
 
   const [stage, setStage] = useState(Stage.CREATE_USER);
@@ -92,7 +92,7 @@ export const CardStep: FC = () => {
     <Container column mobileColumn alignItems="center">
       <StepsIndicator currentStep={Step.CARD} />
       <EmailVerification />
-      <CardStepStyled>
+      <CardScreenStyled>
         <SubtitleM className="title">{getTitle()}</SubtitleM>
         <ParagraphXS className="subtitle">
           {stage === Stage.COMPLETE && (
@@ -114,7 +114,7 @@ export const CardStep: FC = () => {
         >
           {t('card_step.btn')}
         </ButtonPrimary>
-      </CardStepStyled>
+      </CardScreenStyled>
     </Container>
   );
 };

@@ -6,29 +6,29 @@ import { useGetOnboarding } from '@archie-webapps/shared/data-access-archie-api/
 import { Header, Loading, Page } from '@archie-webapps/ui-design-system';
 import { Step } from '@archie-webapps/util-constants';
 
-import { CardStep } from '../components/card-step/card-step';
-import { CollateralizationStep } from '../components/collateralization-step/collateralization-step';
-import { KycStep } from '../components/kyc-step/kyc-step';
-import { VerifyStep } from '../components/verify-step/verify-step';
+import { CardScreen } from '../card-screen/card-screen';
+import { CollateralizationScreen } from '../collateralization-screen/collateralization-screen';
+import { KycScreen } from '../kyc-screen/kyc-screen';
+import { VerifyScreen } from '../verify-screen/verify-screen';
 
-import { OnboardingStyled } from './onboarding-screen.styled';
+import { OnboardingStyled } from './onboarding-handler.styled';
 
 function getCurrentStep(step: Step) {
   switch (step) {
     case Step.KYC:
-      return <KycStep />;
+      return <KycScreen />;
     case Step.VERIFY:
-      return <VerifyStep />;
+      return <VerifyScreen />;
     case Step.COLLATERALIZE:
-      return <CollateralizationStep />;
+      return <CollateralizationScreen />;
     case Step.CARD:
-      return <CardStep />;
+      return <CardScreen />;
     default:
-      return <KycStep />;
+      return <KycScreen />;
   }
 }
 
-export const OnboardingScreen: FC = () => {
+export const OnboardingHandler: FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
 
   const [currentStep, setCurrentStep] = useState<Step>();
