@@ -65,6 +65,7 @@ export class RizeController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([DebitCardDoesNotExist])
+  // TODO: Add paging
   public async getTransactions(
     @Request() req,
   ): Promise<TransactionResponseDto[]> {
