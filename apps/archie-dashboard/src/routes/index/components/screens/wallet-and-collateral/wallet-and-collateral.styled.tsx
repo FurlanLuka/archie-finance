@@ -1,25 +1,23 @@
 import styled from 'styled-components';
 
-import { breakpoints, NAV_WIDTH } from '@archie-webapps/ui-theme';
+import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/ui-theme';
 
-export const IndexStyled = styled.div`
-  display: flex;
-  justify-content: center;
+export const WalletAndCollateralStyled = styled.div`
   width: 100%;
+  max-width: calc(1000px + 4rem);
+  margin-left: ${NAV_WIDTH};
+  padding: 3rem 2rem;
 
-  .content {
-    width: 100%;
-    max-width: calc(1000px + 4rem);
-    margin-left: ${NAV_WIDTH};
-    padding: 3rem 2rem;
+  @media (max-width: ${breakpoints.screenLG}) {
+    margin-left: ${NAV_WIDTH_TABLET};
+  }
 
-    @media (max-width: ${breakpoints.screenMD}) {
-      margin: 0;
-    }
+  @media (max-width: ${breakpoints.screenMD}) {
+    margin: 0;
+  }
 
-    @media (max-width: ${breakpoints.screenSM}) {
-      padding: 1.5rem 1rem;
-    }
+  @media (max-width: ${breakpoints.screenSM}) {
+    padding: 1.5rem 1rem;
   }
 
   .title {
@@ -38,12 +36,23 @@ export const IndexStyled = styled.div`
 
     @media (max-width: ${breakpoints.screenMD}) {
       flex-wrap: wrap;
+      max-width: 70%;
+    }
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      max-width: 100%;
     }
   }
 
   .archie-card {
     max-width: 420px;
-    min-height: 240px;
+    min-width: 420px;
+    min-height: 264px;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      min-width: 100%;
+      min-height: 225px;
+    }
   }
 
   .table-title {
@@ -87,5 +96,14 @@ export const IndexStyled = styled.div`
     border-bottom-right-radius: 0.5rem;
     padding: 0.5rem 1.5rem;
   }
-`
 
+  .text-group {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.25rem;
+
+    p {
+      padding-bottom: 0.25rem;
+    }
+  }
+`;
