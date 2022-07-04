@@ -1,3 +1,4 @@
+<<<<<<< HEAD:libs/archie-dashboard/feature-dashboard/src/lib/screens/dashboard-screen.tsx
 import { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
@@ -36,13 +37,24 @@ import { DashboardStyled } from './dashboard-screen.styled';
 export const DashboardScreen: FC = () => {
   const { t } = useTranslation();
 
+=======
+import { QueryResponse, RequestState } from '@archie/api-consumer/interface';
+import { GetOnboardingResponse } from '@archie/api-consumer/onboarding/api/get-onboarding';
+import { useGetOnboarding } from '@archie/api-consumer/onboarding/hooks/use-get-onboarding';
+import { FC } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+
+import { Header, Loading, Page, Container } from '@archie-webapps/ui-design-system';
+
+import { Navigation } from './components/navigation/navigation';
+import { History } from './components/screens/history/history';
+import { Rewards } from './components/screens/rewards/rewards';
+import { Settings } from './components/screens/settings/settings';
+import { WalletAndCollateral } from './components/screens/wallet-and-collateral/wallet-and-collateral';
+
+export const DashboardRoute: FC = () => {
+>>>>>>> feature/forms:apps/archie-dashboard/src/routes/index/index-route.tsx
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
-
-  const [revealCardModalOpen, setRevealCardModalOpen] = useState(false);
-  const [revealCardData, setRevealCardData] = useState(false);
-
-  const columns = useMemo(() => tableColumns, []);
-  const data = useMemo(() => tableData, []);
 
   if (queryResponse.state === RequestState.LOADING) {
     return <Loading />;
@@ -54,13 +66,11 @@ export const DashboardScreen: FC = () => {
     }
   }
 
-  const name = 'Lando';
-  const date = 'February, 2022';
-
   return (
     <>
       <Header maxWidth="100%" />
       <Page>
+<<<<<<< HEAD:libs/archie-dashboard/feature-dashboard/src/lib/screens/dashboard-screen.tsx
         <DashboardStyled>
           <Navigation />
           <div className="content">
@@ -189,6 +199,17 @@ export const DashboardScreen: FC = () => {
             </div>
           </div>
         </DashboardStyled>
+=======
+        <Container justifyContent="center" maxWidth="100%">
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<WalletAndCollateral />} />
+            <Route path="/rewards" element={<Rewards />} />
+            <Route path="/history" element={<History />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </Container>
+>>>>>>> feature/forms:apps/archie-dashboard/src/routes/index/index-route.tsx
       </Page>
     </>
   );

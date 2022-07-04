@@ -15,6 +15,10 @@ export const NavigationStyled = styled.div`
   margin-top: ${HEADER_HEIGHT};
   z-index: 1;
 
+  @media (max-width: ${breakpoints.screenLG}) {
+    min-width: auto;
+  }
+
   @media (max-width: ${breakpoints.screenMD}) {
     display: none;
   }
@@ -27,7 +31,11 @@ export const NavigationStyled = styled.div`
     cursor: pointer;
   }
 
-  p {
+  .nav-item-title {
     padding-bottom: 0.2rem;
+
+    @media (max-width: ${breakpoints.screenLG}) {
+      display: none;
+    }
   }
 `;

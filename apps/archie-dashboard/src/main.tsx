@@ -34,7 +34,7 @@ ReactDOM.render(
             <BrowserRouter>
               <Routes>
                 <Route
-                  path="/"
+                  path="*"
                   element={
                     <ProtectedRoute>
                       <DashboardScreen />
