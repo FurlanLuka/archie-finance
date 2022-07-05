@@ -3,7 +3,7 @@ import { DefaultVariables, postRequest } from '../../helpers';
 
 export const issueCard = async ({ accessToken }: DefaultVariables): Promise<unknown> => {
   return postRequest(
-    `${API_URL}/v1/apto/user/card`,
+    `${API_URL}/v1/rize/users/cards`,
     {},
     {
       headers: {

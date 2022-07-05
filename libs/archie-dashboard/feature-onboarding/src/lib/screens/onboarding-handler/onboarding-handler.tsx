@@ -17,8 +17,6 @@ function getCurrentStep(step: Step) {
   switch (step) {
     case Step.KYC:
       return <KycScreen />;
-    case Step.VERIFY:
-      return <VerifyScreen />;
     case Step.COLLATERALIZE:
       return <CollateralizationScreen />;
     case Step.CARD:
@@ -37,8 +35,6 @@ export const OnboardingHandler: FC = () => {
     if (queryResponse.state === RequestState.SUCCESS) {
       if (queryResponse.data.kycStage === false) {
         setCurrentStep(Step.KYC);
-      } else if (queryResponse.data.phoneVerificationStage === false) {
-        setCurrentStep(Step.VERIFY);
       } else if (queryResponse.data.collateralizationStage === false) {
         setCurrentStep(Step.COLLATERALIZE);
       } else if (queryResponse.data.cardActivationStage === false) {

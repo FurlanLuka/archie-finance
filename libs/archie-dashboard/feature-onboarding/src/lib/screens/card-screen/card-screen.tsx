@@ -4,7 +4,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { TotalCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-total-value';
 import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-total-value';
 import { GetCreditResponse } from '@archie-webapps/shared/data-access-archie-api/credit/api/get-credit';
-import { useCreateAptoUser } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-create-apto-user';
+import { useCreateRizeUser } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-create-rize-user';
 import { useGetCredit } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-get-credit';
 import { useIssueCard } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-issue-card';
 import {
@@ -32,7 +32,7 @@ export const CardScreen: FC = () => {
 
   const [stage, setStage] = useState(Stage.CREATE_USER);
 
-  const createUserQuery: MutationQueryResponse = useCreateAptoUser();
+  const createUserQuery: MutationQueryResponse = useCreateRizeUser();
   const issueCardQuery: MutationQueryResponse = useIssueCard();
   const getCreditQueryResponse: QueryResponse<GetCreditResponse> = useGetCredit();
   const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = useGetCollateralTotalValue();
