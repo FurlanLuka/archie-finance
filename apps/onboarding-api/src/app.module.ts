@@ -3,9 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '@archie/api/onboarding-api/constants';
+import { OnboardingModule } from '@archie/api/onboarding-api/onboarding';
 import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
-import { OnboardingModule } from './modules/onboarding/onboarding.module';
 
 @Module({
   imports: [
