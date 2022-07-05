@@ -19,7 +19,7 @@ import {
   StartVerificationResponse,
 } from './apto_api.interfaces';
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from 'axios';
-import { ConfigVariables } from '../../../interfaces';
+import { ConfigVariables } from '@archie/api/credit-api/constants';
 import { CryptoService } from '@archie-microservices/crypto';
 
 @Injectable()

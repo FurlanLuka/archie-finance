@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { GenerateAddressResponse, VaultAccountResponse } from 'fireblocks-sdk';
 import { ConfigService } from '@archie-microservices/config';
 import { FireblocksService } from '../fireblocks/fireblocks.service';
-import { ConfigVariables } from '../../interfaces';
+import { ConfigVariables } from '@archie/api/collateral-api/constants';
 
 @Injectable()
 export class OmnibusVaultAccountService {

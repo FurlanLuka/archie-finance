@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
-import { ConfigVariables } from './interfaces';
+import { ConfigVariables } from '@archie/api/credit-api/constants';
 import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
 import { CreditModule } from './modules/credit/credit.module';

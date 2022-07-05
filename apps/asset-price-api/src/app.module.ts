@@ -2,7 +2,7 @@ import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { HealthModule } from '@archie-microservices/health';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigVariables } from './interfaces';
+import { ConfigVariables } from '@archie/api/asset-price-api/constants';
 import { AssetPriceModule } from './modules/asset_price/asset_price.module';
 
 @Module({
