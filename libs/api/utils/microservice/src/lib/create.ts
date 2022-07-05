@@ -33,7 +33,7 @@ export async function createMicroservice(
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors();
 
-  await app.listen(3000);
+  await app.listen(80);
 
   await Openapi.generate(app);
 
