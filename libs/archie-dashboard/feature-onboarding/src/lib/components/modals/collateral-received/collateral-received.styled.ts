@@ -32,9 +32,16 @@ export const CollateralReceivedModalStyled = styled.div`
     }
   }
 
-  button {
+  .btn-group {
+    display: flex;
+    gap: 1rem;
+
     @media (max-width: ${breakpoints.screenSM}) {
-      max-width: 100%;
+      flex-direction: column;
+
+      button {
+        max-width: 100%;
+      }
     }
   }
 `;
