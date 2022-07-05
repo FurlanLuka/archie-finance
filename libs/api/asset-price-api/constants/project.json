@@ -1,13 +1,13 @@
 {
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/api/user/constants/src",
+  "sourceRoot": "libs/api/asset-price-api/constants/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/api/user/constants/**/*.ts"]
+        "lintFilePatterns": ["libs/api/asset-price-api/constants/**/*.ts"]
       }
     }
   },

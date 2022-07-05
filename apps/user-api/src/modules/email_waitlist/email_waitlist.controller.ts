@@ -8,7 +8,7 @@ import {
 import axios from 'axios';
 import { ConfigService } from '@archie-microservices/config';
 import { EmailWaitlistDto } from './email_waitlist.dto';
-import { ConfigVariables } from '@archie/api/user/constants';
+import { ConfigVariables } from '@archie/api/user-api/constants';
 
 @Controller('v1/email_waitlist')
 export class EmailWaitlistController {

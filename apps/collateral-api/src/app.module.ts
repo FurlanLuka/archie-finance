@@ -9,7 +9,7 @@ import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
 import { CollateralModule } from './modules/collateral/collateral.module';
 import { AssetInformationModule } from './modules/asset_information/asset_information.module';
-import { ConfigVariables } from '@archie/api/collateral/constants'
+import { ConfigVariables } from '@archie/api/collateral-api/constants';
 
 @Module({
   imports: [

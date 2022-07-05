@@ -8,7 +8,7 @@ import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
 import { VaultModule } from '@archie-microservices/vault';
 import { InternalApiModule } from '@archie-microservices/internal-api';
-import { ConfigVariables } from '@archie/api/user/constants';
+import { ConfigVariables } from '@archie/api/user-api/constants';
 
 @Module({
   imports: [

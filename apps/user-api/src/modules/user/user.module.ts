@@ -4,7 +4,7 @@ import { Auth0Module } from '../auth0/auth0.module';
 import { InternalUserController, UserController } from './user.controller';
 import { UserService } from './user.service';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
-import { ConfigVariables } from '@archie/api/user/constants';
+import { ConfigVariables } from '@archie/api/user-api/constants';
 
 @Module({
   imports: [

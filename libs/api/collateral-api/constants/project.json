@@ -1,13 +1,13 @@
 {
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/api/referral-system/constants/src",
+  "sourceRoot": "libs/api/collateral-api/constants/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/api/referral-system/constants/**/*.ts"]
+        "lintFilePatterns": ["libs/api/collateral-api/constants/**/*.ts"]
       }
     }
   },

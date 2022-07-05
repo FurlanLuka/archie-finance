@@ -4,7 +4,7 @@ import { Strategy } from 'passport-custom';
 import { ConfigService } from '@archie-microservices/config';
 import * as crypto from 'crypto';
 import { CryptoService } from '@archie-microservices/crypto';
-import { ConfigVariables } from '@archie/api/collateral/constants'
+import { ConfigVariables } from '@archie/api/collateral-api/constants';
 
 @Injectable()
 export class FireblocksWebhookStrategy extends PassportStrategy(

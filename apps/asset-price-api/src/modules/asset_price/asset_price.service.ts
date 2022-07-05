@@ -4,7 +4,7 @@ import { AssetPrice } from './asset_price.entity';
 import { Repository } from 'typeorm';
 import { AssetPriceHistory } from './asset_price_history.entity';
 import { ConfigService } from '@archie-microservices/config';
-import { ConfigVariables } from '@archie/api/asset-price/constants';
+import { ConfigVariables } from '@archie/api/asset-price-api/constants';
 import {
   GetAssetPriceResponse,
   GetAssetPricesResponse,
