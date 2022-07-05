@@ -17,12 +17,12 @@ export const Setup2faBanner: FC = () => {
   return (
     <Setup2faBannerStyled>
       <div className="image">
-        <img src={img2fa} alt={t('setup_2fa_alert.img_alt')} />
+        <img src={img2fa} alt={t('setup_2fa_banner.img_alt')} />
       </div>
       <div className="content">
         <div className="text">
-          <ParagraphS weight={800}>{t('setup_2fa_alert.title')}</ParagraphS>
-          <ParagraphXS>{t('setup_2fa_alert.text')}</ParagraphXS>
+          <ParagraphS weight={800}>{t('setup_2fa_banner.title')}</ParagraphS>
+          <ParagraphXS>{t('setup_2fa_banner.text')}</ParagraphXS>
         </div>
         <ButtonGhost maxWidth="fit-content" onClick={handleClick}>
           {t('btn_continue')}
