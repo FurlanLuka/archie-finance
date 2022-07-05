@@ -7,6 +7,7 @@ import {
   Request,
   UseGuards,
   Response,
+  Query,
 } from '@nestjs/common';
 import { RizeService } from './rize.service';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
@@ -17,7 +18,7 @@ import {
   DebitCardAlreadyExists,
   DebitCardDoesNotExist,
 } from './rize.errors';
-import { TransactionResponseDto } from './rize.dto';
+import { GetTransactionsQueryDto, TransactionResponseDto } from './rize.dto';
 
 @Controller('v1/rize')
 export class RizeController {
@@ -64,11 +65,15 @@ export class RizeController {
   @Get('users/transactions')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([DebitCardDoesNotExist])
-  // TODO: Add paging
+  @ApiErrorResponse([ActiveCustomerDoesNotExist])
   public async getTransactions(
     @Request() req,
+    @Query() query: GetTransactionsQueryDto,
   ): Promise<TransactionResponseDto[]> {
-    return this.rizeService.getTransactions(req.user.sub);
+    return this.rizeService.getTransactions(
+      req.user.sub,
+      query.page,
+      query.limit,
+    );
   }
 }

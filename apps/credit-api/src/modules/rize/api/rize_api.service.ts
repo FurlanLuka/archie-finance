@@ -15,9 +15,9 @@ import {
   RizeList,
   Product,
   DebitCard,
+  DebitCardAccessToken,
+  Transaction,
 } from './rize_api.interfaces';
-import { DebitCardAccessToken } from '@rizefinance/rize-js/types/lib/core/typedefs/debit-card.typedefs';
-import { Transaction } from '@rizefinance/rize-js/types/lib/core/typedefs/transaction.typedefs';
 
 @Injectable()
 export class RizeApiService {
@@ -304,11 +304,18 @@ export class RizeApiService {
     }
   }
 
-  public async getTransactions(customerId: string): Promise<Transaction[]> {
+  public async getTransactions(
+    customerId: string,
+    page: number,
+    limit: number,
+  ): Promise<Transaction[]> {
     try {
       const transactions: RizeList<Transaction> =
         await this.rizeClient.transaction.getList({
           customer_uid: [customerId],
+          limit: limit,
+          offset: page * limit,
+          sort: 'created_at_desc',
         });
 
       return transactions.data;

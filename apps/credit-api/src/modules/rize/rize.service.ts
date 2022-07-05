@@ -8,6 +8,9 @@ import {
   ComplianceWorkflowMeta,
   Customer,
   CustomerDetails,
+  DebitCard,
+  Transaction,
+  DebitCardAccessToken,
 } from './api/rize_api.interfaces';
 import {
   CustomerAlreadyExists,
@@ -16,11 +19,10 @@ import {
   DebitCardDoesNotExist,
 } from './rize.errors';
 import {
-  DebitCard,
-  DebitCardAccessToken,
-} from '@rizefinance/rize-js/types/lib/core/typedefs/debit-card.typedefs';
-import { TransactionResponse } from './rize.interfaces';
-import { Transaction } from '@rizefinance/rize-js/types/lib/core/typedefs/transaction.typedefs';
+  TransactionResponse,
+  TransactionStatus,
+  TransactionType,
+} from './rize.interfaces';
 
 @Injectable()
 export class RizeService {
@@ -87,29 +89,37 @@ export class RizeService {
     return this.rizeApiService.getVirtualCardImage(debitCardAccessToken);
   }
 
-  public async getTransactions(userId: string): Promise<TransactionResponse[]> {
-    const debitCard: DebitCard = await this.rizeApiService.getDebitCard(userId);
+  public async getTransactions(
+    userId: string,
+    page: number,
+    limit: number,
+  ): Promise<TransactionResponse[]> {
+    const customer: Customer | null = await this.rizeApiService.searchCustomers(
+      userId,
+    );
 
-    if (debitCard === null) {
+    if (customer === null || customer.status !== 'active') {
       Logger.error({
-        code: 'DEBIT_CARD_DOES_NOT_EXIST',
+        code: 'CUSTOMER_DOES_NOT_EXIST',
         metadata: {
           userId,
+          customerId: customer.uid,
         },
       });
 
-      throw new DebitCardDoesNotExist();
+      throw new ActiveCustomerDoesNotExist();
     }
-    const transactions: Transaction[] =
-      await this.rizeApiService.getTransactions(debitCard.uid);
 
-    return transactions.map((txn) => ({
-      status: txn.status,
+    const transactions: Transaction[] =
+      await this.rizeApiService.getTransactions(customer.uid, page, limit);
+
+    return transactions.map((txn: Transaction) => ({
+      status: <TransactionStatus>txn.status,
       amount: txn.us_dollar_amount,
       created_at: txn.created_at,
       settled_at: txn.settled_at,
       description: txn.description,
-      type: txn.type,
+      type: <TransactionType>txn.type,
     }));
   }
 
