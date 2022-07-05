@@ -2,50 +2,65 @@ name: Development
 
 on:
   push:
-    tags:
-      - app-*-v*-alpha
-
+    branches:
+      - develop
+ 
 env:
   ECR_REPOSITORY: archie-development-container-repository
   AWS_REGION: us-east-1
 
 jobs:
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Git check few things
-        run: |
-          git checkout main
-          git rev-parse HEAD
-      - uses: nrwl/nx-set-shas@v2
-      - name: Install dependencies
-        run: npm i
-      - name: Workspace lint
-        run: npx nx workspace-lint
-      # - name: Format check
-      #   run: npx nx format:check
-      - name: Affected lint
-        run: npx nx affected --target=lint --parallel=3
-      - name: Affected test
-        run: npx nx affected --target=test --parallel=3 --ci --code-coverage
-      - name: Affected build
-        run: npx nx affected --target=build --parallel=3
-  publish:
-    name: Publish image
-    needs: test
+  check_and_build:
+    name: Check and Build
     runs-on: ubuntu-latest
     environment: development
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+      name: Checkout
+      with:
+        fetch-depth: 0
+    - uses: nrwl/nx-set-shas@v2
+      with:
+        main-branch-name: 'develop'
+    - uses: ./.github/actions/install-dependencies
+      name: Install dependencies
+    - name: Workspace Lint
+      run: npx nx workspace-lint
+    - name: Affected Lint
+      run: npx nx affected --target=lint --parallel=3
+    - name: Affected Test
+      run: npx nx affected --target=test --parallel=3 --ci --code-coverage
+    - name: Affected Build
+      run: npx nx affected --target=build --parallel=3
+    - name: Store build artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: services-build-development
+        path: ./dist
+        retention-days: 1
+  build_and_public:
+    name: Build docker image and publish 
+    needs: check_and_build
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+    - uses: actions/checkout@v2
+      name: Checkout
+      with:
+        fetch-depth: 0
     - name: Extract details from Git
       id: git_details
       uses: ./.github/actions/extract-metadata
+    - uses: nrwl/nx-set-shas@v2
+      with:
+        main-branch-name: 'develop'
+    - uses: ./.github/actions/install-dependencies
+      name: Install dependencies
+    - name: Download build artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: services-build-development
+        path: ./dist
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -55,28 +70,27 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    - name: Build, tag, and push image to Amazon ECR
-      id: build-image
+    - name: Affected docker build
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
-        APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
-      run: |
-        docker build -f ./apps/$APP_NAME/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-    outputs:
-      image_tag: ${{ steps.git_details.outputs.SOURCE_TAG }}
+        IMAGE_TAG: ${{ steps.git_details.outputs.COMMIT_HASH }}
+      run: npx nx affected --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
   deploy:
-    name: Deploy development
-    needs: publish
+    name: Deploy to kubernetes cluster
+    needs: build_and_public
     runs-on: ubuntu-latest
+    environment: development
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+      name: Checkout
+      with:
+        fetch-depth: 0
     - name: Extract details from Git
       id: git_details
       uses: ./.github/actions/extract-metadata
+    - uses: nrwl/nx-set-shas@v2
+    - uses: ./.github/actions/install-dependencies
+      name: Install dependencies
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -86,19 +100,9 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    - name: Test
-      env:
-        CHART: ./charts/${{ steps.git_details.outputs.APP_NAME }}
-      run: |
-        cd $CHART
-        ls 
-    - name: Deploy
-      uses: koslib/helm-eks-action@master
+    - name: Affected deploy
+      uses: ./.github/actions/node-helm
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ needs.publish.outputs.image_tag }}
-        CHART: ./charts/${{ steps.git_details.outputs.APP_NAME }}
-        APP_NAME: ${{ steps.git_details.outputs.APP_NAME }}
       with:
-        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment="development"
+        args: --target=deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.COMMIT_HASH }} --environment=development

@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: default
-  {{- if .Values.production }}
+  {{- if eq .Values.environment "production" }}
   name: archie-production-internal-ingress
   {{- else }}
   name: archie-development-internal-ingress
@@ -11,7 +11,7 @@ metadata:
     {{- if .Values.local }}
     kubernetes.io/ingress.class: nginx
     {{- else }}
-    {{- if .Values.production }}
+    {{- if eq .Values.environment "production" }}
     alb.ingress.kubernetes.io/group.name: archie-production
     {{- else }}
     alb.ingress.kubernetes.io/group.name: archie-development

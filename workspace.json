@@ -13,6 +13,7 @@
     "internal-api": "libs/internal-api",
     "onboarding-api": "apps/onboarding-api",
     "openapi": "libs/openapi",
+    "plugin-deployment": "libs/plugin-deployment",
     "referral-system-api": "apps/referral-system-api",
     "sendgrid": "libs/sendgrid",
     "user-api": "apps/user-api",
