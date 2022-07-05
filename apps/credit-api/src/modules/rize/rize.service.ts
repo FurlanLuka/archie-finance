@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
 import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
 import { InternalApiService } from '@archie-microservices/internal-api';
@@ -11,11 +11,6 @@ import {
   Transaction,
   DebitCardAccessToken,
 } from './api/rize_api.interfaces';
-import {
-  CustomerAlreadyExists,
-  DebitCardAlreadyExists,
-  DebitCardDoesNotExist,
-} from './rize.errors';
 import {
   TransactionResponse,
   TransactionStatus,
