@@ -13,10 +13,10 @@ import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/ui-theme';
 import { CollateralAsset, Step } from '@archie-webapps/util-constants';
 
-import { CollateralReceivedAlert } from '../../components/alerts/collateral-received/collateral-received';
 import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';
 import { CollateralAssetSelect } from '../../components/collateral-asset-select/collateral-asset-select';
 import { Collateral } from '../../components/collateral/collateral';
+import { CollateralReceivedModal } from '../../components/modals/collateral-received/collateral-received';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
 import { CollateralizationScreenStyled } from './collateralization-screen.styled';
@@ -28,6 +28,7 @@ export const CollateralizationScreen: FC = () => {
   const [selectedCollateralAsset, setSelectedCollateralAsset] = useState<CollateralAsset>();
   const [requiredCollateral, setRequiredCollateral] = useState(0);
   const [shouldCall, setShouldCall] = useState(false);
+  const [collateralReceivedModalOpen, setCollateralReceivedModalOpen] = useState(false);
 
   const getAssetPriceResponse: QueryResponse<AssetPrice[]> = useGetAssetPrice();
   const getDepositAddressResponse: QueryResponse<GetDepositAddressResponse> = useGetDepositAddress(
@@ -89,7 +90,11 @@ export const CollateralizationScreen: FC = () => {
       <Collateral />
       <StepsIndicator currentStep={Step.COLLATERALIZE} />
       <EmailVerificationAlert />
-      <CollateralReceivedAlert />
+      <CollateralReceivedModal
+        isOpen={collateralReceivedModalOpen}
+        close={() => setCollateralReceivedModalOpen(false)}
+        onConfirm={() => console.log('Modal clicked')}
+      />
       <CollateralizationScreenStyled>
         <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
         <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
