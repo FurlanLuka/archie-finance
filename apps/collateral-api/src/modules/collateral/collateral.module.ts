@@ -10,10 +10,15 @@ import { CollateralDeposit } from './collateral_deposit.entity';
 import { InternalApiModule } from '@archie-microservices/internal-api';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '../../interfaces';
+import { CollateralWithdrawal } from './collateral_withdrawal.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Collateral, CollateralDeposit]),
+    TypeOrmModule.forFeature([
+      Collateral,
+      CollateralDeposit,
+      CollateralWithdrawal,
+    ]),
     InternalApiModule.register({
       imports: [ConfigModule],
       inject: [ConfigService],

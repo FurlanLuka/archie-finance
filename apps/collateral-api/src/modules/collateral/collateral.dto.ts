@@ -1,8 +1,10 @@
 import {
   Collateral,
   CollateralValue,
+  CollateralWithdrawal,
   GetTotalCollateralValueResponse,
 } from '@archie-microservices/api-interfaces/collateral';
+import { IsNumber, IsString } from 'class-validator';
 
 export class CollateralDto implements Collateral {
   asset: string;
@@ -19,4 +21,13 @@ export class GetTotalCollateralValueResponseDto
   implements GetTotalCollateralValueResponse
 {
   value: number;
+}
+
+export class CollateralWithdrawDto implements CollateralWithdrawal {
+  @IsString()
+  asset: string;
+  @IsNumber()
+  amount: number;
+  @IsString()
+  destinationAddress: string;
 }

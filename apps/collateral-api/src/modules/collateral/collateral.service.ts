@@ -2,6 +2,7 @@ import {
   Injectable,
   InternalServerErrorException,
   Logger,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
@@ -18,6 +19,7 @@ import {
   GetAssetPricesResponse,
 } from '@archie-microservices/api-interfaces/asset_price';
 import { InternalApiService } from '@archie-microservices/internal-api';
+import { CollateralWithdrawal } from './collateral_withdrawal.entity';
 
 @Injectable()
 export class CollateralService {
@@ -84,6 +86,72 @@ export class CollateralService {
           amount,
           destinationAddress,
           status,
+          error: JSON.stringify(error),
+          errorMessage: error.message,
+        },
+      });
+
+      throw new InternalServerErrorException();
+    } finally {
+      await queryRunner.release();
+    }
+  }
+
+  public async createWithdrawal({
+    userId,
+    asset,
+    amount,
+    withdrawalAmount,
+    destinationAddress,
+  }: {
+    userId: string;
+    asset: string;
+    amount: number;
+    withdrawalAmount: number;
+    destinationAddress: string;
+  }): Promise<void> {
+    if (withdrawalAmount > amount) {
+      // TODO throw error
+      // just a sanity check
+      return;
+    }
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.save(CollateralWithdrawal, {
+        userId,
+        asset,
+        destinationAddress,
+        amount: withdrawalAmount,
+      });
+
+      // Do we want the collateralId here? then we need to change Collateral typedef
+      await queryRunner.manager.update(
+        Collateral,
+        {
+          userId,
+          asset,
+        },
+        {
+          amount: amount - withdrawalAmount,
+        },
+      );
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+
+      Logger.error({
+        code: 'CREATE_WITHDRAWAL_ERROR',
+        metadata: {
+          userId,
+          asset,
+          amount,
+          withdrawalAmount,
+          destinationAddress,
           error: JSON.stringify(error),
           errorMessage: error.message,
         },
@@ -170,5 +238,46 @@ export class CollateralService {
     return {
       value: userCollateralValue.reduce((sum, value) => sum + value.price, 0),
     };
+  }
+
+  public async withdrawUserCollateral(
+    userId: string,
+    asset: string,
+    amount: number,
+    destinationAddress: string,
+  ): Promise<void> {
+    const userCollateral: GetUserCollateral = await this.getUserCollateral(
+      userId,
+    );
+
+    console.log(
+      'here we are',
+      JSON.stringify(
+        { userId, asset, amount, destinationAddress, userCollateral },
+        null,
+        2,
+      ),
+    );
+    const availableCollateral = userCollateral.find(
+      (collateral) => collateral.asset === asset,
+    );
+
+    if (availableCollateral === undefined) {
+      throw new NotFoundException('No collateral in the desired asset');
+    }
+
+    if (availableCollateral.amount < amount) {
+      throw new NotFoundException('Not enough amount');
+    }
+
+    await this.createWithdrawal({
+      amount: availableCollateral.amount,
+      withdrawalAmount: amount,
+      destinationAddress,
+      asset,
+      userId,
+    });
+
+    return;
   }
 }

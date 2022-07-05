@@ -15,4 +15,10 @@ export interface Collateral {
   amount: number;
 }
 
+export interface CollateralWithdrawal {
+  asset: string;
+  amount: number;
+  destinationAddress: string;
+}
+
 export type GetUserCollateral = Collateral[];
