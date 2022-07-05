@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GenerateAddressResponse } from 'fireblocks-sdk';
-import { ConfigVariables } from '../../interfaces';
+import { ConfigVariables } from '@archie/api/collateral/constants'
 import { Repository } from 'typeorm';
 import { OmnibusVaultAccountService } from '../omnibus_vault_account/omnibus_vault_account.service';
 import { UserVaultAccountService } from '../user_vault_account/user_vault_account.service';

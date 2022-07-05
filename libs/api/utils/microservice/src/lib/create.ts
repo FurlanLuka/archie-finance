@@ -1,12 +1,14 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { Transport } from '@nestjs/microservices';
 import { utilities, WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
+import { Openapi } from '@archie-microservices/openapi';
+import { RmqOptions } from '@nestjs/microservices';
 
 export async function createMicroservice(
   name: string,
   module: unknown,
+  microserviceOptions?: RmqOptions,
 ): Promise<INestApplication> {
   const app = await NestFactory.create(module, {
     logger: WinstonModule.createLogger({
@@ -23,14 +25,16 @@ export async function createMicroservice(
     }),
   });
 
-  // app.connectMicroservice({
-  //   transport: Transport.RMQ,
-  // });
+  if (microserviceOptions) {
+    app.connectMicroservice<RmqOptions>(microserviceOptions);
+  }
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors();
 
   await app.listen(80);
+
+  await Openapi.generate(app);
 
   return app;
 }

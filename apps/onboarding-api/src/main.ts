@@ -1,9 +1,10 @@
 import { AppModule } from './app.module';
 import './tracer';
-import { createMicroservice } from '@archie/microservice';
+import { createMicroservice } from '@archie/api/utils/microservice';
+import { SERVICE_NAME } from '@archie/api/onboarding/constants'
 
 async function bootstrap() {
-  await createMicroservice('onboarding-api', AppModule)
+  await createMicroservice(SERVICE_NAME, AppModule);
 }
 
 bootstrap();

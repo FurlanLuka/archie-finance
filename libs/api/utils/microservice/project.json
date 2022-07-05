@@ -1,20 +1,20 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/microservice/src",
+  "sourceRoot": "libs/api/utils/microservice/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/microservice/**/*.ts"]
+        "lintFilePatterns": ["libs/api/utils/microservice/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/microservice"],
+      "outputs": ["coverage/libs/api/utils/microservice"],
       "options": {
-        "jestConfig": "libs/microservice/jest.config.ts",
+        "jestConfig": "libs/api/utils/microservice/jest.config.ts",
         "passWithNoTests": true
       }
     }

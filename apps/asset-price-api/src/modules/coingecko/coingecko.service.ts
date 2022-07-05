@@ -2,7 +2,8 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import axios from 'axios';
 import { ConfigService } from '@archie-microservices/config';
 import { CoinPriceResponse } from './coingecko.interfaces';
-import { AssetList, ConfigVariables } from '../../interfaces';
+import { ConfigVariables } from '@archie/api/asset-price/constants';
+import { AssetList } from '../../interfaces';
 
 @Injectable()
 export class CoingeckoService {

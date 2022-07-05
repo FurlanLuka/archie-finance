@@ -6,7 +6,7 @@ import {
   VaultAccountResponse,
   VaultAssetResponse,
 } from 'fireblocks-sdk';
-import { ConfigVariables } from '../../interfaces';
+import { ConfigVariables } from '@archie/api/collateral/constants'
 import { ConfigService } from '@archie-microservices/config';
 import { CryptoService } from '@archie-microservices/crypto';
 

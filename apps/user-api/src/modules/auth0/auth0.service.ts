@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ManagementClient } from 'auth0';
 import { ConfigService } from '@archie-microservices/config';
-import { ConfigVariables } from '../../interfaces';
+import { ConfigVariables } from '@archie/api/user/constants';
 
 @Injectable()
 export class Auth0Service {
