@@ -1,12 +1,11 @@
 import { VaultService } from '@archie-microservices/vault';
 import {
+  Inject,
   Injectable,
-  InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, QueryRunner, Repository } from 'typeorm';
-import { InternalApiService } from '@archie-microservices/internal-api';
+import { Repository } from 'typeorm';
 import { Kyc } from './kyc.entity';
 import {
   CreateKycResponse,
@@ -15,14 +14,19 @@ import {
 import { KycDto } from './kyc.dto';
 import { DateTime } from 'luxon';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
+import {
+  SERVICE_NAME as ONBOARDING_SERVICE_NAME,
+  EventPatterns as OnboardingServiceEventPatterns,
+} from '@archie/api/onboarding-api/constants';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class KycService {
   constructor(
     @InjectRepository(Kyc) private kycRepository: Repository<Kyc>,
+    @Inject(ONBOARDING_SERVICE_NAME)
+    private onboardingServiceClient: ClientProxy,
     private vaultService: VaultService,
-    private dataSource: DataSource,
-    private internalApiService: InternalApiService,
   ) {}
 
   async getKyc(userId: string): Promise<GetKycResponse> {
@@ -103,49 +107,29 @@ export class KycService {
       payload.ssn,
     ]);
 
-    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
+    await this.kycRepository.save({
+      userId,
+      firstName: encryptedData[0],
+      lastName: encryptedData[1],
+      dateOfBirth: encryptedData[2],
+      addressCountry: encryptedData[3],
+      addressLocality: encryptedData[4],
+      addressPostalCode: encryptedData[5],
+      addressRegion: encryptedData[6],
+      addressStreet: encryptedData[7],
+      addressStreetNumber: encryptedData[8],
+      phoneNumber: encryptedData[9],
+      phoneNumberCountryCode: encryptedData[10],
+      ssn: encryptedData[11],
+    });
 
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
-    try {
-      await queryRunner.manager.save(Kyc, {
+    this.onboardingServiceClient.emit(
+      OnboardingServiceEventPatterns.COMPLETE_ONBOARDING_STAGE,
+      {
+        stage: 'kycStage',
         userId,
-        firstName: encryptedData[0],
-        lastName: encryptedData[1],
-        dateOfBirth: encryptedData[2],
-        addressCountry: encryptedData[3],
-        addressLocality: encryptedData[4],
-        addressPostalCode: encryptedData[5],
-        addressRegion: encryptedData[6],
-        addressStreet: encryptedData[7],
-        addressStreetNumber: encryptedData[8],
-        phoneNumber: encryptedData[9],
-        phoneNumberCountryCode: encryptedData[10],
-        ssn: encryptedData[11],
-      });
-
-      await this.internalApiService.completeOnboardingStage('kycStage', userId);
-
-      await queryRunner.commitTransaction();
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-
-      Logger.error({
-        code: 'CREATE_KYC_ERROR',
-        metadata: {
-          userId,
-          error: JSON.stringify(error),
-        },
-      });
-
-      throw new InternalServerErrorException(
-        'ERR_CREATING_KYC_RECORD',
-        'There was an issue creating KYC record. Please try again or contact support.',
-      );
-    } finally {
-      await queryRunner.release();
-    }
+      },
+    );
 
     return {
       firstName: payload.firstName,

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
-  InternalOnboardingController,
+  OnboardingQueueController,
   OnboardingController,
 } from './onboarding.controller';
 import { Onboarding } from './onboarding.entity';
@@ -9,7 +9,7 @@ import { OnboardingService } from './onboarding.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Onboarding])],
-  controllers: [OnboardingController, InternalOnboardingController],
+  controllers: [OnboardingController, OnboardingQueueController],
   providers: [OnboardingService],
   exports: [OnboardingService],
 })

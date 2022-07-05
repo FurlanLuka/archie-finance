@@ -1,17 +1,13 @@
-import {
-  Controller,
-  Get,
-  UseGuards,
-  Request,
-  Post,
-  Body,
-} from '@nestjs/common';
+import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { OnboardingService } from './onboarding.service';
 import { AuthGuard } from '@archie-microservices/auth0';
-import { OnboardingDto, GetOnboardingResponseDto } from './onboarding.dto';
+import {
+  GetOnboardingResponseDto,
+  CompleteOnboardingStageDto,
+} from './onboarding.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
-import { OnboardingAlreadyCompletedError } from './onboarding.errors';
+import { EventPattern, Payload } from '@nestjs/microservices';
+import { EventPatterns } from '@archie/api/onboarding-api/constants';
 
 @Controller('v1/onboarding')
 export class OnboardingController {
@@ -25,16 +21,17 @@ export class OnboardingController {
   }
 }
 
-@Controller('internal/onboarding')
-export class InternalOnboardingController {
+@Controller()
+export class OnboardingQueueController {
   constructor(private onboardingService: OnboardingService) {}
 
-  @Post('complete')
-  @ApiErrorResponse([OnboardingAlreadyCompletedError])
-  async completeOnboardingStage(@Body() body: OnboardingDto): Promise<void> {
+  @EventPattern(EventPatterns.COMPLETE_ONBOARDING_STAGE)
+  async completeOnboardingStage(
+    @Payload() payload: CompleteOnboardingStageDto,
+  ): Promise<void> {
     await this.onboardingService.completeOnboardingStage(
-      body.userId,
-      body.stage,
+      payload.userId,
+      payload.stage,
     );
   }
 }

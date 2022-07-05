@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Credit } from './credit.entity';
@@ -18,6 +13,11 @@ import {
   AssetInformation,
 } from '@archie-microservices/api-interfaces/asset_information';
 import { CreateCreditMinimumCollateralError } from './credit.errors';
+import {
+  SERVICE_NAME as ONBOARDING_SERVICE_NAME,
+  EventPatterns as OnboardingServiceEventPatterns,
+} from '@archie/api/onboarding-api/constants';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class CreditService {
@@ -26,6 +26,8 @@ export class CreditService {
 
   constructor(
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
+    @Inject(ONBOARDING_SERVICE_NAME)
+    private onboardingServiceClient: ClientProxy,
     private internalApiService: InternalApiService,
   ) {}
 
@@ -85,9 +87,12 @@ export class CreditService {
       totalCollateralValue = this.MAXIMUM_CREDIT;
     }
 
-    await this.internalApiService.completeOnboardingStage(
-      'collateralizationStage',
-      userId,
+    this.onboardingServiceClient.emit(
+      OnboardingServiceEventPatterns.COMPLETE_ONBOARDING_STAGE,
+      {
+        stage: 'collateralizationStage',
+        userId,
+      },
     );
 
     await this.creditRepository.save({

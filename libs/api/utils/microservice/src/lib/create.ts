@@ -27,12 +27,13 @@ export async function createMicroservice(
 
   if (microserviceOptions) {
     app.connectMicroservice<RmqOptions>(microserviceOptions);
+    app.startAllMicroservices();
   }
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors();
 
-  await app.listen(80);
+  await app.listen(3000);
 
   await Openapi.generate(app);
 

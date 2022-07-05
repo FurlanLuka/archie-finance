@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   Logger,
   NotFoundException,
@@ -38,6 +39,11 @@ import { ConfigVariables } from '@archie/api/credit-api/constants';
 import { AptoCard } from './apto_card.entity';
 import { CreditService } from '../credit/credit.service';
 import { GetCreditResponse } from '../credit/credit.interfaces';
+import {
+  SERVICE_NAME as ONBOARDING_SERVICE_NAME,
+  EventPatterns as OnboardingServiceEventPatterns,
+} from '@archie/api/onboarding-api/constants';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class AptoService {
@@ -54,6 +60,8 @@ export class AptoService {
     @InjectRepository(AptoCard)
     private aptoCardRepository: Repository<AptoCard>,
     private creditService: CreditService,
+    @Inject(ONBOARDING_SERVICE_NAME)
+    private onboardingServiceClient: ClientProxy,
   ) {}
 
   public async startPhoneVerification(
@@ -120,9 +128,12 @@ export class AptoService {
         secret,
       );
 
-    await this.internalApiService.completeOnboardingStage(
-      'phoneVerificationStage',
-      userId,
+    this.onboardingServiceClient.emit(
+      OnboardingServiceEventPatterns.COMPLETE_ONBOARDING_STAGE,
+      {
+        stage: 'phoneVerificationStage',
+        userId,
+      },
     );
 
     await this.aptoVerificationRepository.update(
@@ -422,9 +433,12 @@ export class AptoService {
         cardId: issueCardResponse.account_id,
       });
 
-      await this.internalApiService.completeOnboardingStage(
-        'cardActivationStage',
-        aptoCardApplication.userId,
+      this.onboardingServiceClient.emit(
+        OnboardingServiceEventPatterns.COMPLETE_ONBOARDING_STAGE,
+        {
+          stage: 'cardActivationStage',
+          userId: aptoCardApplication.userId,
+        },
       );
 
       await this.initiallyLoadCard(

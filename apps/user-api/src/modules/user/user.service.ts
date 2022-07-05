@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -7,13 +8,18 @@ import { User } from 'auth0';
 import { Auth0Service } from '../auth0/auth0.service';
 import { GetEmailVerificationResponse } from './user.interfaces';
 import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
-import { InternalApiService } from '@archie-microservices/internal-api';
+import {
+  SERVICE_NAME as ONBOARDING_SERVICE_NAME,
+  EventPatterns as OnboardingServiceEventPatterns,
+} from '@archie/api/onboarding-api/constants';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class UserService {
   constructor(
     private auth0Service: Auth0Service,
-    private internalApiService: InternalApiService,
+    @Inject(ONBOARDING_SERVICE_NAME)
+    private onboardingServiceClient: ClientProxy,
   ) {}
 
   async isEmailVerified(userId: string): Promise<GetEmailVerificationResponse> {
@@ -22,9 +28,12 @@ export class UserService {
     });
 
     if (user.email_verified) {
-      await this.internalApiService.completeOnboardingStage(
-        'emailVerificationStage',
-        userId,
+      this.onboardingServiceClient.emit(
+        OnboardingServiceEventPatterns.COMPLETE_ONBOARDING_STAGE,
+        {
+          stage: 'emailVerificationStage',
+          userId,
+        },
       );
     }
 
