@@ -7,7 +7,7 @@ const spin = keyframes`
   100% { transform: rotate(360deg); }
 `;
 
-interface ButtonProps {
+export interface ButtonProps {
   isLoading?: boolean;
   isDisabled?: boolean;
   maxWidth?: string;
