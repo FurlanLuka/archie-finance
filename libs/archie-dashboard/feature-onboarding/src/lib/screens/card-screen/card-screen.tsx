@@ -108,7 +108,7 @@ export const CardScreen: FC = () => {
           <img src={imgCardReady} alt={t('card_step.img_alt')} />
         </div>
         <ButtonPrimary
-          maxWidth="16rem"
+          maxWidth="20rem"
           isLoading={getCollateralTotalValueResponse.state === RequestState.LOADING}
           // isDisabled={isEmailVerified} TBD
         >

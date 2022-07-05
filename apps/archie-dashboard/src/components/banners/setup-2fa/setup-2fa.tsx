@@ -20,12 +20,14 @@ export const Setup2faBanner: FC = () => {
         <img src={img2fa} alt={t('setup_2fa_alert.img_alt')} />
       </div>
       <div className="content">
-        <ParagraphS weight={800}>{t('setup_2fa_alert.title')}</ParagraphS>
-        <ParagraphXS>{t('setup_2fa_alert.text')}</ParagraphXS>
+        <div className="text">
+          <ParagraphS weight={800}>{t('setup_2fa_alert.title')}</ParagraphS>
+          <ParagraphXS>{t('setup_2fa_alert.text')}</ParagraphXS>
+        </div>
+        <ButtonGhost maxWidth="fit-content" onClick={handleClick}>
+          {t('btn_continue')}
+        </ButtonGhost>
       </div>
-      <ButtonGhost maxWidth="fit-content" onClick={handleClick}>
-        {t('btn_continue')}
-      </ButtonGhost>
     </Setup2faBannerStyled>
   );
 };

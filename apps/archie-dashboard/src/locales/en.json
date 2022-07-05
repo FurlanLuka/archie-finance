@@ -111,7 +111,7 @@
   },
   "setup_2fa_alert": {
     "title": "Protect your funds with 2FA",
-    "text": "Setup Dual Factor Authentication using your authenticator app",
+    "text": "Setup Dual Factor Authentication using your authenticator app.",
     "img_alt": "Setup 2FA"
   }
 }

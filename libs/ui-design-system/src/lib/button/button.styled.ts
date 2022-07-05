@@ -27,13 +27,10 @@ const Button = styled.button<ButtonProps>`
   border: 1px solid;
   border-radius: ${({ small }) => (small ? '0.25rem' : '0.5rem')};
   max-height: 3rem;
-  width: ${({ maxWidth }) => maxWidth ?? '100%'};
+  max-width: ${({ maxWidth }) => maxWidth ?? '100%'};
+  width: 100%;
   padding: ${({ small }) => (small ? '0.25rem 1rem' : '1rem 2rem')};
   cursor: ${({ isDisabled, isLoading }) => (isDisabled || isLoading ? 'not-allowed' : 'pointer')};
-
-  @media (max-width: ${breakpoints.screenSM}) {
-    width: 100%;
-  }
 
   :hover {
     opacity: ${({ isDisabled, isLoading }) => (isDisabled || isLoading ? '1' : '0.5')};

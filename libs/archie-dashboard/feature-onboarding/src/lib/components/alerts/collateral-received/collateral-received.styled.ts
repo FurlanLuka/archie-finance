@@ -21,6 +21,10 @@ export const CollateralReceivedAlertStyled = styled.div`
   .image {
     max-width: 52px;
     margin-right: 2.5rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      margin-right: 1.5rem;
+    }
   }
 
   button {
