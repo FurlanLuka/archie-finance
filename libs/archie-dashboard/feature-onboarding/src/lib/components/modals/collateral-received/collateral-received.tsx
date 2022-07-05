@@ -25,11 +25,11 @@ export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({ isOp
     <Modal isOpen={isOpen} close={close} maxWidth="800px">
       <CollateralReceivedModalStyled>
         <div className="image">
-          <img src={imgCollateralReceived} alt={t('collateral_received_alert.img_alt')} />
+          <img src={imgCollateralReceived} alt={t('collateral_received_modal.img_alt')} />
         </div>
         <div className="content">
-          <ParagraphM weight={700}>{t('collateral_received_alert.title')}</ParagraphM>
-          <ParagraphXS>{t('collateral_received_alert.text')}</ParagraphXS>
+          <ParagraphM weight={700}>{t('collateral_received_modal.title')}</ParagraphM>
+          <ParagraphXS>{t('collateral_received_modal.text')}</ParagraphXS>
           <ButtonPrimary onClick={handleConfirm} maxWidth="10rem">
             {t('btn_next')}
           </ButtonPrimary>

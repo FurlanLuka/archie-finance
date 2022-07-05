@@ -94,7 +94,7 @@
     "text_2": "to resend it.",
     "img_alt": "Resend verification email"
   },
-  "collateral_received_alert": {
+  "collateral_received_modal": {
     "title": "We received your collateral!",
     "text": "Your current collateral adds up to a $540 credit line.  Feel free to collateralize more assets. Note you can use  different cryptocurrencies as collateral! Click 'Next' when you're ready to get your Archie Card.",
     "img_alt": "Collateral received"
