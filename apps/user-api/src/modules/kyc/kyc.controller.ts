@@ -19,16 +19,16 @@ export class KycController {
   constructor(private readonly kycService: KycService) {}
 
   @Get()
-  @UseGuards(AuthGuard)
   @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @ApiErrorResponse([KycNotFoundError])
   async getKyc(@Req() request): Promise<GetKycResponseDto> {
     return this.kycService.getKyc(request.user.sub);
   }
 
   @Post()
-  @UseGuards(AuthGuard)
   @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @ApiErrorResponse([KycAlreadySubmitted])
   async createKyc(
     @Body() body: KycDto,

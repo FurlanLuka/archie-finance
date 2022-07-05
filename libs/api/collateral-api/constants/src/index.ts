@@ -1,3 +1,6 @@
+export const SERVICE_NAME = 'collateral-api'
+export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`
+
 export enum ConfigVariables {
   AUTH0_DOMAIN = 'AUTH0_DOMAIN',
   AUTH0_AUDIENCE = 'AUTH0_AUDIENCE',

@@ -34,7 +34,7 @@ import {
 } from './apto.interfaces';
 import { AptoCardApplication } from './apto_card_application.entity';
 import { ConfigService } from '@archie-microservices/config';
-import { ConfigVariables } from '../../interfaces';
+import { ConfigVariables } from '@archie/api/credit-api/constants';
 import { AptoCard } from './apto_card.entity';
 import { CreditService } from '../credit/credit.service';
 import { GetCreditResponse } from '../credit/credit.interfaces';

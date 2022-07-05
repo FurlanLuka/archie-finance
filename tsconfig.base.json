@@ -24,6 +24,15 @@
       "@archie-microservices/openapi": ["libs/openapi/src/index.ts"],
       "@archie-microservices/sendgrid": ["libs/sendgrid/src/index.ts"],
       "@archie-microservices/vault": ["libs/vault/src/index.ts"],
+      "@archie/api/user-api/constants": ["libs/api/user-api/constants/src/index.ts"],
+      "@archie/api/referral-system-api/constants": ["libs/api/referral-system-api/constants/src/index.ts"],
+      "@archie/api/onboarding-api/constants": ["libs/api/onboarding-api/constants/src/index.ts"],
+      "@archie/api/credit-api/constants": ["libs/api/credit-api/constants/src/index.ts"],
+      "@archie/api/asset-price-api/constants": ["libs/api/asset-price-api/constants/src/index.ts"],
+      "@archie/api/collateral-api/constants": ["libs/api/collateral-api/constants/src/index.ts"],
+      "@archie/api/utils/microservice": [
+        "libs/api/utils/microservice/src/index.ts"
+      ],
       "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"]
     }
   },
