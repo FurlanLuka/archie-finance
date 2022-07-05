@@ -664,6 +664,35 @@
         ]
       }
     },
+    "/v1/rize/users/transactions": {
+      "get": {
+        "operationId": "RizeController_getTransactions",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TransactionResponseDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/v1/onboarding": {
       "get": {
         "operationId": "OnboardingController_getOnboardingRecord",
@@ -1219,6 +1248,55 @@
           "cardholder_last_name",
           "issued_at",
           "name_on_card"
+        ]
+      },
+      "TransactionResponseDto": {
+        "type": "object",
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "atm_withdrawal",
+              "card_purchase",
+              "card_refund",
+              "dispute",
+              "external_transfer",
+              "fee",
+              "internal_transfer",
+              "other",
+              "reversed_transfer",
+              "third_party_transfer"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "pending",
+              "settled",
+              "failed"
+            ]
+          },
+          "amount": {
+            "type": "string"
+          },
+          "settled_at": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "type",
+          "status",
+          "amount",
+          "settled_at",
+          "created_at"
         ]
       },
       "GetOnboardingResponseDto": {

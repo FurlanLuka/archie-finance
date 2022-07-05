@@ -35,18 +35,8 @@ export class RizeService {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
+    this.validateCustomerExists(customer);
 
-    if (customer === null || customer.status !== 'active') {
-      Logger.error({
-        code: 'CUSTOMER_DOES_NOT_EXIST',
-        metadata: {
-          userId,
-          customerId: customer.uid,
-        },
-      });
-
-      throw new ActiveCustomerDoesNotExist();
-    }
     const debitCard: DebitCard = await this.rizeApiService.getDebitCard(
       customer.uid,
     );
@@ -98,17 +88,7 @@ export class RizeService {
       userId,
     );
 
-    if (customer === null || customer.status !== 'active') {
-      Logger.error({
-        code: 'CUSTOMER_DOES_NOT_EXIST',
-        metadata: {
-          userId,
-          customerId: customer.uid,
-        },
-      });
-
-      throw new ActiveCustomerDoesNotExist();
-    }
+    this.validateCustomerExists(customer);
 
     const transactions: Transaction[] =
       await this.rizeApiService.getTransactions(customer.uid, page, limit);
@@ -177,6 +157,20 @@ export class RizeService {
       customerId,
       complianceWorkflow.product_uid,
     );
+  }
+
+  private validateCustomerExists(customer: Customer | null) {
+    if (customer === null || customer.status !== 'active') {
+      Logger.error({
+        code: 'CUSTOMER_DOES_NOT_EXIST',
+        metadata: {
+          userId: customer.external_uid,
+          customerId: customer.uid,
+        },
+      });
+
+      throw new ActiveCustomerDoesNotExist();
+    }
   }
 
   private async acceptAllDocuments(
