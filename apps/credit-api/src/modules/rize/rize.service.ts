@@ -7,14 +7,12 @@ import {
   ComplianceDocumentAcknowledgementRequest,
   ComplianceWorkflowMeta,
   Customer,
-  CustomerDetails,
   DebitCard,
   Transaction,
   DebitCardAccessToken,
 } from './api/rize_api.interfaces';
 import {
   CustomerAlreadyExists,
-  ActiveCustomerDoesNotExist,
   DebitCardAlreadyExists,
   DebitCardDoesNotExist,
 } from './rize.errors';
@@ -23,35 +21,28 @@ import {
   TransactionStatus,
   TransactionType,
 } from './rize.interfaces';
+import { RizeFactoryService } from './factory/rize_factory.service';
+import { RizeValidatorService } from './validator/rize_validator.service';
 
 @Injectable()
 export class RizeService {
   constructor(
     private internalApiService: InternalApiService,
     private rizeApiService: RizeApiService,
+    private rizeFactoryService: RizeFactoryService,
+    private rizeValidatorService: RizeValidatorService,
   ) {}
 
   public async createCard(userId: string): Promise<void> {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
-    this.validateCustomerExists(customer);
+    this.rizeValidatorService.validateCustomerExists(customer);
 
     const debitCard: DebitCard = await this.rizeApiService.getDebitCard(
       customer.uid,
     );
-
-    if (debitCard !== null) {
-      Logger.error({
-        code: 'DEBIT_CARD_ALREADY_EXISTS',
-        metadata: {
-          userId,
-          customerId: customer.uid,
-        },
-      });
-
-      throw new DebitCardAlreadyExists();
-    }
+    this.rizeValidatorService.validateDebitCardDoesNotExist(debitCard);
 
     await this.rizeApiService.createDebitCard(
       userId,
@@ -62,17 +53,8 @@ export class RizeService {
 
   public async getVirtualCard(userId: string): Promise<string> {
     const debitCard: DebitCard = await this.rizeApiService.getDebitCard(userId);
+    this.rizeValidatorService.validateDebitCardExists(debitCard);
 
-    if (debitCard === null) {
-      Logger.error({
-        code: 'DEBIT_CARD_DOES_NOT_EXIST',
-        metadata: {
-          userId,
-        },
-      });
-
-      throw new DebitCardDoesNotExist();
-    }
     const debitCardAccessToken: DebitCardAccessToken =
       await this.rizeApiService.getDebitCardAccessToken(debitCard.uid);
 
@@ -87,8 +69,7 @@ export class RizeService {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
-
-    this.validateCustomerExists(customer);
+    this.rizeValidatorService.validateCustomerExists(customer);
 
     const transactions: Transaction[] =
       await this.rizeApiService.getTransactions(customer.uid, page, limit);
@@ -106,18 +87,7 @@ export class RizeService {
   public async createUser(userId: string, userIp: string): Promise<void> {
     const existingCustomer: Customer | null =
       await this.rizeApiService.searchCustomers(userId);
-
-    if (existingCustomer !== null && existingCustomer.status === 'active') {
-      Logger.error({
-        code: 'CUSTOMER_ALREADY_EXISTS',
-        metadata: {
-          userId,
-          customerId: existingCustomer.uid,
-        },
-      });
-
-      throw new CustomerAlreadyExists();
-    }
+    this.rizeValidatorService.validateCustomerDoesNotExist(existingCustomer);
 
     const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
     const emailAddressResponse: GetEmailAddressResponse =
@@ -134,7 +104,7 @@ export class RizeService {
     await this.rizeApiService.addCustomerPii(
       customerId,
       emailAddressResponse.email,
-      this.createCustomerDetails(kyc),
+      this.rizeFactoryService.createCustomerDetails(kyc),
     );
 
     let complianceWorkflow: ComplianceWorkflowMeta;
@@ -159,20 +129,6 @@ export class RizeService {
     );
   }
 
-  private validateCustomerExists(customer: Customer | null) {
-    if (customer === null || customer.status !== 'active') {
-      Logger.error({
-        code: 'CUSTOMER_DOES_NOT_EXIST',
-        metadata: {
-          userId: customer.external_uid,
-          customerId: customer.uid,
-        },
-      });
-
-      throw new ActiveCustomerDoesNotExist();
-    }
-  }
-
   private async acceptAllDocuments(
     customerId: string,
     userId: string,
@@ -194,7 +150,11 @@ export class RizeService {
       }
       const docs: ComplianceDocumentAcknowledgementRequest[] =
         complianceWorkflowDocuments.pending_documents.map((documentId) =>
-          this.createAcceptedComplianceDocument(documentId, userIp, userId),
+          this.rizeFactoryService.createAcceptedComplianceDocument(
+            documentId,
+            userIp,
+            userId,
+          ),
         );
 
       await this.rizeApiService.acceptComplianceDocuments(
@@ -203,35 +163,5 @@ export class RizeService {
         docs,
       );
     }
-  }
-
-  private createAcceptedComplianceDocument(
-    documentId: string,
-    userIp: string,
-    userId: string,
-  ): ComplianceDocumentAcknowledgementRequest {
-    return {
-      accept: 'yes',
-      document_uid: documentId,
-      user_name: userId,
-      ip_address: userIp,
-    };
-  }
-
-  private createCustomerDetails(kyc: GetKycResponse): CustomerDetails {
-    return {
-      address: {
-        city: kyc.addressLocality,
-        street1: `${kyc.addressStreetNumber} ${kyc.addressStreet}`,
-        state: kyc.addressRegion,
-        postal_code: kyc.addressPostalCode,
-      },
-      business_name: null,
-      dob: kyc.dateOfBirth,
-      first_name: kyc.firstName,
-      last_name: kyc.lastName,
-      phone: kyc.phoneNumber,
-      ssn: `${kyc.ssn.slice(0, 3)}-${kyc.ssn.slice(3, 5)}-${kyc.ssn.slice(5)}`,
-    };
   }
 }
