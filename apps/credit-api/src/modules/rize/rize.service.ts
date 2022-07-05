@@ -44,6 +44,11 @@ export class RizeService {
       customer.uid,
       customer.pool_uids[0],
     );
+    // TODO: load funds
+    await this.internalApiService.completeOnboardingStage(
+        'cardActivationStage',
+        userId,
+    );
   }
 
   public async getVirtualCard(userId: string): Promise<string> {
