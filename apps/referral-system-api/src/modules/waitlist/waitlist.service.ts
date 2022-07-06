@@ -15,7 +15,7 @@ import {
   ReferralRankQueryResult,
 } from './waitlist.interfaces';
 import { ConfigService } from '@archie-microservices/config';
-import { ConfigVariables } from '../../interfaces';
+import { ConfigVariables } from '@archie/api/referral-system-api/constants';
 import { v4 } from 'uuid';
 
 @Injectable({})

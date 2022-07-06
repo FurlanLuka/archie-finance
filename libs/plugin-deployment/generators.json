@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "plugin-deployment",
+  "version": "0.0.1",
+  "generators": {
+    "plugin-deployment": {
+      "factory": "./src/generators/plugin-deployment/generator",
+      "schema": "./src/generators/plugin-deployment/schema.json",
+      "description": "plugin-deployment generator"
+    }
+  }
+}

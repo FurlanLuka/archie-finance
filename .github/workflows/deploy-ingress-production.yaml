@@ -26,4 +26,4 @@ jobs:
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_PRODUCTION }}
       with:
-        command: helm upgrade --install ingress-proxy ./charts/ingress-controller --set production="true"
+        command: helm upgrade --install ingress-proxy ./charts/ingress-controller --set environment="production"
