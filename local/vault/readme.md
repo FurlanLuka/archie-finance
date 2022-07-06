@@ -52,11 +52,11 @@ Navigate to policies tab and click create new policy. Make policy name `backend-
 
 ```
 path "transit/encrypt/backend-encryption-key" {
-	capabilities = ["update"] 
+	capabilities = ["update"]
 }
 
 path "transit/decrypt/backend-encryption-key" {
-	capabilities = ["update"] 
+	capabilities = ["update"]
 }
 ```
 

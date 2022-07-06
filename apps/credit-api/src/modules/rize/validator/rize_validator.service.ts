@@ -24,7 +24,7 @@ export class RizeValidatorService {
   }
 
   public validateCustomerDoesNotExist(customer: Customer | null) {
-    if (customer === null || customer.status !== 'active') {
+    if (customer !== null && customer.status === 'active') {
       Logger.error({
         code: 'CUSTOMER_ALREADY_EXISTS',
         metadata: {

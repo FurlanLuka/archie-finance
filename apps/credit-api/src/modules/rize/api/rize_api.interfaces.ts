@@ -13,11 +13,3 @@ export {
   DebitCardAccessToken,
 } from '@rizefinance/rize-js/types/lib/core/typedefs/debit-card.typedefs';
 export { Transaction } from '@rizefinance/rize-js/types/lib/core/typedefs/transaction.typedefs';
-
-export interface ComplianceWorkflowMeta {
-  product_uid: string;
-  compliance_workflow_uid: string;
-  current_step: number;
-  last_step: number;
-  pending_documents: string[];
-}

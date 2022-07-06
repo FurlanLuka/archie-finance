@@ -5,11 +5,11 @@ import { InternalApiService } from '@archie-microservices/internal-api';
 import { RizeApiService } from './api/rize_api.service';
 import {
   ComplianceDocumentAcknowledgementRequest,
-  ComplianceWorkflowMeta,
   Customer,
   DebitCard,
   Transaction,
   DebitCardAccessToken,
+  ComplianceWorkflow,
 } from './api/rize_api.interfaces';
 import {
   TransactionResponse,
@@ -34,9 +34,7 @@ export class RizeService {
     );
     this.rizeValidatorService.validateCustomerExists(customer);
 
-    const debitCard: DebitCard = await this.rizeApiService.getDebitCard(
-      customer.uid,
-    );
+    const debitCard: DebitCard = await this.rizeApiService.getDebitCard(userId);
     this.rizeValidatorService.validateDebitCardDoesNotExist(debitCard);
 
     await this.rizeApiService.createDebitCard(
@@ -46,8 +44,8 @@ export class RizeService {
     );
     // TODO: load funds
     await this.internalApiService.completeOnboardingStage(
-        'cardActivationStage',
-        userId,
+      'cardActivationStage',
+      userId,
     );
   }
 
@@ -107,7 +105,7 @@ export class RizeService {
       this.rizeFactoryService.createCustomerDetails(kyc),
     );
 
-    let complianceWorkflow: ComplianceWorkflowMeta;
+    let complianceWorkflow: ComplianceWorkflow;
     try {
       complianceWorkflow =
         await this.rizeApiService.createCheckingComplianceWorkflow(customerId);
@@ -133,34 +131,31 @@ export class RizeService {
     customerId: string,
     userId: string,
     userIp: string,
-    complianceWorkflow: ComplianceWorkflowMeta,
+    complianceWorkflow: ComplianceWorkflow,
   ) {
-    for (
-      let step = complianceWorkflow.current_step;
-      step <= complianceWorkflow.last_step;
-      step++
-    ) {
-      const complianceWorkflowDocuments =
-        step === complianceWorkflow.current_step
-          ? complianceWorkflow
-          : await this.rizeApiService.getLatestComplianceWorkflow(customerId);
-
-      if (complianceWorkflowDocuments.pending_documents.length === 0) {
-        break;
-      }
+    if (complianceWorkflow.current_step_documents_pending.length !== 0) {
       const docs: ComplianceDocumentAcknowledgementRequest[] =
-        complianceWorkflowDocuments.pending_documents.map((documentId) =>
-          this.rizeFactoryService.createAcceptedComplianceDocument(
-            documentId,
-            userIp,
-            userId,
-          ),
+        complianceWorkflow.current_step_documents_pending.map(
+          (pendingDocument) =>
+            this.rizeFactoryService.createAcceptedComplianceDocument(
+              pendingDocument.uid,
+              userIp,
+              userId,
+            ),
         );
 
-      await this.rizeApiService.acceptComplianceDocuments(
+      const updatedComplianceWorkflow: ComplianceWorkflow =
+        await this.rizeApiService.acceptComplianceDocuments(
+          customerId,
+          complianceWorkflow.uid,
+          docs,
+        );
+
+      await this.acceptAllDocuments(
         customerId,
-        complianceWorkflowDocuments.compliance_workflow_uid,
-        docs,
+        userId,
+        userIp,
+        updatedComplianceWorkflow,
       );
     }
   }

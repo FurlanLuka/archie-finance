@@ -1013,11 +1013,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "asset",
-          "price",
-          "currency"
-        ]
+        "required": ["asset", "price", "currency"]
       },
       "GetDepositAddressResponseDto": {
         "type": "object",
@@ -1026,9 +1022,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "address"
-        ]
+        "required": ["address"]
       },
       "CollateralDto": {
         "type": "object",
@@ -1040,10 +1034,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "asset",
-          "amount"
-        ]
+        "required": ["asset", "amount"]
       },
       "CollateralValueDto": {
         "type": "object",
@@ -1058,11 +1049,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "asset",
-          "assetAmount",
-          "price"
-        ]
+        "required": ["asset", "assetAmount", "price"]
       },
       "GetTotalCollateralValueResponseDto": {
         "type": "object",
@@ -1071,9 +1058,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "value"
-        ]
+        "required": ["value"]
       },
       "GetAssetListResponseDto": {
         "type": "object",
@@ -1090,11 +1075,7 @@
           },
           "network": {
             "type": "string",
-            "enum": [
-              "ERC20",
-              "SOL",
-              "BTC"
-            ]
+            "enum": ["ERC20", "SOL", "BTC"]
           },
           "ltv": {
             "type": "number"
@@ -1121,10 +1102,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "totalCredit",
-          "availableCredit"
-        ]
+        "required": ["totalCredit", "availableCredit"]
       },
       "StartPhoneVerificationResponseDto": {
         "type": "object",
@@ -1136,10 +1114,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "verificationId",
-          "status"
-        ]
+        "required": ["verificationId", "status"]
       },
       "FinishPhoneVerificationDto": {
         "type": "object",
@@ -1155,10 +1130,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "verificationId",
-          "status"
-        ]
+        "required": ["verificationId", "status"]
       },
       "CreateUserResponseDto": {
         "type": "object",
@@ -1179,13 +1151,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "type",
-          "user_id",
-          "user_token",
-          "user_data",
-          "metadata"
-        ]
+        "required": ["type", "user_id", "user_token", "user_data", "metadata"]
       },
       "IssueCardResponseDto": {
         "type": "object",
@@ -1273,12 +1239,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "queued",
-              "pending",
-              "settled",
-              "failed"
-            ]
+            "enum": ["queued", "pending", "settled", "failed"]
           },
           "amount": {
             "type": "string"
@@ -1340,10 +1301,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "stage",
-          "userId"
-        ]
+        "required": ["stage", "userId"]
       },
       "GetKycResponseDto": {
         "type": "object",
@@ -1520,9 +1478,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "isVerified"
-        ]
+        "required": ["isVerified"]
       },
       "GetEmailAddressResponseDto": {
         "type": "object",
@@ -1531,9 +1487,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "email"
-        ]
+        "required": ["email"]
       },
       "EmailWaitlistDto": {
         "type": "object",
@@ -1542,9 +1496,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "emailAddress"
-        ]
+        "required": ["emailAddress"]
       },
       "CreateDto": {
         "type": "object",
@@ -1556,9 +1508,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "emailAddress"
-        ]
+        "required": ["emailAddress"]
       },
       "GetWaitlistRecordResponseDto": {
         "type": "object",

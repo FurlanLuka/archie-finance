@@ -31,7 +31,7 @@ export class RizeController {
   @ApiErrorResponse([CustomerAlreadyExists])
   public async createUser(@Request() req): Promise<void> {
     // TODO: remove log
-    console.log(req.headers['x-forwarded-for'])
+    console.log(req.headers['x-forwarded-for']);
 
     return this.rizeService.createUser(
       req.user.sub,

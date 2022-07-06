@@ -9,7 +9,6 @@ import Rize from '@rizefinance/rize-js';
 import {
   ComplianceDocumentAcknowledgementRequest,
   ComplianceWorkflow,
-  ComplianceWorkflowMeta,
   Customer,
   CustomerDetails,
   RizeList,
@@ -101,7 +100,7 @@ export class RizeApiService {
 
   public async createCheckingComplianceWorkflow(
     customerId: string,
-  ): Promise<ComplianceWorkflowMeta> {
+  ): Promise<ComplianceWorkflow> {
     try {
       const products: RizeList<Product> =
         await this.rizeClient.product.getList();
@@ -110,26 +109,10 @@ export class RizeApiService {
         (product) => product.compliance_plan_name === this.COMPLIANCE_PLAN_NAME,
       );
 
-      const complianceWorkflow: ComplianceWorkflow =
-        await this.rizeClient.complianceWorkflow.create(
-          customerId,
-          product.product_compliance_plan_uid,
-        );
-
-      const steps: number[] = complianceWorkflow.all_documents.map(
-        (document) => document.step,
+      return this.rizeClient.complianceWorkflow.create(
+        customerId,
+        product.product_compliance_plan_uid,
       );
-
-      return {
-        product_uid: product.uid,
-        compliance_workflow_uid: complianceWorkflow.uid,
-        last_step: Math.max(...steps),
-        current_step: complianceWorkflow.summary.current_step,
-        pending_documents:
-          complianceWorkflow.current_step_documents_pending.map(
-            (doc) => doc.uid,
-          ),
-      };
     } catch (error) {
       Logger.error({
         code: 'ERROR_CREATING_CHECKING_COMPLIANCE_WORKFLOW',
@@ -147,9 +130,9 @@ export class RizeApiService {
     customerId: string,
     complianceWorkflowUid: string,
     documents: ComplianceDocumentAcknowledgementRequest[],
-  ): Promise<void> {
+  ): Promise<ComplianceWorkflow> {
     try {
-      await this.rizeClient.complianceWorkflow.acknowledgeComplianceDocuments(
+      return this.rizeClient.complianceWorkflow.acknowledgeComplianceDocuments(
         complianceWorkflowUid,
         customerId,
         documents,
@@ -169,25 +152,9 @@ export class RizeApiService {
 
   public async getLatestComplianceWorkflow(
     customerId: string,
-  ): Promise<ComplianceWorkflowMeta> {
+  ): Promise<ComplianceWorkflow> {
     try {
-      const complianceWorkflow: ComplianceWorkflow =
-        await this.rizeClient.complianceWorkflow.viewLatest(customerId);
-
-      const steps: number[] = complianceWorkflow.all_documents.map(
-        (step) => step.step,
-      );
-
-      return {
-        product_uid: complianceWorkflow.product_uid,
-        compliance_workflow_uid: complianceWorkflow.uid,
-        last_step: Math.max(...steps),
-        current_step: complianceWorkflow.summary.current_step,
-        pending_documents:
-          complianceWorkflow.current_step_documents_pending.map(
-            (doc) => doc.uid,
-          ),
-      };
+      return await this.rizeClient.complianceWorkflow.viewLatest(customerId);
     } catch (error) {
       Logger.error({
         code: 'ERROR_FETCHING_LATEST_COMPLIANCE_DOCUMENTS',
