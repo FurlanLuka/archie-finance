@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import {
+  CreateTransactionResponse,
   DepositAddressResponse,
   FireblocksSDK,
   GenerateAddressResponse,
+  PeerType,
   VaultAccountResponse,
   VaultAssetResponse,
 } from 'fireblocks-sdk';
@@ -76,5 +78,32 @@ export class FireblocksService {
 
   public async getVaultAccounts(): Promise<VaultAccountResponse[]> {
     return this.fireblocksClient.getVaultAccounts();
+  }
+
+  public async withdrawAsset({
+    asset,
+    amount,
+    vaultAccountId,
+    destinationAddress,
+  }: {
+    vaultAccountId: string;
+    asset: string;
+    amount: number;
+    destinationAddress: string;
+  }): Promise<CreateTransactionResponse> {
+    return this.fireblocksClient.createTransaction({
+      assetId: asset,
+      amount: amount,
+      source: {
+        type: PeerType.VAULT_ACCOUNT,
+        id: vaultAccountId,
+      },
+      destination: {
+        type: PeerType.ONE_TIME_ADDRESS,
+        oneTimeAddress: {
+          address: destinationAddress,
+        },
+      },
+    });
   }
 }

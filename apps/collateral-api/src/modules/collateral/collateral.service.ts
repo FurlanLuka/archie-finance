@@ -21,6 +21,8 @@ import {
 } from '@archie-microservices/api-interfaces/asset_price';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { CollateralWithdrawal } from './collateral_withdrawal.entity';
+import { UserVaultAccountService } from '../user_vault_account/user_vault_account.service';
+import { FireblocksService } from '../fireblocks/fireblocks.service';
 
 @Injectable()
 export class CollateralService {
@@ -33,6 +35,8 @@ export class CollateralService {
     private collateralWithdrawalRepository: Repository<CollateralWithdrawal>,
     private dataSource: DataSource,
     private internalApiService: InternalApiService,
+    private userVaultAccountService: UserVaultAccountService,
+    private fireblocksService: FireblocksService,
   ) {}
 
   public async createDeposit(
@@ -113,17 +117,19 @@ export class CollateralService {
     withdrawalAmount: number;
     destinationAddress: string;
   }): Promise<void> {
-    if (withdrawalAmount > currentAmount) {
-      // TODO throw error
-      // just a sanity check
-      return;
-    }
     const queryRunner = this.dataSource.createQueryRunner();
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
     try {
+      const userVaultAccount =
+        await this.userVaultAccountService.getUserVaultAccount(userId);
+      if (!userVaultAccount) {
+        // TODO handle no vault account or something
+        return;
+      }
+
       await queryRunner.manager.save(CollateralWithdrawal, {
         userId,
         asset,
@@ -143,6 +149,13 @@ export class CollateralService {
           amount: currentAmount - withdrawalAmount,
         },
       );
+      const transaction = await this.fireblocksService.withdrawAsset({
+        amount: withdrawalAmount,
+        asset,
+        destinationAddress,
+        vaultAccountId: userVaultAccount.id,
+      });
+      Logger.log('Created fireblocks transaction', transaction);
 
       await queryRunner.commitTransaction();
     } catch (error) {
@@ -244,6 +257,7 @@ export class CollateralService {
     };
   }
 
+  // TODO probably move this to a new service?
   public async withdrawUserCollateral(
     userId: string,
     asset: string,

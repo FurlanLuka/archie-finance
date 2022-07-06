@@ -29,6 +29,7 @@ export class DepositAddressService {
     private configService: ConfigService,
   ) {}
 
+  // TODO should we split this into a get and create function?
   public async getDepositAddress(
     asset: string,
     userId: string,

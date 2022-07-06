@@ -11,6 +11,8 @@ import { InternalApiModule } from '@archie-microservices/internal-api';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { CollateralWithdrawal } from './collateral_withdrawal.entity';
+import { UserVaultAccountModule } from '../user_vault_account/user_vault_account.module';
+import { FireblocksModule } from '../fireblocks/fireblocks.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { CollateralWithdrawal } from './collateral_withdrawal.entity';
       CollateralDeposit,
       CollateralWithdrawal,
     ]),
+    UserVaultAccountModule,
+    FireblocksModule,
     InternalApiModule.register({
       imports: [ConfigModule],
       inject: [ConfigService],
