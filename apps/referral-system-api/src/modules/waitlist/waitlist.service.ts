@@ -17,6 +17,10 @@ import {
 import { ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '@archie/api/referral-system-api/constants';
 import { v4 } from 'uuid';
+import {
+  EmailVerificationInternalError,
+  WaitlistRecordCreationInternalError,
+} from './waitlist.errors';
 
 @Injectable({})
 export class WaitlistService {
@@ -65,14 +69,9 @@ export class WaitlistService {
         referrer,
       });
     } catch (error) {
-      Logger.error({
-        code: 'ERROR_CREATING_WAITLIST_RECORD',
-        metadata: {
-          error: JSON.stringify(error),
-        },
+      throw new WaitlistRecordCreationInternalError({
+        error: JSON.stringify(error),
       });
-
-      throw new InternalServerErrorException();
     }
   }
 
@@ -168,14 +167,9 @@ export class WaitlistService {
       //   },
       // );
     } catch (error) {
-      Logger.error({
-        code: 'ERROR_VERIFYING_WAITLIST_EMAIL',
-        metadata: {
-          error: JSON.stringify(error),
-        },
+      throw new EmailVerificationInternalError({
+        error: JSON.stringify(error),
       });
-
-      throw new InternalServerErrorException();
     }
   }
 }
