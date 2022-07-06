@@ -60,7 +60,7 @@ export class CollateralController {
     );
   }
 
-  @Get('my_withdrawals')
+  @Get('withdrawals')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   async getUserWithdrawals(@Req() request): Promise<GetUserWithdrawals> {
