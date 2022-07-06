@@ -13,20 +13,23 @@ export class CollateralWithdrawal {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('varchar', { nullable: false })
+  @Column('varchar', { nullable: false, select: false })
   userId: string;
 
   @Column('varchar', { nullable: false })
   asset: string;
 
   @Column('float', { nullable: false })
-  amount: number;
+  currentAmount: number;
+
+  @Column('float', { nullable: false })
+  withdrawalAmount: number;
 
   @Column('varchar', { nullable: true })
   destinationAddress: string;
 
-  @CreateDateColumn({ select: false })
-  createdAt?: Date;
+  @CreateDateColumn()
+  createdAt: Date;
 
   @UpdateDateColumn({ select: false })
   updatedAt?: Date;

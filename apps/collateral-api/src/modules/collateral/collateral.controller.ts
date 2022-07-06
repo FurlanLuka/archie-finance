@@ -1,4 +1,5 @@
 import { AuthGuard } from '@archie-microservices/auth0';
+import { GetUserWithdrawals } from '@archie-microservices/api-interfaces/collateral';
 import {
   Body,
   Controller,
@@ -13,7 +14,6 @@ import { CollateralService } from './collateral.service';
 import {
   CollateralDto,
   CollateralValueDto,
-  CollateralWithdrawDto,
   GetTotalCollateralValueResponseDto,
 } from './collateral.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -52,14 +52,19 @@ export class CollateralController {
     @Req() request,
     @Body() body: any,
   ): Promise<void> {
-    console.log('bruh wat', body);
-
     return this.collateralService.withdrawUserCollateral(
       request.user.sub,
       body.asset,
-      body.amount,
+      body.withdrawalAmount,
       body.destinationAddress,
     );
+  }
+
+  @Get('my_withdrawals')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getUserWithdrawals(@Req() request): Promise<GetUserWithdrawals> {
+    return this.collateralService.getUserWithdrawals(request.user.sub);
   }
 }
 

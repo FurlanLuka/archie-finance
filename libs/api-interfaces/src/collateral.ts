@@ -17,8 +17,15 @@ export interface Collateral {
 
 export interface CollateralWithdrawal {
   asset: string;
-  amount: number;
+  currentAmount: number;
+  withdrawalAmount: number;
   destinationAddress: string;
 }
 
+export interface UserWithdrawal extends CollateralWithdrawal {
+  currentAmount: number;
+  createdAt: Date;
+}
+
 export type GetUserCollateral = Collateral[];
+export type GetUserWithdrawals = UserWithdrawal[];

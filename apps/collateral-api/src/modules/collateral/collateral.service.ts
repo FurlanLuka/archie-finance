@@ -13,6 +13,7 @@ import {
   GetCollateralValueResponse,
   GetTotalCollateralValueResponse,
   GetUserCollateral,
+  GetUserWithdrawals,
 } from '@archie-microservices/api-interfaces/collateral';
 import {
   GetAssetPriceResponse,
@@ -28,6 +29,8 @@ export class CollateralService {
     private collateralRepository: Repository<Collateral>,
     @InjectRepository(CollateralDeposit)
     private collateralDepositRepository: Repository<CollateralDeposit>,
+    @InjectRepository(CollateralWithdrawal)
+    private collateralWithdrawalRepository: Repository<CollateralWithdrawal>,
     private dataSource: DataSource,
     private internalApiService: InternalApiService,
   ) {}
@@ -100,17 +103,17 @@ export class CollateralService {
   public async createWithdrawal({
     userId,
     asset,
-    amount,
+    currentAmount,
     withdrawalAmount,
     destinationAddress,
   }: {
     userId: string;
     asset: string;
-    amount: number;
+    currentAmount: number;
     withdrawalAmount: number;
     destinationAddress: string;
   }): Promise<void> {
-    if (withdrawalAmount > amount) {
+    if (withdrawalAmount > currentAmount) {
       // TODO throw error
       // just a sanity check
       return;
@@ -124,8 +127,9 @@ export class CollateralService {
       await queryRunner.manager.save(CollateralWithdrawal, {
         userId,
         asset,
+        withdrawalAmount,
+        currentAmount,
         destinationAddress,
-        amount: withdrawalAmount,
       });
 
       // Do we want the collateralId here? then we need to change Collateral typedef
@@ -136,7 +140,7 @@ export class CollateralService {
           asset,
         },
         {
-          amount: amount - withdrawalAmount,
+          amount: currentAmount - withdrawalAmount,
         },
       );
 
@@ -149,7 +153,7 @@ export class CollateralService {
         metadata: {
           userId,
           asset,
-          amount,
+          currentAmount,
           withdrawalAmount,
           destinationAddress,
           error: JSON.stringify(error),
@@ -243,21 +247,13 @@ export class CollateralService {
   public async withdrawUserCollateral(
     userId: string,
     asset: string,
-    amount: number,
+    withdrawalAmount: number,
     destinationAddress: string,
   ): Promise<void> {
     const userCollateral: GetUserCollateral = await this.getUserCollateral(
       userId,
     );
 
-    console.log(
-      'here we are',
-      JSON.stringify(
-        { userId, asset, amount, destinationAddress, userCollateral },
-        null,
-        2,
-      ),
-    );
     const availableCollateral = userCollateral.find(
       (collateral) => collateral.asset === asset,
     );
@@ -266,18 +262,24 @@ export class CollateralService {
       throw new NotFoundException('No collateral in the desired asset');
     }
 
-    if (availableCollateral.amount < amount) {
+    if (availableCollateral.amount < withdrawalAmount) {
       throw new NotFoundException('Not enough amount');
     }
 
     await this.createWithdrawal({
-      amount: availableCollateral.amount,
-      withdrawalAmount: amount,
+      currentAmount: availableCollateral.amount,
+      withdrawalAmount,
       destinationAddress,
       asset,
       userId,
     });
 
     return;
+  }
+
+  public async getUserWithdrawals(userId: string): Promise<GetUserWithdrawals> {
+    return this.collateralWithdrawalRepository.findBy({
+      userId,
+    });
   }
 }
