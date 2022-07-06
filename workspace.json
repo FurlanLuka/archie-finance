@@ -15,6 +15,7 @@
     "openapi": "libs/openapi",
     "referral-system-api": "apps/referral-system-api",
     "sendgrid": "libs/sendgrid",
+    "tracing": "libs/tracing",
     "user-api": "apps/user-api",
     "vault": "libs/vault"
   }
