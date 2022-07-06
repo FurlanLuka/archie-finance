@@ -1,10 +1,11 @@
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import './tracer';
 import { Openapi } from '@archie-microservices/openapi';
+import { AllExceptionsFilter } from '@archie-microservices/tracing';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -23,6 +24,9 @@ async function bootstrap() {
   });
 
   await Openapi.generate(app);
+
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors();
