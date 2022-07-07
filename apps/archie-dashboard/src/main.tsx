@@ -1,19 +1,20 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
-import { ThemeProvider } from 'styled-components';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ProtectedRoute } from './components/router/protected-route';
-import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants';
-import { DashboardRoute } from './routes/index/index-route';
-import { LoginRoute } from './routes/login/login-route';
-import { ReactQueryDevtools } from 'react-query/devtools';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { SessionProvider } from '@archie/session/session-provider';
-import { OnboardingRoute } from './routes/onboarding/onboarding-route';
-import GlobalStyles from './components/_generic/global-styles/global-styles.styled';
-import { theme } from './constants/theme';
-import './utils/i18next';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+
+import { SessionProvider } from '@archie-webapps/shared/data-access-session';
+import { GlobalStyles, theme } from '@archie-webapps/ui-theme';
+
+import { ProtectedRoute } from './components/protected-route/protected-route';
+import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants/auth';
+import { DashboardRoute } from './routes/dashboard/dashboard-route';
+import { LoginRoute } from './routes/login/login-route';
 import { LogoutRoute } from './routes/logout/logout-route';
+import './utils/i18next';
+import { OnboardingRoute } from './routes/onboarding/onboarding-route';
 
 const queryClient: QueryClient = new QueryClient();
 
@@ -33,7 +34,7 @@ ReactDOM.render(
             <BrowserRouter>
               <Routes>
                 <Route
-                  path="/"
+                  path="*"
                   element={
                     <ProtectedRoute>
                       <DashboardRoute />
