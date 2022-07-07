@@ -120,7 +120,7 @@ export const theme: Theme = {
   // button
   buttonPrimary: colors.coral_500,
   buttonOutline: colors.transparent,
-  buttonGhost: colors.neutralgray_300,
+  buttonGhost: colors.white,
   buttonLight: colors.white,
   buttonDisabled: colors.neutralgray_200,
   // input

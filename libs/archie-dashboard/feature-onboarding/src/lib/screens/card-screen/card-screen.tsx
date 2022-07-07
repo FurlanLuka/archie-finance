@@ -16,7 +16,7 @@ import { ButtonPrimary, Container, ParagraphXS, SubtitleM } from '@archie-webapp
 import { Step } from '@archie-webapps/util-constants';
 
 import imgCardReady from '../../../assets/img-card-ready.png';
-import { EmailVerification } from '../../components/email-verification/email-verification';
+import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
 import { CardScreenStyled } from './card-screen.styled';
@@ -91,7 +91,7 @@ export const CardScreen: FC = () => {
   return (
     <Container column mobileColumn alignItems="center">
       <StepsIndicator currentStep={Step.CARD} />
-      <EmailVerification />
+      <EmailVerificationAlert />
       <CardScreenStyled>
         <SubtitleM className="title">{getTitle()}</SubtitleM>
         <ParagraphXS className="subtitle">
@@ -108,7 +108,7 @@ export const CardScreen: FC = () => {
           <img src={imgCardReady} alt={t('card_step.img_alt')} />
         </div>
         <ButtonPrimary
-          maxWidth="16rem"
+          maxWidth="20rem"
           isLoading={getCollateralTotalValueResponse.state === RequestState.LOADING}
           // isDisabled={isEmailVerified} TBD
         >
