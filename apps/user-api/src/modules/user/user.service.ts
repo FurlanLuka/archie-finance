@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -8,18 +7,14 @@ import { User } from 'auth0';
 import { Auth0Service } from '../auth0/auth0.service';
 import { GetEmailVerificationResponse } from './user.interfaces';
 import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
-import {
-  SERVICE_NAME as ONBOARDING_SERVICE_NAME,
-  EventPatterns as OnboardingServiceEventPatterns,
-} from '@archie/api/onboarding-api/constants';
-import { ClientProxy } from '@nestjs/microservices';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { EMAIL_VERIFIED_EXCHANGE } from '@archie/api/user-api/constants';
 
 @Injectable()
 export class UserService {
   constructor(
     private auth0Service: Auth0Service,
-    @Inject(ONBOARDING_SERVICE_NAME)
-    private onboardingServiceClient: ClientProxy,
+    private amqpConnection: AmqpConnection,
   ) {}
 
   async isEmailVerified(userId: string): Promise<GetEmailVerificationResponse> {
@@ -28,13 +23,9 @@ export class UserService {
     });
 
     if (user.email_verified) {
-      this.onboardingServiceClient.emit(
-        OnboardingServiceEventPatterns.COMPLETE_ONBOARDING_STAGE,
-        {
-          stage: 'emailVerificationStage',
-          userId,
-        },
-      );
+      this.amqpConnection.publish(EMAIL_VERIFIED_EXCHANGE.name, '', {
+        userId,
+      });
     }
 
     return {

@@ -4,3 +4,4 @@ export type GetOnboardingResponse = Omit<
   Onboarding,
   'userId' | 'updatedAt' | 'createdAt'
 >;
+

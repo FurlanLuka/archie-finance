@@ -1,9 +1,5 @@
 import { VaultService } from '@archie-microservices/vault';
-import {
-  Inject,
-  Injectable,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Kyc } from './kyc.entity';
@@ -14,19 +10,15 @@ import {
 import { KycDto } from './kyc.dto';
 import { DateTime } from 'luxon';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
-import {
-  SERVICE_NAME as ONBOARDING_SERVICE_NAME,
-  EventPatterns as OnboardingServiceEventPatterns,
-} from '@archie/api/onboarding-api/constants';
-import { ClientProxy } from '@nestjs/microservices';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { KYC_SUBMITTED_EXCHANGE } from '@archie/api/user-api/constants';
 
 @Injectable()
 export class KycService {
   constructor(
     @InjectRepository(Kyc) private kycRepository: Repository<Kyc>,
-    @Inject(ONBOARDING_SERVICE_NAME)
-    private onboardingServiceClient: ClientProxy,
     private vaultService: VaultService,
+    private amqpConnection: AmqpConnection,
   ) {}
 
   async getKyc(userId: string): Promise<GetKycResponse> {
@@ -123,13 +115,9 @@ export class KycService {
       ssn: encryptedData[11],
     });
 
-    this.onboardingServiceClient.emit(
-      OnboardingServiceEventPatterns.COMPLETE_ONBOARDING_STAGE,
-      {
-        stage: 'kycStage',
-        userId,
-      },
-    );
+    this.amqpConnection.publish(KYC_SUBMITTED_EXCHANGE.name, '', {
+      userId,
+    });
 
     return {
       firstName: payload.firstName,

@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  Inject,
   Injectable,
   Logger,
   NotFoundException,
@@ -35,15 +34,15 @@ import {
 } from './apto.interfaces';
 import { AptoCardApplication } from './apto_card_application.entity';
 import { ConfigService } from '@archie-microservices/config';
-import { ConfigVariables } from '@archie/api/credit-api/constants';
+import {
+  CARD_ACTIVATED_EXCHANGE,
+  PHONE_NUMBER_VERIFIED_EXCHANGE,
+  ConfigVariables,
+} from '@archie/api/credit-api/constants';
 import { AptoCard } from './apto_card.entity';
 import { CreditService } from '../credit/credit.service';
 import { GetCreditResponse } from '../credit/credit.interfaces';
-import {
-  SERVICE_NAME as ONBOARDING_SERVICE_NAME,
-  EventPatterns as OnboardingServiceEventPatterns,
-} from '@archie/api/onboarding-api/constants';
-import { ClientProxy } from '@nestjs/microservices';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 export class AptoService {
@@ -60,8 +59,7 @@ export class AptoService {
     @InjectRepository(AptoCard)
     private aptoCardRepository: Repository<AptoCard>,
     private creditService: CreditService,
-    @Inject(ONBOARDING_SERVICE_NAME)
-    private onboardingServiceClient: ClientProxy,
+    private amqpConnection: AmqpConnection,
   ) {}
 
   public async startPhoneVerification(
@@ -128,13 +126,9 @@ export class AptoService {
         secret,
       );
 
-    this.onboardingServiceClient.emit(
-      OnboardingServiceEventPatterns.COMPLETE_ONBOARDING_STAGE,
-      {
-        stage: 'phoneVerificationStage',
-        userId,
-      },
-    );
+    this.amqpConnection.publish(PHONE_NUMBER_VERIFIED_EXCHANGE.name, '', {
+      userId,
+    });
 
     await this.aptoVerificationRepository.update(
       {
@@ -433,13 +427,9 @@ export class AptoService {
         cardId: issueCardResponse.account_id,
       });
 
-      this.onboardingServiceClient.emit(
-        OnboardingServiceEventPatterns.COMPLETE_ONBOARDING_STAGE,
-        {
-          stage: 'cardActivationStage',
-          userId: aptoCardApplication.userId,
-        },
-      );
+      this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
+        userId: aptoCardApplication.userId,
+      });
 
       await this.initiallyLoadCard(
         aptoCardApplication.userId,

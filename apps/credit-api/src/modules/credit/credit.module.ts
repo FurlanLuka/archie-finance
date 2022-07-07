@@ -6,26 +6,26 @@ import {
 } from './credit.controller';
 import { Credit } from './credit.entity';
 import { CreditService } from './credit.service';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import {
-  SERVICE_QUEUE_NAME as ONBOARDING_SERVICE_QUEUE_NAME,
-  SERVICE_NAME as ONBOARDING_SERVICE_NAME,
-} from '@archie/api/onboarding-api/constants';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+  ConfigVariables,
+  COLLATERAL_RECEIVED_EXCHANGE,
+} from '@archie/api/credit-api/constants';
+import { ConfigService, ConfigModule } from '@archie-microservices/config';
 
 @Module({
   controllers: [CreditController, InternalCreditController],
   imports: [
     TypeOrmModule.forFeature([Credit]),
-    ClientsModule.register([
-      {
-        name: ONBOARDING_SERVICE_NAME,
-        transport: Transport.RMQ,
-        options: {
-          urls: [process.env.QUEUE_URL],
-          queue: ONBOARDING_SERVICE_QUEUE_NAME,
-        },
-      },
-    ]),
+    RabbitMQModule.forRootAsync(RabbitMQModule, {
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        exchanges: [COLLATERAL_RECEIVED_EXCHANGE],
+        uri: configService.get(ConfigVariables.QUEUE_URL),
+        connectionInitOptions: { wait: false },
+      }),
+    }),
   ],
   providers: [CreditService],
   exports: [CreditService],

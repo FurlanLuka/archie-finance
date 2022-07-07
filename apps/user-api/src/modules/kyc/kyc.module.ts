@@ -1,29 +1,29 @@
 import { VaultModule } from '@archie-microservices/vault';
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { InternalKycController, KycController } from './kyc.controller';
 import { Kyc } from './kyc.entity';
 import { KycService } from './kyc.service';
+import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import {
-  SERVICE_QUEUE_NAME as ONBOARDING_SERVICE_QUEUE_NAME,
-  SERVICE_NAME as ONBOARDING_SERVICE_NAME,
-} from '@archie/api/onboarding-api/constants';
+  KYC_SUBMITTED_EXCHANGE,
+  ConfigVariables,
+} from '@archie/api/user-api/constants';
+import { ConfigModule, ConfigService } from '@archie-microservices/config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Kyc]),
     VaultModule,
-    ClientsModule.register([
-      {
-        name: ONBOARDING_SERVICE_NAME,
-        transport: Transport.RMQ,
-        options: {
-          urls: [process.env.QUEUE_URL],
-          queue: ONBOARDING_SERVICE_QUEUE_NAME,
-        },
-      },
-    ]),
+    RabbitMQModule.forRootAsync(RabbitMQModule, {
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        exchanges: [KYC_SUBMITTED_EXCHANGE],
+        uri: configService.get(ConfigVariables.QUEUE_URL),
+        connectionInitOptions: { wait: false },
+      }),
+    }),
   ],
   controllers: [KycController, InternalKycController],
   providers: [KycService],

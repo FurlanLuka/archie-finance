@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Credit } from './credit.entity';
@@ -13,11 +13,8 @@ import {
   AssetInformation,
 } from '@archie-microservices/api-interfaces/asset_information';
 import { CreateCreditMinimumCollateralError } from './credit.errors';
-import {
-  SERVICE_NAME as ONBOARDING_SERVICE_NAME,
-  EventPatterns as OnboardingServiceEventPatterns,
-} from '@archie/api/onboarding-api/constants';
-import { ClientProxy } from '@nestjs/microservices';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { COLLATERAL_RECEIVED_EXCHANGE } from '@archie/api/credit-api/constants';
 
 @Injectable()
 export class CreditService {
@@ -26,8 +23,7 @@ export class CreditService {
 
   constructor(
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
-    @Inject(ONBOARDING_SERVICE_NAME)
-    private onboardingServiceClient: ClientProxy,
+    private amqpConnection: AmqpConnection,
     private internalApiService: InternalApiService,
   ) {}
 
@@ -87,13 +83,9 @@ export class CreditService {
       totalCollateralValue = this.MAXIMUM_CREDIT;
     }
 
-    this.onboardingServiceClient.emit(
-      OnboardingServiceEventPatterns.COMPLETE_ONBOARDING_STAGE,
-      {
-        stage: 'collateralizationStage',
-        userId,
-      },
-    );
+    this.amqpConnection.publish(COLLATERAL_RECEIVED_EXCHANGE.name, '', {
+      userId,
+    });
 
     await this.creditRepository.save({
       userId,

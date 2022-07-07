@@ -3,9 +3,6 @@ import { GetOnboardingResponse } from './onboarding.interfaces';
 
 export class CompleteOnboardingStageDto {
   @IsString()
-  stage: string;
-
-  @IsString()
   userId: string;
 }
 

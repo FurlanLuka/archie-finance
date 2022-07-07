@@ -17,6 +17,7 @@ import { HealthModule } from '@archie-microservices/health';
         ConfigVariables.TYPEORM_USERNAME,
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
+        ConfigVariables.QUEUE_URL,
       ],
       parse: (_configVariable, value) => value,
     }),

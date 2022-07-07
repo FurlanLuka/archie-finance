@@ -48,6 +48,7 @@
       "@archie/api/utils/microservice": [
         "libs/api/utils/microservice/src/index.ts"
       ],
+      "@archie/api/utils/queue": ["libs/api/utils/queue/src/index.ts"],
       "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"]
     }
   },
