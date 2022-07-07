@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "v*"
+      - "!v*-alpha"
 
 env:
   ECR_REPOSITORY: archie-production-container-repository
