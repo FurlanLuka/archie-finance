@@ -3,6 +3,7 @@
   "btn_ok": "Ok",
   "btn_yes": "Yes",
   "btn_cancel": "Cancel",
+  "btn_continue": "Continue",
   "steps_indicator": {
     "first": "Sign up",
     "second": "Collateralize",
@@ -86,16 +87,28 @@
     "img_alt": "Your Archie Card is ready",
     "btn": "Go to my dashboard"
   },
-  "email_verification": {
+  "email_verification_alert": {
     "title": "Please verify your email",
     "text_1": "Check your email for a verification link from Archie. If you did not receive a verification email, click",
     "btn": "here",
-    "text_2": "to resend it."
+    "text_2": "to resend it.",
+    "img_alt": "Resend verification email"
+  },
+  "collateral_received_modal": {
+    "title": "We received your collateral!",
+    "text": "Your current collateral adds up to a $540 credit line.  Feel free to collateralize more assets. Note you can use  different cryptocurrencies as collateral! Click 'Next' when you're ready to get your Archie Card.",
+    "img_alt": "Collateral received",
+    "btn": "Collateralize more"
   },
   "dashboard": {
     "title": "Hi, {{name}}",
     "subtitle": "Member since {{date}}",
     "reveal_card_modal": "Show card details?"
+  },
+  "setup_2fa_banner": {
+    "title": "Protect your funds with 2FA",
+    "text": "Setup Multi-Factor Authentication using your authenticator app.",
+    "img_alt": "Setup 2FA"
   },
   "margin_call_alert": {
     "title": "You have reached margin call",
