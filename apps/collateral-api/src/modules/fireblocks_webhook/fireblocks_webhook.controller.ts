@@ -1,6 +1,8 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { FireblocksWebhookService } from './fireblocks_webhook.service';
 import { FireblocksWebhookGuard } from './guard/fireblocks_webhook.guard';
+import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { FireblocksWebhookError } from './fireblocks_webhook.errors';
 
 @Controller('v1/fireblocks/webhook')
 export class FireblocksWebhookController {
@@ -8,6 +10,7 @@ export class FireblocksWebhookController {
 
   @Post('')
   @UseGuards(FireblocksWebhookGuard)
+  @ApiErrorResponse([FireblocksWebhookError])
   public async webhook(@Body() body) {
     return this.fireblocksWebhookService.webhookHandler(body);
   }

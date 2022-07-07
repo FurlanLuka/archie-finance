@@ -13,6 +13,7 @@ import {
 import { ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { AssetList } from '@archie-microservices/api-interfaces/asset_information';
+import { FireblocksWebhookError } from './fireblocks_webhook.errors';
 
 @Injectable()
 export class FireblocksWebhookService {
@@ -85,18 +86,13 @@ export class FireblocksWebhookService {
         payload.data.status,
       );
     } catch (error) {
-      Logger.error({
-        code: 'FIREBLOCKS_WEBHOOK_ERROR',
-        metadata: {
-          transactionId: payload.data.id,
-          assetId: payload.data.assetId,
-          amount: payload.data.netAmount,
-          destination: payload.data.destinationAddress,
-          status: payload.data.status,
-        },
+      throw new FireblocksWebhookError({
+        transactionId: payload.data.id,
+        assetId: payload.data.assetId,
+        amount: payload.data.netAmount,
+        destination: payload.data.destinationAddress,
+        status: payload.data.status,
       });
-
-      throw new InternalServerErrorException();
     }
   }
 }

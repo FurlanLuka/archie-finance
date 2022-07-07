@@ -14,7 +14,11 @@ import {
 } from '@archie-microservices/api-interfaces/kyc';
 import { KycDto } from './kyc.dto';
 import { DateTime } from 'luxon';
-import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
+import {
+  KycAlreadySubmitted,
+  KycNotFoundError,
+  KycRecordCreationInternalError,
+} from './kyc.errors';
 
 @Injectable()
 export class KycService {
@@ -31,13 +35,6 @@ export class KycService {
     });
 
     if (kycRecord === null) {
-      Logger.error({
-        code: 'GET_KYC_ERROR',
-        metadata: {
-          userId,
-        },
-      });
-
       throw new KycNotFoundError();
     }
 
@@ -78,13 +75,6 @@ export class KycService {
     });
 
     if (kycRecord) {
-      Logger.error({
-        code: 'CREATE_KYC_ALREADY_EXISTS_ERROR',
-        metadata: {
-          userId,
-        },
-      });
-
       throw new KycAlreadySubmitted();
     }
 
@@ -131,18 +121,9 @@ export class KycService {
     } catch (error) {
       await queryRunner.rollbackTransaction();
 
-      Logger.error({
-        code: 'CREATE_KYC_ERROR',
-        metadata: {
-          userId,
-          error: JSON.stringify(error),
-        },
+      throw new KycRecordCreationInternalError({
+        error: JSON.stringify(error),
       });
-
-      throw new InternalServerErrorException(
-        'ERR_CREATING_KYC_RECORD',
-        'There was an issue creating KYC record. Please try again or contact support.',
-      );
     } finally {
       await queryRunner.release();
     }

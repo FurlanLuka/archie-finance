@@ -64,13 +64,6 @@ export class CreditService {
     );
 
     if (totalCollateralValue < this.MINIMUM_CREDIT) {
-      Logger.error({
-        code: 'CREATE_CREDIT_MINIMUM_COLLATERAL_ERROR',
-        metadata: {
-          userId,
-        },
-      });
-
       throw new CreateCreditMinimumCollateralError(this.MINIMUM_CREDIT);
     }
 
