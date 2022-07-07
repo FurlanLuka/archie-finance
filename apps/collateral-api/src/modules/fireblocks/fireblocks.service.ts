@@ -90,12 +90,6 @@ export class FireblocksService {
     amount: number;
     destinationAddress: string;
   }): Promise<void> {
-    console.log('kriejting', {
-      asset,
-      amount,
-      vaultAccountId,
-      destinationAddress,
-    });
     const transaction = await this.fireblocksClient.createTransaction({
       assetId: asset,
       amount: amount,

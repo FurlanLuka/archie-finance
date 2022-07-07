@@ -16,6 +16,9 @@ export class CollateralWithdrawal {
   @Column('varchar', { nullable: false, select: false })
   userId: string;
 
+  @Column('varchar', { nullable: false, select: false })
+  transactionId: string;
+
   @Column('varchar', { nullable: false })
   asset: string;
 

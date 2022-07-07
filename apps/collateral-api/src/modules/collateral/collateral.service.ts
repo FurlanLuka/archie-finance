@@ -107,37 +107,48 @@ export class CollateralService {
   public async createWithdrawal({
     userId,
     asset,
-    currentAmount,
     withdrawalAmount,
     destinationAddress,
+    transactionId,
+    status,
   }: {
+    transactionId: string;
     userId: string;
     asset: string;
-    currentAmount: number;
     withdrawalAmount: number;
     destinationAddress: string;
+    status: TransactionStatus;
   }): Promise<void> {
     try {
-      const userVaultAccount =
-        await this.userVaultAccountService.getUserVaultAccount(userId);
-      if (!userVaultAccount) {
-        // TODO handle no vault account or something
-        return;
-      }
+      const currentCollateral = await this.collateralRepository.findOneByOrFail(
+        {
+          userId: userId,
+          asset,
+        },
+      );
 
-      await this.fireblocksService.withdrawAsset({
-        amount: withdrawalAmount,
+      await this.collateralWithdrawalRepository.save({
+        userId,
         asset,
-        destinationAddress,
-        vaultAccountId: userVaultAccount.id,
+        withdrawalAmount,
+        currentAmount: currentCollateral.amount,
+        destinationAddress: destinationAddress,
+        transactionId,
       });
+
+      await this.collateralDepositRepository
+        .createQueryBuilder('CollateralDeposit')
+        .update(CollateralDeposit)
+        .where('userId = :userId AND asset = :asset', { userId, asset })
+        .set({ amount: () => 'amount - :withdrawalAmount' })
+        .setParameter('withdrawalAmount', withdrawalAmount)
+        .execute();
     } catch (error) {
       Logger.error({
         code: 'CREATE_WITHDRAWAL_ERROR',
         metadata: {
           userId,
           asset,
-          currentAmount,
           withdrawalAmount,
           destinationAddress,
           error: JSON.stringify(error),
@@ -233,6 +244,13 @@ export class CollateralService {
     withdrawalAmount: number,
     destinationAddress: string,
   ): Promise<void> {
+    const userVaultAccount =
+      await this.userVaultAccountService.getUserVaultAccount(userId);
+    if (!userVaultAccount) {
+      // TODO handle no vault account or something
+      return;
+    }
+
     const userCollateral: GetUserCollateral = await this.getUserCollateral(
       userId,
     );
@@ -249,15 +267,12 @@ export class CollateralService {
       throw new NotFoundException('Not enough amount');
     }
 
-    await this.createWithdrawal({
-      currentAmount: availableCollateral.amount,
-      withdrawalAmount,
-      destinationAddress,
+    await this.fireblocksService.withdrawAsset({
+      amount: withdrawalAmount,
       asset,
-      userId,
+      destinationAddress,
+      vaultAccountId: userVaultAccount.id,
     });
-
-    return;
   }
 
   public async getUserWithdrawals(userId: string): Promise<GetUserWithdrawals> {

@@ -17,9 +17,7 @@ import { ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { AssetList } from '@archie-microservices/api-interfaces/asset_information';
 import { UserVaultAccount } from '../user_vault_account/user_vault_account.entity';
-import { DataSource, Repository } from 'typeorm';
-import { CollateralWithdrawal } from '../collateral/collateral_withdrawal.entity';
-import { Collateral } from '../collateral/collateral.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class FireblocksWebhookService {
@@ -29,7 +27,6 @@ export class FireblocksWebhookService {
     private configService: ConfigService,
     @InjectRepository(UserVaultAccount)
     private userVaultAccountRepository: Repository<UserVaultAccount>,
-    private dataSource: DataSource,
   ) {}
 
   public async webhookHandler(payload: FireblocksWebhookDto): Promise<void> {
@@ -140,37 +137,14 @@ export class FireblocksWebhookService {
         throw new NotFoundException();
       }
 
-      const queryRunner = this.dataSource.createQueryRunner();
-
-      await queryRunner.connect();
-      await queryRunner.startTransaction();
-      const currentCollateral = await queryRunner.manager.findOneByOrFail(
-        Collateral,
-        {
-          userId: userVaultAccount.userId,
-          asset: transaction.assetId,
-        },
-      );
-
-      await queryRunner.manager.save(CollateralWithdrawal, {
-        userId: userVaultAccount.userId,
+      await this.collateralService.createWithdrawal({
         asset: transaction.assetId,
-        withdrawalAmount: transaction.amount,
-        currentAmount: currentCollateral.amount,
         destinationAddress: transaction.destinationAddress,
+        status: transaction.status,
+        transactionId: transaction.id,
+        withdrawalAmount: transaction.amount,
+        userId: userVaultAccount.userId,
       });
-
-      // Do we want the collateralId here? then we need to change Collateral typedef
-      await queryRunner.manager.update(
-        Collateral,
-        {
-          userId: userVaultAccount.userId,
-          asset: transaction.assetId,
-        },
-        {
-          amount: currentCollateral.amount - transaction.amount,
-        },
-      );
     } catch (error) {
       Logger.error({
         code: 'FIREBLOCKS_WEBHOOK_WITHDRAW_ERROR',
