@@ -4,7 +4,6 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@archie-microservices/config';
-import { ConfigVariables } from '../../../interfaces';
 import Rize from '@rizefinance/rize-js';
 import {
   ComplianceDocumentAcknowledgementRequest,
@@ -17,6 +16,7 @@ import {
   DebitCardAccessToken,
   Transaction,
 } from './rize_api.interfaces';
+import { ConfigVariables } from '@archie/api/credit-api/constants';
 
 @Injectable()
 export class RizeApiService {
@@ -31,46 +31,22 @@ export class RizeApiService {
   }
 
   public async searchCustomers(userId: string): Promise<Customer | null> {
-    try {
-      const customers: RizeList<Customer> =
-        await this.rizeClient.customer.getList({
-          external_uid: userId,
-          include_initiated: true,
-        });
-
-      return customers.data[0] ?? null;
-    } catch (error) {
-      Logger.error({
-        code: 'ERROR_SEARCHING_EXISTING_CUSTOMER',
-        metadata: {
-          error: error,
-          errorResponse: error.data,
-        },
+    const customers: RizeList<Customer> =
+      await this.rizeClient.customer.getList({
+        external_uid: userId,
+        include_initiated: true,
       });
 
-      throw new InternalServerErrorException();
-    }
+    return customers.data[0] ?? null;
   }
 
   public async createCustomer(userId: string, email: string): Promise<string> {
-    try {
-      const customer: Customer = await this.rizeClient.customer.create(
-        userId,
-        email,
-      );
+    const customer: Customer = await this.rizeClient.customer.create(
+      userId,
+      email,
+    );
 
-      return customer.uid;
-    } catch (error) {
-      Logger.error({
-        code: 'ERROR_CREATING_CUSTOMER',
-        metadata: {
-          error: error,
-          errorResponse: error.data,
-        },
-      });
-
-      throw new InternalServerErrorException();
-    }
+    return customer.uid;
   }
 
   public async addCustomerPii(
@@ -78,52 +54,27 @@ export class RizeApiService {
     email: string,
     customerDetails: CustomerDetails,
   ): Promise<void> {
-    try {
-      await this.rizeClient.customer.update(
-        customerUid,
-        email,
-        customerDetails,
-        '',
-      );
-    } catch (error) {
-      Logger.error({
-        code: 'ERROR_UPDATING_CUSTOMER_PII',
-        metadata: {
-          error: error,
-          errorResponse: error.data,
-        },
-      });
-
-      throw new InternalServerErrorException();
-    }
+    await this.rizeClient.customer.update(
+      customerUid,
+      email,
+      customerDetails,
+      '',
+    );
   }
 
   public async createCheckingComplianceWorkflow(
     customerId: string,
   ): Promise<ComplianceWorkflow> {
-    try {
-      const products: RizeList<Product> =
-        await this.rizeClient.product.getList();
+    const products: RizeList<Product> = await this.rizeClient.product.getList();
 
-      const product: Product = products.data.find(
-        (product) => product.compliance_plan_name === this.COMPLIANCE_PLAN_NAME,
-      );
+    const product: Product = products.data.find(
+      (product) => product.compliance_plan_name === this.COMPLIANCE_PLAN_NAME,
+    );
 
-      return this.rizeClient.complianceWorkflow.create(
-        customerId,
-        product.product_compliance_plan_uid,
-      );
-    } catch (error) {
-      Logger.error({
-        code: 'ERROR_CREATING_CHECKING_COMPLIANCE_WORKFLOW',
-        metadata: {
-          error: error,
-          errorResponse: error.data,
-        },
-      });
-
-      throw new InternalServerErrorException();
-    }
+    return this.rizeClient.complianceWorkflow.create(
+      customerId,
+      product.product_compliance_plan_uid,
+    );
   }
 
   public async acceptComplianceDocuments(
@@ -131,60 +82,24 @@ export class RizeApiService {
     complianceWorkflowUid: string,
     documents: ComplianceDocumentAcknowledgementRequest[],
   ): Promise<ComplianceWorkflow> {
-    try {
-      return this.rizeClient.complianceWorkflow.acknowledgeComplianceDocuments(
-        complianceWorkflowUid,
-        customerId,
-        documents,
-      );
-    } catch (error) {
-      Logger.error({
-        code: 'ERROR_ACKNOWLEDGING_COMPLIANCE_DOCUMENTS',
-        metadata: {
-          error: error,
-          errorResponse: error.data,
-        },
-      });
-
-      throw new InternalServerErrorException();
-    }
+    return this.rizeClient.complianceWorkflow.acknowledgeComplianceDocuments(
+      complianceWorkflowUid,
+      customerId,
+      documents,
+    );
   }
 
   public async getLatestComplianceWorkflow(
     customerId: string,
   ): Promise<ComplianceWorkflow> {
-    try {
-      return await this.rizeClient.complianceWorkflow.viewLatest(customerId);
-    } catch (error) {
-      Logger.error({
-        code: 'ERROR_FETCHING_LATEST_COMPLIANCE_DOCUMENTS',
-        metadata: {
-          error: error,
-          errorResponse: error.data,
-        },
-      });
-
-      throw new InternalServerErrorException();
-    }
+    return this.rizeClient.complianceWorkflow.viewLatest(customerId);
   }
 
   public async createCustomerProduct(
     customerId: string,
     productId: string,
   ): Promise<void> {
-    try {
-      await this.rizeClient.customerProduct.create(customerId, productId);
-    } catch (error) {
-      Logger.error({
-        code: 'ERROR_CREATING_CUSTOMER_PRODUCT',
-        metadata: {
-          error: error,
-          errorResponse: error.data,
-        },
-      });
-
-      throw new InternalServerErrorException();
-    }
+    await this.rizeClient.customerProduct.create(customerId, productId);
   }
 
   public async createDebitCard(
@@ -192,83 +107,35 @@ export class RizeApiService {
     customerId: string,
     poolId,
   ): Promise<DebitCard> {
-    try {
-      return this.rizeClient.debitCard.create(userId, customerId, poolId);
-    } catch (error) {
-      Logger.error({
-        code: 'ERROR_CREATING_DEBIT_CARD',
-        metadata: {
-          error: error,
-          errorResponse: error.data,
-        },
-      });
-
-      throw new InternalServerErrorException();
-    }
+    return this.rizeClient.debitCard.create(userId, customerId, poolId);
   }
 
   public async getDebitCard(userId: string): Promise<DebitCard | null> {
-    try {
-      const debitCards: RizeList<DebitCard> =
-        await this.rizeClient.debitCard.getList({ external_uid: userId });
+    const debitCards: RizeList<DebitCard> =
+      await this.rizeClient.debitCard.getList({ external_uid: userId });
 
-      return debitCards.data[0] ?? null;
-    } catch (error) {
-      Logger.error({
-        code: 'ERROR_SEARCHING_EXISTING_DEBIT_CARDS',
-        metadata: {
-          error: error,
-          errorResponse: error.data,
-        },
-      });
-
-      throw new InternalServerErrorException();
-    }
+    return debitCards.data[0] ?? null;
   }
 
   public async getDebitCardAccessToken(
     cardID: string,
   ): Promise<DebitCardAccessToken> {
-    try {
-      const debitCardAccessToken: DebitCardAccessToken =
-        await this.rizeClient.debitCard.getAccessTokenData(cardID);
+    const debitCardAccessToken: DebitCardAccessToken =
+      await this.rizeClient.debitCard.getAccessTokenData(cardID);
 
-      return debitCardAccessToken;
-    } catch (error) {
-      Logger.error({
-        code: 'ERROR_FETCHING_DEBIT_CARD_ACCESS_TOKEN',
-        metadata: {
-          error: error,
-          errorResponse: error.data,
-        },
-      });
-
-      throw new InternalServerErrorException();
-    }
+    return debitCardAccessToken;
   }
 
   public async getVirtualCardImage(
     debitCardAccessToken: DebitCardAccessToken,
   ): Promise<string> {
-    try {
-      const virtualCardImage: string =
-        await this.rizeClient.debitCard.getVirtualCardImage(
-          debitCardAccessToken.config_id,
-          debitCardAccessToken.token,
-        );
+    const virtualCardImage: string =
+      await this.rizeClient.debitCard.getVirtualCardImage(
+        debitCardAccessToken.config_id,
+        debitCardAccessToken.token,
+      );
 
-      return virtualCardImage;
-    } catch (error) {
-      Logger.error({
-        code: 'ERROR_FETCHING_VIRTUAL_CARD_IMAGE',
-        metadata: {
-          error: error,
-          errorResponse: error.data,
-        },
-      });
-
-      throw new InternalServerErrorException();
-    }
+    return virtualCardImage;
   }
 
   public async getTransactions(
@@ -276,26 +143,14 @@ export class RizeApiService {
     page: number,
     limit: number,
   ): Promise<Transaction[]> {
-    try {
-      const transactions: RizeList<Transaction> =
-        await this.rizeClient.transaction.getList({
-          customer_uid: [customerId],
-          limit: limit,
-          offset: page * limit,
-          sort: 'created_at_desc',
-        });
-
-      return transactions.data;
-    } catch (error) {
-      Logger.error({
-        code: 'ERROR_FETCHING_TRANSACTIONS',
-        metadata: {
-          error: error,
-          errorResponse: error.data,
-        },
+    const transactions: RizeList<Transaction> =
+      await this.rizeClient.transaction.getList({
+        customer_uid: [customerId],
+        limit: limit,
+        offset: page * limit,
+        sort: 'created_at_desc',
       });
 
-      throw new InternalServerErrorException();
-    }
+    return transactions.data;
   }
 }
