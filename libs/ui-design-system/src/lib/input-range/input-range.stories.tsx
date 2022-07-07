@@ -7,7 +7,12 @@ export default {
   component: InputRange,
 } as Meta;
 
-export const Template: Story<InputRangeProps> = (args) => <InputRange {...args} />;
+export const Template: Story<InputRangeProps> = (args) => (
+  <div style={{ maxWidth: '30%' }}>
+    <InputRange {...args} />
+  </div>
+);
+
 Template.args = {
   label: 'Estimated monthly spending',
   min: 200,

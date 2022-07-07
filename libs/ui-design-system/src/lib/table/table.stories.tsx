@@ -95,7 +95,11 @@ const tableData = [
   },
 ];
 
-export const Template: Story<TableProps> = (args) => <Table {...args} />;
+export const Template: Story<TableProps> = (args) => (
+  <div style={{ maxWidth: '60%' }}>
+    <Table {...args} />
+  </div>
+);
 Template.args = {
   columns: tableColumns,
   data: tableData,

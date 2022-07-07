@@ -7,9 +7,11 @@ export default {
   component: InputText,
 } as Meta;
 
-export const Template: Story = (args) => (
-  <InputText>
-    Join the Waitlist
-    <input placeholder="Email address" />
-  </InputText>
+export const Template: Story = () => (
+  <div style={{ maxWidth: '30%' }}>
+    <InputText>
+      Join the Waitlist
+      <input placeholder="Email address" />
+    </InputText>
+  </div>
 );
