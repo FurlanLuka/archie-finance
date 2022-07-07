@@ -22,7 +22,7 @@ export const Page = styled.div`
   }
 `;
 
-interface ContainerProps {
+export interface ContainerProps {
   column?: boolean;
   alignItems?: string;
   justifyContent?: string;

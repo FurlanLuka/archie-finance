@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { breakpoints } from '@archie-webapps/ui-theme'
 
-interface TypographyProps {
+export interface TypographyProps {
   color?: string;
   weight?: number;
 }

@@ -5,8 +5,8 @@ import { ParagraphXS } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
 import { CollateralAsset, collateralAssets } from '@archie-webapps/util-constants';
 
+import { CollateralCurrency } from './blocks/collateral-currency/collateral-currency';
 import * as Styled from './collateral-asset-select.styled';
-import { CollateralCurrency } from './fragments/collateral-currency/collateral-currency';
 
 interface InputSelectProps {
   selectedAsset?: CollateralAsset;

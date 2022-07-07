@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import { breakpoints } from '@archie-webapps/ui-theme';
 
-interface CardProps {
+export interface CardProps {
   column?: boolean;
   alignItems?: string;
   justifyContent?: string;

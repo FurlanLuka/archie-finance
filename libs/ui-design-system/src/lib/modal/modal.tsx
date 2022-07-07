@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { ModalStyled, ModalOverlay, ModalContent } from './modal.styled';
 
-interface ModalProps {
+export interface ModalProps {
   isOpen: boolean;
   close: () => void;
   maxWidth?: string;

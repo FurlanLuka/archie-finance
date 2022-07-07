@@ -10,7 +10,7 @@ import { ParagraphS } from '../typography/typography.styled';
 
 import { HeaderStyled, MobileNav } from './header.styled';
 
-interface HeaderProps {
+export interface HeaderProps {
   maxWidth?: string;
 }
 

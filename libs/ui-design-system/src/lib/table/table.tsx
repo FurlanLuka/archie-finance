@@ -3,7 +3,7 @@ import { useTable, Column } from 'react-table';
 
 import { TableStyled } from './table.styled';
 
-interface TableProps {
+export interface TableProps {
   columns: Column<Record<string, unknown>>[];
   data: Record<string, unknown>[];
 }

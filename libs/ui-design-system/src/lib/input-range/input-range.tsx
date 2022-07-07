@@ -4,7 +4,7 @@ import { ParagraphS, ParagraphXS } from '../typography/typography.styled';
 
 import { InputRangeStyled } from './input-range.styled';
 
-interface InputRangeProps {
+export interface InputRangeProps {
   label: string;
   min: number;
   max: number;
