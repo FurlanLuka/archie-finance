@@ -1,6 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
-  CreateTransactionResponse,
   DepositAddressResponse,
   FireblocksSDK,
   GenerateAddressResponse,
@@ -90,8 +89,14 @@ export class FireblocksService {
     asset: string;
     amount: number;
     destinationAddress: string;
-  }): Promise<CreateTransactionResponse> {
-    return this.fireblocksClient.createTransaction({
+  }): Promise<void> {
+    console.log('kriejting', {
+      asset,
+      amount,
+      vaultAccountId,
+      destinationAddress,
+    });
+    const transaction = await this.fireblocksClient.createTransaction({
       assetId: asset,
       amount: amount,
       source: {
@@ -104,6 +109,10 @@ export class FireblocksService {
           address: destinationAddress,
         },
       },
+    });
+    Logger.log({
+      code: 'FIREBLOCKS_SERVICE_CREATED_TRANSACTION',
+      transaction,
     });
   }
 }

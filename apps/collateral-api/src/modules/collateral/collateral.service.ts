@@ -117,11 +117,6 @@ export class CollateralService {
     withdrawalAmount: number;
     destinationAddress: string;
   }): Promise<void> {
-    const queryRunner = this.dataSource.createQueryRunner();
-
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
     try {
       const userVaultAccount =
         await this.userVaultAccountService.getUserVaultAccount(userId);
@@ -130,37 +125,13 @@ export class CollateralService {
         return;
       }
 
-      await queryRunner.manager.save(CollateralWithdrawal, {
-        userId,
-        asset,
-        withdrawalAmount,
-        currentAmount,
-        destinationAddress,
-      });
-
-      // Do we want the collateralId here? then we need to change Collateral typedef
-      await queryRunner.manager.update(
-        Collateral,
-        {
-          userId,
-          asset,
-        },
-        {
-          amount: currentAmount - withdrawalAmount,
-        },
-      );
-      const transaction = await this.fireblocksService.withdrawAsset({
+      await this.fireblocksService.withdrawAsset({
         amount: withdrawalAmount,
         asset,
         destinationAddress,
         vaultAccountId: userVaultAccount.id,
       });
-      Logger.log('Created fireblocks transaction', transaction);
-
-      await queryRunner.commitTransaction();
     } catch (error) {
-      await queryRunner.rollbackTransaction();
-
       Logger.error({
         code: 'CREATE_WITHDRAWAL_ERROR',
         metadata: {
@@ -175,8 +146,6 @@ export class CollateralService {
       });
 
       throw new InternalServerErrorException();
-    } finally {
-      await queryRunner.release();
     }
   }
 
