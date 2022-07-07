@@ -7,6 +7,7 @@ import { HealthModule } from '@archie-microservices/health';
 import { CreditModule } from './modules/credit/credit.module';
 import { InternalApiModule } from '@archie-microservices/internal-api';
 import { AptoModule } from './modules/apto/apto.module';
+import { MarginModule } from './modules/margin/margin.module';
 
 @Module({
   imports: [
@@ -55,6 +56,7 @@ import { AptoModule } from './modules/apto/apto.module';
     HealthModule,
     CreditModule,
     AptoModule,
+    MarginModule,
   ],
   controllers: [],
   providers: [],
