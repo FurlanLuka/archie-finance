@@ -38,11 +38,13 @@ jobs:
         name: services-build-development
         path: ./dist
         retention-days: 1
-  build_and_public:
+  build_and_publish:
     name: Build docker image and publish 
     needs: check_and_build
     runs-on: ubuntu-latest
     environment: development
+    outputs:
+      affectedProjects: ${{ steps.affected-projects.outputs.affectedProjects }}
     steps:
     - uses: actions/checkout@v2
       name: Checkout
@@ -75,11 +77,20 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ steps.git_details.outputs.COMMIT_HASH }}
       run: npx nx affected --base=origin/develop~1 --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+    - uses: ./.github/actions/affected-projects
+      id: affected-projects
+      name: Extract affected apps
+      with:
+        base: origin/develop~1
   deploy:
-    name: Deploy to kubernetes cluster
-    needs: build_and_public
+    name: Deploy ${{ matrix.project }}
+    needs: build_and_publish
     runs-on: ubuntu-latest
     environment: development
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJSON(needs.build_and_publish.outputs.affectedProjects) }}
     steps:
     - uses: actions/checkout@v2
       name: Checkout
@@ -100,9 +111,9 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    - name: Affected deploy
+    - name: Deploy
       uses: ./.github/actions/node-helm
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
       with:
-        args: --base=origin/develop~1 --target=deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.COMMIT_HASH }} --environment=development
+        args: ${{ matrix.project }}:deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.COMMIT_HASH }} --environment=development

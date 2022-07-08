@@ -4,7 +4,7 @@ description: 'Nx affected projects matrix'
 inputs:
   base:
     description: 'NX base for affected:apps command'
-    required: true
+    required: false
 
 outputs:
   isAffected:

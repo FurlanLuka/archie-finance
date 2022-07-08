@@ -3,7 +3,9 @@ const core = require('@actions/core');
 
 function getAffectedProjects() {
   const base = core.getInput('base');
-  const printAffectedCommand = `npx nx affected:apps --base=${base} --plain`;
+  const printAffectedCommand = `npx nx affected:apps ${
+    base ? `--base=${base}` : ''
+  } --plain`;
   const affectedOutput = execSync(printAffectedCommand).toString().trim();
 
   return affectedOutput ? affectedOutput.split(' ') : [];
