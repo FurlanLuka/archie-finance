@@ -27,7 +27,7 @@ jobs:
     - uses: ./.github/actions/affected-projects
       name: Extract affected apps
       with:
-        base: main
+        base: origin/main
   deploy:
     name: Deploy with matrix jobs
     needs: extract
