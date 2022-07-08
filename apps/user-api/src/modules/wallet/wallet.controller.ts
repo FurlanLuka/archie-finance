@@ -1,3 +1,4 @@
+import { AuthGuard } from '@archie-microservices/auth0';
 import { ApiErrorResponse } from '@archie-microservices/openapi';
 import {
   BadRequestException,
@@ -7,7 +8,6 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { WalletCreateDto, WalletDto } from './wallet.dto';
 import { WalletService } from './wallet.service';

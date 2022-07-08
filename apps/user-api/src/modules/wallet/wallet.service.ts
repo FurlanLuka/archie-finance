@@ -17,6 +17,7 @@ export class WalletService {
     userId: string;
     name: string;
   }): Promise<WalletDto> {
+    console.log('craeting', { userId, name });
     const wallet = await this.walletRepository.save({
       userId,
       name,
