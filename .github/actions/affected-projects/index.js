@@ -17,6 +17,8 @@ const run = () => {
 
   core.setOutput('isAffected', affectedProjects.length > 0);
   core.notice(`isAffected: ${affectedProjects.length > 0}`);
+
+  core.notice(JSON.stringify(affectedProjects))
 };
 
 run();
