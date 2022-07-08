@@ -23,9 +23,8 @@ export class MarginNotifications {
   @Column({ type: 'int', nullable: true })
   sentAtLtv: number | null;
 
-  // soft delete??
   @Column({ type: 'boolean' })
-  active: boolean:
+  active: boolean;
 
   @CreateDateColumn({ select: false })
   createdAt: Date;

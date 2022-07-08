@@ -4,9 +4,11 @@ import {
   Entity,
   Generated,
   Index,
+  ManyToOne,
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { MarginCalls } from './margin_calls.entity';
 
 @Entity({
   name: 'liquidation_logs',
@@ -16,7 +18,6 @@ export class LiquidationLogs {
   @Generated('uuid')
   uuid: string;
 
-  @Index()
   @Column('varchar')
   userId: string;
 
@@ -25,6 +26,9 @@ export class LiquidationLogs {
 
   @Column('float')
   amount: number;
+
+  @ManyToOne(() => MarginCalls, (marginCall: MarginCalls) => marginCall.uuid)
+  marginCall: MarginCalls;
 
   @CreateDateColumn({ select: false })
   createdAt: Date;

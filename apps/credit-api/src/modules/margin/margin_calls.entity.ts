@@ -16,7 +16,7 @@ export class MarginCalls {
   @Generated('uuid')
   uuid: string;
 
-  @Index({ unique: true })
+  @Index()
   @Column('varchar')
   userId: string;
 

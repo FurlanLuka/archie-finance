@@ -11,6 +11,11 @@ import {
 import { LiquidationLogs } from './liquidation_logs.entity';
 import { MarginCalls } from './margin_calls.entity';
 import { MarginNotifications } from './margin_notifications.entity';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import {
+  MARGIN_CALL_COMPLETED_EXCHANGE,
+  MARGIN_CALL_STARTED_EXCHANGE,
+} from '@archie/api/credit-api/constants';
 
 @Injectable()
 export class MarginService {
@@ -23,17 +28,15 @@ export class MarginService {
     @InjectRepository(MarginNotifications)
     private marginNotificationsRepository: Repository<MarginNotifications>,
     private internalApiService: InternalApiService,
+    private amqpConnection: AmqpConnection,
   ) {}
 
-  public async checkMargin(): Promise<void> {
+  public async checkMargin(userIds: string[]): Promise<void> {
     // move to queue which will accept batch of users to check
-    const userIds: string[] = ['auth0|'];
     // load Current asset prices -- we need starting number
-    const assetPrices: GetAssetPricesResponse =
-      await this.internalApiService.getAssetPrices();
     // TODO: Get starting value & calculate if value changed by 10%
     // TODO: adjust the credit limit (in any case if It goes up or down)
-
+    console.log(userIds);
     const credits: Credit[] = await this.creditRepository.find({
       where: {
         userId: In(userIds),
@@ -46,20 +49,18 @@ export class MarginService {
         },
       });
 
-    // const userId: string = userIds[0];
     await Promise.all(
       userIds.map(async (userId: string) => {
-        // load users collateral/(api call to load collateral from all users - event driven??)
-        // event driven: 1. asset price updated 2. margin service remembers the values. All deposits and withdrawals should be recorded here
         const usersCollateral: GetCollateralValueResponse =
           await this.internalApiService.getUserCollateralValue(userId);
-        // TODO: change to event driven
+        // TODO: move collateral api to credit api
 
         const totalCollateralValue: number = usersCollateral.reduce(
           (collateralPrice: number, collateralValue: CollateralValue) =>
             collateralPrice + collateralValue.price,
           0,
         );
+
         const usersCredit: Credit = credits.find(
           (credit: Credit) => credit.userId === userId,
         );
@@ -70,25 +71,35 @@ export class MarginService {
 
         await this.sendNotification(userId, ltv);
 
-        const activeMarginCall: MarginCalls | null = activeMarginCalls.find(
-          (marginCall) => marginCall.userId === userId,
-        );
+        const alreadyActiveMarginCall: MarginCalls | null =
+          activeMarginCalls.find((marginCall) => marginCall.userId === userId);
 
         if (ltv < 75) {
-          if (activeMarginCall !== null) {
+          if (alreadyActiveMarginCall !== null) {
             await this.marginCallsRepository.softDelete({
               userId: userId,
             });
+            this.amqpConnection.publish(
+              MARGIN_CALL_COMPLETED_EXCHANGE.name,
+              '',
+              {
+                userId,
+                liquidation: [],
+              },
+            );
             // TODO: Reactivate card - EVENT handled by rize
             // TODO: send email that margin is now ok, 72 hour limit ok
           }
         } else {
+          const marginCall =
+            alreadyActiveMarginCall ??
+            (await this.marginCallsRepository.save({
+              userId: userId,
+            }));
+
           const timePassedInHours: number =
-            activeMarginCall !== null
-              ? (new Date().getTime() -
-                  new Date(activeMarginCall.createdAt).getTime()) /
-                36000
-              : 0;
+            (new Date().getTime() - new Date(marginCall.createdAt).getTime()) /
+            36000;
 
           // if ltv > 85 then transition collateral to a different vault or 3 days passed since ltv reached 75% - reset if goes under
           if (ltv >= 85 || timePassedInHours >= 72) {
@@ -107,12 +118,23 @@ export class MarginService {
               userId,
               toPayArchieCollateralAmount,
               usersCollateral,
+              marginCall,
             );
             await this.marginCallsRepository.softDelete({
               userId: userId,
             });
             // TODO: Reactivate card - EVENT handled by rize
-          } else {
+            this.amqpConnection.publish(
+              MARGIN_CALL_COMPLETED_EXCHANGE.name,
+              '',
+              {
+                userId,
+              },
+            );
+          } else if (alreadyActiveMarginCall === null) {
+            this.amqpConnection.publish(MARGIN_CALL_STARTED_EXCHANGE.name, '', {
+              userId,
+            });
             // TODO: deactivate card - EVENT handled by rize
           }
         }
@@ -124,6 +146,7 @@ export class MarginService {
     userId: string,
     amount: number,
     collateralAssets: GetCollateralValueResponse,
+    marginCall: MarginCalls,
   ): Promise<void> {
     // which asset to select? - Order by the allocation (asset value)
     const sortedCollateralAssets = collateralAssets
@@ -155,6 +178,7 @@ export class MarginService {
               asset: collateralValue.asset,
               amount: collateralValue.assetAmount - newAssetAmount,
               userId,
+              marginCall: marginCall,
             };
           }
 
@@ -162,11 +186,21 @@ export class MarginService {
             asset: collateralValue.asset,
             amount: 0,
             userId,
+            marginCall: marginCall,
           };
         })
         .filter((liquidatedAsset) => liquidatedAsset.amount > 0);
 
     // TODO: transition assets to Archie using fireblocks (collateral service) - vault EVENT
+    this.amqpConnection.publish(MARGIN_CALL_COMPLETED_EXCHANGE.name, '', {
+      userId,
+      liquidation: [
+        liquidatedCollateralAssets.map((liquidatedAssets) => ({
+          asset: liquidatedAssets.asset,
+          amount: liquidatedAssets.amount,
+        })),
+      ],
+    });
 
     await this.liquidationLogsRepository.save(liquidatedCollateralAssets);
   }
@@ -241,7 +275,7 @@ export class MarginService {
         await this.marginNotificationsRepository.upsert(
           {
             userId: userId,
-            active: true,
+            active: false,
             sentAtLtv: ltv,
           },
           {
