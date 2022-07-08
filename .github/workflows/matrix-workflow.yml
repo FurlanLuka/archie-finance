@@ -14,6 +14,8 @@ jobs:
     name: Extract affected apps
     runs-on: ubuntu-latest
     environment: development
+    outputs:
+      affectedProjects: ${{ steps.affected-projects.outputs.affectedProjects }}
     steps:
     - uses: actions/checkout@v2
       name: Checkout
@@ -25,6 +27,7 @@ jobs:
     - uses: ./.github/actions/install-dependencies
       name: Install dependencies
     - uses: ./.github/actions/affected-projects
+      id: affected-projects
       name: Extract affected apps
       with:
         base: origin/main
