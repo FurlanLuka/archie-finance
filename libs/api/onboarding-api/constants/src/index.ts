@@ -1,5 +1,5 @@
-export const SERVICE_NAME = 'onboarding-api'
-export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`
+export const SERVICE_NAME = 'onboarding-api';
+export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
 export enum ConfigVariables {
   AUTH0_DOMAIN = 'AUTH0_DOMAIN',
@@ -9,4 +9,5 @@ export enum ConfigVariables {
   TYPEORM_PASSWORD = 'TYPEORM_PASSWORD',
   TYPEORM_DATABASE = 'TYPEORM_DATABASE',
   TYPEORM_PORT = 'TYPEORM_PORT',
+  QUEUE_URL = 'QUEUE_URL',
 }

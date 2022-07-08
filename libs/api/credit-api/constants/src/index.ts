@@ -16,4 +16,20 @@ export enum ConfigVariables {
   APTO_PUBLIC_KEY = 'APTO_PUBLIC_KEY',
   APTO_PRIVATE_KEY = 'APTO_PRIVATE_KEY',
   APTO_FUNDING_BALANCE_ID = 'FUNDING_BALANCE_ID',
+  QUEUE_URL = 'QUEUE_URL',
 }
+
+export const COLLATERAL_RECEIVED_EXCHANGE = {
+  name: 'credit.collateral.received.fx',
+  type: 'fanout',
+};
+
+export const CARD_ACTIVATED_EXCHANGE = {
+  name: 'credit.card.activated.fx',
+  type: 'fanout',
+};
+
+export const PHONE_NUMBER_VERIFIED_EXCHANGE = {
+  name: 'apto.phone_number.verified.fx',
+  type: 'fanout',
+};

@@ -3,10 +3,10 @@ name: Development
 on:
   push:
     tags:
-      - "v*"
-
+      - v*-alpha
+ 
 env:
-  ECR_REPOSITORY: archie-production-container-repository
+  ECR_REPOSITORY: archie-development-container-repository
   AWS_REGION: us-east-1
 
 jobs:
@@ -19,19 +19,19 @@ jobs:
       name: Checkout
       with:
         fetch-depth: 0
-    - uses: nrwl/nx-set-shas@v2
-      with:
-        main-branch-name: 'master'
+    # - uses: nrwl/nx-set-shas@v2
+    #   with:
+    #     main-branch-name: 'develop'
     - uses: ./.github/actions/install-dependencies
       name: Install dependencies
     - name: Workspace Lint
-      run: npx nx --base=origin/master workspace-lint
+      run: npx nx workspace-lint
     - name: Affected Lint
-      run: npx nx affected --base=origin/master --target=lint --parallel=3
+      run: npx nx affected --base=origin/develop~1 --target=lint --parallel=3
     - name: Affected Test
-      run: npx nx affected --base=origin/master --target=test --parallel=3 --ci --code-coverage
+      run: npx nx affected --base=origin/develop~1 --target=test --parallel=3 --ci --code-coverage
     - name: Affected Build
-      run: npx nx affected --base=origin/master --target=build --parallel=3
+      run: npx nx affected --base=origin/develop~1 --target=build --parallel=3
     - name: Store build artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -51,9 +51,9 @@ jobs:
     - name: Extract details from Git
       id: git_details
       uses: ./.github/actions/extract-metadata
-    - uses: nrwl/nx-set-shas@v2
-      with:
-        main-branch-name: 'master'
+    # - uses: nrwl/nx-set-shas@v2
+    #   with:
+    #     main-branch-name: 'develop'
     - uses: ./.github/actions/install-dependencies
       name: Install dependencies
     - name: Download build artifacts
@@ -64,8 +64,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
     - name: Login to Amazon ECR
       id: login-ecr
@@ -73,8 +73,8 @@ jobs:
     - name: Affected docker build
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
-      run: npx nx affected --base=origin/master --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+        IMAGE_TAG: ${{ steps.git_details.outputs.COMMIT_HASH }}
+      run: npx nx affected --base=origin/develop~1 --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
   deploy:
     name: Deploy to kubernetes cluster
     needs: build_and_public
@@ -94,8 +94,8 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
     - name: Login to Amazon ECR
       id: login-ecr
@@ -103,6 +103,6 @@ jobs:
     - name: Affected deploy
       uses: ./.github/actions/node-helm
       env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_PRODUCTION }}
+        KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
       with:
-        args: --base=origin/master --target=deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.SOURCE_TAG }} --environment=production
+        args: --base=origin/develop~1 --target=deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.COMMIT_HASH }} --environment=development

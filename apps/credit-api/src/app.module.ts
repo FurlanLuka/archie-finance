@@ -20,6 +20,7 @@ import { MarginModule } from './modules/margin/margin.module';
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.INTERNAL_API_URL,
+        ConfigVariables.QUEUE_URL
       ],
       parse: (_configVariable, value) => value,
     }),
