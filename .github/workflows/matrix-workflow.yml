@@ -41,11 +41,14 @@ jobs:
       matrix:
         project: ${{ fromJSON(needs.extract.outputs.affectedProjects) }}
     steps:
-      - uses: trstringer/manual-approval@v1
-        with:
-          secret: ${{ github.TOKEN }}
-          approvers: FurlanLuka
-          minimum-approvals: 1
-          issue-title: "Deploy to development"
+      # - uses: trstringer/manual-approval@v1
+      #   with:
+      #     secret: ${{ github.TOKEN }}
+      #     approvers: FurlanLuka
+      #     minimum-approvals: 1
+      #     issue-title: "Deploy to development"
+      - name: Poor mans manual deploy
+        if: ${{ github.run_attempt== 1}}
+        run: exit 1
       - name: Affected project name
         run: echo ${{ matrix.project }}
