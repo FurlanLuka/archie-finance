@@ -32,85 +32,92 @@ export class MarginService {
     const assetPrices: GetAssetPricesResponse =
       await this.internalApiService.getAssetPrices();
     // TODO: Get starting value & calculate if value changed by 10%
+    // TODO: adjust the credit limit (in any case if It goes up or down)
 
-    // load users credit - total & available
     const credits: Credit[] = await this.creditRepository.find({
       where: {
         userId: In(userIds),
       },
     });
-
-    const userId: string = userIds[0];
-    // load users collateral/(api call to load collateral from all users - event driven??)
-    // event driven: 1. asset price updated 2. margin service remembers the values. All deposits and withdrawals should be recorded here
-    const usersCollateral: GetCollateralValueResponse =
-      await this.internalApiService.getUserCollateralValue(userId);
-
-    const totalCollateralValue: number = usersCollateral.reduce(
-      (collateralPrice: number, collateralValue: CollateralValue) =>
-        collateralPrice + collateralValue.price,
-      0,
-    );
-    const usersCredit: Credit = credits.find(
-      (credit: Credit) => credit.userId === userId,
-    );
-
-    const userSpent: number =
-      usersCredit.totalCredit - usersCredit.availableCredit;
-    const ltv: number = (userSpent / totalCollateralValue) * 100;
-
-    await this.sendNotification(userId, ltv);
-
-    const activeMarginCall: MarginCalls | null =
-      await this.marginCallsRepository.findOne({
+    const activeMarginCalls: MarginCalls[] =
+      await this.marginCallsRepository.find({
         where: {
-          userId: userId,
+          userId: In(userIds),
         },
       });
 
-    // TODO: adjust the credit limit (in any case if It goes up or down)
+    // const userId: string = userIds[0];
+    await Promise.all(
+      userIds.map(async (userId: string) => {
+        // load users collateral/(api call to load collateral from all users - event driven??)
+        // event driven: 1. asset price updated 2. margin service remembers the values. All deposits and withdrawals should be recorded here
+        const usersCollateral: GetCollateralValueResponse =
+          await this.internalApiService.getUserCollateralValue(userId);
+        // TODO: change to event driven
 
-    if (ltv < 75) {
-      if (activeMarginCall !== null) {
-        await this.marginCallsRepository.softDelete({
-          userId: userId,
-        });
-        // TODO: Reactivate card - EVENT handled by rize
-        // TODO: send email that margin is now ok, 72 hour limit ok
-      }
-    } else {
-      const timePassedInHours: number =
-        activeMarginCall !== null
-          ? (new Date().getTime() -
-              new Date(activeMarginCall.createdAt).getTime()) /
-            36000
-          : 0;
-
-      // if ltv > 85 then transition collateral to a different vault or 3 days passed since ltv reached 75% - reset if goes under
-      if (ltv >= 85 || timePassedInHours >= 72) {
-        // liquidate - try to lower credit limit , transition crypto to archie vault
-
-        // calculate how much credit we must take to be ok
-
-        const availableLoanToSatisfyLtv: number = totalCollateralValue * 0.6;
-
-        // the amount spent - amount you can have = amount to pay
-        const toPayArchieCollateralAmount: number =
-          userSpent - availableLoanToSatisfyLtv;
-
-        await this.transitionCryptoToArchieVault(
-          userId,
-          toPayArchieCollateralAmount,
-          usersCollateral,
+        const totalCollateralValue: number = usersCollateral.reduce(
+          (collateralPrice: number, collateralValue: CollateralValue) =>
+            collateralPrice + collateralValue.price,
+          0,
         );
-        await this.marginCallsRepository.softDelete({
-          userId: userId,
-        });
-        // TODO: Reactivate card - EVENT handled by rize
-      } else {
-        // TODO: deactivate card - EVENT handled by rize
-      }
-    }
+        const usersCredit: Credit = credits.find(
+          (credit: Credit) => credit.userId === userId,
+        );
+
+        const userSpent: number =
+          usersCredit.totalCredit - usersCredit.availableCredit;
+        const ltv: number = (userSpent / totalCollateralValue) * 100;
+
+        await this.sendNotification(userId, ltv);
+
+        const activeMarginCall: MarginCalls | null = activeMarginCalls.find(
+          (marginCall) => marginCall.userId === userId,
+        );
+
+        if (ltv < 75) {
+          if (activeMarginCall !== null) {
+            await this.marginCallsRepository.softDelete({
+              userId: userId,
+            });
+            // TODO: Reactivate card - EVENT handled by rize
+            // TODO: send email that margin is now ok, 72 hour limit ok
+          }
+        } else {
+          const timePassedInHours: number =
+            activeMarginCall !== null
+              ? (new Date().getTime() -
+                  new Date(activeMarginCall.createdAt).getTime()) /
+                36000
+              : 0;
+
+          // if ltv > 85 then transition collateral to a different vault or 3 days passed since ltv reached 75% - reset if goes under
+          if (ltv >= 85 || timePassedInHours >= 72) {
+            // liquidate - try to lower credit limit , transition crypto to archie vault
+
+            // calculate how much credit we must take to be ok
+
+            const availableLoanToSatisfyLtv: number =
+              totalCollateralValue * 0.6;
+
+            // the amount spent - amount you can have = amount to pay
+            const toPayArchieCollateralAmount: number =
+              userSpent - availableLoanToSatisfyLtv;
+
+            await this.transitionCryptoToArchieVault(
+              userId,
+              toPayArchieCollateralAmount,
+              usersCollateral,
+            );
+            await this.marginCallsRepository.softDelete({
+              userId: userId,
+            });
+            // TODO: Reactivate card - EVENT handled by rize
+          } else {
+            // TODO: deactivate card - EVENT handled by rize
+          }
+        }
+      }),
+    );
   }
 
   private async transitionCryptoToArchieVault(
