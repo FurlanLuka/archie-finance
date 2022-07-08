@@ -3,13 +3,11 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { utilities, WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { Openapi } from '@archie-microservices/openapi';
-import { RmqOptions } from '@nestjs/microservices';
 import { AllExceptionsFilter } from '@archie-microservices/tracing';
 
 export async function createMicroservice(
   name: string,
-  module: unknown,
-  microserviceOptions?: RmqOptions,
+  module: unknown
 ): Promise<INestApplication> {
   const app = await NestFactory.create(module, {
     logger: WinstonModule.createLogger({
@@ -26,9 +24,6 @@ export async function createMicroservice(
     }),
   });
 
-  if (microserviceOptions) {
-    app.connectMicroservice<RmqOptions>(microserviceOptions);
-  }
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));

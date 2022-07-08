@@ -1,10 +1,7 @@
 import { IsString } from 'class-validator';
 import { GetOnboardingResponse } from './onboarding.interfaces';
 
-export class OnboardingDto {
-  @IsString()
-  stage: string;
-
+export class CompleteOnboardingStageDto {
   @IsString()
   userId: string;
 }

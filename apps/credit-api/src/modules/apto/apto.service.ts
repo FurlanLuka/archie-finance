@@ -34,10 +34,15 @@ import {
 } from './apto.interfaces';
 import { AptoCardApplication } from './apto_card_application.entity';
 import { ConfigService } from '@archie-microservices/config';
-import { ConfigVariables } from '@archie/api/credit-api/constants';
+import {
+  CARD_ACTIVATED_EXCHANGE,
+  PHONE_NUMBER_VERIFIED_EXCHANGE,
+  ConfigVariables,
+} from '@archie/api/credit-api/constants';
 import { AptoCard } from './apto_card.entity';
 import { CreditService } from '../credit/credit.service';
 import { GetCreditResponse } from '../credit/credit.interfaces';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable()
 export class AptoService {
@@ -54,6 +59,7 @@ export class AptoService {
     @InjectRepository(AptoCard)
     private aptoCardRepository: Repository<AptoCard>,
     private creditService: CreditService,
+    private amqpConnection: AmqpConnection,
   ) {}
 
   public async startPhoneVerification(
@@ -120,10 +126,9 @@ export class AptoService {
         secret,
       );
 
-    await this.internalApiService.completeOnboardingStage(
-      'phoneVerificationStage',
+    this.amqpConnection.publish(PHONE_NUMBER_VERIFIED_EXCHANGE.name, '', {
       userId,
-    );
+    });
 
     await this.aptoVerificationRepository.update(
       {
@@ -422,10 +427,9 @@ export class AptoService {
         cardId: issueCardResponse.account_id,
       });
 
-      await this.internalApiService.completeOnboardingStage(
-        'cardActivationStage',
-        aptoCardApplication.userId,
-      );
+      this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
+        userId: aptoCardApplication.userId,
+      });
 
       await this.initiallyLoadCard(
         aptoCardApplication.userId,

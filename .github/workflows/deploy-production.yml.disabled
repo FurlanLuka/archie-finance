@@ -1,0 +1,109 @@
+# name: Development
+
+# on:
+#   push:
+#     tags:
+#       - "v*"
+#       - "!v*-alpha"
+
+# env:
+#   ECR_REPOSITORY: archie-production-container-repository
+#   AWS_REGION: us-east-1
+
+# jobs:
+#   check_and_build:
+#     name: Check and Build
+#     runs-on: ubuntu-latest
+#     environment: development
+#     steps:
+#     - uses: actions/checkout@v2
+#       name: Checkout
+#       with:
+#         fetch-depth: 0
+#     - uses: nrwl/nx-set-shas@v2
+#       with:
+#         main-branch-name: 'master'
+#     - uses: ./.github/actions/install-dependencies
+#       name: Install dependencies
+#     - name: Workspace Lint
+#       run: npx nx --base=origin/master workspace-lint
+#     - name: Affected Lint
+#       run: npx nx affected --base=origin/master --target=lint --parallel=3
+#     - name: Affected Test
+#       run: npx nx affected --base=origin/master --target=test --parallel=3 --ci --code-coverage
+#     - name: Affected Build
+#       run: npx nx affected --base=origin/master --target=build --parallel=3
+#     - name: Store build artifacts
+#       uses: actions/upload-artifact@v2
+#       with:
+#         name: services-build-development
+#         path: ./dist
+#         retention-days: 1
+#   build_and_public:
+#     name: Build docker image and publish 
+#     needs: check_and_build
+#     runs-on: ubuntu-latest
+#     environment: development
+#     steps:
+#     - uses: actions/checkout@v2
+#       name: Checkout
+#       with:
+#         fetch-depth: 0
+#     - name: Extract details from Git
+#       id: git_details
+#       uses: ./.github/actions/extract-metadata
+#     - uses: nrwl/nx-set-shas@v2
+#       with:
+#         main-branch-name: 'master'
+#     - uses: ./.github/actions/install-dependencies
+#       name: Install dependencies
+#     - name: Download build artifacts
+#       uses: actions/download-artifact@v2
+#       with:
+#         name: services-build-development
+#         path: ./dist
+#     - name: Configure AWS credentials
+#       uses: aws-actions/configure-aws-credentials@v1
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+#         aws-region: ${{ env.AWS_REGION }}
+#     - name: Login to Amazon ECR
+#       id: login-ecr
+#       uses: aws-actions/amazon-ecr-login@v1
+#     - name: Affected docker build
+#       env:
+#         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+#         IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
+#       run: npx nx affected --base=origin/master --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+#   deploy:
+#     name: Deploy to kubernetes cluster
+#     needs: build_and_public
+#     runs-on: ubuntu-latest
+#     environment: development
+#     steps:
+#     - uses: actions/checkout@v2
+#       name: Checkout
+#       with:
+#         fetch-depth: 0
+#     - name: Extract details from Git
+#       id: git_details
+#       uses: ./.github/actions/extract-metadata
+#     - uses: nrwl/nx-set-shas@v2
+#     - uses: ./.github/actions/install-dependencies
+#       name: Install dependencies
+#     - name: Configure AWS credentials
+#       uses: aws-actions/configure-aws-credentials@v1
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+#         aws-region: ${{ env.AWS_REGION }}
+#     - name: Login to Amazon ECR
+#       id: login-ecr
+#       uses: aws-actions/amazon-ecr-login@v1
+#     - name: Affected deploy
+#       uses: ./.github/actions/node-helm
+#       env:
+#         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_PRODUCTION }}
+#       with:
+#         args: --base=origin/master --target=deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.SOURCE_TAG }} --environment=production
