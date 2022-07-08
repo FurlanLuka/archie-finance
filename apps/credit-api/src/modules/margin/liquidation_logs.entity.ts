@@ -20,6 +20,12 @@ export class LiquidationLogs {
   @Column('varchar')
   userId: string;
 
+  @Column('varchar')
+  asset: string;
+
+  @Column('float')
+  amount: number;
+
   @CreateDateColumn({ select: false })
   createdAt: Date;
 

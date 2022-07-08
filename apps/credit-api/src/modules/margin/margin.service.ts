@@ -11,7 +11,6 @@ import {
 import { LiquidationLogs } from './liquidation_logs.entity';
 import { MarginCalls } from './margin_calls.entity';
 import { MarginNotifications } from './margin_notifications.entity';
-import { MarginController } from './margin.controller';
 
 @Injectable()
 export class MarginService {
@@ -29,9 +28,10 @@ export class MarginService {
   public async checkMargin(): Promise<void> {
     // move to queue which will accept batch of users to check
     const userIds: string[] = ['auth0|'];
-    // load Current asset prices
+    // load Current asset prices -- we need starting number
     const assetPrices: GetAssetPricesResponse =
       await this.internalApiService.getAssetPrices();
+    // TODO: Get starting value & calculate if value changed by 10%
 
     // load users credit - total & available
     const credits: Credit[] = await this.creditRepository.find({
@@ -42,11 +42,10 @@ export class MarginService {
 
     const userId: string = userIds[0];
     // load users collateral/(api call to load collateral from all users - event driven??)
-    // event driven: 1. asset price updated 2. collateral service calculates & publishes collateral price changed 3. margin service calculates
+    // event driven: 1. asset price updated 2. margin service remembers the values. All deposits and withdrawals should be recorded here
     const usersCollateral: GetCollateralValueResponse =
       await this.internalApiService.getUserCollateralValue(userId);
 
-    // Calculate LTV (available / total collateral value)
     const totalCollateralValue: number = usersCollateral.reduce(
       (collateralPrice: number, collateralValue: CollateralValue) =>
         collateralPrice + collateralValue.price,
@@ -56,53 +55,113 @@ export class MarginService {
       (credit: Credit) => credit.userId === userId,
     );
 
-    const ltv: number = (usersCredit.totalCredit / totalCollateralValue) * 100;
-    // if ltv > x send email < 85
+    const userSpent: number =
+      usersCredit.totalCredit - usersCredit.availableCredit;
+    const ltv: number = (userSpent / totalCollateralValue) * 100;
+
     await this.sendNotification(userId, ltv);
 
-    if (ltv > 75) {
-      const marginCall: MarginCalls | null =
-        await this.marginCallsRepository.findOne({
-          where: {
-            userId: userId,
-          },
-        });
+    const activeMarginCall: MarginCalls | null =
+      await this.marginCallsRepository.findOne({
+        where: {
+          userId: userId,
+        },
+      });
 
-      const timePassed: number =
-        marginCall !== null
-          ? (new Date().getTime() - new Date(marginCall.createdAt).getTime()) /
+    // TODO: adjust the credit limit (in any case if It goes up or down)
+
+    if (ltv < 75) {
+      if (activeMarginCall !== null) {
+        await this.marginCallsRepository.softDelete({
+          userId: userId,
+        });
+        // TODO: Reactivate card - EVENT handled by rize
+        // TODO: send email that margin is now ok, 72 hour limit ok
+      }
+    } else {
+      const timePassedInHours: number =
+        activeMarginCall !== null
+          ? (new Date().getTime() -
+              new Date(activeMarginCall.createdAt).getTime()) /
             36000
           : 0;
 
       // if ltv > 85 then transition collateral to a different vault or 3 days passed since ltv reached 75% - reset if goes under
-      if (ltv > 85 || timePassed >= 72) {
-        // liquidate - try to lower credit else transition crypto to archie vault
+      if (ltv >= 85 || timePassedInHours >= 72) {
+        // liquidate - try to lower credit limit , transition crypto to archie vault
+
         // calculate how much credit we must take to be ok
-        // if value > available - take everything + required crypto
-        // which asset to select???
-        // add log to liquidation_logs table
+
         const availableLoanToSatisfyLtv: number = totalCollateralValue * 0.6;
 
-        // the amount you have - amount you can have = amount to pay
-        const toPayArchieDollars: number =
-          usersCredit.totalCredit - availableLoanToSatisfyLtv;
+        // the amount spent - amount you can have = amount to pay
+        const toPayArchieCollateralAmount: number =
+          userSpent - availableLoanToSatisfyLtv;
 
-        if (usersCredit.availableCredit >= availableLoanToSatisfyLtv) {
-          // TODO change in credit entity (substract) - be aware of race conditions if something is spent
-        } else {
-          // TODO: pay what you can from credit, rest from crypto
-          // TODO: how to determine which asset
-        }
-
+        await this.transitionCryptoToArchieVault(
+          userId,
+          toPayArchieCollateralAmount,
+          usersCollateral,
+        );
         await this.marginCallsRepository.softDelete({
           userId: userId,
         });
+        // TODO: Reactivate card - EVENT handled by rize
+      } else {
+        // TODO: deactivate card - EVENT handled by rize
       }
-    } else {
-      await this.marginCallsRepository.softDelete({
-        userId: userId,
-      });
     }
+  }
+
+  private async transitionCryptoToArchieVault(
+    userId: string,
+    amount: number,
+    collateralAssets: GetCollateralValueResponse,
+  ): Promise<void> {
+    // which asset to select? - Order by the allocation (asset value)
+    const sortedCollateralAssets = collateralAssets
+      .slice()
+      .sort((a: CollateralValue, b: CollateralValue) =>
+        a.price >= b.price ? -1 : 1,
+      );
+
+    let targetAmount: number = amount;
+
+    const liquidatedCollateralAssets: Partial<LiquidationLogs>[] =
+      sortedCollateralAssets
+        .map((collateralValue): Partial<LiquidationLogs> => {
+          if (targetAmount > 0) {
+            let newPrice: number = collateralValue.price - amount;
+
+            if (newPrice >= 0) {
+              targetAmount = targetAmount - (collateralValue.price - newPrice);
+            } else {
+              newPrice = 0;
+              targetAmount = targetAmount - collateralValue.price;
+            }
+
+            const assetAmountPerUnit: number =
+              collateralValue.price / collateralValue.assetAmount;
+            const newAssetAmount: number = newPrice / assetAmountPerUnit;
+
+            return {
+              asset: collateralValue.asset,
+              amount: collateralValue.assetAmount - newAssetAmount,
+              userId,
+            };
+          }
+
+          return {
+            asset: collateralValue.asset,
+            amount: 0,
+            userId,
+          };
+        })
+        .filter((liquidatedAsset) => liquidatedAsset.amount > 0);
+
+    // TODO: transition assets to Archie using fireblocks (collateral service) - vault EVENT
+
+    await this.liquidationLogsRepository.save(liquidatedCollateralAssets);
   }
 
   private async sendNotification(userId: string, ltv: number) {
@@ -157,9 +216,35 @@ export class MarginService {
             skipUpdateIfNoValuesChanged: true,
           },
         );
+      } else if (marginNotifications.sentAtLtv < 75 && ltv >= 75) {
+        // TODO: use sendgrid and send different email (72h mail)
+        await this.marginNotificationsRepository.upsert(
+          {
+            userId: userId,
+            active: true,
+            sentAtLtv: ltv,
+          },
+          {
+            conflictPaths: ['user_id'],
+            skipUpdateIfNoValuesChanged: true,
+          },
+        );
+      } else if (marginNotifications.sentAtLtv < 85 && ltv >= 85) {
+        // TODO: use sendgrid and send different email (crypto taken mail)
+        await this.marginNotificationsRepository.upsert(
+          {
+            userId: userId,
+            active: true,
+            sentAtLtv: ltv,
+          },
+          {
+            conflictPaths: ['user_id'],
+            skipUpdateIfNoValuesChanged: true,
+          },
+        );
       }
     } else {
-      // TODO: should we send notification if It fails under 65?
+      // reset notifications
       await this.marginNotificationsRepository.upsert(
         {
           userId: userId,
