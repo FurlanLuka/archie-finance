@@ -75,7 +75,7 @@ jobs:
     - name: Affected docker build
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ steps.git_details.outputs.COMMIT_HASH }}
+        IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
       run: npx nx affected --base=origin/develop --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
     - uses: ./.github/actions/affected-projects
       id: affected-projects
@@ -114,18 +114,12 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    # - name: Deploy
-    #   uses: ./.github/actions/node-helm
-    #   env:
-    #     KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
-    #   with:
-    #     args: ${{ matrix.project }}:deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.COMMIT_HASH }} --environment=development
     - name: Deploy
       uses: koslib/helm-eks-action@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
+        IMAGE_TAG: ${{ matrix.project }}-${{ steps.git_details.outputs.SOURCE_TAG }}
         CHART: ./apps/${{ matrix.project }}/chart
         APP_NAME: ${{ matrix.project }}
       with:

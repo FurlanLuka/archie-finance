@@ -80,21 +80,6 @@ jobs:
     - uses: ./.github/actions/affected-projects
       id: affected-projects
       name: Extract affected apps
-    #     deploy:
-    # name: Deploy ${{ matrix.project }}
-    # needs: extract
-    # runs-on: ubuntu-latest
-    # environment: development
-    # strategy:
-    #   fail-fast: false
-    #   matrix:
-    #     project: ${{ fromJSON(needs.extract.outputs.affectedProjects) }}
-    # steps:
-    #   - name: Poor mans manual deploy
-    #     if: ${{ github.run_attempt== 1}}
-    #     run: exit 1
-    #   - name: Affected project name
-    #     run: echo ${{ matrix.project }}
   deploy:
     name: Deploy ${{ matrix.project }}
     needs: build_and_publish
@@ -128,8 +113,12 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
     - name: Deploy
-      uses: ./.github/actions/node-helm
+      uses: koslib/helm-eks-action@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ matrix.project }}-${{ steps.git_details.outputs.COMMIT_HASH }}
+        CHART: ./apps/${{ matrix.project }}/chart
+        APP_NAME: ${{ matrix.project }}
       with:
-        args: ${{ matrix.project }}:deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.COMMIT_HASH }} --environment=development
+        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }} --set environment="development"
