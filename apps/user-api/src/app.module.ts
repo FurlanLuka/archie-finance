@@ -9,6 +9,7 @@ import { HealthModule } from '@archie-microservices/health';
 import { VaultModule } from '@archie-microservices/vault';
 import { InternalApiModule } from '@archie-microservices/internal-api';
 import { ConfigVariables } from '@archie/api/user-api/constants';
+import { WalletModule } from './modules/wallet/wallet.module';
 
 @Module({
   imports: [
@@ -80,6 +81,7 @@ import { ConfigVariables } from '@archie/api/user-api/constants';
     HealthModule,
     UserModule,
     EmailWaitlistModule,
+    WalletModule,
   ],
   controllers: [],
   providers: [],
