@@ -32,7 +32,7 @@ jobs:
       with:
         base: origin/main
   deploy:
-    name: Deploy with matrix jobs
+    name: ${{ matrix.project }}
     needs: extract
     runs-on: ubuntu-latest
     environment: development
