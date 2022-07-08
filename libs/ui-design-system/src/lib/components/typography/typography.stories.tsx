@@ -19,7 +19,7 @@ export default {
   title: 'Theme/Typography',
 } as Meta;
 
-export const Template: Story<TypographyProps> = (args) => (
+export const Default: Story<TypographyProps> = (args) => (
   <>
     <Headline {...args}>Archie Finance</Headline>
     <Title {...args}>Archie Finance</Title>
@@ -33,7 +33,7 @@ export const Template: Story<TypographyProps> = (args) => (
     <ParagraphXXS {...args}>Finally, a crypto collateralized credit card for everyday payme</ParagraphXXS>
   </>
 );
-Template.args = {
+Default.args = {
   color: theme.textPrimary,
   weight: 400,
 };

@@ -1,10 +1,5 @@
 import { LoadingStyled } from './loading.styled';
 
-/**
- * A loading indicator.
- * @param {ComponentProps} props
- * @returns {StatelessComponent}
- */
 export const Loading = () => (
   <LoadingStyled>
     <div className="inner">

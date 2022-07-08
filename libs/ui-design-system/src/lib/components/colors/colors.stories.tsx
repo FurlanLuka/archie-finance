@@ -3,8 +3,14 @@ import { Key } from 'react';
 
 import { theme } from '@archie-webapps/ui-theme';
 
+import { StoriesContainer } from '../../utils/stories-container/stories-container';
+import { StoriesTitle } from '../../utils/stories-title/stories-title';
+
 export default {
   title: 'Theme/Colors',
+  parameters: {
+    layout: 'fullscreen',
+  },
 } as Meta;
 
 const colors = [
@@ -47,40 +53,43 @@ const colors = [
   { name: 'Transparent', value: 'transparent' },
 ];
 
-export const Template: Story = () => (
-  <div
-    style={{
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'center',
-      gap: '32px',
-      maxWidth: '60%',
-      margin: '0 auto',
-    }}
-  >
-    {colors.map((item: { name: string; value: string }, index: Key) => (
-      <div
-        key={index}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px',
-          alignItems: 'center',
-          textAlign: 'center',
-          width: '25%',
-        }}
-      >
+export const Default: Story = () => (
+  <StoriesContainer>
+    <StoriesTitle title="Colors" />
+    <div
+      style={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        gap: '32px',
+        maxWidth: '60%',
+        margin: '0 auto',
+      }}
+    >
+      {colors.map((item: { name: string; value: string }, index: Key) => (
         <div
+          key={index}
           style={{
-            backgroundColor: item.value,
-            width: '100px',
-            height: '100px',
-            border: `1px solid ${theme.borderPrimary}`,
-            borderRadius: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            alignItems: 'center',
+            textAlign: 'center',
+            width: '25%',
           }}
-        />
-        <p>{item.name}</p>
-      </div>
-    ))}
-  </div>
+        >
+          <div
+            style={{
+              backgroundColor: item.value,
+              width: '100px',
+              height: '100px',
+              border: `1px solid ${theme.borderPrimary}`,
+              borderRadius: '100%',
+            }}
+          />
+          <p>{item.name}</p>
+        </div>
+      ))}
+    </div>
+  </StoriesContainer>
 );

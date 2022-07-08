@@ -14,11 +14,6 @@ export interface HeaderProps {
   maxWidth?: string;
 }
 
-/**
- * The main header of the website.
- * @param {ComponentProps} props
- * @returns {StatelessComponent}
- */
 export const Header: FC<HeaderProps> = ({ maxWidth }) => {
   const navigate = useNavigate();
   const { logout } = useAuthenticatedSession();
@@ -30,9 +25,15 @@ export const Header: FC<HeaderProps> = ({ maxWidth }) => {
     setMobileNavOpen(!mobileNavOpen);
   };
 
-  const closeMobileNav = () => {
-    document.body.classList.toggle('no-scroll');
-    setMobileNavOpen(false);
+  const closeMobileNav = (itemName: string, itemPath: string) => {
+    if (itemName === 'logout') {
+      logout();
+    } else {
+      navigate(itemPath);
+      setMobileNavOpen(false);
+      document.body.classList.toggle('no-scroll');
+      console.log('vleze');
+    }
   };
 
   return (
@@ -51,11 +52,7 @@ export const Header: FC<HeaderProps> = ({ maxWidth }) => {
       <MobileNav isOpen={mobileNavOpen}>
         <div className="links">
           {dashboardNavItems.map((item, index) => (
-            <div
-              className="link-item"
-              key={index}
-              onClick={() => (item.name === 'logout' ? logout : navigate(item.path))}
-            >
+            <div className="link-item" key={index} onClick={() => closeMobileNav(item.name, item.path)}>
               <div className="icon">
                 <Icon name={item.icon} />
               </div>

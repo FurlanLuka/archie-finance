@@ -5,6 +5,9 @@ import { Page } from './layout.styled';
 export default {
   title: 'Layout/Page',
   component: Page,
+  parameters: {
+    layout: 'fullscreen',
+  },
 } as Meta;
 
-export const Template: Story = (args) => <Page {...args}>Page Layout</Page>;
+export const Default: Story = (args) => <Page {...args} />;

@@ -1,10 +1,16 @@
 import { Story, Meta } from '@storybook/react';
 
+import { StoriesContainer } from '../../utils/stories-container/stories-container';
+import { StoriesTitle } from '../../utils/stories-title/stories-title';
+
 import { TableProps, Table } from './table';
 
 export default {
   title: 'Components/Table',
   component: Table,
+  parameters: {
+    layout: 'fullscreen',
+  },
 } as Meta;
 
 const tableColumns = [
@@ -95,12 +101,15 @@ const tableData = [
   },
 ];
 
-export const Template: Story<TableProps> = (args) => (
-  <div style={{ maxWidth: '60%' }}>
-    <Table {...args} />
-  </div>
+export const Default: Story<TableProps> = (args) => (
+  <StoriesContainer>
+    <StoriesTitle title="Table" />
+    <div style={{ maxWidth: '60%' }}>
+      <Table {...args} />
+    </div>
+  </StoriesContainer>
 );
-Template.args = {
+Default.args = {
   columns: tableColumns,
   data: tableData,
 };
