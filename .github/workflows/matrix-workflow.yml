@@ -22,6 +22,8 @@ jobs:
     - uses: nrwl/nx-set-shas@v2
       with:
         main-branch-name: 'develop'
+    - uses: ./.github/actions/install-dependencies
+      name: Install dependencies
     - uses: ./.github/actions/affected-projects
       name: Extract affected apps
       with:
@@ -34,7 +36,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project: ${{ fromJSON(needs.main.outputs.affectedProjects) }}
+        project: ${{ fromJSON(needs.extract.outputs.affectedProjects) }}
     steps:
       - name: Affected project name
         run: echo ${{ matrix.project }}
