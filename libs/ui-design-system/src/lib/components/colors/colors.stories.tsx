@@ -5,6 +5,7 @@ import { theme } from '@archie-webapps/ui-theme';
 
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
+import { ParagraphXS, ParagraphXXS } from '../typography/typography.styled';
 
 export default {
   title: 'Theme/Colors',
@@ -82,13 +83,16 @@ export const Default: Story = () => (
           <div
             style={{
               backgroundColor: item.value,
-              width: '100px',
-              height: '100px',
+              width: '98px',
+              height: '98px',
               border: `1px solid ${theme.borderPrimary}`,
-              borderRadius: '100%',
+              borderRadius: '8px',
             }}
           />
-          <p>{item.name}</p>
+          <div>
+            <ParagraphXXS weight={700}>{item.name}</ParagraphXXS>
+            <ParagraphXXS color={theme.textSecondary}>{item.value}</ParagraphXXS>
+          </div>
         </div>
       ))}
     </div>
