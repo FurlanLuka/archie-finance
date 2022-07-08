@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import {
   DepositAddressResponse,
   FireblocksSDK,
@@ -10,6 +10,7 @@ import {
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { ConfigService } from '@archie-microservices/config';
 import { CryptoService } from '@archie-microservices/crypto';
+import { AssetList } from '@archie-microservices/api-interfaces/asset_information';
 
 @Injectable()
 export class FireblocksService {
@@ -90,8 +91,28 @@ export class FireblocksService {
     amount: number;
     destinationAddress: string;
   }): Promise<void> {
+    const assetList: AssetList = this.configService.get(
+      ConfigVariables.ASSET_LIST,
+    );
+
+    Logger.log({
+      code: 'ASSET_LIST',
+      ...assetList,
+    });
+
+    const fireblocksAsset = assetList[asset];
+
+    if (!fireblocksAsset) {
+      throw new NotFoundException();
+    }
+
+    Logger.log({
+      code: 'ASSET_INFORMATION',
+      ...fireblocksAsset,
+    });
+
     const transaction = await this.fireblocksClient.createTransaction({
-      assetId: asset,
+      assetId: fireblocksAsset.fireblocks_id,
       amount: amount,
       source: {
         type: PeerType.VAULT_ACCOUNT,

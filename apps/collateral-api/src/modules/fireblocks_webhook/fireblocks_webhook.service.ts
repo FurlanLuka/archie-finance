@@ -5,7 +5,11 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PeerType, TransactionResponse } from 'fireblocks-sdk';
+import {
+  PeerType,
+  TransactionResponse,
+  TransactionStatus,
+} from 'fireblocks-sdk';
 import { CollateralService } from '../collateral/collateral.service';
 import { DepositAddressService } from '../deposit_address/deposit_address.service';
 import { FireblocksWebhookDto } from '../fireblocks_webhook/fireblocks_webhook.dto';
@@ -124,7 +128,13 @@ export class FireblocksWebhookService {
       code: 'COLLATERAL_WITHDRAW',
       transaction: transaction,
     });
+    // don't do anything until it's completed
+    if (transaction.status !== TransactionStatus.COMPLETED) {
+      return;
+    }
+
     try {
+      Logger.log('handling collateral withdraw');
       const userVaultAccount = await this.userVaultAccountRepository.findOneBy({
         vaultAccountId: transaction.source.id,
       });
@@ -137,8 +147,33 @@ export class FireblocksWebhookService {
         throw new NotFoundException();
       }
 
+      const assetList: AssetList = this.configService.get(
+        ConfigVariables.ASSET_LIST,
+      );
+
+      Logger.log({
+        code: 'FIREBLOCKS_WEBHOOK_WITHDRAW_ASSET_LIST',
+        ...assetList,
+      });
+
+      const assets: string[] = Object.keys(assetList).flatMap((key) => {
+        if (assetList[key].fireblocks_id !== transaction.assetId) {
+          return [];
+        }
+
+        return [key];
+      });
+
+      Logger.log({
+        code: 'FIREBLOCKS_WEBHOOK_WITHDRAW_ASSET_INFORMATION',
+        assets,
+      });
+
+      const assetId: string =
+        assets.length > 0 ? assets[0] : transaction.assetId;
+
       await this.collateralService.createWithdrawal({
-        asset: transaction.assetId,
+        asset: assetId,
         destinationAddress: transaction.destinationAddress,
         status: transaction.status,
         transactionId: transaction.id,
