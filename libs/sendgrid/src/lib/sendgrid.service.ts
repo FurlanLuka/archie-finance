@@ -6,6 +6,10 @@ import {
 } from '@nestjs/common';
 import axios, { AxiosError } from 'axios';
 import { SendgridConfig } from './sendgrid.interfaces';
+import {
+  AddToEmailWaitlistInternalError,
+  SendEmailInternalError,
+} from './sendgrid.errors';
 
 @Injectable()
 export class SendgridService {
@@ -30,14 +34,9 @@ export class SendgridService {
         },
       );
     } catch (error) {
-      Logger.error({
-        code: 'ADD_TO_EMAIL_WAITLIST_ERROR',
-        metadata: {
-          id: waitlistId,
-        },
+      throw new AddToEmailWaitlistInternalError({
+        id: waitlistId,
       });
-
-      throw new InternalServerErrorException();
     }
   }
 
@@ -72,15 +71,10 @@ export class SendgridService {
         },
       );
     } catch (error) {
-      Logger.error({
-        code: 'ERROR_SENDING_EMAIL',
-        metadata: {
-          id: emailTemplateId,
-          error: JSON.stringify(error as AxiosError),
-        },
+      throw new SendEmailInternalError({
+        id: emailTemplateId,
+        error: JSON.stringify(error as AxiosError),
       });
-
-      throw new InternalServerErrorException();
     }
   }
 }

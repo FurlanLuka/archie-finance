@@ -1,5 +1,5 @@
 import { VaultService } from '@archie-microservices/vault';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Kyc } from './kyc.entity';
@@ -27,13 +27,6 @@ export class KycService {
     });
 
     if (kycRecord === null) {
-      Logger.error({
-        code: 'GET_KYC_ERROR',
-        metadata: {
-          userId,
-        },
-      });
-
       throw new KycNotFoundError();
     }
 
@@ -74,13 +67,6 @@ export class KycService {
     });
 
     if (kycRecord) {
-      Logger.error({
-        code: 'CREATE_KYC_ALREADY_EXISTS_ERROR',
-        metadata: {
-          userId,
-        },
-      });
-
       throw new KycAlreadySubmitted();
     }
 

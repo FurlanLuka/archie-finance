@@ -18,6 +18,7 @@ import {
   GetAssetPricesResponse,
 } from '@archie-microservices/api-interfaces/asset_price';
 import { InternalApiService } from '@archie-microservices/internal-api';
+import { DepositCreationInternalError } from './collateral.errors';
 
 @Injectable()
 export class CollateralService {
@@ -75,21 +76,15 @@ export class CollateralService {
     } catch (error) {
       await queryRunner.rollbackTransaction();
 
-      Logger.error({
-        code: 'CREATE_DEPOSIT_ERROR',
-        metadata: {
-          userId,
-          asset,
-          transactionId,
-          amount,
-          destinationAddress,
-          status,
-          error: JSON.stringify(error),
-          errorMessage: error.message,
-        },
+      throw new DepositCreationInternalError({
+        asset,
+        transactionId,
+        amount,
+        destinationAddress,
+        status,
+        error: JSON.stringify(error),
+        errorMessage: error.message,
       });
-
-      throw new InternalServerErrorException();
     } finally {
       await queryRunner.release();
     }

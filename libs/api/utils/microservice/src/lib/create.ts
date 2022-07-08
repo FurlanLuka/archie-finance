@@ -1,8 +1,9 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { utilities, WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { Openapi } from '@archie-microservices/openapi';
+import { AllExceptionsFilter } from '@archie-microservices/tracing';
 
 export async function createMicroservice(
   name: string,
@@ -23,6 +24,9 @@ export async function createMicroservice(
     }),
   });
 
+
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors();

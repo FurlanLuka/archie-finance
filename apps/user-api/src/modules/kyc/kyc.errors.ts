@@ -1,4 +1,7 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 
 export class KycNotFoundError extends NotFoundException {
   constructor() {

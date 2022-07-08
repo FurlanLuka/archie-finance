@@ -25,6 +25,7 @@
     "plugin-deployment": "libs/plugin-deployment",
     "referral-system-api": "apps/referral-system-api",
     "sendgrid": "libs/sendgrid",
+    "tracing": "libs/tracing",
     "user-api": "apps/user-api",
     "vault": "libs/vault"
   }
