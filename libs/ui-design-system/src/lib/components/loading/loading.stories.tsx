@@ -10,12 +10,13 @@ export default {
   component: Loading,
   parameters: {
     layout: 'fullscreen',
+    options: { showPanel: false },
   },
 } as Meta;
 
-export const Default: Story = (args) => (
+export const Default: Story = () => (
   <StoriesContainer>
     <StoriesTitle title="Loading indicator" />
-    <Loading {...args} />
+    <Loading />
   </StoriesContainer>
 );

@@ -10,6 +10,7 @@ export default {
   title: 'Theme/Colors',
   parameters: {
     layout: 'fullscreen',
+    options: { showPanel: false },
   },
 } as Meta;
 

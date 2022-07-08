@@ -10,6 +10,7 @@ export default {
   component: Table,
   parameters: {
     layout: 'fullscreen',
+    options: { showPanel: true },
   },
 } as Meta;
 
@@ -101,14 +102,15 @@ const tableData = [
   },
 ];
 
-export const Default: Story<TableProps> = (args) => (
+export const Default: Story<TableProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Table" />
     <div style={{ maxWidth: '60%' }}>
-      <Table {...args} />
+      <Table {...props} />
     </div>
   </StoriesContainer>
 );
+
 Default.args = {
   columns: tableColumns,
   data: tableData,

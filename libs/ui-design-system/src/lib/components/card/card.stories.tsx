@@ -10,13 +10,14 @@ export default {
   component: Card,
   parameters: {
     layout: 'fullscreen',
+    options: { showPanel: true },
   },
 } as Meta;
 
-export const Small: Story<CardProps> = (args) => (
+export const Small: Story<CardProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Card" subtitle="small" />
-    <Card {...args}>Card Title</Card>
+    <Card {...props}>Card Title</Card>
   </StoriesContainer>
 );
 Small.args = {
@@ -32,12 +33,13 @@ Small.args = {
   backgroundImage: '',
 };
 
-export const FullWidth: Story<CardProps> = (args) => (
+export const FullWidth: Story<CardProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Card" subtitle="full width" />
-    <Card {...args}>Card Title</Card>
+    <Card {...props}>Card Title</Card>
   </StoriesContainer>
 );
+
 FullWidth.args = {
   column: false,
   alignItems: '',
@@ -51,12 +53,13 @@ FullWidth.args = {
   backgroundImage: '',
 };
 
-export const WithBackgroundImage: Story<CardProps> = (args) => (
+export const WithBackgroundImage: Story<CardProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Card" subtitle="with background image" />
-    <Card {...args}>Card Title</Card>
+    <Card {...props}>Card Title</Card>
   </StoriesContainer>
 );
+
 WithBackgroundImage.args = {
   column: false,
   alignItems: '',

@@ -11,15 +11,17 @@ export default {
   title: 'Components/Button',
   parameters: {
     layout: 'fullscreen',
+    options: { showPanel: true },
   },
 } as Meta;
 
-export const Primary: Story<ButtonProps> = (args) => (
+export const Primary: Story<ButtonProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Button" subtitle="primary" />
-    <ButtonPrimary {...args}>Next</ButtonPrimary>
+    <ButtonPrimary {...props}>Next</ButtonPrimary>
   </StoriesContainer>
 );
+
 Primary.args = {
   isLoading: false,
   isDisabled: false,
@@ -34,6 +36,7 @@ export const Outline: Story<ButtonProps> = (props) => (
     <ButtonOutline {...props}>Next</ButtonOutline>
   </StoriesContainer>
 );
+
 Outline.args = {
   isLoading: false,
   isDisabled: false,
@@ -48,6 +51,7 @@ export const Ghost: Story<ButtonProps> = (props) => (
     <ButtonGhost {...props}>Next</ButtonGhost>
   </StoriesContainer>
 );
+
 Ghost.args = {
   isLoading: false,
   isDisabled: false,
@@ -62,6 +66,7 @@ export const Light: Story<ButtonProps> = (props) => (
     <ButtonLight {...props}>Next</ButtonLight>
   </StoriesContainer>
 );
+
 Light.args = {
   isLoading: false,
   isDisabled: false,

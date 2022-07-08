@@ -10,12 +10,23 @@ export default {
   component: Container,
   parameters: {
     layout: 'fullscreen',
+    options: { showPanel: true },
   },
 } as Meta;
 
-export const Default: Story<ContainerProps> = (args) => (
+export const Default: Story<ContainerProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Container" />
-    <Container {...args}>Container Layout</Container>
+    <Container {...props}>Container Layout</Container>
   </StoriesContainer>
 );
+
+Default.args = {
+  column: false,
+  alignItems: '',
+  justifyContent: '',
+  maxWidth: '',
+  mobileColumn: false,
+  mobileJustifyContent: '',
+  mobileAlignItems: '',
+};

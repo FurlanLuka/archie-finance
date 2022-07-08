@@ -7,7 +7,8 @@ export default {
   component: Page,
   parameters: {
     layout: 'fullscreen',
+    options: { showPanel: false },
   },
 } as Meta;
 
-export const Default: Story = (args) => <Page {...args} />;
+export const Default: Story = () => <Page />;

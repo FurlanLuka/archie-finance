@@ -10,14 +10,15 @@ export default {
   component: InputRange,
   parameters: {
     layout: 'fullscreen',
+    options: { showPanel: true },
   },
 } as Meta;
 
-export const Default: Story<InputRangeProps> = (args) => (
+export const Default: Story<InputRangeProps> = (props) => (
   <StoriesContainer>
-    <StoriesTitle title="Input range" subtitle="primary" />
+    <StoriesTitle title="Input range" />
     <div style={{ maxWidth: '30%' }}>
-      <InputRange {...args} />
+      <InputRange {...props} />
     </div>
   </StoriesContainer>
 );

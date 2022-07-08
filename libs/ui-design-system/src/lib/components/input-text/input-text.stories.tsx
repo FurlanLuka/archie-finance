@@ -10,12 +10,13 @@ export default {
   component: InputText,
   parameters: {
     layout: 'fullscreen',
+    options: { showPanel: false },
   },
 } as Meta;
 
 export const Default: Story = () => (
   <StoriesContainer>
-    <StoriesTitle title="Input text" subtitle="primary" />
+    <StoriesTitle title="Input text" />
     <div style={{ maxWidth: '30%' }}>
       <InputText>
         Join the Waitlist
