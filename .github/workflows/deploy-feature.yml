@@ -27,11 +27,11 @@ jobs:
     - name: Workspace Lint
       run: npx nx workspace-lint
     - name: Affected Lint
-      run: npx nx affected --base=origin/develop~1 --target=lint --parallel=3
+      run: npx nx affected --base=origin/develop --target=lint --parallel=3
     - name: Affected Test
-      run: npx nx affected --base=origin/develop~1 --target=test --parallel=3 --ci --code-coverage
+      run: npx nx affected --base=origin/develop --target=test --parallel=3 --ci --code-coverage
     - name: Affected Build
-      run: npx nx affected --base=origin/develop~1 --target=build --parallel=3
+      run: npx nx affected --base=origin/develop --target=build --parallel=3
     - name: Store build artifacts
       uses: actions/upload-artifact@v2
       with:
@@ -76,12 +76,12 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ steps.git_details.outputs.COMMIT_HASH }}
-      run: npx nx affected --base=origin/develop~1 --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+      run: npx nx affected --base=origin/develop --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
     - uses: ./.github/actions/affected-projects
       id: affected-projects
       name: Extract affected apps
       with:
-        base: origin/develop~1
+        base: origin/develop
   deploy:
     name: Deploy ${{ matrix.project }}
     needs: build_and_publish
