@@ -1,5 +1,5 @@
-export const SERVICE_NAME = 'user-api'
-export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`
+export const SERVICE_NAME = 'user-api';
+export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
 export enum ConfigVariables {
   AUTH0_DOMAIN = 'AUTH0_DOMAIN',
@@ -19,4 +19,14 @@ export enum ConfigVariables {
   VAULT_PASSWORD = 'VAULT_PASSWORD',
   VAULT_NAMESPACE = 'VAULT_NAMESPACE',
   INTERNAL_API_URL = 'INTERNAL_API_URL',
+  QUEUE_URL = 'QUEUE_URL',
 }
+
+export const KYC_SUBMITTED_EXCHANGE = {
+  name: 'user.kyc.submitted.fx',
+  type: 'fanout',
+};
+export const EMAIL_VERIFIED_EXCHANGE = {
+  name: 'user.email.verified.fx',
+  type: 'fanout',
+};

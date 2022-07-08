@@ -19,24 +19,6 @@ export class InternalApiService {
     @Inject('INTERNAL_API_CONFIG') private config: InternalApiConfig,
   ) {}
 
-  public async completeOnboardingStage(
-    onboardingStage: string,
-    userId: string,
-  ): Promise<void> {
-    await axios.post(
-      `${this.config.internalApiUrl}/internal/onboarding/complete`,
-      {
-        userId,
-        stage: onboardingStage,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-  }
-
   public async getKyc(userId: string): Promise<GetKycResponse> {
     const response: AxiosResponse<GetKycResponse> = await axios.get(
       `${this.config.internalApiUrl}/internal/kyc/${userId}`,

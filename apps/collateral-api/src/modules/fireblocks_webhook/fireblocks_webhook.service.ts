@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   PeerType,
@@ -22,6 +17,7 @@ import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { AssetList } from '@archie-microservices/api-interfaces/asset_information';
 import { UserVaultAccount } from '../user_vault_account/user_vault_account.entity';
 import { Repository } from 'typeorm';
+import { FireblocksWebhookError } from './fireblocks_webhook.errors';
 
 @Injectable()
 export class FireblocksWebhookService {
@@ -105,18 +101,13 @@ export class FireblocksWebhookService {
         transaction.status,
       );
     } catch (error) {
-      Logger.error({
-        code: 'FIREBLOCKS_WEBHOOK_ERROR',
-        metadata: {
-          transactionId: transaction.id,
-          assetId: transaction.assetId,
-          amount: transaction.netAmount,
-          destination: transaction.destinationAddress,
-          status: transaction.status,
-        },
+      throw new FireblocksWebhookError({
+        transactionId: transaction.id,
+        assetId: transaction.assetId,
+        amount: transaction.netAmount,
+        destination: transaction.destinationAddress,
+        status: transaction.status,
       });
-
-      throw new InternalServerErrorException();
     }
   }
 
@@ -181,20 +172,15 @@ export class FireblocksWebhookService {
         userId: userVaultAccount.userId,
       });
     } catch (error) {
-      Logger.error({
-        code: 'FIREBLOCKS_WEBHOOK_WITHDRAW_ERROR',
-        metadata: {
-          transactionId: transaction.id,
-          assetId: transaction.assetId,
-          amount: transaction.netAmount,
-          destination: transaction.destination,
-          destinationAddress: transaction.destinationAddress,
-          source: transaction.source,
-          status: transaction.status,
-        },
+      throw new FireblocksWebhookError({
+        transactionId: transaction.id,
+        assetId: transaction.assetId,
+        amount: transaction.netAmount,
+        destination: transaction.destination,
+        destinationAddress: transaction.destinationAddress,
+        source: transaction.source,
+        status: transaction.status,
       });
-
-      throw new InternalServerErrorException();
     }
   }
 }

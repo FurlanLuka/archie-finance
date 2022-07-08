@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { DataSource, Repository } from 'typeorm';
@@ -23,6 +18,10 @@ import { InternalApiService } from '@archie-microservices/internal-api';
 import { CollateralWithdrawal } from './collateral_withdrawal.entity';
 import { UserVaultAccountService } from '../user_vault_account/user_vault_account.service';
 import { FireblocksService } from '../fireblocks/fireblocks.service';
+import {
+  DepositCreationInternalError,
+  WithdrawalCreationInternalError,
+} from './collateral.errors';
 
 @Injectable()
 export class CollateralService {
@@ -84,21 +83,15 @@ export class CollateralService {
     } catch (error) {
       await queryRunner.rollbackTransaction();
 
-      Logger.error({
-        code: 'CREATE_DEPOSIT_ERROR',
-        metadata: {
-          userId,
-          asset,
-          transactionId,
-          amount,
-          destinationAddress,
-          status,
-          error: JSON.stringify(error),
-          errorMessage: error.message,
-        },
+      throw new DepositCreationInternalError({
+        asset,
+        transactionId,
+        amount,
+        destinationAddress,
+        status,
+        error: JSON.stringify(error),
+        errorMessage: error.message,
       });
-
-      throw new InternalServerErrorException();
     } finally {
       await queryRunner.release();
     }
@@ -144,19 +137,14 @@ export class CollateralService {
         .setParameter('withdrawalAmount', withdrawalAmount)
         .execute();
     } catch (error) {
-      Logger.error({
-        code: 'CREATE_WITHDRAWAL_ERROR',
-        metadata: {
-          userId,
-          asset,
-          withdrawalAmount,
-          destinationAddress,
-          error: JSON.stringify(error),
-          errorMessage: error.message,
-        },
+      throw new WithdrawalCreationInternalError({
+        userId,
+        asset,
+        withdrawalAmount,
+        destinationAddress,
+        error: JSON.stringify(error),
+        errorMessage: error.message,
       });
-
-      throw new InternalServerErrorException();
     }
   }
 

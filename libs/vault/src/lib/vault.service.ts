@@ -11,6 +11,7 @@ import {
   VaultEncryptionData,
 } from './vault.interfaces';
 import { CryptoService } from '@archie-microservices/crypto';
+import { VaultAuthenticationInternalError } from './vault.errors';
 
 @Injectable()
 export class VaultService {
@@ -40,15 +41,10 @@ export class VaultService {
     } catch (err) {
       const error: AxiosError = err;
 
-      Logger.error({
-        code: 'VAULT_AUTHENTICATION_ERROR',
-        metadata: {
-          error: error.toJSON(),
-          response: error.response.data,
-        },
+      throw new VaultAuthenticationInternalError({
+        error: error.toJSON(),
+        response: error.response.data,
       });
-
-      throw new InternalServerErrorException();
     }
   }
 

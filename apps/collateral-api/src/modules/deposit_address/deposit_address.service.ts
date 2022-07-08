@@ -18,6 +18,11 @@ import {
   AssetInformation,
   AssetType,
 } from '@archie-microservices/api-interfaces/asset_information';
+import {
+  DepositAddressUnknownAssetError,
+  GenerateOmnubusWalletInternalError,
+  GeneratePersonalWalletInternalError,
+} from './deposit_address.errors';
 
 @Injectable()
 export class DepositAddressService {
@@ -39,15 +44,10 @@ export class DepositAddressService {
     );
 
     if (Object.keys(assetList).includes(asset) === false) {
-      Logger.error({
-        code: 'DEPOSIT_ADDRESS_UNKNOWN_ASSET_ERROR',
-        metadata: {
-          asset,
-          userId,
-        },
+      throw new DepositAddressUnknownAssetError({
+        asset,
+        userId,
       });
-
-      throw new NotFoundException();
     }
 
     const assetInformation: AssetInformation | undefined = assetList[asset];
@@ -99,16 +99,10 @@ export class DepositAddressService {
         address,
       };
     } catch (error) {
-      Logger.error({
-        code: 'GENERATE_PERSONAL_WALLET_ERROR',
-        metadata: {
-          userId,
-          asset,
-          error: JSON.stringify(error),
-        },
+      throw new GeneratePersonalWalletInternalError({
+        asset,
+        error: JSON.stringify(error),
       });
-
-      throw new InternalServerErrorException();
     }
   }
 
@@ -122,16 +116,10 @@ export class DepositAddressService {
         userId,
       );
     } catch (error) {
-      Logger.error({
-        code: 'GENERATE_OMNIBUS_WALLET_ERROR',
-        metadata: {
-          userId,
-          asset,
-          error: JSON.stringify(error),
-        },
+      throw new GenerateOmnubusWalletInternalError({
+        asset,
+        error: JSON.stringify(error),
       });
-
-      throw new InternalServerErrorException();
     }
   }
 
