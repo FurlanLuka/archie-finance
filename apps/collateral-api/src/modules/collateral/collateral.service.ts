@@ -136,9 +136,9 @@ export class CollateralService {
         transactionId,
       });
 
-      await this.collateralDepositRepository
-        .createQueryBuilder('CollateralDeposit')
-        .update(CollateralDeposit)
+      await this.collateralRepository
+        .createQueryBuilder('Collateral')
+        .update(Collateral)
         .where('userId = :userId AND asset = :asset', { userId, asset })
         .set({ amount: () => 'amount - :withdrawalAmount' })
         .setParameter('withdrawalAmount', withdrawalAmount)
