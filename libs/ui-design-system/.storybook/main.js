@@ -8,13 +8,15 @@ module.exports = {
   stories: [...rootMain.stories, '../src/lib/**/*.stories.mdx', '../src/lib/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [...rootMain.addons, '@nrwl/react/plugins/storybook'],
   webpackFinal: async (config, { configType }) => {
-    // apply any global webpack configs that might have been specified in .storybook/main.js
     if (rootMain.webpackFinal) {
       config = await rootMain.webpackFinal(config, { configType });
     }
 
-    // add your own webpack tweaks if needed
-
     return config;
   },
+
+  previewHead: (head) => (`
+    ${head}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  `),
 };
