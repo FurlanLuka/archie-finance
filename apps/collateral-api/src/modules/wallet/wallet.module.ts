@@ -3,12 +3,14 @@ import { InternalApiModule } from '@archie-microservices/internal-api';
 import { ConfigVariables } from '@archie/api/user-api/constants';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { FireblocksModule } from '../fireblocks/fireblocks.module';
 import { WalletController } from './wallet.controller';
 import { Wallet } from './wallet.entity';
 import { WalletService } from './wallet.service';
 
 @Module({
   imports: [
+    FireblocksModule,
     TypeOrmModule.forFeature([Wallet]),
     InternalApiModule.register({
       imports: [ConfigModule],

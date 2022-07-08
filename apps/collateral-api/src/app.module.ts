@@ -10,6 +10,7 @@ import { HealthModule } from '@archie-microservices/health';
 import { CollateralModule } from './modules/collateral/collateral.module';
 import { AssetInformationModule } from './modules/asset_information/asset_information.module';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
+import { WalletModule } from './modules/wallet/wallet.module';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { ConfigVariables } from '@archie/api/collateral-api/constants';
     FireblocksWebhookModule,
     CollateralModule,
     AssetInformationModule,
+    WalletModule,
   ],
   controllers: [],
   providers: [],

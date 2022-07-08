@@ -77,4 +77,19 @@ export class FireblocksService {
   public async getVaultAccounts(): Promise<VaultAccountResponse[]> {
     return this.fireblocksClient.getVaultAccounts();
   }
+
+  public async createExternalWallet({
+    userId,
+    name,
+  }: {
+    userId: string;
+    name: string;
+  }): Promise<string> {
+    const externalWallet = await this.fireblocksClient.createExternalWallet(
+      name,
+      userId,
+    );
+
+    return externalWallet.id;
+  }
 }

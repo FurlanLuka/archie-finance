@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { FireblocksService } from '../fireblocks/fireblocks.service';
 import { WalletDto } from './wallet.dto';
 import { Wallet } from './wallet.entity';
 
@@ -9,6 +10,7 @@ export class WalletService {
   constructor(
     @InjectRepository(Wallet)
     private walletRepository: Repository<Wallet>,
+    private fireblocksService: FireblocksService,
   ) {}
   async createWallet({
     userId,
@@ -17,11 +19,14 @@ export class WalletService {
     userId: string;
     name: string;
   }): Promise<WalletDto> {
-    console.log('craeting', { userId, name });
+    const externalWalletId = await this.fireblocksService.createExternalWallet({
+      userId,
+      name,
+    });
     const wallet = await this.walletRepository.save({
       userId,
       name,
-      walletId: 'twaja mama',
+      walletId: externalWalletId,
     });
 
     return wallet;
