@@ -27,22 +27,24 @@ jobs:
     - name: Workspace Lint
       run: npx nx workspace-lint
     - name: Affected Lint
-      run: npx nx affected --base=origin/develop~1 --target=lint --parallel=3
+      run: npx nx affected --base=origin/develop --target=lint --parallel=3
     - name: Affected Test
-      run: npx nx affected --base=origin/develop~1 --target=test --parallel=3 --ci --code-coverage
+      run: npx nx affected --base=origin/develop --target=test --parallel=3 --ci --code-coverage
     - name: Affected Build
-      run: npx nx affected --base=origin/develop~1 --target=build --parallel=3
+      run: npx nx affected --base=origin/develop --target=build --parallel=3
     - name: Store build artifacts
       uses: actions/upload-artifact@v2
       with:
         name: services-build-development
         path: ./dist
         retention-days: 1
-  build_and_public:
+  build_and_publish:
     name: Build docker image and publish 
     needs: check_and_build
     runs-on: ubuntu-latest
     environment: development
+    outputs:
+      affectedProjects: ${{ steps.affected-projects.outputs.affectedProjects }}
     steps:
     - uses: actions/checkout@v2
       name: Checkout
@@ -73,14 +75,26 @@ jobs:
     - name: Affected docker build
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ steps.git_details.outputs.COMMIT_HASH }}
-      run: npx nx affected --base=origin/develop~1 --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+        IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
+      run: npx nx affected --base=origin/develop --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+    - uses: ./.github/actions/affected-projects
+      id: affected-projects
+      name: Extract affected apps
+      with:
+        base: origin/develop
   deploy:
-    name: Deploy to kubernetes cluster
-    needs: build_and_public
+    name: Deploy ${{ matrix.project }}
+    needs: build_and_publish
     runs-on: ubuntu-latest
     environment: development
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJSON(needs.build_and_publish.outputs.affectedProjects) }}
     steps:
+    - name: Poor mans manual deploy
+      if: ${{ github.run_attempt== 1}}
+      run: exit 1
     - uses: actions/checkout@v2
       name: Checkout
       with:
@@ -100,9 +114,13 @@ jobs:
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    - name: Affected deploy
-      uses: ./.github/actions/node-helm
+    - name: Deploy
+      uses: koslib/helm-eks-action@master
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        IMAGE_TAG: ${{ matrix.project }}-${{ steps.git_details.outputs.SOURCE_TAG }}
+        CHART: ./apps/${{ matrix.project }}/chart
+        APP_NAME: ${{ matrix.project }}
       with:
-        args: --base=origin/develop~1 --target=deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.COMMIT_HASH }} --environment=development
+        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }} --set environment="development"

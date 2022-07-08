@@ -7,4 +7,6 @@ chmod 600 ${PWD}/kubeconfig
 
 git config --global --add safe.directory /github/workspace
 
-sh -c "nx affected $*"
+echo "npx nx run $*"
+
+sh -c "npx nx run $*"
