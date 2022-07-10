@@ -18,3 +18,8 @@ export enum ConfigVariables {
   VAULT_PASSWORD = 'VAULT_PASSWORD',
   VAULT_NAMESPACE = 'VAULT_NAMESPACE',
 }
+
+export const WAITLIST_JOINED_EXCHANGE = {
+  name: 'waitlist.joined.fx',
+  type: 'fanout',
+};

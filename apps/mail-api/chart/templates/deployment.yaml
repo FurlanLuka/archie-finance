@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mail-api
+  labels:
+    app: mail-api
+    {{- if not .Values.local }}
+    tags.datadoghq.com/env: '{{ .Values.environment }}'
+    tags.datadoghq.com/service: 'mail-api'
+    tags.datadoghq.com/version: '{{ .Values.tag }}'
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: mail-api
+  {{- if not .Values.local }}
+  {{- if eq .Values.environment "production" }}
+  replicas: 1
+  {{- else }}
+  replicas: 1
+  {{- end }}
+  {{- else }}
+  replicas: 1
+  {{- end }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: mail-api
+        {{- if not .Values.local }}
+        tags.datadoghq.com/env: '{{ .Values.environment }}'
+        tags.datadoghq.com/service: 'mail-api'
+        tags.datadoghq.com/version: '{{ .Values.tag }}'
+        {{- else }}
+        helm-revision: '{{ .Release.Revision }}'
+        {{- end }}
+    spec:
+      containers:
+        - name: mail-api
+          image: '{{ .Values.image }}:{{ .Values.tag }}'
+          {{- if not .Values.local }}
+          imagePullPolicy: Always
+          {{- else }}
+          imagePullPolicy: Never
+          {{- end }}
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            httpGet:
+              path: /health
+              port: 80
+          resources:
+            requests:
+              memory: '64Mi'
+              cpu: '50m'
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          {{- if not .Values.local }}
+          env:
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DD_ENV
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/env']
+            - name: DD_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
+            - name: DD_LOGS_INJECTION
+              value: 'true'
+            - name: SENDGRID_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: api-key
+            - name: SENDGRID_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: api-url
+            - name: SENDGRID_MAILING_LIST_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: mailing-list-id
+            - name: SENDGRID_VERIFY_EMAIL_TEMPLATAE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: verify-email-template-id
+            - name: SENDGRID_WELCOME_EMAIL_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: welcome-email-template-id
+            - name: ARCHIE_MARKETING_WEBSITE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: archie-secrets
+                  key: marketing-website-url
+          {{- end }}
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mail-api-service
+  labels:
+    app: mail-api-service
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: mail-api
