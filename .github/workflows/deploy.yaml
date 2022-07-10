@@ -1,0 +1,148 @@
+name: Deployment workflow
+
+on:
+  workflow_call:
+    inputs:
+      NAME:
+        required: true
+        type: string
+      IS_TAGGED:
+        required: true
+        type: boolean
+      ENVIRONMENT:
+        required: true
+        type: string
+      ECR_REPOSITORY:
+        required: true
+        type: string
+      AWS_REGION:
+        required: true
+        type: string
+      BASE_BRANCH_NAME:
+        required: false
+        type: string
+    secrets:
+      AWS_ACCESS_KEY_ID:
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        required: true
+      KUBE_CONFIG_DATA:
+        required: true
+
+jobs:
+  check_and_build:
+    name: Check and Build
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.ENVIRONMENT }}
+    outputs:
+      affectedProjects: ${{ steps.affected-projects.outputs.affectedProjects }}
+      tag: ${{ steps.extract.outputs.SOURCE_TAG }}
+      commitHash: ${{ steps.extract.outputs.COMMIT_HASH }}
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v2
+        if: inputs.BASE_BRANCH_NAME == ''
+      - uses: nrwl/nx-set-shas@v2
+        if: inputs.BASE_BRANCH_NAME != ''
+        with:
+          main-branch-name: ${{ inputs.BASE_BRANCH_NAME }}
+      - uses: ./.github/actions/install-dependencies
+        name: Install dependencies
+      - name: Workspace Lint
+        run: npx nx workspace-lint
+      - name: Affected Lint
+        run: npx nx affected --target=lint --parallel=3
+      - name: Affected Test
+        run: npx nx affected --target=test --parallel=3 --ci --code-coverage
+      - name: Affected Build
+        run: npx nx affected --target=build --parallel=3
+      - name: Store build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: services-build-${{ inputs.NAME }}
+          path: ./dist
+          retention-days: 1
+      - uses: ./.github/actions/affected-projects
+        id: affected-projects
+        name: Extract affected apps
+        with:
+          base: ${{ inputs.BASE_BRANCH_NAME }}
+  build_and_publish:
+    name: Build docker image and publish
+    needs: check_and_build
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.ENVIRONMENT }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJSON(needs.check_and_build.outputs.affectedProjects) }}
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+      - uses: ./.github/actions/install-dependencies
+        name: Install dependencies
+      - name: Download build artifacts
+        uses: actions/download-artifact@v2
+        with:
+          name: services-build-${{ inputs.NAME }}
+          path: ./dist
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ inputs.AWS_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Docker build
+        env:
+          ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
+        run: npx nx ${{ matrix.project }}:build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+  # deploy:
+  #   name: Deploy ${{ matrix.project }}
+  #   needs: build_and_publish
+  #   runs-on: ubuntu-latest
+  #   environment: development
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       project: ${{ fromJSON(needs.build_and_publish.outputs.affectedProjects) }}
+  #   steps:
+  #   - name: Poor mans manual deploy
+  #     if: ${{ github.run_attempt== 1}}
+  #     run: exit 1
+  #   - uses: actions/checkout@v2
+  #     name: Checkout
+  #     with:
+  #       fetch-depth: 0
+  #   - name: Extract details from Git
+  #     id: git_details
+  #     uses: ./.github/actions/extract-metadata
+  #   - uses: nrwl/nx-set-shas@v2
+  #   - uses: ./.github/actions/install-dependencies
+  #     name: Install dependencies
+  #   - name: Configure AWS credentials
+  #     uses: aws-actions/configure-aws-credentials@v1
+  #     with:
+  #       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #       aws-region: ${{ env.AWS_REGION }}
+  #   - name: Login to Amazon ECR
+  #     id: login-ecr
+  #     uses: aws-actions/amazon-ecr-login@v1
+  #   - name: Deploy
+  #     uses: koslib/helm-eks-action@master
+  #     env:
+  #       KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
+  #       ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+  #       IMAGE_TAG: ${{ matrix.project }}-${{ steps.git_details.outputs.SOURCE_TAG }}
+  #       CHART: ./apps/${{ matrix.project }}/chart
+  #       APP_NAME: ${{ matrix.project }}
+  #     with:
+  #       command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }} --set environment="development"
