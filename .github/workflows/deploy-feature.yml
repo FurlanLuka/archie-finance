@@ -11,7 +11,7 @@ env:
 
 jobs:
   workflow:
-    uses: ./deploy.yaml
+    uses: ./deploy.yaml@feature/deployment-optimization
     with:
       NAME: 'feature-deployment'
       IS_TAGGED: false
