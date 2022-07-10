@@ -36,7 +36,7 @@ jobs:
     environment: ${{ inputs.ENVIRONMENT }}
     outputs:
       affectedProjects: ${{ steps.affected-projects.outputs.affectedProjects }}
-      imageTag: ${{ steps.extract.outputs.IMAGE_TAG }}
+      imageTag: ${{ steps.extract-image-tag.outputs.IMAGE_TAG }}
     steps:
       - uses: actions/checkout@v2
         name: Checkout
@@ -82,6 +82,7 @@ jobs:
         with:
           base: origin/${{ inputs.BASE_BRANCH_NAME }}
       - name: Extract image tag
+        id: extract-image-tag
         run: |
           if [[ ${{ inputs.IS_TAGGED }} == true ]]; then
             echo ::set-output name=IMAGE_TAG::${GITHUB_REF#refs/tags/}
