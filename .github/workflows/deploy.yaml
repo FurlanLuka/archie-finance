@@ -123,8 +123,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ needs.check_and_build.outputs.imageTag }}
         run: |
-          echo $IMAGE_TAG
-          echo ${{ needs.check_and_build.outputs.imageTag }}
           npx nx run ${{ matrix.project }}:build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
   deploy:
     name: Deploy ${{ matrix.project }}
@@ -155,8 +153,9 @@ jobs:
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ matrix.project }}-${{ needs.check_and_build.outputs.imageTag }}
         CHART: ./apps/${{ matrix.project }}/chart
         APP_NAME: ${{ matrix.project }}
       with:
-        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/${{ env.ECR_REPOSITORY }} --set environment="development"
+        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REGISTRY --set environment="development"
