@@ -108,6 +108,11 @@ spec:
                 secretKeyRef:
                   name: archie-secrets
                   key: marketing-website-url
+            - name: QUEUE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: queue-secrets
+                  key: queue-url
           {{- end }}
       imagePullSecrets:
         - name: regcred

@@ -3,7 +3,6 @@ import axios, { AxiosError } from 'axios';
 import { ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
 import {
-  AddToEmailWaitlistInternalError,
   SendEmailInternalError,
 } from './sendgrid.errors';
 
@@ -11,35 +10,29 @@ import {
 export class SendgridService {
   constructor(private configService: ConfigService) {}
 
-  public async addToWaitlist(emailAddress: string, waitlistId: string) {
-    try {
-      await axios.put(
-        `${this.configService.get(
-          ConfigVariables.SENDGRID_API_URL,
-        )}/v3/marketing/contacts`,
-        {
-          contacts: [
-            {
-              email: emailAddress,
-            },
-          ],
-          list_ids: [
-            this.configService.get(ConfigVariables.SENDGRID_MAILING_LIST_ID),
-          ],
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${this.configService.get(
-              ConfigVariables.SENDGRID_API_KEY,
-            )}`,
+  public async addToWaitlist(emailAddress: string) {
+    await axios.put(
+      `${this.configService.get(
+        ConfigVariables.SENDGRID_API_URL,
+      )}/v3/marketing/contacts`,
+      {
+        contacts: [
+          {
+            email: emailAddress,
           },
+        ],
+        list_ids: [
+          this.configService.get(ConfigVariables.SENDGRID_MAILING_LIST_ID),
+        ],
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${this.configService.get(
+            ConfigVariables.SENDGRID_API_KEY,
+          )}`,
         },
-      );
-    } catch (error) {
-      throw new AddToEmailWaitlistInternalError({
-        id: waitlistId,
-      });
-    }
+      },
+    );
   }
 
   public async sendEmail(
