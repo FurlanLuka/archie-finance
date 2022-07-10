@@ -54,11 +54,23 @@ jobs:
       - name: Workspace Lint
         run: npx nx workspace-lint
       - name: Affected Lint
+        if: inputs.BASE_BRANCH_NAME == ''
         run: npx nx affected --target=lint --parallel=3
+      - name: Affected Lint
+        if: inputs.BASE_BRANCH_NAME != ''
+        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=lint --parallel=3
       - name: Affected Test
+        if: inputs.BASE_BRANCH_NAME == ''
         run: npx nx affected --target=test --parallel=3 --ci --code-coverage
+      - name: Affected Test
+        if: inputs.BASE_BRANCH_NAME != ''
+        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test --parallel=3 --ci --code-coverage
       - name: Affected Build
+        if: inputs.BASE_BRANCH_NAME == ''
         run: npx nx affected --target=build --parallel=3
+      - name: Affected Build
+        if: inputs.BASE_BRANCH_NAME != ''
+        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=build --parallel=3
       - name: Store build artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -69,7 +81,7 @@ jobs:
         id: affected-projects
         name: Extract affected apps
         with:
-          base: ${{ inputs.BASE_BRANCH_NAME }}
+          base: origin/${{ inputs.BASE_BRANCH_NAME }}
   build_and_publish:
     name: Build docker image and publish
     needs: check_and_build
