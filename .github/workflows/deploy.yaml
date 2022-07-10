@@ -84,7 +84,7 @@ jobs:
           base: origin/${{ inputs.BASE_BRANCH_NAME }}
       - name: Extract image tag
         run: |
-          if [[ ${{ inputs.IS_TAG }} == true ]]; then
+          if [[ ${{ inputs.IS_TAGGED }} == true ]]; then
             echo hey
           fi
   build_and_publish:
