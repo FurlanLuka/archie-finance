@@ -114,7 +114,7 @@ jobs:
         env:
           ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ steps.git_details.outputs.SOURCE_TAG }}
+          IMAGE_TAG: ${{ inputs.IS_TAG == true && needs.check_and_build.outputs.tag || needs.check_and_build.outputs.commitTag }}
         run: npx nx run ${{ matrix.project }}:build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
   deploy:
     name: Deploy ${{ matrix.project }}
@@ -136,7 +136,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-region: ${{ inputs.AWS_REGION }}
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
@@ -145,7 +145,7 @@ jobs:
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ matrix.project }}-${{ steps.git_details.outputs.SOURCE_TAG }}
+        IMAGE_TAG: ${{ matrix.project }}-${{ inputs.IS_TAG == true && needs.check_and_build.outputs.tag || needs.check_and_build.outputs.commitTag }}
         CHART: ./apps/${{ matrix.project }}/chart
         APP_NAME: ${{ matrix.project }}
       with:
