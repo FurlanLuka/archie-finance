@@ -118,13 +118,13 @@ jobs:
         run: npx nx run ${{ matrix.project }}:build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
   deploy:
     name: Deploy ${{ matrix.project }}
-    needs: build_and_publish
+    needs: [build_and_publish, check_and_build]
     runs-on: ubuntu-latest
     environment: development
     strategy:
       fail-fast: false
       matrix:
-        project: ${{ fromJSON(needs.build_and_publish.outputs.affectedProjects) }}
+        project: ${{ fromJSON(needs.check_and_build.outputs.affectedProjects) }}
     steps:
     - name: Poor mans manual deploy
       if: ${{ github.run_attempt== 1}}
