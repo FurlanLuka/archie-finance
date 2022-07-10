@@ -14,7 +14,7 @@ jobs:
     uses: ./.github/workflows/deploy.yaml
     with:
       NAME: 'feature-deployment'
-      IS_TAGGED: false
+      IS_TAGGED: true
       ENVIRONMENT: development
       ECR_REPOSITORY: archie-development-container-repository
       AWS_REGION: us-east-1

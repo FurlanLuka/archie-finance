@@ -82,6 +82,11 @@ jobs:
         name: Extract affected apps
         with:
           base: origin/${{ inputs.BASE_BRANCH_NAME }}
+      - name: Extract image tag
+        run: |
+          if [[ ${{ inputs.IS_TAG }} == true ]]; then
+            echo hey
+          fi
   build_and_publish:
     name: Build ${{ matrix.project }} docker
     needs: check_and_build
@@ -114,7 +119,7 @@ jobs:
         env:
           ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ inputs.IS_TAG == true && needs.check_and_build.outputs.tag || needs.check_and_build.outputs.commitTag }}
+          IMAGE_TAG: ${{ inputs.IS_TAGGED == true && needs.check_and_build.outputs.tag || needs.check_and_build.outputs.commitTag }}
         run: npx nx run ${{ matrix.project }}:build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
   deploy:
     name: Deploy ${{ matrix.project }}
@@ -145,7 +150,7 @@ jobs:
       env:
         KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ matrix.project }}-${{ inputs.IS_TAG == true && needs.check_and_build.outputs.tag || needs.check_and_build.outputs.commitTag }}
+        IMAGE_TAG: ${{ matrix.project }}-${{ inputs.IS_TAGGED == true && needs.check_and_build.outputs.tag || needs.check_and_build.outputs.commitTag }}
         CHART: ./apps/${{ matrix.project }}/chart
         APP_NAME: ${{ matrix.project }}
       with:
