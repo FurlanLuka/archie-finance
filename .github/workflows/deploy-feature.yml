@@ -11,7 +11,7 @@ env:
 
 jobs:
   workflow:
-    uses: ./.github/workflows/deploy.yaml@feature/deployment-optimization
+    uses: ./.github/workflows/deploy.yaml
     with:
       NAME: 'feature-deployment'
       IS_TAGGED: false
