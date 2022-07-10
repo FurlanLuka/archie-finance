@@ -158,4 +158,4 @@ jobs:
         CHART: ./apps/${{ matrix.project }}/chart
         APP_NAME: ${{ matrix.project }}
       with:
-        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REGISTRY --set environment="development"
+        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment="development"
