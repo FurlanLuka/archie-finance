@@ -1,6 +1,7 @@
 import {
   Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Generated,
   Index,
@@ -20,7 +21,10 @@ export class MarginCalls {
   @Column('varchar')
   userId: string;
 
-  @CreateDateColumn({ select: false })
+  @DeleteDateColumn({ name: 'deleted_at', nullable: true })
+  deletedAt?: Date;
+
+  @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn({ select: false })

@@ -27,6 +27,9 @@ export class LiquidationLogs {
   @Column('float')
   amount: number;
 
+  @Column('float')
+  price: number;
+
   @ManyToOne(() => MarginCalls, (marginCall: MarginCalls) => marginCall.uuid)
   marginCall: MarginCalls;
 

@@ -6,19 +6,43 @@ import {
 } from '@nestjs/common';
 import { AppModule } from '../../src/app.module';
 import { clearDatabase } from '../e2e-test-utils/database.utils';
-import { Connection } from 'typeorm';
+import { Connection, Repository } from 'typeorm';
 import { verifyAccessToken } from '../e2e-test-utils/mock.auth.utils';
 import { AuthGuard } from '@archie-microservices/auth0';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { CHECK_MARGIN_EXCHANGE } from '../../../../libs/api/credit-api/constants/src';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import {
+  MARGIN_CALL_COMPLETED_EXCHANGE,
+  MARGIN_CALL_STARTED_EXCHANGE,
+} from '../../../../libs/api/credit-api/constants/src';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import { MarginQueueController } from '../../src/modules/margin/margin.controller';
+import { Credit } from '../../src/modules/credit/credit.entity';
+import nock = require('nock');
+import { ConfigVariables } from '../../../../libs/api/user-api/constants/src';
+import { ConfigService } from '@nestjs/config';
+import { MarginNotifications } from '../../src/modules/margin/margin_notifications.entity';
+import { MarginCalls } from '../../src/modules/margin/margin_calls.entity';
+import { DateTime } from 'luxon';
+import { LiquidationLogs } from '../../src/modules/margin/liquidation_logs.entity';
+import { collateralValueResponse } from '../test-data/collateral.data';
+import { UUID_REGEX } from '../e2e-test-utils/regex.utils';
 
 describe('MarginQueueController (e2e)', () => {
   let app: INestApplication;
   let module: TestingModule;
 
-  beforeAll(async () => {
+  let creditRepository: Repository<Credit>;
+  let configService: ConfigService;
+  let marginNotificationsRepositiory: Repository<MarginNotifications>;
+  let marginCallRepository: Repository<MarginCalls>;
+  let liquidationLogsRepository: Repository<LiquidationLogs>;
+  const marginNotificationLtv: number[] = [65, 70, 73];
+
+  const userId: string = 'userId';
+
+  const amqpConnectionPublish: jest.Mock = jest.fn();
+
+  beforeEach(async () => {
     module = await Test.createTestingModule({
       imports: [AppModule],
     })
@@ -37,7 +61,7 @@ describe('MarginQueueController (e2e)', () => {
       })
       .overrideProvider(AmqpConnection)
       .useValue({
-        publish: (a, b, c) => console.log('mock', a, b, c),
+        publish: amqpConnectionPublish,
       })
       .compile();
 
@@ -45,9 +69,22 @@ describe('MarginQueueController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
     await app.init();
+
+    creditRepository = app.get(getRepositoryToken(Credit));
+    configService = app.get(ConfigService);
+    marginNotificationsRepositiory = app.get(
+      getRepositoryToken(MarginNotifications),
+    );
+    marginCallRepository = app.get(getRepositoryToken(MarginCalls));
+    liquidationLogsRepository = app.get(getRepositoryToken(LiquidationLogs));
+
+    nock(configService.get(ConfigVariables.INTERNAL_API_URL))
+      .get(`/internal/collateral/value/${userId}`)
+      .reply(200, collateralValueResponse);
   });
 
-  afterAll(async () => {
+  afterEach(async () => {
+    amqpConnectionPublish.mockReset();
     const connection: Connection = app.get(Connection);
     await clearDatabase(connection);
     await connection.close();
@@ -55,17 +92,436 @@ describe('MarginQueueController (e2e)', () => {
   });
 
   describe('CHECK_MARGIN_EXCHANGE flow', () => {
-    const userId: string = 'userId';
-
-    it('CHECK_MARGIN_EXCHANGE - Should not push any events in case LTV is under 60%', async () => {
-      const amqpConnectionService: AmqpConnection = app.get(AmqpConnection);
+    it('Should not do anything in case LTV is under 65% and no margin calls are active', async () => {
+      await creditRepository.save({
+        userId,
+        totalCredit: 100,
+        availableCredit: 100 - 64,
+      });
+      nock(configService.get(ConfigVariables.INTERNAL_API_URL))
+        .get(`/internal/collateral/value/${userId}`)
+        .reply(200, collateralValueResponse);
 
       await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
 
-      // TODO: temp
-      amqpConnectionService.publish(CHECK_MARGIN_EXCHANGE.name, '', {
-        userIds: [userId],
+      expect(amqpConnectionPublish).not.toBeCalled();
+    });
+
+    it.each(marginNotificationLtv)(
+      'Should send notification in case LTV is at %s %',
+      async (ltv: number) => {
+        await creditRepository.save({
+          userId,
+          totalCredit: 100,
+          availableCredit: 100 - ltv,
+        });
+
+        await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+
+        expect(amqpConnectionPublish).toBeCalledTimes(1);
+        expect(amqpConnectionPublish).toBeCalledWith(
+          'EMAIL_SENDING_REQUESTED',
+          '',
+          { userId, template_id: 1, ltv: ltv },
+        );
+        expect(
+          await marginNotificationsRepositiory.findOne({
+            where: {
+              userId: userId,
+            },
+          }),
+        ).toEqual({
+          uuid: expect.stringMatching(UUID_REGEX),
+          userId: userId,
+          sentAtLtv: ltv,
+          active: true,
+        });
+      },
+    );
+
+    it.each(marginNotificationLtv)(
+      'Should not send notification in case It was already sent for the same LTV level (%s %)',
+      async (ltv: number) => {
+        await creditRepository.save({
+          userId,
+          totalCredit: 100,
+          availableCredit: 100 - ltv,
+        });
+        await marginNotificationsRepositiory.save({
+          userId,
+          sentAtLtv: ltv,
+          active: true,
+        });
+
+        await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+
+        expect(amqpConnectionPublish).not.toBeCalled();
+      },
+    );
+
+    it.each(marginNotificationLtv)(
+      'Should activate the margin notification record if It already exists in non active state and send notification (%s %)',
+      async (ltv: number) => {
+        await creditRepository.save({
+          userId,
+          totalCredit: 100,
+          availableCredit: 100 - ltv,
+        });
+        await marginNotificationsRepositiory.save({
+          userId,
+          sentAtLtv: ltv,
+          active: false,
+        });
+
+        await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+
+        expect(amqpConnectionPublish).toBeCalledTimes(1);
+        expect(amqpConnectionPublish).toBeCalledWith(
+          'EMAIL_SENDING_REQUESTED',
+          '',
+          { userId, template_id: 1, ltv: ltv },
+        );
+        expect(
+          await marginNotificationsRepositiory.findOne({
+            where: {
+              userId: userId,
+            },
+          }),
+        ).toEqual({
+          uuid: expect.stringMatching(UUID_REGEX),
+          userId: userId,
+          sentAtLtv: ltv,
+          active: true,
+        });
+        expect(
+          await marginNotificationsRepositiory.findOne({
+            where: {
+              userId: userId,
+            },
+          }),
+        ).toEqual({
+          uuid: expect.stringMatching(UUID_REGEX),
+          userId: userId,
+          sentAtLtv: ltv,
+          active: true,
+        });
+      },
+    );
+
+    it('Should start the margin call once ltv reaches 75%', async () => {
+      const ltv: number = 75;
+      await creditRepository.save({
+        userId,
+        totalCredit: 100,
+        availableCredit: 100 - ltv,
+      });
+
+      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+
+      expect(amqpConnectionPublish).toBeCalledTimes(1);
+      expect(amqpConnectionPublish).toBeCalledWith(
+        MARGIN_CALL_STARTED_EXCHANGE.name,
+        '',
+        { userId },
+      );
+      expect(
+        await marginCallRepository.findOne({
+          where: {
+            userId: userId,
+          },
+        }),
+      ).toEqual({
+        uuid: expect.stringMatching(UUID_REGEX),
+        userId,
+        deletedAt: null,
+        createdAt: expect.any(Date),
       });
     });
+
+    it('Should not send notification or trigger MARGIN_CALL_STARTED event in case It was already sent at 75% LTV', async () => {
+      const ltv: number = 75;
+      await creditRepository.save({
+        userId,
+        totalCredit: 100,
+        availableCredit: 100 - ltv,
+      });
+      await marginNotificationsRepositiory.save({
+        userId,
+        sentAtLtv: ltv,
+        active: true,
+      });
+      await marginCallRepository.save({
+        userId,
+      });
+
+      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+
+      expect(amqpConnectionPublish).not.toBeCalled();
+    });
+
+    it('Should reset margin call attempt if LTV falls under 75 within 72 hours and send email', async () => {
+      const ltv: number = 0;
+      await creditRepository.save({
+        userId,
+        totalCredit: 100,
+        availableCredit: 100,
+      });
+      await marginNotificationsRepositiory.save({
+        userId,
+        sentAtLtv: ltv,
+        active: true,
+      });
+      await marginCallRepository.save({
+        userId,
+        createdAt: DateTime.now().minus({ hours: 60 }).toISO(),
+      });
+
+      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+
+      expect(amqpConnectionPublish).toBeCalledTimes(1);
+      expect(amqpConnectionPublish).toBeCalledWith(
+        MARGIN_CALL_COMPLETED_EXCHANGE.name,
+        '',
+        {
+          userId,
+          liquidation: [],
+        },
+      );
+      const marginCall: MarginCalls | undefined =
+        await marginCallRepository.findOne({
+          where: {
+            userId: userId,
+          },
+        });
+      expect(marginCall).toEqual(null);
+      expect(
+        await marginNotificationsRepositiory.findOne({
+          where: {
+            userId: userId,
+          },
+        }),
+      ).toEqual({
+        uuid: expect.stringMatching(UUID_REGEX),
+        userId,
+        sentAtLtv: ltv,
+        active: true,
+      });
+    });
+
+    it('Should take appropriate crypto assets and send email if the LTV is above 75 for 72 hours', async () => {
+      const ltv: number = 75;
+      await creditRepository.save({
+        userId,
+        totalCredit: 100,
+        availableCredit: 100 - ltv,
+      });
+      await marginNotificationsRepositiory.save({
+        userId,
+        sentAtLtv: ltv,
+        active: true,
+      });
+      await marginCallRepository.save({
+        userId,
+        createdAt: DateTime.now().minus({ hours: 72 }).toISO(),
+      });
+      const expectedLiquidatedAssets: Partial<LiquidationLogs>[] = [
+        {
+          asset: 'SOL',
+          amount: 100,
+          price: 28,
+        },
+        {
+          asset: 'BTC',
+          amount: 0.3653846153846154,
+          price: 9.5,
+        },
+      ];
+
+      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+
+      expect(amqpConnectionPublish).toBeCalledTimes(1);
+      expect(amqpConnectionPublish).toBeCalledWith(
+        MARGIN_CALL_COMPLETED_EXCHANGE.name,
+        '',
+        {
+          userId,
+          liquidation: expectedLiquidatedAssets,
+        },
+      );
+      const marginCall: MarginCalls = await marginCallRepository.findOne({
+        where: {
+          userId: userId,
+        },
+        withDeleted: true,
+      });
+      expect(marginCall).toEqual({
+        uuid: expect.stringMatching(UUID_REGEX),
+        userId,
+        deletedAt: expect.any(Date),
+        createdAt: expect.any(Date),
+      });
+      expect(
+        await marginNotificationsRepositiory.findOne({
+          where: {
+            userId: userId,
+          },
+        }),
+      ).toEqual({
+        uuid: expect.stringMatching(UUID_REGEX),
+        userId,
+        sentAtLtv: null,
+        active: false,
+      });
+      expect(
+        await liquidationLogsRepository.find({
+          where: {
+            userId: userId,
+          },
+          loadRelationIds: true,
+        }),
+      ).toEqual([
+        {
+          uuid: expect.stringMatching(UUID_REGEX),
+          userId,
+          marginCall: marginCall.uuid,
+          ...expectedLiquidatedAssets[0],
+        },
+        {
+          uuid: expect.stringMatching(UUID_REGEX),
+          userId,
+          marginCall: marginCall.uuid,
+          ...expectedLiquidatedAssets[1],
+        },
+      ]);
+    });
+
+    it('Should take appropriate crypto assets and send email if the LTV is above 85', async () => {
+      const ltv: number = 85;
+      await creditRepository.save({
+        userId,
+        totalCredit: 100,
+        availableCredit: 100 - ltv,
+      });
+      await marginNotificationsRepositiory.save({
+        userId,
+        sentAtLtv: ltv,
+        active: false,
+      });
+      const expectedLiquidatedAssets: Partial<LiquidationLogs>[] = [
+        {
+          asset: 'SOL',
+          amount: 100,
+          price: 28,
+        },
+        {
+          asset: 'BTC',
+          amount: 1,
+          price: 26,
+        },
+        {
+          asset: 'ETH',
+          amount: 3.541666666666666,
+          price: 8.5,
+        },
+      ];
+
+      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+
+      expect(amqpConnectionPublish).toBeCalledTimes(1);
+      expect(amqpConnectionPublish).toBeCalledWith(
+        MARGIN_CALL_COMPLETED_EXCHANGE.name,
+        '',
+        {
+          userId,
+          liquidation: expectedLiquidatedAssets,
+        },
+      );
+      const marginCall = await marginCallRepository.findOne({
+        where: {
+          userId: userId,
+        },
+        withDeleted: true,
+      });
+      expect(marginCall).toEqual({
+        uuid: expect.stringMatching(UUID_REGEX),
+        userId,
+        deletedAt: expect.any(Date),
+        createdAt: expect.any(Date),
+      });
+      expect(
+        await marginNotificationsRepositiory.findOne({
+          where: {
+            userId: userId,
+          },
+        }),
+      ).toEqual({
+        uuid: expect.stringMatching(UUID_REGEX),
+        userId,
+        sentAtLtv: null,
+        active: false,
+      });
+      expect(
+        await liquidationLogsRepository.find({
+          where: {
+            userId: userId,
+          },
+          loadRelationIds: true,
+        }),
+      ).toEqual([
+        {
+          uuid: expect.stringMatching(UUID_REGEX),
+          userId,
+          marginCall: marginCall.uuid,
+          ...expectedLiquidatedAssets[0],
+        },
+        {
+          uuid: expect.stringMatching(UUID_REGEX),
+          userId,
+          marginCall: marginCall.uuid,
+          ...expectedLiquidatedAssets[1],
+        },
+        {
+          uuid: expect.stringMatching(UUID_REGEX),
+          userId,
+          marginCall: marginCall.uuid,
+          ...expectedLiquidatedAssets[2],
+        },
+      ]);
+    });
+
+    it('Should not take any crypto assets in case enough were already liquidated', async () => {
+      const ltv: number = 85;
+      await creditRepository.save({
+        userId,
+        totalCredit: 100,
+        availableCredit: 100 - ltv,
+      });
+      await liquidationLogsRepository.save([
+        {
+          userId: userId,
+          asset: 'BTC',
+          price: 10,
+          amount: 1,
+        },
+        {
+          userId: userId,
+          asset: 'SOL',
+          price: 40,
+          amount: 1,
+        },
+      ]);
+
+      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+
+      expect(amqpConnectionPublish).toBeCalledTimes(0);
+      const marginCall = await marginCallRepository.findOne({
+        where: {
+          userId: userId,
+        },
+      });
+      expect(marginCall).toEqual(null);
+    });
+
+    it.skip('Should not do anything in case collateral value did not change for at least 10%', async () => {});
   });
 });

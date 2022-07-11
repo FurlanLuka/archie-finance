@@ -2,23 +2,30 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Credit } from '../credit/credit.entity';
 import { In, Repository } from 'typeorm';
+import { LiquidationLogs } from './liquidation_logs.entity';
+import { MarginCalls } from './margin_calls.entity';
+import { MarginNotifications } from './margin_notifications.entity';
 import { InternalApiService } from '@archie-microservices/internal-api';
-import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
   CollateralValue,
   GetCollateralValueResponse,
 } from '@archie-microservices/api-interfaces/collateral';
-import { LiquidationLogs } from './liquidation_logs.entity';
-import { MarginCalls } from './margin_calls.entity';
-import { MarginNotifications } from './margin_notifications.entity';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { rethrow } from '@nestjs/core/helpers/rethrow';
+import { UsersLtv } from './margin.interfaces';
 import {
   MARGIN_CALL_COMPLETED_EXCHANGE,
   MARGIN_CALL_STARTED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
+import { DateTime, Interval } from 'luxon';
 
 @Injectable()
 export class MarginService {
+  LTV_LIMIT = 75;
+  CRITICAL_LTV_LIMIT = 85;
+  SAFE_LTV = 0.6;
+  LTV_ALERT_LIMITS = [65, 70, 73];
+
   constructor(
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
     @InjectRepository(LiquidationLogs)
@@ -32,11 +39,6 @@ export class MarginService {
   ) {}
 
   public async checkMargin(userIds: string[]): Promise<void> {
-    // move to queue which will accept batch of users to check
-    // load Current asset prices -- we need starting number
-    // TODO: Get starting value & calculate if value changed by 10%
-    // TODO: adjust the credit limit (in any case if It goes up or down)
-    console.log(userIds);
     const credits: Credit[] = await this.creditRepository.find({
       where: {
         userId: In(userIds),
@@ -48,166 +50,229 @@ export class MarginService {
           userId: In(userIds),
         },
       });
+    const liquidationLogs: LiquidationLogs[] =
+      await this.liquidationLogsRepository.find({
+        where: {
+          userId: In(userIds),
+        },
+      });
 
+    const userLtvs: UsersLtv[] = await Promise.all(
+      userIds.map(async (userId: string) =>
+        this.calculateUsersLtv(userId, credits, liquidationLogs),
+      ),
+    );
     await Promise.all(
-      userIds.map(async (userId: string) => {
-        const usersCollateral: GetCollateralValueResponse =
-          await this.internalApiService.getUserCollateralValue(userId);
-        // TODO: move collateral api to credit api
+      userLtvs.map(async (usersLtv: UsersLtv) => {
+        const alreadyActiveMarginCall: MarginCalls | undefined =
+          activeMarginCalls.find(
+            (marginCall) => marginCall.userId === usersLtv.userId,
+          );
 
-        const totalCollateralValue: number = usersCollateral.reduce(
-          (collateralPrice: number, collateralValue: CollateralValue) =>
-            collateralPrice + collateralValue.price,
-          0,
-        );
-
-        const usersCredit: Credit = credits.find(
-          (credit: Credit) => credit.userId === userId,
-        );
-
-        const userSpent: number =
-          usersCredit.totalCredit - usersCredit.availableCredit;
-        const ltv: number = (userSpent / totalCollateralValue) * 100;
-
-        await this.sendNotification(userId, ltv);
-
-        const alreadyActiveMarginCall: MarginCalls | null =
-          activeMarginCalls.find((marginCall) => marginCall.userId === userId);
-
-        if (ltv < 75) {
-          if (alreadyActiveMarginCall !== null) {
-            await this.marginCallsRepository.softDelete({
-              userId: userId,
-            });
-            this.amqpConnection.publish(
-              MARGIN_CALL_COMPLETED_EXCHANGE.name,
-              '',
-              {
-                userId,
-                liquidation: [],
-              },
+        if (usersLtv.ltv < this.LTV_LIMIT) {
+          if (alreadyActiveMarginCall !== undefined) {
+            await this.completeMarginCallWithoutLiquidation(usersLtv);
+          } else {
+            await this.checkIfApproachingLtvLimits(
+              usersLtv.userId,
+              usersLtv.ltv,
             );
-            // TODO: Reactivate card - EVENT handled by rize
-            // TODO: send email that margin is now ok, 72 hour limit ok
           }
         } else {
-          const marginCall =
+          const marginCall: MarginCalls =
             alreadyActiveMarginCall ??
             (await this.marginCallsRepository.save({
-              userId: userId,
+              userId: usersLtv.userId,
             }));
 
-          const timePassedInHours: number =
-            (new Date().getTime() - new Date(marginCall.createdAt).getTime()) /
-            36000;
-
-          // if ltv > 85 then transition collateral to a different vault or 3 days passed since ltv reached 75% - reset if goes under
-          if (ltv >= 85 || timePassedInHours >= 72) {
-            // liquidate - try to lower credit limit , transition crypto to archie vault
-
-            // calculate how much credit we must take to be ok
-
-            const availableLoanToSatisfyLtv: number =
-              totalCollateralValue * 0.6;
-
-            // the amount spent - amount you can have = amount to pay
-            const toPayArchieCollateralAmount: number =
-              userSpent - availableLoanToSatisfyLtv;
-
-            await this.transitionCryptoToArchieVault(
-              userId,
-              toPayArchieCollateralAmount,
-              usersCollateral,
-              marginCall,
+          const hoursPassedSinceTheStartOfMarginCall: number =
+            Interval.fromDateTimes(marginCall.createdAt, DateTime.utc()).length(
+              'hours',
             );
-            await this.marginCallsRepository.softDelete({
-              userId: userId,
-            });
-            // TODO: Reactivate card - EVENT handled by rize
-            this.amqpConnection.publish(
-              MARGIN_CALL_COMPLETED_EXCHANGE.name,
-              '',
-              {
-                userId,
-              },
-            );
-          } else if (alreadyActiveMarginCall === null) {
+
+          if (
+            hoursPassedSinceTheStartOfMarginCall >= 72 ||
+            usersLtv.ltv >= this.CRITICAL_LTV_LIMIT
+          ) {
+            await this.completeMarginCallWithLiquidation(usersLtv, marginCall);
+          } else if (alreadyActiveMarginCall === undefined) {
             this.amqpConnection.publish(MARGIN_CALL_STARTED_EXCHANGE.name, '', {
-              userId,
+              userId: usersLtv.userId,
             });
-            // TODO: deactivate card - EVENT handled by rize
           }
         }
       }),
     );
   }
 
-  private async transitionCryptoToArchieVault(
+  private async calculateUsersLtv(
+    userId: string,
+    credits: Credit[],
+    liquidationLogs: LiquidationLogs[],
+  ): Promise<UsersLtv> {
+    const usersCollateral: GetCollateralValueResponse =
+      await this.internalApiService.getUserCollateralValue(userId);
+    // TODO: move collateral api to credit api
+
+    const totalCollateralValue: number = usersCollateral.reduce(
+      (collateralPrice: number, collateralValue: CollateralValue) =>
+        collateralPrice + collateralValue.price,
+      0,
+    );
+
+    const creditBalance: Credit = credits.find(
+      (credit: Credit) => credit.userId === userId,
+    );
+
+    const usersLiquidationLogs: LiquidationLogs[] = liquidationLogs.filter(
+      (liquidationLog: LiquidationLogs) => liquidationLog.userId === userId,
+    );
+    const usersLiquidationLogsSum: number = usersLiquidationLogs.reduce(
+      (liquidationSum: number, liquidationLog) =>
+        liquidationSum + liquidationLog.price,
+      0,
+    );
+
+    const spentBalance: number =
+      creditBalance.totalCredit - creditBalance.availableCredit;
+    const loanedBalance: number = spentBalance - usersLiquidationLogsSum;
+
+    return {
+      userId,
+      ltv: (loanedBalance / totalCollateralValue) * 100,
+      collateralBalance: totalCollateralValue,
+      loanedBalance: loanedBalance,
+      collateralAllocation: usersCollateral,
+    };
+  }
+
+  private async completeMarginCallWithoutLiquidation(usersLtv: UsersLtv) {
+    await this.marginCallsRepository.softDelete({
+      userId: usersLtv.userId,
+    });
+    this.amqpConnection.publish(MARGIN_CALL_COMPLETED_EXCHANGE.name, '', {
+      userId: usersLtv.userId,
+      liquidation: [],
+    });
+    // TODO: Reactivate card - EVENT handled by rize
+    // TODO: send email that margin is now ok, 72 hour limit ok --- Prob remove this event and just handle margin call one on the mail service
+  }
+
+  private async completeMarginCallWithLiquidation(
+    usersLtv: UsersLtv,
+    marginCall: MarginCalls,
+  ) {
+    const loanRepaymentAmount: number = this.calculateAmountToReachSafeLtv(
+      usersLtv.loanedBalance,
+      usersLtv.collateralBalance,
+    );
+    const assetsToLiquidate = await this.getAssetsToLiquidate(
+      usersLtv.userId,
+      loanRepaymentAmount,
+      usersLtv.collateralAllocation,
+      marginCall,
+    );
+    await this.liquidateAssets(usersLtv.userId, assetsToLiquidate);
+    await this.cleanupMarginCallAttempt(usersLtv.userId);
+  }
+
+  private calculateAmountToReachSafeLtv(
+    loanedBalance: number,
+    collateralBalance: number,
+  ) {
+    return (
+      (loanedBalance - this.SAFE_LTV * collateralBalance) / (1 - this.SAFE_LTV)
+    );
+  }
+
+  private async liquidateAssets(
+    userId: string,
+    assetsToLiquidate: Partial<LiquidationLogs>[],
+  ) {
+    this.amqpConnection.publish(MARGIN_CALL_COMPLETED_EXCHANGE.name, '', {
+      userId,
+      liquidation: assetsToLiquidate.map((asset) => ({
+        asset: asset.asset,
+        amount: asset.amount,
+        price: asset.price,
+      })),
+    });
+    // TODO: update collateral amount once collateral entity is moved
+    await this.liquidationLogsRepository.save(assetsToLiquidate);
+  }
+
+  private async getAssetsToLiquidate(
     userId: string,
     amount: number,
     collateralAssets: GetCollateralValueResponse,
     marginCall: MarginCalls,
-  ): Promise<void> {
-    // which asset to select? - Order by the allocation (asset value)
-    const sortedCollateralAssets = collateralAssets
-      .slice()
-      .sort((a: CollateralValue, b: CollateralValue) =>
-        a.price >= b.price ? -1 : 1,
-      );
+  ): Promise<Partial<LiquidationLogs>[]> {
+    const sortedCollateralAssetsByAllocation: GetCollateralValueResponse =
+      collateralAssets
+        .slice()
+        .sort((a: CollateralValue, b: CollateralValue) =>
+          a.price >= b.price ? -1 : 1,
+        );
 
-    let targetAmount: number = amount;
+    let targetLiquidationAmount: number = amount;
 
-    const liquidatedCollateralAssets: Partial<LiquidationLogs>[] =
-      sortedCollateralAssets
-        .map((collateralValue): Partial<LiquidationLogs> => {
-          if (targetAmount > 0) {
-            let newPrice: number = collateralValue.price - amount;
+    return sortedCollateralAssetsByAllocation
+      .map((collateralValue): Partial<LiquidationLogs> => {
+        if (targetLiquidationAmount > 0) {
+          let newCollateralAssetPrice: number =
+            collateralValue.price - targetLiquidationAmount;
 
-            if (newPrice >= 0) {
-              targetAmount = targetAmount - (collateralValue.price - newPrice);
-            } else {
-              newPrice = 0;
-              targetAmount = targetAmount - collateralValue.price;
-            }
-
-            const assetAmountPerUnit: number =
-              collateralValue.price / collateralValue.assetAmount;
-            const newAssetAmount: number = newPrice / assetAmountPerUnit;
-
-            return {
-              asset: collateralValue.asset,
-              amount: collateralValue.assetAmount - newAssetAmount,
-              userId,
-              marginCall: marginCall,
-            };
+          if (newCollateralAssetPrice >= 0) {
+            targetLiquidationAmount -=
+              collateralValue.price - newCollateralAssetPrice;
+          } else {
+            newCollateralAssetPrice = 0;
+            targetLiquidationAmount -= collateralValue.price;
           }
+
+          const assetAmountPerUnit: number =
+            collateralValue.price / collateralValue.assetAmount;
+          const newCollateralAssetAmount: number =
+            newCollateralAssetPrice / assetAmountPerUnit;
 
           return {
             asset: collateralValue.asset,
-            amount: 0,
+            amount: collateralValue.assetAmount - newCollateralAssetAmount,
             userId,
             marginCall: marginCall,
+            price: collateralValue.price - newCollateralAssetPrice,
           };
-        })
-        .filter((liquidatedAsset) => liquidatedAsset.amount > 0);
+        }
 
-    // TODO: transition assets to Archie using fireblocks (collateral service) - vault EVENT
-    this.amqpConnection.publish(MARGIN_CALL_COMPLETED_EXCHANGE.name, '', {
-      userId,
-      liquidation: [
-        liquidatedCollateralAssets.map((liquidatedAssets) => ({
-          asset: liquidatedAssets.asset,
-          amount: liquidatedAssets.amount,
-        })),
-      ],
-    });
-
-    await this.liquidationLogsRepository.save(liquidatedCollateralAssets);
+        return {
+          asset: collateralValue.asset,
+          amount: 0,
+          userId,
+          marginCall: marginCall,
+          price: 0,
+        };
+      })
+      .filter((liquidatedAsset) => liquidatedAsset.amount > 0);
   }
 
-  private async sendNotification(userId: string, ltv: number) {
-    // send if minimum 65%, 70, 73
-    if (ltv > 65) {
+  private async cleanupMarginCallAttempt(userId: string): Promise<void> {
+    await this.marginCallsRepository.softDelete({
+      userId: userId,
+    });
+    await this.marginNotificationsRepository.upsert(
+      {
+        userId: userId,
+        active: false,
+        sentAtLtv: null,
+      },
+      {
+        conflictPaths: ['userId'],
+      },
+    );
+  }
+
+  private async checkIfApproachingLtvLimits(userId: string, ltv: number) {
+    if (ltv >= Math.min(...this.LTV_ALERT_LIMITS)) {
       const marginNotifications: MarginNotifications | null =
         await this.marginNotificationsRepository.findOne({
           where: {
@@ -215,11 +280,28 @@ export class MarginService {
           },
         });
 
-      if (
-        marginNotifications === null ||
-        marginNotifications.active === false
-      ) {
-        // TODO: use sendgrid
+      const shouldSendNotification: boolean = this.LTV_ALERT_LIMITS.map(
+        (limit: number, index: number): boolean => {
+          if (
+            (marginNotifications === null ||
+              marginNotifications.active === false ||
+              marginNotifications.sentAtLtv < limit) &&
+            ltv >= limit &&
+            ltv < (this.LTV_ALERT_LIMITS[index + 1] ?? this.LTV_LIMIT)
+          ) {
+            return true;
+          }
+          return false;
+        },
+      ).some((alert: boolean) => alert === true);
+
+      if (shouldSendNotification) {
+        // TODO: rename event
+        this.amqpConnection.publish('EMAIL_SENDING_REQUESTED', '', {
+          userId,
+          template_id: 1,
+          ltv: ltv,
+        });
         await this.marginNotificationsRepository.upsert(
           {
             userId: userId,
@@ -227,65 +309,11 @@ export class MarginService {
             sentAtLtv: ltv,
           },
           {
-            conflictPaths: ['user_id'],
-            skipUpdateIfNoValuesChanged: true,
-          },
-        );
-      } else if (marginNotifications.sentAtLtv < 70 && ltv >= 70) {
-        // TODO: use sendgrid
-        await this.marginNotificationsRepository.upsert(
-          {
-            userId: userId,
-            active: true,
-            sentAtLtv: ltv,
-          },
-          {
-            conflictPaths: ['user_id'],
-            skipUpdateIfNoValuesChanged: true,
-          },
-        );
-      } else if (marginNotifications.sentAtLtv < 73 && ltv >= 73) {
-        // TODO: use sendgrid
-        await this.marginNotificationsRepository.upsert(
-          {
-            userId: userId,
-            active: true,
-            sentAtLtv: ltv,
-          },
-          {
-            conflictPaths: ['user_id'],
-            skipUpdateIfNoValuesChanged: true,
-          },
-        );
-      } else if (marginNotifications.sentAtLtv < 75 && ltv >= 75) {
-        // TODO: use sendgrid and send different email (72h mail)
-        await this.marginNotificationsRepository.upsert(
-          {
-            userId: userId,
-            active: true,
-            sentAtLtv: ltv,
-          },
-          {
-            conflictPaths: ['user_id'],
-            skipUpdateIfNoValuesChanged: true,
-          },
-        );
-      } else if (marginNotifications.sentAtLtv < 85 && ltv >= 85) {
-        // TODO: use sendgrid and send different email (crypto taken mail)
-        await this.marginNotificationsRepository.upsert(
-          {
-            userId: userId,
-            active: false,
-            sentAtLtv: ltv,
-          },
-          {
-            conflictPaths: ['user_id'],
-            skipUpdateIfNoValuesChanged: true,
+            conflictPaths: ['userId'],
           },
         );
       }
     } else {
-      // reset notifications
       await this.marginNotificationsRepository.upsert(
         {
           userId: userId,
@@ -293,7 +321,7 @@ export class MarginService {
           sentAtLtv: null,
         },
         {
-          conflictPaths: ['user_id'],
+          conflictPaths: ['userId'],
           skipUpdateIfNoValuesChanged: true,
         },
       );
