@@ -15,6 +15,7 @@ import {
 } from '@archie-microservices/api-interfaces/asset_price';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { DepositCreationInternalError } from './collateral.errors';
+import { CreateDepositDto } from './collateral.dto';
 
 @Injectable()
 export class CollateralService {
@@ -27,14 +28,14 @@ export class CollateralService {
     private internalApiService: InternalApiService,
   ) {}
 
-  public async createDeposit(
-    transactionId: string,
-    userId: string,
-    asset: string,
-    amount: number,
-    destinationAddress: string,
-    status: TransactionStatus,
-  ): Promise<void> {
+  public async createDeposit({
+    transactionId,
+    userId,
+    asset,
+    amount,
+    destinationAddress,
+    status,
+  }: CreateDepositDto): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
 
     const collateralDeposit: CollateralDeposit | null =

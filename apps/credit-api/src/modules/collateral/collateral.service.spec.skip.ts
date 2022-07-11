@@ -74,14 +74,14 @@ describe('CollateralService', () => {
         })
         .mockResolvedValue(undefined);
 
-      await service.createDeposit(
+      await service.createDeposit({
         transactionId,
-        user.id,
-        'BTC',
-        1,
+        userId: user.id,
+        asset: 'BTC',
+        amount: 1,
         destinationAddress,
-        TransactionStatus.COMPLETED,
-      );
+        status: TransactionStatus.COMPLETED,
+      });
 
       expect(queryRunnerMock.connect).toHaveBeenCalledTimes(1);
       expect(queryRunnerMock.startTransaction).toHaveBeenCalledTimes(1);
@@ -114,14 +114,14 @@ describe('CollateralService', () => {
         .calledWith({ transactionId })
         .mockResolvedValue(undefined);
 
-      await service.createDeposit(
+      await service.createDeposit({
         transactionId,
-        user.id,
-        'BTC',
-        1,
+        userId: user.id,
+        asset: 'BTC',
+        amount: 1,
         destinationAddress,
-        TransactionStatus.QUEUED,
-      );
+        status: TransactionStatus.QUEUED,
+      });
 
       expect(queryRunnerMock.connect).toHaveBeenCalledTimes(1);
       expect(queryRunnerMock.startTransaction).toHaveBeenCalledTimes(1);
@@ -157,14 +157,14 @@ describe('CollateralService', () => {
         .mockRejectedValue(new Error('error'));
 
       await expect(
-        service.createDeposit(
+        service.createDeposit({
           transactionId,
-          user.id,
-          'BTC',
-          1,
+          userId: user.id,
+          asset: 'BTC',
+          amount: 1,
           destinationAddress,
-          TransactionStatus.QUEUED,
-        ),
+          status: TransactionStatus.QUEUED,
+        }),
       ).rejects.toThrowError(InternalServerErrorException);
 
       expect(queryRunnerMock.connect).toHaveBeenCalledTimes(1);
