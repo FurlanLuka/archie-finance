@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { DataSource, Repository } from 'typeorm';
@@ -36,6 +36,14 @@ export class CollateralService {
     destinationAddress,
     status,
   }: CreateDepositDto): Promise<void> {
+    Logger.log('COLLATERAL_SERVICE_CREATE_DEPOSIT', {
+      transactionId,
+      userId,
+      asset,
+      amount,
+      destinationAddress,
+      status,
+    });
     const queryRunner = this.dataSource.createQueryRunner();
 
     const collateralDeposit: CollateralDeposit | null =
