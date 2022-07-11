@@ -11,7 +11,7 @@ export const Headline = styled.h1<TypographyProps>`
   font-size: 5rem; //80
   line-height: 1.1;
   color: ${({ theme, color }) => color ?? theme.textPrimary};
-  font-weight: ${({ weight }) => weight ?? 900};
+  font-weight: ${({ weight }) => weight ?? 800};
 
   @media (max-width: ${breakpoints.screenLG}) {
     font-size: 4rem; //64
@@ -26,7 +26,7 @@ export const Title = styled.h2<TypographyProps>`
   font-size: 4.5rem; //72 
   line-height: 1.1;
   color: ${({ theme, color }) => color ?? theme.textPrimary};
-  font-weight: ${({ weight }) => weight ?? 900};
+  font-weight: ${({ weight }) => weight ?? 800};
 
   @media (max-width: ${breakpoints.screenLG}) {
     font-size: 3rem; //48
