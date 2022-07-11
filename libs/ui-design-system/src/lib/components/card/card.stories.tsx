@@ -47,7 +47,7 @@ Small.args = {
   alignItems: '',
   justifyContent: '',
   maxWidth: '420px',
-  padding: '2rem 1.5rem 2.5rem',
+  padding: '2rem 1.5rem',
   mobileRow: false,
   columnReverse: false,
   mobileJustifyContent: '',

@@ -16,8 +16,11 @@ export default {
 
 export const Default: Story<ContainerProps> = (props) => (
   <StoriesContainer>
-    <StoriesTitle title="Container" />
-    <Container {...props}>Container Layout</Container>
+    <StoriesTitle title="Container" subtitle="default" />
+    <Container {...props}>
+      This is a 1400px wide container used across the Marketing site and Onboarding flow. It is a flexbox div that
+      receives props to setup the layout however needed.
+    </Container>
   </StoriesContainer>
 );
 
@@ -25,8 +28,27 @@ Default.args = {
   column: false,
   alignItems: '',
   justifyContent: '',
-  maxWidth: '',
   mobileColumn: false,
+  mobileJustifyContent: '',
+  mobileAlignItems: '',
+};
+
+export const FullWidth: Story<ContainerProps> = (props) => (
+  <StoriesContainer>
+    <StoriesTitle title="Container" subtitle="Full-width" />
+    <Container {...props}>
+      This is a full-width container that is basically used in the Dashboard. The only difference with the default one
+      is that it has a 100% maxWidth prop.
+    </Container>
+  </StoriesContainer>
+);
+
+FullWidth.args = {
+  column: false,
+  alignItems: '',
+  justifyContent: '',
+  mobileColumn: false,
+  maxWidth: '100%',
   mobileJustifyContent: '',
   mobileAlignItems: '',
 };

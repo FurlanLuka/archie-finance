@@ -30,7 +30,7 @@ export const Default: Story<TypographyProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Typography" />
     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-      <div style={{ width: '20%', paddingBottom: '0.75rem' }}>
+      <div style={{ width: '20%', paddingBottom: '0.6rem' }}>
         <ParagraphXS>(Headline)</ParagraphXS>
       </div>
       <Headline {...props} weight={800}>
@@ -39,7 +39,7 @@ export const Default: Story<TypographyProps> = (props) => (
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-      <div style={{ width: '20%', paddingBottom: '0.6rem' }}>
+      <div style={{ width: '20%', paddingBottom: '0.5rem' }}>
         <ParagraphXS>(Title)</ParagraphXS>
       </div>
       <Title {...props} weight={800}>
@@ -48,7 +48,7 @@ export const Default: Story<TypographyProps> = (props) => (
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-      <div style={{ width: '20%', paddingBottom: '0.3rem' }}>
+      <div style={{ width: '20%', paddingBottom: '0.25rem' }}>
         <ParagraphXS>(SubtitleL)</ParagraphXS>
       </div>
       <SubtitleL {...props} weight={800}>
@@ -57,7 +57,7 @@ export const Default: Story<TypographyProps> = (props) => (
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-      <div style={{ width: '20%', paddingBottom: '0.3rem' }}>
+      <div style={{ width: '20%', paddingBottom: '0.25rem' }}>
         <ParagraphXS>(SubtitleM)</ParagraphXS>
       </div>
       <SubtitleM {...props} weight={800}>
@@ -66,7 +66,7 @@ export const Default: Story<TypographyProps> = (props) => (
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
-      <div style={{ width: '20%', paddingBottom: '0.25rem' }}>
+      <div style={{ width: '20%', paddingBottom: '0.2rem' }}>
         <ParagraphXS>(SubtitleS)</ParagraphXS>
       </div>
       <SubtitleS {...props} weight={800}>
