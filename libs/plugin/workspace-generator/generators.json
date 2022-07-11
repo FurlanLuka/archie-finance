@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "plugin-workspace-generator",
+  "version": "0.0.1",
+  "generators": {
+    "deployment-config-generator": {
+      "factory": "./src/generators/deployment-config-generator/generator",
+      "schema": "./src/generators/deployment-config-generator/schema.json",
+      "description": "deployment config generator"
+    }
+  }
+}

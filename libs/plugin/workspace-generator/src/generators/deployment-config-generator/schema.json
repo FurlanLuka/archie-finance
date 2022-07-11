@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "DeploymentConfigGenerator",
+  "title": "",
+  "type": "object",
+  "properties": {
+    "projectName": {
+      "description": "The microservice project to target",
+      "type": "string",
+      "$default": {
+        "$source": "projectName"
+      },
+      "x-prompt": "What microservice project would you like to target?"
+    },
+    "includeDatabaseConnectionSecrets": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inject database secrets"
+    },
+    "includeAuth0Secrets": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inject Auth0 secrets"
+    },
+    "includeVaultSecrets": {
+      "type": "boolean",
+      "default": false,
+      "description": "Inject Vault secrets"
+    }
+  },
+  "required": ["projectName"]
+}

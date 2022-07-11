@@ -50,7 +50,10 @@
         "libs/api/utils/microservice/src/index.ts"
       ],
       "@archie/api/utils/queue": ["libs/api/utils/queue/src/index.ts"],
-      "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"]
+      "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"],
+      "@archie/plugin/workspace-generator": [
+        "libs/plugin/workspace-generator/src/index.ts"
+      ]
     }
   },
   "exclude": [
