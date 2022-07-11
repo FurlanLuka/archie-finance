@@ -74,10 +74,22 @@ export class FireblocksWebhookService {
       const assetId: string =
         asset.length > 0 ? asset[0] : payload.data.assetId;
 
+      Logger.log({
+        code: 'CREATE_COLLATERAL_DEPOSIT',
+        ...{
+          transactionId: payload.data.id,
+          userId,
+          asset: assetId,
+          amount: payload.data.netAmount,
+          destination: payload.data.destinationAddress,
+          status: payload.data.status,
+        },
+      });
+
       this.amqpConnection.publish(COLLATERAL_DEPOSITED_EXCHANGE.name, '', {
         transactionId: payload.data.id,
         userId,
-        assetId,
+        asset: assetId,
         amount: payload.data.netAmount,
         destination: payload.data.destinationAddress,
         status: payload.data.status,

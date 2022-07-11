@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   CollateralController,
+  CollateralQueueController,
   InternalCollateralController,
 } from './collateral.controller';
 import { Collateral } from './collateral.entity';
@@ -39,6 +40,10 @@ import { COLLATERAL_DEPOSITED_EXCHANGE } from '@archie/api/credit-api/constants'
   ],
   exports: [CollateralService],
   providers: [CollateralService],
-  controllers: [CollateralController, InternalCollateralController],
+  controllers: [
+    CollateralController,
+    InternalCollateralController,
+    CollateralQueueController,
+  ],
 })
 export class CollateralModule {}
