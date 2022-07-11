@@ -78,8 +78,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: queue-secrets
-                  key: queue-url
-          <% if(includeDatabaseConnectionSecrets) { %>
+                  key: queue-url<% if(includeDatabaseConnectionSecrets) { %>
             - name: TYPEORM_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -104,9 +103,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: database-secrets
-                  key: database
-          <% } %>
-          <% if(includeAuth0Secrets) { %>
+                  key: database<% } %><% if(includeAuth0Secrets) { %>
             - name: AUTH0_DOMAIN
               valueFrom:
                 secretKeyRef:
@@ -116,9 +113,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: auth0-secrets
-                  key: audience
-          <% } %>
-          <% if(includeVaultSecrets) { %>
+                  key: audience<% } %><% if(includeVaultSecrets) { %>
             - name: VAULT_PRIVATE_ADDRESS
               valueFrom:
                 secretKeyRef:
@@ -138,8 +133,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: vault-secrets
-                  key: namespace
-          <% } %>
+                  key: namespace<% } %>
           {{- end }}
       imagePullSecrets:
         - name: regcred
