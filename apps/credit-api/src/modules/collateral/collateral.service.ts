@@ -120,6 +120,17 @@ export class CollateralService {
     destinationAddress: string;
     status: TransactionStatus;
   }): Promise<void> {
+    Logger.log({
+      code: 'COLLATERAL_WITHDRAW_CREATE',
+      data: {
+        userId,
+        asset,
+        withdrawalAmount,
+        destinationAddress,
+        transactionId,
+        status,
+      },
+    });
     try {
       const currentCollateral = await this.collateralRepository.findOneByOrFail(
         {
@@ -255,6 +266,15 @@ export class CollateralService {
       throw new NotFoundException('Not enough amount');
     }
 
+    Logger.log({
+      code: 'COLLATERAL_SERVICE_WITHDRAW_INITIALIZED',
+      params: {
+        asset,
+        withdrawalAmount,
+        userId,
+        destinationAddress,
+      },
+    });
     this.amqpConnection.publish(
       COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE.name,
       '',

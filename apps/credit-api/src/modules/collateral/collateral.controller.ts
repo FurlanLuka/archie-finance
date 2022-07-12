@@ -22,6 +22,7 @@ import {
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   COLLATERAL_DEPOSITED_EXCHANGE,
+  COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
   COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
@@ -105,7 +106,7 @@ export class CollateralQueueController {
     await this.collateralService.createDeposit(payload);
   }
 
-  @Subscribe(COLLATERAL_DEPOSITED_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE, SERVICE_QUEUE_NAME)
   async collateralWithdrawCompleteHandler(
     payload: CollateralWithdrawCompletedDto,
   ): Promise<void> {

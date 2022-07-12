@@ -179,6 +179,17 @@ export class FireblocksWebhookService {
       const assetId: string =
         assets.length > 0 ? assets[0] : transaction.assetId;
 
+      Logger.log({
+        code: 'FIREBLOCKS_WEBHOOK_WITHDRAW_ASSET_PUBLISH',
+        data: {
+          asset: assetId,
+          destinationAddress: transaction.destinationAddress,
+          status: transaction.status,
+          transactionId: transaction.id,
+          withdrawalAmount: transaction.amount,
+          userId: userVaultAccount.userId,
+        },
+      });
       this.amqpConnection.publish(
         COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE.name,
         '',

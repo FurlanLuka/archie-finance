@@ -10,7 +10,10 @@ import { UserVaultAccount } from '../user_vault_account/user_vault_account.entit
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
-import { COLLATERAL_DEPOSITED_EXCHANGE } from '@archie/api/credit-api/constants';
+import {
+  COLLATERAL_DEPOSITED_EXCHANGE,
+  COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
+} from '@archie/api/credit-api/constants';
 
 @Module({
   imports: [
@@ -22,7 +25,10 @@ import { COLLATERAL_DEPOSITED_EXCHANGE } from '@archie/api/credit-api/constants'
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        exchanges: [COLLATERAL_DEPOSITED_EXCHANGE],
+        exchanges: [
+          COLLATERAL_DEPOSITED_EXCHANGE,
+          COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
+        ],
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
       }),
