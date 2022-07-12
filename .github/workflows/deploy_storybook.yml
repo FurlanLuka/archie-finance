@@ -9,6 +9,7 @@ on:
 env:
   BUCKET: design-system.dev.archie.finance
   CLOUDFRONT_ID: E32WUHT3I82K9H
+  AWS_REGION: us-east-1
 
 jobs:
   build-and-deploy:
