@@ -18,7 +18,10 @@ import { UserVaultAccount } from '../user_vault_account/user_vault_account.entit
 import { Repository } from 'typeorm';
 import { FireblocksWebhookError } from './fireblocks_webhook.errors';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { COLLATERAL_DEPOSITED_EXCHANGE } from '@archie/api/credit-api/constants';
+import {
+  COLLATERAL_DEPOSITED_EXCHANGE,
+  COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
+} from '@archie/api/credit-api/constants';
 
 @Injectable()
 export class FireblocksWebhookService {
@@ -176,16 +179,18 @@ export class FireblocksWebhookService {
       const assetId: string =
         assets.length > 0 ? assets[0] : transaction.assetId;
 
-        /* rewrite to queue
-      await this.collateralService.createWithdrawal({
-        asset: assetId,
-        destinationAddress: transaction.destinationAddress,
-        status: transaction.status,
-        transactionId: transaction.id,
-        withdrawalAmount: transaction.amount,
-        userId: userVaultAccount.userId,
-      });
-      */
+      this.amqpConnection.publish(
+        COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE.name,
+        '',
+        {
+          asset: assetId,
+          destinationAddress: transaction.destinationAddress,
+          status: transaction.status,
+          transactionId: transaction.id,
+          withdrawalAmount: transaction.amount,
+          userId: userVaultAccount.userId,
+        },
+      );
     } catch (error) {
       throw new FireblocksWebhookError({
         transactionId: transaction.id,
