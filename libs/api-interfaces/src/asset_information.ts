@@ -14,6 +14,7 @@ export interface AssetInformation {
   network: AssetType;
   ltv: number;
   interest: number;
+  liquidation_wallet: string;
 }
 
 export type GetAssetListResponse = AssetList;

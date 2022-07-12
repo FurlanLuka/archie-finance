@@ -14,6 +14,7 @@ class AssetInformationDto implements AssetInformation {
   network: AssetType;
   ltv: number;
   interest: number;
+  liquidation_wallet: string;
 }
 
 export class GetAssetInformationResponseDto extends AssetInformationDto {}
