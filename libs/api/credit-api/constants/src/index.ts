@@ -53,3 +53,8 @@ export const MARGIN_CHECK_REQUESTED_EXCHANGE = {
   name: 'credit.margin_call.check_requested.fx',
   type: 'fanout',
 };
+
+export const COLLATERAL_DEPOSITED_EXCHANGE = {
+  name: 'credit.collateral.deposited.fx',
+  type: 'fanout',
+};

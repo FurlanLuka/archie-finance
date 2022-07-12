@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
-import { CollateralService } from '../collateral/collateral.service';
+import { Injectable, Logger } from '@nestjs/common';
 import { DepositAddressService } from '../deposit_address/deposit_address.service';
 import { FireblocksWebhookDto } from '../fireblocks_webhook/fireblocks_webhook.dto';
 import {
@@ -14,13 +9,15 @@ import { ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { AssetList } from '@archie-microservices/api-interfaces/asset_information';
 import { FireblocksWebhookError } from './fireblocks_webhook.errors';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { COLLATERAL_DEPOSITED_EXCHANGE } from '@archie/api/credit-api/constants';
 
 @Injectable()
 export class FireblocksWebhookService {
   constructor(
-    private collateralService: CollateralService,
     private depositAddressService: DepositAddressService,
     private configService: ConfigService,
+    private amqpConnection: AmqpConnection,
   ) {}
 
   public async webhookHandler(payload: FireblocksWebhookDto): Promise<void> {
@@ -77,14 +74,26 @@ export class FireblocksWebhookService {
       const assetId: string =
         asset.length > 0 ? asset[0] : payload.data.assetId;
 
-      await this.collateralService.createDeposit(
-        payload.data.id,
+      Logger.log({
+        code: 'CREATE_COLLATERAL_DEPOSIT',
+        ...{
+          transactionId: payload.data.id,
+          userId,
+          asset: assetId,
+          amount: payload.data.netAmount,
+          destination: payload.data.destinationAddress,
+          status: payload.data.status,
+        },
+      });
+
+      this.amqpConnection.publish(COLLATERAL_DEPOSITED_EXCHANGE.name, '', {
+        transactionId: payload.data.id,
         userId,
-        assetId,
-        payload.data.netAmount,
-        payload.data.destinationAddress,
-        payload.data.status,
-      );
+        asset: assetId,
+        amount: payload.data.netAmount,
+        destination: payload.data.destinationAddress,
+        status: payload.data.status,
+      });
     } catch (error) {
       throw new FireblocksWebhookError({
         transactionId: payload.data.id,

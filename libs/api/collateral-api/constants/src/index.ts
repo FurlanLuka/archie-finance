@@ -1,5 +1,5 @@
-export const SERVICE_NAME = 'collateral-api'
-export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`
+export const SERVICE_NAME = 'collateral-api';
+export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
 export enum ConfigVariables {
   AUTH0_DOMAIN = 'AUTH0_DOMAIN',
@@ -15,4 +15,5 @@ export enum ConfigVariables {
   FIREBLOCKS_PRIVATE_KEY = 'FIREBLOCKS_PRIVATE_KEY',
   FIREBLOCKS_PUBLIC_KEY = 'FIREBLOCKS_PUBLIC_KEY',
   INTERNAL_API_URL = 'INTERNAL_API_URL',
+  QUEUE_URL = 'QUEUE_URL',
 }

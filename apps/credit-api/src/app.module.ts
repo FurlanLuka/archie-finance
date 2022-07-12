@@ -8,6 +8,7 @@ import { CreditModule } from './modules/credit/credit.module';
 import { InternalApiModule } from '@archie-microservices/internal-api';
 import { AptoModule } from './modules/apto/apto.module';
 import { MarginModule } from './modules/margin/margin.module';
+import { CollateralModule } from './modules/collateral/collateral.module';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { MarginModule } from './modules/margin/margin.module';
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.INTERNAL_API_URL,
-        ConfigVariables.QUEUE_URL
+        ConfigVariables.QUEUE_URL,
       ],
       parse: (_configVariable, value) => value,
     }),
@@ -58,6 +59,7 @@ import { MarginModule } from './modules/margin/margin.module';
     CreditModule,
     AptoModule,
     MarginModule,
+    CollateralModule,
   ],
   controllers: [],
   providers: [],
