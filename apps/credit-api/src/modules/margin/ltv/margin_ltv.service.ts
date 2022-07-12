@@ -132,7 +132,7 @@ export class MarginLtvService {
   public calculateAmountToReachSafeLtv(
     loanedBalance: number,
     collateralBalance: number,
-  ) {
+  ): number {
     return (
       (loanedBalance - this.SAFE_LTV * collateralBalance) / (1 - this.SAFE_LTV)
     );

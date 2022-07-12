@@ -3,13 +3,15 @@ import {
   CollateralValue,
   GetCollateralValueResponse,
 } from '@archie-microservices/api-interfaces/collateral';
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 import { DataSource, Repository, UpdateResult } from 'typeorm';
 import { MarginCall } from '../../margin_calls.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Collateral } from '../../../collateral/collateral.entity';
-import { logger } from 'nx/src/utils/logger';
-import { CollateralDeposit } from '../../../collateral/collateral_deposit.entity';
 
 @Injectable()
 export class MarginLiquidationService {
@@ -66,7 +68,7 @@ export class MarginLiquidationService {
     } catch (error) {
       await queryRunner.rollbackTransaction();
 
-      logger.fatal({
+      Logger.error({
         userId,
         errorMessage: 'Error updating user collateral',
         error: error,
