@@ -1,6 +1,6 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-import { utilities, WinstonModule } from 'nest-winston';
+import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { Openapi } from '@archie-microservices/openapi';
 import { AllExceptionsFilter } from '@archie-microservices/tracing';
@@ -17,7 +17,7 @@ export async function createMicroservice(
             winston.format.timestamp(),
             winston.format.ms(),
             winston.format.json(),
-            utilities.format.nestLike(`${name}`, { prettyPrint: false }),
+            // utilities.format.nestLike(`${name}`, { prettyPrint: false }),
           ),
         }),
       ],
