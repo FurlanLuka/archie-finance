@@ -74,7 +74,6 @@ export class MarginLtvService {
   }
 
   public async checkIfApproachingLtvLimits(userId: string, ltv: number) {
-    console.log(ltv);
     if (ltv >= this.LTV_ALERT_LIMITS[0]) {
       const marginNotifications: MarginNotification | null =
         await this.marginNotificationsRepository.findOne({

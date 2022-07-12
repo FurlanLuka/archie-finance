@@ -35,6 +35,7 @@ import {
   SOL_STARTING_AMOUNT,
 } from '../test-data/collateral.data';
 import { UUID_REGEX } from '../e2e-test-utils/regex.utils';
+import { closeToMatcher } from '../e2e-test-utils/jest.utils';
 import { Collateral } from '../../src/modules/collateral/collateral.entity';
 
 describe('MarginQueueController (e2e)', () => {
@@ -343,7 +344,7 @@ describe('MarginQueueController (e2e)', () => {
         {
           asset: 'BTC',
           amount: 0.3653846153846152,
-          price: 9.499999999999996,
+          price: closeToMatcher(0.3653846153846152 * BTC_PRICE),
         },
       ];
 
@@ -440,7 +441,7 @@ describe('MarginQueueController (e2e)', () => {
         sentAtLtv: ltv,
         active: false,
       });
-      const expectedLiquidatedAssets: Partial<LiquidationLog>[] = [
+      const expectedLiquidatedAssets = [
         {
           asset: 'SOL',
           amount: 100,
@@ -454,7 +455,7 @@ describe('MarginQueueController (e2e)', () => {
         {
           asset: 'ETH',
           amount: 3.541666666666666,
-          price: 8.5,
+          price: closeToMatcher(3.541666666666666 * ETH_PRICE),
         },
       ];
 
