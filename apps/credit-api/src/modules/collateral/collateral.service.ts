@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { DataSource, Repository } from 'typeorm';
@@ -16,12 +16,13 @@ import {
 } from '@archie-microservices/api-interfaces/asset_price';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { CollateralWithdrawal } from './collateral_withdrawal.entity';
-import { UserVaultAccountService } from '../user_vault_account/user_vault_account.service';
-import { FireblocksService } from '../fireblocks/fireblocks.service';
+//import { UserVaultAccountService } from '../user_vault_account/user_vault_account.service';
+//import { FireblocksService } from '../fireblocks/fireblocks.service';
 import {
   DepositCreationInternalError,
   WithdrawalCreationInternalError,
 } from './collateral.errors';
+import { CreateDepositDto } from './collateral.dto';
 
 @Injectable()
 export class CollateralService {
@@ -34,18 +35,26 @@ export class CollateralService {
     private collateralWithdrawalRepository: Repository<CollateralWithdrawal>,
     private dataSource: DataSource,
     private internalApiService: InternalApiService,
-    private userVaultAccountService: UserVaultAccountService,
-    private fireblocksService: FireblocksService,
+    //private userVaultAccountService: UserVaultAccountService,
+    //private fireblocksService: FireblocksService,
   ) {}
 
-  public async createDeposit(
-    transactionId: string,
-    userId: string,
-    asset: string,
-    amount: number,
-    destinationAddress: string,
-    status: TransactionStatus,
-  ): Promise<void> {
+  public async createDeposit({
+    transactionId,
+    userId,
+    asset,
+    amount,
+    destinationAddress,
+    status,
+  }: CreateDepositDto): Promise<void> {
+    Logger.log('COLLATERAL_SERVICE_CREATE_DEPOSIT', {
+      transactionId,
+      userId,
+      asset,
+      amount,
+      destinationAddress,
+      status,
+    });
     const queryRunner = this.dataSource.createQueryRunner();
 
     const collateralDeposit: CollateralDeposit | null =
@@ -232,6 +241,7 @@ export class CollateralService {
     withdrawalAmount: number,
     destinationAddress: string,
   ): Promise<void> {
+    /* rework to queues?
     const userVaultAccount =
       await this.userVaultAccountService.getUserVaultAccount(userId);
     if (!userVaultAccount) {
@@ -261,6 +271,7 @@ export class CollateralService {
       destinationAddress,
       vaultAccountId: userVaultAccount.id,
     });
+    */
   }
 
   public async getUserWithdrawals(userId: string): Promise<GetUserWithdrawals> {

@@ -1,108 +1,25 @@
-name: Development
+name: Deploy Development
 
 on:
   push:
     branches:
       - develop
- 
+
 env:
   ECR_REPOSITORY: archie-development-container-repository
   AWS_REGION: us-east-1
 
 jobs:
-  check_and_build:
-    name: Check and Build
-    runs-on: ubuntu-latest
-    environment: development
-    steps:
-    - uses: actions/checkout@v2
-      name: Checkout
-      with:
-        fetch-depth: 0
-    - uses: nrwl/nx-set-shas@v2
-      with:
-        main-branch-name: 'develop'
-    - uses: ./.github/actions/install-dependencies
-      name: Install dependencies
-    - name: Workspace Lint
-      run: npx nx workspace-lint
-    - name: Affected Lint
-      run: npx nx affected --target=lint --parallel=3
-    - name: Affected Test
-      run: npx nx affected --target=test --parallel=3 --ci --code-coverage
-    - name: Affected Build
-      run: npx nx affected --target=build --parallel=3
-    - name: Store build artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: services-build-development
-        path: ./dist
-        retention-days: 1
-  build_and_public:
-    name: Build docker image and publish 
-    needs: check_and_build
-    runs-on: ubuntu-latest
-    environment: development
-    steps:
-    - uses: actions/checkout@v2
-      name: Checkout
-      with:
-        fetch-depth: 0
-    - name: Extract details from Git
-      id: git_details
-      uses: ./.github/actions/extract-metadata
-    - uses: nrwl/nx-set-shas@v2
-      with:
-        main-branch-name: 'develop'
-    - uses: ./.github/actions/install-dependencies
-      name: Install dependencies
-    - name: Download build artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: services-build-development
-        path: ./dist
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-    - name: Affected docker build
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ steps.git_details.outputs.COMMIT_HASH }}
-      run: npx nx affected --target=build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
-  deploy:
-    name: Deploy to kubernetes cluster
-    needs: build_and_public
-    runs-on: ubuntu-latest
-    environment: development
-    steps:
-    - uses: actions/checkout@v2
-      name: Checkout
-      with:
-        fetch-depth: 0
-    - name: Extract details from Git
-      id: git_details
-      uses: ./.github/actions/extract-metadata
-    - uses: nrwl/nx-set-shas@v2
-    - uses: ./.github/actions/install-dependencies
-      name: Install dependencies
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-    - name: Affected deploy
-      uses: ./.github/actions/node-helm
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
-      with:
-        args: --target=deploy --ecrRegistry=${{ steps.login-ecr.outputs.registry }} --ecrRepository=${{ env.ECR_REPOSITORY }} --imageTag=${{ steps.git_details.outputs.COMMIT_HASH }} --environment=development
+  workflow:
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      NAME: 'development deployment'
+      IS_TAGGED: false
+      ENVIRONMENT: development
+      ECR_REPOSITORY: archie-development-container-repository
+      AWS_REGION: us-east-1
+      BASE_BRANCH_NAME: develop~1
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}

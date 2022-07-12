@@ -5,7 +5,6 @@ import {
   TransactionResponse,
   TransactionStatus,
 } from 'fireblocks-sdk';
-import { CollateralService } from '../collateral/collateral.service';
 import { DepositAddressService } from '../deposit_address/deposit_address.service';
 import { FireblocksWebhookDto } from '../fireblocks_webhook/fireblocks_webhook.dto';
 import {
@@ -18,15 +17,17 @@ import { AssetList } from '@archie-microservices/api-interfaces/asset_informatio
 import { UserVaultAccount } from '../user_vault_account/user_vault_account.entity';
 import { Repository } from 'typeorm';
 import { FireblocksWebhookError } from './fireblocks_webhook.errors';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { COLLATERAL_DEPOSITED_EXCHANGE } from '@archie/api/credit-api/constants';
 
 @Injectable()
 export class FireblocksWebhookService {
   constructor(
-    private collateralService: CollateralService,
     private depositAddressService: DepositAddressService,
     private configService: ConfigService,
     @InjectRepository(UserVaultAccount)
     private userVaultAccountRepository: Repository<UserVaultAccount>,
+    private amqpConnection: AmqpConnection,
   ) {}
 
   public async webhookHandler(payload: FireblocksWebhookDto): Promise<void> {
@@ -92,14 +93,26 @@ export class FireblocksWebhookService {
 
       const assetId: string = asset.length > 0 ? asset[0] : transaction.assetId;
 
-      await this.collateralService.createDeposit(
-        transaction.id,
+      Logger.log({
+        code: 'CREATE_COLLATERAL_DEPOSIT',
+        ...{
+          transactionId: transaction.id,
+          userId,
+          asset: assetId,
+          amount: transaction.netAmount,
+          destination: transaction.destinationAddress,
+          status: transaction.status,
+        },
+      });
+
+      this.amqpConnection.publish(COLLATERAL_DEPOSITED_EXCHANGE.name, '', {
+        transactionId: transaction.id,
         userId,
-        assetId,
-        transaction.netAmount,
-        transaction.destinationAddress,
-        transaction.status,
-      );
+        asset: assetId,
+        amount: transaction.netAmount,
+        destination: transaction.destinationAddress,
+        status: transaction.status,
+      });
     } catch (error) {
       throw new FireblocksWebhookError({
         transactionId: transaction.id,
@@ -163,6 +176,7 @@ export class FireblocksWebhookService {
       const assetId: string =
         assets.length > 0 ? assets[0] : transaction.assetId;
 
+        /* rewrite to queue
       await this.collateralService.createWithdrawal({
         asset: assetId,
         destinationAddress: transaction.destinationAddress,
@@ -171,6 +185,7 @@ export class FireblocksWebhookService {
         withdrawalAmount: transaction.amount,
         userId: userVaultAccount.userId,
       });
+      */
     } catch (error) {
       throw new FireblocksWebhookError({
         transactionId: transaction.id,

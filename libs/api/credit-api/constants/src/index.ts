@@ -1,5 +1,5 @@
-export const SERVICE_NAME = 'credit-api'
-export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`
+export const SERVICE_NAME = 'credit-api';
+export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
 export enum ConfigVariables {
   AUTH0_DOMAIN = 'AUTH0_DOMAIN',
@@ -31,5 +31,10 @@ export const CARD_ACTIVATED_EXCHANGE = {
 
 export const PHONE_NUMBER_VERIFIED_EXCHANGE = {
   name: 'apto.phone_number.verified.fx',
+  type: 'fanout',
+};
+
+export const COLLATERAL_DEPOSITED_EXCHANGE = {
+  name: 'credit.collateral.deposited.fx',
   type: 'fanout',
 };

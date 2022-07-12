@@ -1,0 +1,17 @@
+name: 'Nx affected projects matrix'
+description: 'Nx affected projects matrix'
+
+inputs:
+  base:
+    description: 'NX base for affected:apps command'
+    required: false
+
+outputs:
+  isAffected:
+    description: 'Indicates if any project is affected'
+  affectedProjects:
+    description: Affected projects matrix
+
+runs:
+  using: 'node16'
+  main: 'index.js'

@@ -18,6 +18,7 @@
   },
   "private": true,
   "dependencies": {
+    "@actions/core": "^1.9.0",
     "@golevelup/nestjs-rabbitmq": "^2.4.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.0.1",
