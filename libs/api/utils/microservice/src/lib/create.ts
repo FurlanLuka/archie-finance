@@ -17,7 +17,7 @@ export async function createMicroservice(
             winston.format.timestamp(),
             winston.format.ms(),
             winston.format.json(),
-            utilities.format.nestLike(`${name}`, { prettyPrint: true }),
+            utilities.format.nestLike(`${name}`, { prettyPrint: false }),
           ),
         }),
       ],
