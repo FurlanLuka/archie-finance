@@ -8,7 +8,7 @@ addons.setConfig({
   panelPosition: 'bottom',
   theme: create({
     base: 'light',
-    brandTitle: 'Achie Finance',
+    brandTitle: 'Archie Finance',
     brandImage: logo,
   }),
 });
