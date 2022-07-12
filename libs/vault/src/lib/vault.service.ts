@@ -87,7 +87,7 @@ export class VaultService {
       Logger.error({
         code: 'ENCRYPT_STRINGS_ERROR',
         metadata: {
-          error: error.toJSON(),
+          error: JSON.stringify(error),
           response: error.response.data,
         },
       });

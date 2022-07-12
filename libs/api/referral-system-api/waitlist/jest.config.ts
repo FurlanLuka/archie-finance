@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
-  displayName: 'sendgrid',
-  preset: '../../jest.preset.js',
+  displayName: 'api-referral-system-api-waitlist',
+  preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -12,5 +12,6 @@ export default {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/libs/sendgrid',
+  coverageDirectory:
+    '../../../../coverage/libs/api/referral-system-api/waitlist',
 };

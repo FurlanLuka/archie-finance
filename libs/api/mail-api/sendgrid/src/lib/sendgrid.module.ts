@@ -1,18 +1,12 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import {
-  OnboardingQueueController,
-  OnboardingController,
-} from './onboarding.controller';
-import { Onboarding } from './onboarding.entity';
-import { OnboardingService } from './onboarding.service';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { ConfigVariables } from '@archie/api/onboarding-api/constants';
+import { Module } from '@nestjs/common';
+import { SendgirdQueueController } from './sendgrid.controller';
+import { SendgridService } from './sendgrid.service';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigVariables } from '@archie/api/mail-api/constants';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Onboarding]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -26,8 +20,8 @@ import { ConfigModule, ConfigService } from '@archie-microservices/config';
       }),
     }),
   ],
-  controllers: [OnboardingController, OnboardingQueueController],
-  providers: [OnboardingService],
-  exports: [OnboardingService],
+  controllers: [SendgirdQueueController],
+  providers: [SendgridService],
+  exports: [SendgridService],
 })
-export class OnboardingModule {}
+export class SendgridModule {}
