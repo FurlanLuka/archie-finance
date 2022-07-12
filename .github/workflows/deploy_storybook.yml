@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - feature/*
 
 env:
   BUCKET: design-system.dev.archie.finance
