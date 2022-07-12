@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: archie-referral-system-api
+  name: mail-api
   labels:
-    app: archie-referral-system-api
+    app: mail-api
     {{- if not .Values.local }}
     tags.datadoghq.com/env: '{{ .Values.environment }}'
-    tags.datadoghq.com/service: 'archie-referral-system-api'
+    tags.datadoghq.com/service: 'mail-api'
     tags.datadoghq.com/version: '{{ .Values.tag }}'
     {{- end }}
 spec:
   selector:
     matchLabels:
-      app: archie-referral-system-api
+      app: mail-api
   {{- if not .Values.local }}
   {{- if eq .Values.environment "production" }}
-  replicas: 2
+  replicas: 1
   {{- else }}
   replicas: 1
   {{- end }}
@@ -30,17 +30,17 @@ spec:
   template:
     metadata:
       labels:
-        app: archie-referral-system-api
+        app: mail-api
         {{- if not .Values.local }}
         tags.datadoghq.com/env: '{{ .Values.environment }}'
-        tags.datadoghq.com/service: 'archie-referral-system-api'
+        tags.datadoghq.com/service: 'mail-api'
         tags.datadoghq.com/version: '{{ .Values.tag }}'
         {{- else }}
         helm-revision: '{{ .Release.Revision }}'
         {{- end }}
     spec:
       containers:
-        - name: archie-referral-system-api
+        - name: mail-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
           {{- if not .Values.local }}
           imagePullPolicy: Always
@@ -78,31 +78,6 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
             - name: DD_LOGS_INJECTION
               value: 'true'
-            - name: TYPEORM_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: database-secrets
-                  key: username
-            - name: TYPEORM_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: database-secrets
-                  key: password
-            - name: TYPEORM_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: database-secrets
-                  key: hostname
-            - name: TYPEORM_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: database-secrets
-                  key: port
-            - name: TYPEORM_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: database-secrets
-                  key: database
             - name: SENDGRID_API_KEY
               valueFrom:
                 secretKeyRef:
@@ -133,26 +108,6 @@ spec:
                 secretKeyRef:
                   name: archie-secrets
                   key: marketing-website-url
-            - name: VAULT_PRIVATE_ADDRESS
-              valueFrom:
-                secretKeyRef:
-                  name: vault-secrets
-                  key: address
-            - name: VAULT_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: vault-secrets
-                  key: username
-            - name: VAULT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: vault-secrets
-                  key: password
-            - name: VAULT_NAMESPACE
-              valueFrom:
-                secretKeyRef:
-                  name: vault-secrets
-                  key: namespace
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:
@@ -165,13 +120,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: archie-referral-system-api-service
+  name: mail-api-service
   labels:
-    app: archie-referral-system-api-service
+    app: mail-api-service
 spec:
   type: NodePort
   ports:
     - port: 80
       targetPort: 80
   selector:
-    app: archie-referral-system-api
+    app: mail-api

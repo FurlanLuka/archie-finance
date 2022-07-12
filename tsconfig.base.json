@@ -34,6 +34,12 @@
       "@archie/api/credit-api/constants": [
         "libs/api/credit-api/constants/src/index.ts"
       ],
+      "@archie/api/mail-api/constants": [
+        "libs/api/mail-api/constants/src/index.ts"
+      ],
+      "@archie/api/mail-api/sendgrid": [
+        "libs/api/mail-api/sendgrid/src/index.ts"
+      ],
       "@archie/api/onboarding-api/constants": [
         "libs/api/onboarding-api/constants/src/index.ts"
       ],
@@ -42,6 +48,9 @@
       ],
       "@archie/api/referral-system-api/constants": [
         "libs/api/referral-system-api/constants/src/index.ts"
+      ],
+      "@archie/api/referral-system-api/waitlist": [
+        "libs/api/referral-system-api/waitlist/src/index.ts"
       ],
       "@archie/api/user-api/constants": [
         "libs/api/user-api/constants/src/index.ts"

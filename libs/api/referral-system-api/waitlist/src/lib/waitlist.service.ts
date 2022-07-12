@@ -1,26 +1,22 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { CryptoService } from '@archie-microservices/crypto';
 import { Waitlist } from './waitlist.entity';
 import { VaultService } from '@archie-microservices/vault';
-import { SendgridService } from '@archie-microservices/sendgrid';
 import {
   GetWaitlistRecordResponse,
   ReferralRankQueryResult,
 } from './waitlist.interfaces';
 import { ConfigService } from '@archie-microservices/config';
-import { ConfigVariables } from '@archie/api/referral-system-api/constants';
-import { v4 } from 'uuid';
 import {
-  EmailVerificationInternalError,
-  WaitlistRecordCreationInternalError,
-} from './waitlist.errors';
+  ConfigVariables,
+  JOINED_WAITLIST_EXCHANGE,
+  APPLIED_TO_WAITLIST_EXCHANGE,
+} from '@archie/api/referral-system-api/constants';
+import { v4 } from 'uuid';
+import { EmailVerificationInternalError } from './waitlist.errors';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 
 @Injectable({})
 export class WaitlistService {
@@ -29,7 +25,7 @@ export class WaitlistService {
     private dataSource: DataSource,
     private cryptoService: CryptoService,
     private vaultService: VaultService,
-    private sendgridService: SendgridService,
+    private amqpConnection: AmqpConnection,
     private configService: ConfigService,
   ) {}
 
@@ -49,30 +45,19 @@ export class WaitlistService {
 
     const id: string = v4();
 
-    try {
-      await this.sendgridService.sendEmail(
-        emailAddress,
-        this.configService.get(
-          ConfigVariables.SENDGRID_VERIFY_EMAIL_TEMPLATAE_ID,
-        ),
-        {
-          verifyAddress: `${this.configService.get(
-            ConfigVariables.ARCHIE_MARKETING_WEBSITE_URL,
-          )}/verify?id=${id}`,
-        },
-      );
+    this.amqpConnection.publish(APPLIED_TO_WAITLIST_EXCHANGE.name, '', {
+      emailAddress,
+      verifyAddress: `${this.configService.get(
+        ConfigVariables.ARCHIE_MARKETING_WEBSITE_URL,
+      )}/verify?id=${id}`,
+    });
 
-      await this.waitlist.insert({
-        id,
-        emailAddress: encryptedEmail,
-        emailIdentifier,
-        referrer,
-      });
-    } catch (error) {
-      throw new WaitlistRecordCreationInternalError({
-        error: JSON.stringify(error),
-      });
-    }
+    await this.waitlist.insert({
+      id,
+      emailAddress: encryptedEmail,
+      emailIdentifier,
+      referrer,
+    });
   }
 
   public async get(id: string): Promise<GetWaitlistRecordResponse> {
@@ -145,7 +130,9 @@ export class WaitlistService {
         waitlistEntity.emailAddress,
       ]);
 
-      await this.sendgridService.addToWaitlist(emailAddress, waitlistEntity.id);
+      this.amqpConnection.publish(JOINED_WAITLIST_EXCHANGE.name, '', {
+        emailAddress,
+      });
 
       this.waitlist.update(
         {
@@ -153,19 +140,6 @@ export class WaitlistService {
         },
         { isEmailVerified: true },
       );
-
-      // Disabled for now, might need later
-
-      // await this.sendgridService.sendEmail(
-      //   emailAddress,
-      //   this.configService.get(
-      //     ConfigVariables.SENDGRID_WELCOME_EMAIL_TEMPLATE_ID,
-      //   ),
-      //   {
-      //     rank: referralRankData.rownumber,
-      //     referralCode: waitlistEntity.referralCode,
-      //   },
-      // );
     } catch (error) {
       throw new EmailVerificationInternalError({
         error: JSON.stringify(error),
