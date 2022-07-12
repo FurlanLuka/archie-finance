@@ -11,14 +11,17 @@ import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { ConfigService } from '@archie-microservices/config';
 import { CryptoService } from '@archie-microservices/crypto';
 import { AssetList } from '@archie-microservices/api-interfaces/asset_information';
-import { UserVaultAccountService } from '../user_vault_account/user_vault_account.service';
+import { UserVaultAccount } from '../user_vault_account/user_vault_account.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class FireblocksService {
   private fireblocksClient: FireblocksSDK;
 
   constructor(
-    private userVaultAccountService: UserVaultAccountService,
+    @InjectRepository(UserVaultAccount)
+    private userVaultAccountRepository: Repository<UserVaultAccount>,
     private configService: ConfigService,
     private cryptoService: CryptoService,
   ) {
@@ -110,8 +113,10 @@ export class FireblocksService {
     }
 
     // TODO event based this?
-    const userVaultAccount =
-      await this.userVaultAccountService.getUserVaultAccount(userId);
+    const userVaultAccount: UserVaultAccount | null =
+      await this.userVaultAccountRepository.findOneBy({
+        userId,
+      });
 
     if (!userVaultAccount) {
       // TODO handle no vault account or something
@@ -128,7 +133,7 @@ export class FireblocksService {
       amount: withdrawalAmount,
       source: {
         type: PeerType.VAULT_ACCOUNT,
-        id: userVaultAccount.id,
+        id: userVaultAccount.vaultAccountId,
       },
       destination: {
         type: PeerType.ONE_TIME_ADDRESS,

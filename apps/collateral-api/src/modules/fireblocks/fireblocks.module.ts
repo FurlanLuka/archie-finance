@@ -8,12 +8,13 @@ import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '@archie/api/credit-api/constants';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { FireblocksQueueController } from './fireblocks.controller';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     PassportModule,
     CryptoModule,
-    UserVaultAccount,
+    TypeOrmModule.forFeature([UserVaultAccount]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       inject: [ConfigService],
