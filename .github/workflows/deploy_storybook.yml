@@ -1,0 +1,39 @@
+name: Main
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    paths: ["libs/ui-design-system"]
+
+env:
+  BUCKET: design-system.dev.archie.finance
+  CLOUDFRONT_ID: E32WUHT3I82K9H
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2.3.1
+        with:
+          persist-credentials: false
+      - name: Install and Build 🔧
+        run: |
+          yarn
+          yarn nx run ui-design-system:build-storybook
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Deploy
+        run: |
+          aws s3 sync dist/storybook/ui-design-system s3://${{ env.BUCKET }}/
+      - name: Invalidate Cloudfront Cache
+        env:
+          APP_NAME: ${{ needs.build.outputs.app_name }}
+        run: |
+          aws cloudfront create-invalidation --distribution-id ${{ env.CLOUDFRONT_ID }} --paths "/*"
