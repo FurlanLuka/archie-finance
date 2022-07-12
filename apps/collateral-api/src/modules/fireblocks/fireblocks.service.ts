@@ -11,12 +11,14 @@ import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { ConfigService } from '@archie-microservices/config';
 import { CryptoService } from '@archie-microservices/crypto';
 import { AssetList } from '@archie-microservices/api-interfaces/asset_information';
+import { UserVaultAccountService } from '../user_vault_account/user_vault_account.service';
 
 @Injectable()
 export class FireblocksService {
   private fireblocksClient: FireblocksSDK;
 
   constructor(
+    private userVaultAccountService: UserVaultAccountService,
     private configService: ConfigService,
     private cryptoService: CryptoService,
   ) {
@@ -80,15 +82,16 @@ export class FireblocksService {
     return this.fireblocksClient.getVaultAccounts();
   }
 
+  // Subscribed to COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE
   public async withdrawAsset({
     asset,
-    amount,
-    vaultAccountId,
+    withdrawalAmount,
+    userId,
     destinationAddress,
   }: {
-    vaultAccountId: string;
     asset: string;
-    amount: number;
+    withdrawalAmount: number;
+    userId: string;
     destinationAddress: string;
   }): Promise<void> {
     const assetList: AssetList = this.configService.get(
@@ -106,6 +109,15 @@ export class FireblocksService {
       throw new NotFoundException();
     }
 
+    // TODO event based this?
+    const userVaultAccount =
+      await this.userVaultAccountService.getUserVaultAccount(userId);
+
+    if (!userVaultAccount) {
+      // TODO handle no vault account or something
+      return;
+    }
+
     Logger.log({
       code: 'ASSET_INFORMATION',
       ...fireblocksAsset,
@@ -113,10 +125,10 @@ export class FireblocksService {
 
     const transaction = await this.fireblocksClient.createTransaction({
       assetId: fireblocksAsset.fireblocks_id,
-      amount: amount,
+      amount: withdrawalAmount,
       source: {
         type: PeerType.VAULT_ACCOUNT,
-        id: vaultAccountId,
+        id: userVaultAccount.id,
       },
       destination: {
         type: PeerType.ONE_TIME_ADDRESS,

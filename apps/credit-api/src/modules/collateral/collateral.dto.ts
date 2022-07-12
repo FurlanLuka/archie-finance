@@ -46,3 +46,18 @@ export class CreateDepositDto {
   @IsString()
   status: TransactionStatus;
 }
+
+export class CollateralWithdrawCompletedDto {
+  @IsString()
+  transactionId: string;
+  @IsString()
+  userId: string;
+  @IsString()
+  asset: string;
+  @IsNumber()
+  withdrawalAmount: number;
+  @IsString()
+  destinationAddress: string;
+  @IsString()
+  status: TransactionStatus;
+}

@@ -14,7 +14,11 @@ import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { CollateralWithdrawal } from './collateral_withdrawal.entity';
 // import { FireblocksModule } from '../fireblocks/fireblocks.module';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { COLLATERAL_DEPOSITED_EXCHANGE } from '@archie/api/credit-api/constants';
+import {
+  COLLATERAL_DEPOSITED_EXCHANGE,
+  COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
+  COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
+} from '@archie/api/credit-api/constants';
 
 @Module({
   imports: [
@@ -36,7 +40,11 @@ import { COLLATERAL_DEPOSITED_EXCHANGE } from '@archie/api/credit-api/constants'
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        exchanges: [COLLATERAL_DEPOSITED_EXCHANGE],
+        exchanges: [
+          COLLATERAL_DEPOSITED_EXCHANGE,
+          COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
+          COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
+        ],
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
         enableControllerDiscovery: true,

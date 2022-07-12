@@ -16,13 +16,13 @@ import {
 } from '@archie-microservices/api-interfaces/asset_price';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { CollateralWithdrawal } from './collateral_withdrawal.entity';
-//import { UserVaultAccountService } from '../user_vault_account/user_vault_account.service';
-//import { FireblocksService } from '../fireblocks/fireblocks.service';
 import {
   DepositCreationInternalError,
   WithdrawalCreationInternalError,
 } from './collateral.errors';
 import { CreateDepositDto } from './collateral.dto';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '@archie/api/credit-api/constants';
 
 @Injectable()
 export class CollateralService {
@@ -34,9 +34,8 @@ export class CollateralService {
     @InjectRepository(CollateralWithdrawal)
     private collateralWithdrawalRepository: Repository<CollateralWithdrawal>,
     private dataSource: DataSource,
+    private amqpConnection: AmqpConnection,
     private internalApiService: InternalApiService,
-    //private userVaultAccountService: UserVaultAccountService,
-    //private fireblocksService: FireblocksService,
   ) {}
 
   public async createDeposit({
@@ -234,21 +233,12 @@ export class CollateralService {
     };
   }
 
-  // TODO probably move this to a new service?
   public async withdrawUserCollateral(
     userId: string,
     asset: string,
     withdrawalAmount: number,
     destinationAddress: string,
   ): Promise<void> {
-    /* rework to queues?
-    const userVaultAccount =
-      await this.userVaultAccountService.getUserVaultAccount(userId);
-    if (!userVaultAccount) {
-      // TODO handle no vault account or something
-      return;
-    }
-
     const userCollateral: GetUserCollateral = await this.getUserCollateral(
       userId,
     );
@@ -265,13 +255,16 @@ export class CollateralService {
       throw new NotFoundException('Not enough amount');
     }
 
-    await this.fireblocksService.withdrawAsset({
-      amount: withdrawalAmount,
-      asset,
-      destinationAddress,
-      vaultAccountId: userVaultAccount.id,
-    });
-    */
+    this.amqpConnection.publish(
+      COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE.name,
+      '',
+      {
+        asset,
+        withdrawalAmount,
+        userId,
+        destinationAddress,
+      },
+    );
   }
 
   public async getUserWithdrawals(userId: string): Promise<GetUserWithdrawals> {
