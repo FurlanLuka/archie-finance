@@ -118,36 +118,16 @@ spec:
                 secretKeyRef:
                   name: internal-api-secrets
                   key: internal-api-url
-            - name: APTO_API_KEY
+            - name: RIZE_HMAC_KEY
               valueFrom:
                 secretKeyRef:
-                  name: apto-secrets
-                  key: api-key
-            - name: APTO_API_URL
+                  name: rize-secrets
+                  key: hmac-key
+            - name: RIZE_PROGRAM_UID
               valueFrom:
                 secretKeyRef:
-                  name: apto-secrets
-                  key: api-url
-            - name: APTO_CARD_PROGRAME_ID
-              valueFrom:
-                secretKeyRef:
-                  name: apto-secrets
-                  key: card-programe-id
-            - name: APTO_PUBLIC_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: apto-secrets
-                  key: api-public-key
-            - name: APTO_PRIVATE_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: apto-secrets
-                  key: api-private-key
-            - name: FUNDING_BALANCE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: apto-secrets
-                  key: funding-balance-id
+                  name: rize-secrets
+                  key: program-uid
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:
