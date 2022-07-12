@@ -8,12 +8,12 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { MarginCalls } from './margin_calls.entity';
+import { MarginCall } from './margin_calls.entity';
 
 @Entity({
   name: 'liquidation_logs',
 })
-export class LiquidationLogs {
+export class LiquidationLog {
   @PrimaryColumn('uuid')
   @Generated('uuid')
   uuid: string;
@@ -30,8 +30,8 @@ export class LiquidationLogs {
   @Column('float')
   price: number;
 
-  @ManyToOne(() => MarginCalls, (marginCall: MarginCalls) => marginCall.uuid)
-  marginCall: MarginCalls;
+  @ManyToOne(() => MarginCall, (marginCall: MarginCall) => marginCall.uuid)
+  marginCall: MarginCall;
 
   @CreateDateColumn({ select: false })
   createdAt: Date;

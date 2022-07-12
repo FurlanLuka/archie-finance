@@ -44,7 +44,12 @@ export const MARGIN_CALL_STARTED_EXCHANGE = {
   type: 'fanout',
 };
 
-export const CHECK_MARGIN_EXCHANGE = {
-  name: 'credit.margin.check.fx',
+export const LTV_LIMIT_APPROACHING_EXCHANGE = {
+  name: 'credit.margin_call.ltv_limit_approaching.fx',
+  type: 'fanout',
+};
+
+export const MARGIN_CHECK_REQUESTED_EXCHANGE = {
+  name: 'credit.margin_call.check_requested.fx',
   type: 'fanout',
 };

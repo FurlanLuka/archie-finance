@@ -11,7 +11,7 @@ import {
 @Entity({
   name: 'margin_notifications',
 })
-export class MarginNotifications {
+export class MarginNotification {
   @PrimaryColumn('uuid')
   @Generated('uuid')
   uuid: string;

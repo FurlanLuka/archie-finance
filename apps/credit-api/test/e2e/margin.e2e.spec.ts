@@ -11,6 +11,7 @@ import { verifyAccessToken } from '../e2e-test-utils/mock.auth.utils';
 import { AuthGuard } from '@archie-microservices/auth0';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
+  LTV_LIMIT_APPROACHING_EXCHANGE,
   MARGIN_CALL_COMPLETED_EXCHANGE,
   MARGIN_CALL_STARTED_EXCHANGE,
 } from '../../../../libs/api/credit-api/constants/src';
@@ -20,10 +21,10 @@ import { Credit } from '../../src/modules/credit/credit.entity';
 import nock = require('nock');
 import { ConfigVariables } from '../../../../libs/api/user-api/constants/src';
 import { ConfigService } from '@nestjs/config';
-import { MarginNotifications } from '../../src/modules/margin/margin_notifications.entity';
-import { MarginCalls } from '../../src/modules/margin/margin_calls.entity';
+import { MarginNotification } from '../../src/modules/margin/margin_notifications.entity';
+import { MarginCall } from '../../src/modules/margin/margin_calls.entity';
 import { DateTime } from 'luxon';
-import { LiquidationLogs } from '../../src/modules/margin/liquidation_logs.entity';
+import { LiquidationLog } from '../../src/modules/margin/liquidation_logs.entity';
 import { collateralValueResponse } from '../test-data/collateral.data';
 import { UUID_REGEX } from '../e2e-test-utils/regex.utils';
 
@@ -33,9 +34,9 @@ describe('MarginQueueController (e2e)', () => {
 
   let creditRepository: Repository<Credit>;
   let configService: ConfigService;
-  let marginNotificationsRepositiory: Repository<MarginNotifications>;
-  let marginCallRepository: Repository<MarginCalls>;
-  let liquidationLogsRepository: Repository<LiquidationLogs>;
+  let marginNotificationsRepositiory: Repository<MarginNotification>;
+  let marginCallRepository: Repository<MarginCall>;
+  let liquidationLogsRepository: Repository<LiquidationLog>;
   const marginNotificationLtv: number[] = [65, 70, 73];
 
   const userId: string = 'userId';
@@ -73,10 +74,10 @@ describe('MarginQueueController (e2e)', () => {
     creditRepository = app.get(getRepositoryToken(Credit));
     configService = app.get(ConfigService);
     marginNotificationsRepositiory = app.get(
-      getRepositoryToken(MarginNotifications),
+      getRepositoryToken(MarginNotification),
     );
-    marginCallRepository = app.get(getRepositoryToken(MarginCalls));
-    liquidationLogsRepository = app.get(getRepositoryToken(LiquidationLogs));
+    marginCallRepository = app.get(getRepositoryToken(MarginCall));
+    liquidationLogsRepository = app.get(getRepositoryToken(LiquidationLog));
 
     nock(configService.get(ConfigVariables.INTERNAL_API_URL))
       .get(`/internal/collateral/value/${userId}`)
@@ -120,7 +121,7 @@ describe('MarginQueueController (e2e)', () => {
 
         expect(amqpConnectionPublish).toBeCalledTimes(1);
         expect(amqpConnectionPublish).toBeCalledWith(
-          'EMAIL_SENDING_REQUESTED',
+          LTV_LIMIT_APPROACHING_EXCHANGE.name,
           '',
           { userId, template_id: 1, ltv: ltv },
         );
@@ -177,7 +178,7 @@ describe('MarginQueueController (e2e)', () => {
 
         expect(amqpConnectionPublish).toBeCalledTimes(1);
         expect(amqpConnectionPublish).toBeCalledWith(
-          'EMAIL_SENDING_REQUESTED',
+          LTV_LIMIT_APPROACHING_EXCHANGE.name,
           '',
           { userId, template_id: 1, ltv: ltv },
         );
@@ -287,7 +288,7 @@ describe('MarginQueueController (e2e)', () => {
           liquidation: [],
         },
       );
-      const marginCall: MarginCalls | undefined =
+      const marginCall: MarginCall | undefined =
         await marginCallRepository.findOne({
           where: {
             userId: userId,
@@ -324,7 +325,7 @@ describe('MarginQueueController (e2e)', () => {
         userId,
         createdAt: DateTime.now().minus({ hours: 72 }).toISO(),
       });
-      const expectedLiquidatedAssets: Partial<LiquidationLogs>[] = [
+      const expectedLiquidatedAssets: Partial<LiquidationLog>[] = [
         {
           asset: 'SOL',
           amount: 100,
@@ -348,7 +349,7 @@ describe('MarginQueueController (e2e)', () => {
           liquidation: expectedLiquidatedAssets,
         },
       );
-      const marginCall: MarginCalls = await marginCallRepository.findOne({
+      const marginCall: MarginCall = await marginCallRepository.findOne({
         where: {
           userId: userId,
         },
@@ -407,7 +408,7 @@ describe('MarginQueueController (e2e)', () => {
         sentAtLtv: ltv,
         active: false,
       });
-      const expectedLiquidatedAssets: Partial<LiquidationLogs>[] = [
+      const expectedLiquidatedAssets: Partial<LiquidationLog>[] = [
         {
           asset: 'SOL',
           amount: 100,

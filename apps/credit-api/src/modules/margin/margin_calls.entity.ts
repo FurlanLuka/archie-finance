@@ -12,7 +12,7 @@ import {
 @Entity({
   name: 'margin_calls',
 })
-export class MarginCalls {
+export class MarginCall {
   @PrimaryColumn('uuid')
   @Generated('uuid')
   uuid: string;
