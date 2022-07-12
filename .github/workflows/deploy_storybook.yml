@@ -4,8 +4,7 @@ on:
   push:
     branches:
       - develop
-  pull_request:
-    paths: ["libs/ui-design-system"]
+      - feature/*
 
 env:
   BUCKET: design-system.dev.archie.finance
