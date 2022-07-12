@@ -170,3 +170,35 @@ spec:
       targetPort: 80
   selector:
     app: archie-credit-api
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: fetch-asset-prices
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    metadata:
+      name: fetch-asset-prices
+    spec:
+      template:
+        spec:
+          containers:
+            - name: fetch-asset-prices-job
+              image: curlimages/curl
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: INTERNAL_API_URL
+                  {{- if not .Values.local }}
+                  valueFrom:
+                    secretKeyRef:
+                      name: internal-api-secrets
+                      key: internal-api-url
+                  {{- else }}
+                  value: http://host.minikube.internal
+                  {{- end }}
+              command:
+                - /bin/sh
+                - -c
+                - curl -X POST ${INTERNAL_API_URL}/internal/asset_price/fetch
+          restartPolicy: OnFailure

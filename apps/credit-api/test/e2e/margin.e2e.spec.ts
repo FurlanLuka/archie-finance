@@ -133,7 +133,7 @@ describe('MarginQueueController (e2e)', () => {
         expect(amqpConnectionPublish).toBeCalledWith(
           LTV_LIMIT_APPROACHING_EXCHANGE.name,
           '',
-          { userId, template_id: 1, ltv: ltv },
+          { userId, ltv: ltv },
         );
         expect(
           await marginNotificationsRepositiory.findOne({
@@ -190,7 +190,7 @@ describe('MarginQueueController (e2e)', () => {
         expect(amqpConnectionPublish).toBeCalledWith(
           LTV_LIMIT_APPROACHING_EXCHANGE.name,
           '',
-          { userId, template_id: 1, ltv: ltv },
+          { userId, ltv: ltv },
         );
         expect(
           await marginNotificationsRepositiory.findOne({

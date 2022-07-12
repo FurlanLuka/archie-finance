@@ -10,10 +10,13 @@ import { MarginCallsService } from './calls/margin_calls.service';
 import { Collateral } from '../collateral/collateral.entity';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { MARGIN_CHECK_REQUESTED_EXCHANGE } from '@archie/api/credit-api/constants';
 
 @Injectable()
 export class MarginService {
   LTV_LIMIT = 75;
+  QUEUE_EVENTS_LIMIT = 10000;
 
   constructor(
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
@@ -26,7 +29,28 @@ export class MarginService {
     private marginLtvService: MarginLtvService,
     private marginCallsService: MarginCallsService,
     private internalApiService: InternalApiService,
+    private amqpConnection: AmqpConnection,
   ) {}
+
+  public async triggerMarginCheck(): Promise<void> {
+    const credits: Credit[] = await this.creditRepository
+      .createQueryBuilder('credit')
+      .select('DISTINCT credit.userId')
+      .getRawMany();
+    const userIds: string[] = credits.map((credit) => credit.userId);
+
+    const chunkSize: number = Math.ceil(
+      userIds.length / this.QUEUE_EVENTS_LIMIT,
+    );
+
+    for (let i = 0; i < userIds.length; i += chunkSize) {
+      const chunk: string[] = userIds.slice(i, i + chunkSize);
+
+      this.amqpConnection.publish(MARGIN_CHECK_REQUESTED_EXCHANGE.name, '', {
+        userIds: chunk,
+      });
+    }
+  }
 
   public async checkMargin(userIds: string[]): Promise<void> {
     const credits: Credit[] = await this.creditRepository.find({
@@ -86,7 +110,6 @@ export class MarginService {
           await this.marginCallsService.handleMarginCall(
             alreadyActiveMarginCall,
             usersLtv,
-            assetPrices,
           );
         }
       }),

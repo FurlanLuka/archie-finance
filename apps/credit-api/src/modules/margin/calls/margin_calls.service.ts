@@ -44,7 +44,6 @@ export class MarginCallsService {
   public async handleMarginCall(
     alreadyActiveMarginCall: MarginCall,
     usersLtv: UsersLtv,
-    assetPrices: GetAssetPricesResponse,
   ) {
     const marginCall: MarginCall =
       alreadyActiveMarginCall ??

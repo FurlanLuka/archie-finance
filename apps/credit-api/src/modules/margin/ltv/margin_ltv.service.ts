@@ -100,8 +100,7 @@ export class MarginLtvService {
       if (shouldSendNotification) {
         this.amqpConnection.publish(LTV_LIMIT_APPROACHING_EXCHANGE.name, '', {
           userId,
-          template_id: 1,
-          ltv: ltv,
+          ltv,
         });
         await this.marginNotificationsRepository.upsert(
           {

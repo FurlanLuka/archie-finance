@@ -2,13 +2,45 @@ import { Injectable } from '@nestjs/common';
 import axios, { AxiosError } from 'axios';
 import { ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
-import {
-  SendEmailInternalError,
-} from './sendgrid.errors';
+import { SendEmailInternalError } from './sendgrid.errors';
+import { InternalApiService } from '@archie-microservices/internal-api';
+import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
+import { Liquidation } from './sendgrid.interfaces';
 
 @Injectable()
 export class SendgridService {
-  constructor(private configService: ConfigService) {}
+  constructor(
+    private configService: ConfigService,
+    private internalApiService: InternalApiService,
+  ) {}
+
+  public async sendMarginCallCompletedMail(
+    userId: string,
+    liquidation: Liquidation[],
+  ) {
+    const emailAddress: GetEmailAddressResponse =
+      await this.internalApiService.getUserEmailAddress(userId);
+
+    if (liquidation.length > 0) {
+      // TODO: send assets were liquidated email
+    } else {
+      // TODO: send assets were not liquidated mail (user payed back / crypto went up again in the 72 hour span)
+    }
+  }
+
+  public async sendMarginCallStartedMail(userId: string) {
+    const emailAddress: GetEmailAddressResponse =
+      await this.internalApiService.getUserEmailAddress(userId);
+
+    // TODO: send margin call started mail - user has 72 hours to pay up
+  }
+
+  public async sendLtvLimitApproachingMail(userId: string, ltv: number) {
+    const emailAddress: GetEmailAddressResponse =
+      await this.internalApiService.getUserEmailAddress(userId);
+
+    // TODO: send ltv limit approaching mail
+  }
 
   public async addToWaitlist(emailAddress: string) {
     await axios.put(
