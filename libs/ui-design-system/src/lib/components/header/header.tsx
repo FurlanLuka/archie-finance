@@ -25,14 +25,13 @@ export const Header: FC<HeaderProps> = ({ maxWidth }) => {
     setMobileNavOpen(!mobileNavOpen);
   };
 
-  const closeMobileNav = (itemName: string, itemPath: string) => {
+  const handleLinkItemClick = (itemName: string, itemPath: string) => {
     if (itemName === 'logout') {
       logout();
     } else {
       navigate(itemPath);
       setMobileNavOpen(false);
       document.body.classList.toggle('no-scroll');
-      console.log('vleze');
     }
   };
 
@@ -52,7 +51,7 @@ export const Header: FC<HeaderProps> = ({ maxWidth }) => {
       <MobileNav isOpen={mobileNavOpen}>
         <div className="links">
           {dashboardNavItems.map((item, index) => (
-            <div className="link-item" key={index} onClick={() => closeMobileNav(item.name, item.path)}>
+            <div className="link-item" key={index} onClick={() => handleLinkItemClick(item.name, item.path)}>
               <div className="icon">
                 <Icon name={item.icon} />
               </div>
