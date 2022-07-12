@@ -3,11 +3,13 @@ import {
   CollateralValue,
   GetCollateralValueResponse,
 } from '@archie-microservices/api-interfaces/collateral';
-import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { DataSource, Repository, UpdateResult } from 'typeorm';
 import { MarginCall } from '../../margin_calls.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Collateral } from '../../../collateral/collateral.entity';
+import { logger } from 'nx/src/utils/logger';
+import { CollateralDeposit } from '../../../collateral/collateral_deposit.entity';
 
 @Injectable()
 export class MarginLiquidationService {
@@ -16,15 +18,63 @@ export class MarginLiquidationService {
     private liquidationLogsRepository: Repository<LiquidationLog>,
     @InjectRepository(Collateral)
     private collateralRepository: Repository<Collateral>,
+    private dataSource: DataSource,
   ) {}
 
   public async liquidateAssets(
     userId: string,
     assetsToLiquidate: Partial<LiquidationLog>[],
   ): Promise<void> {
-    // TODO: update collateral amount once collateral entity is moved + use create withdrawal fn
-    // https://github.com/Archie-Finance/archie-microservices/pull/23/files#diff-e31704f85b2fae51276e9171e76674d63154ef026955ce82c10182c1fbae096bR108
-    await this.liquidationLogsRepository.save(assetsToLiquidate);
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await Promise.all(
+        assetsToLiquidate.map(async (liquidatedAsset) => {
+          const updatedCollateral: UpdateResult =
+            await this.collateralRepository
+              .createQueryBuilder('Collateral')
+              .update(Collateral)
+              .where(
+                'userId = :userId AND asset = :asset AND amount >= :withdrawalAmount',
+                {
+                  userId,
+                  asset: liquidatedAsset.asset,
+                  withdrawalAmount: liquidatedAsset.amount,
+                },
+              )
+              .set({ amount: () => 'amount - :withdrawalAmount' })
+              .setParameter('withdrawalAmount', liquidatedAsset.amount)
+              .useTransaction(true)
+              .execute();
+
+          if (updatedCollateral.affected === 0) {
+            throw new InternalServerErrorException({
+              userId,
+              error: 'Unable to subtract users collateral',
+              asset: liquidatedAsset.asset,
+              amount: liquidatedAsset.amount,
+            });
+          }
+        }),
+      );
+
+      await this.liquidationLogsRepository.save(assetsToLiquidate);
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+
+      logger.fatal({
+        userId,
+        errorMessage: 'Error updating user collateral',
+        error: error,
+      });
+      throw new InternalServerErrorException('Error updating user collateral');
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   public async getAssetsToLiquidate(
@@ -57,10 +107,11 @@ export class MarginLiquidationService {
             targetLiquidationAmount -= collateralValue.price;
           }
 
-          const assetAmountPerUnit: number =
+          const assetPricePerUnit: number =
             collateralValue.price / collateralValue.assetAmount;
+
           const newCollateralAssetAmount: number =
-            newCollateralAssetPrice / assetAmountPerUnit;
+            newCollateralAssetPrice / assetPricePerUnit;
 
           return {
             asset: collateralValue.asset,

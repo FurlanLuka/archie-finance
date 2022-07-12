@@ -16,6 +16,7 @@ import {
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { DepositCreationInternalError } from './collateral.errors';
 import { CreateDepositDto } from './collateral.dto';
+import { CollateralValueService } from './value/collateral_value.service';
 
 @Injectable()
 export class CollateralService {
@@ -26,6 +27,7 @@ export class CollateralService {
     private collateralDepositRepository: Repository<CollateralDeposit>,
     private dataSource: DataSource,
     private internalApiService: InternalApiService,
+    private collateralValueService: CollateralValueService,
   ) {}
 
   public async createDeposit({
@@ -140,25 +142,10 @@ export class CollateralService {
     const assetPrices: GetAssetPricesResponse =
       await this.internalApiService.getAssetPrices();
 
-    return userCollateral.map((collateral: Collateral) => {
-      const assetPrice: GetAssetPriceResponse | undefined = assetPrices.find(
-        (asset) => asset.asset === collateral.asset,
-      );
-
-      if (assetPrice === undefined) {
-        return {
-          asset: collateral.asset,
-          assetAmount: collateral.amount,
-          price: 0,
-        };
-      }
-
-      return {
-        asset: collateral.asset,
-        assetAmount: collateral.amount,
-        price: collateral.amount * assetPrice.price,
-      };
-    });
+    return this.collateralValueService.getUserCollateralValue(
+      userCollateral,
+      assetPrices,
+    );
   }
 
   public async getUserTotalCollateralValue(

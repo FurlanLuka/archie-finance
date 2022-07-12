@@ -8,6 +8,7 @@ import {
   ConfigVariables,
   LTV_LIMIT_APPROACHING_EXCHANGE,
 } from '@archie/api/credit-api/constants';
+import { CollateralValueModule } from '../../collateral/value/collateral_value.module';
 
 @Module({
   controllers: [],
@@ -22,6 +23,7 @@ import {
         connectionInitOptions: { wait: false },
       }),
     }),
+    CollateralValueModule,
   ],
   providers: [MarginLtvService],
   exports: [MarginLtvService],

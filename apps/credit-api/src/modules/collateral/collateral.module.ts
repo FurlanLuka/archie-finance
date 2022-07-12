@@ -13,6 +13,7 @@ import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { COLLATERAL_DEPOSITED_EXCHANGE } from '@archie/api/credit-api/constants';
+import { CollateralValueModule } from './value/collateral_value.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { COLLATERAL_DEPOSITED_EXCHANGE } from '@archie/api/credit-api/constants'
         },
       }),
     }),
+    CollateralValueModule,
   ],
   exports: [CollateralService],
   providers: [CollateralService],

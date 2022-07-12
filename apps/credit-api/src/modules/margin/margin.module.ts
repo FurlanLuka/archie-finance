@@ -7,11 +7,12 @@ import { LiquidationLog } from './liquidation_logs.entity';
 import { MarginCall } from './margin_calls.entity';
 import { MarginLtvModule } from './ltv/margin_ltv.module';
 import { MarginCallsModule } from './calls/margin_calls.module';
+import { Collateral } from '../collateral/collateral.entity';
 
 @Module({
   controllers: [MarginQueueController],
   imports: [
-    TypeOrmModule.forFeature([Credit, LiquidationLog, MarginCall]),
+    TypeOrmModule.forFeature([Credit, LiquidationLog, MarginCall, Collateral]),
     MarginLtvModule,
     MarginCallsModule,
   ],

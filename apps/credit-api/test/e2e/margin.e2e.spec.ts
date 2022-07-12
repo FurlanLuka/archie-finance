@@ -25,8 +25,17 @@ import { MarginNotification } from '../../src/modules/margin/margin_notification
 import { MarginCall } from '../../src/modules/margin/margin_calls.entity';
 import { DateTime } from 'luxon';
 import { LiquidationLog } from '../../src/modules/margin/liquidation_logs.entity';
-import { collateralValueResponse } from '../test-data/collateral.data';
+import {
+  assetPriceResponse,
+  BTC_PRICE,
+  BTC_STARTING_AMOUNT,
+  createUserCollateral,
+  ETH_PRICE,
+  SOL_PRICE,
+  SOL_STARTING_AMOUNT,
+} from '../test-data/collateral.data';
 import { UUID_REGEX } from '../e2e-test-utils/regex.utils';
+import { Collateral } from '../../src/modules/collateral/collateral.entity';
 
 describe('MarginQueueController (e2e)', () => {
   let app: INestApplication;
@@ -37,10 +46,10 @@ describe('MarginQueueController (e2e)', () => {
   let marginNotificationsRepositiory: Repository<MarginNotification>;
   let marginCallRepository: Repository<MarginCall>;
   let liquidationLogsRepository: Repository<LiquidationLog>;
+  let collateralRepository: Repository<Collateral>;
+
   const marginNotificationLtv: number[] = [65, 70, 73];
-
   const userId: string = 'userId';
-
   const amqpConnectionPublish: jest.Mock = jest.fn();
 
   beforeEach(async () => {
@@ -78,10 +87,12 @@ describe('MarginQueueController (e2e)', () => {
     );
     marginCallRepository = app.get(getRepositoryToken(MarginCall));
     liquidationLogsRepository = app.get(getRepositoryToken(LiquidationLog));
+    collateralRepository = app.get(getRepositoryToken(Collateral));
 
     nock(configService.get(ConfigVariables.INTERNAL_API_URL))
-      .get(`/internal/collateral/value/${userId}`)
-      .reply(200, collateralValueResponse);
+      .get(`/internal/asset_price`)
+      .reply(200, assetPriceResponse);
+    await collateralRepository.save(createUserCollateral(userId));
   });
 
   afterEach(async () => {
@@ -94,14 +105,12 @@ describe('MarginQueueController (e2e)', () => {
 
   describe('CHECK_MARGIN_EXCHANGE flow', () => {
     it('Should not do anything in case LTV is under 65% and no margin calls are active', async () => {
+      const ltv: number = 64;
       await creditRepository.save({
         userId,
         totalCredit: 100,
-        availableCredit: 100 - 64,
+        availableCredit: 100 - ltv,
       });
-      nock(configService.get(ConfigVariables.INTERNAL_API_URL))
-        .get(`/internal/collateral/value/${userId}`)
-        .reply(200, collateralValueResponse);
 
       await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
 
@@ -325,16 +334,16 @@ describe('MarginQueueController (e2e)', () => {
         userId,
         createdAt: DateTime.now().minus({ hours: 72 }).toISO(),
       });
-      const expectedLiquidatedAssets: Partial<LiquidationLog>[] = [
+      const expectedLiquidatedAssets = [
         {
           asset: 'SOL',
           amount: 100,
-          price: 28,
+          price: 100 * SOL_PRICE,
         },
         {
           asset: 'BTC',
-          amount: 0.3653846153846154,
-          price: 9.5,
+          amount: 0.3653846153846152,
+          price: 9.499999999999996,
         },
       ];
 
@@ -394,6 +403,29 @@ describe('MarginQueueController (e2e)', () => {
           ...expectedLiquidatedAssets[1],
         },
       ]);
+      const collaterals: Collateral[] = await collateralRepository.find({
+        where: {
+          userId,
+        },
+      });
+      const btcCollateral: Collateral = collaterals.find(
+        (col) => col.asset === 'BTC',
+      );
+      expect(btcCollateral).toEqual({
+        id: expect.stringMatching(UUID_REGEX),
+        userId: userId,
+        asset: 'BTC',
+        amount: BTC_STARTING_AMOUNT - expectedLiquidatedAssets[1].amount,
+      });
+      const solCollateral: Collateral = collaterals.find(
+        (col) => col.asset === 'SOL',
+      );
+      expect(solCollateral).toEqual({
+        id: expect.stringMatching(UUID_REGEX),
+        userId: userId,
+        asset: 'SOL',
+        amount: SOL_STARTING_AMOUNT - expectedLiquidatedAssets[0].amount,
+      });
     });
 
     it('Should take appropriate crypto assets and send email if the LTV is above 85', async () => {
@@ -412,12 +444,12 @@ describe('MarginQueueController (e2e)', () => {
         {
           asset: 'SOL',
           amount: 100,
-          price: 28,
+          price: 100 * SOL_PRICE,
         },
         {
           asset: 'BTC',
           amount: 1,
-          price: 26,
+          price: 1 * BTC_PRICE,
         },
         {
           asset: 'ETH',

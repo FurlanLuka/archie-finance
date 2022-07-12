@@ -13,6 +13,7 @@ import { MarginLiquidationService } from './liquidation/margin_liquidation.servi
 import { MarginNotification } from '../margin_notifications.entity';
 import { LiquidationLog } from '../liquidation_logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
 
 @Injectable()
 export class MarginCallsService {
@@ -43,6 +44,7 @@ export class MarginCallsService {
   public async handleMarginCall(
     alreadyActiveMarginCall: MarginCall,
     usersLtv: UsersLtv,
+    assetPrices: GetAssetPricesResponse,
   ) {
     const marginCall: MarginCall =
       alreadyActiveMarginCall ??

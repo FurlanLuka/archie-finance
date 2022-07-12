@@ -4,12 +4,12 @@ import { Credit } from '../credit/credit.entity';
 import { In, Repository } from 'typeorm';
 import { LiquidationLog } from './liquidation_logs.entity';
 import { MarginCall } from './margin_calls.entity';
-import { MarginNotification } from './margin_notifications.entity';
-import { InternalApiService } from '@archie-microservices/internal-api';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { UsersLtv } from './margin.interfaces';
 import { MarginLtvService } from './ltv/margin_ltv.service';
 import { MarginCallsService } from './calls/margin_calls.service';
+import { Collateral } from '../collateral/collateral.entity';
+import { InternalApiService } from '@archie-microservices/internal-api';
+import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
 
 @Injectable()
 export class MarginService {
@@ -21,8 +21,11 @@ export class MarginService {
     private liquidationLogsRepository: Repository<LiquidationLog>,
     @InjectRepository(MarginCall)
     private marginCallsRepository: Repository<MarginCall>,
+    @InjectRepository(Collateral)
+    private collateralRepository: Repository<Collateral>,
     private marginLtvService: MarginLtvService,
     private marginCallsService: MarginCallsService,
+    private internalApiService: InternalApiService,
   ) {}
 
   public async checkMargin(userIds: string[]): Promise<void> {
@@ -43,16 +46,24 @@ export class MarginService {
           userId: In(userIds),
         },
       });
+    const collaterals: Collateral[] = await this.collateralRepository.find({
+      where: {
+        userId: In(userIds),
+      },
+    });
+    const assetPrices: GetAssetPricesResponse =
+      await this.internalApiService.getAssetPrices();
 
-    const userLtvs: UsersLtv[] = await Promise.all(
-      userIds.map(async (userId: string) =>
-        this.marginLtvService.calculateUsersLtv(
-          userId,
-          credits,
-          liquidationLogs,
-        ),
+    const userLtvs: UsersLtv[] = userIds.map((userId: string) =>
+      this.marginLtvService.calculateUsersLtv(
+        userId,
+        credits,
+        liquidationLogs,
+        collaterals,
+        assetPrices,
       ),
     );
+
     await Promise.all(
       userLtvs.map(async (usersLtv: UsersLtv) => {
         const alreadyActiveMarginCall: MarginCall | undefined =
@@ -75,6 +86,7 @@ export class MarginService {
           await this.marginCallsService.handleMarginCall(
             alreadyActiveMarginCall,
             usersLtv,
+            assetPrices,
           );
         }
       }),

@@ -1,17 +1,16 @@
 import { Credit } from '../../credit/credit.entity';
 import { LiquidationLog } from '../liquidation_logs.entity';
 import { UsersLtv } from '../margin.interfaces';
-import {
-  CollateralValue,
-  GetCollateralValueResponse,
-} from '@archie-microservices/api-interfaces/collateral';
+import { CollateralValue } from '@archie-microservices/api-interfaces/collateral';
 import { Injectable } from '@nestjs/common';
-import { InternalApiService } from '@archie-microservices/internal-api';
 import { MarginNotification } from '../margin_notifications.entity';
 import { LTV_LIMIT_APPROACHING_EXCHANGE } from '@archie/api/credit-api/constants';
 import { Repository } from 'typeorm';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Collateral } from '../../collateral/collateral.entity';
+import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
+import { CollateralValueService } from '../../collateral/value/collateral_value.service';
 
 @Injectable()
 export class MarginLtvService {
@@ -20,22 +19,29 @@ export class MarginLtvService {
   LTV_LIMIT = 75;
 
   constructor(
-    private internalApiService: InternalApiService,
     @InjectRepository(MarginNotification)
     private marginNotificationsRepository: Repository<MarginNotification>,
     private amqpConnection: AmqpConnection,
+    private collateralValueService: CollateralValueService,
   ) {}
 
-  public async calculateUsersLtv(
+  public calculateUsersLtv(
     userId: string,
     credits: Credit[],
     liquidationLogs: LiquidationLog[],
-  ): Promise<UsersLtv> {
-    const usersCollateral: GetCollateralValueResponse =
-      await this.internalApiService.getUserCollateralValue(userId);
-    // TODO: move collateral api to credit api
+    collaterals: Collateral[],
+    assetPrices: GetAssetPricesResponse,
+  ): UsersLtv {
+    const usersCollateral: Collateral[] = collaterals.filter(
+      (collateral: Collateral) => collateral.userId === userId,
+    );
+    const usersCollateralValue =
+      this.collateralValueService.getUserCollateralValue(
+        usersCollateral,
+        assetPrices,
+      );
 
-    const totalCollateralValue: number = usersCollateral.reduce(
+    const totalCollateralValue: number = usersCollateralValue.reduce(
       (collateralPrice: number, collateralValue: CollateralValue) =>
         collateralPrice + collateralValue.price,
       0,
@@ -63,12 +69,13 @@ export class MarginLtvService {
       ltv: (loanedBalance / totalCollateralValue) * 100,
       collateralBalance: totalCollateralValue,
       loanedBalance: loanedBalance,
-      collateralAllocation: usersCollateral,
+      collateralAllocation: usersCollateralValue,
     };
   }
 
   public async checkIfApproachingLtvLimits(userId: string, ltv: number) {
-    if (ltv >= Math.min(...this.LTV_ALERT_LIMITS)) {
+    console.log(ltv);
+    if (ltv >= this.LTV_ALERT_LIMITS[0]) {
       const marginNotifications: MarginNotification | null =
         await this.marginNotificationsRepository.findOne({
           where: {
