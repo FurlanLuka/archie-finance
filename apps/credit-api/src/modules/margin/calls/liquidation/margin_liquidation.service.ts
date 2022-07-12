@@ -7,19 +7,23 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { MarginCall } from '../../margin_calls.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Collateral } from '../../../collateral/collateral.entity';
 
 @Injectable()
 export class MarginLiquidationService {
   constructor(
     @InjectRepository(LiquidationLog)
     private liquidationLogsRepository: Repository<LiquidationLog>,
+    @InjectRepository(Collateral)
+    private collateralRepository: Repository<Collateral>,
   ) {}
 
   public async liquidateAssets(
     userId: string,
     assetsToLiquidate: Partial<LiquidationLog>[],
   ): Promise<void> {
-    // TODO: update collateral amount once collateral entity is moved
+    // TODO: update collateral amount once collateral entity is moved + use create withdrawal fn
+    // https://github.com/Archie-Finance/archie-microservices/pull/23/files#diff-e31704f85b2fae51276e9171e76674d63154ef026955ce82c10182c1fbae096bR108
     await this.liquidationLogsRepository.save(assetsToLiquidate);
   }
 
