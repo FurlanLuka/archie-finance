@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { DataSource, Repository } from 'typeorm';
@@ -19,6 +15,7 @@ import {
 } from '@archie-microservices/api-interfaces/asset_price';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { DepositCreationInternalError } from './collateral.errors';
+import { CreateDepositDto } from './collateral.dto';
 
 @Injectable()
 export class CollateralService {
@@ -31,14 +28,22 @@ export class CollateralService {
     private internalApiService: InternalApiService,
   ) {}
 
-  public async createDeposit(
-    transactionId: string,
-    userId: string,
-    asset: string,
-    amount: number,
-    destinationAddress: string,
-    status: TransactionStatus,
-  ): Promise<void> {
+  public async createDeposit({
+    transactionId,
+    userId,
+    asset,
+    amount,
+    destinationAddress,
+    status,
+  }: CreateDepositDto): Promise<void> {
+    Logger.log('COLLATERAL_SERVICE_CREATE_DEPOSIT', {
+      transactionId,
+      userId,
+      asset,
+      amount,
+      destinationAddress,
+      status,
+    });
     const queryRunner = this.dataSource.createQueryRunner();
 
     const collateralDeposit: CollateralDeposit | null =

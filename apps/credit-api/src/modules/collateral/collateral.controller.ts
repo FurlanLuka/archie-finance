@@ -4,9 +4,15 @@ import { CollateralService } from './collateral.service';
 import {
   CollateralDto,
   CollateralValueDto,
+  CreateDepositDto,
   GetTotalCollateralValueResponseDto,
 } from './collateral.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import {
+  COLLATERAL_DEPOSITED_EXCHANGE,
+  SERVICE_QUEUE_NAME,
+} from '@archie/api/credit-api/constants';
+import { Subscribe } from '@archie/api/utils/queue';
 
 @Controller('v1/collateral')
 export class CollateralController {
@@ -52,5 +58,15 @@ export class InternalCollateralController {
     @Param('userId') userId: string,
   ): Promise<CollateralValueDto[]> {
     return this.collateralService.getUserCollateralValue(userId);
+  }
+}
+
+@Controller()
+export class CollateralQueueController {
+  constructor(private collateralService: CollateralService) {}
+
+  @Subscribe(COLLATERAL_DEPOSITED_EXCHANGE, SERVICE_QUEUE_NAME)
+  async collateralDepositedHandler(payload: CreateDepositDto): Promise<void> {
+    await this.collateralService.createDeposit(payload);
   }
 }
