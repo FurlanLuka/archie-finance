@@ -23,6 +23,15 @@ export class GetTotalCollateralValueResponseDto
   value: number;
 }
 
+export class CollateralWithdrawDto {
+  @IsString()
+  asset: string;
+  @IsNumber()
+  withdrawalAmount: number;
+  @IsString()
+  destinationAddress: string;
+}
+
 export class CreateDepositDto {
   @IsString()
   transactionId: string;
@@ -32,6 +41,21 @@ export class CreateDepositDto {
   asset: string;
   @IsNumber()
   amount: number;
+  @IsString()
+  destinationAddress: string;
+  @IsString()
+  status: TransactionStatus;
+}
+
+export class CollateralWithdrawCompletedDto {
+  @IsString()
+  transactionId: string;
+  @IsString()
+  userId: string;
+  @IsString()
+  asset: string;
+  @IsNumber()
+  withdrawalAmount: number;
   @IsString()
   destinationAddress: string;
   @IsString()
