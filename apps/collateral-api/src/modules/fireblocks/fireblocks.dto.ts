@@ -15,10 +15,10 @@ export class CollateralWithdrawInitializedDto {
 class LiquidationDto {
   @IsString()
   asset: string;
-  @IsString()
-  amount: string;
-  @IsString()
-  price: string;
+  @IsNumber()
+  amount: number;
+  @IsNumber()
+  price: number;
 }
 
 export class LiquidateAssetsDto {

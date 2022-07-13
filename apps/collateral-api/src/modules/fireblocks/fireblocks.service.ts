@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import {
   DepositAddressResponse,
   FireblocksSDK,
@@ -152,6 +157,77 @@ export class FireblocksService {
     userId,
     liquidation,
   }: LiquidateAssetsDto): Promise<void> {
-    return;
+    Logger.log({
+      code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
+      params: {
+        userId,
+        liquidation,
+      },
+    });
+    const internalVaultAccountId = this.configService.get(
+      ConfigVariables.FIREBLOCKS_VAULT_ACCOUNT_ID,
+    );
+    if (!internalVaultAccountId) {
+      Logger.error({
+        code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
+        message: 'Missing FIREBLOCKS_VAULT_ACCOUNT_ID env variable',
+      });
+      throw new InternalServerErrorException();
+    }
+
+    const assetList: AssetList = this.configService.get(
+      ConfigVariables.ASSET_LIST,
+    );
+
+    Logger.log({
+      code: 'ASSET_LIST',
+      ...assetList,
+    });
+
+    const userVaultAccount: UserVaultAccount | null =
+      await this.userVaultAccountRepository.findOneBy({
+        userId,
+      });
+
+    if (!userVaultAccount) {
+      Logger.error({
+        code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
+        message: `No user account for userId: ${userId}`,
+      });
+      throw new NotFoundException();
+    }
+    await Promise.all(
+      liquidation.map(async ({ asset, amount }) => {
+        const fireblocksAsset = assetList[asset];
+
+        if (!fireblocksAsset) {
+          Logger.error({
+            code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
+            message: `Asset ${asset} not in assetList}`,
+            asset,
+            assetList,
+          });
+          throw new NotFoundException();
+        }
+
+        const transaction = await this.fireblocksClient.createTransaction({
+          assetId: fireblocksAsset.fireblocks_id,
+          amount: amount,
+          source: {
+            type: PeerType.VAULT_ACCOUNT,
+            id: userVaultAccount.vaultAccountId,
+          },
+          destination: {
+            type: PeerType.VAULT_ACCOUNT,
+            id: internalVaultAccountId,
+          },
+        });
+        Logger.log({
+          code: 'FIREBLOCKS_SERVICE_LIQUIDATION_TRANSACTION_CREATED',
+          asset,
+          transaction,
+        });
+      }),
+    );
   }
 }
