@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@archie-microservices/config';
 import Rize from '@rizefinance/rize-js';
 import {
@@ -17,16 +13,40 @@ import {
   Transaction,
 } from './rize_api.interfaces';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
+import * as Auth from '@rizefinance/rize-js/lib/core/auth';
+import {
+  DEFAULT_BASE_PATH,
+  DEFAULT_HOST,
+  DEFAULT_TIMEOUT,
+} from '@rizefinance/rize-js/lib/constants';
+import axios, { AxiosInstance } from 'axios';
 
 @Injectable()
 export class RizeApiService {
   private rizeClient: Rize;
+  private rizeAuth: Auth;
+  private rizeApiClient: AxiosInstance;
   private COMPLIANCE_PLAN_NAME = 'checking';
+  private readonly rizeBaseUrl: string;
 
   constructor(private configService: ConfigService) {
     this.rizeClient = new Rize(
       configService.get(ConfigVariables.RIZE_PROGRAM_ID),
       configService.get(ConfigVariables.RIZE_HMAC_KEY),
+      {
+        environment: 'integration',
+      },
+    );
+    this.rizeBaseUrl = DEFAULT_HOST[this.rizeClient.environment];
+    this.rizeApiClient = this.createApiClient({
+      host: this.rizeBaseUrl,
+      basePath: DEFAULT_BASE_PATH,
+      timeout: DEFAULT_TIMEOUT,
+    });
+    this.rizeAuth = new Auth(
+      configService.get(ConfigVariables.RIZE_PROGRAM_ID),
+      configService.get(ConfigVariables.RIZE_HMAC_KEY),
+      this.rizeApiClient,
     );
   }
 
@@ -152,5 +172,55 @@ export class RizeApiService {
       });
 
     return transactions.data;
+  }
+
+  public async createAdjustment(
+    customerId: string,
+    adjustmentAmount: number,
+    adjustmentType: string,
+  ): Promise<void> {
+    const token: string = this.rizeAuth.getToken();
+    const adjustements = await this.rizeApiClient.get('adjustment_types', {
+      headers: {
+        Authorization: token,
+      },
+    });
+    // const adjustements: any = await axios.get(
+    //   `${this.rizeBaseUrl}${DEFAULT_BASE_PATH}adjustment_types`,
+    //   {
+    //     headers: {
+    //       Authorization: token,
+    //     },
+    //   },
+    // );
+    console.log(token);
+    console.log(adjustements.data);
+
+    // await axios.post(
+    //   `${this.rizeBaseUrl}${DEFAULT_BASE_PATH}adjustments`,
+    //   {},
+    //   {
+    //     headers: {
+    //       Authorization: token,
+    //     },
+    //   },
+    // );
+  }
+
+  private createApiClient({ host, basePath, timeout }) {
+    const axiosInstance = axios.create({
+      baseURL: `${host}${basePath}`,
+      timeout: timeout,
+    });
+
+    axiosInstance.interceptors.response.use(undefined, (err) => {
+      throw {
+        status: err.response.status,
+        statusText: err.response.statusText,
+        data: err.response.data,
+      };
+    });
+
+    return axiosInstance;
   }
 }
