@@ -154,17 +154,17 @@ spec:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: fetch-asset-prices
+  name: check-margin-calls
 spec:
   schedule: "0 * * * *"
   jobTemplate:
     metadata:
-      name: fetch-asset-prices
+      name: check-margin-calls
     spec:
       template:
         spec:
           containers:
-            - name: fetch-asset-prices-job
+            - name: check-margin-calls-job
               image: curlimages/curl
               imagePullPolicy: IfNotPresent
               env:
