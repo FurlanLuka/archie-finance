@@ -24,3 +24,18 @@ export class GetTransactionsQueryDto {
   @Type(() => Number)
   limit = 100;
 }
+
+export class MarginCallCompletedDto {
+  userId: string;
+  liquidation: LiquidationDto[];
+}
+
+export class LiquidationDto {
+  asset: string;
+  amount: number;
+  price: number;
+}
+
+export class MarginCallStartedDto {
+  userId: string;
+}

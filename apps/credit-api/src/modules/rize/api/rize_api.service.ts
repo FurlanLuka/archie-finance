@@ -174,6 +174,14 @@ export class RizeApiService {
     return transactions.data;
   }
 
+  public async lockCard(cardId: string): Promise<void> {
+    await this.rizeClient.debitCard.lock(cardId, 'Active margin call');
+  }
+
+  public async unlockCard(cardId: string): Promise<void> {
+    await this.rizeClient.debitCard.unlock(cardId);
+  }
+
   public async createAdjustment(
     customerId: string,
     adjustmentAmount: number,

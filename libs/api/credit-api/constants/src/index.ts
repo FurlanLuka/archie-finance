@@ -40,3 +40,13 @@ export const COLLATERAL_DEPOSITED_EXCHANGE = {
   name: 'credit.collateral.deposited.fx',
   type: 'fanout',
 };
+
+export const MARGIN_CALL_COMPLETED_EXCHANGE = {
+  name: 'credit.margin_call.completed.fx',
+  type: 'fanout',
+};
+
+export const MARGIN_CALL_STARTED_EXCHANGE = {
+  name: 'credit.margin_call.started.fx',
+  type: 'fanout',
+};

@@ -18,7 +18,20 @@ import {
   DebitCardAlreadyExists,
   DebitCardDoesNotExist,
 } from './rize.errors';
-import { GetTransactionsQueryDto, TransactionResponseDto } from './rize.dto';
+import {
+  GetTransactionsQueryDto,
+  MarginCallCompletedDto,
+  MarginCallStartedDto,
+  TransactionResponseDto,
+} from './rize.dto';
+import { Subscribe } from '@archie/api/utils/queue';
+import {
+  COLLATERAL_DEPOSITED_EXCHANGE,
+  MARGIN_CALL_COMPLETED_EXCHANGE,
+  MARGIN_CALL_STARTED_EXCHANGE,
+  SERVICE_QUEUE_NAME,
+} from '@archie/api/credit-api/constants';
+import { CreateDepositDto } from '../collateral/collateral.dto';
 
 @Controller('v1/rize')
 export class RizeController {
@@ -78,5 +91,21 @@ export class RizeController {
       query.page,
       query.limit,
     );
+  }
+}
+
+export class RizeQueueController {
+  constructor(private rizeService: RizeService) {}
+
+  @Subscribe(MARGIN_CALL_STARTED_EXCHANGE, SERVICE_QUEUE_NAME)
+  async marginCallStartedHandler(payload: MarginCallStartedDto): Promise<void> {
+    await this.rizeService.lockCard(payload.userId);
+  }
+
+  @Subscribe(MARGIN_CALL_COMPLETED_EXCHANGE, SERVICE_QUEUE_NAME)
+  async marginCallCompletedHandler(
+    payload: MarginCallCompletedDto,
+  ): Promise<void> {
+    await this.rizeService.unlockCard(payload.userId);
   }
 }

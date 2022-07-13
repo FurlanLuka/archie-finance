@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { RizeController } from './rize.controller';
+import { RizeController, RizeQueueController } from './rize.controller';
 import { RizeService } from './rize.service';
 import { RizeApiModule } from './api/rize_api.module';
 import { RizeFactoryModule } from './factory/rize_factory.module';
@@ -10,9 +10,10 @@ import {
   CARD_ACTIVATED_EXCHANGE,
   ConfigVariables,
 } from '@archie/api/credit-api/constants';
+import { CreditModule } from '../credit/credit.module';
 
 @Module({
-  controllers: [RizeController],
+  controllers: [RizeController, RizeQueueController],
   providers: [RizeService],
   imports: [
     RabbitMQModule.forRootAsync(RabbitMQModule, {
@@ -27,6 +28,7 @@ import {
     RizeApiModule,
     RizeFactoryModule,
     RizeValidatorModule,
+    CreditModule,
   ],
 })
 export class RizeModule {}

@@ -20,6 +20,8 @@ import { RizeFactoryService } from './factory/rize_factory.service';
 import { RizeValidatorService } from './validator/rize_validator.service';
 import { CARD_ACTIVATED_EXCHANGE } from '@archie/api/credit-api/constants';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { GetCreditResponse } from '../credit/credit.interfaces';
+import { CreditService } from '../credit/credit.service';
 
 @Injectable()
 export class RizeService {
@@ -29,11 +31,12 @@ export class RizeService {
     private rizeFactoryService: RizeFactoryService,
     private rizeValidatorService: RizeValidatorService,
     private amqpConnection: AmqpConnection,
+    private creditService: CreditService,
   ) {}
 
   public async createCard(userId: string): Promise<void> {
-    await this.rizeApiService.createAdjustment('', 0, '');
-    return;
+    // await this.rizeApiService.createAdjustment('', 0, '');
+    // return;
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
@@ -47,9 +50,16 @@ export class RizeService {
       customer.uid,
       customer.pool_uids[0],
     );
-    // TODO: load funds
+    const credit: GetCreditResponse = await this.creditService.getCredit(
+      userId,
+    );
+    await this.rizeApiService.createAdjustment(
+      customer.uid,
+      credit.availableCredit,
+      '',
+    );
 
-    this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
+    await this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
       userId: userId,
     });
   }
@@ -162,6 +172,26 @@ export class RizeService {
         userIp,
         updatedComplianceWorkflow,
       );
+    }
+  }
+
+  public async unlockCard(userId: string): Promise<void> {
+    const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
+      userId,
+    );
+
+    if (debitCard !== null) {
+      await this.rizeApiService.lockCard(debitCard.uid);
+    }
+  }
+
+  public async lockCard(userId: string): Promise<void> {
+    const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
+      userId,
+    );
+
+    if (debitCard !== null) {
+      await this.rizeApiService.unlockCard(debitCard.uid);
     }
   }
 }
