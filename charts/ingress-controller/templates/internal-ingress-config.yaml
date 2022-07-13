@@ -72,6 +72,13 @@ spec:
                 name: archie-collateral-api-service
                 port:
                   number: 80
+          - path: /internal/margins
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-credit-api-service
+                port:
+                  number: 80
           ## User api service
           - path: /internal/user
             pathType: Prefix
