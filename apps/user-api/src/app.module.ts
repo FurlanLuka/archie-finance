@@ -30,6 +30,7 @@ import { ConfigVariables } from '@archie/api/user-api/constants';
         ConfigVariables.VAULT_PASSWORD,
         ConfigVariables.VAULT_NAMESPACE,
         ConfigVariables.INTERNAL_API_URL,
+        ConfigVariables.QUEUE_URL,
       ],
       parse: (_configVariable, value) => value,
     }),

@@ -4,5 +4,4 @@ tracer.init({
   logInjection: true,
   runtimeMetrics: true,
 });
-
 export default tracer;

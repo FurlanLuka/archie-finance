@@ -158,6 +158,11 @@ spec:
                 secretKeyRef:
                   name: rize-secrets
                   key: hmac-key
+            - name: QUEUE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: queue-secrets
+                  key: queue-url
           {{- end }}
       imagePullSecrets:
         - name: regcred

@@ -1,5 +1,5 @@
-export const SERVICE_NAME = 'credit-api'
-export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`
+export const SERVICE_NAME = 'credit-api';
+export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
 export enum ConfigVariables {
   AUTH0_DOMAIN = 'AUTH0_DOMAIN',
@@ -18,4 +18,25 @@ export enum ConfigVariables {
   APTO_FUNDING_BALANCE_ID = 'FUNDING_BALANCE_ID',
   RIZE_PROGRAM_ID = 'RIZE_PROGRAM_ID',
   RIZE_HMAC_KEY = 'RIZE_HMAC_KEY',
+  QUEUE_URL = 'QUEUE_URL',
 }
+
+export const COLLATERAL_RECEIVED_EXCHANGE = {
+  name: 'credit.collateral.received.fx',
+  type: 'fanout',
+};
+
+export const CARD_ACTIVATED_EXCHANGE = {
+  name: 'credit.card.activated.fx',
+  type: 'fanout',
+};
+
+export const PHONE_NUMBER_VERIFIED_EXCHANGE = {
+  name: 'apto.phone_number.verified.fx',
+  type: 'fanout',
+};
+
+export const COLLATERAL_DEPOSITED_EXCHANGE = {
+  name: 'credit.collateral.deposited.fx',
+  type: 'fanout',
+};
