@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -13,6 +14,7 @@ export class CollateralWithdrawal {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index()
   @Column('varchar', { nullable: false, select: false })
   userId: string;
 

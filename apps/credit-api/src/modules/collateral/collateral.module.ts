@@ -12,7 +12,6 @@ import { InternalApiModule } from '@archie-microservices/internal-api';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { CollateralWithdrawal } from './collateral_withdrawal.entity';
-// import { FireblocksModule } from '../fireblocks/fireblocks.module';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import {
   COLLATERAL_DEPOSITED_EXCHANGE,
@@ -27,8 +26,6 @@ import {
       CollateralDeposit,
       CollateralWithdrawal,
     ]),
-    // UserVaultAccountModule,
-    // FireblocksModule,
     InternalApiModule.register({
       imports: [ConfigModule],
       inject: [ConfigService],

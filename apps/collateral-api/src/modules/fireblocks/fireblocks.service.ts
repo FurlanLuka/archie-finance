@@ -85,7 +85,6 @@ export class FireblocksService {
     return this.fireblocksClient.getVaultAccounts();
   }
 
-  // Subscribed to COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE
   public async withdrawAsset({
     asset,
     withdrawalAmount,
