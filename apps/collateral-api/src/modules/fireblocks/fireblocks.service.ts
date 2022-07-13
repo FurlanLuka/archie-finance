@@ -14,6 +14,7 @@ import { AssetList } from '@archie-microservices/api-interfaces/asset_informatio
 import { UserVaultAccount } from '../user_vault_account/user_vault_account.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { LiquidateAssetsDto } from './fireblocks.dto';
 
 @Injectable()
 export class FireblocksService {
@@ -145,5 +146,12 @@ export class FireblocksService {
       code: 'FIREBLOCKS_SERVICE_CREATED_TRANSACTION',
       transaction,
     });
+  }
+
+  public async liquidateAssets({
+    userId,
+    liquidation,
+  }: LiquidateAssetsDto): Promise<void> {
+    return;
   }
 }
