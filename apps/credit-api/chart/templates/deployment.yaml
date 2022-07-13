@@ -180,5 +180,5 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - curl -X POST ${INTERNAL_API_URL}/internal/asset_price/fetch
+                - curl -X POST ${INTERNAL_API_URL}/internal/margins/check
           restartPolicy: OnFailure
