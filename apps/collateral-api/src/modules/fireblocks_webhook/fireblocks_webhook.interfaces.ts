@@ -1,4 +1,4 @@
-import { TransactionStatus } from 'fireblocks-sdk';
+import { TransactionResponse } from 'fireblocks-sdk';
 import { FireblocksWebhookDto } from './fireblocks_webhook.dto';
 
 export enum EventType {
@@ -14,31 +14,21 @@ export enum EventType {
   NETWORK_CONNECTION_ADDED = 'NETWORK_CONNECTION_ADDED',
 }
 
-interface TransactionDetails {
-  id: string;
-  assetId: string;
-  netAmount: number;
-  status: TransactionStatus;
-  destinationAddress: string;
-  note: string;
-  customerRefId: string;
-}
-
 interface FireblocksWebhookTransactionCreated extends FireblocksWebhookDto {
   type: EventType.TRANSACTION_CREATED;
-  data: TransactionDetails;
+  data: TransactionResponse;
 }
 
 interface FireblocksWebhookTransactionStatusUpdated
   extends FireblocksWebhookDto {
   type: EventType.TRANSACTION_STATUS_UPDATED;
-  data: TransactionDetails;
+  data: TransactionResponse;
 }
 
 interface FireblocksWebhookTransactionApprovalStatusUpdated
   extends FireblocksWebhookDto {
   type: EventType.TRANSACTION_APPROVAL_STATUS_UPDATED;
-  data: TransactionDetails;
+  data: TransactionResponse;
 }
 
 export type FireblocksWebhookPayload =

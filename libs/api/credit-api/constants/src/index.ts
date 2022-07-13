@@ -58,3 +58,13 @@ export const COLLATERAL_DEPOSITED_EXCHANGE = {
   name: 'credit.collateral.deposited.fx',
   type: 'fanout',
 };
+
+export const COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE = {
+  name: 'credit.collateral.withdraw.initialized.fx',
+  type: 'fanout',
+};
+
+export const COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE = {
+  name: 'credit.collateral.withdraw.completed.fx',
+  type: 'fanout',
+};
