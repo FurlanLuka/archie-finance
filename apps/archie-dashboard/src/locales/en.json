@@ -17,6 +17,7 @@
       "last_name": "Legal last name",
       "date_of_birth": "Date of birth",
       "address": "Address",
+      "apt_unit": "Apt/Unit",
       "phone_number": "Phone Number",
       "ssn": "SSN/TIN"
     },
@@ -25,6 +26,7 @@
       "last_name": "Last Name",
       "date_of_birth": "mm-dd-yyyy",
       "address": "Mailing address (no P.O. Boxes)",
+      "apt_unit": "Apartment or unit number (optional)",
       "phone_number": "Phone number",
       "ssn": "XXX-XX-XXXX"
     },
