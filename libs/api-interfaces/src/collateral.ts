@@ -29,3 +29,6 @@ export interface GetCollateralWithdrawal {
 
 export type GetUserCollateral = Collateral[];
 export type GetUserWithdrawals = GetCollateralWithdrawal[];
+export type GetUserWithdrawalAmount = {
+  maxAmount: number;
+};

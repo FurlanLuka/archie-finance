@@ -16,10 +16,18 @@ import {
   CollateralWithdrawalController,
   CollateralWithdrawalQueueController,
 } from './collateral_withdrawal.controller';
+import { Credit } from '../../credit/credit.entity';
+import { LiquidationLog } from '../../margin/liquidation_logs.entity';
+import { MarginLtvModule } from '../../margin/ltv/margin_ltv.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Collateral, CollateralWithdrawal]),
+    TypeOrmModule.forFeature([
+      Collateral,
+      CollateralWithdrawal,
+      Credit,
+      LiquidationLog,
+    ]),
     InternalApiModule.register({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -44,6 +52,7 @@ import {
         },
       }),
     }),
+    MarginLtvModule,
   ],
   exports: [CollateralWithdrawalService],
   providers: [CollateralWithdrawalService],

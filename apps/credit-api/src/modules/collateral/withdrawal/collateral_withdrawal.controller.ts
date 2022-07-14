@@ -1,5 +1,13 @@
 import { AuthGuard } from '@archie-microservices/auth0';
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   CollateralWithdrawCompletedDto,
@@ -8,6 +16,7 @@ import {
 } from './collateral_withdrawal.dto';
 import { CollateralWithdrawalService } from './collateral_withdrawal.service';
 import {
+  GetUserWithdrawalAmount,
   GetCollateralWithdrawal,
   GetUserWithdrawals,
 } from '@archie-microservices/api-interfaces/collateral';
@@ -45,6 +54,19 @@ export class CollateralWithdrawalController {
   async getUserWithdrawals(@Req() request): Promise<GetUserWithdrawals> {
     return this.collateralWithdrawalService.getUserWithdrawals(
       request.user.sub,
+    );
+  }
+
+  @Get('/:asset/max_amount')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getUserMaxWithdrawalAmount(
+    @Req() request,
+    @Param('asset') asset: string,
+  ): Promise<GetUserWithdrawalAmount> {
+    return this.collateralWithdrawalService.getUserMaxWithdrawalAmount(
+      request.user.sub,
+      asset,
     );
   }
 }

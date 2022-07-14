@@ -1,13 +1,19 @@
 import {
   GetCollateralWithdrawal,
+  GetUserWithdrawalAmount,
   GetUserWithdrawals,
 } from '@archie-microservices/api-interfaces/collateral';
+import { InternalApiService } from '@archie-microservices/internal-api';
 import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '@archie/api/credit-api/constants';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { Repository } from 'typeorm';
+import { Credit } from '../../credit/credit.entity';
+import { LiquidationLog } from '../../margin/liquidation_logs.entity';
+import { MarginLtvService } from '../../margin/ltv/margin_ltv.service';
+import { UsersLtv } from '../../margin/margin.interfaces';
 import { Collateral } from '../collateral.entity';
 import {
   CollateralWithdrawCompletedDto,
@@ -26,6 +32,11 @@ export class CollateralWithdrawalService {
     private collateralRepository: Repository<Collateral>,
     @InjectRepository(CollateralWithdrawal)
     private collateralWithdrawalRepository: Repository<CollateralWithdrawal>,
+    @InjectRepository(Credit) private creditRepository: Repository<Credit>,
+    @InjectRepository(LiquidationLog)
+    private liquidationLogsRepository: Repository<LiquidationLog>,
+    private marginLtvService: MarginLtvService,
+    // private internalApiService: InternalApiService,
     private amqpConnection: AmqpConnection,
   ) {}
 
@@ -100,6 +111,58 @@ export class CollateralWithdrawalService {
         errorMessage: error.message,
       });
     }
+  }
+
+  public async getUserMaxWithdrawalAmount(
+    userId: string,
+    asset: string,
+  ): Promise<GetUserWithdrawalAmount> {
+    const credit = await this.creditRepository.findOneBy({
+      userId,
+    });
+
+    const liquidationLogs = await this.liquidationLogsRepository.findBy({
+      userId,
+    });
+
+    const collaterals = await this.collateralRepository.findBy({
+      userId,
+    });
+
+    //  const assetPrices = await this.internalApiService.getAssetPrices();
+    const assetPrices = [
+      {
+        asset: 'BTC',
+        price: 19731.44,
+        currency: 'USD',
+      },
+      {
+        asset: 'ETH',
+        price: 1080.76,
+        currency: 'USD',
+      },
+      {
+        asset: 'SOL',
+        price: 33.78,
+        currency: 'USD',
+      },
+      {
+        asset: 'USDC',
+        price: 1.003,
+        currency: 'USD',
+      },
+    ];
+
+    const userLtv = this.marginLtvService.calculateUsersLtv(
+      userId,
+      [credit],
+      liquidationLogs,
+      collaterals,
+      assetPrices,
+    );
+    console.log('juzr ltv', userLtv);
+
+    return { maxAmount: 0 };
   }
 
   public async withdrawUserCollateral(
