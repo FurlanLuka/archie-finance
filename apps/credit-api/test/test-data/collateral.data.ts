@@ -23,7 +23,7 @@ export const assetPriceResponse: GetAssetPriceResponse[] = [
   },
   {
     asset: 'USDC',
-    price: 2.2,
+    price: 1,
     currency: 'USD',
   },
 ];
@@ -51,30 +51,7 @@ export function createUserCollateral(userId: string) {
     {
       userId,
       asset: 'USDC',
-      amount: 10,
+      amount: 22,
     },
   ];
 }
-
-export const collateralValueResponse: GetCollateralValueResponse = [
-  {
-    asset: 'BTC',
-    assetAmount: 1,
-    price: 26,
-  },
-  {
-    asset: 'ETH',
-    assetAmount: 10,
-    price: 24,
-  },
-  {
-    asset: 'SOL',
-    assetAmount: 100,
-    price: 28,
-  },
-  {
-    asset: 'USDC',
-    assetAmount: 10,
-    price: 22,
-  },
-];

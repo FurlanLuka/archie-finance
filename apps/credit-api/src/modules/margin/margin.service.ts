@@ -104,6 +104,7 @@ export class MarginService {
             await this.marginLtvService.checkIfApproachingLtvLimits(
               usersLtv.userId,
               usersLtv.ltv,
+              usersLtv.userOnlyHasStableCoins,
             );
           }
         } else {
@@ -114,5 +115,9 @@ export class MarginService {
         }
       }),
     );
+
+    await Promise.all(userLtvs.map(this.adjustCreditLimit));
   }
+
+  private adjustCreditLimit(usersLtv: UsersLtv) {}
 }
