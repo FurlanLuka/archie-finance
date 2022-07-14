@@ -1,4 +1,4 @@
-import { Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Controller, Post } from '@nestjs/common';
 import { MarginService } from './margin.service';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
@@ -23,9 +23,6 @@ export class MarginInternalController {
 
   @Post('check')
   async checkMargin(): Promise<void> {
-    // TODO: trigger MARGIN_CHECK_REQUESTED_EXCHANGE event
-    // 1. Fetch distinct users from credit api
-    // 2. Trigger in batches max 10k events
     return this.marginService.triggerMarginCheck();
   }
 }
