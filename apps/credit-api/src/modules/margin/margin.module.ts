@@ -17,6 +17,7 @@ import {
   ConfigVariables,
   MARGIN_CHECK_REQUESTED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
+import { CreditService } from '../credit/credit.service';
 
 @Module({
   controllers: [MarginQueueController, MarginInternalController],
@@ -33,6 +34,7 @@ import {
     }),
     MarginLtvModule,
     MarginCallsModule,
+    CreditService,
   ],
   providers: [MarginService],
   exports: [MarginService],
