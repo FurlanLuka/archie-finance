@@ -20,7 +20,7 @@ import {
   DEFAULT_TIMEOUT,
 } from '@rizefinance/rize-js/lib/constants';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import * as rs from 'jsrsasign'
+import * as rs from 'jsrsasign';
 
 @Injectable()
 export class RizeApiService {
@@ -30,15 +30,18 @@ export class RizeApiService {
 
   private DEFAULT_TOKEN_MAX_AGE = 82800000;
   private tokenCache = {
-      data: undefined,
-      timestamp: undefined,
-      isExpired(tokenMaxAge = this.DEFAULT_TOKEN_MAX_AGE) {
-          return !this.timestamp || new Date().getTime() - this.timestamp > tokenMaxAge;
-      }
+    data: undefined,
+    timestamp: undefined,
+    isExpired(tokenMaxAge = this.DEFAULT_TOKEN_MAX_AGE) {
+      return (
+        !this.timestamp || new Date().getTime() - this.timestamp > tokenMaxAge
+      );
+    },
   };
 
   constructor(private configService: ConfigService) {
-    const environment: 'production' | 'integration' | 'sandbox' = configService.get(ConfigVariables.RIZE_ENVIRONMENT)
+    const environment: 'production' | 'integration' | 'sandbox' =
+      configService.get(ConfigVariables.RIZE_ENVIRONMENT);
 
     this.rizeClient = new Rize(
       configService.get(ConfigVariables.RIZE_PROGRAM_ID),
@@ -92,7 +95,7 @@ export class RizeApiService {
   ): Promise<ComplianceWorkflow> {
     const products: RizeList<Product> = await this.rizeClient.product.getList();
 
-    const product: Product = products.data[0]
+    const product: Product = products.data[0];
 
     return this.rizeClient.complianceWorkflow.create(
       customerId,
@@ -234,40 +237,46 @@ export class RizeApiService {
     return axiosInstance;
   }
 
-    private async getToken() {
-        // Check if there's no token data or if the token is already expired
-        if (!this.tokenCache.data || this.tokenCache.isExpired(this.DEFAULT_TOKEN_MAX_AGE)) {
-            // Create Header and Payload objects
-            const header = {
-                'alg': 'HS512'
-            };
+  private async getToken() {
+    // Check if there's no token data or if the token is already expired
+    if (
+      !this.tokenCache.data ||
+      this.tokenCache.isExpired(this.DEFAULT_TOKEN_MAX_AGE)
+    ) {
+      // Create Header and Payload objects
+      const header = {
+        alg: 'HS512',
+      };
 
-            const payload = {
-                'sub': this.configService.get(ConfigVariables.RIZE_PROGRAM_ID),
-                'iat': Math.floor(+new Date() / 1000)
-            };
+      const payload = {
+        sub: this.configService.get(ConfigVariables.RIZE_PROGRAM_ID),
+        iat: Math.floor(+new Date() / 1000),
+      };
 
-            // Prep the objects for a JWT
-            const sHeader = JSON.stringify(header);
-            const sPayload = JSON.stringify(payload);
+      // Prep the objects for a JWT
+      const sHeader = JSON.stringify(header);
+      const sPayload = JSON.stringify(payload);
 
-            // Request for a new token
-            const sJwt = rs.KJUR.jws.JWS.sign('HS512', sHeader, sPayload, this.configService.get(ConfigVariables.RIZE_HMAC_KEY));
+      // Request for a new token
+      const sJwt = rs.KJUR.jws.JWS.sign(
+        'HS512',
+        sHeader,
+        sPayload,
+        this.configService.get(ConfigVariables.RIZE_HMAC_KEY),
+      );
 
-            let response;
-            try {
-                response = await this.rizeApiClient.post(
-                    '/auth',
-                    undefined,
-                    { headers: { 'Authorization': sJwt } }
-                );
-            } catch (err) {
-                return new Error();
-            }
+      let response;
+      try {
+        response = await this.rizeApiClient.post('/auth', undefined, {
+          headers: { Authorization: sJwt },
+        });
+      } catch (err) {
+        return new Error();
+      }
 
-            this.tokenCache.data = response.data.token;
-            this.tokenCache.timestamp = new Date();
-        }
-        return this.tokenCache.data;
+      this.tokenCache.data = response.data.token;
+      this.tokenCache.timestamp = new Date();
     }
+    return this.tokenCache.data;
+  }
 }
