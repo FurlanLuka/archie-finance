@@ -43,6 +43,8 @@ export class RizeApiService {
     const environment: 'production' | 'integration' | 'sandbox' =
       configService.get(ConfigVariables.RIZE_ENVIRONMENT);
 
+    console.log(configService.get(ConfigVariables.RIZE_PROGRAM_ID));
+    console.log(configService.get(ConfigVariables.RIZE_ENVIRONMENT));
     this.rizeClient = new Rize(
       configService.get(ConfigVariables.RIZE_PROGRAM_ID),
       configService.get(ConfigVariables.RIZE_HMAC_KEY),
@@ -193,17 +195,21 @@ export class RizeApiService {
     adjustmentAmount: number,
   ): Promise<void> {
     const token: string = await this.getToken();
-    const adjustmentTypesResponse: AxiosResponse<AdjustmentType[]> =
+    const adjustmentTypesResponse: AxiosResponse<RizeList<AdjustmentType>> =
       await this.rizeApiClient.get('adjustment_types', {
         headers: {
           Authorization: token,
         },
       });
+    console.log('here5', JSON.stringify(adjustmentTypesResponse.data, null, 2));
+
     const increaseCreditAdjustmentType: AdjustmentType =
-      adjustmentTypesResponse.data.find(
+      adjustmentTypesResponse.data.data.find(
         (adjustmentType: AdjustmentType) =>
           adjustmentType.name === 'credit_limit_update_increase',
       );
+
+    console.log('here5', adjustmentTypesResponse);
 
     await axios.post(
       `${this.rizeBaseUrl}${DEFAULT_BASE_PATH}adjustments`,
@@ -226,13 +232,13 @@ export class RizeApiService {
       timeout: timeout,
     });
 
-    axiosInstance.interceptors.response.use(undefined, (err) => {
-      throw {
-        status: err.response.status,
-        statusText: err.response.statusText,
-        data: err.response.data,
-      };
-    });
+    // axiosInstance.interceptors.response.use(undefined, (err) => {
+    //   throw {
+    //     status: err.response.status,
+    //     statusText: err.response.statusText,
+    //     data: err.response.data,
+    //   };
+    // });
 
     return axiosInstance;
   }

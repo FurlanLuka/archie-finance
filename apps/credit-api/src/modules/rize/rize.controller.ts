@@ -50,15 +50,6 @@ export class RizeController {
     );
   }
 
-  @Post('users/cards')
-  @UseGuards(AuthGuard)
-  @HttpCode(204)
-  @ApiBearerAuth()
-  @ApiErrorResponse([ActiveCustomerDoesNotExist, DebitCardAlreadyExists])
-  public async createCard(@Request() req): Promise<void> {
-    return this.rizeService.createCard(req.user.sub);
-  }
-
   @Get('users/cards/image')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()

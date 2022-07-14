@@ -34,30 +34,6 @@ export class RizeService {
     private creditService: CreditService,
   ) {}
 
-  public async createCard(userId: string): Promise<void> {
-    const customer: Customer | null = await this.rizeApiService.searchCustomers(
-      userId,
-    );
-    this.rizeValidatorService.validateCustomerExists(customer);
-
-    const debitCard: DebitCard = await this.rizeApiService.getDebitCard(userId);
-    this.rizeValidatorService.validateDebitCardDoesNotExist(debitCard);
-
-    await this.rizeApiService.createDebitCard(
-      userId,
-      customer.uid,
-      customer.pool_uids[0],
-    );
-    const credit: GetCreditResponse = await this.creditService.getCredit(
-      userId,
-    );
-    await this.rizeApiService.loadFunds(customer.uid, credit.availableCredit);
-
-    await this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
-      userId: userId,
-    });
-  }
-
   public async getVirtualCard(userId: string): Promise<string> {
     const debitCard: DebitCard = await this.rizeApiService.getDebitCard(userId);
     this.rizeValidatorService.validateDebitCardExists(debitCard);
@@ -96,10 +72,25 @@ export class RizeService {
       await this.rizeApiService.searchCustomers(userId);
     this.rizeValidatorService.validateCustomerDoesNotExist(existingCustomer);
 
-    const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
-    const emailAddressResponse: GetEmailAddressResponse =
-     await this.internalApiService.getUserEmailAddress(userId);
-
+    // const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
+    // const emailAddressResponse: GetEmailAddressResponse =
+    //   await this.internalApiService.getUserEmailAddress(userId);
+    const kyc = {
+      firstName: 'Andraz',
+      lastName: 'Cuderman',
+      dateOfBirth: '1989-12-31',
+      addressCountry: 'US',
+      addressLocality: 'Moorpark',
+      addressPostalCode: '93021',
+      addressRegion: 'CA',
+      addressStreet: 'Los Angeles Avenue',
+      addressStreetNumber: '120',
+      phoneNumber: '5541232133',
+      phoneNumberCountryCode: '+1',
+      ssn: '324324235',
+    };
+    const emailAddressResponse = { email: 'andraz1@archie.finance' };
+    console.log(1);
     const customerId: string =
       existingCustomer !== null
         ? existingCustomer.uid
@@ -107,13 +98,14 @@ export class RizeService {
             userId,
             emailAddressResponse.email,
           );
-          
-  
+    console.log(2);
+
     await this.rizeApiService.addCustomerPii(
       customerId,
       emailAddressResponse.email,
       this.rizeFactoryService.createCustomerDetails(kyc),
     );
+    console.log(3);
 
     let complianceWorkflow: ComplianceWorkflow;
     try {
@@ -135,6 +127,15 @@ export class RizeService {
       customerId,
       complianceWorkflow.product_uid,
     );
+
+    const credit: GetCreditResponse = await this.creditService.getCredit(
+      userId,
+    );
+    await this.rizeApiService.loadFunds(customerId, credit.availableCredit);
+
+    await this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
+      userId: userId,
+    });
   }
 
   private async acceptAllDocuments(
