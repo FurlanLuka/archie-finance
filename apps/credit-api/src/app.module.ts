@@ -9,6 +9,7 @@ import { InternalApiModule } from '@archie-microservices/internal-api';
 import { AptoModule } from './modules/apto/apto.module';
 import { MarginModule } from './modules/margin/margin.module';
 import { CollateralModule } from './modules/collateral/collateral.module';
+import { CollateralWithdrawalModule } from './modules/collateral/withdrawal/collateral_withdrawal.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { CollateralModule } from './modules/collateral/collateral.module';
     AptoModule,
     MarginModule,
     CollateralModule,
+    CollateralWithdrawalModule,
   ],
   controllers: [],
   providers: [],
