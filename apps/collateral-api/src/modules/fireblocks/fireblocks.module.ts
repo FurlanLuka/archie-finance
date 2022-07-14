@@ -7,6 +7,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import {
   COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
+  COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE,
   MARGIN_CALL_COMPLETED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
@@ -24,6 +25,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       useFactory: (configService: ConfigService) => ({
         exchanges: [
           COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
+          COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE,
           MARGIN_CALL_COMPLETED_EXCHANGE,
         ],
         uri: configService.get(ConfigVariables.QUEUE_URL),
