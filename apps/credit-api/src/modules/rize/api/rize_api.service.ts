@@ -11,6 +11,7 @@ import {
   DebitCard,
   DebitCardAccessToken,
   Transaction,
+  AdjustmentType,
 } from './rize_api.interfaces';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
 import * as Auth from '@rizefinance/rize-js/lib/core/auth';
@@ -19,7 +20,7 @@ import {
   DEFAULT_HOST,
   DEFAULT_TIMEOUT,
 } from '@rizefinance/rize-js/lib/constants';
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
 @Injectable()
 export class RizeApiService {
@@ -182,37 +183,36 @@ export class RizeApiService {
     await this.rizeClient.debitCard.unlock(cardId);
   }
 
-  public async createAdjustment(
+  public async loadFunds(
     customerId: string,
     adjustmentAmount: number,
-    adjustmentType: string,
   ): Promise<void> {
     const token: string = this.rizeAuth.getToken();
-    const adjustements = await this.rizeApiClient.get('adjustment_types', {
-      headers: {
-        Authorization: token,
-      },
-    });
-    // const adjustements: any = await axios.get(
-    //   `${this.rizeBaseUrl}${DEFAULT_BASE_PATH}adjustment_types`,
-    //   {
-    //     headers: {
-    //       Authorization: token,
-    //     },
-    //   },
-    // );
-    console.log(token);
-    console.log(adjustements.data);
+    const adjustmentTypesResponse: AxiosResponse<AdjustmentType[]> =
+      await this.rizeApiClient.get('adjustment_types', {
+        headers: {
+          Authorization: token,
+        },
+      });
+    const increaseCreditAdjustmentType: AdjustmentType =
+      adjustmentTypesResponse.data.find(
+        (adjustmentType: AdjustmentType) =>
+          adjustmentType.name === 'credit_limit_update_increase',
+      );
 
-    // await axios.post(
-    //   `${this.rizeBaseUrl}${DEFAULT_BASE_PATH}adjustments`,
-    //   {},
-    //   {
-    //     headers: {
-    //       Authorization: token,
-    //     },
-    //   },
-    // );
+    await axios.post(
+      `${this.rizeBaseUrl}${DEFAULT_BASE_PATH}adjustments`,
+      {
+        customer_uid: customerId,
+        usd_adjustment_amount: adjustmentAmount,
+        adjustment_type_uid: increaseCreditAdjustmentType.uid,
+      },
+      {
+        headers: {
+          Authorization: token,
+        },
+      },
+    );
   }
 
   private createApiClient({ host, basePath, timeout }) {

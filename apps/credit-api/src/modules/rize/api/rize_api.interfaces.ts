@@ -13,3 +13,11 @@ export {
   DebitCardAccessToken,
 } from '@rizefinance/rize-js/types/lib/core/typedefs/debit-card.typedefs';
 export { Transaction } from '@rizefinance/rize-js/types/lib/core/typedefs/transaction.typedefs';
+
+export interface AdjustmentType {
+  uid: string;
+  name: 'credit_limit_update_decrease' | 'credit_limit_update_increase';
+  description: string;
+  fee: boolean;
+  program_uid: string;
+}

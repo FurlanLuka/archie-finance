@@ -35,8 +35,6 @@ export class RizeService {
   ) {}
 
   public async createCard(userId: string): Promise<void> {
-    // await this.rizeApiService.createAdjustment('', 0, '');
-    // return;
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
@@ -53,11 +51,7 @@ export class RizeService {
     const credit: GetCreditResponse = await this.creditService.getCredit(
       userId,
     );
-    await this.rizeApiService.createAdjustment(
-      customer.uid,
-      credit.availableCredit,
-      '',
-    );
+    await this.rizeApiService.loadFunds(customer.uid, credit.availableCredit);
 
     await this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
       userId: userId,
