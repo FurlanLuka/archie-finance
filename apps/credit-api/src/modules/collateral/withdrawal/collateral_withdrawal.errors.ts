@@ -8,3 +8,12 @@ export class WithdrawalCreationInternalError extends InternalServerErrorExceptio
     this.metadata = metadata;
   }
 }
+
+export class WithdrawalInitializeInternalError extends InternalServerErrorException {
+  metadata: object;
+
+  constructor(metadata: object) {
+    super('INITIALIZE_WITHDRAWAL_ERROR');
+    this.metadata = metadata;
+  }
+}

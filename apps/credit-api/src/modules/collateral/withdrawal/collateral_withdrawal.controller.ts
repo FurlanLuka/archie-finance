@@ -3,10 +3,13 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   CollateralWithdrawCompletedDto,
-  CollateralWithdrawDto,
+  CollateralWithdrawCreateDto,
 } from './collateral_withdrawal.dto';
 import { CollateralWithdrawalService } from './collateral_withdrawal.service';
-import { GetUserWithdrawals } from '@archie-microservices/api-interfaces/collateral';
+import {
+  GetCollateralWithdrawal,
+  GetUserWithdrawals,
+} from '@archie-microservices/api-interfaces/collateral';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
@@ -24,8 +27,8 @@ export class CollateralWithdrawalController {
   @ApiBearerAuth()
   async withdrawUserCollateral(
     @Req() request,
-    @Body() body: CollateralWithdrawDto,
-  ): Promise<void> {
+    @Body() body: CollateralWithdrawCreateDto,
+  ): Promise<GetCollateralWithdrawal> {
     return this.collateralWithdrawalService.withdrawUserCollateral(
       request.user.sub,
       body.asset,
@@ -54,6 +57,6 @@ export class CollateralWithdrawalQueueController {
   async collateralWithdrawCompleteHandler(
     payload: CollateralWithdrawCompletedDto,
   ): Promise<void> {
-    await this.collateralWithdrawalService.createWithdrawal(payload);
+    await this.collateralWithdrawalService.handleWithdrawalComplete(payload);
   }
 }

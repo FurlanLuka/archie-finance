@@ -15,7 +15,6 @@ import {
   CollateralWithdrawalController,
   CollateralWithdrawalQueueController,
 } from './collateral_withdrawal.controller';
-import { CollateralModule } from '../collateral.module';
 
 @Module({
   imports: [
@@ -43,7 +42,6 @@ import { CollateralModule } from '../collateral.module';
         },
       }),
     }),
-    CollateralModule,
   ],
   exports: [CollateralWithdrawalService],
   providers: [CollateralWithdrawalService],

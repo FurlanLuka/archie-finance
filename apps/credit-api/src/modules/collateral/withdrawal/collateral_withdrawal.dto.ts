@@ -1,8 +1,7 @@
-import { IsNumber, IsString } from "class-validator";
-import { TransactionStatus } from "fireblocks-sdk";
+import { IsNumber, IsString } from 'class-validator';
+import { TransactionStatus } from 'fireblocks-sdk';
 
-
-export class CollateralWithdrawDto {
+export class CollateralWithdrawCreateDto {
   @IsString()
   asset: string;
   @IsNumber()
