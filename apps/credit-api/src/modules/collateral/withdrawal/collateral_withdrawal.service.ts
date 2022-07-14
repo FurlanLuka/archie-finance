@@ -9,7 +9,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { Repository } from 'typeorm';
 import { Collateral } from '../collateral.entity';
-import { CollateralWithdrawCompletedDto } from './collateral_withdrawal.dto';
+import {
+  CollateralWithdrawCompletedDto,
+  CollateralWithdrawTransactionCreatedDto,
+} from './collateral_withdrawal.dto';
 import { CollateralWithdrawal } from './collateral_withdrawal.entity';
 import {
   WithdrawalCreationInternalError,
@@ -25,6 +28,27 @@ export class CollateralWithdrawalService {
     private collateralWithdrawalRepository: Repository<CollateralWithdrawal>,
     private amqpConnection: AmqpConnection,
   ) {}
+
+  public async handleWithdrawalTransactionCreated({
+    withdrawalId,
+    transactionId,
+  }: CollateralWithdrawTransactionCreatedDto): Promise<void> {
+    Logger.log({
+      code: 'COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE',
+      params: {
+        withdrawalId,
+        transactionId,
+      },
+    });
+    await this.collateralWithdrawalRepository.update(
+      {
+        id: withdrawalId,
+      },
+      {
+        transactionId,
+      },
+    );
+  }
 
   public async handleWithdrawalComplete({
     userId,
@@ -44,20 +68,29 @@ export class CollateralWithdrawalService {
       },
     });
     try {
-      // TODO something that isn't as fragile
-      await this.collateralWithdrawalRepository.update(
-        {
-          userId,
-          asset,
-          destinationAddress: destinationAddress,
-          transactionId: null,
-          status: TransactionStatus.SUBMITTED,
-        },
+      const updateResult = await this.collateralWithdrawalRepository.update(
         {
           transactionId,
+        },
+        {
           status: TransactionStatus.COMPLETED,
         },
       );
+
+      if (updateResult.affected === 0) {
+        Logger.log({
+          code: 'COLLATERAL_WITHDRAW_COMPLETE_NO_TRANSACTION',
+          message: 'transactionId not yet synced',
+          params: {
+            userId,
+            asset,
+            destinationAddress,
+            transactionId,
+            status,
+          },
+        });
+        throw new NotFoundException();
+      }
     } catch (error) {
       throw new WithdrawalCreationInternalError({
         userId,
@@ -125,6 +158,7 @@ export class CollateralWithdrawalService {
           withdrawalAmount,
           userId,
           destinationAddress,
+          withdrawalId: withdrawal.id,
         },
       );
 

@@ -24,3 +24,10 @@ export class CollateralWithdrawCompletedDto {
   @IsString()
   status: TransactionStatus;
 }
+
+export class CollateralWithdrawTransactionCreatedDto {
+  @IsString()
+  transactionId: string;
+  @IsString()
+  withdrawalId: string;
+}

@@ -65,6 +65,11 @@ export const COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE = {
   type: 'fanout',
 };
 
+export const COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE = {
+  name: 'credit.collateral.withdraw.transaction.created.fx',
+  type: 'fanout',
+};
+
 export const COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE = {
   name: 'credit.collateral.withdraw.completed.fx',
   type: 'fanout',

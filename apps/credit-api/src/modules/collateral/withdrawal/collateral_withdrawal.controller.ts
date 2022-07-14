@@ -4,6 +4,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   CollateralWithdrawCompletedDto,
   CollateralWithdrawCreateDto,
+  CollateralWithdrawTransactionCreatedDto,
 } from './collateral_withdrawal.dto';
 import { CollateralWithdrawalService } from './collateral_withdrawal.service';
 import {
@@ -13,6 +14,7 @@ import {
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
+  COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
 
@@ -58,5 +60,16 @@ export class CollateralWithdrawalQueueController {
     payload: CollateralWithdrawCompletedDto,
   ): Promise<void> {
     await this.collateralWithdrawalService.handleWithdrawalComplete(payload);
+  }
+  @Subscribe(
+    COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE,
+    SERVICE_QUEUE_NAME,
+  )
+  async collateralWithdrawTransactionCreatedHandler(
+    payload: CollateralWithdrawTransactionCreatedDto,
+  ): Promise<void> {
+    await this.collateralWithdrawalService.handleWithdrawalTransactionCreated(
+      payload,
+    );
   }
 }

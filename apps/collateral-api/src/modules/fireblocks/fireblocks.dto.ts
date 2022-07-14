@@ -10,6 +10,8 @@ export class CollateralWithdrawInitializedDto {
   userId: string;
   @IsString()
   destinationAddress: string;
+  @IsString()
+  withdrawalId: string;
 }
 
 class LiquidationDto {
