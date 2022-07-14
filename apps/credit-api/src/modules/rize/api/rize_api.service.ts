@@ -14,41 +14,45 @@ import {
   AdjustmentType,
 } from './rize_api.interfaces';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
-import * as Auth from '@rizefinance/rize-js/lib/core/auth';
 import {
   DEFAULT_BASE_PATH,
   DEFAULT_HOST,
   DEFAULT_TIMEOUT,
 } from '@rizefinance/rize-js/lib/constants';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
+import * as rs from 'jsrsasign'
 
 @Injectable()
 export class RizeApiService {
   private rizeClient: Rize;
-  private rizeAuth: Auth;
   private rizeApiClient: AxiosInstance;
-  private COMPLIANCE_PLAN_NAME = 'checking';
   private readonly rizeBaseUrl: string;
 
+  private DEFAULT_TOKEN_MAX_AGE = 82800000;
+  private tokenCache = {
+      data: undefined,
+      timestamp: undefined,
+      isExpired(tokenMaxAge = this.DEFAULT_TOKEN_MAX_AGE) {
+          return !this.timestamp || new Date().getTime() - this.timestamp > tokenMaxAge;
+      }
+  };
+
   constructor(private configService: ConfigService) {
+    const environment: 'production' | 'integration' | 'sandbox' = configService.get(ConfigVariables.RIZE_ENVIRONMENT)
+
     this.rizeClient = new Rize(
       configService.get(ConfigVariables.RIZE_PROGRAM_ID),
       configService.get(ConfigVariables.RIZE_HMAC_KEY),
       {
-        environment: 'integration',
+        environment,
       },
     );
-    this.rizeBaseUrl = DEFAULT_HOST[this.rizeClient.environment];
+    this.rizeBaseUrl = DEFAULT_HOST[environment];
     this.rizeApiClient = this.createApiClient({
       host: this.rizeBaseUrl,
       basePath: DEFAULT_BASE_PATH,
       timeout: DEFAULT_TIMEOUT,
     });
-    this.rizeAuth = new Auth(
-      configService.get(ConfigVariables.RIZE_PROGRAM_ID),
-      configService.get(ConfigVariables.RIZE_HMAC_KEY),
-      this.rizeApiClient,
-    );
   }
 
   public async searchCustomers(userId: string): Promise<Customer | null> {
@@ -88,9 +92,7 @@ export class RizeApiService {
   ): Promise<ComplianceWorkflow> {
     const products: RizeList<Product> = await this.rizeClient.product.getList();
 
-    const product: Product = products.data.find(
-      (product) => product.compliance_plan_name === this.COMPLIANCE_PLAN_NAME,
-    );
+    const product: Product = products.data[0]
 
     return this.rizeClient.complianceWorkflow.create(
       customerId,
@@ -187,7 +189,7 @@ export class RizeApiService {
     customerId: string,
     adjustmentAmount: number,
   ): Promise<void> {
-    const token: string = this.rizeAuth.getToken();
+    const token: string = await this.getToken();
     const adjustmentTypesResponse: AxiosResponse<AdjustmentType[]> =
       await this.rizeApiClient.get('adjustment_types', {
         headers: {
@@ -231,4 +233,41 @@ export class RizeApiService {
 
     return axiosInstance;
   }
+
+    private async getToken() {
+        // Check if there's no token data or if the token is already expired
+        if (!this.tokenCache.data || this.tokenCache.isExpired(this.DEFAULT_TOKEN_MAX_AGE)) {
+            // Create Header and Payload objects
+            const header = {
+                'alg': 'HS512'
+            };
+
+            const payload = {
+                'sub': this.configService.get(ConfigVariables.RIZE_PROGRAM_ID),
+                'iat': Math.floor(+new Date() / 1000)
+            };
+
+            // Prep the objects for a JWT
+            const sHeader = JSON.stringify(header);
+            const sPayload = JSON.stringify(payload);
+
+            // Request for a new token
+            const sJwt = rs.KJUR.jws.JWS.sign('HS512', sHeader, sPayload, this.configService.get(ConfigVariables.RIZE_HMAC_KEY));
+
+            let response;
+            try {
+                response = await this.rizeApiClient.post(
+                    '/auth',
+                    undefined,
+                    { headers: { 'Authorization': sJwt } }
+                );
+            } catch (err) {
+                return new Error();
+            }
+
+            this.tokenCache.data = response.data.token;
+            this.tokenCache.timestamp = new Date();
+        }
+        return this.tokenCache.data;
+    }
 }

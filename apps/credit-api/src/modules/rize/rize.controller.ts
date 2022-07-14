@@ -26,12 +26,10 @@ import {
 } from './rize.dto';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
-  COLLATERAL_DEPOSITED_EXCHANGE,
   MARGIN_CALL_COMPLETED_EXCHANGE,
   MARGIN_CALL_STARTED_EXCHANGE,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
-import { CreateDepositDto } from '../collateral/collateral.dto';
 
 @Controller('v1/rize')
 export class RizeController {
@@ -94,6 +92,7 @@ export class RizeController {
   }
 }
 
+@Controller()
 export class RizeQueueController {
   constructor(private rizeService: RizeService) {}
 

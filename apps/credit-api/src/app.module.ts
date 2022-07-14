@@ -21,6 +21,7 @@ import { CollateralModule } from './modules/collateral/collateral.module';
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.INTERNAL_API_URL,
+        ConfigVariables.RIZE_ENVIRONMENT,
         ConfigVariables.RIZE_PROGRAM_ID,
         ConfigVariables.RIZE_HMAC_KEY,
         ConfigVariables.QUEUE_URL,

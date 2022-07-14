@@ -98,7 +98,7 @@ export class RizeService {
 
     const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
     const emailAddressResponse: GetEmailAddressResponse =
-      await this.internalApiService.getUserEmailAddress(userId);
+     await this.internalApiService.getUserEmailAddress(userId);
 
     const customerId: string =
       existingCustomer !== null
@@ -107,7 +107,8 @@ export class RizeService {
             userId,
             emailAddressResponse.email,
           );
-
+          
+  
     await this.rizeApiService.addCustomerPii(
       customerId,
       emailAddressResponse.email,
