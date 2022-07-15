@@ -25,6 +25,7 @@ import {
   WithdrawalInitializeInternalError,
 } from './collateral_withdrawal.errors';
 
+const MAX_LTV = 30;
 @Injectable()
 export class CollateralWithdrawalService {
   constructor(
@@ -153,16 +154,50 @@ export class CollateralWithdrawalService {
       },
     ];
 
-    const userLtv = this.marginLtvService.calculateUsersLtv(
-      userId,
-      [credit],
-      liquidationLogs,
-      collaterals,
-      assetPrices,
-    );
-    console.log('juzr ltv', userLtv);
+    const assetPrice = assetPrices.find((a) => a.asset === asset);
 
-    return { maxAmount: 0 };
+    if (!assetPrice) {
+      Logger.error({
+        code: 'USER_MAX_WITHDRAWAL_ERROR',
+        message: `No asset price information for asset ${asset}`,
+        assetPrices,
+      });
+    }
+
+    const { collateralAllocation, collateralBalance, ltv, loanedBalance } =
+      this.marginLtvService.calculateUsersLtv(
+        userId,
+        [credit],
+        liquidationLogs,
+        collaterals,
+        assetPrices,
+      );
+
+    const desiredAsset = collateralAllocation.find(
+      (collateral) => collateral.asset === asset,
+    );
+    if (!desiredAsset) {
+      return { maxAmount: 0 };
+    }
+
+    // user has loaned too much
+    if (ltv > MAX_LTV) {
+      return { maxAmount: 0 };
+    }
+
+    // user hasn't loaned any money, they can withdraw everything
+    // can any of these be true without the other?
+    if (loanedBalance === 0 && ltv === 0) {
+      return { maxAmount: desiredAsset.assetAmount };
+    }
+
+    const maxAmountForMaxLtv = loanedBalance / (MAX_LTV / 100); // ltv is multiplied by 100 initially
+    const maxAvailableAmount = collateralBalance - maxAmountForMaxLtv;
+
+    return {
+      maxAmount:
+        Math.min(maxAvailableAmount, desiredAsset.price) / assetPrice.price,
+    };
   }
 
   public async withdrawUserCollateral(
