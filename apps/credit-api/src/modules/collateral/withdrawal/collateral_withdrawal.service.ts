@@ -156,6 +156,14 @@ export class CollateralWithdrawalService {
         collaterals,
         assetPrices,
       );
+    Logger.log({
+      code: 'COLLATERAL_WITHDRAW_MAXIMUM_AMOUNT',
+      message: `Info for user ${userId}`,
+      collateralAllocation,
+      collateralBalance,
+      ltv,
+      loanedBalance,
+    });
 
     const desiredAsset = collateralAllocation.find(
       (collateral) => collateral.asset === asset,

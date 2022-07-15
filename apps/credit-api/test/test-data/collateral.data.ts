@@ -55,3 +55,5 @@ export function createUserCollateral(userId: string) {
     },
   ];
 }
+export const defaultCollateralTotal =
+  BTC_STARTING_AMOUNT * BTC_PRICE + 10 * ETH_PRICE + 100 * SOL_PRICE + 22 * 1;
