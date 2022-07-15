@@ -7,7 +7,7 @@ import { AllExceptionsFilter } from '@archie-microservices/tracing';
 
 export async function createMicroservice(
   name: string,
-  module: unknown
+  module: unknown,
 ): Promise<INestApplication> {
   const app = await NestFactory.create(module, {
     logger: WinstonModule.createLogger({
