@@ -6,7 +6,6 @@ import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access-a
 import { GetCreditResponse } from '@archie-webapps/shared/data-access-archie-api/credit/api/get-credit';
 import { useCreateRizeUser } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-create-rize-user';
 import { useGetCredit } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-get-credit';
-import { useIssueCard } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-issue-card';
 import {
   MutationQueryResponse,
   QueryResponse,
@@ -23,7 +22,6 @@ import { CardScreenStyled } from './card-screen.styled';
 
 enum Stage {
   CREATE_USER,
-  ISSUE_CARD,
   COMPLETE,
 }
 
@@ -33,7 +31,6 @@ export const CardScreen: FC = () => {
   const [stage, setStage] = useState(Stage.CREATE_USER);
 
   const createUserQuery: MutationQueryResponse = useCreateRizeUser();
-  const issueCardQuery: MutationQueryResponse = useIssueCard();
   const getCreditQueryResponse: QueryResponse<GetCreditResponse> = useGetCredit();
   const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = useGetCollateralTotalValue();
 
@@ -44,29 +41,15 @@ export const CardScreen: FC = () => {
       }
 
       if (createUserQuery.state === RequestState.SUCCESS) {
-        setStage(Stage.ISSUE_CARD);
-      }
-    }
-  }, [stage, createUserQuery]);
-
-  useEffect(() => {
-    if (stage === Stage.ISSUE_CARD) {
-      if (issueCardQuery.state === RequestState.IDLE) {
-        issueCardQuery.mutate({});
-      }
-
-      if (issueCardQuery.state === RequestState.SUCCESS) {
         setStage(Stage.COMPLETE);
       }
     }
-  }, [stage, issueCardQuery]);
+  }, [stage, createUserQuery]);
 
   const getTitle = () => {
     switch (stage) {
       case Stage.CREATE_USER:
         return `${t('card_step.title.create')}`;
-      case Stage.ISSUE_CARD:
-        return `${t('card_step.title.issue')}`;
       case Stage.COMPLETE:
         return `${t('card_step.title.complete')}`;
     }
