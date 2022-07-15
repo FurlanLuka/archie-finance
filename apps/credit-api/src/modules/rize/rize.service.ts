@@ -11,11 +11,7 @@ import {
   DebitCardAccessToken,
   ComplianceWorkflow,
 } from './api/rize_api.interfaces';
-import {
-  TransactionResponse,
-  TransactionStatus,
-  TransactionType,
-} from './rize.interfaces';
+import { TransactionResponse } from './rize.interfaces';
 import { RizeFactoryService } from './factory/rize_factory.service';
 import { RizeValidatorService } from './validator/rize_validator.service';
 import { CARD_ACTIVATED_EXCHANGE } from '@archie/api/credit-api/constants';
@@ -39,10 +35,10 @@ export class RizeService {
       userId,
     );
     this.rizeValidatorService.validateCustomerExists(customer);
+
     const debitCard: DebitCard = await this.rizeApiService.getDebitCard(
       customer.uid,
     );
-    console.log(debitCard);
     this.rizeValidatorService.validateDebitCardExists(debitCard);
 
     const debitCardAccessToken: DebitCardAccessToken =
@@ -65,39 +61,31 @@ export class RizeService {
       await this.rizeApiService.getTransactions(customer.uid, page, limit);
 
     return transactions.map((txn: Transaction) => ({
-      status: <TransactionStatus>txn.status,
-      amount: txn.us_dollar_amount,
+      status: txn.status,
+      us_dollar_amount: txn.us_dollar_amount,
       created_at: txn.created_at,
       settled_at: txn.settled_at,
       description: txn.description,
-      type: <TransactionType>txn.type,
+      type: txn.type,
+      is_adjustment: txn.adjustment_uid !== null,
+      mcc: txn.mcc,
+      merchant_location: txn.merchant_location,
+      merchant_name: txn.merchant_name,
+      merchant_number: txn.merchant_number,
+      denial_reason: txn.denial_reason,
+      net_asset: txn.net_asset,
     }));
   }
 
-  public async createUser(_userId: string, userIp: string): Promise<void> {
-    const userId = 'auth0|aaaaaaa';
+  public async createUser(userId: string, userIp: string): Promise<void> {
     const existingCustomer: Customer | null =
       await this.rizeApiService.searchCustomers(userId);
     this.rizeValidatorService.validateCustomerDoesNotExist(existingCustomer);
 
-    // const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
-    // const emailAddressResponse: GetEmailAddressResponse =
-    //   await this.internalApiService.getUserEmailAddress(userId);
-    const kyc = {
-      firstName: 'Andraz',
-      lastName: 'Cuderman',
-      dateOfBirth: '1989-12-31',
-      addressCountry: 'US',
-      addressLocality: 'Moorpark',
-      addressPostalCode: '93021',
-      addressRegion: 'CA',
-      addressStreet: 'Los Angeles Avenue',
-      addressStreetNumber: '120',
-      phoneNumber: '5541232125',
-      phoneNumberCountryCode: '+1',
-      ssn: '324324225',
-    };
-    const emailAddressResponse = { email: 'andraz10@archie.finance' };
+    const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
+    const emailAddressResponse: GetEmailAddressResponse =
+      await this.internalApiService.getUserEmailAddress(userId);
+
     const customerId: string =
       existingCustomer !== null
         ? existingCustomer.uid

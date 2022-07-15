@@ -169,13 +169,14 @@ export class RizeApiService {
     page: number,
     limit: number,
   ): Promise<Transaction[]> {
-    const transactions: RizeList<Transaction> =
-      await this.rizeClient.transaction.getList({
+    const transactions: RizeList<Transaction> = <RizeList<Transaction>>(
+      (<unknown>await this.rizeClient.transaction.getList({
         customer_uid: [customerId],
         limit: limit,
         offset: page * limit,
         sort: 'created_at_desc',
-      });
+      }))
+    );
 
     return transactions.data;
   }

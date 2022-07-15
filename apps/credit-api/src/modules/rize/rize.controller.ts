@@ -20,15 +20,11 @@ import {
 import {
   CardActivatedDto,
   GetTransactionsQueryDto,
-  MarginCallCompletedDto,
-  MarginCallStartedDto,
   TransactionResponseDto,
 } from './rize.dto';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   CARD_ACTIVATED_EXCHANGE,
-  MARGIN_CALL_COMPLETED_EXCHANGE,
-  MARGIN_CALL_STARTED_EXCHANGE,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
 
