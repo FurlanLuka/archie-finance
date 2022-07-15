@@ -6,14 +6,18 @@ import {
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '@archie/api/credit-api/constants';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { Repository } from 'typeorm';
 import { Credit } from '../../credit/credit.entity';
 import { LiquidationLog } from '../../margin/liquidation_logs.entity';
 import { MarginLtvService } from '../../margin/ltv/margin_ltv.service';
-import { UsersLtv } from '../../margin/margin.interfaces';
 import { Collateral } from '../collateral.entity';
 import {
   CollateralWithdrawCompletedDto,
@@ -37,7 +41,7 @@ export class CollateralWithdrawalService {
     @InjectRepository(LiquidationLog)
     private liquidationLogsRepository: Repository<LiquidationLog>,
     private marginLtvService: MarginLtvService,
-    // private internalApiService: InternalApiService,
+    private internalApiService: InternalApiService,
     private amqpConnection: AmqpConnection,
   ) {}
 
@@ -130,29 +134,7 @@ export class CollateralWithdrawalService {
       userId,
     });
 
-    //  const assetPrices = await this.internalApiService.getAssetPrices();
-    const assetPrices = [
-      {
-        asset: 'BTC',
-        price: 19731.44,
-        currency: 'USD',
-      },
-      {
-        asset: 'ETH',
-        price: 1080.76,
-        currency: 'USD',
-      },
-      {
-        asset: 'SOL',
-        price: 33.78,
-        currency: 'USD',
-      },
-      {
-        asset: 'USDC',
-        price: 1.003,
-        currency: 'USD',
-      },
-    ];
+    const assetPrices = await this.internalApiService.getAssetPrices();
 
     const assetPrice = assetPrices.find((a) => a.asset === asset);
 
@@ -162,6 +144,8 @@ export class CollateralWithdrawalService {
         message: `No asset price information for asset ${asset}`,
         assetPrices,
       });
+
+      throw new NotFoundException();
     }
 
     const { collateralAllocation, collateralBalance, ltv, loanedBalance } =
@@ -211,13 +195,16 @@ export class CollateralWithdrawalService {
         userId,
         asset,
       });
+      const { maxAmount } = await this.getUserMaxWithdrawalAmount(
+        userId,
+        asset,
+      );
 
-      if (!userCollateral) {
-        throw new NotFoundException('No collateral in the desired asset');
-      }
-
-      if (userCollateral.amount < withdrawalAmount) {
-        throw new NotFoundException('Not enough amount');
+      if (maxAmount < withdrawalAmount) {
+        throw new BadRequestException({
+          code: 'COLLATERAL_WITHDRAW_AMOUNT_ERROR',
+          message: 'Not enough amount',
+        });
       }
 
       Logger.log({
