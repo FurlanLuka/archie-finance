@@ -23,6 +23,7 @@ export async function createMicroservice(
       ],
     }),
   });
+  await Openapi.generate(app);
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
@@ -30,9 +31,7 @@ export async function createMicroservice(
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors();
 
-  await app.listen(3000);
-
-  await Openapi.generate(app);
+  await app.listen(80);
 
   return app;
 }

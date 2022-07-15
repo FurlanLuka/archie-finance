@@ -149,7 +149,7 @@
             }
           },
           "404": {
-            "description": "Not Found"
+            "description": "DEPOSIT_ADDRESS_UNKNOWN_ASSET"
           }
         },
         "security": [
@@ -166,141 +166,9 @@
         "responses": {
           "201": {
             "description": ""
-          }
-        }
-      }
-    },
-    "/v1/collateral": {
-      "get": {
-        "operationId": "CollateralController_getCollateral",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CollateralDto"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/collateral/value": {
-      "get": {
-        "operationId": "CollateralController_getUserCollateralValue",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CollateralValueDto"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/collateral/value/total": {
-      "get": {
-        "operationId": "CollateralController_getUserTotalCollateralValue",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetTotalCollateralValueResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/internal/collateral/{userId}": {
-      "get": {
-        "operationId": "InternalCollateralController_getCollateral",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CollateralDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/internal/collateral/value/{userId}": {
-      "get": {
-        "operationId": "InternalCollateralController_getUserCollateralValue",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CollateralValueDto"
-                  }
-                }
-              }
-            }
+          },
+          "500": {
+            "description": "FIREBLOCKS_WEBHOOK_ERROR"
           }
         }
       }
@@ -457,6 +325,9 @@
           },
           "400": {
             "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
+          },
+          "404": {
+            "description": "ERR_CREDIT_NOT_FOUND"
           }
         }
       }
@@ -623,28 +494,6 @@
         ]
       }
     },
-    "/v1/rize/users/cards": {
-      "post": {
-        "operationId": "RizeController_createCard",
-        "parameters": [],
-        "responses": {
-          "204": {
-            "description": ""
-          },
-          "404": {
-            "description": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
-          },
-          "409": {
-            "description": "ERR_DEBIT_CARD_ALREADY_EXISTS"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
     "/v1/rize/users/cards/image": {
       "get": {
         "operationId": "RizeController_getVirtualCard",
@@ -654,7 +503,7 @@
             "description": "Debit card image"
           },
           "404": {
-            "description": "ERR_DEBIT_CARD_DOES_NOT_EXIST"
+            "description": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
           }
         },
         "security": [
@@ -693,6 +542,141 @@
         ]
       }
     },
+    "/v1/collateral": {
+      "get": {
+        "operationId": "CollateralController_getCollateral",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CollateralDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/collateral/value": {
+      "get": {
+        "operationId": "CollateralController_getUserCollateralValue",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CollateralValueDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/collateral/value/total": {
+      "get": {
+        "operationId": "CollateralController_getUserTotalCollateralValue",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetTotalCollateralValueResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/internal/collateral/{userId}": {
+      "get": {
+        "operationId": "InternalCollateralController_getCollateral",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CollateralDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/collateral/value/{userId}": {
+      "get": {
+        "operationId": "InternalCollateralController_getUserCollateralValue",
+        "parameters": [
+          {
+            "name": "userId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CollateralValueDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/onboarding": {
       "get": {
         "operationId": "OnboardingController_getOnboardingRecord",
@@ -714,30 +698,6 @@
             "bearer": []
           }
         ]
-      }
-    },
-    "/internal/onboarding/complete": {
-      "post": {
-        "operationId": "InternalOnboardingController_completeOnboardingStage",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OnboardingDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": ""
-          },
-          "400": {
-            "description": "Onboarding already completed"
-          }
-        }
       }
     },
     "/v1/kyc": {
@@ -1013,7 +973,11 @@
             "type": "string"
           }
         },
-        "required": ["asset", "price", "currency"]
+        "required": [
+          "asset",
+          "price",
+          "currency"
+        ]
       },
       "GetDepositAddressResponseDto": {
         "type": "object",
@@ -1022,43 +986,9 @@
             "type": "string"
           }
         },
-        "required": ["address"]
-      },
-      "CollateralDto": {
-        "type": "object",
-        "properties": {
-          "asset": {
-            "type": "string"
-          },
-          "amount": {
-            "type": "number"
-          }
-        },
-        "required": ["asset", "amount"]
-      },
-      "CollateralValueDto": {
-        "type": "object",
-        "properties": {
-          "asset": {
-            "type": "string"
-          },
-          "assetAmount": {
-            "type": "number"
-          },
-          "price": {
-            "type": "number"
-          }
-        },
-        "required": ["asset", "assetAmount", "price"]
-      },
-      "GetTotalCollateralValueResponseDto": {
-        "type": "object",
-        "properties": {
-          "value": {
-            "type": "number"
-          }
-        },
-        "required": ["value"]
+        "required": [
+          "address"
+        ]
       },
       "GetAssetListResponseDto": {
         "type": "object",
@@ -1075,7 +1005,11 @@
           },
           "network": {
             "type": "string",
-            "enum": ["ERC20", "SOL", "BTC"]
+            "enum": [
+              "ERC20",
+              "SOL",
+              "BTC"
+            ]
           },
           "ltv": {
             "type": "number"
@@ -1102,7 +1036,10 @@
             "type": "number"
           }
         },
-        "required": ["totalCredit", "availableCredit"]
+        "required": [
+          "totalCredit",
+          "availableCredit"
+        ]
       },
       "StartPhoneVerificationResponseDto": {
         "type": "object",
@@ -1114,7 +1051,10 @@
             "type": "string"
           }
         },
-        "required": ["verificationId", "status"]
+        "required": [
+          "verificationId",
+          "status"
+        ]
       },
       "FinishPhoneVerificationDto": {
         "type": "object",
@@ -1130,7 +1070,10 @@
             "type": "string"
           }
         },
-        "required": ["verificationId", "status"]
+        "required": [
+          "verificationId",
+          "status"
+        ]
       },
       "CreateUserResponseDto": {
         "type": "object",
@@ -1151,7 +1094,13 @@
             "type": "string"
           }
         },
-        "required": ["type", "user_id", "user_token", "user_data", "metadata"]
+        "required": [
+          "type",
+          "user_id",
+          "user_token",
+          "user_data",
+          "metadata"
+        ]
       },
       "IssueCardResponseDto": {
         "type": "object",
@@ -1239,7 +1188,12 @@
           },
           "status": {
             "type": "string",
-            "enum": ["queued", "pending", "settled", "failed"]
+            "enum": [
+              "queued",
+              "pending",
+              "settled",
+              "failed"
+            ]
           },
           "amount": {
             "type": "string"
@@ -1258,6 +1212,51 @@
           "amount",
           "settled_at",
           "created_at"
+        ]
+      },
+      "CollateralDto": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "asset",
+          "amount"
+        ]
+      },
+      "CollateralValueDto": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string"
+          },
+          "assetAmount": {
+            "type": "number"
+          },
+          "price": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "asset",
+          "assetAmount",
+          "price"
+        ]
+      },
+      "GetTotalCollateralValueResponseDto": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "value"
         ]
       },
       "GetOnboardingResponseDto": {
@@ -1290,18 +1289,6 @@
           "cardActivationStage",
           "completed"
         ]
-      },
-      "OnboardingDto": {
-        "type": "object",
-        "properties": {
-          "stage": {
-            "type": "string"
-          },
-          "userId": {
-            "type": "string"
-          }
-        },
-        "required": ["stage", "userId"]
       },
       "GetKycResponseDto": {
         "type": "object",
@@ -1478,7 +1465,9 @@
             "type": "boolean"
           }
         },
-        "required": ["isVerified"]
+        "required": [
+          "isVerified"
+        ]
       },
       "GetEmailAddressResponseDto": {
         "type": "object",
@@ -1487,7 +1476,9 @@
             "type": "string"
           }
         },
-        "required": ["email"]
+        "required": [
+          "email"
+        ]
       },
       "EmailWaitlistDto": {
         "type": "object",
@@ -1496,7 +1487,9 @@
             "type": "string"
           }
         },
-        "required": ["emailAddress"]
+        "required": [
+          "emailAddress"
+        ]
       },
       "CreateDto": {
         "type": "object",
@@ -1508,7 +1501,9 @@
             "type": "string"
           }
         },
-        "required": ["emailAddress"]
+        "required": [
+          "emailAddress"
+        ]
       },
       "GetWaitlistRecordResponseDto": {
         "type": "object",

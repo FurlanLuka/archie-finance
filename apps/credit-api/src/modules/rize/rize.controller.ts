@@ -15,10 +15,10 @@ import { ApiErrorResponse } from '@archie-microservices/openapi';
 import {
   CustomerAlreadyExists,
   ActiveCustomerDoesNotExist,
-  DebitCardAlreadyExists,
   DebitCardDoesNotExist,
 } from './rize.errors';
 import {
+  CardActivatedDto,
   GetTransactionsQueryDto,
   MarginCallCompletedDto,
   MarginCallStartedDto,
@@ -26,6 +26,7 @@ import {
 } from './rize.dto';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
+  CARD_ACTIVATED_EXCHANGE,
   MARGIN_CALL_COMPLETED_EXCHANGE,
   MARGIN_CALL_STARTED_EXCHANGE,
   SERVICE_QUEUE_NAME,
@@ -42,7 +43,7 @@ export class RizeController {
   @ApiErrorResponse([CustomerAlreadyExists])
   public async createUser(@Request() req): Promise<void> {
     // TODO: remove log
-    console.log(req.headers['x-forwarded-for']);
+    console.log('x-forwarded-for', req.headers['x-forwarded-for']);
 
     return this.rizeService.createUser(
       req.user.sub,
@@ -53,7 +54,7 @@ export class RizeController {
   @Get('users/cards/image')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([DebitCardDoesNotExist])
+  @ApiErrorResponse([DebitCardDoesNotExist, ActiveCustomerDoesNotExist])
   @ApiOkResponse({
     status: 200,
     description: 'Debit card image',
@@ -87,15 +88,21 @@ export class RizeController {
 export class RizeQueueController {
   constructor(private rizeService: RizeService) {}
 
-  @Subscribe(MARGIN_CALL_STARTED_EXCHANGE, SERVICE_QUEUE_NAME)
-  async marginCallStartedHandler(payload: MarginCallStartedDto): Promise<void> {
-    await this.rizeService.lockCard(payload.userId);
-  }
+  // TODO: uncomment once margin calls are implemented
+  // @Subscribe(MARGIN_CALL_STARTED_EXCHANGE, SERVICE_QUEUE_NAME)
+  // async marginCallStartedHandler(payload: MarginCallStartedDto): Promise<void> {
+  //   await this.rizeService.lockCard(payload.userId);
+  // }
+  //
+  // @Subscribe(MARGIN_CALL_COMPLETED_EXCHANGE, SERVICE_QUEUE_NAME)
+  // async marginCallCompletedHandler(
+  //   payload: MarginCallCompletedDto,
+  // ): Promise<void> {
+  //   await this.rizeService.unlockCard(payload.userId);
+  // }
 
-  @Subscribe(MARGIN_CALL_COMPLETED_EXCHANGE, SERVICE_QUEUE_NAME)
-  async marginCallCompletedHandler(
-    payload: MarginCallCompletedDto,
-  ): Promise<void> {
-    await this.rizeService.unlockCard(payload.userId);
+  @Subscribe(CARD_ACTIVATED_EXCHANGE, SERVICE_QUEUE_NAME)
+  async cardActivatedHandler(payload: CardActivatedDto): Promise<void> {
+    await this.rizeService.loadFunds(payload.userId, payload.customerId);
   }
 }

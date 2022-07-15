@@ -35,7 +35,14 @@ export class RizeService {
   ) {}
 
   public async getVirtualCard(userId: string): Promise<string> {
-    const debitCard: DebitCard = await this.rizeApiService.getDebitCard(userId);
+    const customer: Customer | null = await this.rizeApiService.searchCustomers(
+      userId,
+    );
+    this.rizeValidatorService.validateCustomerExists(customer);
+    const debitCard: DebitCard = await this.rizeApiService.getDebitCard(
+      customer.uid,
+    );
+    console.log(debitCard);
     this.rizeValidatorService.validateDebitCardExists(debitCard);
 
     const debitCardAccessToken: DebitCardAccessToken =
@@ -67,7 +74,8 @@ export class RizeService {
     }));
   }
 
-  public async createUser(userId: string, userIp: string): Promise<void> {
+  public async createUser(_userId: string, userIp: string): Promise<void> {
+    const userId = 'auth0|aaaaaaa';
     const existingCustomer: Customer | null =
       await this.rizeApiService.searchCustomers(userId);
     this.rizeValidatorService.validateCustomerDoesNotExist(existingCustomer);
@@ -85,12 +93,11 @@ export class RizeService {
       addressRegion: 'CA',
       addressStreet: 'Los Angeles Avenue',
       addressStreetNumber: '120',
-      phoneNumber: '5541232133',
+      phoneNumber: '5541232125',
       phoneNumberCountryCode: '+1',
-      ssn: '324324235',
+      ssn: '324324225',
     };
-    const emailAddressResponse = { email: 'andraz1@archie.finance' };
-    console.log(1);
+    const emailAddressResponse = { email: 'andraz10@archie.finance' };
     const customerId: string =
       existingCustomer !== null
         ? existingCustomer.uid
@@ -98,14 +105,12 @@ export class RizeService {
             userId,
             emailAddressResponse.email,
           );
-    console.log(2);
 
     await this.rizeApiService.addCustomerPii(
       customerId,
       emailAddressResponse.email,
       this.rizeFactoryService.createCustomerDetails(kyc),
     );
-    console.log(3);
 
     let complianceWorkflow: ComplianceWorkflow;
     try {
@@ -128,13 +133,9 @@ export class RizeService {
       complianceWorkflow.product_uid,
     );
 
-    const credit: GetCreditResponse = await this.creditService.getCredit(
-      userId,
-    );
-    await this.rizeApiService.loadFunds(customerId, credit.availableCredit);
-
     await this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
-      userId: userId,
+      userId,
+      customerId,
     });
   }
 
@@ -171,9 +172,20 @@ export class RizeService {
     }
   }
 
-  public async unlockCard(userId: string): Promise<void> {
-    const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
+  public async loadFunds(userId: string, customerId: string): Promise<void> {
+    const credit: GetCreditResponse = await this.creditService.getCredit(
       userId,
+    );
+
+    await this.rizeApiService.loadFunds(customerId, credit.availableCredit);
+  }
+
+  public async unlockCard(userId: string): Promise<void> {
+    const customer: Customer | null = await this.rizeApiService.searchCustomers(
+      userId,
+    );
+    const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
+      customer.uid,
     );
 
     if (debitCard !== null) {
@@ -182,8 +194,11 @@ export class RizeService {
   }
 
   public async lockCard(userId: string): Promise<void> {
-    const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
+    const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
+    );
+    const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
+      customer.uid,
     );
 
     if (debitCard !== null) {

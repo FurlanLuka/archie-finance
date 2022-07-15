@@ -39,3 +39,8 @@ export class LiquidationDto {
 export class MarginCallStartedDto {
   userId: string;
 }
+
+export class CardActivatedDto {
+  userId: string;
+  customerId: string;
+}

@@ -12,11 +12,6 @@ export class ActiveCustomerDoesNotExist extends NotFoundException {
   }
 }
 
-export class DebitCardAlreadyExists extends ConflictException {
-  constructor() {
-    super('ERR_DEBIT_CARD_ALREADY_EXISTS');
-  }
-}
 export class DebitCardDoesNotExist extends NotFoundException {
   constructor() {
     super('ERR_DEBIT_CARD_DOES_NOT_EXIST');

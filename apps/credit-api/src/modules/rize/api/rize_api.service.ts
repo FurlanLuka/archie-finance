@@ -43,8 +43,6 @@ export class RizeApiService {
     const environment: 'production' | 'integration' | 'sandbox' =
       configService.get(ConfigVariables.RIZE_ENVIRONMENT);
 
-    console.log(configService.get(ConfigVariables.RIZE_PROGRAM_ID));
-    console.log(configService.get(ConfigVariables.RIZE_ENVIRONMENT));
     this.rizeClient = new Rize(
       configService.get(ConfigVariables.RIZE_PROGRAM_ID),
       configService.get(ConfigVariables.RIZE_HMAC_KEY),
@@ -71,12 +69,20 @@ export class RizeApiService {
   }
 
   public async createCustomer(userId: string, email: string): Promise<string> {
-    const customer: Customer = await this.rizeClient.customer.create(
-      userId,
-      email,
+    const customer: AxiosResponse<Customer> = await this.rizeApiClient.post(
+      'customers',
+      {
+        external_uid: userId,
+        email,
+      },
+      {
+        headers: {
+          Authorization: await this.getToken(),
+        },
+      },
     );
 
-    return customer.uid;
+    return customer.data.uid;
   }
 
   public async addCustomerPii(
@@ -130,17 +136,9 @@ export class RizeApiService {
     await this.rizeClient.customerProduct.create(customerId, productId);
   }
 
-  public async createDebitCard(
-    userId: string,
-    customerId: string,
-    poolId,
-  ): Promise<DebitCard> {
-    return this.rizeClient.debitCard.create(userId, customerId, poolId);
-  }
-
-  public async getDebitCard(userId: string): Promise<DebitCard | null> {
+  public async getDebitCard(customerId: string): Promise<DebitCard | null> {
     const debitCards: RizeList<DebitCard> =
-      await this.rizeClient.debitCard.getList({ external_uid: userId });
+      await this.rizeClient.debitCard.getList({ customer_uid: [customerId] });
 
     return debitCards.data[0] ?? null;
   }
@@ -194,25 +192,20 @@ export class RizeApiService {
     customerId: string,
     adjustmentAmount: number,
   ): Promise<void> {
-    const token: string = await this.getToken();
     const adjustmentTypesResponse: AxiosResponse<RizeList<AdjustmentType>> =
       await this.rizeApiClient.get('adjustment_types', {
         headers: {
-          Authorization: token,
+          Authorization: await this.getToken(),
         },
       });
-    console.log('here5', JSON.stringify(adjustmentTypesResponse.data, null, 2));
-
     const increaseCreditAdjustmentType: AdjustmentType =
       adjustmentTypesResponse.data.data.find(
         (adjustmentType: AdjustmentType) =>
           adjustmentType.name === 'credit_limit_update_increase',
       );
 
-    console.log('here5', adjustmentTypesResponse);
-
-    await axios.post(
-      `${this.rizeBaseUrl}${DEFAULT_BASE_PATH}adjustments`,
+    await this.rizeApiClient.post(
+      `adjustments`,
       {
         customer_uid: customerId,
         usd_adjustment_amount: adjustmentAmount,
@@ -220,7 +213,7 @@ export class RizeApiService {
       },
       {
         headers: {
-          Authorization: token,
+          Authorization: await this.getToken(),
         },
       },
     );
@@ -231,14 +224,6 @@ export class RizeApiService {
       baseURL: `${host}${basePath}`,
       timeout: timeout,
     });
-
-    // axiosInstance.interceptors.response.use(undefined, (err) => {
-    //   throw {
-    //     status: err.response.status,
-    //     statusText: err.response.statusText,
-    //     data: err.response.data,
-    //   };
-    // });
 
     return axiosInstance;
   }
