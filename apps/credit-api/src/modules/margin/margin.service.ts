@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Credit } from '../credit/credit.entity';
-import { In, Repository } from 'typeorm';
+import { In, Repository, UpdateResult } from 'typeorm';
 import { LiquidationLog } from './liquidation_logs.entity';
 import { MarginCall } from './margin_calls.entity';
 import { UsersLtv } from './margin.interfaces';
@@ -12,6 +12,8 @@ import { InternalApiService } from '@archie-microservices/internal-api';
 import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { MARGIN_CHECK_REQUESTED_EXCHANGE } from '@archie/api/credit-api/constants';
+import { CreditService } from '../credit/credit.service';
+import { GetAssetListResponse } from '@archie-microservices/api-interfaces/asset_information';
 
 @Injectable()
 export class MarginService {
@@ -30,6 +32,7 @@ export class MarginService {
     private marginCallsService: MarginCallsService,
     private internalApiService: InternalApiService,
     private amqpConnection: AmqpConnection,
+    private creditService: CreditService,
   ) {}
 
   public async triggerMarginCheck(): Promise<void> {
@@ -104,6 +107,7 @@ export class MarginService {
             await this.marginLtvService.checkIfApproachingLtvLimits(
               usersLtv.userId,
               usersLtv.ltv,
+              usersLtv.userOnlyHasStableCoins,
             );
           }
         } else {
@@ -114,5 +118,107 @@ export class MarginService {
         }
       }),
     );
+  }
+
+  // TODO: calculate after margin call check
+  public async checkCreditLimit(userIds: string[]) {
+    const credits: Credit[] = await this.creditRepository.find({
+      where: {
+        userId: In(userIds),
+      },
+    });
+    const liquidationLogs: LiquidationLog[] =
+      await this.liquidationLogsRepository.find({
+        where: {
+          userId: In(userIds),
+        },
+      });
+    const collaterals: Collateral[] = await this.collateralRepository.find({
+      where: {
+        userId: In(userIds),
+      },
+    });
+    const assetPrices: GetAssetPricesResponse =
+      await this.internalApiService.getAssetPrices();
+
+    const userLtvs: UsersLtv[] = userIds.map((userId: string) =>
+      this.marginLtvService.calculateUsersLtv(
+        userId,
+        credits,
+        liquidationLogs,
+        collaterals,
+        assetPrices,
+      ),
+    );
+
+    const assetsList: GetAssetListResponse =
+      await this.internalApiService.getAssetList();
+    await Promise.all(
+      userLtvs.map((userLtv: UsersLtv) =>
+        this.adjustCreditLimit(userLtv, assetsList, credits),
+      ),
+    );
+  }
+
+  private async adjustCreditLimit(
+    usersLtv: UsersLtv,
+    assetList: GetAssetListResponse,
+    credits: Credit[],
+  ) {
+    const creditLimit: number = this.creditService.getCreditLimit(
+      usersLtv.collateralAllocation,
+      assetList,
+    );
+    const credit: Credit = credits.find(
+      (credit: Credit) => credit.userId === usersLtv.userId,
+    );
+
+    if (creditLimit > credit.totalCredit) {
+      await this.creditRepository
+        .createQueryBuilder('credit')
+        .update(Credit)
+        .where('userId = :userId', { userId: usersLtv.userId })
+        .set({
+          totalCredit: () => 'totalCredit + :creditIncrease',
+          availableCredit: () => 'availableCredit + :creditIncrease',
+        })
+        .setParameters({
+          creditIncrease: creditLimit - credit.totalCredit,
+        })
+        .execute();
+      // TODO: emit event and handle with rize - Adjustment
+    } else {
+      const creditLimitDecrease: number = credit.totalCredit - creditLimit;
+      const decreaseAmount: number =
+        creditLimitDecrease < credit.availableCredit
+          ? creditLimitDecrease
+          : credit.availableCredit;
+
+      const updatedResult: UpdateResult = await this.creditRepository
+        .createQueryBuilder('credit')
+        .update(Credit)
+        .where('userId = :userId AND availableCredit > :creditDecrease', {
+          userId: usersLtv.userId,
+          creditDecrease: decreaseAmount,
+        })
+        .set({
+          totalCredit: () => 'totalCredit - :creditDecrease',
+          availableCredit: () => 'availableCredit - :creditDecrease',
+        })
+        .setParameters({
+          creditDecrease: decreaseAmount,
+        })
+        .execute();
+
+      if (updatedResult.affected === 0) {
+        throw new InternalServerErrorException({
+          error: 'Credit could not be reduced',
+          userId: usersLtv.userId,
+          decreaseAmount: decreaseAmount,
+        });
+      }
+
+      // TODO: emit event and handle with rize - Adjustment
+    }
   }
 }

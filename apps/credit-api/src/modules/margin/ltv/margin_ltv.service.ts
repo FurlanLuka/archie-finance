@@ -41,6 +41,12 @@ export class MarginLtvService {
         assetPrices,
       );
 
+    const doesUserHaveOnlyUsdc: boolean =
+      usersCollateralValue.some(
+        (collateralValue) =>
+          collateralValue.asset !== 'USDC' && collateralValue.assetAmount > 0,
+      ) === false;
+
     const totalCollateralValue: number = usersCollateralValue.reduce(
       (collateralPrice: number, collateralValue: CollateralValue) =>
         collateralPrice + collateralValue.price,
@@ -70,11 +76,16 @@ export class MarginLtvService {
       collateralBalance: totalCollateralValue,
       loanedBalance: loanedBalance,
       collateralAllocation: usersCollateralValue,
+      userOnlyHasStableCoins: doesUserHaveOnlyUsdc,
     };
   }
 
-  public async checkIfApproachingLtvLimits(userId: string, ltv: number) {
-    if (ltv >= this.LTV_ALERT_LIMITS[0]) {
+  public async checkIfApproachingLtvLimits(
+    userId: string,
+    ltv: number,
+    userHasOnlyStableCoins: boolean,
+  ) {
+    if (ltv >= this.LTV_ALERT_LIMITS[0] && !userHasOnlyStableCoins) {
       const marginNotifications: MarginNotification | null =
         await this.marginNotificationsRepository.findOne({
           where: {
