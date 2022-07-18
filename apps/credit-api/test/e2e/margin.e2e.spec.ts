@@ -1,3 +1,4 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   ExecutionContext,
@@ -10,12 +11,16 @@ import { Connection, Repository } from 'typeorm';
 import { verifyAccessToken } from '../e2e-test-utils/mock.auth.utils';
 import { AuthGuard } from '@archie-microservices/auth0';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { LTV_LIMIT_APPROACHING_EXCHANGE, MARGIN_CALL_COMPLETED_EXCHANGE, MARGIN_CALL_STARTED_EXCHANGE } from '@archie/api/credit-api/constants';
+import {
+  LTV_LIMIT_APPROACHING_EXCHANGE,
+  MARGIN_CALL_COMPLETED_EXCHANGE,
+  MARGIN_CALL_STARTED_EXCHANGE,
+} from '../../../../libs/api/credit-api/constants/src';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MarginQueueController } from '../../src/modules/margin/margin.controller';
 import { Credit } from '../../src/modules/credit/credit.entity';
 import nock = require('nock');
-import { ConfigVariables } from '@archie/api/user-api/constants';
+import { ConfigVariables } from '../../../../libs/api/user-api/constants/src';
 import { ConfigService } from '@nestjs/config';
 import { MarginNotification } from '../../src/modules/margin/margin_notifications.entity';
 import { MarginCall } from '../../src/modules/margin/margin_calls.entity';

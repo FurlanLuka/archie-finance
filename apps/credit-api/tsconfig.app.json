@@ -3,9 +3,7 @@
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "module": "commonjs",
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
     "emitDecoratorMetadata": true,
     "target": "es2015"
   },
@@ -14,10 +12,7 @@
     "**/*.spec.ts",
     "**/*.test.ts",
     "**/__data__",
-    "**/__mocks__",
-    "test"
+    "**/__mocks__"
   ],
-  "include": [
-    "**/*.ts"
-  ]
+  "include": ["**/*.ts"]
 }

@@ -1,4 +1,4 @@
-import { GetAssetPriceResponse } from '@archie-microservices/api-interfaces/src/asset_price';
+import { GetAssetPriceResponse } from '@archie-microservices/api-interfaces/asset_price';
 
 export const SOL_PRICE = 0.28;
 export const BTC_PRICE = 26;
