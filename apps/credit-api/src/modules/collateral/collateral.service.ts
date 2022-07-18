@@ -43,6 +43,7 @@ export class CollateralService {
       destinationAddress,
       status,
     });
+
     const queryRunner = this.dataSource.createQueryRunner();
 
     const collateralDeposit: CollateralDeposit | null =

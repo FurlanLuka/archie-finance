@@ -26,9 +26,9 @@ export class MarginNotification {
   @Column({ type: 'boolean' })
   active: boolean;
 
-  @CreateDateColumn({ select: false, type: 'timestamp with time zone' })
+  @CreateDateColumn({ select: false })
   createdAt: Date;
 
-  @UpdateDateColumn({ select: false, type: 'timestamp with time zone' })
+  @UpdateDateColumn({ select: false })
   updatedAt: Date;
 }

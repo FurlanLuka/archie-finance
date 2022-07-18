@@ -1,7 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 import axios, { AxiosResponse } from 'axios';
 import { InternalApiConfig } from './internal-api.interfaces';
-import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
+import {
+  GetAssetPriceResponse,
+  GetAssetPricesResponse,
+} from '@archie-microservices/api-interfaces/asset_price';
 import {
   GetCollateralValueResponse,
   GetUserCollateral,
@@ -49,6 +52,14 @@ export class InternalApiService {
   public async getAssetPrices(): Promise<GetAssetPricesResponse> {
     const response: AxiosResponse<GetAssetPricesResponse> = await axios.get(
       `${this.config.internalApiUrl}/internal/asset_price`,
+    );
+
+    return response.data;
+  }
+
+  public async getAssetPrice(asset: string): Promise<GetAssetPriceResponse> {
+    const response: AxiosResponse<GetAssetPriceResponse> = await axios.get(
+      `${this.config.internalApiUrl}/internal/asset_price/${asset}`,
     );
 
     return response.data;

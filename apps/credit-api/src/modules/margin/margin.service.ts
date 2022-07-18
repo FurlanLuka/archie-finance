@@ -14,11 +14,14 @@ import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { MARGIN_CHECK_REQUESTED_EXCHANGE } from '@archie/api/credit-api/constants';
 import { CreditService } from '../credit/credit.service';
 import { GetAssetListResponse } from '@archie-microservices/api-interfaces/asset_information';
+import { MarginCollateralCheck } from './margin_collateral_check.entity';
+import { MarginCollateralValueCheckService } from './collateral_value_checks/margin_collaterall_value_checks.service';
 
 @Injectable()
 export class MarginService {
   LTV_LIMIT = 75;
   QUEUE_EVENTS_LIMIT = 10000;
+  REQUIRED_COLLATERAL_VALUE_CHANGE_TO_CALCULATE_MARGIN = 10;
 
   constructor(
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
@@ -33,6 +36,7 @@ export class MarginService {
     private internalApiService: InternalApiService,
     private amqpConnection: AmqpConnection,
     private creditService: CreditService,
+    private marginCollateralCheckService: MarginCollateralValueCheckService,
   ) {}
 
   public async triggerMarginCheck(): Promise<void> {
@@ -56,6 +60,12 @@ export class MarginService {
   }
 
   public async checkMargin(userIds: string[]): Promise<void> {
+    const collaterals: Collateral[] = await this.collateralRepository.find({
+      where: {
+        userId: In(userIds),
+      },
+    });
+
     const credits: Credit[] = await this.creditRepository.find({
       where: {
         userId: In(userIds),
@@ -73,11 +83,7 @@ export class MarginService {
           userId: In(userIds),
         },
       });
-    const collaterals: Collateral[] = await this.collateralRepository.find({
-      where: {
-        userId: In(userIds),
-      },
-    });
+
     const assetPrices: GetAssetPricesResponse =
       await this.internalApiService.getAssetPrices();
 
@@ -91,8 +97,13 @@ export class MarginService {
       ),
     );
 
+    const filteredUsersByValueChange: UsersLtv[] =
+      await this.marginCollateralCheckService.filterUsersByCollateralValueChange(
+        userLtvs,
+      );
+
     await Promise.all(
-      userLtvs.map(async (usersLtv: UsersLtv) => {
+      filteredUsersByValueChange.map(async (usersLtv: UsersLtv) => {
         const alreadyActiveMarginCall: MarginCall | undefined =
           activeMarginCalls.find(
             (marginCall) => marginCall.userId === usersLtv.userId,
@@ -117,6 +128,10 @@ export class MarginService {
           );
         }
       }),
+    );
+
+    await this.marginCollateralCheckService.updateMarginChecks(
+      filteredUsersByValueChange,
     );
   }
 
@@ -197,7 +212,7 @@ export class MarginService {
       const updatedResult: UpdateResult = await this.creditRepository
         .createQueryBuilder('credit')
         .update(Credit)
-        .where('userId = :userId AND availableCredit > :creditDecrease', {
+        .where('userId = :userId AND availableCredit >= :creditDecrease', {
           userId: usersLtv.userId,
           creditDecrease: decreaseAmount,
         })
@@ -212,7 +227,7 @@ export class MarginService {
 
       if (updatedResult.affected === 0) {
         throw new InternalServerErrorException({
-          error: 'Credit could not be reduced',
+          error: 'Credit line could not be decreased',
           userId: usersLtv.userId,
           decreaseAmount: decreaseAmount,
         });
