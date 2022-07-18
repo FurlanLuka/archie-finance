@@ -4,6 +4,9 @@
   "btn_yes": "Yes",
   "btn_cancel": "Cancel",
   "btn_continue": "Continue",
+  "btn_add": "Add",
+  "btn_claim": "Claim",
+  "ltv": "LTV",
   "steps_indicator": {
     "first": "Sign up",
     "second": "Collateralize",
@@ -100,11 +103,6 @@
     "img_alt": "Collateral received",
     "btn": "Collateralize more"
   },
-  "dashboard": {
-    "title": "Hi, {{name}}",
-    "subtitle": "Member since {{date}}",
-    "reveal_card_modal": "Show card details?"
-  },
   "setup_2fa_banner": {
     "title": "Protect your funds with 2FA",
     "text": "Setup Multi-Factor Authentication using your authenticator app.",
@@ -114,5 +112,15 @@
     "title": "You have reached margin call",
     "text": "The value of your ArchCredit collateral has dropped and you have reached an LTV rate above 75%. Action is required to prevent liquidiating a portion of your collateral. We recommend sending more collateral to your ArchCredit; paying down your balance through your bank may take up to 3 days. Archie will automatically undergo a partial lidquidation if your LTV reaches 90%",
     "btn": "Cure"
+  },
+  "dashboard_wallet_and_collateral": {
+    "title": "Hi, {{name}}",
+    "subtitle": "Member since {{date}}",
+    "reveal_card_modal": "Show card details?"
+  },
+  "dashboard_collateral": {
+    "table_section": {
+      "title": "My Wallet"
+    }
   }
 }

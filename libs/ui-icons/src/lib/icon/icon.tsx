@@ -16,6 +16,7 @@ export type IconName =
   | 'indicator-done'
   | 'logo'
   | 'logout'
+  | 'options-dots'
   | 'paper'
   | 'settings'
   | 'solana'

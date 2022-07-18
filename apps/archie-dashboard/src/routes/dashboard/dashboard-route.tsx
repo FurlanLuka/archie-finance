@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature-collateral';
 import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature-history';
 import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature-rewards';
 import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature-settings';
@@ -36,6 +37,7 @@ export const DashboardRoute: FC = () => {
             <Navigation />
             <Routes>
               <Route path="/" element={<WalletAndCollateralScreen />} />
+              <Route path="/collateral" element={<CollateralScreen />} />
               <Route path="/rewards" element={<RewardsScreen />} />
               <Route path="/history" element={<HistoryScreen />} />
               <Route path="/settings" element={<SettingsScreen />} />

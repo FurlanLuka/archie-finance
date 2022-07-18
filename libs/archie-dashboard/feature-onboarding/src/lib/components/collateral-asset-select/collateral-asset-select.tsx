@@ -1,12 +1,11 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ParagraphXS } from '@archie-webapps/ui-design-system';
+import { CollateralCurrency, ParagraphXS } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
 import { CollateralAsset, collateralAssets } from '@archie-webapps/util-constants';
 
-import { CollateralCurrency } from './blocks/collateral-currency/collateral-currency';
-import * as Styled from './collateral-asset-select.styled';
+import { CollateralCurrencySelect, CollateralDeposit } from './collateral-asset-select.styled';
 
 interface InputSelectProps {
   selectedAsset?: CollateralAsset;
@@ -25,7 +24,7 @@ export const CollateralAssetSelect: FC<InputSelectProps> = ({ selectedAsset, set
   };
 
   return (
-    <Styled.CollateralCurrencySelect>
+    <CollateralCurrencySelect>
       <ParagraphXS weight={700}>{t('collateralization_step.inputs.input_select_label')}</ParagraphXS>
       <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
         {selectedAsset ? (
@@ -38,12 +37,12 @@ export const CollateralAssetSelect: FC<InputSelectProps> = ({ selectedAsset, set
       {selectOpen && (
         <div className="select-list">
           {collateralAssets.map((asset) => (
-            <Styled.CollateralDeposit key={asset.id} onClick={() => handleSelect(asset)}>
+            <CollateralDeposit key={asset.id} onClick={() => handleSelect(asset)}>
               <CollateralCurrency icon={asset.icon} name={asset.name} short={asset.short} />
-            </Styled.CollateralDeposit>
+            </CollateralDeposit>
           ))}
         </div>
       )}
-    </Styled.CollateralCurrencySelect>
+    </CollateralCurrencySelect>
   );
 };
