@@ -15,10 +15,12 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import {
   ConfigVariables,
+  CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,
   MARGIN_CHECK_REQUESTED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
 import { CreditModule } from '../credit/credit.module';
 import { MarginCollateralValueCheckModule } from './collateral_value_checks/margin_collateral_value_cheks.module';
+import { CreditLimitModule } from './credit_limit/credit_limit.module';
 
 @Module({
   controllers: [MarginQueueController, MarginInternalController],
@@ -28,15 +30,18 @@ import { MarginCollateralValueCheckModule } from './collateral_value_checks/marg
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        exchanges: [MARGIN_CHECK_REQUESTED_EXCHANGE],
+        exchanges: [
+          MARGIN_CHECK_REQUESTED_EXCHANGE,
+          CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,
+        ],
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
       }),
     }),
     MarginLtvModule,
     MarginCallsModule,
-    CreditModule,
     MarginCollateralValueCheckModule,
+    CreditLimitModule,
   ],
   providers: [MarginService],
   exports: [MarginService],
