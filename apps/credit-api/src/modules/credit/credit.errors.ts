@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 export class CreateCreditMinimumCollateralError extends BadRequestException {
   constructor(minimumCredit: number) {
@@ -6,5 +6,11 @@ export class CreateCreditMinimumCollateralError extends BadRequestException {
       'ERR_CREATE_CREDIT_MINIMUM_COLLATERAL',
       `Collateralized assets must be worth at least ${minimumCredit} USD`,
     );
+  }
+}
+
+export class CreditNotFoundError extends NotFoundException {
+  constructor() {
+    super('ERR_CREDIT_NOT_FOUND');
   }
 }

@@ -49,6 +49,13 @@ spec:
                 name: archie-credit-api-service
                 port:
                   number: 80
+          - path: /internal/collateral
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-credit-api-service
+                port:
+                  number: 80
           ## Asset price api service
           - path: /internal/asset_price
             pathType: Prefix
@@ -58,13 +65,6 @@ spec:
                 port:
                   number: 80
           ## Collateral api service
-          - path: /internal/collateral
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-credit-api-service
-                port:
-                  number: 80
           - path: /internal/asset_information
             pathType: Prefix
             backend:

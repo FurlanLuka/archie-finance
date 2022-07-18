@@ -12,7 +12,10 @@ import {
   GetAssetListResponse,
   AssetInformation,
 } from '@archie-microservices/api-interfaces/asset_information';
-import { CreateCreditMinimumCollateralError } from './credit.errors';
+import {
+  CreateCreditMinimumCollateralError,
+  CreditNotFoundError,
+} from './credit.errors';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { COLLATERAL_RECEIVED_EXCHANGE } from '@archie/api/credit-api/constants';
 
@@ -105,7 +108,7 @@ export class CreditService {
     });
 
     if (credit === null) {
-      throw new NotFoundException();
+      throw new CreditNotFoundError();
     }
 
     return {

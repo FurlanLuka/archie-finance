@@ -8,6 +8,7 @@ import { CreditModule } from './modules/credit/credit.module';
 import { InternalApiModule } from '@archie-microservices/internal-api';
 import { AptoModule } from './modules/apto/apto.module';
 import { MarginModule } from './modules/margin/margin.module';
+import { RizeModule } from './modules/rize/rize.module';
 import { CollateralModule } from './modules/collateral/collateral.module';
 import { CollateralWithdrawalModule } from './modules/collateral/withdrawal/collateral_withdrawal.module';
 
@@ -22,6 +23,9 @@ import { CollateralWithdrawalModule } from './modules/collateral/withdrawal/coll
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.INTERNAL_API_URL,
+        ConfigVariables.RIZE_ENVIRONMENT,
+        ConfigVariables.RIZE_PROGRAM_ID,
+        ConfigVariables.RIZE_HMAC_KEY,
         ConfigVariables.QUEUE_URL,
       ],
       parse: (_configVariable, value) => value,
@@ -60,6 +64,7 @@ import { CollateralWithdrawalModule } from './modules/collateral/withdrawal/coll
     CreditModule,
     AptoModule,
     MarginModule,
+    RizeModule,
     CollateralModule,
     CollateralWithdrawalModule,
   ],

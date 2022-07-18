@@ -13,7 +13,6 @@ import {
 import {
   COLLATERAL_RECEIVED_EXCHANGE,
   CARD_ACTIVATED_EXCHANGE,
-  PHONE_NUMBER_VERIFIED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
 import { Subscribe } from '@archie/api/utils/queue';
@@ -71,16 +70,6 @@ export class OnboardingQueueController {
     await this.onboardingService.completeOnboardingStage(
       payload.userId,
       'cardActivationStage',
-    );
-  }
-
-  @Subscribe(PHONE_NUMBER_VERIFIED_EXCHANGE, SERVICE_QUEUE_NAME)
-  async phoneNumberVerifiedEventHandler(
-    payload: CompleteOnboardingStageDto,
-  ): Promise<void> {
-    await this.onboardingService.completeOnboardingStage(
-      payload.userId,
-      'phoneVerificationStage',
     );
   }
 }
