@@ -2,16 +2,16 @@ import { useQueryClient } from 'react-query';
 
 import { useExtendedMutation } from '../../helper-hooks';
 import { DefaultVariables } from '../../helpers';
-import { MutationQueryResponse } from '../../interface';
 import { ONBOARDING_RECORD_QUERY_KEY } from '../../onboarding/hooks/use-get-onboarding';
-import { issueCard } from '../api/issue-card';
+import { MutationQueryResponse } from '../../interface';
+import { createRizeUser } from '../api/create-rize-user';
 
-export const useIssueCard = (): MutationQueryResponse => {
+export const useCreateRizeUser = (): MutationQueryResponse => {
   const queryClient = useQueryClient();
 
-  return useExtendedMutation<unknown, DefaultVariables>('apto_card_issue', issueCard, {
+  return useExtendedMutation<unknown, DefaultVariables>('rize_user_create', createRizeUser, {
     onSuccess: () => {
-      console.log('apto card issue creation successful!!');
+      console.log('Rize user creation successful!!');
       queryClient.invalidateQueries(ONBOARDING_RECORD_QUERY_KEY);
     },
   });

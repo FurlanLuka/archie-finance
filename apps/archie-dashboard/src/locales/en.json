@@ -82,8 +82,7 @@
   },
   "card_step": {
     "title": {
-      "create": "We're getting things in order...",
-      "issue": "Issuing credit card...",
+      "create": "Issuing credit card...",
       "complete": "Your Archie Card is ready!"
     },
     "subtitle": "You have submitted {{total_value}} worth of collateral and have a {{credit_value}} credit limit. Make sure <br /> your email is verified before continuing.",
