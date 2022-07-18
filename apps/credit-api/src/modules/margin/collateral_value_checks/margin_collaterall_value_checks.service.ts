@@ -28,11 +28,18 @@ export class MarginCollateralValueCheckService {
         marginCollateralChecks.find(
           (marginCheck) => marginCheck.userId === usersLtv.userId,
         );
+
       const valueChangeInPercentage: number =
         this.getPercentageDifferenceBetweenValues(
-          usersLtv?.collateralBalance ?? 0,
-          marginCollateralCheck.checked_at_collateral_balance,
+          usersLtv.collateralBalance,
+          marginCollateralCheck?.checked_at_collateral_balance ?? 0,
         );
+
+      console.log(
+        valueChangeInPercentage,
+        usersLtv.collateralBalance,
+        marginCollateralCheck?.checked_at_collateral_balance ?? 0,
+      );
 
       return (
         valueChangeInPercentage >=
@@ -61,7 +68,7 @@ export class MarginCollateralValueCheckService {
     previousValue: number,
   ): number {
     return (
-      (Math.abs(newValue - previousValue) / (newValue + previousValue) / 2) *
+      (Math.abs(newValue - previousValue) / ((newValue + previousValue) / 2)) *
       100
     );
   }

@@ -37,8 +37,9 @@ import {
 import { UUID_REGEX } from '../e2e-test-utils/regex.utils';
 import { closeToMatcher } from '../e2e-test-utils/jest.utils';
 import { Collateral } from '../../src/modules/collateral/collateral.entity';
+import { MarginCollateralCheck } from '../../src/modules/margin/margin_collateral_check.entity';
 
-describe('MarginQueueController (e2e)', () => {
+describe.only('MarginQueueController (e2e)', () => {
   let app: INestApplication;
   let module: TestingModule;
 
@@ -48,6 +49,7 @@ describe('MarginQueueController (e2e)', () => {
   let marginCallRepository: Repository<MarginCall>;
   let liquidationLogsRepository: Repository<LiquidationLog>;
   let collateralRepository: Repository<Collateral>;
+  let marginCollateralCheckRepository: Repository<MarginCollateralCheck>;
 
   const marginNotificationLtv: number[] = [65, 70, 73];
   const userId: string = 'userId';
@@ -89,6 +91,9 @@ describe('MarginQueueController (e2e)', () => {
     marginCallRepository = app.get(getRepositoryToken(MarginCall));
     liquidationLogsRepository = app.get(getRepositoryToken(LiquidationLog));
     collateralRepository = app.get(getRepositoryToken(Collateral));
+    marginCollateralCheckRepository = app.get(
+      getRepositoryToken(MarginCollateralCheck),
+    );
 
     nock(configService.get(ConfigVariables.INTERNAL_API_URL))
       .get(`/internal/asset_price`)
@@ -577,6 +582,58 @@ describe('MarginQueueController (e2e)', () => {
       expect(amqpConnectionPublish).toBeCalledTimes(0);
     });
 
-    it.skip('Should not do anything in case collateral value did not change for at least 10%', async () => {});
+    it('Should not do anything in case collateral value did not change for at least 10%', async () => {
+      const collateralBalance: number = 100;
+      await marginCollateralCheckRepository.save({
+        checked_at_collateral_balance: collateralBalance,
+        userId,
+      });
+      const ltv = 85;
+      await creditRepository.save({
+        userId,
+        totalCredit: collateralBalance,
+        availableCredit: collateralBalance - ltv,
+      });
+
+      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+
+      expect(amqpConnectionPublish).toBeCalledTimes(0);
+    });
+
+    it('Should not do anything in case collateral value did not change for at least 10%', async () => {
+      const collateralBalance: number = 100;
+      await marginCollateralCheckRepository.save({
+        checked_at_collateral_balance: collateralBalance - 9,
+        userId,
+      });
+      const ltv = 85;
+      await creditRepository.save({
+        userId,
+        totalCredit: collateralBalance,
+        availableCredit: collateralBalance - ltv,
+      });
+
+      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+
+      expect(amqpConnectionPublish).toBeCalledTimes(0);
+    });
+
+    it('Should check for the margin call in case collateral value changes by at least 10%', async () => {
+      const collateralBalance: number = 100;
+      await marginCollateralCheckRepository.save({
+        checked_at_collateral_balance: collateralBalance - 10,
+        userId,
+      });
+      const ltv = 85;
+      await creditRepository.save({
+        userId,
+        totalCredit: collateralBalance,
+        availableCredit: collateralBalance - ltv,
+      });
+
+      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+
+      expect(amqpConnectionPublish).toBeCalledTimes(1);
+    });
   });
 });
