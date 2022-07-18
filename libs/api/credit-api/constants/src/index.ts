@@ -55,6 +55,21 @@ export const MARGIN_CHECK_REQUESTED_EXCHANGE = {
   type: 'fanout',
 };
 
+export const CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE = {
+  name: 'credit.limit.adjust_requested.fx',
+  type: 'fanout',
+};
+
+export const CREDIT_LIMIT_DECREASED = {
+  name: 'credit.limit.adjusted.fx',
+  type: 'fanout',
+};
+
+export const CREDIT_LIMIT_INCREASED = {
+  name: 'credit.limit.adjusted.fx',
+  type: 'fanout',
+};
+
 export const COLLATERAL_DEPOSITED_EXCHANGE = {
   name: 'credit.collateral.deposited.fx',
   type: 'fanout',
