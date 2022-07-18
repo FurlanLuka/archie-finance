@@ -158,6 +158,11 @@ spec:
                 secretKeyRef:
                   name: rize-secrets
                   key: hmac-key
+            - name: RIZE_ENVIRONMENT
+              valueFrom:
+                secretKeyRef:
+                  name: rize-secrets
+                  key: rize-environment
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:
