@@ -1,3 +1,4 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import nock = require('nock');
 import { verifyAccessToken } from '../e2e-test-utils/mock.auth.utils';
 import { AppModule } from '../../src/app.module';
@@ -12,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { clearDatabase } from '../e2e-test-utils/database.utils';
 import { Connection, Repository } from 'typeorm';
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '../../../../libs/auth0/src/lib/auth.guard';
 import { Collateral } from '../../src/modules/collateral/collateral.entity';
 import { LiquidationLog } from '../../src/modules/margin/liquidation_logs.entity';
 import { MarginNotification } from '../../src/modules/margin/margin_notifications.entity';

@@ -1,3 +1,4 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   ExecutionContext,
@@ -52,7 +53,7 @@ describe('MarginQueueController (e2e)', () => {
   let marginCollateralCheckRepository: Repository<MarginCollateralCheck>;
 
   const marginNotificationLtv: number[] = [65, 70, 73];
-  const userId: string = 'userId';
+  const userId = 'userId';
   const amqpConnectionPublish: jest.Mock = jest.fn();
 
   beforeEach(async () => {
@@ -111,7 +112,7 @@ describe('MarginQueueController (e2e)', () => {
 
   describe('CHECK_MARGIN_EXCHANGE flow', () => {
     it('Should not do anything in case LTV is under 65% and no margin calls are active', async () => {
-      const ltv: number = 64;
+      const ltv = 64;
       await creditRepository.save({
         userId,
         totalCredit: 100,
@@ -225,7 +226,7 @@ describe('MarginQueueController (e2e)', () => {
     );
 
     it('Should start the margin call once ltv reaches 75%', async () => {
-      const ltv: number = 75;
+      const ltv = 75;
       await creditRepository.save({
         userId,
         totalCredit: 100,
@@ -255,7 +256,7 @@ describe('MarginQueueController (e2e)', () => {
     });
 
     it('Should not send notification or trigger MARGIN_CALL_STARTED event in case It was already sent at 75% LTV', async () => {
-      const ltv: number = 75;
+      const ltv = 75;
       await creditRepository.save({
         userId,
         totalCredit: 100,
@@ -276,7 +277,7 @@ describe('MarginQueueController (e2e)', () => {
     });
 
     it('Should reset margin call attempt if LTV falls under 75 within 72 hours and send email', async () => {
-      const ltv: number = 0;
+      const ltv = 0;
       await creditRepository.save({
         userId,
         totalCredit: 100,
@@ -325,7 +326,7 @@ describe('MarginQueueController (e2e)', () => {
     });
 
     it('Should take appropriate crypto assets and send email if the LTV is above 75 for 72 hours', async () => {
-      const ltv: number = 75;
+      const ltv = 75;
       await creditRepository.save({
         userId,
         totalCredit: 100,
@@ -435,7 +436,7 @@ describe('MarginQueueController (e2e)', () => {
     });
 
     it('Should take appropriate crypto assets and send email if the LTV is above 85', async () => {
-      const ltv: number = 85;
+      const ltv = 85;
       await creditRepository.save({
         userId,
         totalCredit: 100,
@@ -529,7 +530,7 @@ describe('MarginQueueController (e2e)', () => {
     });
 
     it('Should not take any crypto assets in case enough were already liquidated', async () => {
-      const ltv: number = 85;
+      const ltv = 85;
       await creditRepository.save({
         userId,
         totalCredit: 100,
@@ -583,7 +584,7 @@ describe('MarginQueueController (e2e)', () => {
     });
 
     it('Should not do anything in case collateral value did not change for at least 10%', async () => {
-      const collateralBalance: number = 100;
+      const collateralBalance = 100;
       await marginCollateralCheckRepository.save({
         checked_at_collateral_balance: collateralBalance,
         userId,
@@ -601,7 +602,7 @@ describe('MarginQueueController (e2e)', () => {
     });
 
     it('Should not do anything in case collateral value did not change for at least 10%', async () => {
-      const collateralBalance: number = 100;
+      const collateralBalance = 100;
       await marginCollateralCheckRepository.save({
         checked_at_collateral_balance: collateralBalance - 9,
         userId,
@@ -619,7 +620,7 @@ describe('MarginQueueController (e2e)', () => {
     });
 
     it('Should check for the margin call in case collateral value changes by at least 10%', async () => {
-      const collateralBalance: number = 100;
+      const collateralBalance = 100;
       await marginCollateralCheckRepository.save({
         checked_at_collateral_balance: collateralBalance - 10,
         userId,
