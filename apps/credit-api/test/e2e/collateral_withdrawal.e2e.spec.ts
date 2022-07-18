@@ -28,7 +28,10 @@ import {
   defaultCollateralTotal,
   ETH_PRICE,
 } from '../test-data/collateral.data';
-import { CollateralWithdrawalController } from '../../src/modules/collateral/withdrawal/collateral_withdrawal.controller';
+import {
+  CollateralWithdrawalController,
+  CollateralWithdrawalQueueController,
+} from '../../src/modules/collateral/withdrawal/collateral_withdrawal.controller';
 import { TransactionStatus } from 'fireblocks-sdk';
 
 describe('CollateralWithdrawalController (e2e)', () => {
@@ -109,7 +112,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
 
   describe('GET /:asset/max_amount', () => {
     // defaultCollateralTotal = 100
-    it('should return 404 if unsupported asset', async () => {
+    it('should return 400 if unsupported asset', async () => {
       try {
         await app
           .get(CollateralWithdrawalController)
@@ -120,7 +123,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
             'TEH',
           );
       } catch (error) {
-        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error).toBeInstanceOf(BadRequestException);
       }
     });
 
@@ -255,7 +258,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
       }
     });
 
-    it('should return 404 if user tries to withdraw an asset which they have not collateralized', async () => {
+    it('should return 400 if user tries to withdraw an asset which they have not collateralized', async () => {
       const desiredAsset = 'ETH';
       await collateralRepository.delete({
         userId,
@@ -271,7 +274,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
           { asset: desiredAsset, destinationAddress, withdrawalAmount: 1 },
         );
       } catch (error) {
-        expect(error).toBeInstanceOf(NotFoundException);
+        expect(error).toBeInstanceOf(BadRequestException);
       }
     });
 
@@ -316,6 +319,91 @@ describe('CollateralWithdrawalController (e2e)', () => {
         asset,
       });
       expect(userCollateral.amount).toEqual(10 - withdrawalAmount);
+    });
+  });
+
+  describe('Withdrawal transaction created handler', () => {
+    it('should update withdrawal with transactionId', async () => {
+      const transactionId = 'transaction_id';
+      const withdrawal = await collateralWithdrawalRepository.save({
+        userId,
+        asset: 'ETH',
+        withdrawalAmount: 5,
+        currentAmount: 10,
+        destinationAddress,
+        transactionId: null,
+        status: TransactionStatus.SUBMITTED,
+      });
+
+      await app
+        .get(CollateralWithdrawalQueueController)
+        .collateralWithdrawTransactionCreatedHandler({
+          withdrawalId: withdrawal.id,
+          transactionId,
+        });
+
+      const withdrawalResult = await collateralWithdrawalRepository.findOne({
+        where: { id: withdrawal.id },
+        select: ['id', 'transactionId'],
+      });
+
+      expect(withdrawalResult.transactionId).toEqual(transactionId);
+    });
+  });
+  describe('Withdrawal completed handler', () => {
+    it('should update status to completed', async () => {
+      const transactionId = 'transaction_id';
+
+      const withdrawal = await collateralWithdrawalRepository.save({
+        userId,
+        asset: 'ETH',
+        withdrawalAmount: 5,
+        currentAmount: 10,
+        destinationAddress,
+        transactionId,
+        status: TransactionStatus.SUBMITTED,
+      });
+
+      await app
+        .get(CollateralWithdrawalQueueController)
+        .collateralWithdrawCompleteHandler({
+          userId,
+          transactionId,
+          asset: 'ETH',
+        });
+
+      const withdrawalResult = await collateralWithdrawalRepository.findOne({
+        where: { id: withdrawal.id },
+        select: ['id', 'status'],
+      });
+
+      expect(withdrawalResult.status).toEqual(TransactionStatus.COMPLETED);
+    });
+
+    it('should throw not found if transaction id has not been synced yet', async () => {
+      const transactionId = 'transaction_id';
+
+      try {
+        await collateralWithdrawalRepository.save({
+          userId,
+          asset: 'ETH',
+          withdrawalAmount: 5,
+          currentAmount: 10,
+          destinationAddress,
+          transactionId: null,
+          status: TransactionStatus.SUBMITTED,
+        });
+
+        await app
+          .get(CollateralWithdrawalQueueController)
+          .collateralWithdrawCompleteHandler({
+            userId,
+            transactionId,
+            asset: 'ETH',
+          });
+      } catch (error) {
+        expect(error).toBeInstanceOf(NotFoundException);
+      }
     });
   });
 });

@@ -70,18 +70,14 @@ export class CollateralWithdrawalService {
   public async handleWithdrawalComplete({
     userId,
     asset,
-    destinationAddress,
     transactionId,
-    status,
   }: CollateralWithdrawCompletedDto): Promise<void> {
     Logger.log({
       code: 'COLLATERAL_WITHDRAW_COMPLETE',
       params: {
         userId,
         asset,
-        destinationAddress,
         transactionId,
-        status,
       },
     });
     try {
@@ -101,18 +97,18 @@ export class CollateralWithdrawalService {
           params: {
             userId,
             asset,
-            destinationAddress,
             transactionId,
-            status,
           },
         });
         throw new NotFoundException();
       }
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new WithdrawalCreationInternalError({
         userId,
         asset,
-        destinationAddress,
         error: JSON.stringify(error),
         errorMessage: error.message,
       });
@@ -143,13 +139,7 @@ export class CollateralWithdrawalService {
 
     // early break if user isn't hodling the desired asset at all
     if (!collaterals.find((collateral) => collateral.asset === asset)) {
-      Logger.error({
-        code: 'USER_MAX_WITHDRAWAL_ERROR',
-        message: `No user collateral in asset ${asset}`,
-        asset,
-      });
-
-      throw new NotFoundException();
+      return { maxAmount: 0 };
     }
 
     const credit = await this.creditRepository.findOneBy({
