@@ -16,6 +16,9 @@ export enum ConfigVariables {
   APTO_PUBLIC_KEY = 'APTO_PUBLIC_KEY',
   APTO_PRIVATE_KEY = 'APTO_PRIVATE_KEY',
   APTO_FUNDING_BALANCE_ID = 'FUNDING_BALANCE_ID',
+  RIZE_ENVIRONMENT = 'RIZE_ENVIRONMENT',
+  RIZE_PROGRAM_ID = 'RIZE_PROGRAM_ID',
+  RIZE_HMAC_KEY = 'RIZE_HMAC_KEY',
   QUEUE_URL = 'QUEUE_URL',
 }
 
@@ -36,6 +39,16 @@ export const PHONE_NUMBER_VERIFIED_EXCHANGE = {
 
 export const COLLATERAL_DEPOSITED_EXCHANGE = {
   name: 'credit.collateral.deposited.fx',
+  type: 'fanout',
+};
+
+export const MARGIN_CALL_COMPLETED_EXCHANGE = {
+  name: 'credit.margin_call.completed.fx',
+  type: 'fanout',
+};
+
+export const MARGIN_CALL_STARTED_EXCHANGE = {
+  name: 'credit.margin_call.started.fx',
   type: 'fanout',
 };
 

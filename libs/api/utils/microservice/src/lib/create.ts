@@ -7,7 +7,7 @@ import { AllExceptionsFilter } from '@archie-microservices/tracing';
 
 export async function createMicroservice(
   name: string,
-  module: unknown
+  module: unknown,
 ): Promise<INestApplication> {
   const app = await NestFactory.create(module, {
     logger: WinstonModule.createLogger({
@@ -23,7 +23,7 @@ export async function createMicroservice(
       ],
     }),
   });
-
+  await Openapi.generate(app);
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
@@ -32,8 +32,6 @@ export async function createMicroservice(
   app.enableCors();
 
   await app.listen(80);
-
-  await Openapi.generate(app);
 
   return app;
 }

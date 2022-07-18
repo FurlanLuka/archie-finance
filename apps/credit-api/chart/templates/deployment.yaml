@@ -148,6 +148,21 @@ spec:
                 secretKeyRef:
                   name: apto-secrets
                   key: funding-balance-id
+            - name: RIZE_PROGRAM_ID
+              valueFrom:
+                secretKeyRef:
+                  name: rize-secrets
+                  key: program-id
+            - name: RIZE_HMAC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: rize-secrets
+                  key: hmac-key
+            - name: RIZE_ENVIRONMENT
+              valueFrom:
+                secretKeyRef:
+                  name: rize-secrets
+                  key: rize-environment
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:

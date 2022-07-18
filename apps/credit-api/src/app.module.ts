@@ -7,6 +7,7 @@ import { HealthModule } from '@archie-microservices/health';
 import { CreditModule } from './modules/credit/credit.module';
 import { InternalApiModule } from '@archie-microservices/internal-api';
 import { AptoModule } from './modules/apto/apto.module';
+import { RizeModule } from './modules/rize/rize.module';
 import { CollateralModule } from './modules/collateral/collateral.module';
 
 @Module({
@@ -20,6 +21,9 @@ import { CollateralModule } from './modules/collateral/collateral.module';
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.INTERNAL_API_URL,
+        ConfigVariables.RIZE_ENVIRONMENT,
+        ConfigVariables.RIZE_PROGRAM_ID,
+        ConfigVariables.RIZE_HMAC_KEY,
         ConfigVariables.QUEUE_URL,
       ],
       parse: (_configVariable, value) => value,
@@ -57,6 +61,7 @@ import { CollateralModule } from './modules/collateral/collateral.module';
     HealthModule,
     CreditModule,
     AptoModule,
+    RizeModule,
     CollateralModule,
   ],
   controllers: [],

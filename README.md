@@ -22,7 +22,7 @@ Vault has been already been configured, and its configuration is saved inside th
 
 ### 2. Add minikube url to the hosts file
 
-Because services that run in Minikube can't access localhost directly, they use `host.minikube.internal` url to access the localhost. Add `127.0.0.1       host.minikube.internal` to hosts file (/etc/hosts) the minikube url to your localhost. This is required because when you locally deploy microservices, it uses .env files for config, and by mapping the minikube url to localhost, you don't have to change .env from localhost to minikube url every time you have to deploy and test everything locally.
+Because services that run in Minikube can't access localhost directly, they use `host.minikube.internal` url to access the localhost. Add `127.0.0.1 host.minikube.internal` to hosts file (/etc/hosts) the minikube url to your localhost. This is required because when you locally deploy microservices, it uses .env files for config, and by mapping the minikube url to localhost, you don't have to change .env from localhost to minikube url every time you have to deploy and test everything locally.
 
 ### 3. Setup environment variables
 

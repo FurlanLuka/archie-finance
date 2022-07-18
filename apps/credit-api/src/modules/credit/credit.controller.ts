@@ -10,7 +10,10 @@ import { GetCreditResponseDto } from './credit.dto';
 import { CreditService } from './credit.service';
 import { AuthGuard } from '@archie-microservices/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { CreateCreditMinimumCollateralError } from './credit.errors';
+import {
+  CreateCreditMinimumCollateralError,
+  CreditNotFoundError,
+} from './credit.errors';
 import { ApiErrorResponse } from '@archie-microservices/openapi';
 
 @Controller('v1/credit')
@@ -47,7 +50,7 @@ export class InternalCreditController {
   }
 
   @Get(':userId')
-  @ApiErrorResponse([CreateCreditMinimumCollateralError])
+  @ApiErrorResponse([CreateCreditMinimumCollateralError, CreditNotFoundError])
   async getCreditLine(
     @Param('userId') userId: string,
   ): Promise<GetCreditResponseDto> {

@@ -9,7 +9,6 @@ export class CompleteOnboardingStageDto {
 export class GetOnboardingResponseDto implements GetOnboardingResponse {
   kycStage: boolean;
   emailVerificationStage: boolean;
-  phoneVerificationStage: boolean;
   collateralizationStage: boolean;
   cardActivationStage: boolean;
   completed: boolean;

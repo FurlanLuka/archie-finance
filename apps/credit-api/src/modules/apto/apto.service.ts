@@ -378,7 +378,7 @@ export class AptoService {
       workflowObjectId: cardApplicationResponse.workflow_object_id,
     };
 
-    this.aptoCardApplicationRepository.save(cardApplication);
+    await this.aptoCardApplicationRepository.save(cardApplication);
 
     return this.completeCardIssuanceSteps(
       aptoUser.accessToken,
