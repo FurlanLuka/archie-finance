@@ -3,11 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  Enrollment,
-  SendEnrollmentTicketResponse,
-  User,
-} from 'auth0';
+import { Enrollment, SendEnrollmentTicketResponse, User } from 'auth0';
 import { Auth0Service } from '../auth0/auth0.service';
 import {
   GetEmailVerificationResponse,
@@ -15,7 +11,10 @@ import {
 } from './user.interfaces';
 import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { EMAIL_VERIFIED_EXCHANGE } from '@archie/api/user-api/constants';
+import {
+  EMAIL_VERIFIED_EXCHANGE,
+  MFA_ENROLLED_EXCHANGE,
+} from '@archie/api/user-api/constants';
 
 @Injectable()
 export class UserService {
@@ -98,10 +97,9 @@ export class UserService {
     );
 
     if (hasEnrolledAuthenticator !== undefined) {
-      await this.internalApiService.completeOnboardingStage(
-        'mfaEnrollmentStage',
+      this.amqpConnection.publish(MFA_ENROLLED_EXCHANGE.name, '', {
         userId,
-      );
+      });
     }
 
     return {
