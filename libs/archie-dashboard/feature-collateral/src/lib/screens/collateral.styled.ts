@@ -38,7 +38,7 @@ export const CollateralStyled = styled.div`
     gap: 0.5rem;
 
     p:nth-child(2) {
-      line-height: 1.2;
+      line-height: 1.16;
     }
   }
 

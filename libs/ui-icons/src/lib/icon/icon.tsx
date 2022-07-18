@@ -12,6 +12,7 @@ export type IconName =
   | 'copy'
   | 'ethereum'
   | 'external-link'
+  | 'home'
   | 'indicator-active'
   | 'indicator-done'
   | 'logo'
