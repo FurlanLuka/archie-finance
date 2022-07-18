@@ -36,12 +36,6 @@ const ActionsCell: FC<ActionsCellProps> = ({ id }) => {
   );
 };
 
-const OptionsCell: FC = () => (
-  <OptionsCellStyled>
-    <Icon name="options-dots" />
-  </OptionsCellStyled>
-);
-
 export const tableColumns = [
   {
     Header: '',
@@ -79,14 +73,6 @@ export const tableColumns = [
         width: 3,
         Cell: ({ value: { collateral_asset } }: any) => {
           return <ActionsCell id={collateral_asset} />;
-        },
-      },
-      {
-        Header: '',
-        accessor: 'options',
-        width: 1,
-        Cell: () => {
-          return <OptionsCell />;
         },
       },
     ],

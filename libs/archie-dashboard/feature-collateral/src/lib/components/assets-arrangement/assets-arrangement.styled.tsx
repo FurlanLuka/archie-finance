@@ -19,8 +19,8 @@ export const AssetsArrangementStyled = styled.div<AssetsArrangementStyledProps>`
           ${theme.backgroundWarning} 0 ${btc}%, 
           ${theme.backgroundAlert} ${btc}% ${btc + eth}%, 
           ${theme.backgroundSuccess} ${btc + eth}% ${btc + eth + sol}%,
-          ${theme.backgroundPositive} ${btc + eth + sol}% 100%)`};
-    /* background-size: ${({ btc, eth, sol, usdc }) => `${btc}%, ${eth}%, ${sol}%, ${usdc}%`}; */
+          ${theme.backgroundPositive} ${btc + eth + sol}% 100%)
+        `};
     border-radius: 0.25rem;
     width: 100%;
     height: 0.75rem;
