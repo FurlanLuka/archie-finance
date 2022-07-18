@@ -230,12 +230,10 @@ export class RizeApiService {
   }
 
   private async getToken() {
-    // Check if there's no token data or if the token is already expired
     if (
       !this.tokenCache.data ||
       this.tokenCache.isExpired(this.DEFAULT_TOKEN_MAX_AGE)
     ) {
-      // Create Header and Payload objects
       const header = {
         alg: 'HS512',
       };
@@ -245,11 +243,9 @@ export class RizeApiService {
         iat: Math.floor(+new Date() / 1000),
       };
 
-      // Prep the objects for a JWT
       const sHeader = JSON.stringify(header);
       const sPayload = JSON.stringify(payload);
 
-      // Request for a new token
       const sJwt = rs.KJUR.jws.JWS.sign(
         'HS512',
         sHeader,

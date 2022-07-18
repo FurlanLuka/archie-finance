@@ -38,12 +38,9 @@ export class RizeController {
   @ApiBearerAuth()
   @ApiErrorResponse([CustomerAlreadyExists])
   public async createUser(@Request() req): Promise<void> {
-    // TODO: remove log
-    console.log('x-forwarded-for', req.headers['x-forwarded-for']);
-
     return this.rizeService.createUser(
       req.user.sub,
-      req.headers['x-forwarded-for'] ?? '123.56.3.12', //TODO: remove optional,
+      req.headers['x-forwarded-for'],
     );
   }
 
