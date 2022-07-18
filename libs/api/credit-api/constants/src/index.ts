@@ -51,3 +51,13 @@ export const MARGIN_CALL_STARTED_EXCHANGE = {
   name: 'credit.margin_call.started.fx',
   type: 'fanout',
 };
+
+export const COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE = {
+  name: 'credit.collateral.withdraw.initialized.fx',
+  type: 'fanout',
+};
+
+export const COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE = {
+  name: 'credit.collateral.withdraw.completed.fx',
+  type: 'fanout',
+};

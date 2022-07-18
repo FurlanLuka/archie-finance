@@ -1,15 +1,29 @@
 import { AuthGuard } from '@archie-microservices/auth0';
-import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { GetUserWithdrawals } from '@archie-microservices/api-interfaces/collateral';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { CollateralService } from './collateral.service';
 import {
   CollateralDto,
   CollateralValueDto,
+  CollateralWithdrawCompletedDto,
+  CollateralWithdrawDto,
   CreateDepositDto,
   GetTotalCollateralValueResponseDto,
 } from './collateral.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   COLLATERAL_DEPOSITED_EXCHANGE,
+  COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
+  COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
 import { Subscribe } from '@archie/api/utils/queue';
@@ -40,6 +54,28 @@ export class CollateralController {
   ): Promise<GetTotalCollateralValueResponseDto> {
     return this.collateralService.getUserTotalCollateralValue(request.user.sub);
   }
+
+  @Post('withdraw')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async withdrawUserCollateral(
+    @Req() request,
+    @Body() body: CollateralWithdrawDto,
+  ): Promise<void> {
+    return this.collateralService.withdrawUserCollateral(
+      request.user.sub,
+      body.asset,
+      body.withdrawalAmount,
+      body.destinationAddress,
+    );
+  }
+
+  @Get('withdrawals')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getUserWithdrawals(@Req() request): Promise<GetUserWithdrawals> {
+    return this.collateralService.getUserWithdrawals(request.user.sub);
+  }
 }
 
 @Controller('internal/collateral')
@@ -68,5 +104,12 @@ export class CollateralQueueController {
   @Subscribe(COLLATERAL_DEPOSITED_EXCHANGE, SERVICE_QUEUE_NAME)
   async collateralDepositedHandler(payload: CreateDepositDto): Promise<void> {
     await this.collateralService.createDeposit(payload);
+  }
+
+  @Subscribe(COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE, SERVICE_QUEUE_NAME)
+  async collateralWithdrawCompleteHandler(
+    payload: CollateralWithdrawCompletedDto,
+  ): Promise<void> {
+    await this.collateralService.createWithdrawal(payload);
   }
 }

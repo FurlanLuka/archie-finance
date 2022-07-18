@@ -13,6 +13,7 @@ export class UserVaultAccountService {
     private fireblocksService: FireblocksService,
   ) {}
 
+  // TODO split create and get? using this in withdrawals makes creation of an empty vault account a bit iffy
   public async getUserVaultAccount(
     userId: string,
   ): Promise<VaultAccountResponse> {

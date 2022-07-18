@@ -8,3 +8,12 @@ export class DepositCreationInternalError extends InternalServerErrorException {
     this.metadata = metadata;
   }
 }
+
+export class WithdrawalCreationInternalError extends InternalServerErrorException {
+  metadata: object;
+
+  constructor(metadata: object) {
+    super('CREATE_WITHDRAWAL_ERROR');
+    this.metadata = metadata;
+  }
+}
