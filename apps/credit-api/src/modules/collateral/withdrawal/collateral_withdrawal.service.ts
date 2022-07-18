@@ -8,6 +8,7 @@ import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '@archie/api/credit-api
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   Logger,
   NotFoundException,
@@ -69,18 +70,14 @@ export class CollateralWithdrawalService {
   public async handleWithdrawalComplete({
     userId,
     asset,
-    destinationAddress,
     transactionId,
-    status,
   }: CollateralWithdrawCompletedDto): Promise<void> {
     Logger.log({
       code: 'COLLATERAL_WITHDRAW_COMPLETE',
       params: {
         userId,
         asset,
-        destinationAddress,
         transactionId,
-        status,
       },
     });
     try {
@@ -100,18 +97,18 @@ export class CollateralWithdrawalService {
           params: {
             userId,
             asset,
-            destinationAddress,
             transactionId,
-            status,
           },
         });
         throw new NotFoundException();
       }
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new WithdrawalCreationInternalError({
         userId,
         asset,
-        destinationAddress,
         error: JSON.stringify(error),
         errorMessage: error.message,
       });
@@ -122,18 +119,6 @@ export class CollateralWithdrawalService {
     userId: string,
     asset: string,
   ): Promise<GetUserWithdrawalAmount> {
-    const credit = await this.creditRepository.findOneBy({
-      userId,
-    });
-
-    const liquidationLogs = await this.liquidationLogsRepository.findBy({
-      userId,
-    });
-
-    const collaterals = await this.collateralRepository.findBy({
-      userId,
-    });
-
     const assetPrices = await this.internalApiService.getAssetPrices();
 
     const assetPrice = assetPrices.find((a) => a.asset === asset);
@@ -145,8 +130,25 @@ export class CollateralWithdrawalService {
         assetPrices,
       });
 
-      throw new NotFoundException();
+      throw new BadRequestException();
     }
+
+    const collaterals = await this.collateralRepository.findBy({
+      userId,
+    });
+
+    // early break if user isn't hodling the desired asset at all
+    if (!collaterals.find((collateral) => collateral.asset === asset)) {
+      return { maxAmount: 0 };
+    }
+
+    const credit = await this.creditRepository.findOneBy({
+      userId,
+    });
+
+    const liquidationLogs = await this.liquidationLogsRepository.findBy({
+      userId,
+    });
 
     const { collateralAllocation, collateralBalance, ltv, loanedBalance } =
       this.marginLtvService.calculateUsersLtv(
@@ -165,6 +167,7 @@ export class CollateralWithdrawalService {
       loanedBalance,
     });
 
+    // This isn't going to be undefined, since we did the check above, but it's a different variable here
     const desiredAsset = collateralAllocation.find(
       (collateral) => collateral.asset === asset,
     );
@@ -178,7 +181,6 @@ export class CollateralWithdrawalService {
     }
 
     // user hasn't loaned any money, they can withdraw everything
-    // can any of these be true without the other?
     if (loanedBalance === 0 && ltv === 0) {
       return { maxAmount: desiredAsset.assetAmount };
     }
@@ -257,6 +259,9 @@ export class CollateralWithdrawalService {
 
       return withdrawal;
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new WithdrawalInitializeInternalError({
         userId,
         asset,
