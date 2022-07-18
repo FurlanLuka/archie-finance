@@ -1,0 +1,177 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: archie-referral-system-api
+  labels:
+    app: archie-referral-system-api
+    {{- if not .Values.local }}
+    tags.datadoghq.com/env: '{{ .Values.environment }}'
+    tags.datadoghq.com/service: 'archie-referral-system-api'
+    tags.datadoghq.com/version: '{{ .Values.tag }}'
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: archie-referral-system-api
+  {{- if not .Values.local }}
+  {{- if eq .Values.environment "production" }}
+  replicas: 2
+  {{- else }}
+  replicas: 1
+  {{- end }}
+  {{- else }}
+  replicas: 1
+  {{- end }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: archie-referral-system-api
+        {{- if not .Values.local }}
+        tags.datadoghq.com/env: '{{ .Values.environment }}'
+        tags.datadoghq.com/service: 'archie-referral-system-api'
+        tags.datadoghq.com/version: '{{ .Values.tag }}'
+        {{- else }}
+        helm-revision: '{{ .Release.Revision }}'
+        {{- end }}
+    spec:
+      containers:
+        - name: archie-referral-system-api
+          image: '{{ .Values.image }}:{{ .Values.tag }}'
+          {{- if not .Values.local }}
+          imagePullPolicy: Always
+          {{- else }}
+          imagePullPolicy: Never
+          {{- end }}
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            httpGet:
+              path: /health
+              port: 80
+          resources:
+            requests:
+              memory: '64Mi'
+              cpu: '50m'
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          {{- if not .Values.local }}
+          env:
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DD_ENV
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/env']
+            - name: DD_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
+            - name: DD_LOGS_INJECTION
+              value: 'true'
+            - name: TYPEORM_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: username
+            - name: TYPEORM_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: password
+            - name: TYPEORM_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: hostname
+            - name: TYPEORM_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: port
+            - name: TYPEORM_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: database
+            - name: SENDGRID_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: api-key
+            - name: SENDGRID_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: api-url
+            - name: SENDGRID_MAILING_LIST_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: mailing-list-id
+            - name: SENDGRID_VERIFY_EMAIL_TEMPLATAE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: verify-email-template-id
+            - name: SENDGRID_WELCOME_EMAIL_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: welcome-email-template-id
+            - name: ARCHIE_MARKETING_WEBSITE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: archie-secrets
+                  key: marketing-website-url
+            - name: VAULT_PRIVATE_ADDRESS
+              valueFrom:
+                secretKeyRef:
+                  name: vault-secrets
+                  key: address
+            - name: VAULT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: vault-secrets
+                  key: username
+            - name: VAULT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: vault-secrets
+                  key: password
+            - name: VAULT_NAMESPACE
+              valueFrom:
+                secretKeyRef:
+                  name: vault-secrets
+                  key: namespace
+            - name: QUEUE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: queue-secrets
+                  key: queue-url
+          {{- end }}
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: archie-referral-system-api-service
+  labels:
+    app: archie-referral-system-api-service
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: archie-referral-system-api

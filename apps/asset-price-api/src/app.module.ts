@@ -2,7 +2,7 @@ import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { HealthModule } from '@archie-microservices/health';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigVariables } from './interfaces';
+import { ConfigVariables } from '@archie/api/asset-price-api/constants';
 import { AssetPriceModule } from './modules/asset_price/asset_price.module';
 
 @Module({
@@ -28,7 +28,7 @@ import { AssetPriceModule } from './modules/asset_price/asset_price.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
+        type: `postgres`,
         host: configService.get(ConfigVariables.TYPEORM_HOST),
         username: configService.get(ConfigVariables.TYPEORM_USERNAME),
         password: configService.get(ConfigVariables.TYPEORM_PASSWORD),

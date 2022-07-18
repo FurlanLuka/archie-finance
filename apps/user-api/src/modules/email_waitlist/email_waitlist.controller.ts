@@ -8,7 +8,8 @@ import {
 import axios from 'axios';
 import { ConfigService } from '@archie-microservices/config';
 import { EmailWaitlistDto } from './email_waitlist.dto';
-import { ConfigVariables } from '../../interfaces';
+import { ConfigVariables } from '@archie/api/user-api/constants';
+import { AddToEmailWaitlistInternalError } from './email_waitlist.errors';
 
 @Controller('v1/email_waitlist')
 export class EmailWaitlistController {
@@ -38,14 +39,9 @@ export class EmailWaitlistController {
         },
       );
     } catch (error) {
-      Logger.error({
-        code: 'ADD_TO_EMAIL_WAITLIST_ERROR',
-        metadata: {
-          email: body.emailAddress,
-        },
+      throw new AddToEmailWaitlistInternalError({
+        email: body.emailAddress,
       });
-
-      throw new InternalServerErrorException();
     }
   }
 }

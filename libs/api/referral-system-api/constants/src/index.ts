@@ -1,0 +1,26 @@
+export const SERVICE_NAME = 'referral-system-api'
+export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`
+
+export enum ConfigVariables {
+  TYPEORM_HOST = 'TYPEORM_HOST',
+  TYPEORM_USERNAME = 'TYPEORM_USERNAME',
+  TYPEORM_PASSWORD = 'TYPEORM_PASSWORD',
+  TYPEORM_DATABASE = 'TYPEORM_DATABASE',
+  TYPEORM_PORT = 'TYPEORM_PORT',
+  ARCHIE_MARKETING_WEBSITE_URL = 'ARCHIE_MARKETING_WEBSITE_URL',
+  VAULT_PRIVATE_ADDRESS = 'VAULT_PRIVATE_ADDRESS',
+  VAULT_USERNAME = 'VAULT_USERNAME',
+  VAULT_PASSWORD = 'VAULT_PASSWORD',
+  VAULT_NAMESPACE = 'VAULT_NAMESPACE',
+  QUEUE_URL = 'QUEUE_URL'
+}
+
+export const APPLIED_TO_WAITLIST_EXCHANGE = {
+  name: 'waitlist.joined.fx',
+  type: 'fanout',
+};
+
+export const JOINED_WAITLIST_EXCHANGE = {
+  name: 'waitlist.joined.fx',
+  type: 'fanout',
+};

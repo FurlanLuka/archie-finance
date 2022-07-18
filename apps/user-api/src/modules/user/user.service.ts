@@ -14,13 +14,14 @@ import {
   GetMfaEnrollmentResponse,
 } from './user.interfaces';
 import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
-import { InternalApiService } from '@archie-microservices/internal-api';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { EMAIL_VERIFIED_EXCHANGE } from '@archie/api/user-api/constants';
 
 @Injectable()
 export class UserService {
   constructor(
     private auth0Service: Auth0Service,
-    private internalApiService: InternalApiService,
+    private amqpConnection: AmqpConnection,
   ) {}
 
   async isEmailVerified(userId: string): Promise<GetEmailVerificationResponse> {
@@ -29,10 +30,9 @@ export class UserService {
     });
 
     if (user.email_verified) {
-      await this.internalApiService.completeOnboardingStage(
-        'emailVerificationStage',
+      this.amqpConnection.publish(EMAIL_VERIFIED_EXCHANGE.name, '', {
         userId,
-      );
+      });
     }
 
     return {

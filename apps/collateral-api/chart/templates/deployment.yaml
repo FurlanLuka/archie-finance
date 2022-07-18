@@ -1,0 +1,177 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: archie-collateral-api
+  labels:
+    app: archie-collateral-api
+    {{- if not .Values.local }}
+    tags.datadoghq.com/env: '{{ .Values.environment }}'
+    tags.datadoghq.com/service: 'archie-collateral-api'
+    tags.datadoghq.com/version: '{{ .Values.tag }}'
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: archie-collateral-api
+  {{- if not .Values.local }}
+  replicas: 1
+  {{- else }}
+  replicas: 1
+  {{- end }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: archie-collateral-api
+        {{- if not .Values.local }}
+        tags.datadoghq.com/env: '{{ .Values.environment }}'
+        tags.datadoghq.com/service: 'archie-collateral-api'
+        tags.datadoghq.com/version: '{{ .Values.tag }}'
+        {{- else }}
+        helm-revision: '{{ .Release.Revision }}'
+        {{- end }}
+    spec:
+      containers:
+        - name: archie-collateral-api
+          image: '{{ .Values.image }}:{{ .Values.tag }}'
+          {{- if not .Values.local }}
+          imagePullPolicy: Always
+          {{- else }}
+          imagePullPolicy: Never
+          {{- end }}
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            httpGet:
+              path: /health
+              port: 80
+          resources:
+            requests:
+              memory: '64Mi'
+              cpu: '50m'
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          {{- if not .Values.local }}
+          env:
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DD_ENV
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/env']
+            - name: DD_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
+            - name: DD_SERVICE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/service']
+            - name: DD_LOGS_INJECTION
+              value: 'true'
+            - name: AUTH0_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: auth0-secrets
+                  key: domain
+            - name: AUTH0_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: auth0-secrets
+                  key: audience
+            - name: SENDGRID_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: api-key
+            - name: SENDGRID_MAILING_LIST_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: mailing-list-id
+            - name: TYPEORM_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: username
+            - name: TYPEORM_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: password
+            - name: TYPEORM_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: hostname
+            - name: TYPEORM_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: port
+            - name: TYPEORM_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: database
+            - name: FIREBLOCKS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fireblocks-secrets
+                  key: api-key
+            - name: FIREBLOCKS_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fireblocks-secrets
+                  key: private-key
+            - name: FIREBLOCKS_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fireblocks-secrets
+                  key: public-key
+            - name: FIREBLOCKS_VAULT_ACCOUNT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: fireblocks-secrets
+                  key: vault-account-id
+            - name: ASSET_LIST
+              valueFrom:
+                secretKeyRef:
+                  name: asset-secrets
+                  key: enabled-assets
+            - name: INTERNAL_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: internal-api-secrets
+                  key: internal-api-url
+            - name: QUEUE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: queue-secrets
+                  key: queue-url
+          {{- end }}
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: archie-collateral-api-service
+  labels:
+    app: archie-collateral-api-service
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: archie-collateral-api

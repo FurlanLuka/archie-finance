@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
-import { ConfigVariables } from './interfaces';
+import { ConfigVariables } from '@archie/api/onboarding-api/constants';
+import { OnboardingModule } from '@archie/api/onboarding-api/onboarding';
 import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
-import { OnboardingModule } from './modules/onboarding/onboarding.module';
 
 @Module({
   imports: [
@@ -17,6 +17,7 @@ import { OnboardingModule } from './modules/onboarding/onboarding.module';
         ConfigVariables.TYPEORM_USERNAME,
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
+        ConfigVariables.QUEUE_URL,
       ],
       parse: (_configVariable, value) => value,
     }),

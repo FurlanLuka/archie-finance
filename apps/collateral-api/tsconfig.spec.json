@@ -12,6 +12,6 @@
     "**/*.d.ts",
     "**/__data__",
     "**/__mocks__",
-    "src/modules/collateral/collateral.service.spec.ts"
+    "src/modules/collateral/collateral.service.spec.skip.ts"
   ]
 }

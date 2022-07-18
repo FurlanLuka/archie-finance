@@ -1,14 +1,7 @@
 import { VaultService } from '@archie-microservices/vault';
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, QueryRunner, Repository } from 'typeorm';
-import { InternalApiService } from '@archie-microservices/internal-api';
+import { Repository } from 'typeorm';
 import { Kyc } from './kyc.entity';
 import {
   CreateKycResponse,
@@ -17,14 +10,15 @@ import {
 import { KycDto } from './kyc.dto';
 import { DateTime } from 'luxon';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { KYC_SUBMITTED_EXCHANGE } from '@archie/api/user-api/constants';
 
 @Injectable()
 export class KycService {
   constructor(
     @InjectRepository(Kyc) private kycRepository: Repository<Kyc>,
     private vaultService: VaultService,
-    private dataSource: DataSource,
-    private internalApiService: InternalApiService,
+    private amqpConnection: AmqpConnection,
   ) {}
 
   async getKyc(userId: string): Promise<GetKycResponse> {
@@ -33,13 +27,6 @@ export class KycService {
     });
 
     if (kycRecord === null) {
-      Logger.error({
-        code: 'GET_KYC_ERROR',
-        metadata: {
-          userId,
-        },
-      });
-
       throw new KycNotFoundError();
     }
 
@@ -80,13 +67,6 @@ export class KycService {
     });
 
     if (kycRecord) {
-      Logger.error({
-        code: 'CREATE_KYC_ALREADY_EXISTS_ERROR',
-        metadata: {
-          userId,
-        },
-      });
-
       throw new KycAlreadySubmitted();
     }
 
@@ -105,49 +85,25 @@ export class KycService {
       payload.ssn,
     ]);
 
-    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
+    await this.kycRepository.save({
+      userId,
+      firstName: encryptedData[0],
+      lastName: encryptedData[1],
+      dateOfBirth: encryptedData[2],
+      addressCountry: encryptedData[3],
+      addressLocality: encryptedData[4],
+      addressPostalCode: encryptedData[5],
+      addressRegion: encryptedData[6],
+      addressStreet: encryptedData[7],
+      addressStreetNumber: encryptedData[8],
+      phoneNumber: encryptedData[9],
+      phoneNumberCountryCode: encryptedData[10],
+      ssn: encryptedData[11],
+    });
 
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
-    try {
-      await queryRunner.manager.save(Kyc, {
-        userId,
-        firstName: encryptedData[0],
-        lastName: encryptedData[1],
-        dateOfBirth: encryptedData[2],
-        addressCountry: encryptedData[3],
-        addressLocality: encryptedData[4],
-        addressPostalCode: encryptedData[5],
-        addressRegion: encryptedData[6],
-        addressStreet: encryptedData[7],
-        addressStreetNumber: encryptedData[8],
-        phoneNumber: encryptedData[9],
-        phoneNumberCountryCode: encryptedData[10],
-        ssn: encryptedData[11],
-      });
-
-      await this.internalApiService.completeOnboardingStage('kycStage', userId);
-
-      await queryRunner.commitTransaction();
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-
-      Logger.error({
-        code: 'CREATE_KYC_ERROR',
-        metadata: {
-          userId,
-          error: JSON.stringify(error),
-        },
-      });
-
-      throw new InternalServerErrorException(
-        'ERR_CREATING_KYC_RECORD',
-        'There was an issue creating KYC record. Please try again or contact support.',
-      );
-    } finally {
-      await queryRunner.release();
-    }
+    this.amqpConnection.publish(KYC_SUBMITTED_EXCHANGE.name, '', {
+      userId,
+    });
 
     return {
       firstName: payload.firstName,

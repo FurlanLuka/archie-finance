@@ -4,29 +4,10 @@ To run hashicorp vault locally first create volumes that you will mount for pers
 
 ```
 mkdir volumes/config
-touch volumes/config/vault.json
 mkdir volumes/file
 mkdir volumes/logs
 ```
 
-After creating required folders and config, edit the config file and add the following
-
-```
-{
-  "backend": {
-    "file": {
-      "path": "/vault/file"
-    }
-  },
-  "listener": {
-    "tcp": {
-      "address": "0.0.0.0:8200",
-      "tls_disable": 1
-    }
-  },
-  "ui": true
-}
-```
 
 After everything is created run `docker-compose up`. When docker container is running navigate to [http://localhost:8200/](http://localhost:8200/https:/) to start the setup process.
 
@@ -52,11 +33,11 @@ Navigate to policies tab and click create new policy. Make policy name `backend-
 
 ```
 path "transit/encrypt/backend-encryption-key" {
-	capabilities = ["update"] 
+	capabilities = ["update"]
 }
 
 path "transit/decrypt/backend-encryption-key" {
-	capabilities = ["update"] 
+	capabilities = ["update"]
 }
 ```
 

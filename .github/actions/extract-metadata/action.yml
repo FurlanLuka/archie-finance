@@ -3,24 +3,23 @@ description: 'Extract metadata'
 
 outputs:
   SOURCE_NAME:
-    description: "Source name"
+    description: 'Source name'
     value: ${{ steps.extract.outputs.SOURCE_NAME }}
   SOURCE_BRANCH:
-    description: "Source branch"
+    description: 'Source branch'
     value: ${{ steps.extract.outputs.SOURCE_BRANCH }}
   SOURCE_TAG:
-    description: "Source tag"
+    description: 'Source tag'
     value: ${{ steps.extract.outputs.SOURCE_TAG }}
   APP_NAME:
-    description: "Source name"
+    description: 'Source name'
     value: ${{ steps.extract.outputs.APP_NAME }}
   COMMIT_HASH:
-    description: "Commit hash"
+    description: 'Commit hash'
     value: ${{ steps.extract.outputs.COMMIT_HASH }}
 
-
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - id: extract
       run: |
