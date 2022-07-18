@@ -39,7 +39,7 @@ import { closeToMatcher } from '../e2e-test-utils/jest.utils';
 import { Collateral } from '../../src/modules/collateral/collateral.entity';
 import { MarginCollateralCheck } from '../../src/modules/margin/margin_collateral_check.entity';
 
-describe.only('MarginQueueController (e2e)', () => {
+describe('MarginQueueController (e2e)', () => {
   let app: INestApplication;
   let module: TestingModule;
 
