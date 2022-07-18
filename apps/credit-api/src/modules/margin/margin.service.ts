@@ -11,7 +11,6 @@ import { Collateral } from '../collateral/collateral.entity';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { CreditService } from '../credit/credit.service';
 import { GetAssetListResponse } from '@archie-microservices/api-interfaces/asset_information';
 import { MarginCollateralValueCheckService } from './collateral_value_checks/margin_collaterall_value_checks.service';
 import {
@@ -37,7 +36,6 @@ export class MarginService {
     private marginCallsService: MarginCallsService,
     private internalApiService: InternalApiService,
     private amqpConnection: AmqpConnection,
-    private creditService: CreditService,
     private marginCollateralCheckService: MarginCollateralValueCheckService,
     private creditLimitService: CreditLimitService,
   ) {}

@@ -9,11 +9,12 @@ import {
 } from '@archie/api/credit-api/constants';
 import { CreditModule } from '../../credit/credit.module';
 import { CreditLimitService } from './credit_limit.service';
+import { Credit } from '../../credit/credit.entity';
 
 @Module({
   controllers: [],
   imports: [
-    TypeOrmModule.forFeature([]),
+    TypeOrmModule.forFeature([Credit]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       inject: [ConfigService],
