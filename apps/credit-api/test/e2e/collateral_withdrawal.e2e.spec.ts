@@ -20,8 +20,8 @@ import { Credit } from '../../src/modules/credit/credit.entity';
 import { CollateralWithdrawal } from '../../src/modules/collateral/withdrawal/collateral_withdrawal.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '../../../../libs/api/credit-api/constants/src';
-import { ConfigVariables } from '../../../../libs/api/user-api/constants/src';
+import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '@archie/api/credit-api/constants';
+import { ConfigVariables } from '@archie/api/user-api/constants';
 import {
   assetPriceResponse,
   createUserCollateral,

@@ -1,5 +1,4 @@
-import { GetCollateralValueResponse } from '../../../../libs/api-interfaces/src/collateral';
-import { GetAssetPriceResponse } from '../../../../libs/api-interfaces/src/asset_price';
+import { GetAssetPriceResponse } from '@archie-microservices/api-interfaces/src/asset_price';
 
 export const SOL_PRICE = 0.28;
 export const BTC_PRICE = 26;
