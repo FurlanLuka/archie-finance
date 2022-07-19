@@ -25,7 +25,6 @@ export class FireblocksQueueController {
   async marginCallCompletedLiquidationHandler(
     payload: LiquidateAssetsDto,
   ): Promise<void> {
-    console.log('ma kaki pejlod', payload);
     await this.fireblocksService.liquidateAssets(payload);
   }
 }

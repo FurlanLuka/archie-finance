@@ -66,7 +66,6 @@ export class MarginService {
         userId: In(userIds),
       },
     });
-
     const credits: Credit[] = await this.creditRepository.find({
       where: {
         userId: In(userIds),
@@ -84,7 +83,6 @@ export class MarginService {
           userId: In(userIds),
         },
       });
-
     const assetPrices: GetAssetPricesResponse =
       await this.internalApiService.getAssetPrices();
 
@@ -135,7 +133,7 @@ export class MarginService {
       }),
     );
 
-    await this.marginCollateralCheckService.updateMarginChecks(
+    await this.marginCollateralCheckService.updatexMarginChecks(
       filteredUsersByValueChange,
     );
     await this.amqpConnection.publish(

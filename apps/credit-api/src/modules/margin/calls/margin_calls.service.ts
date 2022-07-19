@@ -37,8 +37,6 @@ export class MarginCallsService {
       userId: usersLtv.userId,
       liquidation: [],
     });
-    // TODO: Reactivate card - EVENT handled by rize
-    // TODO: send email that margin is now ok, 72 hour limit ok --- Prob remove this event and just handle margin call one on the mail service
   }
 
   public async handleMarginCall(
