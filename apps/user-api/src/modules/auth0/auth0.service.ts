@@ -14,7 +14,7 @@ export class Auth0Service {
       clientSecret: this.configService.get(
         ConfigVariables.AUTH0_M2M_CLIENT_SECRET,
       ),
-      scope: 'read:users update:users',
+      scope: 'read:users update:users create:guardian_enrollment_tickets',
     });
   }
 

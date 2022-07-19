@@ -9,6 +9,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   KYC_SUBMITTED_EXCHANGE,
   EMAIL_VERIFIED_EXCHANGE,
+  MFA_ENROLLED_EXCHANGE,
 } from '@archie/api/user-api/constants';
 import {
   COLLATERAL_RECEIVED_EXCHANGE,
@@ -50,6 +51,16 @@ export class OnboardingQueueController {
     await this.onboardingService.completeOnboardingStage(
       payload.userId,
       'emailVerificationStage',
+    );
+  }
+
+  @Subscribe(MFA_ENROLLED_EXCHANGE, SERVICE_QUEUE_NAME)
+  async mfaEnrollmentEventHandler(
+    payload: CompleteOnboardingStageDto,
+  ): Promise<void> {
+    await this.onboardingService.completeOnboardingStage(
+      payload.userId,
+      'mfaEnrollmentStage',
     );
   }
 

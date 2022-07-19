@@ -11,5 +11,6 @@ export class GetOnboardingResponseDto implements GetOnboardingResponse {
   emailVerificationStage: boolean;
   collateralizationStage: boolean;
   cardActivationStage: boolean;
+  mfaEnrollmentStage: boolean;
   completed: boolean;
 }
