@@ -19,6 +19,9 @@ export class AssetPriceHistory {
   @Column('float')
   price: number;
 
+  @Column('float')
+  dailyChange: number;
+
   @Column('varchar')
   currency: string;
 
