@@ -119,7 +119,9 @@ describe.skip('MarginQueueController (e2e)', () => {
         availableCredit: 100 - ltv,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
       expect(amqpConnectionPublish).not.toBeCalled();
     });
@@ -133,7 +135,9 @@ describe.skip('MarginQueueController (e2e)', () => {
           availableCredit: 100 - ltv,
         });
 
-        await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+        await app
+          .get(MarginQueueController)
+          .checkMarginHandler({ userIds: [userId] });
 
         expect(amqpConnectionPublish).toBeCalledTimes(1);
         expect(amqpConnectionPublish).toBeCalledWith(
@@ -170,7 +174,9 @@ describe.skip('MarginQueueController (e2e)', () => {
           active: true,
         });
 
-        await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+        await app
+          .get(MarginQueueController)
+          .checkMarginHandler({ userIds: [userId] });
 
         expect(amqpConnectionPublish).not.toBeCalled();
       },
@@ -190,7 +196,9 @@ describe.skip('MarginQueueController (e2e)', () => {
           active: false,
         });
 
-        await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+        await app
+          .get(MarginQueueController)
+          .checkMarginHandler({ userIds: [userId] });
 
         expect(amqpConnectionPublish).toBeCalledTimes(1);
         expect(amqpConnectionPublish).toBeCalledWith(
@@ -233,7 +241,9 @@ describe.skip('MarginQueueController (e2e)', () => {
         availableCredit: 100 - ltv,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
       expect(amqpConnectionPublish).toBeCalledTimes(1);
       expect(amqpConnectionPublish).toBeCalledWith(
@@ -271,7 +281,9 @@ describe.skip('MarginQueueController (e2e)', () => {
         userId,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
       expect(amqpConnectionPublish).not.toBeCalled();
     });
@@ -293,7 +305,9 @@ describe.skip('MarginQueueController (e2e)', () => {
         createdAt: DateTime.now().minus({ hours: 60 }).toISO(),
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
       expect(amqpConnectionPublish).toBeCalledTimes(1);
       expect(amqpConnectionPublish).toBeCalledWith(
@@ -354,7 +368,9 @@ describe.skip('MarginQueueController (e2e)', () => {
         },
       ];
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
       expect(amqpConnectionPublish).toBeCalledTimes(1);
       expect(amqpConnectionPublish).toBeCalledWith(
@@ -465,7 +481,9 @@ describe.skip('MarginQueueController (e2e)', () => {
         },
       ];
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
       expect(amqpConnectionPublish).toBeCalledTimes(1);
       expect(amqpConnectionPublish).toBeCalledWith(
@@ -551,7 +569,9 @@ describe.skip('MarginQueueController (e2e)', () => {
         },
       ]);
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
       expect(amqpConnectionPublish).toBeCalledTimes(0);
       const marginCall = await marginCallRepository.findOne({
@@ -578,7 +598,9 @@ describe.skip('MarginQueueController (e2e)', () => {
         amount: 100,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
       expect(amqpConnectionPublish).toBeCalledTimes(0);
     });
@@ -596,7 +618,9 @@ describe.skip('MarginQueueController (e2e)', () => {
         availableCredit: collateralBalance - ltv,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
       expect(amqpConnectionPublish).toBeCalledTimes(0);
     });
@@ -614,7 +638,9 @@ describe.skip('MarginQueueController (e2e)', () => {
         availableCredit: collateralBalance - ltv,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
       expect(amqpConnectionPublish).toBeCalledTimes(0);
     });
@@ -632,7 +658,9 @@ describe.skip('MarginQueueController (e2e)', () => {
         availableCredit: collateralBalance - ltv,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
       expect(amqpConnectionPublish).toBeCalledTimes(1);
     });
