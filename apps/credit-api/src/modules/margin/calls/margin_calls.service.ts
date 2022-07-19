@@ -65,8 +65,8 @@ export class MarginCallsService {
         userId: usersLtv.userId,
         liquidation: assetsToLiquidate.map((asset) => ({
           asset: asset.asset,
-          amount: asset.amount,
-          price: asset.price,
+          amount: asset.liquidationAmount,
+          price: asset.liquidationPrice,
         })),
       });
     } else if (alreadyActiveMarginCall === undefined) {

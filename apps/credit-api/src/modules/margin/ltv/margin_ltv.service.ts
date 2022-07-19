@@ -63,7 +63,7 @@ export class MarginLtvService {
     );
     const usersLiquidationLogsSum: number = usersLiquidationLogs.reduce(
       (liquidationSum: number, liquidationLog) =>
-        liquidationSum + liquidationLog.price,
+        liquidationSum + liquidationLog.liquidationPrice,
       0,
     );
 

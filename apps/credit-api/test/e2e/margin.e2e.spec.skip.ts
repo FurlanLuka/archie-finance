@@ -566,14 +566,14 @@ describe('MarginQueueController (e2e)', () => {
         {
           userId: userId,
           asset: 'BTC',
-          price: 10,
-          amount: 1,
+          liquidationPrice: 10,
+          liquidationAmount: 1,
         },
         {
           userId: userId,
           asset: 'SOL',
-          price: 40,
-          amount: 1,
+          liquidationPrice: 40,
+          liquidationAmount: 1,
         },
       ]);
 

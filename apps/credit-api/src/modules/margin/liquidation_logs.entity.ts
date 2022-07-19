@@ -25,10 +25,10 @@ export class LiquidationLog {
   asset: string;
 
   @Column('float')
-  amount: number;
+  liquidationAmount: number;
 
   @Column('float')
-  price: number;
+  liquidationPrice: number;
 
   @ManyToOne(() => MarginCall, (marginCall: MarginCall) => marginCall.uuid)
   marginCall: MarginCall;
