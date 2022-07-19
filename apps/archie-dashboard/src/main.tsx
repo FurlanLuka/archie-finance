@@ -18,6 +18,8 @@ import { OnboardingRoute } from './routes/onboarding/onboarding-route';
 
 const queryClient: QueryClient = new QueryClient();
 
+console.log('AUTH0_AUDIENCE', AUTH0_AUDIENCE);
+
 ReactDOM.render(
   <>
     <GlobalStyles />
