@@ -31,7 +31,6 @@ export const CollateralDeposit: FC = () => {
     shouldPoll,
   });
 
-  return <CreateCreditLine collateral={currentCollateral} />;
   if (isModalOpen) {
     return (
       <CollateralReceivedModal
