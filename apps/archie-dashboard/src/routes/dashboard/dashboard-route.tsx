@@ -20,11 +20,11 @@ export const DashboardRoute: FC = () => {
     return <Loading />;
   }
 
-  // if (queryResponse.state === RequestState.SUCCESS) {
-  //   if (!queryResponse.data.completed) {
-  //     return <Navigate to="/onboarding" />;
-  //   }
-  // }
+  if (queryResponse.state === RequestState.SUCCESS) {
+    if (!queryResponse.data.completed) {
+      return <Navigate to="/onboarding" />;
+    }
+  }
 
   return (
     <>

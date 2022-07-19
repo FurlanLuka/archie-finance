@@ -9,20 +9,19 @@ import { CollateralReceivedModalStyled } from './collateral-received.styled';
 
 interface CollateralReceivedModalProps {
   isOpen: boolean;
-  close: () => void;
+  onClose: () => void;
   onConfirm: () => void;
 }
 
-export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({ isOpen, close, onConfirm }) => {
+export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({ isOpen, onClose, onConfirm }) => {
   const { t } = useTranslation();
 
   const handleConfirm = () => {
     onConfirm();
-    close();
   };
 
   return (
-    <Modal isOpen={isOpen} close={close} maxWidth="800px">
+    <Modal isOpen={isOpen} close={onClose} maxWidth="800px">
       <CollateralReceivedModalStyled>
         <div className="image">
           <img src={imgCollateralReceived} alt={t('collateral_received_modal.img_alt')} />

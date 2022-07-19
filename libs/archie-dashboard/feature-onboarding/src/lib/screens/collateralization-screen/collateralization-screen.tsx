@@ -15,8 +15,7 @@ import { CollateralAsset, Step } from '@archie-webapps/util-constants';
 
 import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';
 import { CollateralAssetSelect } from '../../components/collateral-asset-select/collateral-asset-select';
-import { Collateral } from '../../components/collateral/collateral';
-import { CollateralReceivedModal } from '../../components/modals/collateral-received/collateral-received';
+import { CollateralDeposit } from '../../components/collateral-deposit/collateral-deposit';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
 import { CollateralizationScreenStyled } from './collateralization-screen.styled';
@@ -28,7 +27,6 @@ export const CollateralizationScreen: FC = () => {
   const [selectedCollateralAsset, setSelectedCollateralAsset] = useState<CollateralAsset>();
   const [requiredCollateral, setRequiredCollateral] = useState(0);
   const [shouldCall, setShouldCall] = useState(false);
-  const [collateralReceivedModalOpen, setCollateralReceivedModalOpen] = useState(false);
 
   const getAssetPriceResponse: QueryResponse<AssetPrice[]> = useGetAssetPrice();
   const getDepositAddressResponse: QueryResponse<GetDepositAddressResponse> = useGetDepositAddress(
@@ -57,7 +55,7 @@ export const CollateralizationScreen: FC = () => {
         }
       }
     }
-  }, [getAssetPriceResponse]);
+  }, [getAssetPriceResponse, lineOfCredit, selectedCollateralAsset]);
 
   const getDepositAddress = (): string | undefined => {
     if (getDepositAddressResponse.state === RequestState.SUCCESS) {
@@ -87,14 +85,9 @@ export const CollateralizationScreen: FC = () => {
 
   return (
     <Container column mobileColumn alignItems="center">
-      <Collateral />
+      <CollateralDeposit />
       <StepsIndicator currentStep={Step.COLLATERALIZE} />
       <EmailVerificationAlert />
-      <CollateralReceivedModal
-        isOpen={collateralReceivedModalOpen}
-        close={() => setCollateralReceivedModalOpen(false)}
-        onConfirm={() => console.log('Modal clicked')}
-      />
       <CollateralizationScreenStyled>
         <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
         <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
