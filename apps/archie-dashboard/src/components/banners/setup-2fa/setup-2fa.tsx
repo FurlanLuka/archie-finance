@@ -43,7 +43,7 @@ export const Setup2faBanner: FC = () => {
           <ParagraphS weight={800}>{t('setup_2fa_banner.title')}</ParagraphS>
           <ParagraphXS>{t('setup_2fa_banner.text')}</ParagraphXS>
         </div>
-        <ButtonGhost maxWidth="fit-content" onClick={handleClick}>
+        <ButtonGhost maxWidth="fit-content" onClick={handleClick} disabled={shouldPollMfaEnrollment}>
           {t('btn_continue')}
         </ButtonGhost>
       </div>
