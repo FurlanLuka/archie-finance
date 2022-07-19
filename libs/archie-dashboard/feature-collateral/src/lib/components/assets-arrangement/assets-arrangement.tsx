@@ -10,19 +10,19 @@ export const AssetsArrangement: FC = () => (
     <div className="legend">
       <div className="legend-item">
         <ParagraphXXS weight={700}>Bitcoin</ParagraphXXS>
-        <div className="legend-item-border" />
+        <div className="legend-item-border btc" />
       </div>
       <div className="legend-item">
         <ParagraphXXS weight={700}>Ethereum</ParagraphXXS>
-        <div className="legend-item-border" />
+        <div className="legend-item-border eth" />
       </div>
       <div className="legend-item">
         <ParagraphXXS weight={700}>Solana</ParagraphXXS>
-        <div className="legend-item-border" />
+        <div className="legend-item-border sol" />
       </div>
       <div className="legend-item">
         <ParagraphXXS weight={700}>USDCoin</ParagraphXXS>
-        <div className="legend-item-border" />
+        <div className="legend-item-border usdc" />
       </div>
     </div>
   </AssetsArrangementStyled>

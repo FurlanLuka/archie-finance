@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { ButtonOutline, CollateralCurrency } from '@archie-webapps/ui-design-system';
-import { Icon } from '@archie-webapps/ui-icons';
 import { collateralAssets } from '@archie-webapps/util-constants';
 
-import { AllocationCellStyled, ActionsCellStyled, OptionsCellStyled } from './table-fixtures.styled';
+import { AllocationCellStyled, ActionsCellStyled } from './table-fixtures.styled';
 
 interface CollateralAssetCellProps {
   id: string;

@@ -49,3 +49,10 @@ export const collateralAssets: CollateralAsset[] = [
     url: 'https://etherscan.io/address',
   },
 ];
+
+export const collateralAssetsColor = {
+  btc: '#f7931a',
+  eth: '#627eea',
+  sol: '#bd40f2',
+  usdc: '#3e73c4',
+}
