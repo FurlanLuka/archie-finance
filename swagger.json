@@ -475,6 +475,17 @@
         ]
       }
     },
+    "/internal/margins/check": {
+      "post": {
+        "operationId": "MarginInternalController_checkMargin",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/v1/rize/users": {
       "post": {
         "operationId": "RizeController_createUser",
@@ -675,6 +686,95 @@
             }
           }
         }
+      }
+    },
+    "/v1/collateral/withdraw": {
+      "post": {
+        "operationId": "CollateralWithdrawalController_withdrawUserCollateral",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollateralWithdrawCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "CollateralWithdrawalController_getUserWithdrawals",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/collateral/withdraw/{asset}/max_amount": {
+      "get": {
+        "operationId": "CollateralWithdrawalController_getUserMaxWithdrawalAmount",
+        "parameters": [
+          {
+            "name": "asset",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
       }
     },
     "/v1/onboarding": {
@@ -1016,6 +1116,9 @@
           },
           "interest": {
             "type": "number"
+          },
+          "liquidation_wallet": {
+            "type": "string"
           }
         },
         "required": [
@@ -1023,7 +1126,8 @@
           "coinapi_id",
           "network",
           "ltv",
-          "interest"
+          "interest",
+          "liquidation_wallet"
         ]
       },
       "GetCreditResponseDto": {
@@ -1195,7 +1299,7 @@
               "failed"
             ]
           },
-          "amount": {
+          "us_dollar_amount": {
             "type": "string"
           },
           "settled_at": {
@@ -1203,15 +1307,52 @@
           },
           "created_at": {
             "type": "string"
+          },
+          "is_adjustment": {
+            "type": "boolean"
+          },
+          "mcc": {
+            "type": "string",
+            "nullable": true
+          },
+          "merchant_location": {
+            "type": "string",
+            "nullable": true
+          },
+          "merchant_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "merchant_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "denial_reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "net_asset": {
+            "type": "string",
+            "enum": [
+              "positive",
+              "negative"
+            ]
           }
         },
         "required": [
           "description",
           "type",
           "status",
-          "amount",
+          "us_dollar_amount",
           "settled_at",
-          "created_at"
+          "created_at",
+          "is_adjustment",
+          "mcc",
+          "merchant_location",
+          "merchant_name",
+          "merchant_number",
+          "denial_reason",
+          "net_asset"
         ]
       },
       "CollateralDto": {
@@ -1259,6 +1400,25 @@
           "value"
         ]
       },
+      "CollateralWithdrawCreateDto": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string"
+          },
+          "withdrawalAmount": {
+            "type": "number"
+          },
+          "destinationAddress": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset",
+          "withdrawalAmount",
+          "destinationAddress"
+        ]
+      },
       "GetOnboardingResponseDto": {
         "type": "object",
         "properties": {
@@ -1266,9 +1426,6 @@
             "type": "boolean"
           },
           "emailVerificationStage": {
-            "type": "boolean"
-          },
-          "phoneVerificationStage": {
             "type": "boolean"
           },
           "collateralizationStage": {
@@ -1284,7 +1441,6 @@
         "required": [
           "kycStage",
           "emailVerificationStage",
-          "phoneVerificationStage",
           "collateralizationStage",
           "cardActivationStage",
           "completed"

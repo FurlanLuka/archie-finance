@@ -35,12 +35,6 @@ export class MarginCollateralValueCheckService {
           marginCollateralCheck?.checked_at_collateral_balance ?? 0,
         );
 
-      console.log(
-        valueChangeInPercentage,
-        usersLtv.collateralBalance,
-        marginCollateralCheck?.checked_at_collateral_balance ?? 0,
-      );
-
       return (
         valueChangeInPercentage >=
         this.REQUIRED_COLLATERAL_VALUE_CHANGE_TO_CALCULATE_MARGIN

@@ -133,7 +133,7 @@ export class MarginService {
       }),
     );
 
-    await this.marginCollateralCheckService.updatexMarginChecks(
+    await this.marginCollateralCheckService.updateMarginChecks(
       filteredUsersByValueChange,
     );
     await this.amqpConnection.publish(
