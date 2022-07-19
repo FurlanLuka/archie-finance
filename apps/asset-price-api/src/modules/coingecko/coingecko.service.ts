@@ -15,7 +15,9 @@ export class CoingeckoService {
     const response = await axios.get(
       `${this.configService.get(
         ConfigVariables.COINGECKO_API_URI,
-      )}/v3/simple/price?ids=${coinIds.join(',')}&vs_currencies=usd`,
+      )}/v3/simple/price?ids=${coinIds.join(
+        ',',
+      )}&vs_currencies=usd&include_24hr_change=true`,
     );
 
     return response.data;
