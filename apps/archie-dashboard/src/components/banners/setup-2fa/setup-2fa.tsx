@@ -19,9 +19,11 @@ export const Setup2faBanner: FC = () => {
 
   useEffect(() => {
     if (startMfaEnrollmentResponse.state === RequestState.SUCCESS) {
-      setShouldPollMfaEnrollment(true);
+      if (shouldPollMfaEnrollment === false) {
+        window.open(startMfaEnrollmentResponse.data.ticket_url, '_blank');
+      }
 
-      window.open(startMfaEnrollmentResponse.data.ticket_url, '_blank');
+      setShouldPollMfaEnrollment(true);
     }
   }, [startMfaEnrollmentResponse]);
 
