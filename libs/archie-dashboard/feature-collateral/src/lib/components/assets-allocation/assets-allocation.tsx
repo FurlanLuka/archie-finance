@@ -2,10 +2,10 @@ import { FC } from 'react';
 
 import { ParagraphXXS } from '@archie-webapps/ui-design-system';
 
-import { AssetsArrangementStyled } from './assets-arrangement.styled';
+import { AssetsAllocationStyled } from './assets-allocation.styled';
 
-export const AssetsArrangement: FC = () => (
-  <AssetsArrangementStyled btc={75} eth={13} sol={10} usdc={2}>
+export const AssetsAllocation: FC = () => (
+  <AssetsAllocationStyled btc={75} eth={13} sol={10} usdc={2}>
     <div className="range" />
     <div className="legend">
       <div className="legend-item">
@@ -25,5 +25,5 @@ export const AssetsArrangement: FC = () => (
         <div className="legend-item-border usdc" />
       </div>
     </div>
-  </AssetsArrangementStyled>
+  </AssetsAllocationStyled>
 );

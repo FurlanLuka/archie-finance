@@ -5,7 +5,7 @@ import { Card, Table, Badge, SubtitleS, ParagraphM, ParagraphXS } from '@archie-
 import { theme } from '@archie-webapps/ui-theme';
 import { LoanToValueColor, LoanToValueText } from '@archie-webapps/util-constants';
 
-import { AssetsArrangement } from '../components/assets-arrangement/assets-arrangement';
+import { AssetsAllocation } from '../components/assets-allocation/assets-allocation';
 import { tableData } from '../constants/table-data';
 import { tableColumns } from '../fixtures/table-fixture';
 
@@ -42,7 +42,7 @@ export const CollateralScreen: FC = () => {
             <Badge statusColor={LoanToValueColor[good]}>{LoanToValueText[good]}</Badge>
           </div>
 
-          <AssetsArrangement />
+          <AssetsAllocation />
 
           <Table columns={columns} data={data} />
         </Card>

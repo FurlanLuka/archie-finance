@@ -2,14 +2,14 @@ import styled from 'styled-components';
 
 import { collateralAssetsColor } from '@archie-webapps/util-constants';
 
-interface AssetsArrangementStyledProps {
+interface AssetsAllocationStyledProps {
   btc: number;
   eth: number;
   sol: number;
   usdc: number;
 }
 
-export const AssetsArrangementStyled = styled.div<AssetsArrangementStyledProps>`
+export const AssetsAllocationStyled = styled.div<AssetsAllocationStyledProps>`
   width: 100%;
   margin-bottom: 2rem;
 
