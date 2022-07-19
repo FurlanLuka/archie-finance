@@ -168,6 +168,28 @@ export class RizeService {
     await this.rizeApiService.loadFunds(customerId, credit.availableCredit);
   }
 
+  public async increaseCreditLimit(
+    userId: string,
+    amount: number,
+  ): Promise<void> {
+    const customer: Customer | null = await this.rizeApiService.searchCustomers(
+      userId,
+    );
+
+    await this.rizeApiService.loadFunds(customer.uid, amount);
+  }
+
+  public async decreaseCreditLimit(
+    userId: string,
+    amount: number,
+  ): Promise<void> {
+    const customer: Customer | null = await this.rizeApiService.searchCustomers(
+      userId,
+    );
+
+    await this.rizeApiService.decreaseCreditLimit(customer.uid, amount);
+  }
+
   public async unlockCard(userId: string): Promise<void> {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,

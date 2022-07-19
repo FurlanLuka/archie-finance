@@ -52,3 +52,8 @@ export class CardActivatedDto {
   userId: string;
   customerId: string;
 }
+
+export class CreditLimitDto {
+  userId: string;
+  amount: number;
+}

@@ -43,11 +43,6 @@ export const MARGIN_CALL_COMPLETED_EXCHANGE = {
   type: 'fanout',
 };
 
-export const MARGIN_CALL_STARTED_EXCHANGE = {
-  name: 'credit.margin_call.started.fx',
-  type: 'fanout',
-};
-
 export const LTV_LIMIT_APPROACHING_EXCHANGE = {
   name: 'credit.margin_call.ltv_limit_approaching.fx',
   type: 'fanout',
@@ -64,22 +59,17 @@ export const CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE = {
 };
 
 export const CREDIT_LIMIT_DECREASED = {
-  name: 'credit.limit.adjusted.fx',
+  name: 'credit.limit.decreased.fx',
   type: 'fanout',
 };
 
 export const CREDIT_LIMIT_INCREASED = {
-  name: 'credit.limit.adjusted.fx',
+  name: 'credit.limit.increased.fx',
   type: 'fanout',
 };
 
 export const COLLATERAL_DEPOSITED_EXCHANGE = {
   name: 'credit.collateral.deposited.fx',
-  type: 'fanout',
-};
-
-export const MARGIN_CALL_COMPLETED_EXCHANGE = {
-  name: 'credit.margin_call.completed.fx',
   type: 'fanout',
 };
 

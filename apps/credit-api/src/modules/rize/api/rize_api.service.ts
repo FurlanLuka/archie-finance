@@ -220,6 +220,37 @@ export class RizeApiService {
     );
   }
 
+  public async decreaseCreditLimit(
+    customerId: string,
+    adjustmentAmount: number,
+  ): Promise<void> {
+    const adjustmentTypesResponse: AxiosResponse<RizeList<AdjustmentType>> =
+      await this.rizeApiClient.get('adjustment_types', {
+        headers: {
+          Authorization: await this.getToken(),
+        },
+      });
+    const increaseCreditAdjustmentType: AdjustmentType =
+      adjustmentTypesResponse.data.data.find(
+        (adjustmentType: AdjustmentType) =>
+          adjustmentType.name === 'credit_limit_update_decrease',
+      );
+
+    await this.rizeApiClient.post(
+      `adjustments`,
+      {
+        customer_uid: customerId,
+        usd_adjustment_amount: adjustmentAmount,
+        adjustment_type_uid: increaseCreditAdjustmentType.uid,
+      },
+      {
+        headers: {
+          Authorization: await this.getToken(),
+        },
+      },
+    );
+  }
+
   private createApiClient({ host, basePath, timeout }) {
     const axiosInstance = axios.create({
       baseURL: `${host}${basePath}`,

@@ -47,16 +47,14 @@ export class CreditLimitService {
     const increasedAmount: number = creditLimit - credit.totalCredit;
 
     await this.creditRepository
-      .createQueryBuilder('credit')
+      .createQueryBuilder('Credit')
       .update(Credit)
       .where('userId = :userId', { userId: userId })
       .set({
-        totalCredit: () => 'totalCredit + :creditIncrease',
-        availableCredit: () => 'availableCredit + :creditIncrease',
+        totalCredit: () => '"totalCredit" + :creditIncrease',
+        availableCredit: () => '"availableCredit" + :creditIncrease',
       })
-      .setParameters({
-        creditIncrease: increasedAmount,
-      })
+      .setParameter('creditIncrease', increasedAmount)
       .execute();
 
     this.amqpConnection.publish(CREDIT_LIMIT_INCREASED.name, '', {
@@ -77,15 +75,15 @@ export class CreditLimitService {
         : credit.availableCredit;
 
     const updatedResult: UpdateResult = await this.creditRepository
-      .createQueryBuilder('credit')
+      .createQueryBuilder('Credit')
       .update(Credit)
       .where('userId = :userId AND availableCredit >= :creditDecrease', {
         userId: userId,
         creditDecrease: decreaseAmount,
       })
       .set({
-        totalCredit: () => 'totalCredit - :creditDecrease',
-        availableCredit: () => 'availableCredit - :creditDecrease',
+        totalCredit: () => '"totalCredit" - :creditDecrease',
+        availableCredit: () => '"availableCredit" - :creditDecrease',
       })
       .setParameters({
         creditDecrease: decreaseAmount,

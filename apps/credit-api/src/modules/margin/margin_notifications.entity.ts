@@ -20,7 +20,7 @@ export class MarginNotification {
   @Column('varchar')
   userId: string;
 
-  @Column({ type: 'int', nullable: true })
+  @Column({ type: 'float', nullable: true })
   sentAtLtv: number | null;
 
   @Column({ type: 'boolean' })

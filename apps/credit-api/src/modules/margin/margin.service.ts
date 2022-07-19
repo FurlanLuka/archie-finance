@@ -103,6 +103,10 @@ export class MarginService {
         userLtvs,
       );
 
+    if (filteredUsersByValueChange.length === 0) {
+      return;
+    }
+
     await Promise.all(
       filteredUsersByValueChange.map(async (usersLtv: UsersLtv) => {
         const alreadyActiveMarginCall: MarginCall | undefined =

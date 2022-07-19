@@ -12,6 +12,7 @@ import { verifyAccessToken } from '../e2e-test-utils/mock.auth.utils';
 import { AuthGuard } from '@archie-microservices/auth0';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
+  CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,
   LTV_LIMIT_APPROACHING_EXCHANGE,
   MARGIN_CALL_COMPLETED_EXCHANGE,
   MARGIN_CALL_STARTED_EXCHANGE,
@@ -40,7 +41,7 @@ import { closeToMatcher } from '../e2e-test-utils/jest.utils';
 import { Collateral } from '../../src/modules/collateral/collateral.entity';
 import { MarginCollateralCheck } from '../../src/modules/margin/margin_collateral_check.entity';
 
-describe.skip('MarginQueueController (e2e)', () => {
+describe('MarginQueueController (e2e)', () => {
   let app: INestApplication;
   let module: TestingModule;
 
@@ -111,7 +112,7 @@ describe.skip('MarginQueueController (e2e)', () => {
   });
 
   describe('CHECK_MARGIN_EXCHANGE flow', () => {
-    it('Should not do anything in case LTV is under 65% and no margin calls are active', async () => {
+    it('Should adjust credit limit at the first time and not send notification in case LTV is under 65% and no margin calls are active', async () => {
       const ltv = 64;
       await creditRepository.save({
         userId,
@@ -119,9 +120,18 @@ describe.skip('MarginQueueController (e2e)', () => {
         availableCredit: 100 - ltv,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpConnectionPublish).not.toBeCalled();
+      expect(amqpConnectionPublish).toBeCalledTimes(1);
+      expect(amqpConnectionPublish).toBeCalledWith(
+        CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE.name,
+        '',
+        {
+          userIds: [userId],
+        },
+      );
     });
 
     it.each(marginNotificationLtv)(
@@ -133,9 +143,10 @@ describe.skip('MarginQueueController (e2e)', () => {
           availableCredit: 100 - ltv,
         });
 
-        await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+        await app
+          .get(MarginQueueController)
+          .checkMarginHandler({ userIds: [userId] });
 
-        expect(amqpConnectionPublish).toBeCalledTimes(1);
         expect(amqpConnectionPublish).toBeCalledWith(
           LTV_LIMIT_APPROACHING_EXCHANGE.name,
           '',
@@ -170,9 +181,17 @@ describe.skip('MarginQueueController (e2e)', () => {
           active: true,
         });
 
-        await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+        await app
+          .get(MarginQueueController)
+          .checkMarginHandler({ userIds: [userId] });
 
-        expect(amqpConnectionPublish).not.toBeCalled();
+        expect(amqpConnectionPublish).toBeCalledWith(
+          CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE.name,
+          '',
+          {
+            userIds: [userId],
+          },
+        );
       },
     );
 
@@ -190,9 +209,10 @@ describe.skip('MarginQueueController (e2e)', () => {
           active: false,
         });
 
-        await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+        await app
+          .get(MarginQueueController)
+          .checkMarginHandler({ userIds: [userId] });
 
-        expect(amqpConnectionPublish).toBeCalledTimes(1);
         expect(amqpConnectionPublish).toBeCalledWith(
           LTV_LIMIT_APPROACHING_EXCHANGE.name,
           '',
@@ -233,9 +253,10 @@ describe.skip('MarginQueueController (e2e)', () => {
         availableCredit: 100 - ltv,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpConnectionPublish).toBeCalledTimes(1);
       expect(amqpConnectionPublish).toBeCalledWith(
         MARGIN_CALL_STARTED_EXCHANGE.name,
         '',
@@ -271,9 +292,11 @@ describe.skip('MarginQueueController (e2e)', () => {
         userId,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpConnectionPublish).not.toBeCalled();
+      expect(amqpConnectionPublish).toBeCalledTimes(1);
     });
 
     it('Should reset margin call attempt if LTV falls under 75 within 72 hours and send email', async () => {
@@ -293,9 +316,10 @@ describe.skip('MarginQueueController (e2e)', () => {
         createdAt: DateTime.now().minus({ hours: 60 }).toISO(),
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpConnectionPublish).toBeCalledTimes(1);
       expect(amqpConnectionPublish).toBeCalledWith(
         MARGIN_CALL_COMPLETED_EXCHANGE.name,
         '',
@@ -354,9 +378,10 @@ describe.skip('MarginQueueController (e2e)', () => {
         },
       ];
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpConnectionPublish).toBeCalledTimes(1);
       expect(amqpConnectionPublish).toBeCalledWith(
         MARGIN_CALL_COMPLETED_EXCHANGE.name,
         '',
@@ -465,9 +490,10 @@ describe.skip('MarginQueueController (e2e)', () => {
         },
       ];
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpConnectionPublish).toBeCalledTimes(1);
       expect(amqpConnectionPublish).toBeCalledWith(
         MARGIN_CALL_COMPLETED_EXCHANGE.name,
         '',
@@ -551,9 +577,10 @@ describe.skip('MarginQueueController (e2e)', () => {
         },
       ]);
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpConnectionPublish).toBeCalledTimes(0);
       const marginCall = await marginCallRepository.findOne({
         where: {
           userId: userId,
@@ -578,30 +605,21 @@ describe.skip('MarginQueueController (e2e)', () => {
         amount: 100,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpConnectionPublish).toBeCalledTimes(0);
+      expect(amqpConnectionPublish).toBeCalledTimes(1);
+      expect(amqpConnectionPublish).toBeCalledWith(
+        CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE.name,
+        '',
+        {
+          userIds: [userId],
+        },
+      );
     });
 
-    it('Should not do anything in case collateral value did not change for at least 10%', async () => {
-      const collateralBalance = 100;
-      await marginCollateralCheckRepository.save({
-        checked_at_collateral_balance: collateralBalance,
-        userId,
-      });
-      const ltv = 85;
-      await creditRepository.save({
-        userId,
-        totalCredit: collateralBalance,
-        availableCredit: collateralBalance - ltv,
-      });
-
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
-
-      expect(amqpConnectionPublish).toBeCalledTimes(0);
-    });
-
-    it('Should not do anything in case collateral value did not change for at least 10%', async () => {
+    it('Should not check anything in case collateral value did not change for at least 10%', async () => {
       const collateralBalance = 100;
       await marginCollateralCheckRepository.save({
         checked_at_collateral_balance: collateralBalance - 9,
@@ -614,12 +632,14 @@ describe.skip('MarginQueueController (e2e)', () => {
         availableCredit: collateralBalance - ltv,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
       expect(amqpConnectionPublish).toBeCalledTimes(0);
     });
 
-    it('Should check for the margin call in case collateral value changes by at least 10%', async () => {
+    it('Should check for the margin call and adjust credit line in case collateral value changes by at least 10%', async () => {
       const collateralBalance = 100;
       await marginCollateralCheckRepository.save({
         checked_at_collateral_balance: collateralBalance - 10,
@@ -632,9 +652,18 @@ describe.skip('MarginQueueController (e2e)', () => {
         availableCredit: collateralBalance - ltv,
       });
 
-      await app.get(MarginQueueController).checkMargin({ userIds: [userId] });
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpConnectionPublish).toBeCalledTimes(1);
+      expect(amqpConnectionPublish).toBeCalledTimes(2);
+      expect(amqpConnectionPublish).toBeCalledWith(
+        CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE.name,
+        '',
+        {
+          userIds: [userId],
+        },
+      );
     });
   });
 });
