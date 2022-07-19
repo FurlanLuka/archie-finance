@@ -609,6 +609,26 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
+      expect(amqpConnectionPublish).toBeCalledTimes(0);
+    });
+
+    it('Should not do anything in case collateral value did not change for at least 10%', async () => {
+      const collateralBalance = 100;
+      await marginCollateralCheckRepository.save({
+        checked_at_collateral_balance: collateralBalance,
+        userId,
+      });
+      const ltv = 85;
+      await creditRepository.save({
+        userId,
+        totalCredit: collateralBalance,
+        availableCredit: collateralBalance - ltv,
+      });
+
+      await app
+        .get(MarginQueueController)
+        .checkMarginHandler({ userIds: [userId] });
+
       expect(amqpConnectionPublish).toBeCalledTimes(1);
       expect(amqpConnectionPublish).toBeCalledWith(
         CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE.name,
