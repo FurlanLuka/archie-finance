@@ -6,6 +6,8 @@ import { useCreateCreditLine } from '@archie-webapps/shared/data-access-archie-a
 import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { ButtonPrimary, Loading, ParagraphXS } from '@archie-webapps/ui-design-system';
 
+import { calculateCollateralValue } from '../../../../helpers/collateral';
+
 import * as Styled from './create_credit_line.styled';
 
 interface CreateCreditLineProps {
@@ -25,7 +27,7 @@ export const CreateCreditLine: FC<CreateCreditLineProps> = ({ collateral }) => {
           <>
             <ParagraphXS weight={700} className="creditInfo">
               You are collateralizing {collateral.map((asset) => `${asset.amount} ${asset.asset}, `)} for a credit line
-              of 300$.
+              of {calculateCollateralValue(collateral, getAssetPriceResponse.data)}$.
             </ParagraphXS>
             <ButtonPrimary
               onClick={() => {
