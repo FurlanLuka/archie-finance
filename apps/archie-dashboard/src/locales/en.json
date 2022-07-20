@@ -128,7 +128,7 @@
     "address_title": "What address would you like to send your {{currentAsset}} to?",
     "label": {
       "amount": "How much {{currentAsset}} would you like to withdraw?",
-      "address": "Send {{withdrawAmount}} {{currentAsset}} to:"
+      "address": "Send {{currentAsset}} to:"
     },
     "placeholder": {
       "amount": "max: {{maxWithdrawAmount}} {{currentAsset}}",

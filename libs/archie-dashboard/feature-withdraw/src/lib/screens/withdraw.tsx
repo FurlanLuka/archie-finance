@@ -87,9 +87,7 @@ export const WithdrawScreen: FC = () => {
                 <ParagraphXS weight={700}>{t('dashboard_withdraw.address_title', { currentAsset })}</ParagraphXS>
               </div>
               <div className="address-input">
-                <ParagraphXS weight={700}>
-                  {t('dashboard_withdraw.label.address', { withdrawAmount: 0.12, currentAsset })}
-                </ParagraphXS>
+                <ParagraphXS weight={700}>{t('dashboard_withdraw.label.address', { currentAsset })}</ParagraphXS>
                 <input placeholder={t('dashboard_withdraw.placeholder.address')} {...register('withdrawAddress')} />
                 {errors.withdrawAddress?.message && (
                   <ParagraphXS className="error" color={theme.textDanger}>
