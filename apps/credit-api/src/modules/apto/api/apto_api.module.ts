@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AptoApiService } from './apto_api.service';
-import { CryptoModule } from '@archie-microservices/crypto';
+import { CryptoModule } from '@archie/api/utils/crypto';
 
 @Module({
   imports: [CryptoModule],

@@ -19,6 +19,8 @@ import { WaitlistModule } from '@archie/api/referral-system-api/waitlist';
         ConfigVariables.VAULT_PRIVATE_ADDRESS,
         ConfigVariables.VAULT_USERNAME,
         ConfigVariables.QUEUE_URL,
+        ConfigVariables.PRIVATE_KEY,
+        ConfigVariables.PUBLIC_KEY,
       ],
       parse: (_configVariable, value) => value,
     }),

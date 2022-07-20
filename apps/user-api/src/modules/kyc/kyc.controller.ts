@@ -42,6 +42,11 @@ export class KycController {
 export class InternalKycController {
   constructor(private readonly kycService: KycService) {}
 
+  @Get('migrate')
+  async migrate(): Promise<void> {
+    await this.kycService.migrate();
+  }
+
   @Get(':userId')
   @ApiErrorResponse([KycNotFoundError])
   async getKyc(@Param('userId') userId: string): Promise<GetKycResponseDto> {
