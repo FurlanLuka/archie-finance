@@ -19,6 +19,7 @@ import { CollateralDeposit } from '../../components/collateral-deposit/collatera
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
 import { CollateralizationScreenStyled } from './collateralization-screen.styled';
+import { MIN_LINE_OF_CREDIT } from '../../constants/collateral';
 
 export const CollateralizationScreen: FC = () => {
   const { t } = useTranslation();
@@ -99,7 +100,7 @@ export const CollateralizationScreen: FC = () => {
           />
           <InputRange
             label={t('collateralization_step.inputs.input_range_label')}
-            min={200}
+            min={MIN_LINE_OF_CREDIT}
             max={1500}
             value={lineOfCredit}
             onChange={setLineOfCredit}

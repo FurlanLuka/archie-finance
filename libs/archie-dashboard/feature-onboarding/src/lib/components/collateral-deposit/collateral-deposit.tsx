@@ -2,9 +2,12 @@ import { FC, useCallback, useMemo, useState } from 'react';
 
 import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
 
+import { MIN_LINE_OF_CREDIT } from '../../constants/collateral';
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
+import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';
 
 import { CreateCreditLine } from './blocks/create_credit_line/create_credit_line';
+import { NotEnoughCollateral } from './blocks/not-enough-collateral/not-enough-collateral';
 import { calculateCollateralValue, formatEntireCollateral } from './helpers';
 import { usePollCollateralDeposit } from './use-poll-collateral-deposit';
 
@@ -34,23 +37,38 @@ export const CollateralDeposit: FC = () => {
   });
 
   if (isModalOpen) {
+    if (collateralTotalValue > MIN_LINE_OF_CREDIT) {
+      return (
+        <CollateralReceivedModal
+          onClose={() => {
+            setIsModalOpen(false);
+          }}
+          onConfirm={() => {
+            setIsModalOpen(false);
+            setShouldPoll(true);
+          }}
+          collateralText={collateralText}
+          creditValue={collateralTotalValue}
+        />
+      );
+    }
     return (
-      <CollateralReceivedModal
+      <NotEnoughCollateralModal
+        collateralText={collateralText}
+        creditValue={collateralTotalValue}
         onClose={() => {
-          setIsModalOpen(false);
-        }}
-        onConfirm={() => {
           setIsModalOpen(false);
           setShouldPoll(true);
         }}
-        collateralText={collateralText}
-        creditValue={collateralTotalValue}
       />
     );
   }
 
   if (!isModalOpen && currentCollateral.length > 0) {
-    return <CreateCreditLine collateralText={collateralText} creditValue={collateralTotalValue} />;
+    if (collateralTotalValue > MIN_LINE_OF_CREDIT) {
+      return <CreateCreditLine collateralText={collateralText} creditValue={collateralTotalValue} />;
+    }
+    return <NotEnoughCollateral creditValue={collateralTotalValue} collateralText={collateralText} />;
   }
 
   return null;

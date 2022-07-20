@@ -99,6 +99,14 @@
     "img_alt": "Collateral received",
     "btn": "Collateralize more"
   },
+  "not_enough_collateral_modal": {
+    "title": "We received your collateral, but...",
+    "text": "Your current collateral of {{collateral}} adds up to a ${{credit_value}} credit line. The minimum required value is ${{min_value}}. Please deposit at least {{difference}} worth of cryptocurrency more.",
+    "btn": "Collateralize more"
+  },
+  "not_enough_collateral_popup": {
+    "text": "Your current collateral of {{collateral}} adds up to a ${{credit_value}} credit line. The minimum required value is ${{min_value}}. Please deposit at least {{difference}} worth of cryptocurrency more."
+  },
   "collateral_credit_line_popup": {
     "text": "You are collaterizing {{collateral}} for a credit line of ${{credit_value}}.",
     "button_text": "Let's go!"

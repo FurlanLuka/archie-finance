@@ -3,7 +3,7 @@ import { collateralAssets } from '@archie-webapps/util-constants';
 
 export function formatEntireCollateral(collateral: CollateralValue[]): string {
   const collateralText = collateral.reduce((text, collateralEntry, i) => {
-    if (i === 1) {
+    if (i === 0) {
       return `${collateralEntry.assetAmount} ${collateralEntry.asset}`;
     }
 
