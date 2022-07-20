@@ -67,7 +67,7 @@ export const CollateralScreen: FC = () => {
 
         <AssetsAllocation />
 
-        {getCollateralValue()}
+        {getCollateralValue().toString()}
 
         <Table columns={columns} data={data} />
       </Card>
