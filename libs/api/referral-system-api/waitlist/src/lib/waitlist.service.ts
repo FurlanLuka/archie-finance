@@ -151,15 +151,15 @@ export class WaitlistService {
       emailAddress: Like('%vault:%'),
     });
 
-    const updatedEntities = await Promise.all(
-      entities.map(async (entity) => {
-        try {
-          const decryptedEmail = await this.vaultService.decryptStrings([
-            entity.emailAddress,
-          ]);
+    const emailAddresses = entities.map(entity => entity.emailAddress);
 
+    const decryptedEmails = await this.vaultService.decryptStrings(emailAddresses);
+
+    const updatedEntities = await Promise.all(
+      entities.map(async (entity, index) => {
+        try {
           const reEncryptedEmail = this.cryptoService.encrypt(
-            decryptedEmail[0],
+            decryptedEmails[index],
           );
 
           return {
