@@ -3,7 +3,7 @@ name: Deploy production
 on:
   push:
     tags:
-      - !v*-alpha
+      - "!v*-alpha"
       - v*
 
 env:
