@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { TotalCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-total-value';
 import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-total-value';
@@ -27,6 +28,8 @@ enum Stage {
 
 export const CardScreen: FC = () => {
   const { t } = useTranslation();
+
+  const navigate = useNavigate();
 
   const [stage, setStage] = useState(Stage.CREATE_USER);
 
@@ -93,7 +96,8 @@ export const CardScreen: FC = () => {
         <ButtonPrimary
           maxWidth="20rem"
           isLoading={getCollateralTotalValueResponse.state === RequestState.LOADING}
-          // isDisabled={isEmailVerified} TBD
+          isDisabled={!(getCreditQueryResponse.state === RequestState.SUCCESS && stage === Stage.COMPLETE)}
+          onClick={() => navigate('/collateral')}
         >
           {t('card_step.btn')}
         </ButtonPrimary>
