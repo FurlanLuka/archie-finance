@@ -124,7 +124,7 @@ export const CollateralizationScreen: FC = () => {
               >
                 {getFormattedCollateral()}
               </span>
-              <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
+              <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>0</span>
             </SubtitleM>
             <ReactTooltip
               textColor={theme.tooltipText}
@@ -137,14 +137,14 @@ export const CollateralizationScreen: FC = () => {
             <ParagraphXS weight={700}>{t('collateralization_step.result.second')}</ParagraphXS>
             <SubtitleM weight={400}>
               {selectedCollateralAsset?.loan_to_value}%
-              <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
+              <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>0%</span>
             </SubtitleM>
           </div>
           <div className="result-item">
             <ParagraphXS weight={700}>{t('collateralization_step.result.third')}</ParagraphXS>
             <SubtitleM weight={400}>
               {selectedCollateralAsset?.interest_rate}%
-              <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>-/-</span>
+              <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>0%</span>
             </SubtitleM>
           </div>
         </div>
