@@ -14,7 +14,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/api/utils/crypto"],
       "options": {
-        "jestConfig": "libs/api/utilscrypto/jest.config.ts",
+        "jestConfig": "libs/api/utils/crypto/jest.config.ts",
         "passWithNoTests": true
       }
     }
