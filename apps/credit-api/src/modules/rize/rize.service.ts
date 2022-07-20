@@ -61,27 +61,15 @@ export class RizeService {
               payload: message,
             });
 
-            if (
-              ![TransactionType.fee, TransactionType.credit].includes(
-                message.data.details.type,
-              ) &&
-              message.data.details.new_status === TransactionStatus.settled
-            ) {
-              const userId: string = message.data.details.customer_external_uid;
-              const amount: string = message.data.details.us_dollar_amount;
-
-              this.decreaseAvailableCredit(userId, Number(amount))
-                .then(() => ack())
-                .catch((error) => {
-                  Logger.error({
-                    message: 'Rize transaction event message parsing failed',
-                    error,
-                  });
-                  nack();
+            this.handleTransactionsEvent(message)
+              .then(() => ack())
+              .catch((error) => {
+                Logger.error({
+                  message: 'Rize transaction event message parsing failed',
+                  error,
                 });
-            } else {
-              ack();
-            }
+                nack();
+              });
           } else {
             Logger.error({
               message: 'Rize transaction event message parsing failed',
@@ -102,6 +90,20 @@ export class RizeService {
         error: err,
       });
       nack();
+    }
+  }
+
+  private async handleTransactionsEvent(message: TransactionEvent) {
+    if (
+      ![TransactionType.fee, TransactionType.credit].includes(
+        message.data.details.type,
+      ) &&
+      message.data.details.new_status === TransactionStatus.settled
+    ) {
+      const userId: string = message.data.details.customer_external_uid;
+      const amount: string = message.data.details.us_dollar_amount;
+
+      await this.decreaseAvailableCredit(userId, Number(amount));
     }
   }
 
