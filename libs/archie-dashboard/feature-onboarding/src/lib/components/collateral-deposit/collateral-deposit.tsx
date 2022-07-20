@@ -1,19 +1,20 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useMemo, useState } from 'react';
 
-import { Collateral } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral';
+import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
 
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 
 import { CreateCreditLine } from './blocks/create_credit_line/create_credit_line';
+import { calculateCollateralValue, formatEntireCollateral } from './helpers';
 import { usePollCollateralDeposit } from './use-poll-collateral-deposit';
 
 export const CollateralDeposit: FC = () => {
   const [shouldPoll, setShouldPoll] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentCollateral, setCurrentCollateral] = useState<Collateral[]>([]);
+  const [currentCollateral, setCurrentCollateral] = useState<CollateralValue[]>([]);
 
   const onCollateralChange = useCallback(
-    (newCollateral: Collateral[]) => {
+    (newCollateral: CollateralValue[]) => {
       // TODO bruh stringify
       // reducer perhaps?
       if (JSON.stringify(newCollateral) !== JSON.stringify(currentCollateral)) {
@@ -24,6 +25,8 @@ export const CollateralDeposit: FC = () => {
     },
     [currentCollateral],
   );
+  const collateralText = useMemo(() => formatEntireCollateral(currentCollateral), [currentCollateral]);
+  const collateralTotalValue = useMemo(() => calculateCollateralValue(currentCollateral), [currentCollateral]);
 
   usePollCollateralDeposit({
     onCollateralChange,
@@ -33,7 +36,6 @@ export const CollateralDeposit: FC = () => {
   if (isModalOpen) {
     return (
       <CollateralReceivedModal
-        collateral={currentCollateral}
         onClose={() => {
           setIsModalOpen(false);
         }}
@@ -41,12 +43,14 @@ export const CollateralDeposit: FC = () => {
           setIsModalOpen(false);
           setShouldPoll(true);
         }}
+        collateralText={collateralText}
+        creditValue={collateralTotalValue}
       />
     );
   }
 
   if (!isModalOpen && currentCollateral.length > 0) {
-    return <CreateCreditLine collateral={currentCollateral} />;
+    return <CreateCreditLine collateralText={collateralText} creditValue={collateralTotalValue} />;
   }
 
   return null;

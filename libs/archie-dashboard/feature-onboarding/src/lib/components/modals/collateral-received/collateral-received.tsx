@@ -1,33 +1,28 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetAssetPrice } from '@archie-webapps/shared/data-access-archie-api/asset_price/hooks/use-get-asset-price';
-import { Collateral } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral';
+import { useCreateCreditLine } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-create-credit-line';
 import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
-import {
-  ButtonPrimary,
-  ButtonOutline,
-  Modal,
-  ParagraphM,
-  ParagraphXS,
-  Loading,
-} from '@archie-webapps/ui-design-system';
+import { ButtonPrimary, ButtonOutline, Modal, ParagraphM, ParagraphXS } from '@archie-webapps/ui-design-system';
 
 import imgCollateralReceived from '../../../../assets/img-collateral-received.png';
-import { calculateCollateralValue, formatEntireCollateral } from '../../../helpers/collateral';
 
 import { CollateralReceivedModalStyled } from './collateral-received.styled';
-import { useCreateCreditLine } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-create-credit-line';
 
 interface CollateralReceivedModalProps {
   onClose: () => void;
   onConfirm: () => void;
-  collateral: Collateral[];
+  collateralText: string;
+  creditValue: number;
 }
 
-export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({ onClose, onConfirm, collateral }) => {
+export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
+  onClose,
+  onConfirm,
+  collateralText,
+  creditValue,
+}) => {
   const { t } = useTranslation();
-  const getAssetPriceResponse = useGetAssetPrice();
   const createCreditLine = useCreateCreditLine();
 
   const handleConfirm = () => {
@@ -37,33 +32,20 @@ export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({ onCl
     onConfirm();
   };
 
-  function getModalContent() {
-    switch (getAssetPriceResponse.state) {
-      case RequestState.LOADING:
-        return <Loading />;
-      case RequestState.SUCCESS:
-        return (
-          <ParagraphXS>
-            {t('collateral_received_modal.text', {
-              collateral: formatEntireCollateral(collateral),
-              credit_value: calculateCollateralValue(collateral, getAssetPriceResponse.data),
-            })}
-          </ParagraphXS>
-        );
-      default:
-        return null;
-    }
-  }
-
   return (
-    <Modal isOpen={true} close={onClose} maxWidth="800px">
+    <Modal isOpen={true} maxWidth="800px">
       <CollateralReceivedModalStyled>
         <div className="image">
           <img src={imgCollateralReceived} alt={t('collateral_received_modal.img_alt')} />
         </div>
         <div className="content">
           <ParagraphM weight={700}>{t('collateral_received_modal.title')}</ParagraphM>
-          {getModalContent()}
+          <ParagraphXS>
+            {t('collateral_received_modal.text', {
+              collateral: collateralText,
+              credit_value: creditValue,
+            })}
+          </ParagraphXS>
           <div className="btn-group">
             <ButtonPrimary onClick={onClose} maxWidth="fit-content">
               {t('collateral_received_modal.btn')}
