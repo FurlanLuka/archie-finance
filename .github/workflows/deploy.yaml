@@ -128,7 +128,7 @@ jobs:
     name: Deploy ${{ matrix.project }}
     needs: [build_and_publish, check_and_build]
     runs-on: ubuntu-latest
-    environment: development
+    environment: ${{ inputs.ENVIRONMENT }}
     strategy:
       fail-fast: false
       matrix:
@@ -155,7 +155,8 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ matrix.project }}-${{ needs.check_and_build.outputs.imageTag }}
+        ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
         CHART: ./apps/${{ matrix.project }}/chart
         APP_NAME: ${{ matrix.project }}
       with:
-        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment="development"
+        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment=$ENVIRONMENT
