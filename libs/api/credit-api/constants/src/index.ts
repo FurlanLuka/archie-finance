@@ -96,8 +96,3 @@ export const COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE = {
   name: 'credit.collateral.withdraw.completed.fx',
   type: 'fanout',
 };
-
-export const TRANSFER_RIZE_EXCHANGE = {
-  name: 'archie.integration.transfer',
-  type: 'fanout',
-};
