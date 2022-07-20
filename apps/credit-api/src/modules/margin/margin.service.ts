@@ -136,7 +136,7 @@ export class MarginService {
     await this.marginCollateralCheckService.updateMarginChecks(
       filteredUsersByValueChange,
     );
-    await this.amqpConnection.publish(
+    this.amqpConnection.publish(
       CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE.name,
       '',
       {

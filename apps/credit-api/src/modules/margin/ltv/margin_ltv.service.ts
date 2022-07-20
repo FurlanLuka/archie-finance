@@ -11,7 +11,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Collateral } from '../../collateral/collateral.entity';
 import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
 import { CollateralValueService } from '../../collateral/value/collateral_value.service';
-import { rethrow } from '@nestjs/core/helpers/rethrow';
 
 @Injectable()
 export class MarginLtvService {
@@ -63,7 +62,7 @@ export class MarginLtvService {
     );
     const usersLiquidationLogsSum: number = usersLiquidationLogs.reduce(
       (liquidationSum: number, liquidationLog) =>
-        liquidationSum + liquidationLog.price,
+        liquidationSum + liquidationLog.liquidationPrice,
       0,
     );
 

@@ -13,7 +13,6 @@ import { MarginLiquidationService } from './liquidation/margin_liquidation.servi
 import { MarginNotification } from '../margin_notifications.entity';
 import { LiquidationLog } from '../liquidation_logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
 
 @Injectable()
 export class MarginCallsService {
@@ -65,8 +64,8 @@ export class MarginCallsService {
         userId: usersLtv.userId,
         liquidation: assetsToLiquidate.map((asset) => ({
           asset: asset.asset,
-          amount: asset.amount,
-          price: asset.price,
+          amount: asset.liquidationAmount,
+          price: asset.liquidationPrice,
         })),
       });
     } else if (alreadyActiveMarginCall === undefined) {

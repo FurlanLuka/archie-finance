@@ -210,7 +210,7 @@ export class RizeService {
       complianceWorkflow.product_uid,
     );
 
-    await this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
+    this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
       userId,
       customerId,
     });
