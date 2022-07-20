@@ -22,18 +22,20 @@ export const DashboardRoute: FC = () => {
     return <Loading />;
   }
 
-  // if (queryResponse.state === RequestState.SUCCESS) {
-  //   if (!queryResponse.data.completed) {
-  //     return <Navigate to="/onboarding" />;
-  //   }
-  // }
+  const isMfaSetup = queryResponse.state === RequestState.SUCCESS && queryResponse.data.mfaEnrollmentStage;
+
+  if (queryResponse.state === RequestState.SUCCESS) {
+    if (!queryResponse.data.completed) {
+      return <Navigate to="/onboarding" />;
+    }
+  }
 
   return (
     <>
       <Header maxWidth="100%" />
       <Page>
         <Container column mobileColumn maxWidth="100%">
-          {/* <Setup2faBanner /> */}
+          {!isMfaSetup && <Setup2faBanner />}
           <Container justifyContent="center" maxWidth="100%">
             <Navigation />
             <Routes>

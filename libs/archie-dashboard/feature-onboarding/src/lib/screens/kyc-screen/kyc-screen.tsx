@@ -21,6 +21,7 @@ interface KycFormData {
   lastName: string;
   dateOfBirth: string;
   address: Address;
+  aptUnit: string;
   phoneNumber: string;
   ssn: string;
 }
@@ -43,6 +44,7 @@ export const KycScreen: FC = () => {
       lastName: '',
       dateOfBirth: '',
       address: undefined,
+      aptUnit: '',
       phoneNumber: '',
       ssn: '',
     },
@@ -57,10 +59,11 @@ export const KycScreen: FC = () => {
         firstName: data.firstName,
         lastName: data.lastName,
         dateOfBirth: parseDate(data.dateOfBirth).toISOString(),
+        ...data.address,
+        aptUnit: data.aptUnit,
+        phoneNumberCountryCode,
         phoneNumber: data.phoneNumber,
         ssn: data.ssn,
-        phoneNumberCountryCode,
-        ...data.address,
       });
     }
   });
@@ -135,6 +138,15 @@ export const KycScreen: FC = () => {
               </>
             )}
           />
+        </InputText>
+        <InputText>
+          {t('kyc_step.label.apt_unit')}
+          <input placeholder={t('kyc_step.placeholder.apt_unit')} {...register('aptUnit')} />
+          {errors.aptUnit?.message && (
+            <ParagraphXS className="error" color={theme.textDanger}>
+              {t(errors.aptUnit.message)}
+            </ParagraphXS>
+          )}
         </InputText>
         <InputText>
           {t('kyc_step.label.phone_number')}

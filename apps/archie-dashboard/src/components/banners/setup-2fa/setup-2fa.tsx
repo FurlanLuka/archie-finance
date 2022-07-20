@@ -1,6 +1,9 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { MutationQueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
+import { usePollMfaEnrollment } from '@archie-webapps/shared/data-access-archie-api/user/hooks/use-poll-mfa-enrollment';
+import { useStartMfaEnrollment } from '@archie-webapps/shared/data-access-archie-api/user/hooks/use-start-mfa-enrollment';
 import { ButtonGhost, ParagraphS, ParagraphXS } from '@archie-webapps/ui-design-system';
 
 import img2fa from '../../../assets/images/img-2fa.png';
@@ -9,9 +12,25 @@ import { Setup2faBannerStyled } from './setup-2fa.styled';
 
 export const Setup2faBanner: FC = () => {
   const { t } = useTranslation();
+  const [shouldPollMfaEnrollment, setShouldPollMfaEnrollment] = useState(false);
+  const startMfaEnrollmentResponse: MutationQueryResponse = useStartMfaEnrollment();
+
+  usePollMfaEnrollment(shouldPollMfaEnrollment);
+
+  useEffect(() => {
+    if (startMfaEnrollmentResponse.state === RequestState.SUCCESS) {
+      if (shouldPollMfaEnrollment === false) {
+        window.open(startMfaEnrollmentResponse.data.ticket_url, '_blank');
+      }
+
+      setShouldPollMfaEnrollment(true);
+    }
+  }, [startMfaEnrollmentResponse]);
 
   const handleClick = () => {
-    console.log('clicked');
+    if (startMfaEnrollmentResponse.state === RequestState.IDLE) {
+      startMfaEnrollmentResponse.mutate({});
+    }
   };
 
   return (
@@ -24,7 +43,7 @@ export const Setup2faBanner: FC = () => {
           <ParagraphS weight={800}>{t('setup_2fa_banner.title')}</ParagraphS>
           <ParagraphXS>{t('setup_2fa_banner.text')}</ParagraphXS>
         </div>
-        <ButtonGhost maxWidth="fit-content" onClick={handleClick}>
+        <ButtonGhost maxWidth="fit-content" onClick={handleClick} isDisabled={shouldPollMfaEnrollment}>
           {t('btn_continue')}
         </ButtonGhost>
       </div>
