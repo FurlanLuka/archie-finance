@@ -25,7 +25,7 @@ export class CryptoService {
 
   public encrypt(data: string): string {
     if (this.cryptoConfig.encryptionKey === undefined) {
-      throw new Error('PUBLIC_KEY_REQUIRED');
+      throw new Error('ENCRYPTION_KEY_REQUIRED');
     }
 
     try {
@@ -61,7 +61,7 @@ export class CryptoService {
 
   public decrypt(data: string): string {
     if (this.cryptoConfig.encryptionKey === undefined) {
-      throw new Error('PRIVATE_KEY_REQUIRED');
+      throw new Error('ENCRYPTION_KEY_REQUIRED');
     }
 
     try {
