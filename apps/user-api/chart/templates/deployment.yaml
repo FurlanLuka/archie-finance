@@ -168,6 +168,11 @@ spec:
                 secretKeyRef:
                   name: queue-secrets
                   key: queue-url
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cryptography-secrets
+                  key: encryption-key
           {{- end }}
       imagePullSecrets:
         - name: regcred

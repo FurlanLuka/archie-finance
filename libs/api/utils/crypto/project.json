@@ -1,20 +1,20 @@
 {
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/crypto/src",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/utils/crypto/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/crypto/**/*.ts"]
+        "lintFilePatterns": ["libs/api/utils/crypto/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/crypto"],
+      "outputs": ["coverage/libs/api/utils/crypto"],
       "options": {
-        "jestConfig": "libs/crypto/jest.config.ts",
+        "jestConfig": "libs/api/utils/crypto/jest.config.ts",
         "passWithNoTests": true
       }
     }

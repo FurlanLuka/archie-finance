@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-custom';
 import { ConfigService } from '@archie-microservices/config';
 import * as crypto from 'crypto';
-import { CryptoService } from '@archie-microservices/crypto';
+import { CryptoService } from '@archie/api/utils/crypto';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 
 @Injectable()

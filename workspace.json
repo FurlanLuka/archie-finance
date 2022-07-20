@@ -19,7 +19,7 @@
     "collateral-api": "apps/collateral-api",
     "config": "libs/config",
     "credit-api": "apps/credit-api",
-    "crypto": "libs/crypto",
+    "api-utils-crypto": "libs/api/utils/crypto",
     "health": "libs/health",
     "internal-api": "libs/internal-api",
     "mail-api": "apps/mail-api",

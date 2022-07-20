@@ -1,7 +1,7 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { VaultOptions } from './vault.interfaces';
 import { VaultService } from './vault.service';
-import { CryptoModule } from '@archie-microservices/crypto';
+import { CryptoModule } from '@archie/api/utils/crypto';
 
 @Module({})
 export class VaultModule {

@@ -9,6 +9,7 @@ import { HealthModule } from '@archie-microservices/health';
 import { VaultModule } from '@archie-microservices/vault';
 import { InternalApiModule } from '@archie-microservices/internal-api';
 import { ConfigVariables } from '@archie/api/user-api/constants';
+import { CryptoModule } from '@archie/api/utils/crypto';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ConfigVariables } from '@archie/api/user-api/constants';
         ConfigVariables.VAULT_NAMESPACE,
         ConfigVariables.INTERNAL_API_URL,
         ConfigVariables.QUEUE_URL,
+        ConfigVariables.ENCRYPTION_KEY,
       ],
       parse: (_configVariable, value) => value,
     }),
@@ -74,6 +76,13 @@ import { ConfigVariables } from '@archie/api/user-api/constants';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         internalApiUrl: configService.get(ConfigVariables.INTERNAL_API_URL),
+      }),
+    }),
+    CryptoModule.register({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
       }),
     }),
     KycModule,

@@ -9,7 +9,7 @@ import {
 } from 'fireblocks-sdk';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { ConfigService } from '@archie-microservices/config';
-import { CryptoService } from '@archie-microservices/crypto';
+import { CryptoService } from '@archie/api/utils/crypto';
 import { AssetList } from '@archie-microservices/api-interfaces/asset_information';
 import { UserVaultAccount } from '../user_vault_account/user_vault_account.entity';
 import { InjectRepository } from '@nestjs/typeorm';

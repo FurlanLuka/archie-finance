@@ -27,7 +27,7 @@ export class WaitlistController {
   @ApiErrorResponse([NotFoundException])
   public async verify(@Param() params: IdParamsDto): Promise<void> {
     return this.waitlistService.verifyEmail(params.id);
-  } 
+  }
 
   @Get(':id')
   @ApiErrorResponse([NotFoundException])
@@ -35,5 +35,15 @@ export class WaitlistController {
     @Param() params: IdParamsDto,
   ): Promise<GetWaitlistRecordResponseDto> {
     return this.waitlistService.get(params.id);
+  }
+}
+
+@Controller('internal/waitlist')
+export class InternalWaitlistController {
+  constructor(private waitlistService: WaitlistService) {}
+
+  @Get('migrate')
+  public async migrate(): Promise<void> {
+    await this.waitlistService.migrate();
   }
 }

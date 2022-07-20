@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
-import { CryptoService } from '@archie-microservices/crypto';
+import { DataSource, Like, Repository } from 'typeorm';
+import { CryptoService } from '@archie/api/utils/crypto';
 import { Waitlist } from './waitlist.entity';
 import { VaultService } from '@archie-microservices/vault';
 import {
@@ -39,9 +39,8 @@ export class WaitlistService {
     if (waitlistEntity !== null) {
       return;
     }
-    const encryptedEmail: string = (
-      await this.vaultService.encryptStrings([emailAddress])
-    )[0];
+
+    const encryptedEmail: string = this.cryptoService.encrypt(emailAddress);
 
     const id: string = v4();
 
@@ -126,9 +125,9 @@ export class WaitlistService {
     }
 
     try {
-      const [emailAddress] = await this.vaultService.decryptStrings([
+      const emailAddress = this.cryptoService.decrypt(
         waitlistEntity.emailAddress,
-      ]);
+      );
 
       this.amqpConnection.publish(JOINED_WAITLIST_EXCHANGE.name, '', {
         emailAddress,
@@ -145,5 +144,34 @@ export class WaitlistService {
         error: JSON.stringify(error),
       });
     }
+  }
+
+  public async migrate(): Promise<void> {
+    const entities: Waitlist[] = await this.waitlist.findBy({
+      emailAddress: Like('%vault:%'),
+    });
+
+    const emailAddresses = entities.map(entity => entity.emailAddress);
+
+    const decryptedEmails = await this.vaultService.decryptStrings(emailAddresses);
+
+    const updatedEntities = await Promise.all(
+      entities.map(async (entity, index) => {
+        try {
+          const reEncryptedEmail = this.cryptoService.encrypt(
+            decryptedEmails[index],
+          );
+
+          return {
+            ...entity,
+            emailAddress: reEncryptedEmail,
+          };
+        } catch (error) {
+          console.log('error', error);
+        }
+      }),
+    );
+
+    await this.waitlist.save(updatedEntities);
   }
 }
