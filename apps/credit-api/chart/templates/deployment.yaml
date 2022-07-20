@@ -153,6 +153,26 @@ spec:
                 secretKeyRef:
                   name: rize-secrets
                   key: rize-environment
+            - name: RIZE_MQ_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: rize-secrets
+                  key: rize-mq-host
+            - name: RIZE_MQ_TOPIC_PREFIX
+              valueFrom:
+                secretKeyRef:
+                  name: rize-secrets
+                  key: rize-mq-topic-prefix
+            - name: RIZE_MQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rize-secrets
+                  key: rize-mq-username
+            - name: RIZE_MQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rize-secrets
+                  key: rize-mq-password
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:
