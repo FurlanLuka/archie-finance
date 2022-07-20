@@ -115,7 +115,6 @@ export class FireblocksService {
       throw new NotFoundException();
     }
 
-    // TODO event based this?
     const userVaultAccount: UserVaultAccount | null =
       await this.userVaultAccountRepository.findOneBy({
         userId,
@@ -125,11 +124,6 @@ export class FireblocksService {
       // TODO handle no vault account or something
       return;
     }
-
-    Logger.log({
-      code: 'ASSET_INFORMATION',
-      ...fireblocksAsset,
-    });
 
     const transaction = await this.fireblocksClient.createTransaction({
       assetId: fireblocksAsset.fireblocks_id,
@@ -189,11 +183,6 @@ export class FireblocksService {
     const assetList: AssetList = this.configService.get(
       ConfigVariables.ASSET_LIST,
     );
-
-    Logger.log({
-      code: 'ASSET_LIST',
-      ...assetList,
-    });
 
     const userVaultAccount: UserVaultAccount | null =
       await this.userVaultAccountRepository.findOneBy({
