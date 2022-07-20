@@ -91,6 +91,7 @@ jobs:
           fi
   build_and_publish:
     name: Build ${{ matrix.project }} docker
+    if: ${{ needs.check_and_build.outputs.affectedProjects != '[]' && needs.check_and_build.outputs.affectedProjects != '' }}
     needs: check_and_build
     runs-on: ubuntu-latest
     environment: ${{ inputs.ENVIRONMENT }}
@@ -126,6 +127,7 @@ jobs:
           npx nx run ${{ matrix.project }}:build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
   deploy:
     name: Deploy ${{ matrix.project }}
+    if: ${{ needs.check_and_build.outputs.affectedProjects != '[]' && needs.check_and_build.outputs.affectedProjects != '' }}
     needs: [build_and_publish, check_and_build]
     runs-on: ubuntu-latest
     environment: ${{ inputs.ENVIRONMENT }}
