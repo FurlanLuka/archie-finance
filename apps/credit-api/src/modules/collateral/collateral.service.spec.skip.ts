@@ -65,14 +65,14 @@ describe('CollateralService', () => {
     it('should save the deposit and increment the collateral amount', async () => {
       when(collateralDepositRepository.findOneBy)
         .calledWith({ transactionId })
-        .mockResolvedValue(undefined);
+        .mockResolvedValue(null);
 
       when(collateralRepository.findOneBy)
         .calledWith({
           userId: user.id,
           asset: 'BTC',
         })
-        .mockResolvedValue(undefined);
+        .mockResolvedValue(null);
 
       await service.createDeposit({
         transactionId,

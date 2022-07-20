@@ -16,6 +16,9 @@ export class AssetPrice {
   @Column('float')
   price: number;
 
+  @Column('float', { nullable: true })
+  dailyChange: number;
+
   @Column('varchar')
   currency: string;
 

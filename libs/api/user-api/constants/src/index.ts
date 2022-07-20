@@ -30,3 +30,7 @@ export const EMAIL_VERIFIED_EXCHANGE = {
   name: 'user.email.verified.fx',
   type: 'fanout',
 };
+export const MFA_ENROLLED_EXCHANGE = {
+  name: 'user.mfa.enrolled.fx',
+  type: 'fanout',
+};

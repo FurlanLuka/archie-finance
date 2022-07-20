@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Onboarding } from './onboarding.entity';
 import { GetOnboardingResponse } from './onboarding.interfaces';
-import { OnboardingAlreadyCompletedError } from './onboarding.errors';
 
 @Injectable()
 export class OnboardingService {
@@ -30,6 +29,7 @@ export class OnboardingService {
         emailVerificationStage: false,
         collateralizationStage: false,
         cardActivationStage: false,
+        mfaEnrollmentStage: false,
         completed: false,
       };
     }
