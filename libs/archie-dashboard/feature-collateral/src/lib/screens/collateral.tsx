@@ -32,7 +32,7 @@ export const CollateralScreen: FC = () => {
 
   const getCollateralValue = () => {
     if (getCollateralValueResponse.state === RequestState.SUCCESS) {
-      console.log(getCollateralValueResponse);
+      console.log(getCollateralValueResponse.data);
       return getCollateralValueResponse.data;
     }
 
@@ -67,7 +67,7 @@ export const CollateralScreen: FC = () => {
 
         <AssetsAllocation />
 
-        {getCollateralValue()}
+        {getCollateralValue().toString()}
 
         <Table columns={columns} data={data} />
       </Card>

@@ -64,7 +64,7 @@ export const AssetsAllocationStyled = styled.div<AssetsAllocationStyledProps>`
       background-color: ${collateralAssetsColor.btc};
     }
 
-    &.etc {
+    &.eth {
       background-color: ${collateralAssetsColor.eth};
     }
 
