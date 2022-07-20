@@ -11,7 +11,6 @@ import { theme } from '@archie-webapps/ui-theme';
 import { LoanToValueColor, LoanToValueText } from '@archie-webapps/util-constants';
 
 import { AssetsAllocation } from '../components/assets-allocation/assets-allocation';
-import { tableData } from '../constants/table-data';
 import { tableColumns } from '../fixtures/table-fixture';
 
 import { CollateralStyled } from './collateral.styled';
@@ -30,17 +29,26 @@ export const CollateralScreen: FC = () => {
     return 0;
   };
 
-  const getCollateralValue = () => {
+  const data = useMemo(() => {
     if (getCollateralValueResponse.state === RequestState.SUCCESS) {
-      console.log(getCollateralValueResponse.data);
-      return getCollateralValueResponse.data;
+      return getCollateralValueResponse.data.map((item) => ({
+        collateral_asset: item.asset,
+        balance: `$${item.price}`,
+        holdings: `${item.assetAmount} ${item.asset}`,
+        change: {
+          collateral_asset: item.asset,
+        },
+        allocation: '0%',
+        actions: {
+          collateral_asset: item.asset,
+        },
+      }));
     }
 
     return [];
-  };
+  }, [getCollateralValueResponse]);
 
   const columns = useMemo(() => tableColumns, []);
-  const data = useMemo(() => tableData, []);
 
   // Temp data
   const ltv = 22;
@@ -66,8 +74,6 @@ export const CollateralScreen: FC = () => {
         </div>
 
         <AssetsAllocation />
-
-        {getCollateralValue().toString()}
 
         <Table columns={columns} data={data} />
       </Card>
