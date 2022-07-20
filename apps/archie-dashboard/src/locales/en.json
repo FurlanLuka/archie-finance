@@ -51,7 +51,7 @@
   "verify_step": {
     "title": "Verify phone number",
     "subtitle": "Enter the 6-digit code you received via SMS",
-    "resend_text": "Didn’t get it?",
+    "resend_text": "Didn't get it?",
     "resend_btn": "Resend"
   },
   "collateralization_step": {
@@ -125,7 +125,27 @@
   "dashboard_withdraw": {
     "title": "Withdraw {{currentAsset}}",
     "subtitle": "You currently have a {{creditLine}} credit line.",
-    "label": "How much {{currentAsset}} would you like to withdraw?",
+    "address_title": "What address would you like to send your {{currentAsset}} to?",
+    "label": {
+      "amount": "How much {{currentAsset}} would you like to withdraw?",
+      "address": "Send {{withdrawAmount}} {{currentAsset}} to:"
+    },
+    "placeholder": {
+      "amount": "max: {{maxWithdrawAmount}} {{currentAsset}}",
+      "address": ""
+    },
+    "error": {
+      "required_field": "This field is required"
+    },
+    "successfull_withdrawal_modal": {
+      "title": "Withdrawal Successfully Initiated",
+      "subtitle": "We have initiated your withdrawal request. Follow along on the",
+      "link": "the blockchain explorer"
+    },
+    "enter_2fa_code_modal": {
+      "title": "Enter Your 2-Factor Authentication Code",
+      "subtitle": "To complete this action, please verify your 2-Factor Authentication Code from your 2FA application"
+    },
     "btn": "Withdraw Collateral"
   }
 }
