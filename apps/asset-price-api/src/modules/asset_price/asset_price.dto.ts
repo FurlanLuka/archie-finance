@@ -3,5 +3,6 @@ import { GetAssetPriceResponse } from '@archie-microservices/api-interfaces/asse
 export class GetAssetPriceResponseDto implements GetAssetPriceResponse {
   asset: string;
   price: number;
+  dailyChange: number;
   currency: string;
 }
