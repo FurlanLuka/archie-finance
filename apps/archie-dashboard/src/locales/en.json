@@ -95,9 +95,13 @@
   },
   "collateral_received_modal": {
     "title": "We received your collateral!",
-    "text": "Your current collateral adds up to a $540 credit line.  Feel free to collateralize more assets. Note you can use  different cryptocurrencies as collateral! Click 'Next' when you're ready to get your Archie Card.",
+    "text": "Your current collateral of {{collateral}} adds up to a ${{credit_value}} credit line.  Feel free to collateralize more assets. Note you can use  different cryptocurrencies as collateral! Click 'Next' when you're ready to get your Archie Card.",
     "img_alt": "Collateral received",
     "btn": "Collateralize more"
+  },
+  "collateral_credit_line_popup": {
+    "text": "You are collaterizing {{collateral}} for a credit line of ${{credit_value}}.",
+    "button_text": "Let's go!"
   },
   "dashboard": {
     "title": "Hi, {{name}}",

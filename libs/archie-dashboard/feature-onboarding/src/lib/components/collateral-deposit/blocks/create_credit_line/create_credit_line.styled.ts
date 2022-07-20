@@ -8,6 +8,10 @@ export const FloatingCreditLine = styled.div`
 
   max-width: 400px;
 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   border: 2px solid ${({ theme }) => theme.borderHighlight};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.backgroundPrimary};

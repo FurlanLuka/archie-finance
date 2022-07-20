@@ -7,7 +7,6 @@ import { CollateralReceivedModal } from '../modals/collateral-received/collatera
 import { CreateCreditLine } from './blocks/create_credit_line/create_credit_line';
 import { usePollCollateralDeposit } from './use-poll-collateral-deposit';
 
-// TODO rewrite into just a hook?
 export const CollateralDeposit: FC = () => {
   const [shouldPoll, setShouldPoll] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,14 +33,12 @@ export const CollateralDeposit: FC = () => {
   if (isModalOpen) {
     return (
       <CollateralReceivedModal
-        isOpen
+        collateral={currentCollateral}
         onClose={() => {
           setIsModalOpen(false);
-          // create credit line
         }}
         onConfirm={() => {
           setIsModalOpen(false);
-          console.log('polarni medo');
           setShouldPoll(true);
         }}
       />
