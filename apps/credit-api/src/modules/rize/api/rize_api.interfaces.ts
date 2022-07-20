@@ -66,8 +66,32 @@ export enum TransactionType {
   dispute = 'dispute',
   external_transfer = 'external_transfer',
   fee = 'fee',
+  credit = 'credit',
   internal_transfer = 'internal_transfer',
   other = 'other',
   reversed_transfer = 'reversed_transfer',
   third_party_transfer = 'third_party_transfer',
+}
+
+export interface TransactionEvent {
+  data: {
+    details: {
+      asset_breakdown: any[];
+      customer_external_uid: string;
+      customer_uid: string;
+      debit_card_uid: string | null;
+      denial_reason: string | null;
+      description: string | null;
+      destination_synthetic_account_uid: string;
+      new_status: TransactionStatus;
+      settled_index: null | number;
+      source_synthetic_account_uid: string;
+      transaction_uid: string;
+      type: TransactionType;
+      us_dollar_amount: string;
+    };
+    event_type: string;
+  };
+  sequence: number;
+  timestamp: string;
 }
