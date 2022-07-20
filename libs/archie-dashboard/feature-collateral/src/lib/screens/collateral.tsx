@@ -36,29 +36,27 @@ export const CollateralScreen: FC = () => {
 
   return (
     <CollateralStyled>
-      <div className="section-table">
-        <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
-          <ParagraphM weight={800} className="title">
-            {t('dashboard_collateral.table_section.title')}
-          </ParagraphM>
-          <SubtitleS weight={400} className="total">
-            ${getCollateralTotalValue()}
-          </SubtitleS>
-          <div className="title-group">
-            <div className="ltv-group">
-              <ParagraphXS weight={700} color={theme.textSecondary}>
-                {t('ltv')}:
-              </ParagraphXS>
-              <ParagraphM>{ltv}%</ParagraphM>
-            </div>
-            <Badge statusColor={LoanToValueColor[good]}>{LoanToValueText[good]}</Badge>
+      <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
+        <ParagraphM weight={800} className="title">
+          {t('dashboard_collateral.title')}
+        </ParagraphM>
+        <SubtitleS weight={400} className="total">
+          ${getCollateralTotalValue()}
+        </SubtitleS>
+        <div className="title-group">
+          <div className="ltv-group">
+            <ParagraphXS weight={700} color={theme.textSecondary}>
+              {t('ltv')}:
+            </ParagraphXS>
+            <ParagraphM>{ltv}%</ParagraphM>
           </div>
+          <Badge statusColor={LoanToValueColor[good]}>{LoanToValueText[good]}</Badge>
+        </div>
 
-          <AssetsAllocation />
+        <AssetsAllocation />
 
-          <Table columns={columns} data={data} />
-        </Card>
-      </div>
+        <Table columns={columns} data={data} />
+      </Card>
     </CollateralStyled>
   );
 };

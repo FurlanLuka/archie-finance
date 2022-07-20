@@ -118,8 +118,12 @@
     "reveal_card_modal": "Show card details?"
   },
   "dashboard_collateral": {
-    "table_section": {
-      "title": "My Wallet"
-    }
+    "title": "My Wallet"
+  },
+  "dashboard_withdraw": {
+    "title": "Withdraw {{currentAsset}}",
+    "subtitle": "You currently have a {{creditLine}} credit line.",
+    "label": "How much {{currentAsset}} would you like to withdraw?",
+    "btn": "Withdraw Collateral"
   }
 }

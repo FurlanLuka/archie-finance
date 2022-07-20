@@ -6,6 +6,7 @@ import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature-history'
 import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature-rewards';
 import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature-settings';
 import { WalletAndCollateralScreen } from '@archie-webapps/archie-dashboard/feature-wallet-and-collateral';
+import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature-withdraw';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access-archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access-archie-api/onboarding/hooks/use-get-onboarding';
@@ -38,6 +39,7 @@ export const DashboardRoute: FC = () => {
             <Routes>
               <Route path="/" element={<WalletAndCollateralScreen />} />
               <Route path="/collateral" element={<CollateralScreen />} />
+              <Route path="/collateral/withdraw/*" element={<WithdrawScreen />} />
               <Route path="/rewards" element={<RewardsScreen />} />
               <Route path="/history" element={<HistoryScreen />} />
               <Route path="/settings" element={<SettingsScreen />} />
