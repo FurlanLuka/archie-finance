@@ -118,21 +118,6 @@ spec:
                 secretKeyRef:
                   name: internal-api-secrets
                   key: internal-api-url
-            - name: APTO_CARD_PROGRAME_ID
-              valueFrom:
-                secretKeyRef:
-                  name: apto-secrets
-                  key: card-programe-id
-            - name: APTO_PUBLIC_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: apto-secrets
-                  key: api-public-key
-            - name: APTO_PRIVATE_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: apto-secrets
-                  key: api-private-key
             - name: FUNDING_BALANCE_ID
               valueFrom:
                 secretKeyRef:

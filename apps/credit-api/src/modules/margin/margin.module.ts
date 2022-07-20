@@ -18,7 +18,6 @@ import {
   CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,
   MARGIN_CHECK_REQUESTED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
-import { CreditModule } from '../credit/credit.module';
 import { MarginCollateralValueCheckModule } from './collateral_value_checks/margin_collateral_value_cheks.module';
 import { CreditLimitModule } from './credit_limit/credit_limit.module';
 

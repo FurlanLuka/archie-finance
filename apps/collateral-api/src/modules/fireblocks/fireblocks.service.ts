@@ -109,11 +109,6 @@ export class FireblocksService {
       ConfigVariables.ASSET_LIST,
     );
 
-    Logger.log({
-      code: 'ASSET_LIST',
-      ...assetList,
-    });
-
     const fireblocksAsset = assetList[asset];
 
     if (!fireblocksAsset) {

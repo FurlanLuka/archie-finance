@@ -2,10 +2,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Generated,
   Index,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { MarginCall } from './margin_calls.entity';
@@ -14,10 +13,10 @@ import { MarginCall } from './margin_calls.entity';
   name: 'liquidation_logs',
 })
 export class LiquidationLog {
-  @PrimaryColumn('uuid')
-  @Generated('uuid')
+  @PrimaryGeneratedColumn('uuid')
   uuid: string;
 
+  @Index()
   @Column('varchar')
   userId: string;
 

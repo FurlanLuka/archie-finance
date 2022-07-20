@@ -11,7 +11,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Collateral } from '../../collateral/collateral.entity';
 import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
 import { CollateralValueService } from '../../collateral/value/collateral_value.service';
-import { rethrow } from '@nestjs/core/helpers/rethrow';
 
 @Injectable()
 export class MarginLtvService {
