@@ -9,18 +9,7 @@ import { CryptoConfig } from './crypto.interfaces';
 
 @Injectable()
 export class CryptoService {
-  private privateKey: string | undefined;
-  private publicKey: string | undefined;
-
-  constructor(@Inject('CRYPTO_OPTIONS') cryptoConfig: CryptoConfig) {
-    if (cryptoConfig.privateKey) {
-      this.privateKey = this.base64decode(cryptoConfig.privateKey);
-    }
-
-    if (cryptoConfig.publicKey) {
-      this.publicKey = this.base64decode(cryptoConfig.publicKey);
-    }
-  }
+  constructor(@Inject('CRYPTO_OPTIONS') private cryptoConfig: CryptoConfig) {}
 
   public sha256(data: crypto.BinaryLike): string {
     return crypto.createHash('sha256').update(data).digest('hex');
@@ -35,21 +24,25 @@ export class CryptoService {
   }
 
   public encrypt(data: string): string {
-    if (this.publicKey === undefined) {
+    if (this.cryptoConfig.encryptionKey === undefined) {
       throw new Error('PUBLIC_KEY_REQUIRED');
     }
 
     try {
-      const encryptedBuffer: Buffer = crypto.publicEncrypt(
-        {
-          key: this.publicKey,
-          padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-          oaepHash: 'sha256',
-        },
-        Buffer.from(data),
+      const iv = crypto.randomBytes(16);
+      const cipher = crypto.createCipheriv(
+        'aes-256-gcm',
+        this.cryptoConfig.encryptionKey,
+        iv,
       );
 
-      return encryptedBuffer.toString('base64');
+      const encrypted: Buffer = Buffer.concat([
+        cipher.update(data, 'utf8'),
+        cipher.final(),
+      ]);
+      const tag: Buffer = cipher.getAuthTag();
+
+      return Buffer.concat([iv, tag, encrypted]).toString('base64');
     } catch (error) {
       Logger.error({
         code: 'ENCRYPTION_ERROR',
@@ -67,21 +60,29 @@ export class CryptoService {
   }
 
   public decrypt(data: string): string {
-    if (this.privateKey === undefined) {
+    if (this.cryptoConfig.encryptionKey === undefined) {
       throw new Error('PRIVATE_KEY_REQUIRED');
     }
 
     try {
-      const decryptedBuffer: Buffer = crypto.privateDecrypt(
-        {
-          key: this.privateKey,
-          padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-          oaepHash: 'sha256',
-        },
-        Buffer.from(data, 'base64'),
+      const buffer: Buffer = Buffer.from(data, 'base64');
+
+      const iv: Buffer = buffer.slice(0, 16);
+      const tag: Buffer = buffer.slice(16, 32);
+      const encryptedText: Buffer = buffer.slice(32);
+
+      const decipher = crypto.createDecipheriv(
+        'aes-256-gcm',
+        this.cryptoConfig.encryptionKey,
+        iv,
       );
 
-      return decryptedBuffer.toString();
+      decipher.setAuthTag(tag);
+
+      return (
+        decipher.update(encryptedText, undefined, 'utf8') +
+        decipher.final('utf8')
+      );
     } catch (error) {
       Logger.error({
         code: 'DECRYPTION_ERROR',
@@ -96,34 +97,5 @@ export class CryptoService {
 
   public decryptMultiple(data: string[]): string[] {
     return data.map((value) => this.decrypt(value));
-  }
-
-  public sign(data: string): string {
-    if (this.privateKey === undefined) {
-      throw new Error('PRIVATE_KEY_REQUIRED');
-    }
-
-    const signature: Buffer = crypto.sign('sha256', Buffer.from(data), {
-      key: this.privateKey,
-      padding: crypto.constants.RSA_PKCS1_PSS_PADDING,
-    });
-
-    return signature.toString('base64');
-  }
-
-  public verifySignature(data: string, signature: string): boolean {
-    if (this.publicKey === undefined) {
-      throw new Error('PUBLIC_KEY_REQUIRED');
-    }
-
-    return crypto.verify(
-      'sha256',
-      Buffer.from(data),
-      {
-        key: this.publicKey,
-        padding: crypto.constants.RSA_PKCS1_PSS_PADDING,
-      },
-      Buffer.from(signature),
-    );
   }
 }

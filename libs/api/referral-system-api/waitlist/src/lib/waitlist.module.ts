@@ -19,8 +19,7 @@ import {
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        privateKey: configService.get(ConfigVariables.PRIVATE_KEY),
-        publicKey: configService.get(ConfigVariables.PUBLIC_KEY),
+        encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {

@@ -1,6 +1,5 @@
 export interface CryptoConfig {
-  privateKey?: string;
-  publicKey?: string;
+  encryptionKey?: string;
 }
 
 export interface CryptoOptions {
