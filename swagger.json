@@ -932,6 +932,78 @@
         ]
       }
     },
+    "/v1/user/mfa/enroll": {
+      "post": {
+        "operationId": "UserController_enrollMfa",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSendEnrollmentTicketResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/user/mfa/enrollments": {
+      "get": {
+        "operationId": "UserController_getMfaEnrollments",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EnrollmentDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/user/mfa/enrollment": {
+      "get": {
+        "operationId": "UserController_isMfaEnrolled",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/internal/user/email-address/{userId}": {
       "get": {
         "operationId": "InternalUserController_getEmailAddress",
@@ -1069,6 +1141,9 @@
           "price": {
             "type": "number"
           },
+          "dailyChange": {
+            "type": "number"
+          },
           "currency": {
             "type": "string"
           }
@@ -1076,6 +1151,7 @@
         "required": [
           "asset",
           "price",
+          "dailyChange",
           "currency"
         ]
       },
@@ -1284,6 +1360,7 @@
               "dispute",
               "external_transfer",
               "fee",
+              "credit",
               "internal_transfer",
               "other",
               "reversed_transfer",
@@ -1434,6 +1511,9 @@
           "cardActivationStage": {
             "type": "boolean"
           },
+          "mfaEnrollmentStage": {
+            "type": "boolean"
+          },
           "completed": {
             "type": "boolean"
           }
@@ -1443,6 +1523,7 @@
           "emailVerificationStage",
           "collateralizationStage",
           "cardActivationStage",
+          "mfaEnrollmentStage",
           "completed"
         ]
       },
@@ -1623,6 +1704,52 @@
         },
         "required": [
           "isVerified"
+        ]
+      },
+      "GetSendEnrollmentTicketResponseDto": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          },
+          "ticket_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id",
+          "ticket_url"
+        ]
+      },
+      "EnrollmentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "object"
+          },
+          "enrolled_at": {
+            "type": "string"
+          },
+          "last_auth": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "auth_method": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "enrolled_at",
+          "last_auth",
+          "type",
+          "auth_method"
         ]
       },
       "GetEmailAddressResponseDto": {
