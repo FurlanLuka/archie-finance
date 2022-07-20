@@ -6,7 +6,7 @@ import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/c
 import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-total-value';
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-value';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
-import { Card, Table, Badge, SubtitleS, ParagraphM, ParagraphXS } from '@archie-webapps/ui-design-system';
+import { Loading, Card, Table, Badge, SubtitleS, ParagraphM, ParagraphXS } from '@archie-webapps/ui-design-system';
 import { theme } from '@archie-webapps/ui-theme';
 import { LoanToValueColor, LoanToValueText } from '@archie-webapps/util-constants';
 
@@ -49,6 +49,13 @@ export const CollateralScreen: FC = () => {
   }, [getCollateralValueResponse]);
 
   const columns = useMemo(() => tableColumns, []);
+
+  if (
+    getCollateralValueResponse.state === RequestState.LOADING ||
+    getCollateralTotalValueResponse.state === RequestState.LOADING
+  ) {
+    return <Loading />;
+  }
 
   // Temp data
   const ltv = 22;
