@@ -9,21 +9,25 @@ export const assetPriceResponse: GetAssetPriceResponse[] = [
     asset: 'BTC',
     price: BTC_PRICE,
     currency: 'USD',
+    dailyChange: 0,
   },
   {
     asset: 'ETH',
     price: ETH_PRICE,
     currency: 'USD',
+    dailyChange: 0,
   },
   {
     asset: 'SOL',
     price: SOL_PRICE,
     currency: 'USD',
+    dailyChange: 0,
   },
   {
     asset: 'USDC',
     price: 1,
     currency: 'USD',
+    dailyChange: 0,
   },
 ];
 

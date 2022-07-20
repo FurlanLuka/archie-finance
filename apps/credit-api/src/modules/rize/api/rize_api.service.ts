@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@archie-microservices/config';
 import Rize from '@rizefinance/rize-js';
 import {
@@ -56,6 +56,51 @@ export class RizeApiService {
       basePath: DEFAULT_BASE_PATH,
       timeout: DEFAULT_TIMEOUT,
     });
+  }
+
+  public connectToRizeMessagingQueue() {
+    const rmqClient = this.rizeClient.rmq.connect(
+      this.configService.get(ConfigVariables.RIZE_MQ_HOST),
+      this.configService.get(ConfigVariables.RIZE_PROGRAM_ID),
+      this.configService.get(ConfigVariables.RIZE_MQ_TOPIC_PREFIX),
+      this.configService.get(ConfigVariables.RIZE_MQ_USERNAME),
+      this.configService.get(ConfigVariables.RIZE_MQ_PASSWORD),
+    );
+
+    rmqClient.on('connecting', function (_connector) {
+      Logger.log({
+        message: 'Connecting to Rize messaging queue',
+      });
+    });
+
+    rmqClient.on('connect', function (_connector) {
+      Logger.log({
+        message: 'Connected to Rize messaging queue',
+      });
+    });
+
+    rmqClient.on('error', function (_error) {
+      // error includes login credentials
+      Logger.error({
+        message: 'ERROR connecting to Rize messaging queue',
+      });
+    });
+
+    return rmqClient;
+  }
+
+  public subscribeToTopic(
+    client,
+    topic:
+      | 'customer'
+      | 'debit_card'
+      | 'synthetic_account'
+      | 'synthetic_account'
+      | 'transfer'
+      | 'transaction',
+    listener: (err: Error, msg, ack, nack) => void,
+  ): void {
+    client.subscribeToRizeTopic(topic, topic, listener, 'client-individual');
   }
 
   public async searchCustomers(userId: string): Promise<Customer | null> {
