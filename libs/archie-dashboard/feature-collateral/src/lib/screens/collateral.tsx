@@ -2,7 +2,9 @@ import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { TotalCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-total-value';
+import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
 import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-total-value';
+import { useGetCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-value';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { Card, Table, Badge, SubtitleS, ParagraphM, ParagraphXS } from '@archie-webapps/ui-design-system';
 import { theme } from '@archie-webapps/ui-theme';
@@ -18,6 +20,7 @@ export const CollateralScreen: FC = () => {
   const { t } = useTranslation();
 
   const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = useGetCollateralTotalValue();
+  const getCollateralValueResponse: QueryResponse<CollateralValue[]> = useGetCollateralValue();
 
   const getCollateralTotalValue = () => {
     if (getCollateralTotalValueResponse.state === RequestState.SUCCESS) {
@@ -25,6 +28,15 @@ export const CollateralScreen: FC = () => {
     }
 
     return 0;
+  };
+
+  const getCollateralValue = () => {
+    if (getCollateralValueResponse.state === RequestState.SUCCESS) {
+      console.log(getCollateralValueResponse);
+      return getCollateralValueResponse.data;
+    }
+
+    return [];
   };
 
   const columns = useMemo(() => tableColumns, []);
@@ -54,6 +66,8 @@ export const CollateralScreen: FC = () => {
         </div>
 
         <AssetsAllocation />
+
+        {getCollateralValue()}
 
         <Table columns={columns} data={data} />
       </Card>
