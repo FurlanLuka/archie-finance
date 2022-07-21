@@ -7,9 +7,8 @@ import {
 import { Onboarding } from './onboarding.entity';
 import { OnboardingService } from './onboarding.service';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { KYC_SUBMITTED_EXCHANGE } from '@archie/api/user-api/constants';
 import { ConfigVariables } from '@archie/api/onboarding-api/constants';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 
 @Module({
   imports: [
@@ -18,7 +17,6 @@ import { ConfigModule, ConfigService } from '@archie-microservices/config';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        exchanges: [KYC_SUBMITTED_EXCHANGE],
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
         enableControllerDiscovery: true,

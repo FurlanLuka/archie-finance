@@ -2,7 +2,7 @@ import {
   AssetInformation,
   AssetType,
   GetAssetListResponse,
-} from '@archie-microservices/api-interfaces/asset_information';
+} from '@archie/api/utils/interfaces/asset_information';
 
 export class GetAssetListResponseDto implements GetAssetListResponse {
   [key: string]: AssetInformationDto;

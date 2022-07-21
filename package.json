@@ -13,6 +13,7 @@
     "build:user-api": "nx run user-api:build",
     "build:onboarding-api": "nx run onboarding-api:build",
     "build:referral-system-api": "nx run referral-system-api:build",
+    "build:mail-api": "nx run mail-api:build",
     "test": "nx test",
     "local-deploy": "node ./deploy-localhost.js"
   },
@@ -29,6 +30,7 @@
     "@nestjs/swagger": "^5.2.1",
     "@nestjs/typeorm": "^8.1.1",
     "@nrwl/nx-plugin": "^14.3.6",
+    "@rizefinance/rize-js": "github:RizeFinance/rize-js#v1.6.0",
     "@swc/helpers": "~0.3.3",
     "auth0": "^2.42.0",
     "axios": "^0.27.2",

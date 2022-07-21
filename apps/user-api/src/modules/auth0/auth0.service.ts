@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ManagementClient } from 'auth0';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/user-api/constants';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class Auth0Service {
       clientSecret: this.configService.get(
         ConfigVariables.AUTH0_M2M_CLIENT_SECRET,
       ),
-      scope: 'read:users update:users',
+      scope: 'read:users update:users create:guardian_enrollment_tickets',
     });
   }
 

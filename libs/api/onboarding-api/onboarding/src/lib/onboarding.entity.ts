@@ -20,13 +20,13 @@ export class Onboarding {
   emailVerificationStage: boolean;
 
   @Column('boolean', { default: false })
-  phoneVerificationStage: boolean;
-
-  @Column('boolean', { default: false })
   collateralizationStage: boolean;
 
   @Column('boolean', { default: false })
   cardActivationStage: boolean;
+
+  @Column('boolean', { default: false })
+  mfaEnrollmentStage: boolean;
 
   @Column('boolean', { default: false })
   completed: boolean;

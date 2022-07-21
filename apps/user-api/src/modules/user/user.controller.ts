@@ -1,4 +1,4 @@
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   BadRequestException,
   Controller,
@@ -12,10 +12,13 @@ import {
 import {
   GetEmailVerificationResponseDto,
   GetEmailAddressResponseDto,
+  GetSendEnrollmentTicketResponseDto,
+  EnrollmentDto,
 } from './user.dto';
 import { UserService } from './user.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
+import { GetMfaEnrollmentResponse } from './user.interfaces';
 
 @Controller('v1/user')
 export class UserController {
@@ -36,6 +39,27 @@ export class UserController {
   @ApiErrorResponse([BadRequestException])
   async resendEmailVerification(@Req() request): Promise<void> {
     return this.userService.resendEmailVerification(request.user.sub);
+  }
+
+  @Post('mfa/enroll')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async enrollMfa(@Req() request): Promise<GetSendEnrollmentTicketResponseDto> {
+    return this.userService.enrollMfa(request.user.sub);
+  }
+
+  @Get('mfa/enrollments')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getMfaEnrollments(@Req() request): Promise<EnrollmentDto[]> {
+    return this.userService.getMfaEnrollments(request.user.sub);
+  }
+
+  @Get('mfa/enrollment')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async isMfaEnrolled(@Req() request): Promise<GetMfaEnrollmentResponse> {
+    return this.userService.isMfaEnrolled(request.user.sub);
   }
 }
 

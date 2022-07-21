@@ -1,5 +1,5 @@
 export interface DockerBuildExecutorSchema {
-  ecrRegistry: string,
-  ecrRepository: string,
-  imageTag: string
+  ecrRegistry: string;
+  ecrRepository: string;
+  imageTag: string;
 }

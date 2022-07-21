@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { InternalApiService } from '@archie-microservices/internal-api';
+import { InternalApiService } from '@archie/api/utils/internal';
 import { AptoApiService } from './api/apto_api.service';
 import {
   AddressDataPoint,
@@ -23,8 +23,8 @@ import {
   StartVerificationResponse,
 } from './api/apto_api.interfaces';
 import { AptoVerification } from './apto_verification.entity';
-import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
-import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
+import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
+import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
 import { AptoUser } from './apto_user.entity';
 import {
   AptoCardApplicationNextAction,
@@ -33,7 +33,7 @@ import {
   StartPhoneVerificationResponse,
 } from './apto.interfaces';
 import { AptoCardApplication } from './apto_card_application.entity';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import {
   CARD_ACTIVATED_EXCHANGE,
   PHONE_NUMBER_VERIFIED_EXCHANGE,
@@ -378,7 +378,7 @@ export class AptoService {
       workflowObjectId: cardApplicationResponse.workflow_object_id,
     };
 
-    this.aptoCardApplicationRepository.save(cardApplication);
+    await this.aptoCardApplicationRepository.save(cardApplication);
 
     return this.completeCardIssuanceSteps(
       aptoUser.accessToken,

@@ -2,10 +2,11 @@ import { Module } from '@nestjs/common';
 import { Auth0Module } from '../auth0/auth0.module';
 import { InternalUserController, UserController } from './user.controller';
 import { UserService } from './user.service';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
   EMAIL_VERIFIED_EXCHANGE,
+  MFA_ENROLLED_EXCHANGE,
 } from '@archie/api/user-api/constants';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 @Module({
@@ -15,7 +16,7 @@ import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        exchanges: [EMAIL_VERIFIED_EXCHANGE],
+        exchanges: [EMAIL_VERIFIED_EXCHANGE, MFA_ENROLLED_EXCHANGE],
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
       }),

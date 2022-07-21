@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { OnboardingService } from './onboarding.service';
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   CompleteOnboardingStageDto,
   GetOnboardingResponseDto,
@@ -9,11 +9,11 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   KYC_SUBMITTED_EXCHANGE,
   EMAIL_VERIFIED_EXCHANGE,
+  MFA_ENROLLED_EXCHANGE,
 } from '@archie/api/user-api/constants';
 import {
   COLLATERAL_RECEIVED_EXCHANGE,
   CARD_ACTIVATED_EXCHANGE,
-  PHONE_NUMBER_VERIFIED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
 import { Subscribe } from '@archie/api/utils/queue';
@@ -54,6 +54,16 @@ export class OnboardingQueueController {
     );
   }
 
+  @Subscribe(MFA_ENROLLED_EXCHANGE, SERVICE_QUEUE_NAME)
+  async mfaEnrollmentEventHandler(
+    payload: CompleteOnboardingStageDto,
+  ): Promise<void> {
+    await this.onboardingService.completeOnboardingStage(
+      payload.userId,
+      'mfaEnrollmentStage',
+    );
+  }
+
   @Subscribe(COLLATERAL_RECEIVED_EXCHANGE, SERVICE_QUEUE_NAME)
   async collateralReceivedEventHandler(
     payload: CompleteOnboardingStageDto,
@@ -71,16 +81,6 @@ export class OnboardingQueueController {
     await this.onboardingService.completeOnboardingStage(
       payload.userId,
       'cardActivationStage',
-    );
-  }
-
-  @Subscribe(PHONE_NUMBER_VERIFIED_EXCHANGE, SERVICE_QUEUE_NAME)
-  async phoneNumberVerifiedEventHandler(
-    payload: CompleteOnboardingStageDto,
-  ): Promise<void> {
-    await this.onboardingService.completeOnboardingStage(
-      payload.userId,
-      'phoneVerificationStage',
     );
   }
 }

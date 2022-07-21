@@ -1,13 +1,13 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
-import { utilities, WinstonModule } from 'nest-winston';
+import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
-import { Openapi } from '@archie-microservices/openapi';
-import { AllExceptionsFilter } from '@archie-microservices/tracing';
+import { Openapi } from '@archie/api/utils/openapi';
+import { AllExceptionsFilter } from '@archie/api/utils/tracing';
 
 export async function createMicroservice(
   name: string,
-  module: unknown
+  module: unknown,
 ): Promise<INestApplication> {
   const app = await NestFactory.create(module, {
     logger: WinstonModule.createLogger({
@@ -17,13 +17,14 @@ export async function createMicroservice(
             winston.format.timestamp(),
             winston.format.ms(),
             winston.format.json(),
-            utilities.format.nestLike(`${name}`, { prettyPrint: true }),
+            // utilities.format.nestLike(`${name}`, { prettyPrint: false }),
           ),
         }),
       ],
     }),
   });
 
+  await Openapi.generate(app);
 
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
@@ -32,8 +33,6 @@ export async function createMicroservice(
   app.enableCors();
 
   await app.listen(80);
-
-  await Openapi.generate(app);
 
   return app;
 }

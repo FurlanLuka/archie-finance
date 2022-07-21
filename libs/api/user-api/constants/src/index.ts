@@ -14,12 +14,9 @@ export enum ConfigVariables {
   TYPEORM_PORT = 'TYPEORM_PORT',
   SENDGRID_API_KEY = 'SENDGRID_API_KEY',
   SENDGRID_MAILING_LIST_ID = 'SENDGRID_MAILING_LIST_ID',
-  VAULT_PRIVATE_ADDRESS = 'VAULT_PRIVATE_ADDRESS',
-  VAULT_USERNAME = 'VAULT_USERNAME',
-  VAULT_PASSWORD = 'VAULT_PASSWORD',
-  VAULT_NAMESPACE = 'VAULT_NAMESPACE',
   INTERNAL_API_URL = 'INTERNAL_API_URL',
   QUEUE_URL = 'QUEUE_URL',
+  ENCRYPTION_KEY = 'ENCRYPTION_KEY',
 }
 
 export const KYC_SUBMITTED_EXCHANGE = {
@@ -28,5 +25,9 @@ export const KYC_SUBMITTED_EXCHANGE = {
 };
 export const EMAIL_VERIFIED_EXCHANGE = {
   name: 'user.email.verified.fx',
+  type: 'fanout',
+};
+export const MFA_ENROLLED_EXCHANGE = {
+  name: 'user.mfa.enrolled.fx',
   type: 'fanout',
 };

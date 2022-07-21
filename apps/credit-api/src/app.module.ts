@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
-import { AuthModule } from '@archie-microservices/auth0';
-import { HealthModule } from '@archie-microservices/health';
+import { AuthModule } from '@archie/api/utils/auth0';
+import { HealthModule } from '@archie/api/utils/health';
 import { CreditModule } from './modules/credit/credit.module';
-import { InternalApiModule } from '@archie-microservices/internal-api';
+import { InternalApiModule } from '@archie/api/utils/internal';
 import { AptoModule } from './modules/apto/apto.module';
+import { RizeModule } from './modules/rize/rize.module';
+import { CollateralModule } from './modules/collateral/collateral.module';
 
 @Module({
   imports: [
@@ -19,7 +21,10 @@ import { AptoModule } from './modules/apto/apto.module';
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.INTERNAL_API_URL,
-        ConfigVariables.QUEUE_URL
+        ConfigVariables.RIZE_ENVIRONMENT,
+        ConfigVariables.RIZE_PROGRAM_ID,
+        ConfigVariables.RIZE_HMAC_KEY,
+        ConfigVariables.QUEUE_URL,
       ],
       parse: (_configVariable, value) => value,
     }),
@@ -56,6 +61,8 @@ import { AptoModule } from './modules/apto/apto.module';
     HealthModule,
     CreditModule,
     AptoModule,
+    RizeModule,
+    CollateralModule,
   ],
   controllers: [],
   providers: [],

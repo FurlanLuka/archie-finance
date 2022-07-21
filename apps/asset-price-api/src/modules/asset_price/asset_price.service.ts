@@ -3,12 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AssetPrice } from './asset_price.entity';
 import { Repository } from 'typeorm';
 import { AssetPriceHistory } from './asset_price_history.entity';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/asset-price-api/constants';
 import {
   GetAssetPriceResponse,
   GetAssetPricesResponse,
-} from '@archie-microservices/api-interfaces/asset_price';
+} from '@archie/api/utils/interfaces/asset_price';
 import { CoingeckoService } from '../coingecko/coingecko.service';
 import { CoinPriceResponse } from '../coingecko/coingecko.interfaces';
 import { AssetList } from '../../interfaces';
@@ -64,6 +64,7 @@ export class AssetPriceService {
     Object.keys(prices).forEach((key: string) => {
       try {
         const assetPrice: number = prices[key].usd;
+        const dailyChange: number = prices[key].usd_24h_change;
         const assetId: string = this.coingeckoService.getAssetIdForCoingeckoId(
           assetList,
           key,
@@ -72,12 +73,14 @@ export class AssetPriceService {
         assetPriceEntities.push({
           asset: assetId,
           price: assetPrice,
+          dailyChange,
           currency: 'USD',
         });
 
         assetPriceHistoryEntities.push({
           asset: assetId,
           price: assetPrice,
+          dailyChange,
           currency: 'USD',
         });
       } catch (error) {

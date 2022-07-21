@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/onboarding-api/constants';
 import { OnboardingModule } from '@archie/api/onboarding-api/onboarding';
-import { AuthModule } from '@archie-microservices/auth0';
-import { HealthModule } from '@archie-microservices/health';
+import { AuthModule } from '@archie/api/utils/auth0';
+import { HealthModule } from '@archie/api/utils/health';
 
 @Module({
   imports: [

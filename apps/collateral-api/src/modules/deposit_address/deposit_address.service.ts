@@ -12,12 +12,12 @@ import { OmnibusVaultAccountService } from '../omnibus_vault_account/omnibus_vau
 import { UserVaultAccountService } from '../user_vault_account/user_vault_account.service';
 import { DepositAddress } from './deposit_address.entity';
 import { GetDepositAddressResponse } from './deposit_address.interfaces';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import {
   AssetList,
   AssetInformation,
   AssetType,
-} from '@archie-microservices/api-interfaces/asset_information';
+} from '@archie/api/utils/interfaces/asset_information';
 import {
   DepositAddressUnknownAssetError,
   GenerateOmnubusWalletInternalError,
@@ -34,6 +34,7 @@ export class DepositAddressService {
     private configService: ConfigService,
   ) {}
 
+  // TODO should we split this into a get and create function?
   public async getDepositAddress(
     asset: string,
     userId: string,

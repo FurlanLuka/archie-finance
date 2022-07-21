@@ -3,16 +3,19 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Credit } from './credit.entity';
 import { GetCreditResponse } from './credit.interfaces';
-import { InternalApiService } from '@archie-microservices/internal-api';
+import { InternalApiService } from '@archie/api/utils/internal';
 import {
   GetCollateralValueResponse,
   CollateralValue,
-} from '@archie-microservices/api-interfaces/collateral';
+} from '@archie/api/utils/interfaces/collateral';
 import {
   GetAssetListResponse,
   AssetInformation,
-} from '@archie-microservices/api-interfaces/asset_information';
-import { CreateCreditMinimumCollateralError } from './credit.errors';
+} from '@archie/api/utils/interfaces/asset_information';
+import {
+  CreateCreditMinimumCollateralError,
+  CreditNotFoundError,
+} from './credit.errors';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { COLLATERAL_RECEIVED_EXCHANGE } from '@archie/api/credit-api/constants';
 
@@ -98,7 +101,7 @@ export class CreditService {
     });
 
     if (credit === null) {
-      throw new NotFoundException();
+      throw new CreditNotFoundError();
     }
 
     return {

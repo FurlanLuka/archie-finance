@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import axios from 'axios';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import { CoinPriceResponse } from './coingecko.interfaces';
 import { ConfigVariables } from '@archie/api/asset-price-api/constants';
 import { AssetList } from '../../interfaces';
@@ -15,7 +15,9 @@ export class CoingeckoService {
     const response = await axios.get(
       `${this.configService.get(
         ConfigVariables.COINGECKO_API_URI,
-      )}/v3/simple/price?ids=${coinIds.join(',')}&vs_currencies=usd`,
+      )}/v3/simple/price?ids=${coinIds.join(
+        ',',
+      )}&vs_currencies=usd&include_24hr_change=true`,
     );
 
     return response.data;

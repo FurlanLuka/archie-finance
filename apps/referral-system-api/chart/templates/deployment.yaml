@@ -137,26 +137,16 @@ spec:
                 secretKeyRef:
                   name: archie-secrets
                   key: marketing-website-url
-            - name: VAULT_PRIVATE_ADDRESS
+            - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:
-                  name: vault-secrets
-                  key: address
-            - name: VAULT_USERNAME
+                  name: queue-secrets
+                  key: queue-url
+            - name: ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: vault-secrets
-                  key: username
-            - name: VAULT_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: vault-secrets
-                  key: password
-            - name: VAULT_NAMESPACE
-              valueFrom:
-                secretKeyRef:
-                  name: vault-secrets
-                  key: namespace
+                  name: cryptography-secrets
+                  key: encryption-key
           {{- end }}
       imagePullSecrets:
         - name: regcred

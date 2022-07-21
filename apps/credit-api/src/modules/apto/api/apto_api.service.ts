@@ -3,7 +3,7 @@ import {
   InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import {
   AddressDataPoint,
   BirthdateDataPoint,
@@ -20,7 +20,7 @@ import {
 } from './apto_api.interfaces';
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from 'axios';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
-import { CryptoService } from '@archie-microservices/crypto';
+import { CryptoService } from '@archie/api/utils/crypto';
 
 @Injectable()
 export class AptoApiService {

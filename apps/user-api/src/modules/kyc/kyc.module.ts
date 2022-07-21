@@ -1,4 +1,3 @@
-import { VaultModule } from '@archie-microservices/vault';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { InternalKycController, KycController } from './kyc.controller';
@@ -9,12 +8,11 @@ import {
   KYC_SUBMITTED_EXCHANGE,
   ConfigVariables,
 } from '@archie/api/user-api/constants';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Kyc]),
-    VaultModule,
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       inject: [ConfigService],

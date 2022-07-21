@@ -3,12 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { KycModule } from './modules/kyc/kyc.module';
 import { UserModule } from './modules/user/user.module';
 import { EmailWaitlistModule } from './modules/email_waitlist/email_waitlist.module';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
-import { AuthModule } from '@archie-microservices/auth0';
-import { HealthModule } from '@archie-microservices/health';
-import { VaultModule } from '@archie-microservices/vault';
-import { InternalApiModule } from '@archie-microservices/internal-api';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
+import { AuthModule } from '@archie/api/utils/auth0';
+import { HealthModule } from '@archie/api/utils/health';
+import { InternalApiModule } from '@archie/api/utils/internal';
 import { ConfigVariables } from '@archie/api/user-api/constants';
+import { CryptoModule } from '@archie/api/utils/crypto';
 
 @Module({
   imports: [
@@ -25,12 +25,9 @@ import { ConfigVariables } from '@archie/api/user-api/constants';
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.SENDGRID_API_KEY,
         ConfigVariables.SENDGRID_MAILING_LIST_ID,
-        ConfigVariables.VAULT_PRIVATE_ADDRESS,
-        ConfigVariables.VAULT_USERNAME,
-        ConfigVariables.VAULT_PASSWORD,
-        ConfigVariables.VAULT_NAMESPACE,
         ConfigVariables.INTERNAL_API_URL,
         ConfigVariables.QUEUE_URL,
+        ConfigVariables.ENCRYPTION_KEY,
       ],
       parse: (_configVariable, value) => value,
     }),
@@ -57,23 +54,18 @@ import { ConfigVariables } from '@archie/api/user-api/constants';
       }),
       inject: [ConfigService],
     }),
-    VaultModule.register({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        VAULT_NAMESPACE: configService.get(ConfigVariables.VAULT_NAMESPACE),
-        VAULT_PASSWORD: configService.get(ConfigVariables.VAULT_PASSWORD),
-        VAULT_PRIVATE_ADDRESS: configService.get(
-          ConfigVariables.VAULT_PRIVATE_ADDRESS,
-        ),
-        VAULT_USERNAME: configService.get(ConfigVariables.VAULT_USERNAME),
-      }),
-      inject: [ConfigService],
-    }),
     InternalApiModule.register({
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         internalApiUrl: configService.get(ConfigVariables.INTERNAL_API_URL),
+      }),
+    }),
+    CryptoModule.register({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
       }),
     }),
     KycModule,
