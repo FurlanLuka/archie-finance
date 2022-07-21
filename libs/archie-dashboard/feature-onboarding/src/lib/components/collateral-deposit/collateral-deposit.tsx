@@ -8,7 +8,7 @@ import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-en
 
 import { CreateCreditLine } from './blocks/create_credit_line/create_credit_line';
 import { NotEnoughCollateral } from './blocks/not-enough-collateral/not-enough-collateral';
-import { calculateCollateralValue, formatEntireCollateral } from './helpers';
+import { calculateCollateralValue, formatEntireCollateral } from './collateral-deposit.helpers';
 import { usePollCollateralDeposit } from './use-poll-collateral-deposit';
 
 export const CollateralDeposit: FC = () => {

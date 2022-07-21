@@ -15,8 +15,4 @@ export const NotEnoughCollateralStyled = styled.div`
   background-color: ${({ theme }) => theme.backgroundAlert};
   padding: 1rem;
   box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.08);
-
-  .creditInfo {
-    margin-bottom: 0.5rem;
-  }
 `;
