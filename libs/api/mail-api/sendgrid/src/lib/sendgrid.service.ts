@@ -3,10 +3,7 @@ import axios, { AxiosError } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
 import { SendEmailInternalError } from './sendgrid.errors';
-import { InternalApiService } from '@archie-microservices/internal-api';
-import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
 import {
-  Liquidation,
   LtvLimitApproaching,
   MarginCallCompleted,
   MarginCallStarted,
