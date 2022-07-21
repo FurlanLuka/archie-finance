@@ -19,7 +19,11 @@ import {
   imports: [
     PassportModule,
     DepositAddressModule,
-    CryptoModule,
+    CryptoModule.register({
+      imports: [],
+      inject: [],
+      useFactory: () => ({}),
+    }),
     TypeOrmModule.forFeature([UserVaultAccount]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],

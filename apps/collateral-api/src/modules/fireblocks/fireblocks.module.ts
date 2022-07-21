@@ -13,7 +13,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     PassportModule,
-    CryptoModule,
+    CryptoModule.register(),
     TypeOrmModule.forFeature([UserVaultAccount]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],

@@ -23,6 +23,7 @@ export async function createMicroservice(
       ],
     }),
   });
+
   await Openapi.generate(app);
 
   const { httpAdapter } = app.get(HttpAdapterHost);
