@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { GetCreditResponseDto } from './credit.dto';
 import { CreditService } from './credit.service';
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   CreateCreditMinimumCollateralError,

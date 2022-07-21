@@ -5,7 +5,7 @@ import { UserVaultAccountModule } from './modules/user_vault_account/user_vault_
 import { OmnibusVaultAccountModule } from './modules/omnibus_vault_account/omnibus_vault_account.module';
 import { FireblocksWebhookModule } from './modules/fireblocks_webhook/fireblocks_webhook.module';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
-import { AuthModule } from '@archie-microservices/auth0';
+import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
 import { AssetInformationModule } from './modules/asset_information/asset_information.module';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';

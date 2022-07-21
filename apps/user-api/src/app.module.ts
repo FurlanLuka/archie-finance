@@ -4,7 +4,7 @@ import { KycModule } from './modules/kyc/kyc.module';
 import { UserModule } from './modules/user/user.module';
 import { EmailWaitlistModule } from './modules/email_waitlist/email_waitlist.module';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
-import { AuthModule } from '@archie-microservices/auth0';
+import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
 import { InternalApiModule } from '@archie-microservices/internal-api';
 import { ConfigVariables } from '@archie/api/user-api/constants';

@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { FinishPhoneVerificationDto } from '@archie-microservices/api-interfaces/apto';
 import { AptoService } from './apto.service';
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   CreateUserResponseDto,
   IssueCardResponseDto,

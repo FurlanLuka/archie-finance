@@ -15,7 +15,7 @@
     "api-user-api-constants": "libs/api/user-api/constants",
     "api-utils-queue": "libs/api/utils/queue",
     "asset-price-api": "apps/asset-price-api",
-    "auth0": "libs/auth0",
+    "api-utils-auth0": "libs/api/utils/auth0",
     "collateral-api": "apps/collateral-api",
     "config": "libs/config",
     "credit-api": "apps/credit-api",

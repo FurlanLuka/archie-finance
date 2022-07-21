@@ -1,4 +1,4 @@
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   Body,
   Controller,
