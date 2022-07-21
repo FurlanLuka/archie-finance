@@ -15,6 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@archie/api/asset-price-api/asset-price": [
+        "libs/api/asset-price-api/asset-price/src/index.ts"
+      ],
+      "@archie/api/asset-price-api/coingecko": [
+        "libs/api/asset-price-api/coingecko/src/index.ts"
+      ],
       "@archie/api/asset-price-api/constants": [
         "libs/api/asset-price-api/constants/src/index.ts"
       ],

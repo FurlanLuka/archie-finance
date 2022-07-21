@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CoingeckoModule } from '../coingecko/coingecko.module';
+import { CoingeckoModule } from '@archie/api/asset-price-api/coingecko';
 import {
   AssetPriceController,
   InternalAssetPriceController,

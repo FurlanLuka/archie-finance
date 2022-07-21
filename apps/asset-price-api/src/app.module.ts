@@ -3,7 +3,7 @@ import { HealthModule } from '@archie/api/utils/health';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigVariables } from '@archie/api/asset-price-api/constants';
-import { AssetPriceModule } from './modules/asset_price/asset_price.module';
+import { AssetPriceModule } from '@archie/api/asset-price-api/asset-price';
 
 @Module({
   imports: [

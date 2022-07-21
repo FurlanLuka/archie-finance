@@ -2,6 +2,8 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "api-asset-price-api-asset-price": "libs/api/asset-price-api/asset-price",
+    "api-asset-price-api-coingecko": "libs/api/asset-price-api/coingecko",
     "api-asset-price-api-constants": "libs/api/asset-price-api/constants",
     "api-collateral-api-constants": "libs/api/collateral-api/constants",
     "api-credit-api-constants": "libs/api/credit-api/constants",
