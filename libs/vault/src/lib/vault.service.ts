@@ -1,7 +1,6 @@
 import {
   Inject,
   Injectable,
-  InternalServerErrorException,
   Logger,
 } from '@nestjs/common';
 import axios, { AxiosError, AxiosResponse } from 'axios';
@@ -10,7 +9,7 @@ import {
   VaultDecryptionData,
   VaultEncryptionData,
 } from './vault.interfaces';
-import { CryptoService } from '@archie-microservices/crypto';
+import { CryptoService } from '@archie/api/utils/crypto';
 import { VaultAuthenticationInternalError } from './vault.errors';
 
 @Injectable()

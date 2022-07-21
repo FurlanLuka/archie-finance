@@ -1,5 +1,5 @@
-export const SERVICE_NAME = 'referral-system-api'
-export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`
+export const SERVICE_NAME = 'referral-system-api';
+export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
 export enum ConfigVariables {
   TYPEORM_HOST = 'TYPEORM_HOST',
@@ -12,7 +12,8 @@ export enum ConfigVariables {
   VAULT_USERNAME = 'VAULT_USERNAME',
   VAULT_PASSWORD = 'VAULT_PASSWORD',
   VAULT_NAMESPACE = 'VAULT_NAMESPACE',
-  QUEUE_URL = 'QUEUE_URL'
+  QUEUE_URL = 'QUEUE_URL',
+  ENCRYPTION_KEY = 'ENCRYPTION_KEY',
 }
 
 export const APPLIED_TO_WAITLIST_EXCHANGE = {

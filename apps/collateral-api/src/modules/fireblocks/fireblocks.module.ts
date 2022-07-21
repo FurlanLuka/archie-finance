@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { FireblocksService } from './fireblocks.service';
-import { CryptoModule } from '@archie-microservices/crypto';
+import { CryptoModule } from '@archie/api/utils/crypto';
 import { UserVaultAccount } from '../user_vault_account/user_vault_account.entity';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
