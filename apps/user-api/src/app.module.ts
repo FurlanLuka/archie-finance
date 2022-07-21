@@ -1,14 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { KycModule } from './modules/kyc/kyc.module';
-import { UserModule } from './modules/user/user.module';
-import { EmailWaitlistModule } from './modules/email_waitlist/email_waitlist.module';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
 import { InternalApiModule } from '@archie/api/utils/internal';
 import { ConfigVariables } from '@archie/api/user-api/constants';
 import { CryptoModule } from '@archie/api/utils/crypto';
+import { KycModule } from '@archie/api/user-api/kyc';
+import { UserModule } from '@archie/api/user-api/user';
 
 @Module({
   imports: [
@@ -71,7 +70,6 @@ import { CryptoModule } from '@archie/api/utils/crypto';
     KycModule,
     HealthModule,
     UserModule,
-    EmailWaitlistModule,
   ],
   controllers: [],
   providers: [],
