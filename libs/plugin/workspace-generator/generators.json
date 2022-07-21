@@ -12,6 +12,11 @@
       "factory": "./src/generators/microservice-generator/generator",
       "schema": "./src/generators/microservice-generator/schema.json",
       "description": "microservice generator"
+    },
+    "microservice-module-generator": {
+      "factory": "./src/generators/microservice-module-generator/generator",
+      "schema": "./src/generators/microservice-module-generator/schema.json",
+      "description": "microservice module generator"
     }
   }
 }
