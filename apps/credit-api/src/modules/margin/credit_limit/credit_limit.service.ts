@@ -13,8 +13,6 @@ import {
 
 @Injectable()
 export class CreditLimitService {
-  MINIMUM_CHANGE_USD = 1;
-
   constructor(
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
     private creditService: CreditService,
@@ -34,9 +32,9 @@ export class CreditLimitService {
       (credit: Credit) => credit.userId === usersLtv.userId,
     );
 
-    if (creditLimit >= credit.totalCredit + this.MINIMUM_CHANGE_USD) {
+    if (creditLimit > credit.totalCredit) {
       await this.increaseCreditLimit(credit, creditLimit, usersLtv.userId);
-    } else if (creditLimit <= credit.totalCredit - this.MINIMUM_CHANGE_USD) {
+    } else if (creditLimit < credit.totalCredit) {
       await this.decreaseCreditLimit(credit, creditLimit, usersLtv.userId);
     }
   }

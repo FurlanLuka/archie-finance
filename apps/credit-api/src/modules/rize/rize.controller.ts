@@ -110,8 +110,9 @@ export class RizeQueueController {
     await this.rizeService.increaseCreditLimit(payload.userId, payload.amount);
   }
 
-  @Subscribe(CARD_ACTIVATED_EXCHANGE, SERVICE_QUEUE_NAME, true)
+  @Subscribe(CARD_ACTIVATED_EXCHANGE, SERVICE_QUEUE_NAME)
   async cardActivatedHandler(payload: CardActivatedDto): Promise<void> {
+    // TODO: listen to customer activated event
     await this.rizeService.loadFunds(payload.userId, payload.customerId);
   }
 }
