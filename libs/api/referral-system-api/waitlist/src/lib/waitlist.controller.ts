@@ -37,13 +37,3 @@ export class WaitlistController {
     return this.waitlistService.get(params.id);
   }
 }
-
-@Controller('internal/waitlist')
-export class InternalWaitlistController {
-  constructor(private waitlistService: WaitlistService) {}
-
-  @Get('migrate')
-  public async migrate(): Promise<void> {
-    await this.waitlistService.migrate();
-  }
-}

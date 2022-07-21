@@ -29,7 +29,6 @@
     "plugin-deployment": "libs/plugin-deployment",
     "referral-system-api": "apps/referral-system-api",
     "tracing": "libs/tracing",
-    "user-api": "apps/user-api",
-    "vault": "libs/vault"
+    "user-api": "apps/user-api"
   }
 }

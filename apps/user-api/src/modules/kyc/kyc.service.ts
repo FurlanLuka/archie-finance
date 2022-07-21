@@ -1,4 +1,3 @@
-import { VaultService } from '@archie-microservices/vault';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
@@ -18,7 +17,6 @@ import { CryptoService } from '@archie/api/utils/crypto';
 export class KycService {
   constructor(
     @InjectRepository(Kyc) private kycRepository: Repository<Kyc>,
-    private vaultService: VaultService,
     private amqpConnection: AmqpConnection,
     private cryptoService: CryptoService,
   ) {}
@@ -121,48 +119,5 @@ export class KycService {
       phoneNumberCountryCode: payload.phoneNumberCountryCode,
       ssn: payload.ssn,
     };
-  }
-
-  async migrate(): Promise<void> {
-    const entities = await this.kycRepository.findBy({
-      firstName: Like('%vault:%'),
-    });
-
-    const updatedEntities = await Promise.all(
-      entities.map(async (entity) => {
-        const decryptedData: string[] = await this.vaultService.decryptStrings([
-          entity.firstName,
-          entity.lastName,
-          entity.dateOfBirth,
-          entity.addressCountry,
-          entity.addressLocality,
-          entity.addressPostalCode,
-          entity.addressRegion,
-          entity.addressStreet,
-          entity.addressStreetNumber,
-          entity.phoneNumber,
-          entity.phoneNumberCountryCode,
-          entity.ssn,
-        ]);
-
-        return {
-          ...entity,
-          firstName: this.cryptoService.encrypt(decryptedData[0]),
-          lastName: this.cryptoService.encrypt(decryptedData[1]),
-          dateOfBirth: this.cryptoService.encrypt(decryptedData[2]),
-          addressCountry: this.cryptoService.encrypt(decryptedData[3]),
-          addressLocality: this.cryptoService.encrypt(decryptedData[4]),
-          addressPostalCode: this.cryptoService.encrypt(decryptedData[5]),
-          addressRegion: this.cryptoService.encrypt(decryptedData[6]),
-          addressStreet: this.cryptoService.encrypt(decryptedData[7]),
-          addressStreetNumber: this.cryptoService.encrypt(decryptedData[8]),
-          phoneNumber: this.cryptoService.encrypt(decryptedData[9]),
-          phoneNumberCountryCode: this.cryptoService.encrypt(decryptedData[10]),
-          ssn: this.cryptoService.encrypt(decryptedData[11]),
-        };
-      }),
-    );
-
-    await this.kycRepository.save(updatedEntities);
   }
 }
