@@ -27,6 +27,7 @@
     "onboarding-api": "apps/onboarding-api",
     "api-utils-openapi": "libs/api/utils/openapi",
     "plugin-deployment": "libs/plugin-deployment",
+    "plugin-workspace-generator": "libs/plugin/workspace-generator",
     "referral-system-api": "apps/referral-system-api",
     "api-utils-tracing": "libs/api/utils/tracing",
     "user-api": "apps/user-api"

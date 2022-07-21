@@ -1,0 +1,60 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/plugin/workspace-generator/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/plugin/workspace-generator",
+        "main": "libs/plugin/workspace-generator/src/index.ts",
+        "tsConfig": "libs/plugin/workspace-generator/tsconfig.lib.json",
+        "assets": [
+          "libs/plugin/workspace-generator/*.md",
+          {
+            "input": "./libs/plugin/workspace-generator/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./libs/plugin/workspace-generator/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./libs/plugin/workspace-generator",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./libs/plugin/workspace-generator",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/plugin/workspace-generator/**/*.ts",
+          "libs/plugin/workspace-generator/generators.json",
+          "libs/plugin/workspace-generator/executors.json",
+          "libs/plugin/workspace-generator/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/plugin/workspace-generator"],
+      "options": {
+        "jestConfig": "libs/plugin/workspace-generator/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

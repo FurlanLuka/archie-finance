@@ -59,7 +59,10 @@
       "@archie/api/utils/internal": [
         "libs/api/utils/internal-api/src/index.ts"
       ],
-      "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"]
+      "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"],
+      "@archie/plugin/workspace-generator": [
+        "libs/plugin/workspace-generator/src/index.ts"
+      ]
     }
   },
   "exclude": [
