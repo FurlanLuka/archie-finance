@@ -32,6 +32,7 @@ import {
   BTC_PRICE,
   BTC_STARTING_AMOUNT,
   createUserCollateral,
+  defaultCollateralTotal,
   ETH_PRICE,
   SOL_PRICE,
   SOL_STARTING_AMOUNT,
@@ -55,6 +56,9 @@ describe('MarginQueueController (e2e)', () => {
 
   const marginNotificationLtv: number[] = [65, 70, 73];
   const userId = 'userId';
+  const COLLATERAL_SALE_LTV = 0.85;
+  const MARGIN_CALL_START_LTV = 0.75;
+  const MARGIN_CALL_END_LTV = 0.6;
   const amqpConnectionPublish: jest.Mock = jest.fn();
 
   beforeEach(async () => {
@@ -142,6 +146,7 @@ describe('MarginQueueController (e2e)', () => {
           totalCredit: 100,
           availableCredit: 100 - ltv,
         });
+        const userLoan = ltv;
 
         await app
           .get(MarginQueueController)
@@ -150,7 +155,13 @@ describe('MarginQueueController (e2e)', () => {
         expect(amqpConnectionPublish).toBeCalledWith(
           LTV_LIMIT_APPROACHING_EXCHANGE.name,
           '',
-          { userId, ltv: ltv },
+          {
+            userId,
+            ltv: ltv,
+            collateralBalance: defaultCollateralTotal,
+            priceForMarginCall: userLoan / MARGIN_CALL_START_LTV,
+            priceForPartialCollateralSale: userLoan / COLLATERAL_SALE_LTV,
+          },
         );
         expect(
           await marginNotificationsRepositiory.findOne({
@@ -208,6 +219,7 @@ describe('MarginQueueController (e2e)', () => {
           sentAtLtv: ltv,
           active: false,
         });
+        const userLoan = ltv;
 
         await app
           .get(MarginQueueController)
@@ -216,7 +228,13 @@ describe('MarginQueueController (e2e)', () => {
         expect(amqpConnectionPublish).toBeCalledWith(
           LTV_LIMIT_APPROACHING_EXCHANGE.name,
           '',
-          { userId, ltv: ltv },
+          {
+            userId,
+            ltv: ltv,
+            collateralBalance: defaultCollateralTotal,
+            priceForMarginCall: userLoan / MARGIN_CALL_START_LTV,
+            priceForPartialCollateralSale: userLoan / COLLATERAL_SALE_LTV,
+          },
         );
         expect(
           await marginNotificationsRepositiory.findOne({
@@ -252,6 +270,7 @@ describe('MarginQueueController (e2e)', () => {
         totalCredit: 100,
         availableCredit: 100 - ltv,
       });
+      const userLoan = ltv;
 
       await app
         .get(MarginQueueController)
@@ -260,7 +279,13 @@ describe('MarginQueueController (e2e)', () => {
       expect(amqpConnectionPublish).toBeCalledWith(
         MARGIN_CALL_STARTED_EXCHANGE.name,
         '',
-        { userId },
+        {
+          userId,
+          ltv: ltv,
+          collateralBalance: defaultCollateralTotal,
+          priceForMarginCall: userLoan / MARGIN_CALL_START_LTV,
+          priceForPartialCollateralSale: userLoan / COLLATERAL_SALE_LTV,
+        },
       );
       expect(
         await marginCallRepository.findOne({
@@ -326,6 +351,10 @@ describe('MarginQueueController (e2e)', () => {
         {
           userId,
           liquidation: [],
+          collateralBalance: defaultCollateralTotal,
+          ltv: 0,
+          priceForMarginCall: 0,
+          priceForPartialCollateralSale: 0,
         },
       );
       const marginCall: MarginCall | undefined =
@@ -356,6 +385,7 @@ describe('MarginQueueController (e2e)', () => {
         totalCredit: 100,
         availableCredit: 100 - ltv,
       });
+      const userLoan = ltv;
       await marginNotificationsRepositiory.save({
         userId,
         sentAtLtv: ltv,
@@ -382,14 +412,6 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpConnectionPublish).toBeCalledWith(
-        MARGIN_CALL_COMPLETED_EXCHANGE.name,
-        '',
-        {
-          userId,
-          liquidation: expectedLiquidatedAssets,
-        },
-      );
       const marginCall: MarginCall = await marginCallRepository.findOne({
         where: {
           userId: userId,
@@ -402,26 +424,14 @@ describe('MarginQueueController (e2e)', () => {
         deletedAt: expect.any(Date),
         createdAt: expect.any(Date),
       });
-      expect(
-        await marginNotificationsRepositiory.findOne({
-          where: {
-            userId: userId,
-          },
-        }),
-      ).toEqual({
-        uuid: expect.stringMatching(UUID_REGEX),
-        userId,
-        sentAtLtv: null,
-        active: false,
-      });
-      expect(
+      const liquidationLogs: LiquidationLog[] =
         await liquidationLogsRepository.find({
           where: {
             userId: userId,
           },
           loadRelationIds: true,
-        }),
-      ).toEqual([
+        });
+      expect(liquidationLogs).toEqual([
         {
           uuid: expect.stringMatching(UUID_REGEX),
           userId,
@@ -435,6 +445,38 @@ describe('MarginQueueController (e2e)', () => {
           ...expectedLiquidatedAssets[1],
         },
       ]);
+      const liquidatedPrice: number = liquidationLogs.reduce(
+        (amount, log) => amount + log.price,
+        0,
+      );
+      const newCollateralBalance: number =
+        defaultCollateralTotal - liquidatedPrice;
+      expect(amqpConnectionPublish).toBeCalledWith(
+        MARGIN_CALL_COMPLETED_EXCHANGE.name,
+        '',
+        {
+          userId,
+          liquidation: expectedLiquidatedAssets,
+          ltv: MARGIN_CALL_END_LTV * 100,
+          collateralBalance: newCollateralBalance,
+          priceForMarginCall:
+            (userLoan - liquidatedPrice) / MARGIN_CALL_START_LTV,
+          priceForPartialCollateralSale:
+            (userLoan - liquidatedPrice) / COLLATERAL_SALE_LTV,
+        },
+      );
+      expect(
+        await marginNotificationsRepositiory.findOne({
+          where: {
+            userId: userId,
+          },
+        }),
+      ).toEqual({
+        uuid: expect.stringMatching(UUID_REGEX),
+        userId,
+        sentAtLtv: null,
+        active: false,
+      });
       const collaterals: Collateral[] = await collateralRepository.find({
         where: {
           userId,
@@ -462,6 +504,7 @@ describe('MarginQueueController (e2e)', () => {
 
     it('Should take appropriate crypto assets and send email if the LTV is above 85', async () => {
       const ltv = 85;
+      const userLoan = ltv;
       await creditRepository.save({
         userId,
         totalCredit: 100,
@@ -494,14 +537,6 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpConnectionPublish).toBeCalledWith(
-        MARGIN_CALL_COMPLETED_EXCHANGE.name,
-        '',
-        {
-          userId,
-          liquidation: expectedLiquidatedAssets,
-        },
-      );
       const marginCall = await marginCallRepository.findOne({
         where: {
           userId: userId,
@@ -514,26 +549,14 @@ describe('MarginQueueController (e2e)', () => {
         deletedAt: expect.any(Date),
         createdAt: expect.any(Date),
       });
-      expect(
-        await marginNotificationsRepositiory.findOne({
-          where: {
-            userId: userId,
-          },
-        }),
-      ).toEqual({
-        uuid: expect.stringMatching(UUID_REGEX),
-        userId,
-        sentAtLtv: null,
-        active: false,
-      });
-      expect(
+      const liquidationLogs: LiquidationLog[] =
         await liquidationLogsRepository.find({
           where: {
             userId: userId,
           },
           loadRelationIds: true,
-        }),
-      ).toEqual([
+        });
+      expect(liquidationLogs).toEqual([
         {
           uuid: expect.stringMatching(UUID_REGEX),
           userId,
@@ -553,6 +576,39 @@ describe('MarginQueueController (e2e)', () => {
           ...expectedLiquidatedAssets[2],
         },
       ]);
+
+      const liquidatedPrice: number = liquidationLogs.reduce(
+        (amount, log) => amount + log.price,
+        0,
+      );
+      const newCollateralBalance: number =
+        defaultCollateralTotal - liquidatedPrice;
+      expect(amqpConnectionPublish).toBeCalledWith(
+        MARGIN_CALL_COMPLETED_EXCHANGE.name,
+        '',
+        {
+          userId,
+          liquidation: expectedLiquidatedAssets,
+          ltv: MARGIN_CALL_END_LTV * 100,
+          collateralBalance: newCollateralBalance,
+          priceForMarginCall:
+            (userLoan - liquidatedPrice) / MARGIN_CALL_START_LTV,
+          priceForPartialCollateralSale:
+            (userLoan - liquidatedPrice) / COLLATERAL_SALE_LTV,
+        },
+      );
+      expect(
+        await marginNotificationsRepositiory.findOne({
+          where: {
+            userId: userId,
+          },
+        }),
+      ).toEqual({
+        uuid: expect.stringMatching(UUID_REGEX),
+        userId,
+        sentAtLtv: null,
+        active: false,
+      });
     });
 
     it('Should not take any crypto assets in case enough were already liquidated', async () => {
@@ -566,14 +622,14 @@ describe('MarginQueueController (e2e)', () => {
         {
           userId: userId,
           asset: 'BTC',
-          liquidationPrice: 10,
-          liquidationAmount: 1,
+          price: 10,
+          amount: 1,
         },
         {
           userId: userId,
           asset: 'SOL',
-          liquidationPrice: 40,
-          liquidationAmount: 1,
+          price: 40,
+          amount: 1,
         },
       ]);
 
