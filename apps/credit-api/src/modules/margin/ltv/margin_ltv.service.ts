@@ -17,6 +17,7 @@ export class MarginLtvService {
   LTV_ALERT_LIMITS = [65, 70, 73];
   SAFE_LTV = 0.6;
   LTV_LIMIT = 75;
+  COLLATERAL_SALE_LTV_LIMIT = 85;
 
   constructor(
     @InjectRepository(MarginNotification)
@@ -77,15 +78,23 @@ export class MarginLtvService {
       loanedBalance: loanedBalance,
       collateralAllocation: usersCollateralValue,
       userOnlyHasStableCoins: doesUserHaveOnlyUsdc,
+      priceForMarginCall: loanedBalance / (this.LTV_LIMIT / 100),
+      priceForPartialCollateralSale:
+        loanedBalance / (this.COLLATERAL_SALE_LTV_LIMIT / 100),
     };
   }
 
-  public async checkIfApproachingLtvLimits(
-    userId: string,
-    ltv: number,
-    userHasOnlyStableCoins: boolean,
-  ) {
-    if (ltv >= this.LTV_ALERT_LIMITS[0] && !userHasOnlyStableCoins) {
+  public async checkIfApproachingLtvLimits(usersLtv: UsersLtv) {
+    const {
+      ltv,
+      userOnlyHasStableCoins,
+      userId,
+      priceForMarginCall,
+      priceForPartialCollateralSale,
+      collateralBalance,
+    } = usersLtv;
+
+    if (ltv >= this.LTV_ALERT_LIMITS[0] && !userOnlyHasStableCoins) {
       const marginNotifications: MarginNotification | null =
         await this.marginNotificationsRepository.findOne({
           where: {
@@ -112,6 +121,9 @@ export class MarginLtvService {
         this.amqpConnection.publish(LTV_LIMIT_APPROACHING_EXCHANGE.name, '', {
           userId,
           ltv,
+          priceForMarginCall,
+          priceForPartialCollateralSale,
+          collateralBalance,
         });
         await this.marginNotificationsRepository.upsert(
           {

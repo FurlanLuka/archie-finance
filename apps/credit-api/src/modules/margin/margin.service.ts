@@ -118,11 +118,7 @@ export class MarginService {
               usersLtv,
             );
           } else {
-            await this.marginLtvService.checkIfApproachingLtvLimits(
-              usersLtv.userId,
-              usersLtv.ltv,
-              usersLtv.userOnlyHasStableCoins,
-            );
+            await this.marginLtvService.checkIfApproachingLtvLimits(usersLtv);
           }
         } else {
           await this.marginCallsService.handleMarginCall(

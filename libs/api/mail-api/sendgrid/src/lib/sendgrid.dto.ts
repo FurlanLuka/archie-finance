@@ -1,4 +1,10 @@
-import { Liquidation } from './sendgrid.interfaces';
+import {
+  Liquidation,
+  LtvLimitApproaching,
+  MarginCallBase,
+  MarginCallCompleted,
+  MarginCallStarted,
+} from './sendgrid.interfaces';
 
 export class AppliedToWaitlistDto {
   emailAddress: string;
@@ -9,8 +15,18 @@ export class JoinedWaitlistDto {
   emailAddress: string;
 }
 
-export class MarginCallCompletedDto {
+class MarginCallBaseDto implements MarginCallBase {
   userId: string;
+  priceForMarginCall: number;
+  priceForPartialCollateralSale: number;
+  collateralBalance: number;
+  ltv: number;
+}
+
+export class MarginCallCompletedDto
+  extends MarginCallBaseDto
+  implements MarginCallCompleted
+{
   liquidation: LiquidationDto[];
 }
 
@@ -20,11 +36,10 @@ export class LiquidationDto implements Liquidation {
   price: number;
 }
 
-export class MarginCallStartedDto {
-  userId: string;
-}
+export class MarginCallStartedDto
+  extends MarginCallBaseDto
+  implements MarginCallStarted {}
 
-export class LtvLimitApproachingDto {
-  userId: string;
-  ltv: number;
-}
+export class LtvLimitApproachingDto
+  extends MarginCallBaseDto
+  implements LtvLimitApproaching {}

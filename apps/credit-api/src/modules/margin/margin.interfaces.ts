@@ -16,4 +16,6 @@ export interface UsersLtv {
   collateralBalance: number;
   collateralAllocation: GetCollateralValueResponse;
   userOnlyHasStableCoins: boolean;
+  priceForMarginCall: number;
+  priceForPartialCollateralSale: number;
 }

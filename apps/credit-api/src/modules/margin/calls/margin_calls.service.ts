@@ -35,6 +35,10 @@ export class MarginCallsService {
     this.amqpConnection.publish(MARGIN_CALL_COMPLETED_EXCHANGE.name, '', {
       userId: usersLtv.userId,
       liquidation: [],
+      ltv: usersLtv.ltv,
+      priceForMarginCall: usersLtv.priceForMarginCall,
+      priceForPartialCollateralSale: usersLtv.priceForPartialCollateralSale,
+      collateralBalance: usersLtv.collateralBalance,
     });
   }
 
@@ -67,10 +71,18 @@ export class MarginCallsService {
           amount: asset.liquidationAmount,
           price: asset.liquidationPrice,
         })),
+        ltv: usersLtv.ltv,
+        priceForMarginCall: usersLtv.priceForMarginCall,
+        priceForPartialCollateralSale: usersLtv.priceForPartialCollateralSale,
+        collateralBalance: usersLtv.collateralBalance,
       });
     } else if (alreadyActiveMarginCall === undefined) {
       this.amqpConnection.publish(MARGIN_CALL_STARTED_EXCHANGE.name, '', {
         userId: usersLtv.userId,
+        ltv: usersLtv.ltv,
+        priceForMarginCall: usersLtv.priceForMarginCall,
+        priceForPartialCollateralSale: usersLtv.priceForPartialCollateralSale,
+        collateralBalance: usersLtv.collateralBalance,
       });
     }
   }
