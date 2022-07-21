@@ -1,13 +1,13 @@
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';
-import { getCollateralTotalValue, TotalCollateralValue } from '../api/get-collateral-total-value';
+import { getCollateralValue, CollateralValue } from '../api/get-collateral-value';
 
 export const COLLATERAL_VALUE_RECORD_QUERY_KEY = 'collateral_value_record';
 
-export const usePollCollateralTotalValue = (enabled = true): QueryResponse<TotalCollateralValue> => {
+export const usePollCollateralValue = (enabled = true): QueryResponse<CollateralValue[]> => {
   return useExtendedQuery(
     COLLATERAL_VALUE_RECORD_QUERY_KEY,
-    async (accessToken: string) => getCollateralTotalValue(accessToken),
+    async (accessToken: string) => getCollateralValue(accessToken),
     {
       enabled,
       refetchInterval: () => 10000,
