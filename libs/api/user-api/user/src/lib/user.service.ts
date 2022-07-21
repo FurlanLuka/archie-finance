@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Enrollment, SendEnrollmentTicketResponse, User } from 'auth0';
-import { Auth0Service } from '../auth0/auth0.service';
+import { Auth0Service } from '@archie/api/user-api/auth0';
 import {
   GetEmailVerificationResponse,
   GetMfaEnrollmentResponse,
