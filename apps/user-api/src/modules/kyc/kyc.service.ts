@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Kyc } from './kyc.entity';
 import {
   CreateKycResponse,
   GetKycResponse,
-} from '@archie-microservices/api-interfaces/kyc';
+} from '@archie/api/utils/interfaces/kyc';
 import { KycDto } from './kyc.dto';
 import { DateTime } from 'luxon';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';

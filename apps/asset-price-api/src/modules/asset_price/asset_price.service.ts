@@ -3,12 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AssetPrice } from './asset_price.entity';
 import { Repository } from 'typeorm';
 import { AssetPriceHistory } from './asset_price_history.entity';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/asset-price-api/constants';
 import {
   GetAssetPriceResponse,
   GetAssetPricesResponse,
-} from '@archie-microservices/api-interfaces/asset_price';
+} from '@archie/api/utils/interfaces/asset_price';
 import { CoingeckoService } from '../coingecko/coingecko.service';
 import { CoinPriceResponse } from '../coingecko/coingecko.interfaces';
 import { AssetList } from '../../interfaces';

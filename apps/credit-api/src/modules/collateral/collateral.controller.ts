@@ -1,10 +1,9 @@
-import { AuthGuard } from '@archie-microservices/auth0';
-import { GetUserWithdrawals } from '@archie-microservices/api-interfaces/collateral';
+import { AuthGuard } from '@archie/api/utils/auth0';
+import { GetUserWithdrawals } from '@archie/api/utils/interfaces/collateral';
 import {
   Body,
   Controller,
   Get,
-  Logger,
   Param,
   Post,
   Req,
@@ -23,7 +22,6 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   COLLATERAL_DEPOSITED_EXCHANGE,
   COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
-  COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
 import { Subscribe } from '@archie/api/utils/queue';

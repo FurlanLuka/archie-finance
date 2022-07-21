@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import axios, { AxiosError } from 'axios';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
-import {
-  SendEmailInternalError,
-} from './sendgrid.errors';
+import { SendEmailInternalError } from './sendgrid.errors';
 
 @Injectable()
 export class SendgridService {

@@ -8,7 +8,7 @@ import {
   KYC_SUBMITTED_EXCHANGE,
   ConfigVariables,
 } from '@archie/api/user-api/constants';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 
 @Module({
   imports: [

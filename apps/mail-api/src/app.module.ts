@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@archie-microservices/config';
+import { ConfigModule } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
 import { SendgridModule } from '@archie/api/mail-api/sendgrid';
-import { HealthModule } from '@archie-microservices/health';
+import { HealthModule } from '@archie/api/utils/health';
 
 @Module({
   imports: [

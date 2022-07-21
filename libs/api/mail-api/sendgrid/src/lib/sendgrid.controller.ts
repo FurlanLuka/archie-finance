@@ -8,7 +8,7 @@ import {
   SERVICE_QUEUE_NAME,
   ConfigVariables,
 } from '@archie/api/mail-api/constants';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import { AppliedToWaitlistDto, JoinedWaitlistDto } from './sendgrid.dto';
 import { SendgridService } from './sendgrid.service';
 

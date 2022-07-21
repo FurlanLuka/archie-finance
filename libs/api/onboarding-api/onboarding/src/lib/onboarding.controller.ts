@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { OnboardingService } from './onboarding.service';
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   CompleteOnboardingStageDto,
   GetOnboardingResponseDto,

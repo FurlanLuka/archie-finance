@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 import {
   CreateKycResponse,
   GetKycResponse,
-} from '@archie-microservices/api-interfaces/kyc';
+} from '@archie/api/utils/interfaces/kyc';
 
 export class KycDto {
   @IsString()

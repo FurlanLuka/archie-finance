@@ -7,9 +7,9 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { FinishPhoneVerificationDto } from '@archie-microservices/api-interfaces/apto';
+import { FinishPhoneVerificationDto } from '@archie/api/utils/interfaces/apto';
 import { AptoService } from './apto.service';
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   CreateUserResponseDto,
   IssueCardResponseDto,
@@ -17,7 +17,7 @@ import {
   CompletePhoneVerificationResponseDto,
 } from './apto.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 
 @Controller('v1/apto')
 export class AptoController {

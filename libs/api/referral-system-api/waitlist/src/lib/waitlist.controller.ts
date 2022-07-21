@@ -12,7 +12,7 @@ import {
   IdParamsDto,
 } from './waitlist.dto';
 import { WaitlistService } from './waitlist.service';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 
 @Controller('v1/waitlist')
 export class WaitlistController {
