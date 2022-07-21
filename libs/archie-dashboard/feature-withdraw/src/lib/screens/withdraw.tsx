@@ -7,12 +7,13 @@ import { RequestState } from '@archie-webapps/shared/data-access-archie-api/inte
 import { Card, ParagraphM, ParagraphS } from '@archie-webapps/ui-design-system';
 
 import { WithdrawalForm } from '../components/withdrawal-form/withdrawal-form';
+import { WithdrawalSkeleton } from '../components/withdrawal-skeleton/withdrawal-skeleton';
 
 import { WithdrawScreenStyled } from './withdraw.styled';
 
 const creditLine = '$4,564.34';
 // TODO errors when asset is bogus
-export const WithdrawalHandler: FC = () => {
+export const WithdrawScreen: FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const currentAsset = location.pathname.slice(location.pathname.lastIndexOf('/') + 1);
@@ -24,11 +25,17 @@ export const WithdrawalHandler: FC = () => {
       case RequestState.ERROR:
         return <div>Something went wrong :( </div>;
       case RequestState.LOADING:
-        return <div>Spooky scary skellingtons</div>;
+        return <WithdrawalSkeleton />;
       case RequestState.SUCCESS:
-        return <WithdrawalForm currentAsset={currentAsset} maxAmount={getMaxWithdrawalAmountResponse.data.maxAmount} />;
+        return (
+          <>
+            <ParagraphS className="subtitle">{t('dashboard_withdraw.subtitle', { creditLine })}</ParagraphS>
+            <WithdrawalForm currentAsset={currentAsset} maxAmount={getMaxWithdrawalAmountResponse.data.maxAmount} />
+          </>
+        );
+
       default:
-        console.error('Withdrawalhandler unhandles request state');
+        console.error('Withdrawal unhandled request state');
         return null;
     }
   }
@@ -39,7 +46,6 @@ export const WithdrawalHandler: FC = () => {
         <ParagraphM weight={800} className="title">
           {t('dashboard_withdraw.title', { currentAsset })}
         </ParagraphM>
-        <ParagraphS className="subtitle">{t('dashboard_withdraw.subtitle', { creditLine })}</ParagraphS>
         {getContent()}
       </Card>
     </WithdrawScreenStyled>

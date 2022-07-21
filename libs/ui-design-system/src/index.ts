@@ -10,3 +10,4 @@ export * from './lib/components/loading/loading';
 export * from './lib/components/modal/modal';
 export * from './lib/components/table/table';
 export * from './lib/components/typography/typography.styled';
+export * from './lib/components/skeleton/skeleton.styled';
