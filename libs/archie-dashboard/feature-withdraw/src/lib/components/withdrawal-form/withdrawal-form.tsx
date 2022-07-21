@@ -4,41 +4,59 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
 import { ButtonOutline, ButtonPrimary, InputText, ParagraphXS } from '@archie-webapps/ui-design-system';
 import { theme } from '@archie-webapps/ui-theme';
 
+import { calculateCollateralCreditValue, calculateCollateralTotalValue } from '../../helpers/collateral';
 import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/successfull-withdrawal';
 
-import { WithdrawSchema } from './withdrawal-form.schema';
+import { getUpdatedCreditAndTotal } from './withdrawal-form.helpers';
+import { getWithdrawSchema } from './withdrawal-form.schema';
 import * as Styled from './withdrawal-form.styled';
 
 interface WithdrawFormData {
-  withdrawAmount: string;
+  withdrawAmount: number;
   withdrawAddress: string;
 }
 
 interface WithdrawalFormProps {
   currentAsset: string;
+  collateral: CollateralValue[];
   maxAmount: number;
 }
-export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, maxAmount }) => {
+export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collateral, maxAmount }) => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
   const [successfullWithdrawalModalOpen, setSuccessfullWithdrawalModalOpen] = useState(false);
+  const WithdrawSchema = getWithdrawSchema(maxAmount);
 
   const {
     handleSubmit,
     register,
+    getValues,
     formState: { isDirty, errors },
   } = useForm<WithdrawFormData>({
     mode: 'onSubmit',
     reValidateMode: 'onBlur',
     defaultValues: {
-      withdrawAmount: '',
+      withdrawAmount: 0,
       withdrawAddress: '',
     },
     resolver: yupResolver(WithdrawSchema),
+  });
+
+  const withdrawalAmount = getValues('withdrawAmount');
+  console.log('dvigamo', withdrawalAmount);
+
+  const initialCreditValue = calculateCollateralCreditValue(collateral);
+  const initialCollateralValue = calculateCollateralTotalValue(collateral);
+
+  const { updatedCollateralValue, updatedCreditValue } = getUpdatedCreditAndTotal({
+    asset: currentAsset,
+    collateral,
+    withdrawalAmount,
   });
 
   const onSubmit = handleSubmit((data) => {
@@ -50,9 +68,14 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, maxAmoun
     <>
       <Styled.WithdrawalForm onSubmit={onSubmit}>
         <InputText>
-          {t('dashboard_withdraw.label.amount', { currentAsset })}
+          <label htmlFor="withdrawAmount">{t('dashboard_withdraw.form.amount_label', { currentAsset })}</label>
           <input
-            placeholder={t('dashboard_withdraw.placeholder.amount', { maxWithdrawAmount: maxAmount, currentAsset })}
+            id="withdrawAmount"
+            placeholder={t('dashboard_withdraw.form.amount_placeholder', {
+              maxWithdrawAmount: maxAmount,
+              currentAsset,
+            })}
+            type="number"
             {...register('withdrawAmount')}
           />
           {errors.withdrawAmount?.message && (
@@ -60,18 +83,30 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, maxAmoun
               {t(errors.withdrawAmount.message)}
             </ParagraphXS>
           )}
-          <ParagraphXS color={theme.textSecondary} weight={500} className="credit-limit">
-            Withdrawing this amount will reduce your Archie Collateral from $4,564.34 to $4,124. This reduces your
-            credit limit from $3,424 to $3,093. {/*  TBD */}
-          </ParagraphXS>
+          {withdrawalAmount > 0 && (
+            <ParagraphXS color={theme.textSecondary} weight={500} className="credit-limit">
+              {t('dashboard_withdraw.form.credit_change', {
+                initialCollateralValue,
+                initialCreditValue,
+                updatedCollateralValue,
+                updatedCreditValue,
+              })}
+            </ParagraphXS>
+          )}
         </InputText>
         <div className="address">
           <div className="address-title">
             <ParagraphXS weight={700}>{t('dashboard_withdraw.address_title', { currentAsset })}</ParagraphXS>
           </div>
           <div className="address-input">
-            <ParagraphXS weight={700}>{t('dashboard_withdraw.label.address', { currentAsset })}</ParagraphXS>
-            <input placeholder={t('dashboard_withdraw.placeholder.address')} {...register('withdrawAddress')} />
+            <label htmlFor="withdrawAddress">
+              <ParagraphXS weight={700}>{t('dashboard_withdraw.form.address_label', { currentAsset })}</ParagraphXS>
+            </label>
+            <input
+              id="withdrawAddress"
+              placeholder={t('dashboard_withdraw.form.address_placeholder')}
+              {...register('withdrawAddress')}
+            />
             {errors.withdrawAddress?.message && (
               <ParagraphXS className="error" color={theme.textDanger}>
                 {t(errors.withdrawAddress.message)}

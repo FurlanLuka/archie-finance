@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
+import { useGetCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-value';
 import { useGetMaxWithdrawalAmount } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-max-withdrawal-amount';
 import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { Card, ParagraphM, ParagraphS } from '@archie-webapps/ui-design-system';
@@ -19,25 +20,41 @@ export const WithdrawScreen: FC = () => {
   const currentAsset = location.pathname.slice(location.pathname.lastIndexOf('/') + 1);
 
   const getMaxWithdrawalAmountResponse = useGetMaxWithdrawalAmount(currentAsset);
+  const getCollateralValueReponse = useGetCollateralValue();
 
   function getContent() {
-    switch (getMaxWithdrawalAmountResponse.state) {
-      case RequestState.ERROR:
-        return <div>Something went wrong :( </div>;
-      case RequestState.LOADING:
-        return <WithdrawalSkeleton />;
-      case RequestState.SUCCESS:
-        return (
-          <>
-            <ParagraphS className="subtitle">{t('dashboard_withdraw.subtitle', { creditLine })}</ParagraphS>
-            <WithdrawalForm currentAsset={currentAsset} maxAmount={getMaxWithdrawalAmountResponse.data.maxAmount} />
-          </>
-        );
-
-      default:
-        console.error('Withdrawal unhandled request state');
-        return null;
+    if (
+      getMaxWithdrawalAmountResponse.state === RequestState.LOADING ||
+      getCollateralValueReponse.state === RequestState.LOADING
+    ) {
+      return <WithdrawalSkeleton />;
     }
+
+    if (
+      getMaxWithdrawalAmountResponse.state === RequestState.ERROR ||
+      getCollateralValueReponse.state === RequestState.ERROR
+    ) {
+      return <div>Something went wrong :( </div>;
+    }
+
+    if (
+      getMaxWithdrawalAmountResponse.state === RequestState.SUCCESS &&
+      getCollateralValueReponse.state === RequestState.SUCCESS
+    ) {
+      return (
+        <>
+          <ParagraphS className="subtitle">{t('dashboard_withdraw.subtitle', { creditLine })}</ParagraphS>
+          <WithdrawalForm
+            currentAsset={currentAsset}
+            maxAmount={getMaxWithdrawalAmountResponse.data.maxAmount}
+            collateral={getCollateralValueReponse.data}
+          />
+        </>
+      );
+    }
+
+    console.error('Withdrawal unhandled request state');
+    return null;
   }
 
   return (
