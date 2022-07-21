@@ -6,7 +6,7 @@ import { OmnibusVaultAccountModule } from './modules/omnibus_vault_account/omnib
 import { FireblocksWebhookModule } from './modules/fireblocks_webhook/fireblocks_webhook.module';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { AuthModule } from '@archie-microservices/auth0';
-import { HealthModule } from '@archie-microservices/health';
+import { HealthModule } from '@archie/api/utils/health';
 import { AssetInformationModule } from './modules/asset_information/asset_information.module';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 

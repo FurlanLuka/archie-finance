@@ -20,7 +20,7 @@
     "config": "libs/config",
     "credit-api": "apps/credit-api",
     "api-utils-crypto": "libs/api/utils/crypto",
-    "health": "libs/health",
+    "api-utils-health": "libs/api/utils/health",
     "internal-api": "libs/internal-api",
     "mail-api": "apps/mail-api",
     "microservice": "libs/api/utils/microservice",

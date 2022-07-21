@@ -1,5 +1,5 @@
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
-import { HealthModule } from '@archie-microservices/health';
+import { HealthModule } from '@archie/api/utils/health';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigVariables } from '@archie/api/asset-price-api/constants';
