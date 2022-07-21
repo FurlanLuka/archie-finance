@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import {
   ConfigVariables,

@@ -2,7 +2,7 @@ import {
   Collateral,
   CollateralValue,
   GetTotalCollateralValueResponse,
-} from '@archie-microservices/api-interfaces/collateral';
+} from '@archie/api/utils/interfaces/collateral';
 import { IsNumber, IsString } from 'class-validator';
 import { TransactionStatus } from 'fireblocks-sdk';
 

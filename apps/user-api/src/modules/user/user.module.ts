@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { Auth0Module } from '../auth0/auth0.module';
 import { InternalUserController, UserController } from './user.controller';
 import { UserService } from './user.service';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
   EMAIL_VERIFIED_EXCHANGE,

@@ -8,10 +8,10 @@ import { UsersLtv } from './margin.interfaces';
 import { MarginLtvService } from './ltv/margin_ltv.service';
 import { MarginCallsService } from './calls/margin_calls.service';
 import { Collateral } from '../collateral/collateral.entity';
-import { InternalApiService } from '@archie-microservices/internal-api';
-import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
+import { InternalApiService } from '@archie/api/utils/internal';
+import { GetAssetPricesResponse } from '@archie/api/utils/interfaces/asset_price';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { GetAssetListResponse } from '@archie-microservices/api-interfaces/asset_information';
+import { GetAssetListResponse } from '@archie/api/utils/interfaces/asset_information';
 import { MarginCollateralValueCheckService } from './collateral_value_checks/margin_collaterall_value_checks.service';
 import {
   CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,

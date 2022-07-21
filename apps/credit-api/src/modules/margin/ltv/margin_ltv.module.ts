@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { MarginLtvService } from './margin_ltv.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MarginNotification } from '../margin_notifications.entity';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import {
   ConfigVariables,

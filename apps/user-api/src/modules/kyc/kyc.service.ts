@@ -1,4 +1,3 @@
-import { VaultService } from '@archie-microservices/vault';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -6,19 +5,20 @@ import { Kyc } from './kyc.entity';
 import {
   CreateKycResponse,
   GetKycResponse,
-} from '@archie-microservices/api-interfaces/kyc';
+} from '@archie/api/utils/interfaces/kyc';
 import { KycDto } from './kyc.dto';
 import { DateTime } from 'luxon';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { KYC_SUBMITTED_EXCHANGE } from '@archie/api/user-api/constants';
+import { CryptoService } from '@archie/api/utils/crypto';
 
 @Injectable()
 export class KycService {
   constructor(
     @InjectRepository(Kyc) private kycRepository: Repository<Kyc>,
-    private vaultService: VaultService,
     private amqpConnection: AmqpConnection,
+    private cryptoService: CryptoService,
   ) {}
 
   async getKyc(userId: string): Promise<GetKycResponse> {
@@ -30,7 +30,7 @@ export class KycService {
       throw new KycNotFoundError();
     }
 
-    const decryptedData: string[] = await this.vaultService.decryptStrings([
+    const decryptedData: string[] = this.cryptoService.decryptMultiple([
       kycRecord.firstName,
       kycRecord.lastName,
       kycRecord.dateOfBirth,
@@ -70,7 +70,7 @@ export class KycService {
       throw new KycAlreadySubmitted();
     }
 
-    const encryptedData: string[] = await this.vaultService.encryptStrings([
+    const encryptedData: string[] = this.cryptoService.encryptMultiple([
       payload.firstName,
       payload.lastName,
       DateTime.fromJSDate(payload.dateOfBirth).toISODate(),

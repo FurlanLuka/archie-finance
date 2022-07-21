@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
-import { AuthModule } from '@archie-microservices/auth0';
-import { HealthModule } from '@archie-microservices/health';
+import { AuthModule } from '@archie/api/utils/auth0';
+import { HealthModule } from '@archie/api/utils/health';
 import { CreditModule } from './modules/credit/credit.module';
-import { InternalApiModule } from '@archie-microservices/internal-api';
+import { InternalApiModule } from '@archie/api/utils/internal';
 import { AptoModule } from './modules/apto/apto.module';
 import { MarginModule } from './modules/margin/margin.module';
 import { RizeModule } from './modules/rize/rize.module';

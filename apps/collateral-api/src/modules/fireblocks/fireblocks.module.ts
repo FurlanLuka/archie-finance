@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { FireblocksService } from './fireblocks.service';
-import { CryptoModule } from '@archie-microservices/crypto';
+import { CryptoModule } from '@archie/api/utils/crypto';
 import { UserVaultAccount } from '../user_vault_account/user_vault_account.entity';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import {
   COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
   COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE,
@@ -17,7 +17,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     PassportModule,
-    CryptoModule,
+    CryptoModule.register(),
     TypeOrmModule.forFeature([UserVaultAccount]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],

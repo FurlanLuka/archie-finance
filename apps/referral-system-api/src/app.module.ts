@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/referral-system-api/constants';
-import { HealthModule } from '@archie-microservices/health';
-import { VaultModule } from '@archie-microservices/vault';
+import { HealthModule } from '@archie/api/utils/health';
 import { WaitlistModule } from '@archie/api/referral-system-api/waitlist';
 
 @Module({
@@ -14,11 +13,8 @@ import { WaitlistModule } from '@archie/api/referral-system-api/waitlist';
         ConfigVariables.TYPEORM_USERNAME,
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
-        ConfigVariables.VAULT_NAMESPACE,
-        ConfigVariables.VAULT_PASSWORD,
-        ConfigVariables.VAULT_PRIVATE_ADDRESS,
-        ConfigVariables.VAULT_USERNAME,
         ConfigVariables.QUEUE_URL,
+        ConfigVariables.ENCRYPTION_KEY,
       ],
       parse: (_configVariable, value) => value,
     }),
@@ -34,18 +30,6 @@ import { WaitlistModule } from '@archie/api/referral-system-api/waitlist';
         synchronize: true,
         autoLoadEntities: true,
         keepConnectionAlive: true,
-      }),
-      inject: [ConfigService],
-    }),
-    VaultModule.register({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        VAULT_NAMESPACE: configService.get(ConfigVariables.VAULT_NAMESPACE),
-        VAULT_PASSWORD: configService.get(ConfigVariables.VAULT_PASSWORD),
-        VAULT_PRIVATE_ADDRESS: configService.get(
-          ConfigVariables.VAULT_PRIVATE_ADDRESS,
-        ),
-        VAULT_USERNAME: configService.get(ConfigVariables.VAULT_USERNAME),
       }),
       inject: [ConfigService],
     }),

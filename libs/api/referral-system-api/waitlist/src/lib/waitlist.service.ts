@@ -1,14 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import { CryptoService } from '@archie-microservices/crypto';
+import { CryptoService } from '@archie/api/utils/crypto';
 import { Waitlist } from './waitlist.entity';
-import { VaultService } from '@archie-microservices/vault';
 import {
   GetWaitlistRecordResponse,
   ReferralRankQueryResult,
 } from './waitlist.interfaces';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
   JOINED_WAITLIST_EXCHANGE,
@@ -24,7 +23,6 @@ export class WaitlistService {
     @InjectRepository(Waitlist) private waitlist: Repository<Waitlist>,
     private dataSource: DataSource,
     private cryptoService: CryptoService,
-    private vaultService: VaultService,
     private amqpConnection: AmqpConnection,
     private configService: ConfigService,
   ) {}
@@ -39,9 +37,8 @@ export class WaitlistService {
     if (waitlistEntity !== null) {
       return;
     }
-    const encryptedEmail: string = (
-      await this.vaultService.encryptStrings([emailAddress])
-    )[0];
+
+    const encryptedEmail: string = this.cryptoService.encrypt(emailAddress);
 
     const id: string = v4();
 
@@ -126,9 +123,9 @@ export class WaitlistService {
     }
 
     try {
-      const [emailAddress] = await this.vaultService.decryptStrings([
+      const emailAddress = this.cryptoService.decrypt(
         waitlistEntity.emailAddress,
-      ]);
+      );
 
       this.amqpConnection.publish(JOINED_WAITLIST_EXCHANGE.name, '', {
         emailAddress,

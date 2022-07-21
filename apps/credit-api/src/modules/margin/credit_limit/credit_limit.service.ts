@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UsersLtv } from '../margin.interfaces';
-import { GetAssetListResponse } from '@archie-microservices/api-interfaces/asset_information';
+import { GetAssetListResponse } from '@archie/api/utils/interfaces/asset_information';
 import { Credit } from '../../credit/credit.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { CreditService } from '../../credit/credit.service';

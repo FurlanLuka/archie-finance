@@ -11,7 +11,7 @@ import {
   ConfigVariables,
   COLLATERAL_RECEIVED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
-import { ConfigService, ConfigModule } from '@archie-microservices/config';
+import { ConfigService, ConfigModule } from '@archie/api/utils/config';
 
 @Module({
   controllers: [CreditController, InternalCreditController],

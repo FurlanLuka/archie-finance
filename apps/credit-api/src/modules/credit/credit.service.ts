@@ -3,15 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Credit } from './credit.entity';
 import { GetCreditResponse } from './credit.interfaces';
-import { InternalApiService } from '@archie-microservices/internal-api';
+import { InternalApiService } from '@archie/api/utils/internal';
 import {
   GetCollateralValueResponse,
   CollateralValue,
-} from '@archie-microservices/api-interfaces/collateral';
+} from '@archie/api/utils/interfaces/collateral';
 import {
   GetAssetListResponse,
   AssetInformation,
-} from '@archie-microservices/api-interfaces/asset_information';
+} from '@archie/api/utils/interfaces/asset_information';
 import {
   CreateCreditMinimumCollateralError,
   CreditNotFoundError,

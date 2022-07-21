@@ -1,7 +1,7 @@
 import { Credit } from '../../credit/credit.entity';
 import { LiquidationLog } from '../liquidation_logs.entity';
 import { UsersLtv } from '../margin.interfaces';
-import { CollateralValue } from '@archie-microservices/api-interfaces/collateral';
+import { CollateralValue } from '@archie/api/utils/interfaces/collateral';
 import { Injectable } from '@nestjs/common';
 import { MarginNotification } from '../margin_notifications.entity';
 import { LTV_LIMIT_APPROACHING_EXCHANGE } from '@archie/api/credit-api/constants';
@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Collateral } from '../../collateral/collateral.entity';
-import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
+import { GetAssetPricesResponse } from '@archie/api/utils/interfaces/asset_price';
 import { CollateralValueService } from '../../collateral/value/collateral_value.service';
 
 @Injectable()

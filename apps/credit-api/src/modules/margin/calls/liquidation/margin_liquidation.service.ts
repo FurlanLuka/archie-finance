@@ -2,7 +2,7 @@ import { LiquidationLog } from '../../liquidation_logs.entity';
 import {
   CollateralValue,
   GetCollateralValueResponse,
-} from '@archie-microservices/api-interfaces/collateral';
+} from '@archie/api/utils/interfaces/collateral';
 import {
   Injectable,
   InternalServerErrorException,

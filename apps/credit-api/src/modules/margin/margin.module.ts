@@ -12,7 +12,7 @@ import { MarginLtvModule } from './ltv/margin_ltv.module';
 import { MarginCallsModule } from './calls/margin_calls.module';
 import { Collateral } from '../collateral/collateral.entity';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
   CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,

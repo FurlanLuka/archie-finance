@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import axios, { AxiosError } from 'axios';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
 import { SendEmailInternalError } from './sendgrid.errors';
 import { InternalApiService } from '@archie-microservices/internal-api';
@@ -11,6 +11,8 @@ import {
   MarginCallCompleted,
   MarginCallStarted,
 } from './sendgrid.interfaces';
+import { InternalApiService } from '@archie/api/utils/internal';
+import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
 
 @Injectable()
 export class SendgridService {

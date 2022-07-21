@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CryptoModule } from '@archie-microservices/crypto';
+import { CryptoModule } from '@archie/api/utils/crypto';
 import { WaitlistService } from './waitlist.service';
 import { WaitlistController } from './waitlist.controller';
 import { Waitlist } from './waitlist.entity';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
   JOINED_WAITLIST_EXCHANGE,
@@ -15,7 +15,13 @@ import {
 @Module({
   imports: [
     TypeOrmModule.forFeature([Waitlist]),
-    CryptoModule,
+    CryptoModule.register({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
+      }),
+    }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       inject: [ConfigService],

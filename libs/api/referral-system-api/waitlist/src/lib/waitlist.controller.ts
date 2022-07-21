@@ -12,7 +12,7 @@ import {
   IdParamsDto,
 } from './waitlist.dto';
 import { WaitlistService } from './waitlist.service';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 
 @Controller('v1/waitlist')
 export class WaitlistController {
@@ -27,7 +27,7 @@ export class WaitlistController {
   @ApiErrorResponse([NotFoundException])
   public async verify(@Param() params: IdParamsDto): Promise<void> {
     return this.waitlistService.verifyEmail(params.id);
-  } 
+  }
 
   @Get(':id')
   @ApiErrorResponse([NotFoundException])

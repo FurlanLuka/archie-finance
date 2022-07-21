@@ -91,6 +91,7 @@ jobs:
           fi
   build_and_publish:
     name: Build ${{ matrix.project }} docker
+    if: ${{ needs.check_and_build.outputs.affectedProjects != '[]' && needs.check_and_build.outputs.affectedProjects != '' }}
     needs: check_and_build
     runs-on: ubuntu-latest
     environment: ${{ inputs.ENVIRONMENT }}
@@ -126,9 +127,10 @@ jobs:
           npx nx run ${{ matrix.project }}:build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
   deploy:
     name: Deploy ${{ matrix.project }}
+    if: ${{ needs.check_and_build.outputs.affectedProjects != '[]' && needs.check_and_build.outputs.affectedProjects != '' }}
     needs: [build_and_publish, check_and_build]
     runs-on: ubuntu-latest
-    environment: development
+    environment: ${{ inputs.ENVIRONMENT }}
     strategy:
       fail-fast: false
       matrix:
@@ -155,7 +157,8 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
         IMAGE_TAG: ${{ matrix.project }}-${{ needs.check_and_build.outputs.imageTag }}
+        ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
         CHART: ./apps/${{ matrix.project }}/chart
         APP_NAME: ${{ matrix.project }}
       with:
-        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment="development"
+        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment=$ENVIRONMENT

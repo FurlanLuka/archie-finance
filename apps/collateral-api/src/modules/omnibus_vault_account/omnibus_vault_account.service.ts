@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { GenerateAddressResponse, VaultAccountResponse } from 'fireblocks-sdk';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import { FireblocksService } from '../fireblocks/fireblocks.service';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 

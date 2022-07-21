@@ -2,8 +2,8 @@ import {
   GetCollateralWithdrawal,
   GetUserWithdrawalAmount,
   GetUserWithdrawals,
-} from '@archie-microservices/api-interfaces/collateral';
-import { InternalApiService } from '@archie-microservices/internal-api';
+} from '@archie/api/utils/interfaces/collateral';
+import { InternalApiService } from '@archie/api/utils/internal';
 import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '@archie/api/credit-api/constants';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
