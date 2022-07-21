@@ -10,7 +10,7 @@ import { Channel, ConsumeMessage } from 'amqplib';
 export function Subscribe(
   exchange: RabbitMQExchangeConfig,
   queueName: string,
-  requeueOnError = true,
+  requeueOnError = false,
 ) {
   return applyDecorators(
     RabbitSubscribe({
