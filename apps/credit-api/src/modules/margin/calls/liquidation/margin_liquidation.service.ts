@@ -44,14 +44,11 @@ export class MarginLiquidationService {
                 {
                   userId,
                   asset: liquidatedAsset.asset,
-                  withdrawalAmount: liquidatedAsset.liquidationAmount,
+                  withdrawalAmount: liquidatedAsset.amount,
                 },
               )
               .set({ amount: () => 'amount - :withdrawalAmount' })
-              .setParameter(
-                'withdrawalAmount',
-                liquidatedAsset.liquidationAmount,
-              )
+              .setParameter('withdrawalAmount', liquidatedAsset.amount)
               .useTransaction(true)
               .execute();
 
@@ -60,7 +57,7 @@ export class MarginLiquidationService {
               userId,
               error: 'Unable to subtract users collateral',
               asset: liquidatedAsset.asset,
-              amount: liquidatedAsset.liquidationAmount,
+              amount: liquidatedAsset.amount,
             });
           }
         }),
@@ -120,22 +117,21 @@ export class MarginLiquidationService {
 
           return {
             asset: collateralValue.asset,
-            liquidationAmount:
-              collateralValue.assetAmount - newCollateralAssetAmount,
+            amount: collateralValue.assetAmount - newCollateralAssetAmount,
             userId,
             marginCall: marginCall,
-            liquidationPrice: collateralValue.price - newCollateralAssetPrice,
+            price: collateralValue.price - newCollateralAssetPrice,
           };
         }
 
         return {
           asset: collateralValue.asset,
-          liquidationAmount: 0,
+          amount: 0,
           userId,
           marginCall: marginCall,
-          liquidationPrice: 0,
+          price: 0,
         };
       })
-      .filter((liquidatedAsset) => liquidatedAsset.liquidationAmount > 0);
+      .filter((liquidatedAsset) => liquidatedAsset.amount > 0);
   }
 }

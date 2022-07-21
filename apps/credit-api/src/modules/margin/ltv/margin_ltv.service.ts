@@ -15,7 +15,6 @@ import { CollateralValueService } from '../../collateral/value/collateral_value.
 @Injectable()
 export class MarginLtvService {
   LTV_ALERT_LIMITS = [65, 70, 73];
-  SAFE_LTV = 0.6;
   LTV_LIMIT = 75;
   COLLATERAL_SALE_LTV_LIMIT = 85;
 
@@ -63,7 +62,7 @@ export class MarginLtvService {
     );
     const usersLiquidationLogsSum: number = usersLiquidationLogs.reduce(
       (liquidationSum: number, liquidationLog) =>
-        liquidationSum + liquidationLog.liquidationPrice,
+        liquidationSum + liquidationLog.price,
       0,
     );
 
@@ -78,10 +77,18 @@ export class MarginLtvService {
       loanedBalance: loanedBalance,
       collateralAllocation: usersCollateralValue,
       userOnlyHasStableCoins: doesUserHaveOnlyUsdc,
-      priceForMarginCall: loanedBalance / (this.LTV_LIMIT / 100),
+      priceForMarginCall: this.calculatePriceForMarginCall(loanedBalance),
       priceForPartialCollateralSale:
-        loanedBalance / (this.COLLATERAL_SALE_LTV_LIMIT / 100),
+        this.calculatePriceForCollateralSale(loanedBalance),
     };
+  }
+
+  public calculatePriceForMarginCall(loanedBalance: number): number {
+    return loanedBalance / (this.LTV_LIMIT / 100);
+  }
+
+  public calculatePriceForCollateralSale(loanedBalance: number): number {
+    return loanedBalance / (this.COLLATERAL_SALE_LTV_LIMIT / 100);
   }
 
   public async checkIfApproachingLtvLimits(usersLtv: UsersLtv) {
@@ -151,12 +158,13 @@ export class MarginLtvService {
     }
   }
 
-  public calculateAmountToReachSafeLtv(
+  public calculateAmountToReachLtv(
     loanedBalance: number,
     collateralBalance: number,
+    targetLtv: number,
   ): number {
-    return (
-      (loanedBalance - this.SAFE_LTV * collateralBalance) / (1 - this.SAFE_LTV)
-    );
+    const ltv: number = targetLtv / 100;
+
+    return (loanedBalance - ltv * collateralBalance) / (1 - ltv);
   }
 }

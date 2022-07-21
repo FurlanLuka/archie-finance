@@ -1,4 +1,4 @@
-import { UsersLtv } from '../margin.interfaces';
+import { LiquidatedCollateralAssets, UsersLtv } from '../margin.interfaces';
 import { Injectable } from '@nestjs/common';
 import {
   MARGIN_CALL_COMPLETED_EXCHANGE,
@@ -11,12 +11,12 @@ import { DateTime, Interval } from 'luxon';
 import { MarginLtvService } from '../ltv/margin_ltv.service';
 import { MarginLiquidationService } from './liquidation/margin_liquidation.service';
 import { MarginNotification } from '../margin_notifications.entity';
-import { LiquidationLog } from '../liquidation_logs.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class MarginCallsService {
   CRITICAL_LTV_LIMIT = 85;
+  LIQUIDATE_TO_LTV = 60;
 
   constructor(
     @InjectRepository(MarginNotification)
@@ -61,20 +61,29 @@ export class MarginCallsService {
       hoursPassedSinceTheStartOfMarginCall >= 72 ||
       usersLtv.ltv >= this.CRITICAL_LTV_LIMIT
     ) {
-      const assetsToLiquidate: Partial<LiquidationLog>[] =
+      const liquidatedCollateralAssets: LiquidatedCollateralAssets =
         await this.completeMarginCallWithLiquidation(usersLtv, marginCall);
+
+      const loanedBalance: number =
+        usersLtv.loanedBalance - liquidatedCollateralAssets.loanRepaymentAmount;
 
       this.amqpConnection.publish(MARGIN_CALL_COMPLETED_EXCHANGE.name, '', {
         userId: usersLtv.userId,
-        liquidation: assetsToLiquidate.map((asset) => ({
-          asset: asset.asset,
-          amount: asset.liquidationAmount,
-          price: asset.liquidationPrice,
-        })),
-        ltv: usersLtv.ltv,
-        priceForMarginCall: usersLtv.priceForMarginCall,
-        priceForPartialCollateralSale: usersLtv.priceForPartialCollateralSale,
-        collateralBalance: usersLtv.collateralBalance,
+        liquidation: liquidatedCollateralAssets.liquidatedAssets.map(
+          (asset) => ({
+            asset: asset.asset,
+            amount: asset.amount,
+            price: asset.price,
+          }),
+        ),
+        ltv: this.LIQUIDATE_TO_LTV,
+        priceForMarginCall:
+          this.marginLtvService.calculatePriceForMarginCall(loanedBalance),
+        priceForPartialCollateralSale:
+          this.marginLtvService.calculatePriceForCollateralSale(loanedBalance),
+        collateralBalance:
+          usersLtv.collateralBalance -
+          liquidatedCollateralAssets.loanRepaymentAmount,
       });
     } else if (alreadyActiveMarginCall === undefined) {
       this.amqpConnection.publish(MARGIN_CALL_STARTED_EXCHANGE.name, '', {
@@ -90,11 +99,12 @@ export class MarginCallsService {
   private async completeMarginCallWithLiquidation(
     usersLtv: UsersLtv,
     marginCall: MarginCall,
-  ): Promise<Partial<LiquidationLog>[]> {
+  ): Promise<LiquidatedCollateralAssets> {
     const loanRepaymentAmount: number =
-      this.marginLtvService.calculateAmountToReachSafeLtv(
+      this.marginLtvService.calculateAmountToReachLtv(
         usersLtv.loanedBalance,
         usersLtv.collateralBalance,
+        this.LIQUIDATE_TO_LTV,
       );
     const assetsToLiquidate =
       await this.marginLiquidationService.getAssetsToLiquidate(
@@ -109,7 +119,10 @@ export class MarginCallsService {
     );
     await this.cleanupMarginCallAttempt(usersLtv.userId);
 
-    return assetsToLiquidate;
+    return {
+      loanRepaymentAmount,
+      liquidatedAssets: assetsToLiquidate,
+    };
   }
 
   private async cleanupMarginCallAttempt(userId: string): Promise<void> {

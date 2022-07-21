@@ -1,8 +1,9 @@
 import { GetCollateralValueResponse } from '@archie/api/utils/interfaces/collateral';
+import { LiquidationLog } from './liquidation_logs.entity';
 
 export interface LiquidatedCollateralAssets {
-  asset: string;
-  amount: number;
+  loanRepaymentAmount: number;
+  liquidatedAssets: Partial<LiquidationLog>[];
 }
 
 export interface CheckMarginMessage {
