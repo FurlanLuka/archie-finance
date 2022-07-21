@@ -10,3 +10,15 @@ export enum ConfigVariables {
   COINGECKO_API_URI = 'COINGECKO_API_URI',
   ASSET_LIST = 'ASSET_LIST',
 }
+
+export interface AssetList {
+  [key: string]: AssetInformation;
+}
+
+interface AssetInformation {
+  fireblocks_id: string;
+  coingecko_id: string;
+  network: string;
+  ltv: number;
+  interest: number;
+}

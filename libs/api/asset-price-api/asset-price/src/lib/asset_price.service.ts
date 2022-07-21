@@ -9,9 +9,9 @@ import {
   GetAssetPriceResponse,
   GetAssetPricesResponse,
 } from '@archie/api/utils/interfaces/asset_price';
-import { CoingeckoService } from '../coingecko/coingecko.service';
-import { CoinPriceResponse } from '../coingecko/coingecko.interfaces';
-import { AssetList } from '../../interfaces';
+import { CoingeckoService } from '@archie/api/asset-price-api/coingecko';
+import { CoinPriceResponse } from '@archie/api/asset-price-api/coingecko';
+import { AssetList } from '@archie/api/asset-price-api/constants';
 
 @Injectable()
 export class AssetPriceService {

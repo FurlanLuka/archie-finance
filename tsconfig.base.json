@@ -15,6 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@archie/api/asset-price-api/asset-price": [
+        "libs/api/asset-price-api/asset-price/src/index.ts"
+      ],
+      "@archie/api/asset-price-api/coingecko": [
+        "libs/api/asset-price-api/coingecko/src/index.ts"
+      ],
       "@archie/api/asset-price-api/constants": [
         "libs/api/asset-price-api/constants/src/index.ts"
       ],
@@ -45,20 +51,20 @@
       "@archie/api/user-api/constants": [
         "libs/api/user-api/constants/src/index.ts"
       ],
-      "@archie/api/utils/microservice": [
-        "libs/api/utils/microservice/src/index.ts"
-      ],
-      "@archie/api/utils/queue": ["libs/api/utils/queue/src/index.ts"],
-      "@archie/api/utils/crypto": ["libs/api/utils/crypto/src/index.ts"],
-      "@archie/api/utils/health": ["libs/api/utils/health/src/index.ts"],
       "@archie/api/utils/auth0": ["libs/api/utils/auth0/src/index.ts"],
       "@archie/api/utils/config": ["libs/api/utils/config/src/index.ts"],
-      "@archie/api/utils/tracing": ["libs/api/utils/tracing/src/index.ts"],
+      "@archie/api/utils/crypto": ["libs/api/utils/crypto/src/index.ts"],
+      "@archie/api/utils/health": ["libs/api/utils/health/src/index.ts"],
       "@archie/api/utils/interfaces/*": ["libs/api/utils/api-interfaces/src/*"],
-      "@archie/api/utils/openapi": ["libs/api/utils/openapi/src/index.ts"],
       "@archie/api/utils/internal": [
         "libs/api/utils/internal-api/src/index.ts"
       ],
+      "@archie/api/utils/microservice": [
+        "libs/api/utils/microservice/src/index.ts"
+      ],
+      "@archie/api/utils/openapi": ["libs/api/utils/openapi/src/index.ts"],
+      "@archie/api/utils/queue": ["libs/api/utils/queue/src/index.ts"],
+      "@archie/api/utils/tracing": ["libs/api/utils/tracing/src/index.ts"],
       "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"],
       "@archie/plugin/workspace-generator": [
         "libs/plugin/workspace-generator/src/index.ts"
