@@ -28,7 +28,7 @@
     "openapi": "libs/openapi",
     "plugin-deployment": "libs/plugin-deployment",
     "referral-system-api": "apps/referral-system-api",
-    "tracing": "libs/tracing",
+    "api-utils-tracing": "libs/api/utils/tracing",
     "user-api": "apps/user-api"
   }
 }

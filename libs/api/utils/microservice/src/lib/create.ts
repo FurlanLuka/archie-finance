@@ -3,7 +3,7 @@ import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { Openapi } from '@archie-microservices/openapi';
-import { AllExceptionsFilter } from '@archie-microservices/tracing';
+import { AllExceptionsFilter } from '@archie/api/utils/tracing';
 
 export async function createMicroservice(
   name: string,
