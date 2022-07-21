@@ -20,6 +20,8 @@ export const DashboardRoute: FC = () => {
     return <Loading />;
   }
 
+  const isMfaSetup = queryResponse.state === RequestState.SUCCESS && queryResponse.data.mfaEnrollmentStage;
+
   if (queryResponse.state === RequestState.SUCCESS) {
     if (!queryResponse.data.completed) {
       return <Navigate to="/onboarding" />;
@@ -31,7 +33,7 @@ export const DashboardRoute: FC = () => {
       <Header maxWidth="100%" />
       <Page>
         <Container column mobileColumn maxWidth="100%">
-          {/* <Setup2faBanner /> */}
+          {!isMfaSetup && <Setup2faBanner />}
           <Container justifyContent="center" maxWidth="100%">
             <Navigation />
             <Routes>

@@ -58,6 +58,8 @@ export const KycSchema = yup.object({
     addressRegion: yup.string().required('kyc_step.error.not_full_address'),
     addressPostalCode: yup.string().required('kyc_step.error.not_full_address'),
   }),
+  aptUnit: yup
+    .string(),
   phoneNumber: yup.string().required('kyc_step.error.required_field').min(10, 'kyc_step.error.phone_number_digits'),
   ssn: yup.string().required('kyc_step.error.required_field').length(9, 'kyc_step.error.ssn_digits'),
 });
