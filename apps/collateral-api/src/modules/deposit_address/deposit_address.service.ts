@@ -17,7 +17,7 @@ import {
   AssetList,
   AssetInformation,
   AssetType,
-} from '@archie-microservices/api-interfaces/asset_information';
+} from '@archie/api/utils/interfaces/asset_information';
 import {
   DepositAddressUnknownAssetError,
   GenerateOmnubusWalletInternalError,

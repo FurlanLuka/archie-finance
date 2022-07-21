@@ -15,7 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@archie-microservices/api-interfaces/*": ["libs/api-interfaces/src/*"],
       "@archie-microservices/internal-api": ["libs/internal-api/src/index.ts"],
       "@archie-microservices/openapi": ["libs/openapi/src/index.ts"],
       "@archie-microservices/sendgrid": ["libs/sendgrid/src/index.ts"],
@@ -58,6 +57,7 @@
       "@archie/api/utils/auth0": ["libs/api/utils/auth0/src/index.ts"],
       "@archie/api/utils/config": ["libs/api/utils/config/src/index.ts"],
       "@archie/api/utils/tracing": ["libs/api/utils/tracing/src/index.ts"],
+      "@archie/api/utils/interfaces/*": ["libs/api/utils/api-interfaces/src/*"],
       "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"]
     }
   },

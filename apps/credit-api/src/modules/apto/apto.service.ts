@@ -23,8 +23,8 @@ import {
   StartVerificationResponse,
 } from './api/apto_api.interfaces';
 import { AptoVerification } from './apto_verification.entity';
-import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
-import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
+import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
+import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
 import { AptoUser } from './apto_user.entity';
 import {
   AptoCardApplicationNextAction,

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
-import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
+import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
+import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { RizeApiService } from './api/rize_api.service';
 import {

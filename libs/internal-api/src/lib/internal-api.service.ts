@@ -1,17 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import axios, { AxiosResponse } from 'axios';
 import { InternalApiConfig } from './internal-api.interfaces';
-import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
+import { GetAssetPricesResponse } from '@archie/api/utils/interfaces/asset_price';
 import {
   GetCollateralValueResponse,
   GetUserCollateral,
-} from '@archie-microservices/api-interfaces/collateral';
+} from '@archie/api/utils/interfaces/collateral';
 import {
   GetAssetInformationResponse,
   GetAssetListResponse,
-} from '@archie-microservices/api-interfaces/asset_information';
-import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
-import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
+} from '@archie/api/utils/interfaces/asset_information';
+import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
+import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
 
 @Injectable()
 export class InternalApiService {

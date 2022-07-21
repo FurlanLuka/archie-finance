@@ -1,5 +1,5 @@
 import { AuthGuard } from '@archie/api/utils/auth0';
-import { GetUserWithdrawals } from '@archie-microservices/api-interfaces/collateral';
+import { GetUserWithdrawals } from '@archie/api/utils/interfaces/collateral';
 import {
   Body,
   Controller,

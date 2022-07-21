@@ -3,7 +3,7 @@ import {
   ComplianceDocumentAcknowledgementRequest,
   CustomerDetails,
 } from '../api/rize_api.interfaces';
-import { GetKycResponse } from '@archie-microservices/api-interfaces/kyc';
+import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
 
 @Injectable()
 export class RizeFactoryService {

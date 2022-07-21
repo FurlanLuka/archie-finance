@@ -9,11 +9,11 @@ import {
   GetTotalCollateralValueResponse,
   GetUserCollateral,
   GetUserWithdrawals,
-} from '@archie-microservices/api-interfaces/collateral';
+} from '@archie/api/utils/interfaces/collateral';
 import {
   GetAssetPriceResponse,
   GetAssetPricesResponse,
-} from '@archie-microservices/api-interfaces/asset_price';
+} from '@archie/api/utils/interfaces/asset_price';
 import { InternalApiService } from '@archie-microservices/internal-api';
 import { CollateralWithdrawal } from './collateral_withdrawal.entity';
 import {

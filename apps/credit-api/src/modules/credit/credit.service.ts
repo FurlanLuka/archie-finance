@@ -7,11 +7,11 @@ import { InternalApiService } from '@archie-microservices/internal-api';
 import {
   GetCollateralValueResponse,
   CollateralValue,
-} from '@archie-microservices/api-interfaces/collateral';
+} from '@archie/api/utils/interfaces/collateral';
 import {
   GetAssetListResponse,
   AssetInformation,
-} from '@archie-microservices/api-interfaces/asset_information';
+} from '@archie/api/utils/interfaces/asset_information';
 import {
   CreateCreditMinimumCollateralError,
   CreditNotFoundError,

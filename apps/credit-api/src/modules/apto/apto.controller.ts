@@ -7,7 +7,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { FinishPhoneVerificationDto } from '@archie-microservices/api-interfaces/apto';
+import { FinishPhoneVerificationDto } from '@archie/api/utils/interfaces/apto';
 import { AptoService } from './apto.service';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import {

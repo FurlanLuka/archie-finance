@@ -8,7 +8,7 @@ import { ConfigVariables } from '@archie/api/asset-price-api/constants';
 import {
   GetAssetPriceResponse,
   GetAssetPricesResponse,
-} from '@archie-microservices/api-interfaces/asset_price';
+} from '@archie/api/utils/interfaces/asset_price';
 import { CoingeckoService } from '../coingecko/coingecko.service';
 import { CoinPriceResponse } from '../coingecko/coingecko.interfaces';
 import { AssetList } from '../../interfaces';
