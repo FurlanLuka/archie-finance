@@ -14,7 +14,7 @@ import {
   GetAssetPriceResponse,
   GetAssetPricesResponse,
 } from '@archie/api/utils/interfaces/asset_price';
-import { InternalApiService } from '@archie-microservices/internal-api';
+import { InternalApiService } from '@archie/api/utils/internal';
 import { CollateralWithdrawal } from './collateral_withdrawal.entity';
 import {
   DepositCreationInternalError,

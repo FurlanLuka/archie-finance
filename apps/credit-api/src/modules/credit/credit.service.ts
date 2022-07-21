@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Credit } from './credit.entity';
 import { GetCreditResponse } from './credit.interfaces';
-import { InternalApiService } from '@archie-microservices/internal-api';
+import { InternalApiService } from '@archie/api/utils/internal';
 import {
   GetCollateralValueResponse,
   CollateralValue,

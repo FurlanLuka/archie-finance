@@ -5,7 +5,7 @@ import { ConfigVariables } from '@archie/api/credit-api/constants';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
 import { CreditModule } from './modules/credit/credit.module';
-import { InternalApiModule } from '@archie-microservices/internal-api';
+import { InternalApiModule } from '@archie/api/utils/internal';
 import { AptoModule } from './modules/apto/apto.module';
 import { RizeModule } from './modules/rize/rize.module';
 import { CollateralModule } from './modules/collateral/collateral.module';

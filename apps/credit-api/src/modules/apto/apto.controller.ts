@@ -17,7 +17,7 @@ import {
   CompletePhoneVerificationResponseDto,
 } from './apto.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 
 @Controller('v1/apto')
 export class AptoController {

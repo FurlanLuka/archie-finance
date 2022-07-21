@@ -1,20 +1,20 @@
 {
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/internal-api/src",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/utils/openapi/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/internal-api/**/*.ts"]
+        "lintFilePatterns": ["libs/api/utils/openapi/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/internal-api"],
+      "outputs": ["coverage/libs/api/utils/openapi"],
       "options": {
-        "jestConfig": "libs/internal-api/jest.config.ts",
+        "jestConfig": "libs/api/utils/openapi/jest.config.ts",
         "passWithNoTests": true
       }
     }

@@ -14,7 +14,7 @@ import {
   CreateCreditMinimumCollateralError,
   CreditNotFoundError,
 } from './credit.errors';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 
 @Controller('v1/credit')
 export class CreditController {

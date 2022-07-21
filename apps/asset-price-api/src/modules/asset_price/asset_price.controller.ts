@@ -1,7 +1,7 @@
 import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
 import { GetAssetPriceResponseDto } from './asset_price.dto';
 import { AssetPriceService } from './asset_price.service';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 
 @Controller(['v1/asset_price'])
 export class AssetPriceController {

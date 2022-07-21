@@ -2,7 +2,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
-import { Openapi } from '@archie-microservices/openapi';
+import { Openapi } from '@archie/api/utils/openapi';
 import { AllExceptionsFilter } from '@archie/api/utils/tracing';
 
 export async function createMicroservice(

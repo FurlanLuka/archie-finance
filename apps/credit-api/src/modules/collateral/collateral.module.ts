@@ -8,7 +8,7 @@ import {
 import { Collateral } from './collateral.entity';
 import { CollateralService } from './collateral.service';
 import { CollateralDeposit } from './collateral_deposit.entity';
-import { InternalApiModule } from '@archie-microservices/internal-api';
+import { InternalApiModule } from '@archie/api/utils/internal';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { CollateralWithdrawal } from './collateral_withdrawal.entity';

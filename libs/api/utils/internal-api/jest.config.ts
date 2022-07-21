@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'internal-api',
-  preset: '../../jest.preset.js',
+  preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -12,5 +12,5 @@ export default {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/libs/internal-api',
+  coverageDirectory: '../../../../coverage/libs/api/utils/internal-api',
 };

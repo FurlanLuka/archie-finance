@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { RizeService } from './rize.service';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import {
   CustomerAlreadyExists,
   ActiveCustomerDoesNotExist,

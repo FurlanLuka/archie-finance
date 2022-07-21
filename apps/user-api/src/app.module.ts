@@ -6,7 +6,7 @@ import { EmailWaitlistModule } from './modules/email_waitlist/email_waitlist.mod
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
-import { InternalApiModule } from '@archie-microservices/internal-api';
+import { InternalApiModule } from '@archie/api/utils/internal';
 import { ConfigVariables } from '@archie/api/user-api/constants';
 import { CryptoModule } from '@archie/api/utils/crypto';
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
 import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
-import { InternalApiService } from '@archie-microservices/internal-api';
+import { InternalApiService } from '@archie/api/utils/internal';
 import { RizeApiService } from './api/rize_api.service';
 import {
   ComplianceDocumentAcknowledgementRequest,

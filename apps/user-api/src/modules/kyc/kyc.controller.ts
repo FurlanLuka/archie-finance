@@ -11,7 +11,7 @@ import {
 import { KycDto, CreateKycResponseDto, GetKycResponseDto } from './kyc.dto';
 import { KycService } from './kyc.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
 
 @Controller('v1/kyc')
