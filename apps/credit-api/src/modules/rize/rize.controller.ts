@@ -1,4 +1,4 @@
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   Controller,
   Get,
@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { RizeService } from './rize.service';
 import { ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import {
   CustomerAlreadyExists,
   ActiveCustomerDoesNotExist,

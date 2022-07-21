@@ -1,9 +1,9 @@
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { GetDepositAddressResponseDto } from './deposit_address.dto';
 import { DepositAddressService } from './deposit_address.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { DepositAddressUnknownAssetError } from './deposit_address.errors';
 
 @Controller('v1/deposit_address')

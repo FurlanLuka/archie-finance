@@ -4,7 +4,7 @@ import {
   GetAssetInformationResponseDto,
 } from './asset_information.dto';
 import { AssetInformationService } from './asset_information.service';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 
 @Controller('internal/asset_information')
 export class InternalAssetInformationController {

@@ -1,4 +1,4 @@
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   Body,
   Controller,
@@ -11,7 +11,7 @@ import {
 import { KycDto, CreateKycResponseDto, GetKycResponseDto } from './kyc.dto';
 import { KycService } from './kyc.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
 
 @Controller('v1/kyc')
@@ -41,11 +41,6 @@ export class KycController {
 @Controller('internal/kyc')
 export class InternalKycController {
   constructor(private readonly kycService: KycService) {}
-
-  @Get('migrate')
-  async migrate(): Promise<void> {
-    await this.kycService.migrate();
-  }
 
   @Get(':userId')
   @ApiErrorResponse([KycNotFoundError])

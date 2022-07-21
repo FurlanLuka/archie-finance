@@ -8,7 +8,7 @@ import { Onboarding } from './onboarding.entity';
 import { OnboardingService } from './onboarding.service';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigVariables } from '@archie/api/onboarding-api/constants';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 
 @Module({
   imports: [

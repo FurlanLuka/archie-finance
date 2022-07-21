@@ -2,7 +2,7 @@ import {
   GetEmailVerificationResponse,
   GetMfaEnrollmentResponse,
 } from './user.interfaces';
-import { GetEmailAddressResponse } from '@archie-microservices/api-interfaces/user';
+import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
 import {
   AuthMethod,
   Enrollment,

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import Rize from '@rizefinance/rize-js';
 import {
   ComplianceDocumentAcknowledgementRequest,

@@ -1,14 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Like, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { Waitlist } from './waitlist.entity';
-import { VaultService } from '@archie-microservices/vault';
 import {
   GetWaitlistRecordResponse,
   ReferralRankQueryResult,
 } from './waitlist.interfaces';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
   JOINED_WAITLIST_EXCHANGE,
@@ -24,7 +23,6 @@ export class WaitlistService {
     @InjectRepository(Waitlist) private waitlist: Repository<Waitlist>,
     private dataSource: DataSource,
     private cryptoService: CryptoService,
-    private vaultService: VaultService,
     private amqpConnection: AmqpConnection,
     private configService: ConfigService,
   ) {}
@@ -144,34 +142,5 @@ export class WaitlistService {
         error: JSON.stringify(error),
       });
     }
-  }
-
-  public async migrate(): Promise<void> {
-    const entities: Waitlist[] = await this.waitlist.findBy({
-      emailAddress: Like('%vault:%'),
-    });
-
-    const emailAddresses = entities.map(entity => entity.emailAddress);
-
-    const decryptedEmails = await this.vaultService.decryptStrings(emailAddresses);
-
-    const updatedEntities = await Promise.all(
-      entities.map(async (entity, index) => {
-        try {
-          const reEncryptedEmail = this.cryptoService.encrypt(
-            decryptedEmails[index],
-          );
-
-          return {
-            ...entity,
-            emailAddress: reEncryptedEmail,
-          };
-        } catch (error) {
-          console.log('error', error);
-        }
-      }),
-    );
-
-    await this.waitlist.save(updatedEntities);
   }
 }

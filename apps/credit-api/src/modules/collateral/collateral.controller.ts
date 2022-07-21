@@ -1,11 +1,8 @@
-import { AuthGuard } from '@archie-microservices/auth0';
-import { GetUserWithdrawals } from '@archie-microservices/api-interfaces/collateral';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import {
-  Body,
   Controller,
   Get,
   Param,
-  Post,
   Req,
   UseGuards,
 } from '@nestjs/common';

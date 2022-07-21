@@ -12,7 +12,7 @@ import {
   IdParamsDto,
 } from './waitlist.dto';
 import { WaitlistService } from './waitlist.service';
-import { ApiErrorResponse } from '@archie-microservices/openapi';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
 
 @Controller('v1/waitlist')
 export class WaitlistController {
@@ -35,15 +35,5 @@ export class WaitlistController {
     @Param() params: IdParamsDto,
   ): Promise<GetWaitlistRecordResponseDto> {
     return this.waitlistService.get(params.id);
-  }
-}
-
-@Controller('internal/waitlist')
-export class InternalWaitlistController {
-  constructor(private waitlistService: WaitlistService) {}
-
-  @Get('migrate')
-  public async migrate(): Promise<void> {
-    await this.waitlistService.migrate();
   }
 }

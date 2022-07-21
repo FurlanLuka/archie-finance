@@ -8,7 +8,7 @@ import { CryptoModule } from '@archie/api/utils/crypto';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserVaultAccount } from '../user_vault_account/user_vault_account.entity';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import {
   COLLATERAL_DEPOSITED_EXCHANGE,
@@ -19,7 +19,11 @@ import {
   imports: [
     PassportModule,
     DepositAddressModule,
-    CryptoModule,
+    CryptoModule.register({
+      imports: [],
+      inject: [],
+      useFactory: () => ({}),
+    }),
     TypeOrmModule.forFeature([UserVaultAccount]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],

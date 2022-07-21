@@ -8,9 +8,9 @@ import {
   GetCollateralValueResponse,
   GetTotalCollateralValueResponse,
   GetUserCollateral,
-} from '@archie-microservices/api-interfaces/collateral';
-import { GetAssetPricesResponse } from '@archie-microservices/api-interfaces/asset_price';
-import { InternalApiService } from '@archie-microservices/internal-api';
+} from '@archie/api/utils/interfaces/collateral';
+import { GetAssetPricesResponse } from '@archie/api/utils/interfaces/asset_price';
+import { InternalApiService } from '@archie/api/utils/internal';
 import { DepositCreationInternalError } from './collateral.errors';
 import { CreateDepositDto } from './collateral.dto';
 import { CollateralValueService } from './value/collateral_value.service';
