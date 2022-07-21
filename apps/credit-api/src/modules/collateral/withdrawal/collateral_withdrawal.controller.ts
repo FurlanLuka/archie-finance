@@ -1,4 +1,4 @@
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   Body,
   Controller,
@@ -19,7 +19,7 @@ import {
   GetUserWithdrawalAmount,
   GetCollateralWithdrawal,
   GetUserWithdrawals,
-} from '@archie-microservices/api-interfaces/collateral';
+} from '@archie/api/utils/interfaces/collateral';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,

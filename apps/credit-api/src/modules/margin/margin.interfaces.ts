@@ -1,4 +1,4 @@
-import { GetCollateralValueResponse } from '@archie-microservices/api-interfaces/collateral';
+import { GetCollateralValueResponse } from '@archie/api/utils/interfaces/collateral';
 
 export interface LiquidatedCollateralAssets {
   asset: string;

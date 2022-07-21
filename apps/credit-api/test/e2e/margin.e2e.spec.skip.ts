@@ -9,7 +9,7 @@ import { AppModule } from '../../src/app.module';
 import { clearDatabase } from '../e2e-test-utils/database.utils';
 import { Connection, Repository } from 'typeorm';
 import { verifyAccessToken } from '../e2e-test-utils/mock.auth.utils';
-import { AuthGuard } from '@archie-microservices/auth0';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
   CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,

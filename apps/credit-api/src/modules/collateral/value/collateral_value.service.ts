@@ -2,11 +2,11 @@ import { Collateral } from '../collateral.entity';
 import {
   GetAssetPriceResponse,
   GetAssetPricesResponse,
-} from '@archie-microservices/api-interfaces/asset_price';
+} from '@archie/api/utils/interfaces/asset_price';
 import {
   GetCollateralValueResponse,
   GetUserCollateral,
-} from '@archie-microservices/api-interfaces/collateral';
+} from '@archie/api/utils/interfaces/collateral';
 
 export class CollateralValueService {
   public getUserCollateralValue(
