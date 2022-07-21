@@ -54,24 +54,18 @@ export class SendgirdQueueController {
   async marginCallCompletedHandler(
     payload: MarginCallCompletedDto,
   ): Promise<void> {
-    await this.sendgridService.sendMarginCallCompletedMail(
-      payload.userId,
-      payload.liquidation,
-    );
+    await this.sendgridService.sendMarginCallCompletedMail(payload);
   }
 
   @Subscribe(MARGIN_CALL_STARTED_EXCHANGE, SERVICE_QUEUE_NAME)
   async marginCallStartedHandler(payload: MarginCallStartedDto): Promise<void> {
-    await this.sendgridService.sendMarginCallStartedMail(payload.userId);
+    await this.sendgridService.sendMarginCallStartedMail(payload);
   }
 
   @Subscribe(LTV_LIMIT_APPROACHING_EXCHANGE, SERVICE_QUEUE_NAME)
   async LtvLimitApproachingHandler(
     payload: LtvLimitApproachingDto,
   ): Promise<void> {
-    await this.sendgridService.sendLtvLimitApproachingMail(
-      payload.userId,
-      payload.ltv,
-    );
+    await this.sendgridService.sendLtvLimitApproachingMail(payload);
   }
 }
