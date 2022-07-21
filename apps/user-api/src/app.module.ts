@@ -6,7 +6,6 @@ import { EmailWaitlistModule } from './modules/email_waitlist/email_waitlist.mod
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
 import { AuthModule } from '@archie-microservices/auth0';
 import { HealthModule } from '@archie-microservices/health';
-import { VaultModule } from '@archie-microservices/vault';
 import { InternalApiModule } from '@archie-microservices/internal-api';
 import { ConfigVariables } from '@archie/api/user-api/constants';
 import { CryptoModule } from '@archie/api/utils/crypto';
@@ -26,10 +25,6 @@ import { CryptoModule } from '@archie/api/utils/crypto';
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.SENDGRID_API_KEY,
         ConfigVariables.SENDGRID_MAILING_LIST_ID,
-        ConfigVariables.VAULT_PRIVATE_ADDRESS,
-        ConfigVariables.VAULT_USERNAME,
-        ConfigVariables.VAULT_PASSWORD,
-        ConfigVariables.VAULT_NAMESPACE,
         ConfigVariables.INTERNAL_API_URL,
         ConfigVariables.QUEUE_URL,
         ConfigVariables.ENCRYPTION_KEY,
@@ -56,18 +51,6 @@ import { CryptoModule } from '@archie/api/utils/crypto';
       useFactory: (configService: ConfigService) => ({
         domain: configService.get(ConfigVariables.AUTH0_DOMAIN),
         audience: configService.get(ConfigVariables.AUTH0_AUDIENCE),
-      }),
-      inject: [ConfigService],
-    }),
-    VaultModule.register({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        VAULT_NAMESPACE: configService.get(ConfigVariables.VAULT_NAMESPACE),
-        VAULT_PASSWORD: configService.get(ConfigVariables.VAULT_PASSWORD),
-        VAULT_PRIVATE_ADDRESS: configService.get(
-          ConfigVariables.VAULT_PRIVATE_ADDRESS,
-        ),
-        VAULT_USERNAME: configService.get(ConfigVariables.VAULT_USERNAME),
       }),
       inject: [ConfigService],
     }),

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CryptoModule } from '@archie/api/utils/crypto';
 import { WaitlistService } from './waitlist.service';
-import { InternalWaitlistController, WaitlistController } from './waitlist.controller';
+import { WaitlistController } from './waitlist.controller';
 import { Waitlist } from './waitlist.entity';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@archie-microservices/config';
@@ -33,6 +33,6 @@ import {
     }),
   ],
   providers: [WaitlistService],
-  controllers: [WaitlistController, InternalWaitlistController],
+  controllers: [WaitlistController],
 })
 export class WaitlistModule {}
