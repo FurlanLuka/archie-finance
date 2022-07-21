@@ -9,11 +9,10 @@ import { Card, ParagraphM, ParagraphS } from '@archie-webapps/ui-design-system';
 
 import { WithdrawalForm } from '../components/withdrawal-form/withdrawal-form';
 import { WithdrawalSkeleton } from '../components/withdrawal-skeleton/withdrawal-skeleton';
+import { calculateCollateralCreditValue } from '../helpers/collateral';
 
 import { WithdrawScreenStyled } from './withdraw.styled';
 
-const creditLine = '$4,564.34';
-// TODO errors when asset is bogus
 export const WithdrawScreen: FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
@@ -43,7 +42,11 @@ export const WithdrawScreen: FC = () => {
     ) {
       return (
         <>
-          <ParagraphS className="subtitle">{t('dashboard_withdraw.subtitle', { creditLine })}</ParagraphS>
+          <ParagraphS className="subtitle">
+            {t('dashboard_withdraw.subtitle', {
+              creditLine: calculateCollateralCreditValue(getCollateralValueReponse.data),
+            })}
+          </ParagraphS>
           <WithdrawalForm
             currentAsset={currentAsset}
             maxAmount={getMaxWithdrawalAmountResponse.data.maxAmount}

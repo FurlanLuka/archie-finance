@@ -127,11 +127,12 @@
     "subtitle": "You currently have a {{creditLine}} credit line.",
     "address_title": "What address would you like to send your {{currentAsset}} to?",
     "form": {
-      "amount_label": "How much {{currentAsset}} would you like to withdraw?",
+      "amount_label": "How much {{currentAsset}} would you like to withdraw? Max is {{maxAmount}}",
       "address_label": "Send {{currentAsset}} to:",
       "amount_placeholder": "max: {{maxWithdrawAmount}} {{currentAsset}}",
       "address_placeholder": "Enter your address",
       "required_field_error": "This field is required",
+      "amount_type_error": "Amount must be a number",
       "amount_min_error": "You must withdraw more than 0",
       "amount_max_error": "You cannot withdraw more than {{maxAmount}}",
       "credit_change": "Withdrawing this amount will reduce your Archie Collateral from ${{initialCollateralValue}} to ${{updatedCollateralValue}}. This reduces your credit limit from ${{initialCreditValue}} to ${{updatedCreditValue}}"

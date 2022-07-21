@@ -35,11 +35,11 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
   const {
     handleSubmit,
     register,
-    getValues,
-    formState: { isDirty, errors },
+    watch,
+    formState: { errors, isValid },
   } = useForm<WithdrawFormData>({
-    mode: 'onSubmit',
-    reValidateMode: 'onBlur',
+    mode: 'all',
+    reValidateMode: 'onChange',
     defaultValues: {
       withdrawAmount: 0,
       withdrawAddress: '',
@@ -47,7 +47,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
     resolver: yupResolver(WithdrawSchema),
   });
 
-  const withdrawalAmount = getValues('withdrawAmount');
+  const withdrawalAmount = watch('withdrawAmount');
   console.log('dvigamo', withdrawalAmount);
 
   const initialCreditValue = calculateCollateralCreditValue(collateral);
@@ -68,14 +68,15 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
     <>
       <Styled.WithdrawalForm onSubmit={onSubmit}>
         <InputText>
-          <label htmlFor="withdrawAmount">{t('dashboard_withdraw.form.amount_label', { currentAsset })}</label>
           <input
-            id="withdrawAmount"
             placeholder={t('dashboard_withdraw.form.amount_placeholder', {
               maxWithdrawAmount: maxAmount,
               currentAsset,
             })}
             type="number"
+            defaultValue={0}
+            min={0}
+            max={maxAmount}
             {...register('withdrawAmount')}
           />
           {errors.withdrawAmount?.message && (
@@ -83,7 +84,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
               {t(errors.withdrawAmount.message)}
             </ParagraphXS>
           )}
-          {withdrawalAmount > 0 && (
+          {withdrawalAmount > 0 && withdrawalAmount <= maxAmount && (
             <ParagraphXS color={theme.textSecondary} weight={500} className="credit-limit">
               {t('dashboard_withdraw.form.credit_change', {
                 initialCollateralValue,
@@ -118,7 +119,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
           <ButtonOutline maxWidth="fit-content" onClick={() => navigate('/collateral')}>
             {t('btn_cancel')}
           </ButtonOutline>
-          <ButtonPrimary maxWidth="fit-content" isDisabled={!isDirty}>
+          <ButtonPrimary maxWidth="fit-content" isDisabled={!isValid}>
             {t('dashboard_withdraw.btn')}
           </ButtonPrimary>
         </div>
