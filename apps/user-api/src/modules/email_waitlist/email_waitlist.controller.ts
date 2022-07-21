@@ -6,7 +6,7 @@ import {
   Put,
 } from '@nestjs/common';
 import axios from 'axios';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import { EmailWaitlistDto } from './email_waitlist.dto';
 import { ConfigVariables } from '@archie/api/user-api/constants';
 import { AddToEmailWaitlistInternalError } from './email_waitlist.errors';

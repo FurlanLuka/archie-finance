@@ -9,7 +9,7 @@ import { Collateral } from './collateral.entity';
 import { CollateralService } from './collateral.service';
 import { CollateralDeposit } from './collateral_deposit.entity';
 import { InternalApiModule } from '@archie-microservices/internal-api';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { CollateralWithdrawal } from './collateral_withdrawal.entity';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';

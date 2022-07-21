@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/referral-system-api/constants';
 import { HealthModule } from '@archie/api/utils/health';
 import { WaitlistModule } from '@archie/api/referral-system-api/waitlist';

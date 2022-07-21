@@ -17,7 +17,7 @@
     "asset-price-api": "apps/asset-price-api",
     "api-utils-auth0": "libs/api/utils/auth0",
     "collateral-api": "apps/collateral-api",
-    "config": "libs/config",
+    "api-utils-config": "libs/api/utils/config",
     "credit-api": "apps/credit-api",
     "api-utils-crypto": "libs/api/utils/crypto",
     "api-utils-health": "libs/api/utils/health",

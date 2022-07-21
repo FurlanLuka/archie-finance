@@ -33,7 +33,7 @@ import {
   StartPhoneVerificationResponse,
 } from './apto.interfaces';
 import { AptoCardApplication } from './apto_card_application.entity';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import {
   CARD_ACTIVATED_EXCHANGE,
   PHONE_NUMBER_VERIFIED_EXCHANGE,

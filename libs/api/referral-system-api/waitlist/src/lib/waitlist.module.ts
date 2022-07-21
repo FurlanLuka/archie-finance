@@ -5,7 +5,7 @@ import { WaitlistService } from './waitlist.service';
 import { WaitlistController } from './waitlist.controller';
 import { Waitlist } from './waitlist.entity';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
   JOINED_WAITLIST_EXCHANGE,

@@ -8,7 +8,7 @@ import {
   VaultAssetResponse,
 } from 'fireblocks-sdk';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { AssetList } from '@archie-microservices/api-interfaces/asset_information';
 import { UserVaultAccount } from '../user_vault_account/user_vault_account.entity';

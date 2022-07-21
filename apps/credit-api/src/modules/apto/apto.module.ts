@@ -14,7 +14,7 @@ import {
   ConfigVariables,
   PHONE_NUMBER_VERIFIED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
-import { ConfigService, ConfigModule } from '@archie-microservices/config';
+import { ConfigService, ConfigModule } from '@archie/api/utils/config';
 
 @Module({
   controllers: [AptoController],

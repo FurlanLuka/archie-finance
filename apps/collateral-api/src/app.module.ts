@@ -4,7 +4,7 @@ import { DepositAddressModule } from './modules/deposit_address/deposit_address.
 import { UserVaultAccountModule } from './modules/user_vault_account/user_vault_account.module';
 import { OmnibusVaultAccountModule } from './modules/omnibus_vault_account/omnibus_vault_account.module';
 import { FireblocksWebhookModule } from './modules/fireblocks_webhook/fireblocks_webhook.module';
-import { ConfigModule, ConfigService } from '@archie-microservices/config';
+import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
 import { AssetInformationModule } from './modules/asset_information/asset_information.module';

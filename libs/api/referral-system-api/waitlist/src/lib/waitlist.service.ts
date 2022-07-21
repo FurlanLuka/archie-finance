@@ -7,7 +7,7 @@ import {
   GetWaitlistRecordResponse,
   ReferralRankQueryResult,
 } from './waitlist.interfaces';
-import { ConfigService } from '@archie-microservices/config';
+import { ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
   JOINED_WAITLIST_EXCHANGE,
