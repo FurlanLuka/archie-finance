@@ -1,24 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: archie-referral-system-api
+  name: archie-<%= projectName %>
   labels:
-    app: archie-referral-system-api
+    app: archie-<%= projectName %>
     {{- if not .Values.local }}
     tags.datadoghq.com/env: '{{ .Values.environment }}'
-    tags.datadoghq.com/service: 'archie-referral-system-api'
+    tags.datadoghq.com/service: 'archie-<%= projectName %>'
     tags.datadoghq.com/version: '{{ .Values.tag }}'
     {{- end }}
 spec:
   selector:
     matchLabels:
-      app: archie-referral-system-api
+      app: archie-<%= projectName %>
   {{- if not .Values.local }}
-  {{- if eq .Values.environment "production" }}
-  replicas: 2
-  {{- else }}
   replicas: 1
-  {{- end }}
   {{- else }}
   replicas: 1
   {{- end }}
@@ -30,17 +26,17 @@ spec:
   template:
     metadata:
       labels:
-        app: archie-referral-system-api
+        app: archie-<%= projectName %>
         {{- if not .Values.local }}
         tags.datadoghq.com/env: '{{ .Values.environment }}'
-        tags.datadoghq.com/service: 'archie-referral-system-api'
+        tags.datadoghq.com/service: 'archie-<%= projectName %>'
         tags.datadoghq.com/version: '{{ .Values.tag }}'
         {{- else }}
         helm-revision: '{{ .Release.Revision }}'
         {{- end }}
     spec:
       containers:
-        - name: archie-referral-system-api
+        - name: archie-<%= projectName %>
           image: '{{ .Values.image }}:{{ .Values.tag }}'
           {{- if not .Values.local }}
           imagePullPolicy: Always
@@ -82,6 +78,11 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
+            - name: QUEUE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: queue-secrets
+                  key: queue-url<% if(includeDatabaseConnectionSecrets) { %>
             - name: TYPEORM_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -106,47 +107,37 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: database-secrets
-                  key: database
-            - name: SENDGRID_API_KEY
+                  key: database<% } %><% if(includeAuth0Secrets) { %>
+            - name: AUTH0_DOMAIN
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: api-key
-            - name: SENDGRID_API_URL
+                  name: auth0-secrets
+                  key: domain
+            - name: AUTH0_AUDIENCE
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: api-url
-            - name: SENDGRID_MAILING_LIST_ID
+                  name: auth0-secrets
+                  key: audience<% } %><% if(includeVaultSecrets) { %>
+            - name: VAULT_PRIVATE_ADDRESS
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: mailing-list-id
-            - name: SENDGRID_VERIFY_EMAIL_TEMPLATAE_ID
+                  name: vault-secrets
+                  key: address
+            - name: VAULT_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: verify-email-template-id
-            - name: SENDGRID_WELCOME_EMAIL_TEMPLATE_ID
+                  name: vault-secrets
+                  key: username
+            - name: VAULT_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: welcome-email-template-id
-            - name: ARCHIE_MARKETING_WEBSITE_URL
+                  name: vault-secrets
+                  key: password
+            - name: VAULT_NAMESPACE
               valueFrom:
                 secretKeyRef:
-                  name: archie-secrets
-                  key: marketing-website-url
-            - name: QUEUE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: queue-secrets
-                  key: queue-url
-            - name: ENCRYPTION_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: cryptography-secrets
-                  key: encryption-key
+                  name: vault-secrets
+                  key: namespace<% } %>
           {{- end }}
       imagePullSecrets:
         - name: regcred
@@ -154,13 +145,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: archie-referral-system-api-service
+  name: archie-<%= projectName %>-service
   labels:
-    app: archie-referral-system-api-service
+    app: archie-<%= projectName %>-service
 spec:
   type: NodePort
   ports:
     - port: 80
       targetPort: 80
   selector:
-    app: archie-referral-system-api
+    app: archie-<%= projectName %>
