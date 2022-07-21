@@ -46,17 +46,13 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, maxAmoun
     setSuccessfullWithdrawalModalOpen(true);
   });
 
-  // Temp data
-  const creditLine = '$4,564.34';
-  const maxWithdrawAmount = 0.123456;
-
   return (
     <>
       <Styled.WithdrawalForm onSubmit={onSubmit}>
         <InputText>
           {t('dashboard_withdraw.label.amount', { currentAsset })}
           <input
-            placeholder={t('dashboard_withdraw.placeholder.amount', { maxWithdrawAmount, currentAsset })}
+            placeholder={t('dashboard_withdraw.placeholder.amount', { maxWithdrawAmount: maxAmount, currentAsset })}
             {...register('withdrawAmount')}
           />
           {errors.withdrawAmount?.message && (

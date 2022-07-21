@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/ui-theme';
 
-export const WithdrawContainer = styled.div`
+export const WithdrawScreenStyled = styled.div`
   width: 100%;
   max-width: calc(1000px + 4rem);
   margin-left: ${NAV_WIDTH};
