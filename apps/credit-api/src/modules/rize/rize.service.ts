@@ -13,6 +13,7 @@ import {
   TransactionEvent,
   TransactionStatus,
   TransactionType,
+  RizeTransaction,
 } from './api/rize_api.interfaces';
 import { TransactionResponse } from './rize.interfaces';
 import { RizeFactoryService } from './factory/rize_factory.service';
@@ -102,8 +103,16 @@ export class RizeService {
     ) {
       const userId: string = message.data.details.customer_external_uid;
       const amount: string = message.data.details.us_dollar_amount;
+      const transactionId: string = message.data.details.transaction_uid;
 
-      await this.decreaseAvailableCredit(userId, Number(amount));
+      const transaction: RizeTransaction =
+        await this.rizeApiService.getTransaction(transactionId);
+
+      if (transaction.net_asset === 'negative') {
+        await this.decreaseAvailableCredit(userId, Number(amount));
+      } else {
+        await this.increaseAvailableCredit(userId, Number(amount));
+      }
     }
   }
 
@@ -113,9 +122,21 @@ export class RizeService {
       .update(Credit)
       .where('userId = :userId', { userId })
       .set({
-        availableCredit: () => '"availableCredit" - :spentAmount',
+        availableCredit: () => '"availableCredit" - :amount',
       })
-      .setParameter('spentAmount', amount)
+      .setParameter('amount', amount)
+      .execute();
+  }
+
+  private async increaseAvailableCredit(userId: string, amount: number) {
+    await this.creditRepository
+      .createQueryBuilder('Credit')
+      .update(Credit)
+      .where('userId = :userId', { userId })
+      .set({
+        availableCredit: () => '"availableCredit" + :amount',
+      })
+      .setParameter('amount', amount)
       .execute();
   }
 

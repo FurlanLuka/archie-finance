@@ -17,6 +17,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class MarginCallsService {
   CRITICAL_LTV_LIMIT = 85;
   LIQUIDATE_TO_LTV = 60;
+  MARGIN_CALL_TIME_LIMIT = 72;
 
   constructor(
     @InjectRepository(MarginNotification)
@@ -42,6 +43,31 @@ export class MarginCallsService {
     });
   }
 
+  public filterUsersWithExpiredMarginCall(
+    marginCalls: MarginCall[],
+    usersLtv: UsersLtv[],
+  ): UsersLtv[] {
+    const currentTime = DateTime.utc();
+
+    return usersLtv.filter((userLtv) => {
+      const expiredMarginCall: MarginCall | undefined = marginCalls.find(
+        (marginCall) => {
+          const hoursPassedSinceTheStartOfMarginCall: number =
+            Interval.fromDateTimes(marginCall.createdAt, currentTime).length(
+              'hours',
+            );
+
+          return (
+            marginCall.userId === userLtv.userId &&
+            hoursPassedSinceTheStartOfMarginCall >= this.MARGIN_CALL_TIME_LIMIT
+          );
+        },
+      );
+
+      return expiredMarginCall !== undefined;
+    });
+  }
+
   public async handleMarginCall(
     alreadyActiveMarginCall: MarginCall,
     usersLtv: UsersLtv,
@@ -58,7 +84,7 @@ export class MarginCallsService {
     ).length('hours');
 
     if (
-      hoursPassedSinceTheStartOfMarginCall >= 72 ||
+      hoursPassedSinceTheStartOfMarginCall >= this.MARGIN_CALL_TIME_LIMIT ||
       usersLtv.ltv >= this.CRITICAL_LTV_LIMIT
     ) {
       const liquidatedCollateralAssets: LiquidatedCollateralAssets =

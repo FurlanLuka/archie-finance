@@ -3,6 +3,7 @@ import { UsersLtv } from '../margin.interfaces';
 import { MarginCollateralCheck } from '../margin_collateral_check.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
+import { MarginCall } from '../margin_calls.entity';
 
 @Injectable()
 export class MarginCollateralValueCheckService {

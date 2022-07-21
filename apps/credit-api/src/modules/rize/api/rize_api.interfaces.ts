@@ -12,6 +12,7 @@ export {
   DebitCard,
   DebitCardAccessToken,
 } from '@rizefinance/rize-js/types/lib/core/typedefs/debit-card.typedefs';
+export { Transaction as RizeTransaction } from '@rizefinance/rize-js/types/lib/core/typedefs/transaction.typedefs';
 
 export interface AdjustmentType {
   uid: string;

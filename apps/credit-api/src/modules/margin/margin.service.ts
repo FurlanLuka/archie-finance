@@ -101,12 +101,26 @@ export class MarginService {
         userLtvs,
       );
 
-    if (filteredUsersByValueChange.length === 0) {
+    const usersWithExpiredMarginCalls: UsersLtv[] =
+      this.marginCallsService.filterUsersWithExpiredMarginCall(
+        activeMarginCalls,
+        userLtvs,
+      );
+
+    const uniqueFilteredApplicableUsers: UsersLtv[] = [
+      ...new Map(
+        [...filteredUsersByValueChange, ...usersWithExpiredMarginCalls].map(
+          (userLtv) => [userLtv.userId, userLtv],
+        ),
+      ).values(),
+    ];
+
+    if (uniqueFilteredApplicableUsers.length === 0) {
       return;
     }
 
     await Promise.all(
-      filteredUsersByValueChange.map(async (usersLtv: UsersLtv) => {
+      uniqueFilteredApplicableUsers.map(async (usersLtv: UsersLtv) => {
         const alreadyActiveMarginCall: MarginCall | undefined =
           activeMarginCalls.find(
             (marginCall) => marginCall.userId === usersLtv.userId,
@@ -130,13 +144,13 @@ export class MarginService {
     );
 
     await this.marginCollateralCheckService.updateMarginChecks(
-      filteredUsersByValueChange,
+      uniqueFilteredApplicableUsers,
     );
     this.amqpConnection.publish(
       CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE.name,
       '',
       {
-        userIds: filteredUsersByValueChange.map((user) => user.userId),
+        userIds: uniqueFilteredApplicableUsers.map((user) => user.userId),
       },
     );
   }

@@ -12,6 +12,7 @@ import {
   DebitCardAccessToken,
   Transaction,
   AdjustmentType,
+  RizeTransaction,
 } from './rize_api.interfaces';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
 import {
@@ -111,6 +112,14 @@ export class RizeApiService {
       });
 
     return customers.data[0] ?? null;
+  }
+
+  public async getTransaction(txnId: string): Promise<RizeTransaction> {
+    const transaction: RizeTransaction = await this.rizeClient.transaction.get(
+      txnId,
+    );
+
+    return transaction;
   }
 
   public async createCustomer(userId: string, email: string): Promise<string> {
