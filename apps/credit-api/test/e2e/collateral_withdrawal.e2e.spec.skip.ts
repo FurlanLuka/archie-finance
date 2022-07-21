@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { clearDatabase } from '../e2e-test-utils/database.utils';
 import { Connection, Repository } from 'typeorm';
-import { AuthGuard } from '../../../../libs/auth0/src/lib/auth.guard';
+import { AuthGuard } from '../../../../libs/api/utils/auth0/src/lib/auth.guard';
 import { Collateral } from '../../src/modules/collateral/collateral.entity';
 import { LiquidationLog } from '../../src/modules/margin/liquidation_logs.entity';
 import { MarginNotification } from '../../src/modules/margin/margin_notifications.entity';
