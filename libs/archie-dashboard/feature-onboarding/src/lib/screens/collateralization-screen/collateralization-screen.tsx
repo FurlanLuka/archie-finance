@@ -11,7 +11,7 @@ import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-
 import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/ui-theme';
-import { CollateralAsset, Step } from '@archie-webapps/util-constants';
+import { CollateralAsset, MAX_LINE_OF_CREDIT, MIN_LINE_OF_CREDIT, Step } from '@archie-webapps/util-constants';
 
 import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';
 import { CollateralAssetSelect } from '../../components/collateral-asset-select/collateral-asset-select';
@@ -19,7 +19,6 @@ import { CollateralDeposit } from '../../components/collateral-deposit/collatera
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
 import { CollateralizationScreenStyled } from './collateralization-screen.styled';
-import { MIN_LINE_OF_CREDIT } from '../../constants/collateral';
 
 export const CollateralizationScreen: FC = () => {
   const { t } = useTranslation();
@@ -101,7 +100,7 @@ export const CollateralizationScreen: FC = () => {
           <InputRange
             label={t('collateralization_step.inputs.input_range_label')}
             min={MIN_LINE_OF_CREDIT}
-            max={1500}
+            max={MAX_LINE_OF_CREDIT}
             value={lineOfCredit}
             onChange={setLineOfCredit}
           />

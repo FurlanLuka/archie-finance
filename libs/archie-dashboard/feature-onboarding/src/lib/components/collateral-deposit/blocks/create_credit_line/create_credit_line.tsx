@@ -5,7 +5,7 @@ import { useCreateCreditLine } from '@archie-webapps/shared/data-access-archie-a
 import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { ButtonPrimary, ParagraphXS } from '@archie-webapps/ui-design-system';
 
-import * as Styled from './create_credit_line.styled';
+import { FloatingCreditLineStyled } from './create_credit_line.styled';
 
 interface CreateCreditLineProps {
   collateralText: string;
@@ -17,8 +17,8 @@ export const CreateCreditLine: FC<CreateCreditLineProps> = ({ collateralText, cr
   const { t } = useTranslation();
 
   return (
-    <Styled.FloatingCreditLine>
-      <ParagraphXS weight={700} className="creditInfo">
+    <FloatingCreditLineStyled>
+      <ParagraphXS weight={700} className="credit-info">
         {t('collateral_credit_line_popup.text', {
           collateral: collateralText,
           credit_value: creditValue,
@@ -33,6 +33,6 @@ export const CreateCreditLine: FC<CreateCreditLineProps> = ({ collateralText, cr
       >
         {t('collateral_credit_line_popup.button_text')}
       </ButtonPrimary>
-    </Styled.FloatingCreditLine>
+    </FloatingCreditLineStyled>
   );
 };

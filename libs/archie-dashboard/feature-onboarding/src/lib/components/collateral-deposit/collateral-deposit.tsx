@@ -1,8 +1,8 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 
 import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
+import { MIN_LINE_OF_CREDIT } from '@archie-webapps/util-constants';
 
-import { MIN_LINE_OF_CREDIT } from '../../constants/collateral';
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';
 
@@ -18,8 +18,6 @@ export const CollateralDeposit: FC = () => {
 
   const onCollateralChange = useCallback(
     (newCollateral: CollateralValue[]) => {
-      // TODO bruh stringify
-      // reducer perhaps?
       if (JSON.stringify(newCollateral) !== JSON.stringify(currentCollateral)) {
         setShouldPoll(false);
         setCurrentCollateral(newCollateral);
@@ -42,10 +40,10 @@ export const CollateralDeposit: FC = () => {
         <CollateralReceivedModal
           onClose={() => {
             setIsModalOpen(false);
+            setShouldPoll(true);
           }}
           onConfirm={() => {
             setIsModalOpen(false);
-            setShouldPoll(true);
           }}
           collateralText={collateralText}
           creditValue={collateralTotalValue}

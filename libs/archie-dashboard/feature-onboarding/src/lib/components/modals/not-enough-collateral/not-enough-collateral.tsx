@@ -2,8 +2,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ButtonPrimary, Modal, ParagraphM, ParagraphXS } from '@archie-webapps/ui-design-system';
-
-import { MIN_LINE_OF_CREDIT } from '../../../constants/collateral';
+import { MIN_LINE_OF_CREDIT } from '@archie-webapps/util-constants';
 
 import { NotEnoughCollateralModalStyled } from './not-enough-collateral.styled';
 
