@@ -10,6 +10,7 @@ import {
 } from './sendgrid.interfaces';
 import { InternalApiService } from '@archie/api/utils/internal';
 import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
+import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
 
 @Injectable()
 export class SendgridService {
@@ -18,29 +19,96 @@ export class SendgridService {
     private internalApiService: InternalApiService,
   ) {}
 
+  private roundValue(price: number) {
+    return price.toFixed(2);
+  }
+
   public async sendMarginCallCompletedMail(marginCall: MarginCallCompleted) {
     const emailAddress: GetEmailAddressResponse =
       await this.internalApiService.getUserEmailAddress(marginCall.userId);
+    const kyc: GetKycResponse = await this.internalApiService.getKyc(
+      marginCall.userId,
+    );
 
-    if (marginCall.liquidation.length > 0) {
-      // TODO: send assets were liquidated email
+    if (marginCall.liquidationAmount > 0) {
+      await this.sendEmail(
+        emailAddress.email,
+        this.configService.get(
+          ConfigVariables.SENDGRID_COLLATERAL_LIQUIDATED_TEMPLATE_ID,
+        ),
+        {
+          firstName: kyc.firstName,
+          liquidatedAmount: this.roundValue(marginCall.liquidationAmount),
+          collateralValue: this.roundValue(marginCall.collateralBalance),
+          ltv: this.roundValue(marginCall.ltv),
+        },
+      );
     } else {
-      // TODO: send assets were not liquidated mail (user payed back / crypto went up again in the 72 hour span)
+      // TODO same payload for majority - factory
+      await this.sendEmail(
+        emailAddress.email,
+        this.configService.get(
+          ConfigVariables.SENDGRID_MARGIN_CALL_EXITED_TEMPLATE_ID,
+        ),
+        {
+          firstName: kyc.firstName,
+          collateralValue: this.roundValue(marginCall.collateralBalance),
+          ltv: this.roundValue(marginCall.ltv),
+          marginCallValue: this.roundValue(marginCall.priceForMarginCall),
+          priceThatTriggersSale: this.roundValue(
+            marginCall.priceForPartialCollateralSale,
+          ),
+        },
+      );
     }
   }
 
   public async sendMarginCallStartedMail(marginCall: MarginCallStarted) {
     const emailAddress: GetEmailAddressResponse =
       await this.internalApiService.getUserEmailAddress(marginCall.userId);
+    const kyc: GetKycResponse = await this.internalApiService.getKyc(
+      marginCall.userId,
+    );
 
-    // TODO: send margin call started mail - user has 72 hours to pay up
+    await this.sendEmail(
+      emailAddress.email,
+      this.configService.get(
+        ConfigVariables.SENDGRID_MARGIN_CALL_REACHED_TEMPLATE_ID,
+      ),
+      {
+        firstName: kyc.firstName,
+        collateralValue: this.roundValue(marginCall.collateralBalance),
+        ltv: this.roundValue(marginCall.ltv),
+        marginCallValue: this.roundValue(marginCall.priceForMarginCall),
+        priceThatTriggersSale: this.roundValue(
+          marginCall.priceForPartialCollateralSale,
+        ),
+      },
+    );
   }
 
   public async sendLtvLimitApproachingMail(marginCall: LtvLimitApproaching) {
     const emailAddress: GetEmailAddressResponse =
       await this.internalApiService.getUserEmailAddress(marginCall.userId);
+    const kyc: GetKycResponse = await this.internalApiService.getKyc(
+      marginCall.userId,
+    );
 
-    // TODO: send ltv limit approaching mail
+    await this.sendEmail(
+      emailAddress.email,
+      this.configService.get(
+        ConfigVariables.SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID,
+      ),
+      {
+        firstName: kyc.firstName,
+        collateralValue: this.roundValue(marginCall.collateralBalance),
+        ltv: this.roundValue(marginCall.ltv),
+        marginCallValue: this.roundValue(marginCall.priceForMarginCall),
+        priceThatTriggersSale: this.roundValue(
+          marginCall.priceForPartialCollateralSale,
+        ),
+      },
+    );
   }
 
   public async addToWaitlist(emailAddress: string) {

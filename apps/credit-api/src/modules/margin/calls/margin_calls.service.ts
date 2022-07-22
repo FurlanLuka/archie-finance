@@ -36,6 +36,7 @@ export class MarginCallsService {
     this.amqpConnection.publish(MARGIN_CALL_COMPLETED_EXCHANGE.name, '', {
       userId: usersLtv.userId,
       liquidation: [],
+      liquidationAmount: 0,
       ltv: usersLtv.ltv,
       priceForMarginCall: usersLtv.priceForMarginCall,
       priceForPartialCollateralSale: usersLtv.priceForPartialCollateralSale,
@@ -102,6 +103,7 @@ export class MarginCallsService {
             price: asset.price,
           }),
         ),
+        liquidationAmount: liquidatedCollateralAssets.loanRepaymentAmount,
         ltv: this.LIQUIDATE_TO_LTV,
         priceForMarginCall:
           this.marginLtvService.calculatePriceForMarginCall(loanedBalance),

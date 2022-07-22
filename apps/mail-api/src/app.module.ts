@@ -15,6 +15,10 @@ import { InternalApiModule } from '@archie/api/utils/internal';
         ConfigVariables.SENDGRID_API_URL,
         ConfigVariables.SENDGRID_VERIFY_EMAIL_TEMPLATAE_ID,
         ConfigVariables.ARCHIE_MARKETING_WEBSITE_URL,
+        ConfigVariables.SENDGRID_MARGIN_CALL_EXITED_TEMPLATE_ID,
+        ConfigVariables.SENDGRID_MARGIN_CALL_REACHED_TEMPLATE_ID,
+        ConfigVariables.SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID,
+        ConfigVariables.SENDGRID_COLLATERAL_LIQUIDATED_TEMPLATE_ID,
       ],
     }),
     InternalApiModule.register({

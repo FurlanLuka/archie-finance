@@ -18,4 +18,5 @@ export type LtvLimitApproaching = MarginCallBase;
 
 export interface MarginCallCompleted extends MarginCallBase {
   liquidation: Liquidation[];
+  liquidationAmount: number;
 }

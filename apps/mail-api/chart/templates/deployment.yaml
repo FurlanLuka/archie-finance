@@ -98,11 +98,26 @@ spec:
                 secretKeyRef:
                   name: sendgrid-secrets
                   key: verify-email-template-id
-            - name: SENDGRID_WELCOME_EMAIL_TEMPLATE_ID
+            - name: SENDGRID_MARGIN_CALL_EXITED_TEMPLATE_ID
               valueFrom:
                 secretKeyRef:
                   name: sendgrid-secrets
-                  key: welcome-email-template-id
+                  key: margin-call-exited-template-id
+            - name: SENDGRID_MARGIN_CALL_REACHED_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: margin-call-reached-template-id
+            - name: SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: margin-call-in-danger-template-id
+            - name: SENDGRID_COLLATERAL_LIQUIDATED_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: collateral-liquidated-template-id
             - name: ARCHIE_MARKETING_WEBSITE_URL
               valueFrom:
                 secretKeyRef:

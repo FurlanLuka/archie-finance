@@ -28,6 +28,7 @@ export class MarginCallCompletedDto
   implements MarginCallCompleted
 {
   liquidation: LiquidationDto[];
+  liquidationAmount: number;
 }
 
 export class LiquidationDto implements Liquidation {
