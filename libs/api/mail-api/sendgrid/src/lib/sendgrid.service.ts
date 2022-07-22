@@ -11,17 +11,15 @@ import {
 import { InternalApiService } from '@archie/api/utils/internal';
 import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
 import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
+import { EmailDataFactoryService } from '@archie/api/mail-api/utils/email-data-factory';
 
 @Injectable()
 export class SendgridService {
   constructor(
     private configService: ConfigService,
     private internalApiService: InternalApiService,
+    private emailDataFactory: EmailDataFactoryService,
   ) {}
-
-  private roundValue(price: number) {
-    return price.toFixed(2);
-  }
 
   public async sendMarginCallCompletedMail(marginCall: MarginCallCompleted) {
     const emailAddress: GetEmailAddressResponse =
@@ -36,29 +34,15 @@ export class SendgridService {
         this.configService.get(
           ConfigVariables.SENDGRID_COLLATERAL_LIQUIDATED_TEMPLATE_ID,
         ),
-        {
-          firstName: kyc.firstName,
-          liquidatedAmount: this.roundValue(marginCall.liquidationAmount),
-          collateralValue: this.roundValue(marginCall.collateralBalance),
-          ltv: this.roundValue(marginCall.ltv),
-        },
+        this.emailDataFactory.createCollateralLiquidatedMail(kyc, marginCall),
       );
     } else {
-      // TODO same payload for majority - factory
       await this.sendEmail(
         emailAddress.email,
         this.configService.get(
           ConfigVariables.SENDGRID_MARGIN_CALL_EXITED_TEMPLATE_ID,
         ),
-        {
-          firstName: kyc.firstName,
-          collateralValue: this.roundValue(marginCall.collateralBalance),
-          ltv: this.roundValue(marginCall.ltv),
-          marginCallValue: this.roundValue(marginCall.priceForMarginCall),
-          priceThatTriggersSale: this.roundValue(
-            marginCall.priceForPartialCollateralSale,
-          ),
-        },
+        this.emailDataFactory.createInfoData(kyc, marginCall),
       );
     }
   }
@@ -75,15 +59,7 @@ export class SendgridService {
       this.configService.get(
         ConfigVariables.SENDGRID_MARGIN_CALL_REACHED_TEMPLATE_ID,
       ),
-      {
-        firstName: kyc.firstName,
-        collateralValue: this.roundValue(marginCall.collateralBalance),
-        ltv: this.roundValue(marginCall.ltv),
-        marginCallValue: this.roundValue(marginCall.priceForMarginCall),
-        priceThatTriggersSale: this.roundValue(
-          marginCall.priceForPartialCollateralSale,
-        ),
-      },
+      this.emailDataFactory.createInfoData(kyc, marginCall),
     );
   }
 
@@ -99,15 +75,7 @@ export class SendgridService {
       this.configService.get(
         ConfigVariables.SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID,
       ),
-      {
-        firstName: kyc.firstName,
-        collateralValue: this.roundValue(marginCall.collateralBalance),
-        ltv: this.roundValue(marginCall.ltv),
-        marginCallValue: this.roundValue(marginCall.priceForMarginCall),
-        priceThatTriggersSale: this.roundValue(
-          marginCall.priceForPartialCollateralSale,
-        ),
-      },
+      this.emailDataFactory.createInfoData(kyc, marginCall),
     );
   }
 

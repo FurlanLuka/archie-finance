@@ -36,6 +36,9 @@
       "@archie/api/mail-api/sendgrid": [
         "libs/api/mail-api/sendgrid/src/index.ts"
       ],
+      "@archie/api/mail-api/utils/email-data-factory": [
+        "libs/api/mail-api/utils/email-data-factory/src/index.ts"
+      ],
       "@archie/api/onboarding-api/constants": [
         "libs/api/onboarding-api/constants/src/index.ts"
       ],

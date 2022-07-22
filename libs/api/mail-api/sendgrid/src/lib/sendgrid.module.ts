@@ -4,6 +4,7 @@ import { SendgirdQueueController } from './sendgrid.controller';
 import { SendgridService } from './sendgrid.service';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
+import { EmailDataFactoryModule } from '@archie/api/mail-api/utils/email-data-factory';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ConfigVariables } from '@archie/api/mail-api/constants';
         },
       }),
     }),
+    EmailDataFactoryModule,
   ],
   controllers: [SendgirdQueueController],
   providers: [SendgridService],

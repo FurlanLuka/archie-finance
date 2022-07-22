@@ -74,33 +74,35 @@ export class CreditLimitService {
         ? creditLimitDecrease
         : credit.availableCredit;
 
-    const updatedResult: UpdateResult = await this.creditRepository
-      .createQueryBuilder('Credit')
-      .update(Credit)
-      .where('userId = :userId AND availableCredit >= :creditDecrease', {
-        userId: userId,
-        creditDecrease: decreaseAmount,
-      })
-      .set({
-        totalCredit: () => '"totalCredit" - :creditDecrease',
-        availableCredit: () => '"availableCredit" - :creditDecrease',
-      })
-      .setParameters({
-        creditDecrease: decreaseAmount,
-      })
-      .execute();
+    if (decreaseAmount > 0) {
+      const updatedResult: UpdateResult = await this.creditRepository
+        .createQueryBuilder('Credit')
+        .update(Credit)
+        .where('userId = :userId AND availableCredit >= :creditDecrease', {
+          userId: userId,
+          creditDecrease: decreaseAmount,
+        })
+        .set({
+          totalCredit: () => '"totalCredit" - :creditDecrease',
+          availableCredit: () => '"availableCredit" - :creditDecrease',
+        })
+        .setParameters({
+          creditDecrease: decreaseAmount,
+        })
+        .execute();
 
-    if (updatedResult.affected === 0) {
-      throw new InternalServerErrorException({
-        error: 'Credit line could not be decreased',
+      if (updatedResult.affected === 0) {
+        throw new InternalServerErrorException({
+          error: 'Credit line could not be decreased',
+          userId: userId,
+          decreaseAmount: decreaseAmount,
+        });
+      }
+
+      this.amqpConnection.publish(CREDIT_LIMIT_DECREASED.name, '', {
         userId: userId,
-        decreaseAmount: decreaseAmount,
+        amount: decreaseAmount,
       });
     }
-
-    this.amqpConnection.publish(CREDIT_LIMIT_DECREASED.name, '', {
-      userId: userId,
-      amount: decreaseAmount,
-    });
   }
 }
