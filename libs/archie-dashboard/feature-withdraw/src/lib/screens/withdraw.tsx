@@ -9,7 +9,6 @@ import { Card, ParagraphM, ParagraphS } from '@archie-webapps/ui-design-system';
 
 import { WithdrawalForm } from '../components/withdrawal-form/withdrawal-form';
 import { WithdrawalSkeleton } from '../components/withdrawal-skeleton/withdrawal-skeleton';
-import { calculateCollateralCreditValue } from '../helpers/collateral';
 
 import { WithdrawScreenStyled } from './withdraw.styled';
 
