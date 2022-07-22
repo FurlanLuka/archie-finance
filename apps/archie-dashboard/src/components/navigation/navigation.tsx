@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthenticatedSession } from '@archie-webapps/shared/data-access-session';
 import { ParagraphXXS } from '@archie-webapps/shared/ui-design-system';
 import { Icon } from '@archie-webapps/shared/ui-icons';
-import { dashboardNavItems } from '@archie-webapps/archie-dashboard/util-constants';
+import { dashboardNavItems } from '@archie-webapps/shared/util-constants';
 
 import { NavigationStyled } from './navigation.styled';
 

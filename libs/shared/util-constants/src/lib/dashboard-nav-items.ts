@@ -7,6 +7,7 @@ interface DashboardNavItem {
   path: string;
 }
 
+// TODO figure out what to do with header, because this isn't shared across many apps
 export const dashboardNavItems: DashboardNavItem[] = [
   {
     icon: 'wallet',
