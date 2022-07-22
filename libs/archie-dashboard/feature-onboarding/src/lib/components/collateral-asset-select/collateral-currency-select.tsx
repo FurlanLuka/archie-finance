@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ParagraphXS } from '@archie-webapps/ui-design-system';
+import { ParagraphXS } from '@archie-webapps/shared/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
 import { CollateralAsset, collateralAssets } from '@archie-webapps/util-constants';
 

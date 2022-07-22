@@ -1,4 +1,4 @@
-const rootMain = require('../../../.storybook/main');
+const rootMain = require('../../../../.storybook/main');
 
 module.exports = {
   ...rootMain,
@@ -15,8 +15,8 @@ module.exports = {
     return config;
   },
 
-  previewHead: (head) => (`
+  previewHead: (head) => `
     ${head}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  `),
+  `,
 };

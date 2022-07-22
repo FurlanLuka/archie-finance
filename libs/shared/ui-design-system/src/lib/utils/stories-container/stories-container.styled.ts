@@ -8,4 +8,4 @@ export const StoriesContainerStyled = styled.div<StoriesContainerProps>`
   background-color: ${({ theme, bgColor }) => bgColor ?? theme.backgroundPrimary};
   height: 100vh;
   padding: 2rem;
-`
+`;

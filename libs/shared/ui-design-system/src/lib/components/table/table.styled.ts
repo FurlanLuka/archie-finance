@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const TableStyled = styled.div`
   width: 100%;
   overflow-x: scroll;
-  
+
   table {
     border-spacing: 0;
     width: 100%;
@@ -20,7 +20,7 @@ export const TableStyled = styled.div`
 
     tr {
       background-color: ${({ theme }) => theme.backgroundPrimary};
-  
+
       :last-child {
         td {
           border-bottom: 1px solid ${({ theme }) => theme.tableBorderOuther};
@@ -29,7 +29,7 @@ export const TableStyled = styled.div`
     }
 
     th {
-      font-size: 0.875rem; 
+      font-size: 0.875rem;
       font-weight: 700;
       color: ${({ theme }) => theme.textSecondary};
       letter-spacing: 0.02em;
@@ -39,7 +39,7 @@ export const TableStyled = styled.div`
     }
 
     td {
-      font-size: 0.875rem; 
+      font-size: 0.875rem;
       font-weight: 500;
       color: ${({ theme }) => theme.textPrimary};
       line-height: 1.2;

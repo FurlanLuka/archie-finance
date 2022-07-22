@@ -1,6 +1,6 @@
 {
-  "root": "libs/ui-design-system",
-  "sourceRoot": "libs/ui-design-system/src",
+  "root": "libs/shared/ui-design-system",
+  "sourceRoot": "libs/shared/ui-design-system/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -8,14 +8,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/ui-design-system/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["libs/shared/ui-design-system/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui-design-system"],
+      "outputs": ["coverage/libs/shared/ui-design-system"],
       "options": {
-        "jestConfig": "libs/ui-design-system/jest.config.js",
+        "jestConfig": "libs/shared/ui-design-system/jest.config.js",
         "passWithNoTests": true
       }
     },
@@ -25,7 +25,7 @@
         "uiFramework": "@storybook/react",
         "port": 4400,
         "config": {
-          "configFolder": "libs/ui-design-system/.storybook"
+          "configFolder": "libs/shared/ui-design-system/.storybook"
         }
       },
       "configurations": {
@@ -41,7 +41,7 @@
         "uiFramework": "@storybook/react",
         "outputPath": "dist/storybook/ui-design-system",
         "config": {
-          "configFolder": "libs/ui-design-system/.storybook"
+          "configFolder": "libs/shared/ui-design-system/.storybook"
         }
       },
       "configurations": {

@@ -1,4 +1,4 @@
-import styled, { keyframes } from 'styled-components'
+import styled, { keyframes } from 'styled-components';
 
 const stretchdelay = keyframes`
   0%, 40%, 100% { 
@@ -7,7 +7,7 @@ const stretchdelay = keyframes`
   20% { 
     transform: translateY(0%);
   }
-`
+`;
 
 export const LoadingStyled = styled.div`
   position: fixed;
@@ -22,8 +22,8 @@ export const LoadingStyled = styled.div`
     position: fixed;
     width: 50px;
     height: 35px;
-    top: calc(50% - 35px/2);
-    left: calc(50% - 50px/2);
+    top: calc(50% - 35px / 2);
+    left: calc(50% - 50px / 2);
   }
 
   .rect {
@@ -39,7 +39,7 @@ export const LoadingStyled = styled.div`
     }
 
     &.rect3 {
-      animation-delay: -1.0s;
+      animation-delay: -1s;
     }
 
     &.rect4 {
@@ -50,6 +50,4 @@ export const LoadingStyled = styled.div`
       animation-delay: -0.8s;
     }
   }
-
-`
-
+`;

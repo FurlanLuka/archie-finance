@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { ParagraphXS } from '@archie-webapps/ui-design-system';
+import { ParagraphXS } from '@archie-webapps/shared/ui-design-system';
 import { Icon, IconName } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/shared/ui-theme';
 

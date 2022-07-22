@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const InputText = styled.label`
   display: flex;
@@ -17,7 +17,7 @@ export const InputText = styled.label`
     line-height: 1;
     font-weight: 500;
     font-family: ${({ theme }) => theme.fontPrimary};
- 		color: ${({ theme }) => theme.textPrimary};
+    color: ${({ theme }) => theme.textPrimary};
     letter-spacing: 0.02em;
     padding: 1rem 0.75rem;
     border-radius: 0.5rem;
@@ -29,7 +29,6 @@ export const InputText = styled.label`
 
     ::placeholder {
       color: ${({ theme }) => theme.inputTextPlaceholder};
-    }  
+    }
   }
-`
-
+`;

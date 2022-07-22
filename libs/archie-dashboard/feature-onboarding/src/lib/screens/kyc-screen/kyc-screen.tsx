@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { useCreateKyc } from '@archie-webapps/shared/data-access-archie-api/kyc/hooks/use-create-kyc';
-import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
+import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/shared/ui-theme';
 

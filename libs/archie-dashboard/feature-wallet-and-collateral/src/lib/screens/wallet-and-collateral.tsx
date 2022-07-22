@@ -11,7 +11,7 @@ import {
   ParagraphXXS,
   SubtitleS,
   Table,
-} from '@archie-webapps/ui-design-system';
+} from '@archie-webapps/shared/ui-design-system';
 import { theme } from '@archie-webapps/shared/ui-theme';
 
 import imgCard from '../../assets/card-placeholder.png';

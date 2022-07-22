@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ParagraphXXS } from '@archie-webapps/ui-design-system';
+import { ParagraphXXS } from '@archie-webapps/shared/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
 import { theme } from '@archie-webapps/shared/ui-theme';
 import { Step } from '@archie-webapps/util-constants';

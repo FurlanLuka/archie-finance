@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 interface InputRangeStyledProps {
   backgroundSize: string;
@@ -54,5 +54,4 @@ export const InputRangeStyled = styled.label<InputRangeStyledProps>`
       cursor: pointer;
     }
   }
-`
-
+`;
