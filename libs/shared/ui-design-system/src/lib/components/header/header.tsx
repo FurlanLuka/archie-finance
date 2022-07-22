@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAuthenticatedSession } from '@archie-webapps/shared/data-access-session';
 import { Icon } from '@archie-webapps/shared/ui-icons';
-import { dashboardNavItems } from '@archie-webapps/util-constants';
+import { dashboardNavItems } from '@archie-webapps/archie-dashboard/util-constants';
 
 import { Container } from '../layout/layout.styled';
 import { ParagraphS } from '../typography/typography.styled';

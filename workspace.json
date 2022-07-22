@@ -7,11 +7,11 @@
     "archie-dashboard-feature-rewards": "libs/archie-dashboard/feature-rewards",
     "archie-dashboard-feature-settings": "libs/archie-dashboard/feature-settings",
     "archie-dashboard-feature-wallet-and-collateral": "libs/archie-dashboard/feature-wallet-and-collateral",
+    "archie-dashboard-util-constants": "libs/archie-dashboard/util-constants",
     "shared-data-access-archie-api": "libs/shared/data-access-archie-api",
     "shared-data-access-session": "libs/shared/data-access-session",
     "shared-ui-design-system": "libs/shared/ui-design-system",
     "shared-ui-icons": "libs/shared/ui-icons",
-    "shared-ui-theme": "libs/shared/ui-theme",
-    "util-constants": "libs/util-constants"
+    "shared-ui-theme": "libs/shared/ui-theme"
   }
 }

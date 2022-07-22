@@ -11,7 +11,7 @@ import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-
 import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui-design-system';
 import { Icon } from '@archie-webapps/shared/ui-icons';
 import { theme } from '@archie-webapps/shared/ui-theme';
-import { CollateralAsset, Step } from '@archie-webapps/util-constants';
+import { CollateralAsset, Step } from '@archie-webapps/archie-dashboard/util-constants';
 
 import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';
 import { CollateralAssetSelect } from '../../components/collateral-asset-select/collateral-asset-select';

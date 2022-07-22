@@ -13,7 +13,7 @@ import {
   RequestState,
 } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { ButtonPrimary, Container, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui-design-system';
-import { Step } from '@archie-webapps/util-constants';
+import { Step } from '@archie-webapps/archie-dashboard/util-constants';
 
 import imgCardReady from '../../../assets/img-card-ready.png';
 import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';

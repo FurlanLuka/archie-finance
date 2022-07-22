@@ -23,12 +23,12 @@
       "@archie-webapps/archie-dashboard/feature-wallet-and-collateral": [
         "libs/archie-dashboard/feature-wallet-and-collateral/src/index.ts"
       ],
+      "@archie-webapps/archie-dashboard/util-constants": ["libs/archie-dashboard/util-constants/src/index.ts"],
       "@archie-webapps/shared/data-access-archie-api/*": ["libs/shared/data-access-archie-api/src/*"],
       "@archie-webapps/shared/data-access-session": ["libs/shared/data-access-session/src/index.ts"],
       "@archie-webapps/shared/ui-design-system": ["libs/shared/ui-design-system/src/index.ts"],
       "@archie-webapps/shared/ui-icons": ["libs/shared/ui-icons/src/index.ts"],
-      "@archie-webapps/shared/ui-theme": ["libs/shared/ui-theme/src/index.ts"],
-      "@archie-webapps/util-constants": ["libs/util-constants/src/index.ts"]
+      "@archie-webapps/shared/ui-theme": ["libs/shared/ui-theme/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
