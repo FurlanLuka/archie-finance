@@ -36,7 +36,7 @@ export const CollateralAssetSelect: FC<InputSelectProps> = ({ selectedAsset, set
       </div>
       {selectOpen && (
         <div className="select-list">
-          {collateralAssets.map((asset) => (
+          {Object.values(collateralAssets).map((asset) => (
             <CollateralDeposit key={asset.id} onClick={() => handleSelect(asset)}>
               <CollateralCurrency icon={asset.icon} name={asset.name} short={asset.short} />
             </CollateralDeposit>

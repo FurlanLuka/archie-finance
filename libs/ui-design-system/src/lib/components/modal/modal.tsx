@@ -4,7 +4,7 @@ import { ModalStyled, ModalOverlay, ModalContent } from './modal.styled';
 
 export interface ModalProps {
   isOpen: boolean;
-  close: () => void;
+  close?: () => void;
   maxWidth?: string;
 }
 
