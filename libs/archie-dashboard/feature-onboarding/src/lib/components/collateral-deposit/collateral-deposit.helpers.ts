@@ -1,5 +1,5 @@
-import { collateralAssets } from '@archie-webapps/archie-dashboard/util-constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
+import { collateralAssets } from '@archie-webapps/shared/util-constants';
 
 export function formatEntireCollateral(collateral: CollateralValue[]): string {
   const collateralText = collateral.reduce((text, collateralEntry, i) => {

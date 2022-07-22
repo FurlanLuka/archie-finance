@@ -12,6 +12,7 @@
     "shared-data-access-session": "libs/shared/data-access-session",
     "shared-ui-design-system": "libs/shared/ui-design-system",
     "shared-ui-icons": "libs/shared/ui-icons",
-    "shared-ui-theme": "libs/shared/ui-theme"
+    "shared-ui-theme": "libs/shared/ui-theme",
+    "shared-util-constants": "libs/shared/util-constants"
   }
 }
