@@ -6,7 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import { SessionProvider } from '@archie-webapps/shared/data-access-session';
-import { GlobalStyles, theme } from '@archie-webapps/ui-theme';
+import { GlobalStyles, theme } from '@archie-webapps/shared/ui-theme';
 
 import { ProtectedRoute } from './components/protected-route/protected-route';
 import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants/auth';

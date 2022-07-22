@@ -2,7 +2,7 @@ import { FC } from 'react';
 
 import { ParagraphXS } from '@archie-webapps/ui-design-system';
 import { Icon, IconName } from '@archie-webapps/ui-icons';
-import { theme } from '@archie-webapps/ui-theme';
+import { theme } from '@archie-webapps/shared/ui-theme';
 
 import { CollateralCurrencyStyled } from './collateral-currency.styled';
 

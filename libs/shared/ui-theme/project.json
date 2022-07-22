@@ -1,19 +1,19 @@
 {
-  "root": "libs/ui-theme",
-  "sourceRoot": "libs/ui-theme/src",
+  "root": "libs/shared/ui-theme",
+  "sourceRoot": "libs/shared/ui-theme/src",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/ui-theme/**/*.ts"]
+        "lintFilePatterns": ["libs/shared/ui-theme/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui-theme"],
+      "outputs": ["coverage/libs/shared/ui-theme"],
       "options": {
-        "jestConfig": "libs/ui-theme/jest.config.js",
+        "jestConfig": "libs/shared/ui-theme/jest.config.js",
         "passWithNoTests": true
       }
     }

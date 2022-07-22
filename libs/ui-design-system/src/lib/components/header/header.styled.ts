@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { breakpoints } from '@archie-webapps/ui-theme';
+import { breakpoints } from '@archie-webapps/shared/ui-theme';
 
 interface HeaderProps {
   isOpen: boolean;

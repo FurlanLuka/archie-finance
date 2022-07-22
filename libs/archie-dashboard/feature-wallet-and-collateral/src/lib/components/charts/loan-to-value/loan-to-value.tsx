@@ -2,7 +2,7 @@ import { ResponsivePie } from '@nivo/pie';
 import { FC } from 'react';
 
 import { SubtitleM, ParagraphXXS } from '@archie-webapps/ui-design-system';
-import { theme } from '@archie-webapps/ui-theme';
+import { theme } from '@archie-webapps/shared/ui-theme';
 
 import { LoanToValueStyled } from './loan-to-value.styled';
 

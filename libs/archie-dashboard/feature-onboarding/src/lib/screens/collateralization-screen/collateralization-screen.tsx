@@ -10,7 +10,7 @@ import { useGetDepositAddress } from '@archie-webapps/shared/data-access-archie-
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
-import { theme } from '@archie-webapps/ui-theme';
+import { theme } from '@archie-webapps/shared/ui-theme';
 import { CollateralAsset, Step } from '@archie-webapps/util-constants';
 
 import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';

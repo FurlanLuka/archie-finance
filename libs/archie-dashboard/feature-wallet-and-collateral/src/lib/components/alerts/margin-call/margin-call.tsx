@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ButtonLight, ParagraphS, ParagraphXS } from '@archie-webapps/ui-design-system';
-import { theme } from '@archie-webapps/ui-theme';
+import { theme } from '@archie-webapps/shared/ui-theme';
 
 import { MarginCallAlertStyled } from './margin-call.styled';
 

@@ -7,7 +7,7 @@ import { useStartAptoVerification } from '@archie-webapps/shared/data-access-arc
 import { MutationQueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { ButtonPrimary, ParagraphXS, SubtitleM } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
-import { theme } from '@archie-webapps/ui-theme';
+import { theme } from '@archie-webapps/shared/ui-theme';
 
 import { VerifyScreenStyled } from './verify-screen.styled';
 

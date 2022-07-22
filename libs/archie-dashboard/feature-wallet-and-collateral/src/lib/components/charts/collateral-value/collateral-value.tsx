@@ -2,7 +2,7 @@ import { linearGradientDef } from '@nivo/core';
 import { ResponsiveStream } from '@nivo/stream';
 import { FC } from 'react';
 
-import { theme } from '@archie-webapps/ui-theme';
+import { theme } from '@archie-webapps/shared/ui-theme';
 
 import { CollateralValueStyled } from './collateral-value.styled';
 

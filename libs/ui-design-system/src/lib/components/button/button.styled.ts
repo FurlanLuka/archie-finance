@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 
-import { breakpoints } from '@archie-webapps/ui-theme';
+import { breakpoints } from '@archie-webapps/shared/ui-theme';
 
 const spin = keyframes`
   0% { transform: rotate(0deg); }
@@ -69,18 +69,18 @@ export const ButtonPrimary = styled(Button)`
 
 export const ButtonOutline = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
-  color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonPrimary)};
-  border-color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonPrimary)};
+  color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonPrimary)};
+  border-color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonPrimary)};
 `;
 
 export const ButtonGhost = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
-  color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonGhost)};
-  border-color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonGhost)};
+  color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonGhost)};
+  border-color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonGhost)};
 `;
 
 export const ButtonLight = styled(Button)`
-  background-color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonLight)};
+  background-color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonLight)};
   color: ${({ theme, color }) => color ?? theme.textPrimary};
-  border-color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonLight)};
+  border-color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonLight)};
 `;

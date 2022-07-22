@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { ParagraphXXS } from '@archie-webapps/ui-design-system';
-import { theme } from '@archie-webapps/ui-theme';
+import { theme } from '@archie-webapps/shared/ui-theme';
 
 import { NextPaymentStyled } from './next-payment.styled';
 

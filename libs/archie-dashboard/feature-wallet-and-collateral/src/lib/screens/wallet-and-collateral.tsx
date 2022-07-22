@@ -12,7 +12,7 @@ import {
   SubtitleS,
   Table,
 } from '@archie-webapps/ui-design-system';
-import { theme } from '@archie-webapps/ui-theme';
+import { theme } from '@archie-webapps/shared/ui-theme';
 
 import imgCard from '../../assets/card-placeholder.png';
 // import { MarginCallAlert } from '../components/alerts/margin-call/margin-call';

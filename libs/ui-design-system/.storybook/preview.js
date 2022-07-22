@@ -2,7 +2,7 @@ import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { addDecorator, addParameters } from '@storybook/react';
 import { withThemesProvider } from 'themeprovider-storybook';
 
-import { GlobalStyles, theme } from '@archie-webapps/ui-theme';
+import { GlobalStyles, theme } from '@archie-webapps/shared/ui-theme';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -29,4 +29,4 @@ addParameters({
   viewport: {
     viewports: INITIAL_VIEWPORTS,
   },
-})
+});

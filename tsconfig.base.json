@@ -25,9 +25,9 @@
       ],
       "@archie-webapps/shared/data-access-archie-api/*": ["libs/shared/data-access-archie-api/src/*"],
       "@archie-webapps/shared/data-access-session": ["libs/shared/data-access-session/src/index.ts"],
+      "@archie-webapps/shared/ui-theme": ["libs/shared/ui-theme/src/index.ts"],
       "@archie-webapps/ui-design-system": ["libs/ui-design-system/src/index.ts"],
       "@archie-webapps/ui-icons": ["libs/ui-icons/src/index.ts"],
-      "@archie-webapps/ui-theme": ["libs/ui-theme/src/index.ts"],
       "@archie-webapps/util-constants": ["libs/util-constants/src/index.ts"]
     }
   },

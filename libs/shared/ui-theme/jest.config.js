@@ -1,6 +1,6 @@
 module.exports = {
-  displayName: 'ui-theme',
-  preset: '../../jest.preset.js',
+  displayName: 'shared-ui-theme',
+  preset: '../../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/libs/ui-theme',
+  coverageDirectory: '../../../coverage/libs/shared/ui-theme',
 };
