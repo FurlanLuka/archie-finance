@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuthenticatedSession } from '@archie-webapps/shared/data-access-session';
-import { Icon } from '@archie-webapps/ui-icons';
+import { Icon } from '@archie-webapps/shared/ui-icons';
 import { dashboardNavItems } from '@archie-webapps/util-constants';
 
 import { Container } from '../layout/layout.styled';

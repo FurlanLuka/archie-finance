@@ -1,4 +1,4 @@
-import { IconName } from '@archie-webapps/ui-icons';
+import { IconName } from '@archie-webapps/shared/ui-icons';
 
 // TODO check why we need babelrc here and in ui-theme
 interface DashboardNavItem {

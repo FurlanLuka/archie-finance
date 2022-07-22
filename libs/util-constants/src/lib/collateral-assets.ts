@@ -1,4 +1,4 @@
-import { IconName } from '@archie-webapps/ui-icons';
+import { IconName } from '@archie-webapps/shared/ui-icons';
 
 export interface CollateralAsset {
   // TODO icon to string

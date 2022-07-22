@@ -9,7 +9,7 @@ import { GetDepositAddressResponse } from '@archie-webapps/shared/data-access-ar
 import { useGetDepositAddress } from '@archie-webapps/shared/data-access-archie-api/deposit_address/hooks/use-get-deposit-address';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui-design-system';
-import { Icon } from '@archie-webapps/ui-icons';
+import { Icon } from '@archie-webapps/shared/ui-icons';
 import { theme } from '@archie-webapps/shared/ui-theme';
 import { CollateralAsset, Step } from '@archie-webapps/util-constants';
 
