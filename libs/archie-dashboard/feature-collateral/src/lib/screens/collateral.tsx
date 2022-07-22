@@ -26,11 +26,13 @@ export const CollateralScreen: FC = () => {
     return 0;
   };
 
+  const getFormattedPrice = (value: number) => value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+
   const data = useMemo(() => {
     if (getCollateralValueResponse.state === RequestState.SUCCESS) {
       return getCollateralValueResponse.data.map((item) => ({
         collateral_asset: item.asset,
-        balance: `$${item.price}`,
+        balance: `$${getFormattedPrice(item.price)}`,
         holdings: `${item.assetAmount} ${item.asset}`,
         change: {
           collateral_asset: item.asset,
@@ -62,7 +64,7 @@ export const CollateralScreen: FC = () => {
           {t('dashboard_collateral.title')}
         </ParagraphM>
         <SubtitleS weight={400} className="total">
-          ${getCollateralTotalValue()}
+          ${getFormattedPrice(getCollateralTotalValue())}
         </SubtitleS>
         <div className="title-group">
           <div className="ltv-group">

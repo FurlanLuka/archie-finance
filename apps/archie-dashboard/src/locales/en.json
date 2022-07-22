@@ -116,11 +116,6 @@
     "text": "You are collaterizing {{collateral}} for a credit line of ${{credit_value}}.",
     "button_text": "Let's go!"
   },
-  "dashboard": {
-    "title": "Hi, {{name}}",
-    "subtitle": "Member since {{date}}",
-    "reveal_card_modal": "Show card details?"
-  },
   "setup_2fa_banner": {
     "title": "Protect your funds with 2FA",
     "text": "Setup Multi-Factor Authentication using your authenticator app.",
