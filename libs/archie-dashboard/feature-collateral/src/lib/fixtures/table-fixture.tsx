@@ -15,7 +15,7 @@ interface CollateralAssetCellProps {
 }
 
 const CollateralAssetCell: FC<CollateralAssetCellProps> = ({ id }) => {
-  const asset = collateralAssets.find((asset) => asset.id === id);
+  const asset = Object.values(collateralAssets).find((asset) => asset.id === id);
 
   return <CollateralCurrency icon={asset?.icon} name={asset?.name} short={asset?.id} />;
 };

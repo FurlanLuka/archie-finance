@@ -100,9 +100,21 @@
   },
   "collateral_received_modal": {
     "title": "We received your collateral!",
-    "text": "Your current collateral adds up to a $540 credit line.  Feel free to collateralize more assets. Note you can use  different cryptocurrencies as collateral! Click 'Next' when you're ready to get your Archie Card.",
+    "text": "Your current collateral of {{collateral}} adds up to a ${{credit_value}} credit line.  Feel free to collateralize more assets. Note you can use  different cryptocurrencies as collateral! Click 'Next' when you're ready to get your Archie Card.",
     "img_alt": "Collateral received",
     "btn": "Collateralize more"
+  },
+  "not_enough_collateral_modal": {
+    "title": "We received your collateral, but...",
+    "text": "Your current collateral of {{collateral}} adds up to a ${{credit_value}} credit line. The minimum required value is ${{min_value}}. Please deposit at least {{difference}} worth of cryptocurrency more.",
+    "btn": "Collateralize more"
+  },
+  "not_enough_collateral_popup": {
+    "text": "Your current collateral of {{collateral}} adds up to a ${{credit_value}} credit line. The minimum required value is ${{min_value}}. Please deposit at least {{difference}} worth of cryptocurrency more."
+  },
+  "collateral_credit_line_popup": {
+    "text": "You are collaterizing {{collateral}} for a credit line of ${{credit_value}}.",
+    "button_text": "Let's go!"
   },
   "setup_2fa_banner": {
     "title": "Protect your funds with 2FA",
