@@ -40,11 +40,18 @@ export const WithdrawScreen: FC = () => {
       getMaxWithdrawalAmountResponse.state === RequestState.SUCCESS &&
       getCollateralValueReponse.state === RequestState.SUCCESS
     ) {
+      const asset = getCollateralValueReponse.data.find((a) => a.asset === currentAsset);
+      if (!asset) {
+        return <div>You do not have this asset collateralized</div>;
+      }
+
       return (
         <>
           <ParagraphS className="subtitle">
             {t('dashboard_withdraw.subtitle', {
-              creditLine: calculateCollateralCreditValue(getCollateralValueReponse.data),
+              asset: asset.asset,
+              assetAmount: asset.assetAmount,
+              assetValue: asset.price,
             })}
           </ParagraphS>
           <WithdrawalForm

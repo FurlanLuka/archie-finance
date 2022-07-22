@@ -124,7 +124,7 @@
   },
   "dashboard_withdraw": {
     "title": "Withdraw {{currentAsset}}",
-    "subtitle": "You currently have a {{creditLine}} credit line.",
+    "subtitle": "You currently have {{assetAmount}} {{asset}} (~${{assetValue}}).",
     "address_title": "What address would you like to send your {{currentAsset}} to?",
     "form": {
       "amount_label": "How much {{currentAsset}} would you like to withdraw? Max is {{maxAmount}}",
