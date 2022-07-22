@@ -1,6 +1,5 @@
 import { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 
 import {
   ButtonGhost,
@@ -45,7 +44,6 @@ export const WalletAndCollateralScreen: FC = () => {
         {t('dashboard_wallet_and_collateral.subtitle', { date })}
       </ParagraphXS>
       {/* <MarginCallAlert /> */}
-      <Link to="/collateral/withdraw/ETH">Your friendly eth withdrawal shortcut</Link>
       <div className="section-cards">
         <Card
           backgroundImage={imgCard}
