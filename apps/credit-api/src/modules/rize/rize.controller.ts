@@ -27,7 +27,6 @@ import {
 } from './rize.dto';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
-  CARD_ACTIVATED_EXCHANGE,
   CREDIT_LIMIT_DECREASED,
   CREDIT_LIMIT_INCREASED,
   MARGIN_CALL_COMPLETED_EXCHANGE,
@@ -108,11 +107,5 @@ export class RizeQueueController {
   @Subscribe(CREDIT_LIMIT_INCREASED, SERVICE_QUEUE_NAME)
   async creditLimitIncreasedHandler(payload: CreditLimitDto): Promise<void> {
     await this.rizeService.increaseCreditLimit(payload.userId, payload.amount);
-  }
-
-  @Subscribe(CARD_ACTIVATED_EXCHANGE, SERVICE_QUEUE_NAME)
-  async cardActivatedHandler(payload: CardActivatedDto): Promise<void> {
-    // TODO: listen to customer activated event
-    await this.rizeService.loadFunds(payload.userId, payload.customerId);
   }
 }

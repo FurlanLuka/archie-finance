@@ -96,3 +96,26 @@ export interface TransactionEvent {
   sequence: number;
   timestamp: string;
 }
+
+export type CustomerStatus =
+  | 'initiated'
+  | 'queued'
+  | 'identity_verified'
+  | 'active'
+  | 'manual_review'
+  | 'rejected'
+  | 'archived'
+  | 'under_review'
+  | 'pending_archival';
+
+export interface CustomerEvent {
+  data: {
+    details: {
+      new_status: CustomerStatus;
+      customer_uid: string;
+      external_uid: string;
+      prior_status: CustomerStatus;
+    };
+    event_type: string;
+  };
+}

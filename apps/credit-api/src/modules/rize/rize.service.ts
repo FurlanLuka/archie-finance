@@ -14,6 +14,7 @@ import {
   TransactionStatus,
   TransactionType,
   RizeTransaction,
+  CustomerEvent,
 } from './api/rize_api.interfaces';
 import { TransactionResponse } from './rize.interfaces';
 import { RizeFactoryService } from './factory/rize_factory.service';
@@ -39,59 +40,69 @@ export class RizeService {
     private amqpConnection: AmqpConnection,
     private creditService: CreditService,
   ) {
-    this.rizeTransactionEventListener =
-      this.rizeTransactionEventListener.bind(this);
+    this.rizeEventListener = this.rizeEventListener.bind(this);
+    this.handleTransactionsEvent = this.handleTransactionsEvent.bind(this);
+    this.handleCustomerActiveEvent = this.handleCustomerActiveEvent.bind(this);
 
     this.rizeMessagingQueueClient =
       rizeApiService.connectToRizeMessagingQueue();
+
     rizeApiService.subscribeToTopic(
       this.rizeMessagingQueueClient,
       'transaction',
-      this.rizeTransactionEventListener,
+      this.rizeEventListener(this.handleTransactionsEvent),
+    );
+
+    rizeApiService.subscribeToTopic(
+      this.rizeMessagingQueueClient,
+      'customer',
+      this.rizeEventListener(this.handleCustomerActiveEvent),
     );
   }
 
-  private rizeTransactionEventListener(err: Error, msg, ack, nack) {
-    if (!err) {
-      try {
-        msg.readString('UTF-8', (err, body) => {
-          if (!err) {
-            const message: TransactionEvent = JSON.parse(body);
-            Logger.log({
-              message: 'Rize event received',
-              payload: message,
-            });
-
-            this.handleTransactionsEvent(message)
-              .then(() => ack())
-              .catch((error) => {
-                Logger.error({
-                  message: 'Rize transaction event message parsing failed',
-                  error,
-                });
-                nack();
+  private rizeEventListener<T>(handler: (message: T) => Promise<void>) {
+    return (err: Error, msg, ack, nack) => {
+      if (!err) {
+        try {
+          msg.readString('UTF-8', (err, body) => {
+            if (!err) {
+              const message = JSON.parse(body);
+              Logger.log({
+                message: 'Rize event received',
+                payload: message,
               });
-          } else {
-            Logger.error({
-              message: 'Rize transaction event message parsing failed',
-            });
-            nack();
-          }
-        });
-      } catch (error) {
+
+              handler(message)
+                .then(() => ack())
+                .catch((error) => {
+                  Logger.error({
+                    message: 'Rize transaction event handling failed',
+                    error,
+                  });
+                  nack();
+                });
+            } else {
+              Logger.error({
+                message: 'Rize transaction event message parsing failed',
+              });
+              nack();
+            }
+          });
+        } catch (error) {
+          Logger.error({
+            message: 'Rize transaction event handling failed',
+            error: error,
+          });
+          nack();
+        }
+      } else {
         Logger.error({
-          message: 'Rize transaction event handling failed',
-          error: error,
+          message: 'Error from Rize received',
+          error: err,
         });
         nack();
       }
-    } else {
-      Logger.error({
-        message: 'Error from Rize received',
-        error: err,
-      });
-      nack();
-    }
+    };
   }
 
   private async handleTransactionsEvent(message: TransactionEvent) {
@@ -113,6 +124,15 @@ export class RizeService {
       } else {
         await this.increaseAvailableCredit(userId, Number(amount));
       }
+    }
+  }
+
+  private async handleCustomerActiveEvent(message: CustomerEvent) {
+    if (message.data.details.new_status === 'active') {
+      const userId: string = message.data.details.external_uid;
+      const customerId: string = message.data.details.customer_uid;
+
+      await this.loadFunds(userId, customerId);
     }
   }
 
@@ -230,7 +250,6 @@ export class RizeService {
       customerId,
       complianceWorkflow.product_uid,
     );
-
     this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
       userId,
       customerId,
