@@ -1,9 +1,7 @@
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { TotalCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-total-value';
 import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
-import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-total-value';
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-value';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { Loading, Card, Table, Badge, SubtitleS, ParagraphM, ParagraphXS } from '@archie-webapps/ui-design-system';
@@ -18,12 +16,11 @@ import { CollateralStyled } from './collateral.styled';
 export const CollateralScreen: FC = () => {
   const { t } = useTranslation();
 
-  const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = useGetCollateralTotalValue();
   const getCollateralValueResponse: QueryResponse<CollateralValue[]> = useGetCollateralValue();
 
   const getCollateralTotalValue = () => {
-    if (getCollateralTotalValueResponse.state === RequestState.SUCCESS) {
-      return getCollateralTotalValueResponse.data.value;
+    if (getCollateralValueResponse.state === RequestState.SUCCESS) {
+      return getCollateralValueResponse.data.reduce((sum, item) => sum + item.price, 0);
     }
 
     return 0;
@@ -38,7 +35,7 @@ export const CollateralScreen: FC = () => {
         change: {
           collateral_asset: item.asset,
         },
-        allocation: '0%',
+        allocation: `${item.price / getCollateralTotalValue()}%`,
         actions: {
           collateral_asset: item.asset,
         },
@@ -50,10 +47,7 @@ export const CollateralScreen: FC = () => {
 
   const columns = useMemo(() => tableColumns, []);
 
-  if (
-    getCollateralValueResponse.state === RequestState.LOADING ||
-    getCollateralTotalValueResponse.state === RequestState.LOADING
-  ) {
+  if (getCollateralValueResponse.state === RequestState.LOADING) {
     return <Loading />;
   }
 
