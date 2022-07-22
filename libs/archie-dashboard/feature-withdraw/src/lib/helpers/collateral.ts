@@ -10,7 +10,7 @@ export function calculateCollateralTotalValue(collateral: CollateralValue[]): nu
 export function calculateCollateralCreditValue(collateral: CollateralValue[]): number {
   return collateral.reduce((sum, collateralEntry) => {
     // TODO fix this lookup to [] from array find
-    const assetInfo = collateralAssets.find((a) => a.id === collateralEntry.asset);
+    const assetInfo = collateralAssets[collateralEntry.asset];
 
     if (!assetInfo) {
       console.warn('Missing asset info', { assetInfo, collateralEntry });
