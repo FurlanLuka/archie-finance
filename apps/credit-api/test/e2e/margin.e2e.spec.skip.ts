@@ -352,6 +352,7 @@ describe('MarginQueueController (e2e)', () => {
           userId,
           liquidation: [],
           collateralBalance: defaultCollateralTotal,
+          liquidationAmount: 0,
           ltv: 0,
           priceForMarginCall: 0,
           priceForPartialCollateralSale: 0,
@@ -458,6 +459,7 @@ describe('MarginQueueController (e2e)', () => {
           userId,
           liquidation: expectedLiquidatedAssets,
           ltv: MARGIN_CALL_END_LTV * 100,
+          liquidationAmount: liquidatedPrice,
           collateralBalance: newCollateralBalance,
           priceForMarginCall:
             (userLoan - liquidatedPrice) / MARGIN_CALL_START_LTV,
@@ -590,6 +592,7 @@ describe('MarginQueueController (e2e)', () => {
           userId,
           liquidation: expectedLiquidatedAssets,
           ltv: MARGIN_CALL_END_LTV * 100,
+          liquidationAmount: liquidatedPrice,
           collateralBalance: newCollateralBalance,
           priceForMarginCall:
             (userLoan - liquidatedPrice) / MARGIN_CALL_START_LTV,
