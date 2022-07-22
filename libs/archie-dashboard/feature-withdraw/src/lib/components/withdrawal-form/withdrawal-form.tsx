@@ -1,10 +1,12 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { FC, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
+import { useCreateWithdrawal } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-create-withdrawal';
+import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { ButtonOutline, ButtonPrimary, InputText, ParagraphXS } from '@archie-webapps/ui-design-system';
 import { theme } from '@archie-webapps/ui-theme';
 
@@ -29,7 +31,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
   const { t } = useTranslation();
 
   const navigate = useNavigate();
-  const [successfullWithdrawalModalOpen, setSuccessfullWithdrawalModalOpen] = useState(false);
+  const createWithdrawal = useCreateWithdrawal();
   const WithdrawSchema = getWithdrawSchema(maxAmount);
 
   const {
@@ -47,8 +49,15 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
     resolver: yupResolver(WithdrawSchema),
   });
 
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (createWithdrawal.state === RequestState.SUCCESS) {
+      setIsSuccessModalOpen(true);
+    }
+  }, [createWithdrawal.state]);
+
   const withdrawalAmount = watch('withdrawAmount');
-  console.log('dvigamo', withdrawalAmount);
 
   const initialCreditValue = calculateCollateralCreditValue(collateral);
   const initialCollateralValue = calculateCollateralTotalValue(collateral);
@@ -60,21 +69,30 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
   });
 
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
-    setSuccessfullWithdrawalModalOpen(true);
+    if (createWithdrawal.state === RequestState.IDLE) {
+      createWithdrawal.mutate({
+        asset: currentAsset,
+        withdrawalAmount: data.withdrawAmount,
+        destinationAddress: data.withdrawAddress,
+      });
+    }
   });
 
   return (
     <>
       <Styled.WithdrawalForm onSubmit={onSubmit}>
         <InputText>
+          <label htmlFor="withdrawAmount">
+            {t('dashboard_withdraw.form.amount_label', { currentAsset, maxAmount })}
+          </label>
           <input
+            id="withdrawAmount"
             placeholder={t('dashboard_withdraw.form.amount_placeholder', {
               maxWithdrawAmount: maxAmount,
               currentAsset,
             })}
             type="number"
-            defaultValue={0}
+            step="any"
             min={0}
             max={maxAmount}
             {...register('withdrawAmount')}
@@ -119,16 +137,24 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
           <ButtonOutline maxWidth="fit-content" onClick={() => navigate('/collateral')}>
             {t('btn_cancel')}
           </ButtonOutline>
-          <ButtonPrimary maxWidth="fit-content" isDisabled={!isValid}>
+          <ButtonPrimary
+            maxWidth="fit-content"
+            isDisabled={!isValid}
+            isLoading={createWithdrawal.state === RequestState.LOADING}
+          >
             {t('dashboard_withdraw.btn')}
           </ButtonPrimary>
         </div>
       </Styled.WithdrawalForm>
-      <SuccessfullWithdrawalModal
-        isOpen={successfullWithdrawalModalOpen}
-        close={() => setSuccessfullWithdrawalModalOpen(false)}
-        onConfirm={() => console.log('confirmed')}
-      />
+      {isSuccessModalOpen && (
+        <SuccessfullWithdrawalModal
+          isOpen
+          onConfirm={() => {
+            setIsSuccessModalOpen(false);
+            navigate('/collateral');
+          }}
+        />
+      )}
     </>
   );
 };

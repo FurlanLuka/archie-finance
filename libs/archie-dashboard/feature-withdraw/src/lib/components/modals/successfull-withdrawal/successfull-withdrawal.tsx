@@ -7,20 +7,14 @@ import { SuccessfullWithdrawalModalStyled } from './successfull-withdrawal.style
 
 interface SuccessfullWithdrawalModalProps {
   isOpen: boolean;
-  close: () => void;
   onConfirm: () => void;
 }
 
-export const SuccessfullWithdrawalModal: FC<SuccessfullWithdrawalModalProps> = ({ isOpen, close, onConfirm }) => {
+export const SuccessfullWithdrawalModal: FC<SuccessfullWithdrawalModalProps> = ({ isOpen, onConfirm }) => {
   const { t } = useTranslation();
 
-  const handleConfirm = () => {
-    onConfirm();
-    close();
-  };
-
   return (
-    <Modal isOpen={isOpen} close={close} maxWidth="730px">
+    <Modal isOpen={isOpen} maxWidth="730px">
       <SuccessfullWithdrawalModalStyled>
         <ParagraphM weight={800} className="title">
           {t('dashboard_withdraw.successfull_withdrawal_modal.title')}
@@ -37,7 +31,7 @@ export const SuccessfullWithdrawalModal: FC<SuccessfullWithdrawalModalProps> = (
           </a>
           .
         </ParagraphS>
-        <ButtonPrimary maxWidth="fit-content" onClick={handleConfirm}>
+        <ButtonPrimary maxWidth="fit-content" onClick={onConfirm}>
           {t('btn_ok')}
         </ButtonPrimary>
       </SuccessfullWithdrawalModalStyled>
