@@ -11,8 +11,8 @@ export interface CollateralAsset {
   url: string;
 }
 
-export const collateralAssets: CollateralAsset[] = [
-  {
+export const collateralAssets: Record<string, CollateralAsset> = {
+  BTC: {
     id: 'BTC',
     name: 'Bitcoin',
     short: 'BTC',
@@ -21,7 +21,7 @@ export const collateralAssets: CollateralAsset[] = [
     interest_rate: 15,
     url: 'https://www.blockchain.com/btc/address',
   },
-  {
+  ETH: {
     id: 'ETH',
     name: 'Ethereum',
     short: 'ETH',
@@ -30,7 +30,7 @@ export const collateralAssets: CollateralAsset[] = [
     interest_rate: 15,
     url: 'https://etherscan.io/address',
   },
-  {
+  SOL: {
     id: 'SOL',
     name: 'Solana',
     short: 'SOL',
@@ -39,7 +39,7 @@ export const collateralAssets: CollateralAsset[] = [
     interest_rate: 15,
     url: 'https://explorer.solana.com/address',
   },
-  {
+  USDC: {
     id: 'USDC',
     name: 'USD Coin',
     short: 'USDC',
@@ -48,4 +48,4 @@ export const collateralAssets: CollateralAsset[] = [
     interest_rate: 15,
     url: 'https://etherscan.io/address',
   },
-];
+};

@@ -3,6 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import QRCode from 'react-qr-code';
 import ReactTooltip from 'react-tooltip';
 
+import { CollateralAsset, MAX_LINE_OF_CREDIT, MIN_LINE_OF_CREDIT, Step } from '@archie-webapps/archie-dashboard/util-constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access-archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access-archie-api/asset_price/hooks/use-get-asset-price';
 import { GetDepositAddressResponse } from '@archie-webapps/shared/data-access-archie-api/deposit_address/api/get-deposit-address';
@@ -11,12 +12,10 @@ import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-
 import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui-design-system';
 import { Icon } from '@archie-webapps/shared/ui-icons';
 import { theme } from '@archie-webapps/shared/ui-theme';
-import { CollateralAsset, Step } from '@archie-webapps/archie-dashboard/util-constants';
 
 import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';
 import { CollateralAssetSelect } from '../../components/collateral-asset-select/collateral-asset-select';
-import { Collateral } from '../../components/collateral/collateral';
-import { CollateralReceivedModal } from '../../components/modals/collateral-received/collateral-received';
+import { CollateralDeposit } from '../../components/collateral-deposit/collateral-deposit';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
 import { CollateralizationScreenStyled } from './collateralization-screen.styled';
@@ -28,7 +27,6 @@ export const CollateralizationScreen: FC = () => {
   const [selectedCollateralAsset, setSelectedCollateralAsset] = useState<CollateralAsset>();
   const [requiredCollateral, setRequiredCollateral] = useState(0);
   const [shouldCall, setShouldCall] = useState(false);
-  const [collateralReceivedModalOpen, setCollateralReceivedModalOpen] = useState(false);
 
   const getAssetPriceResponse: QueryResponse<AssetPrice[]> = useGetAssetPrice();
   const getDepositAddressResponse: QueryResponse<GetDepositAddressResponse> = useGetDepositAddress(
@@ -57,7 +55,7 @@ export const CollateralizationScreen: FC = () => {
         }
       }
     }
-  }, [getAssetPriceResponse]);
+  }, [getAssetPriceResponse, lineOfCredit, selectedCollateralAsset]);
 
   const getDepositAddress = (): string | undefined => {
     if (getDepositAddressResponse.state === RequestState.SUCCESS) {
@@ -87,14 +85,9 @@ export const CollateralizationScreen: FC = () => {
 
   return (
     <Container column mobileColumn alignItems="center">
-      <Collateral />
+      <CollateralDeposit />
       <StepsIndicator currentStep={Step.COLLATERALIZE} />
       <EmailVerificationAlert />
-      <CollateralReceivedModal
-        isOpen={collateralReceivedModalOpen}
-        close={() => setCollateralReceivedModalOpen(false)}
-        onConfirm={() => console.log('Modal clicked')}
-      />
       <CollateralizationScreenStyled>
         <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
         <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
@@ -106,8 +99,8 @@ export const CollateralizationScreen: FC = () => {
           />
           <InputRange
             label={t('collateralization_step.inputs.input_range_label')}
-            min={200}
-            max={1500}
+            min={MIN_LINE_OF_CREDIT}
+            max={MAX_LINE_OF_CREDIT}
             value={lineOfCredit}
             onChange={setLineOfCredit}
           />
