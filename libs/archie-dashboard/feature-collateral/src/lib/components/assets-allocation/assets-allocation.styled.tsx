@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { collateralAssetsColor } from '@archie-webapps/util-constants';
+import { CollateralAssetsColor } from '@archie-webapps/util-constants';
 
 interface AssetsAllocationStyledProps {
   btc: number;
@@ -15,13 +15,13 @@ export const AssetsAllocationStyled = styled.div<AssetsAllocationStyledProps>`
 
   .range {
     display: block;
-    background-image: ${({ theme, btc, eth, sol, usdc }) =>
+    background-image: ${({ btc, eth, sol, usdc }) =>
       `linear-gradient(
           to right, 
-          ${collateralAssetsColor.btc} 0 ${btc}%, 
-          ${collateralAssetsColor.eth} ${btc}% ${btc + eth}%, 
-          ${collateralAssetsColor.sol} ${btc + eth}% ${btc + eth + sol}%,
-          ${collateralAssetsColor.usdc} ${btc + eth + sol}% 100%)
+          ${CollateralAssetsColor.BTC} 0 ${btc}%, 
+          ${CollateralAssetsColor.ETH} ${btc}% ${btc + eth}%, 
+          ${CollateralAssetsColor.SOL} ${btc + eth}% ${btc + eth + sol}%,
+          ${CollateralAssetsColor.USDC} ${btc + eth + sol}% 100%)
         `};
     border-radius: 0.25rem;
     width: 100%;
@@ -61,19 +61,19 @@ export const AssetsAllocationStyled = styled.div<AssetsAllocationStyledProps>`
     height: 0.75rem;
 
     &.btc {
-      background-color: ${collateralAssetsColor.btc};
+      background-color: ${CollateralAssetsColor.BTC};
     }
 
     &.eth {
-      background-color: ${collateralAssetsColor.eth};
+      background-color: ${CollateralAssetsColor.ETH};
     }
 
     &.sol {
-      background-color: ${collateralAssetsColor.sol};
+      background-color: ${CollateralAssetsColor.SOL};
     }
 
     &.usdc {
-      background-color: ${collateralAssetsColor.usdc};
+      background-color: ${CollateralAssetsColor.USDC};
     }
   }
 `;
