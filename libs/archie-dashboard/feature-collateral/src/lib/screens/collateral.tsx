@@ -6,6 +6,7 @@ import { useGetCollateralValue } from '@archie-webapps/shared/data-access-archie
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { Loading, Card, Table, Badge, SubtitleS, ParagraphM, ParagraphXS } from '@archie-webapps/ui-design-system';
 import { theme } from '@archie-webapps/ui-theme';
+import { CollateralCurrency } from '@archie-webapps/util-constants';
 import { LoanToValueColor, LoanToValueText } from '@archie-webapps/util-constants';
 
 import { AssetsAllocation } from '../components/assets-allocation/assets-allocation';
@@ -18,6 +19,9 @@ export const CollateralScreen: FC = () => {
 
   const getCollateralValueResponse: QueryResponse<CollateralValue[]> = useGetCollateralValue();
 
+  const getFormattedValue = (value: number) => value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  const getAssetsAllocationPercentage = (price: number) => (price / getCollateralTotalValue()) * 100;
+
   const getCollateralTotalValue = () => {
     if (getCollateralValueResponse.state === RequestState.SUCCESS) {
       return getCollateralValueResponse.data.reduce((sum, item) => sum + item.price, 0);
@@ -26,18 +30,26 @@ export const CollateralScreen: FC = () => {
     return 0;
   };
 
-  const getFormattedPrice = (value: number) => value.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  const getAssetsAllocation = (asset: string) => {
+    if (getCollateralValueResponse.state === RequestState.SUCCESS) {
+      const current = getCollateralValueResponse.data.find((item) => item.asset === asset);
+
+      return getAssetsAllocationPercentage(current?.price ?? 0);
+    }
+
+    return 0;
+  };
 
   const data = useMemo(() => {
     if (getCollateralValueResponse.state === RequestState.SUCCESS) {
       return getCollateralValueResponse.data.map((item) => ({
         collateral_asset: item.asset,
-        balance: `$${getFormattedPrice(item.price)}`,
+        balance: `$${getFormattedValue(item.price)}`,
         holdings: `${item.assetAmount} ${item.asset}`,
         change: {
           collateral_asset: item.asset,
         },
-        allocation: `${item.price / getCollateralTotalValue()}%`,
+        allocation: `${getAssetsAllocationPercentage(item.price).toFixed(2)}%`,
         actions: {
           collateral_asset: item.asset,
         },
@@ -64,7 +76,7 @@ export const CollateralScreen: FC = () => {
           {t('dashboard_collateral.title')}
         </ParagraphM>
         <SubtitleS weight={400} className="total">
-          ${getFormattedPrice(getCollateralTotalValue())}
+          ${getFormattedValue(getCollateralTotalValue())}
         </SubtitleS>
         <div className="title-group">
           <div className="ltv-group">
@@ -76,7 +88,12 @@ export const CollateralScreen: FC = () => {
           <Badge statusColor={LoanToValueColor[good]}>{LoanToValueText[good]}</Badge>
         </div>
 
-        <AssetsAllocation />
+        <AssetsAllocation
+          btc={getAssetsAllocation(CollateralCurrency.BTC)}
+          eth={getAssetsAllocation(CollateralCurrency.ETH)}
+          sol={getAssetsAllocation(CollateralCurrency.SOL)}
+          usdc={getAssetsAllocation(CollateralCurrency.USDC)}
+        />
 
         <Table columns={columns} data={data} />
       </Card>

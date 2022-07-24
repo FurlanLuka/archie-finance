@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CollateralCurrency, ParagraphXS } from '@archie-webapps/ui-design-system';
 import { Icon } from '@archie-webapps/ui-icons';
-import { CollateralAsset, collateralAssets } from '@archie-webapps/util-constants';
+import { CollateralAsset, CollateralAssets } from '@archie-webapps/util-constants';
 
 import { CollateralCurrencySelect, CollateralDeposit } from './collateral-asset-select.styled';
 
@@ -36,7 +36,7 @@ export const CollateralAssetSelect: FC<InputSelectProps> = ({ selectedAsset, set
       </div>
       {selectOpen && (
         <div className="select-list">
-          {Object.values(collateralAssets).map((asset) => (
+          {Object.values(CollateralAssets).map((asset) => (
             <CollateralDeposit key={asset.id} onClick={() => handleSelect(asset)}>
               <CollateralCurrency icon={asset.icon} name={asset.name} short={asset.short} />
             </CollateralDeposit>

@@ -6,7 +6,7 @@ import { AssetPrice } from '@archie-webapps/shared/data-access-archie-api/asset_
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access-archie-api/asset_price/hooks/use-get-asset-price';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { ButtonOutline, CollateralCurrency } from '@archie-webapps/ui-design-system';
-import { collateralAssets } from '@archie-webapps/util-constants';
+import { CollateralAssets } from '@archie-webapps/util-constants';
 
 import { AllocationCellStyled, ChangeCellStyled, ActionsCellStyled } from './table-fixtures.styled';
 
@@ -15,7 +15,7 @@ interface CollateralAssetCellProps {
 }
 
 const CollateralAssetCell: FC<CollateralAssetCellProps> = ({ id }) => {
-  const asset = Object.values(collateralAssets).find((asset) => asset.id === id);
+  const asset = CollateralAssets[id];
 
   return <CollateralCurrency icon={asset?.icon} name={asset?.name} short={asset?.id} />;
 };
