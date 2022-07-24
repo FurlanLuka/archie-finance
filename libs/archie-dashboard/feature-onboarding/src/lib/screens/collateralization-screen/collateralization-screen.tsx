@@ -89,9 +89,9 @@ export const CollateralizationScreen: FC = () => {
       <StepsIndicator currentStep={Step.COLLATERALIZE} />
       <EmailVerificationAlert />
       <CollateralizationScreenStyled>
+        {/* Use <Card>, if you decide to have this whole screen separated from /collateral/add */}
         <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
         <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
-
         <div className="inputs">
           <CollateralAssetSelect
             selectedAsset={selectedCollateralAsset}
@@ -105,7 +105,6 @@ export const CollateralizationScreen: FC = () => {
             onChange={setLineOfCredit}
           />
         </div>
-
         <div className="result">
           <div className="result-item">
             <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
@@ -141,7 +140,6 @@ export const CollateralizationScreen: FC = () => {
             </SubtitleM>
           </div>
         </div>
-
         <div className="address">
           <ParagraphXS weight={700}>
             <Trans
