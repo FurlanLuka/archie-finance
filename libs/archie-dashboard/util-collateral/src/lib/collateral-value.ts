@@ -1,9 +1,9 @@
 import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
-import { collateralAssets } from '@archie-webapps/util-constants';
+import { CollateralAssets } from '@archie-webapps/util-constants';
 
 export function calculateCollateralCreditValue(collateral: CollateralValue[]): number {
   return collateral.reduce((sum, collateralEntry) => {
-    const assetInfo = collateralAssets[collateralEntry.asset];
+    const assetInfo = CollateralAssets[collateralEntry.asset];
 
     if (!assetInfo) {
       console.warn('Missing asset info', { assetInfo, collateralEntry });

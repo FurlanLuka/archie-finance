@@ -13,7 +13,7 @@ import { useCreateWithdrawal } from '@archie-webapps/shared/data-access-archie-a
 import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { ButtonOutline, ButtonPrimary, InputText, ParagraphXS } from '@archie-webapps/ui-design-system';
 import { theme } from '@archie-webapps/ui-theme';
-import { collateralAssets } from '@archie-webapps/util-constants';
+import { CollateralAssets } from '@archie-webapps/util-constants';
 
 import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/successfull-withdrawal';
 
@@ -153,7 +153,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
       </Styled.WithdrawalForm>
       {isSuccessModalOpen && (
         <SuccessfullWithdrawalModal
-          addressLink={`${collateralAssets[currentAsset]?.url}/${depositAddress}`}
+          addressLink={`${CollateralAssets[currentAsset]?.url}/${depositAddress}`}
           onConfirm={() => {
             setIsSuccessModalOpen(false);
             navigate('/collateral');
