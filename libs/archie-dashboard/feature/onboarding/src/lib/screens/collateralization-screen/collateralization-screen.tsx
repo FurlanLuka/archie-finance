@@ -3,6 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import QRCode from 'react-qr-code';
 import ReactTooltip from 'react-tooltip';
 
+import { CollateralAssetSelect } from '@archie-webapps/archie-dashboard/components';
 import { MAX_LINE_OF_CREDIT, MIN_LINE_OF_CREDIT, Step } from '@archie-webapps/archie-dashboard/constants';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
@@ -15,7 +16,6 @@ import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';
-import { CollateralAssetSelect } from '../../components/collateral-asset-select/collateral-asset-select';
 import { CollateralDeposit } from '../../components/collateral-deposit/collateral-deposit';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 

@@ -4,6 +4,7 @@ import QRCode from 'react-qr-code';
 import ReactTooltip from 'react-tooltip';
 
 import { MAX_LINE_OF_CREDIT, MIN_LINE_OF_CREDIT, Step } from '@archie-webapps/archie-dashboard/constants';
+import { CollateralAssetSelect } from '@archie-webapps/archie-dashboard/components';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
@@ -84,7 +85,7 @@ export const CollaterizationForm: FC = () => {
   return (
     <CollaterizationFormStyled>
       <div className="inputs">
-        {/* <CollateralAssetSelect selectedAsset={selectedCollateralAsset} setSelectedAsset={setSelectedCollateralAsset} /> */}
+        <CollateralAssetSelect selectedAsset={selectedCollateralAsset} setSelectedAsset={setSelectedCollateralAsset} />
         <InputRange
           label={t('collateralization_step.inputs.input_range_label')}
           min={MIN_LINE_OF_CREDIT}
