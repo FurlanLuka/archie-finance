@@ -2,16 +2,16 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { TotalCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-total-value';
-import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-total-value';
-import { GetCreditResponse } from '@archie-webapps/shared/data-access-archie-api/credit/api/get-credit';
-import { useCreateRizeUser } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-create-rize-user';
-import { useGetCredit } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-get-credit';
+import { TotalCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-total-value';
+import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-total-value';
+import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
+import { useCreateRizeUser } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
+import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import {
   MutationQueryResponse,
   QueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access-archie-api/interface';
+} from '@archie-webapps/shared/data-access/archie-api/interface';
 import { ButtonPrimary, Container, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
 import { Step } from '@archie-webapps/archie-dashboard/constants';
 

@@ -4,11 +4,11 @@ import QRCode from 'react-qr-code';
 import ReactTooltip from 'react-tooltip';
 
 import { MAX_LINE_OF_CREDIT, MIN_LINE_OF_CREDIT, Step } from '@archie-webapps/archie-dashboard/constants';
-import { AssetPrice } from '@archie-webapps/shared/data-access-archie-api/asset_price/api/get-asset-price';
-import { useGetAssetPrice } from '@archie-webapps/shared/data-access-archie-api/asset_price/hooks/use-get-asset-price';
-import { GetDepositAddressResponse } from '@archie-webapps/shared/data-access-archie-api/deposit_address/api/get-deposit-address';
-import { useGetDepositAddress } from '@archie-webapps/shared/data-access-archie-api/deposit_address/hooks/use-get-deposit-address';
-import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
+import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
+import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
+import { GetDepositAddressResponse } from '@archie-webapps/shared/data-access/archie-api/deposit_address/api/get-deposit-address';
+import { useGetDepositAddress } from '@archie-webapps/shared/data-access/archie-api/deposit_address/hooks/use-get-deposit-address';
+import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';

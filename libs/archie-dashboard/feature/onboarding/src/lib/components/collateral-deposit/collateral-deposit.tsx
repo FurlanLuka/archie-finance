@@ -1,7 +1,7 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 
 import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
-import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
+import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';

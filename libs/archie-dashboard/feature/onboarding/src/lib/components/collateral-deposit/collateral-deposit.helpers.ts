@@ -1,4 +1,4 @@
-import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
+import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 import { collateralAssets } from '@archie-webapps/shared/constants';
 
 export function formatEntireCollateral(collateral: CollateralValue[]): string {

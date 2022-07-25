@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 
-import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
-import { usePollCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-poll-collateral-value';
-import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
+import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
+import { usePollCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-poll-collateral-value';
+import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 
 interface UsePollCollateralDepositParams {
   shouldPoll: boolean;

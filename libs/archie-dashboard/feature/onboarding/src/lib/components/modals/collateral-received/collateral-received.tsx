@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useCreateCreditLine } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-create-credit-line';
-import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
+import { useCreateCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-create-credit-line';
+import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { ButtonPrimary, ButtonOutline, Modal, ParagraphM, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 
 import imgCollateralReceived from '../../../../assets/img-collateral-received.png';

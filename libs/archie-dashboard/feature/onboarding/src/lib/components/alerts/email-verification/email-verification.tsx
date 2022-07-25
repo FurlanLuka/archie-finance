@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
-import { GetOnboardingResponse } from '@archie-webapps/shared/data-access-archie-api/onboarding/api/get-onboarding';
-import { useGetOnboarding } from '@archie-webapps/shared/data-access-archie-api/onboarding/hooks/use-get-onboarding';
-import { usePollEmailVerification } from '@archie-webapps/shared/data-access-archie-api/user/hooks/use-poll-email-verification';
-import { useResendEmailVerification } from '@archie-webapps/shared/data-access-archie-api/user/hooks/use-resend-email-verification';
+import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
+import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
+import { usePollEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
+import { useResendEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
 import { ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 
 import imgResend from '../../../../assets/img-resend.png';
