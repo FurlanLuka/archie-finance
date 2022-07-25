@@ -53,6 +53,12 @@
         "command": "npm run build mail-api && node dist/apps/mail-api/main build-swagger"
       }
     },
+    "generate-migration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build mail-api && node dist/apps/mail-api/main generate-migration"
+      }
+    },
     "build-docker": {
       "executor": "@archie/plugin/deployment:docker-build"
     },

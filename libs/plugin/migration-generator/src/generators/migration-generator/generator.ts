@@ -1,7 +1,8 @@
-import { getWorkspaceLayout, Tree } from '@nrwl/devkit';
+import { generateFiles, getWorkspaceLayout, offsetFromRoot, Tree } from '@nrwl/devkit';
 import { MicroserviceModuleGeneratorSchema } from './schema';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import path = require('node:path');
 
 interface NormalizedSchema extends MicroserviceModuleGeneratorSchema {
   serviceRoot: string;
@@ -19,6 +20,19 @@ function normalizeOptions(
     ...options,
     serviceRoot,
   };
+}
+
+function addFiles(tree: Tree, options: NormalizedSchema) {
+  const templateOptions = {
+    ...options,
+    offsetFromRoot: offsetFromRoot(options.serviceRoot),
+  };
+  generateFiles(
+    tree,
+    path.join(__dirname, 'files'),
+    options.serviceRoot,
+    templateOptions,
+  );
 }
 
 const MIGRATION_START_OUTPUT = '_______START-MIGRATION-CODE_______';
@@ -44,12 +58,18 @@ export default async function (
     /(?<=name = ').*?(?=')/gs,
   )[0];
 
-  tree.write(
-    `${normalizedOptions.serviceRoot}/src/migrations/${migrationName}.ts`,
-    migrationCode,
-  );
+  const migrationsDirectory = `${normalizedOptions.serviceRoot}/src/migrations`;
 
-  // visitNotIgnoredFiles(tree, `${normalizedOptions.serviceRoot}/src/`, (path) => console.log(path))
+  tree.write(`${migrationsDirectory}/${migrationName}.ts`, migrationCode);
 
-  // addFiles(tree, normalizedOptions);
+  const migrations = tree
+    .children(migrationsDirectory)
+    .map((migrationFile) => migrationFile.slice(0, -3));
+
+  tree.delete(`${normalizedOptions.serviceRoot}/src/migrations.ts`);
+
+  addFiles(tree, {
+    ...normalizedOptions,
+    migrations,
+  });
 }

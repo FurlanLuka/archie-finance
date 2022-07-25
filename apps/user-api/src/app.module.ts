@@ -39,7 +39,7 @@ import { UserModule } from '@archie/api/user-api/user';
         password: configService.get(ConfigVariables.TYPEORM_PASSWORD),
         database: configService.get(ConfigVariables.TYPEORM_DATABASE),
         port: configService.get(ConfigVariables.TYPEORM_PORT),
-        synchronize: true,
+        synchronize: false,
         autoLoadEntities: true,
         keepConnectionAlive: true,
       }),

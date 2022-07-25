@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigVariables } from '@archie/api/asset-price-api/constants';
 import { AssetPriceModule } from '@archie/api/asset-price-api/asset-price';
+import { migrations } from './migrations';
 
 @Module({
   imports: [
@@ -37,6 +38,8 @@ import { AssetPriceModule } from '@archie/api/asset-price-api/asset-price';
         synchronize: false,
         keepConnectionAlive: true,
         autoLoadEntities: true,
+        migrations: migrations,
+        migrationsRun: true,
       }),
       inject: [ConfigService],
     }),

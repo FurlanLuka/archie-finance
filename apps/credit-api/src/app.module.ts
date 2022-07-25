@@ -37,7 +37,7 @@ import { CollateralModule } from './modules/collateral/collateral.module';
         password: configService.get(ConfigVariables.TYPEORM_PASSWORD),
         database: configService.get(ConfigVariables.TYPEORM_DATABASE),
         port: configService.get(ConfigVariables.TYPEORM_PORT),
-        synchronize: true,
+        synchronize: false,
         autoLoadEntities: true,
         keepConnectionAlive: true,
       }),

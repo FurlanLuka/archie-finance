@@ -33,6 +33,12 @@
         "command": "npm run build collateral-api && node dist/apps/collateral-api/main build-swagger"
       }
     },
+    "generate-migration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build collateral-api && node dist/apps/collateral-api/main generate-migration"
+      }
+    },
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
