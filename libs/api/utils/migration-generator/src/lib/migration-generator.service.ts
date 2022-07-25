@@ -11,6 +11,7 @@ export class MigrationGeneratorService {
   constructor(private dataSource: DataSource) {}
 
   public async generateMigration(serviceName: string) {
+    console.log('herererererere')
     const upSqls: string[] = [];
     const downSqls: string[] = [];
     const sqlInMemory = await this.dataSource.driver
