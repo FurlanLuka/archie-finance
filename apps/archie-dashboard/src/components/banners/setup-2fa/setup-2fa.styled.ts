@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/ui-theme';
+import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/shared/ui/theme';
 
 export const Setup2faBannerStyled = styled.div`
   display: flex;
