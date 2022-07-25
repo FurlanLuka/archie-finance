@@ -1,20 +1,20 @@
 import { FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature-collateral';
-import { CollaterizationScreen } from '@archie-webapps/archie-dashboard/feature-collaterization';
-import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature-history';
-import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature-rewards';
-import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature-settings';
-import { WalletAndCollateralScreen } from '@archie-webapps/archie-dashboard/feature-wallet-and-collateral';
-import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature-withdraw';
-import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
-import { GetOnboardingResponse } from '@archie-webapps/shared/data-access-archie-api/onboarding/api/get-onboarding';
-import { useGetOnboarding } from '@archie-webapps/shared/data-access-archie-api/onboarding/hooks/use-get-onboarding';
-import { Header, Loading, Page, Container } from '@archie-webapps/ui-design-system';
+import { Header, Navigation } from '@archie-webapps/archie-dashboard/components';
+import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature/collateral';
+import { CollaterizationScreen } from '@archie-webapps/archie-dashboard/feature/collaterization';
+import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature/history';
+import { WalletAndCollateralScreen } from '@archie-webapps/archie-dashboard/feature/home';
+import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature/rewards';
+import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature/settings';
+import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature/withdraw';
+import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
+import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
+import { Loading, Page, Container } from '@archie-webapps/shared/ui/design-system';
 
 import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
-import { Navigation } from '../../components/navigation/navigation';
 
 export const DashboardRoute: FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
