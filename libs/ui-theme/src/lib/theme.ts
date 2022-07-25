@@ -134,7 +134,7 @@ export const theme: Theme = {
   borderPrimary: colors.neutralgray_200,
   borderHighlight: colors.coral_500,
   // tooltip
-  tooltipBackground: colors.black,
+  tooltipBackground: colors.coral_500,
   tooltipText: colors.white,
   // loading splash screen
   loadingBackground: colors.teal_800,

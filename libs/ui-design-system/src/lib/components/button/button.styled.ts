@@ -67,8 +67,8 @@ export const ButtonPrimary = styled(Button)`
 
 export const ButtonOutline = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
-  color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonPrimary)};
-  border-color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonPrimary)};
+  color: ${({ theme, color, isDisabled}) => (isDisabled ? theme.buttonDisabled : color ?? theme.buttonPrimary)};
+  border-color: ${({ theme, color, isDisabled}) => (isDisabled ? theme.buttonDisabled : color ?? theme.buttonPrimary)};
 `;
 
 export const ButtonGhost = styled(Button)`
