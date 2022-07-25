@@ -1,9 +1,7 @@
 import {
   getWorkspaceLayout,
   Tree,
-  visitNotIgnoredFiles,
 } from '@nrwl/devkit';
-import * as path from 'path';
 import { MicroserviceGenerator } from './schema';
 import { applicationGenerator } from '@nrwl/nest'
 
