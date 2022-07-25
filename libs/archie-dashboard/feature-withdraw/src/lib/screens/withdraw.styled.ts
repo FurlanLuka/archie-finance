@@ -27,8 +27,4 @@ export const WithdrawScreenStyled = styled.div`
   .subtitle {
     margin-bottom: 3rem;
   }
-
-  .loader-container {
-    color: ${({ theme }) => theme.loaderBackground};
-  }
 `;
