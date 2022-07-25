@@ -1,4 +1,4 @@
-import { theme } from '@archie-webapps/shared/ui-theme';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 export enum CardStatus {
   ACTIVE = 'active',

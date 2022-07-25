@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonOutline, ButtonPrimary, Modal, ParagraphM } from '@archie-webapps/shared/ui-design-system';
+import { ButtonOutline, ButtonPrimary, Modal, ParagraphM } from '@archie-webapps/shared/ui/design-system';
 
 import { RevealCardModalStyled } from './reveal-card.styled';
 

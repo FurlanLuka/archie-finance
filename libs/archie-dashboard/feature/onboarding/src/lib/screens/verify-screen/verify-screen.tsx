@@ -5,9 +5,9 @@ import ReactCodeInput from 'react-verification-code-input';
 import { useCompleteAptoVerification } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-complete-apto-verification';
 import { useStartAptoVerification } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-start-apto-verification';
 import { MutationQueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
-import { ButtonPrimary, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui-design-system';
-import { Icon } from '@archie-webapps/shared/ui-icons';
-import { theme } from '@archie-webapps/shared/ui-theme';
+import { ButtonPrimary, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
+import { Icon } from '@archie-webapps/shared/ui/icons';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { VerifyScreenStyled } from './verify-screen.styled';
 

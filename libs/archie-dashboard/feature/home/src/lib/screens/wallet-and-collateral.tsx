@@ -11,8 +11,8 @@ import {
   ParagraphXXS,
   SubtitleS,
   Table,
-} from '@archie-webapps/shared/ui-design-system';
-import { theme } from '@archie-webapps/shared/ui-theme';
+} from '@archie-webapps/shared/ui/design-system';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 import imgCard from '../../assets/card-placeholder.png';
 // import { MarginCallAlert } from '../components/alerts/margin-call/margin-call';

@@ -6,7 +6,7 @@ import { GetOnboardingResponse } from '@archie-webapps/shared/data-access-archie
 import { useGetOnboarding } from '@archie-webapps/shared/data-access-archie-api/onboarding/hooks/use-get-onboarding';
 import { usePollEmailVerification } from '@archie-webapps/shared/data-access-archie-api/user/hooks/use-poll-email-verification';
 import { useResendEmailVerification } from '@archie-webapps/shared/data-access-archie-api/user/hooks/use-resend-email-verification';
-import { ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui-design-system';
+import { ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 
 import imgResend from '../../../../assets/img-resend.png';
 

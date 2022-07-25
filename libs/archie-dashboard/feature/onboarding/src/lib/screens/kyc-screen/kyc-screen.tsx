@@ -8,9 +8,9 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { useCreateKyc } from '@archie-webapps/shared/data-access-archie-api/kyc/hooks/use-create-kyc';
-import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui-design-system';
-import { Icon } from '@archie-webapps/shared/ui-icons';
-import { theme } from '@archie-webapps/shared/ui-theme';
+import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
+import { Icon } from '@archie-webapps/shared/ui/icons';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { parseDate, addAddress, getAddressError, Address } from './kyc-form.helpers';
 import { KycSchema } from './kyc-form.schema';

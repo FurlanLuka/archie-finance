@@ -12,7 +12,7 @@ import {
   QueryResponse,
   RequestState,
 } from '@archie-webapps/shared/data-access-archie-api/interface';
-import { ButtonPrimary, Container, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui-design-system';
+import { ButtonPrimary, Container, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
 import { Step } from '@archie-webapps/archie-dashboard/constants';
 
 import imgCardReady from '../../../assets/img-card-ready.png';

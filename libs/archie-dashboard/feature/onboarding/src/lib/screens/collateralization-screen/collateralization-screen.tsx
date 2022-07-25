@@ -9,10 +9,10 @@ import { useGetAssetPrice } from '@archie-webapps/shared/data-access-archie-api/
 import { GetDepositAddressResponse } from '@archie-webapps/shared/data-access-archie-api/deposit_address/api/get-deposit-address';
 import { useGetDepositAddress } from '@archie-webapps/shared/data-access-archie-api/deposit_address/hooks/use-get-deposit-address';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
-import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui-design-system';
-import { Icon } from '@archie-webapps/shared/ui-icons';
-import { theme } from '@archie-webapps/shared/ui-theme';
-import { CollateralAsset } from '@archie-webapps/shared/util-constants';
+import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
+import { Icon } from '@archie-webapps/shared/ui/icons';
+import { theme } from '@archie-webapps/shared/ui/theme';
+import { CollateralAsset } from '@archie-webapps/shared/constants';
 
 import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';
 import { CollateralAssetSelect } from '../../components/collateral-asset-select/collateral-asset-select';

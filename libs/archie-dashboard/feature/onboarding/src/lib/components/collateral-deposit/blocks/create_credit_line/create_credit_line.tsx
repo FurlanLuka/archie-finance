@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useCreateCreditLine } from '@archie-webapps/shared/data-access-archie-api/credit/hooks/use-create-credit-line';
 import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
-import { ButtonPrimary, ParagraphXS } from '@archie-webapps/shared/ui-design-system';
+import { ButtonPrimary, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 
 import { FloatingCreditLineStyled } from './create_credit_line.styled';
 

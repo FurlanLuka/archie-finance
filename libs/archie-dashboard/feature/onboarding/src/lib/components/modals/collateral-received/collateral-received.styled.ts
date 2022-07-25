@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { breakpoints } from '@archie-webapps/shared/ui-theme';
+import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
 export const CollateralReceivedModalStyled = styled.div`
   display: flex;

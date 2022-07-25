@@ -1,8 +1,8 @@
 import { FC } from 'react';
 
-import { ParagraphXS } from '@archie-webapps/shared/ui-design-system';
-import { Icon, IconName } from '@archie-webapps/shared/ui-icons';
-import { theme } from '@archie-webapps/shared/ui-theme';
+import { ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { Icon, IconName } from '@archie-webapps/shared/ui/icons';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralCurrencyStyled } from './collateral-currency.styled';
 

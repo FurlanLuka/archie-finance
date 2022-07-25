@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 
-import { breakpoints } from '@archie-webapps/shared/ui-theme';
+import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
 const load = keyframes`
   0% {

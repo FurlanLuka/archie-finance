@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SubtitleS } from '@archie-webapps/shared/ui-design-system';
+import { SubtitleS } from '@archie-webapps/shared/ui/design-system';
 
 import { SettingsStyled } from './settings.styled';
 

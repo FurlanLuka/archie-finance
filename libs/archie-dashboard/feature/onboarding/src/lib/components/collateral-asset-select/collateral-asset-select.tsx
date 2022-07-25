@@ -1,9 +1,9 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ParagraphXS } from '@archie-webapps/shared/ui-design-system';
-import { Icon } from '@archie-webapps/shared/ui-icons';
-import { CollateralAsset, collateralAssets } from '@archie-webapps/shared/util-constants';
+import { ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { Icon } from '@archie-webapps/shared/ui/icons';
+import { CollateralAsset, collateralAssets } from '@archie-webapps/shared/constants';
 
 import { CollateralCurrency } from './blocks/collateral-currency/collateral-currency';
 import * as Styled from './collateral-asset-select.styled';
