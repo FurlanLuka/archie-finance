@@ -39,20 +39,8 @@ const scale = keyframes`
 `;
 
 export const CollateralizationScreenStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: ${({ theme }) => theme.backgroundPrimary};
-  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.08);
-  border: 0;
-  border-radius: 1rem;
   width: 100%;
   max-width: 928px;
-  padding: 2.5rem 7% 3.5rem;
-
-  @media (max-width: ${breakpoints.screenSM}) {
-    padding: 2.5rem 1.5rem 3.5rem;
-  }
 
   .title {
     margin-bottom: 0.5rem;

@@ -11,7 +11,14 @@ import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/
 import { GetDepositAddressResponse } from '@archie-webapps/shared/data-access/archie-api/deposit_address/api/get-deposit-address';
 import { useGetDepositAddress } from '@archie-webapps/shared/data-access/archie-api/deposit_address/hooks/use-get-deposit-address';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Container, InputRange, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
+import {
+  Container,
+  Card,
+  InputRange,
+  ParagraphS,
+  ParagraphXS,
+  SubtitleM,
+} from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -90,161 +97,162 @@ export const CollateralizationScreen: FC = () => {
       <StepsIndicator currentStep={Step.COLLATERALIZE} />
       <EmailVerificationAlert />
       <CollateralizationScreenStyled>
-        {/* Use <Card>, if you decide to have this whole screen separated from /collateral/add */}
-        <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
-        <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
-        <div className="inputs">
-          <CollateralAssetSelect
-            selectedAsset={selectedCollateralAsset}
-            setSelectedAsset={setSelectedCollateralAsset}
-          />
-          <InputRange
-            label={t('collateralization_step.inputs.input_range_label')}
-            min={MIN_LINE_OF_CREDIT}
-            max={MAX_LINE_OF_CREDIT}
-            value={lineOfCredit}
-            onChange={setLineOfCredit}
-          />
-        </div>
-        <div className="result">
-          <div className="result-item">
-            <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
-            <SubtitleM weight={400} id="collateral">
-              <span
-                className="clickable"
-                data-tip="Click to copy"
-                onClick={() => handleCopyToClipboard('collateral', requiredCollateral as unknown as string)}
-              >
-                {getFormattedCollateral()}
-              </span>
-              <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>0</span>
-            </SubtitleM>
-            <ReactTooltip
-              textColor={theme.tooltipText}
-              backgroundColor={theme.tooltipBackground}
-              effect="solid"
-              delayHide={1000}
+        <Card column alignItems="center" padding="2.5rem 10% 3.5rem" mobilePadding="2.5rem 1.5rem 3.5rem">
+          <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
+          <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
+          <div className="inputs">
+            <CollateralAssetSelect
+              selectedAsset={selectedCollateralAsset}
+              setSelectedAsset={setSelectedCollateralAsset}
+            />
+            <InputRange
+              label={t('collateralization_step.inputs.input_range_label')}
+              min={MIN_LINE_OF_CREDIT}
+              max={MAX_LINE_OF_CREDIT}
+              value={lineOfCredit}
+              onChange={setLineOfCredit}
             />
           </div>
-          <div className="result-item">
-            <ParagraphXS weight={700}>{t('collateralization_step.result.second')}</ParagraphXS>
-            <SubtitleM weight={400}>
-              {selectedCollateralAsset?.loan_to_value}%
-              <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>0%</span>
-            </SubtitleM>
+          <div className="result">
+            <div className="result-item">
+              <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
+              <SubtitleM weight={400} id="collateral">
+                <span
+                  className="clickable"
+                  data-tip="Click to copy"
+                  onClick={() => handleCopyToClipboard('collateral', requiredCollateral as unknown as string)}
+                >
+                  {getFormattedCollateral()}
+                </span>
+                <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>0</span>
+              </SubtitleM>
+              <ReactTooltip
+                textColor={theme.tooltipText}
+                backgroundColor={theme.tooltipBackground}
+                effect="solid"
+                delayHide={1000}
+              />
+            </div>
+            <div className="result-item">
+              <ParagraphXS weight={700}>{t('collateralization_step.result.second')}</ParagraphXS>
+              <SubtitleM weight={400}>
+                {selectedCollateralAsset?.loan_to_value}%
+                <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>0%</span>
+              </SubtitleM>
+            </div>
+            <div className="result-item">
+              <ParagraphXS weight={700}>{t('collateralization_step.result.third')}</ParagraphXS>
+              <SubtitleM weight={400}>
+                {selectedCollateralAsset?.interest_rate}%
+                <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>0%</span>
+              </SubtitleM>
+            </div>
           </div>
-          <div className="result-item">
-            <ParagraphXS weight={700}>{t('collateralization_step.result.third')}</ParagraphXS>
-            <SubtitleM weight={400}>
-              {selectedCollateralAsset?.interest_rate}%
-              <span className={`placeholder ${getDepositAddress() && 'fade-out'}`}>0%</span>
-            </SubtitleM>
-          </div>
-        </div>
-        <div className="address">
-          <ParagraphXS weight={700}>
-            <Trans
-              values={{
-                required_collateral: getFormattedCollateral(),
-              }}
-            >
-              collateralization_step.address.title
-            </Trans>
-          </ParagraphXS>
-          <div className="address-copy">
-            <ParagraphS id="address">
-              <span
-                className="clickable"
-                data-tip="Click to copy"
-                onClick={() => handleCopyToClipboard('address', getDepositAddress())}
+          <div className="address">
+            <ParagraphXS weight={700}>
+              <Trans
+                values={{
+                  required_collateral: getFormattedCollateral(),
+                }}
               >
-                {getDepositAddress()}
-              </span>
-            </ParagraphS>
-            <ReactTooltip
-              textColor={theme.tooltipText}
-              backgroundColor={theme.tooltipBackground}
-              effect="solid"
-              delayHide={1000}
-            />
-            <button className="btn-copy" onClick={() => handleCopyToClipboard('address', getDepositAddress())}>
-              <Icon name="copy" className="icon-copy" />
-            </button>
-          </div>
-          <div className="address-code">
-            <div className="code">
-              <QRCode value={getDepositAddress() ?? ''} size={96} />
+                collateralization_step.address.title
+              </Trans>
+            </ParagraphXS>
+            <div className="address-copy">
+              <ParagraphS id="address">
+                <span
+                  className="clickable"
+                  data-tip="Click to copy"
+                  onClick={() => handleCopyToClipboard('address', getDepositAddress())}
+                >
+                  {getDepositAddress()}
+                </span>
+              </ParagraphS>
+              <ReactTooltip
+                textColor={theme.tooltipText}
+                backgroundColor={theme.tooltipBackground}
+                effect="solid"
+                delayHide={1000}
+              />
+              <button className="btn-copy" onClick={() => handleCopyToClipboard('address', getDepositAddress())}>
+                <Icon name="copy" className="icon-copy" />
+              </button>
             </div>
-            <div className="info">
-              <div className="info-group">
-                <ParagraphXS>
-                  <Trans
-                    components={{ b: <b /> }}
-                    values={{ selected_collateral_asset: selectedCollateralAsset?.short }}
-                  >
-                    collateralization_step.address.info_text_1
-                  </Trans>
-                </ParagraphXS>
+            <div className="address-code">
+              <div className="code">
+                <QRCode value={getDepositAddress() ?? ''} size={96} />
               </div>
-              <div className="info-group">
-                <ParagraphXS>
-                  <Trans
-                    components={{ b: <b /> }}
-                    values={{ selected_collateral_asset: selectedCollateralAsset?.short }}
-                  >
-                    collateralization_step.address.info_text_2
-                  </Trans>
-                </ParagraphXS>
-                <ParagraphXS className="info-link">
-                  {t('collateralization_step.address.info_link_1')}
-                  <a
-                    href={`${selectedCollateralAsset?.url}/${getDepositAddress()}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="info-link-url"
-                  >
-                    {t('collateralization_step.address.info_link_2')}
-                    <Icon name="external-link" fill={theme.textHighlight} className="info-link-icon" />
-                  </a>
-                </ParagraphXS>
+              <div className="info">
+                <div className="info-group">
+                  <ParagraphXS>
+                    <Trans
+                      components={{ b: <b /> }}
+                      values={{ selected_collateral_asset: selectedCollateralAsset?.short }}
+                    >
+                      collateralization_step.address.info_text_1
+                    </Trans>
+                  </ParagraphXS>
+                </div>
+                <div className="info-group">
+                  <ParagraphXS>
+                    <Trans
+                      components={{ b: <b /> }}
+                      values={{ selected_collateral_asset: selectedCollateralAsset?.short }}
+                    >
+                      collateralization_step.address.info_text_2
+                    </Trans>
+                  </ParagraphXS>
+                  <ParagraphXS className="info-link">
+                    {t('collateralization_step.address.info_link_1')}
+                    <a
+                      href={`${selectedCollateralAsset?.url}/${getDepositAddress()}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="info-link-url"
+                    >
+                      {t('collateralization_step.address.info_link_2')}
+                      <Icon name="external-link" fill={theme.textHighlight} className="info-link-icon" />
+                    </a>
+                  </ParagraphXS>
+                </div>
               </div>
             </div>
-          </div>
 
-          <hr className="divider" />
+            <hr className="divider" />
 
-          <div className="terms">
-            <div className="terms-title">
-              <ParagraphXS weight={700}>{t('collateralization_step.terms.title')}</ParagraphXS>
+            <div className="terms">
+              <div className="terms-title">
+                <ParagraphXS weight={700}>{t('collateralization_step.terms.title')}</ParagraphXS>
+              </div>
+              <ul className="terms-list">
+                <li className="terms-list-item">
+                  <ParagraphXS>
+                    <Trans
+                      components={{ b: <b /> }}
+                      values={{ selected_collateral_asset: selectedCollateralAsset?.loan_to_value }}
+                    >
+                      collateralization_step.terms.first
+                    </Trans>
+                  </ParagraphXS>
+                </li>
+                <li className="terms-list-item">
+                  <ParagraphXS>{t('collateralization_step.terms.second')}</ParagraphXS>
+                </li>
+                <li className="terms-list-item">
+                  <ParagraphXS>
+                    <Trans
+                      components={{ br: <br /> }}
+                      values={{ selected_collateral_asset: selectedCollateralAsset?.loan_to_value }}
+                    >
+                      collateralization_step.terms.third
+                    </Trans>
+                  </ParagraphXS>
+                </li>
+              </ul>
             </div>
-            <ul className="terms-list">
-              <li className="terms-list-item">
-                <ParagraphXS>
-                  <Trans
-                    components={{ b: <b /> }}
-                    values={{ selected_collateral_asset: selectedCollateralAsset?.loan_to_value }}
-                  >
-                    collateralization_step.terms.first
-                  </Trans>
-                </ParagraphXS>
-              </li>
-              <li className="terms-list-item">
-                <ParagraphXS>{t('collateralization_step.terms.second')}</ParagraphXS>
-              </li>
-              <li className="terms-list-item">
-                <ParagraphXS>
-                  <Trans
-                    components={{ br: <br /> }}
-                    values={{ selected_collateral_asset: selectedCollateralAsset?.loan_to_value }}
-                  >
-                    collateralization_step.terms.third
-                  </Trans>
-                </ParagraphXS>
-              </li>
-            </ul>
+            <div className={`overlay ${getDepositAddress() && 'fade-out'}`} />
           </div>
-          <div className={`overlay ${getDepositAddress() && 'fade-out'}`} />
-        </div>
+        </Card>
       </CollateralizationScreenStyled>
     </Container>
   );
