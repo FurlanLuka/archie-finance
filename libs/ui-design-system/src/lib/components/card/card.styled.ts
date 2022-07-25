@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 import { breakpoints } from '@archie-webapps/ui-theme';
 
@@ -6,7 +6,8 @@ export interface CardProps {
   column?: boolean;
   alignItems?: string;
   justifyContent?: string;
-  maxWidth?: string
+  maxWidth?: string;
+  minHeight?: string;
   padding?: string;
   mobileRow?: boolean;
   columnReverse?: boolean;
@@ -18,7 +19,7 @@ export interface CardProps {
 export const Card = styled.div<CardProps>`
   position: relative;
   display: flex;
-  flex-direction: ${({ column }) => column ? 'column' : 'row'};
+  flex-direction: ${({ column }) => (column ? 'column' : 'row')};
   justify-content: ${({ justifyContent }) => justifyContent};
   align-items: ${({ alignItems }) => alignItems};
   background-color: ${({ theme }) => theme.backgroundPrimary};
@@ -28,10 +29,12 @@ export const Card = styled.div<CardProps>`
   border-radius: 0.5rem;
   width: 100%;
   max-width: ${({ maxWidth }) => maxWidth ?? '100%'};
+  min-height: ${({ minHeight }) => minHeight ?? '100%'};
   padding: ${({ padding }) => padding};
 
   @media (max-width: ${breakpoints.screenSM}) {
-    flex-direction: ${({ columnReverse, mobileRow }) => columnReverse ? 'column-reverse' : mobileRow ? 'row' : 'column'};
+    flex-direction: ${({ columnReverse, mobileRow }) =>
+      columnReverse ? 'column-reverse' : mobileRow ? 'row' : 'column'};
     justify-content: ${({ mobileJustifyContent }) => mobileJustifyContent};
     align-items: ${({ mobileAlignItems }) => mobileAlignItems};
   }
@@ -73,7 +76,7 @@ export const Card = styled.div<CardProps>`
 
     &.border-default {
       padding-left: 0.5rem;
-    
+
       :before {
         display: block;
         background-color: ${({ theme }) => theme.loanToValueDefault};
@@ -82,7 +85,7 @@ export const Card = styled.div<CardProps>`
 
     &.border-active {
       padding-left: 0.5rem;
-    
+
       :before {
         display: block;
         background-color: ${({ theme }) => theme.loanToValueActive};
@@ -97,5 +100,5 @@ export const Card = styled.div<CardProps>`
   .btn-group {
     display: flex;
     gap: 0.5rem;
-  }  
-`
+  }
+`;

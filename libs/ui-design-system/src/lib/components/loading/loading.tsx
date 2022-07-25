@@ -1,15 +1,13 @@
-import { useTheme } from 'styled-components';
+import { theme } from '@archie-webapps/ui-theme';
 
 import { Loader } from '../loader/loader';
 
 import { LoadingStyled } from './loading.styled';
 
 export const Loading = () => {
-  const { backgroundPrimary } = useTheme();
-
   return (
     <LoadingStyled>
-      <Loader color={backgroundPrimary} />
+      <Loader color={theme.backgroundPrimary} />
     </LoadingStyled>
   );
 };

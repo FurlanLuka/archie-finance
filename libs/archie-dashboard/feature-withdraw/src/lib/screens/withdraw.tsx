@@ -24,7 +24,11 @@ export const WithdrawScreen: FC = () => {
       getMaxWithdrawalAmountResponse.state === RequestState.LOADING ||
       getCollateralValueReponse.state === RequestState.LOADING
     ) {
-      return <Loader />;
+      return (
+        <div className="loader-container">
+          <Loader />
+        </div>
+      );
     }
 
     if (
@@ -67,7 +71,7 @@ export const WithdrawScreen: FC = () => {
 
   return (
     <WithdrawScreenStyled>
-      <Card column alignItems="center" padding="2.5rem 1.5rem 3.5rem">
+      <Card column alignItems="center" padding="2.5rem 1.5rem 3.5rem" minHeight="720px">
         <ParagraphM weight={800} className="title">
           {t('dashboard_withdraw.title', { currentAsset })}
         </ParagraphM>
