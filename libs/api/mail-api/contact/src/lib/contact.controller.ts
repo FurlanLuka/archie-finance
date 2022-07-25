@@ -6,8 +6,8 @@ import {
 } from '@archie/api/user-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/mail-api/constants';
 
-import { ContactService } from '@archie/api/mail-api/contact';
 import { EmailVerifiedDto, KycSubmittedDto } from './contact.dto';
+import { ContactService } from './contact.service';
 
 @Controller()
 export class ContactController {
