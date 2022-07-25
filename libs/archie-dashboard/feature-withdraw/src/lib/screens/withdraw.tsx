@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-value';
 import { useGetMaxWithdrawalAmount } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-max-withdrawal-amount';
 import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
-import { Card, ParagraphM, ParagraphS } from '@archie-webapps/ui-design-system';
+import { Card, Loader, ParagraphM, ParagraphS } from '@archie-webapps/ui-design-system';
 
 import { WithdrawalForm } from '../components/withdrawal-form/withdrawal-form';
 import { WithdrawalSkeleton } from '../components/withdrawal-skeleton/withdrawal-skeleton';
@@ -25,14 +25,18 @@ export const WithdrawScreen: FC = () => {
       getMaxWithdrawalAmountResponse.state === RequestState.LOADING ||
       getCollateralValueReponse.state === RequestState.LOADING
     ) {
-      return <WithdrawalSkeleton />;
+      return (
+        <div className="loader-container">
+          <Loader />
+        </div>
+      );
     }
 
     if (
       getMaxWithdrawalAmountResponse.state === RequestState.ERROR ||
       getCollateralValueReponse.state === RequestState.ERROR
     ) {
-      return <div>Something went wrong :( </div>;
+      return <div>Something went wrong, try refreshing :( </div>;
     }
 
     if (
