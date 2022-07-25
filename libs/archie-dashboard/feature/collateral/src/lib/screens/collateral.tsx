@@ -1,13 +1,21 @@
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
+import { CollateralCurrency } from '@archie-webapps/shared/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Loading, Card, Table, Badge, SubtitleS, ParagraphM, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import {
+  Loading,
+  Card,
+  Table,
+  Badge,
+  SubtitleS,
+  ParagraphM,
+  ParagraphXS,
+} from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
-import { CollateralCurrency } from '@archie-webapps/util-constants';
-import { LoanToValueColor, LoanToValueText } from '@archie-webapps/util-constants';
 
 import { AssetsAllocation } from '../components/assets-allocation/assets-allocation';
 import { tableColumns } from '../fixtures/table-fixture';

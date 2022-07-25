@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
+import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { ButtonOutline, CollateralCurrency } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
-import { CollateralAssets } from '@archie-webapps/util-constants';
 
 import { AllocationCellStyled, ChangeCellStyled, ActionsCellStyled } from './table-fixtures.styled';
 

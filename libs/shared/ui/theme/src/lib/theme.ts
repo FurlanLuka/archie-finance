@@ -141,7 +141,7 @@ export const theme: Theme = {
   loadingBorder: colors.neutralgray_300,
   loadingBorderTop: colors.neutralgray_400,
   // inline loader
-  loaderBackground: colors.neutralgray_200,
+  loaderBackground: colors.teal_600,
   // table
   tableBorderOuther: colors.neutralgray_500,
   tableBorderInner: colors.neutralgray_200,
