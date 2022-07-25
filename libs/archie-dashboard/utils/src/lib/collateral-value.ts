@@ -1,8 +1,8 @@
 import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 
-export function calculateCollateralCreditValue(collateral: CollateralValue[]): number {
-  return collateral.reduce((sum, collateralEntry) => {
+export const calculateCollateralCreditValue = (collateral: CollateralValue[]): number => 
+  collateral.reduce((sum, collateralEntry) => {
     const assetInfo = CollateralAssets[collateralEntry.asset];
 
     if (!assetInfo) {
@@ -10,14 +10,16 @@ export function calculateCollateralCreditValue(collateral: CollateralValue[]): n
 
       return sum;
     }
+    
     const entryValue = collateralEntry.price * (assetInfo.loan_to_value / 100);
 
     return sum + entryValue;
   }, 0);
-}
 
-export function calculateCollateralTotalValue(collateral: CollateralValue[]): number {
-  return collateral.reduce((sum, collateralEntry) => {
-    return sum + collateralEntry.price;
-  }, 0);
-}
+
+export const calculateCollateralTotalValue = (collateral: CollateralValue[]): number => 
+  collateral.reduce((sum, collateralEntry) => sum + collateralEntry.price, 0);
+
+
+export const getFormattedValue = (value: number) => 
+  value.toLocaleString(undefined, { maximumFractionDigits: 2 });
