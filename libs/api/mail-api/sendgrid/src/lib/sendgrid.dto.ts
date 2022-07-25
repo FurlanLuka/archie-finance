@@ -44,3 +44,13 @@ export class MarginCallStartedDto
 export class LtvLimitApproachingDto
   extends MarginCallBaseDto
   implements LtvLimitApproaching {}
+
+export class KycSubmittedDto {
+  userId: string;
+  firstName: string;
+}
+
+export class EmailVerifiedDto {
+  userId: string;
+  email: string;
+}

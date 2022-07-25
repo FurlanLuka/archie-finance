@@ -5,9 +5,13 @@ import { SendgridService } from './sendgrid.service';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
 import { EmailDataFactoryModule } from '@archie/api/mail-api/utils/email-data-factory';
+import { CryptoModule } from '@archie/api/utils/crypto';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Contact } from './contact.entity';
 
 @Module({
   imports: [
+    TypeOrmModule.forFeature([Contact]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -18,6 +22,13 @@ import { EmailDataFactoryModule } from '@archie/api/mail-api/utils/email-data-fa
         connectionManagerOptions: {
           heartbeatIntervalInSeconds: 10,
         },
+      }),
+    }),
+    CryptoModule.register({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
       }),
     }),
     EmailDataFactoryModule,

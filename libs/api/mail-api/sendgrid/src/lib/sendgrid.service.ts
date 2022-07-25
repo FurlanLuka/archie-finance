@@ -12,6 +12,10 @@ import { InternalApiService } from '@archie/api/utils/internal';
 import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
 import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
 import { EmailDataFactoryService } from '@archie/api/mail-api/utils/email-data-factory';
+import { CryptoService } from '@archie/api/utils/crypto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Contact } from './contact.entity';
 
 @Injectable()
 export class SendgridService {
@@ -19,7 +23,37 @@ export class SendgridService {
     private configService: ConfigService,
     private internalApiService: InternalApiService,
     private emailDataFactory: EmailDataFactoryService,
+    private cryptoService: CryptoService,
+    @InjectRepository(Contact) private contactRepository: Repository<Contact>,
   ) {}
+
+  public async saveFirstName(userId: string, firstName: string): Promise<void> {
+    const encryptedFirstName: string = this.cryptoService.encrypt(firstName);
+
+    await this.contactRepository.upsert(
+      {
+        userId,
+        encryptedFirstName,
+      },
+      {
+        conflictPaths: ['userId'],
+      },
+    );
+  }
+
+  public async saveEmail(userId: string, email: string): Promise<void> {
+    const encryptedEmail: string = this.cryptoService.encrypt(email);
+
+    await this.contactRepository.upsert(
+      {
+        userId,
+        encryptedEmail,
+      },
+      {
+        conflictPaths: ['userId'],
+      },
+    );
+  }
 
   public async sendMarginCallCompletedMail(marginCall: MarginCallCompleted) {
     const emailAddress: GetEmailAddressResponse =

@@ -28,9 +28,11 @@ export class UserService {
       id: userId,
     });
 
+    console.log(user);
     if (user.email_verified) {
       this.amqpConnection.publish(EMAIL_VERIFIED_EXCHANGE.name, '', {
         userId,
+        email: user.email,
       });
     }
 
