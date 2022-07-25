@@ -10,7 +10,7 @@ import { Channel, ConsumeMessage } from 'amqplib';
 export function Subscribe(
   exchange: RabbitMQExchangeConfig,
   queueName: string,
-  requeueOnError = true,
+  requeueOnError = false,
 ) {
   return applyDecorators(
     RabbitSubscribe({
@@ -23,7 +23,7 @@ export function Subscribe(
       },
       errorHandler: (channel: Channel, msg: ConsumeMessage, error) => {
         Logger.error({
-          message: 'Event handling failed',
+          message: `Event handling failed for exchange "${exchange.name}"`,
           payload: msg.content.toString(),
           error,
           requeue: requeueOnError,

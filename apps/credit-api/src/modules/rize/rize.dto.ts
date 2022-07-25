@@ -48,7 +48,7 @@ export class MarginCallStartedDto {
   userId: string;
 }
 
-export class CardActivatedDto {
+export class CreditLimitDto {
   userId: string;
-  customerId: string;
+  amount: number;
 }

@@ -51,7 +51,8 @@
       "outputs": ["coverage/apps/credit-api"],
       "options": {
         "jestConfig": "apps/credit-api/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "runInBand": true
       }
     },
     "build-docker": {

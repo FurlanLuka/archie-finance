@@ -103,6 +103,7 @@ export class KycService {
 
     this.amqpConnection.publish(KYC_SUBMITTED_EXCHANGE.name, '', {
       userId,
+      firstName: payload.firstName,
     });
 
     return {

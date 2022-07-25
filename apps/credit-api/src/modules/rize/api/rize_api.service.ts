@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@archie/api/utils/config';
 import Rize from '@rizefinance/rize-js';
 import {
@@ -12,6 +12,7 @@ import {
   DebitCardAccessToken,
   Transaction,
   AdjustmentType,
+  RizeTransaction,
 } from './rize_api.interfaces';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
 import {
@@ -58,6 +59,51 @@ export class RizeApiService {
     });
   }
 
+  public connectToRizeMessagingQueue() {
+    const rmqClient = this.rizeClient.rmq.connect(
+      this.configService.get(ConfigVariables.RIZE_MQ_HOST),
+      this.configService.get(ConfigVariables.RIZE_PROGRAM_ID),
+      this.configService.get(ConfigVariables.RIZE_MQ_TOPIC_PREFIX),
+      this.configService.get(ConfigVariables.RIZE_MQ_USERNAME),
+      this.configService.get(ConfigVariables.RIZE_MQ_PASSWORD),
+    );
+
+    rmqClient.on('connecting', function (_connector) {
+      Logger.log({
+        message: 'Connecting to Rize messaging queue',
+      });
+    });
+
+    rmqClient.on('connect', function (_connector) {
+      Logger.log({
+        message: 'Connected to Rize messaging queue',
+      });
+    });
+
+    rmqClient.on('error', function (_error) {
+      // error includes login credentials
+      Logger.error({
+        message: 'ERROR connecting to Rize messaging queue',
+      });
+    });
+
+    return rmqClient;
+  }
+
+  public subscribeToTopic(
+    client,
+    topic:
+      | 'customer'
+      | 'debit_card'
+      | 'synthetic_account'
+      | 'synthetic_account'
+      | 'transfer'
+      | 'transaction',
+    listener: (err: Error, msg, ack, nack) => void,
+  ): void {
+    client.subscribeToRizeTopic(topic, topic, listener, 'client-individual');
+  }
+
   public async searchCustomers(userId: string): Promise<Customer | null> {
     const customers: RizeList<Customer> =
       await this.rizeClient.customer.getList({
@@ -66,6 +112,14 @@ export class RizeApiService {
       });
 
     return customers.data[0] ?? null;
+  }
+
+  public async getTransaction(txnId: string): Promise<RizeTransaction> {
+    const transaction: RizeTransaction = await this.rizeClient.transaction.get(
+      txnId,
+    );
+
+    return transaction;
   }
 
   public async createCustomer(userId: string, email: string): Promise<string> {
@@ -203,6 +257,37 @@ export class RizeApiService {
       adjustmentTypesResponse.data.data.find(
         (adjustmentType: AdjustmentType) =>
           adjustmentType.name === 'credit_limit_update_increase',
+      );
+
+    await this.rizeApiClient.post(
+      `adjustments`,
+      {
+        customer_uid: customerId,
+        usd_adjustment_amount: adjustmentAmount,
+        adjustment_type_uid: increaseCreditAdjustmentType.uid,
+      },
+      {
+        headers: {
+          Authorization: await this.getToken(),
+        },
+      },
+    );
+  }
+
+  public async decreaseCreditLimit(
+    customerId: string,
+    adjustmentAmount: number,
+  ): Promise<void> {
+    const adjustmentTypesResponse: AxiosResponse<RizeList<AdjustmentType>> =
+      await this.rizeApiClient.get('adjustment_types', {
+        headers: {
+          Authorization: await this.getToken(),
+        },
+      });
+    const increaseCreditAdjustmentType: AdjustmentType =
+      adjustmentTypesResponse.data.data.find(
+        (adjustmentType: AdjustmentType) =>
+          adjustmentType.name === 'credit_limit_update_decrease',
       );
 
     await this.rizeApiClient.post(

@@ -48,20 +48,9 @@ export class CreditService {
     const assetList: GetAssetListResponse =
       await this.internalApiService.getAssetList();
 
-    let totalCollateralValue: number = collateralValue.reduce(
-      (sum: number, value: CollateralValue) => {
-        if (assetList[value.asset] === undefined) {
-          return sum;
-        }
-
-        const assetInformation: AssetInformation = assetList[value.asset];
-
-        const actualCollateralValue: number =
-          (value.price / 100) * assetInformation.ltv;
-
-        return sum + Math.floor(actualCollateralValue);
-      },
-      0,
+    let totalCollateralValue: number = this.getCreditLimit(
+      collateralValue,
+      assetList,
     );
 
     if (totalCollateralValue < this.MINIMUM_CREDIT) {
@@ -93,6 +82,24 @@ export class CreditService {
       availableCredit: totalCollateralValue,
       totalCredit: totalCollateralValue,
     };
+  }
+
+  public getCreditLimit(
+    collateralValue: GetCollateralValueResponse,
+    assetList: GetAssetListResponse,
+  ): number {
+    return collateralValue.reduce((sum: number, value: CollateralValue) => {
+      if (assetList[value.asset] === undefined) {
+        return sum;
+      }
+
+      const assetInformation: AssetInformation = assetList[value.asset];
+
+      const actualCollateralValue: number =
+        (value.price / 100) * assetInformation.ltv;
+
+      return sum + Math.floor(actualCollateralValue);
+    }, 0);
   }
 
   public async getCredit(userId: string): Promise<GetCreditResponse> {
