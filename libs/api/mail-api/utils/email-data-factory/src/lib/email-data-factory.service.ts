@@ -12,11 +12,11 @@ export class EmailDataFactoryService {
   }
 
   public createCollateralLiquidatedMail(
-    kyc: GetKycResponse,
+    firstName: string,
     marginCall: MarginCallCompleted,
   ) {
     return {
-      firstName: kyc.firstName,
+      firstName: firstName,
       liquidatedAmount: this.roundValue(marginCall.liquidationAmount),
       collateralValue: this.roundValue(marginCall.collateralBalance),
       ltv: this.roundValue(marginCall.ltv),
@@ -24,11 +24,11 @@ export class EmailDataFactoryService {
   }
 
   public createInfoData<T extends MarginCallBase>(
-    kyc: GetKycResponse,
+    firstName: string,
     marginCall: T,
   ) {
     return {
-      firstName: kyc.firstName,
+      firstName: firstName,
       collateralValue: this.roundValue(marginCall.collateralBalance),
       ltv: this.roundValue(marginCall.ltv),
       marginCallValue: this.roundValue(marginCall.priceForMarginCall),

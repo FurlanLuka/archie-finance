@@ -20,3 +20,8 @@ export interface MarginCallCompleted extends MarginCallBase {
   liquidation: Liquidation[];
   liquidationAmount: number;
 }
+
+export interface DecryptedContact {
+  firstName: string;
+  email: string;
+}
