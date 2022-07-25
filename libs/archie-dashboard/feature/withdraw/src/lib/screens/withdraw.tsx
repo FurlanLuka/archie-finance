@@ -2,10 +2,10 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
-import { useGetCollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-collateral-value';
-import { useGetMaxWithdrawalAmount } from '@archie-webapps/shared/data-access-archie-api/collateral/hooks/use-get-max-withdrawal-amount';
-import { RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
-import { Card, Loader, ParagraphM, ParagraphS } from '@archie-webapps/ui-design-system';
+import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
+import { useGetMaxWithdrawalAmount } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-max-withdrawal-amount';
+import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { Card, Loader, ParagraphM, ParagraphS } from '@archie-webapps/shared/ui/design-system';
 
 import { WithdrawalForm } from '../components/withdrawal-form/withdrawal-form';
 

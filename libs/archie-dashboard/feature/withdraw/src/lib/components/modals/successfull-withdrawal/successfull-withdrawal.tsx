@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonPrimary, Modal, ParagraphM, ParagraphS } from '@archie-webapps/ui-design-system';
+import { ButtonPrimary, Modal, ParagraphM, ParagraphS } from '@archie-webapps/shared/ui/design-system';
 
 import { SuccessfullWithdrawalModalStyled } from './successfull-withdrawal.styled';
 

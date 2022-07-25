@@ -1,8 +1,5 @@
-import {
-  calculateCollateralCreditValue,
-  calculateCollateralTotalValue,
-} from '@archie-webapps/archie-dashboard/util/collateral';
-import { CollateralValue } from '@archie-webapps/shared/data-access-archie-api/collateral/api/get-collateral-value';
+import { calculateCollateralCreditValue, calculateCollateralTotalValue } from '@archie-webapps/archie-dashboard/utils';
+import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 
 interface GetUpdatedCreditAndTotalResult {
   updatedCreditValue: number;

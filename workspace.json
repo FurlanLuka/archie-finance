@@ -11,7 +11,7 @@
     "archie-dashboard-feature-rewards": "libs/archie-dashboard/feature/rewards",
     "archie-dashboard-feature-settings": "libs/archie-dashboard/feature/settings",
     "archie-dashboard-feature-withdraw": "libs/archie-dashboard/feature/withdraw",
-    "archie-dashboard-util-collateral": "libs/archie-dashboard/util/collateral",
+    "archie-dashboard-utils": "libs/archie-dashboard/utils",
     "shared-constants": "libs/shared/constants",
     "shared-data-access-archie-api": "libs/shared/data-access/archie-api",
     "shared-data-access-session": "libs/shared/data-access/session",

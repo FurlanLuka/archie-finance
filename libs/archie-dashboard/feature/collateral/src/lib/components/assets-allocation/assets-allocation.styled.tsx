@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { CollateralAssetsColor } from '@archie-webapps/util-constants';
+import { CollateralAssetsColor } from '@archie-webapps/shared/constants';
 
 interface AssetsAllocationStyledProps {
   btc: number;

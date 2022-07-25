@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { ParagraphXXS } from '@archie-webapps/ui-design-system';
+import { ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
 
 import { AssetsAllocationStyled } from './assets-allocation.styled';
 

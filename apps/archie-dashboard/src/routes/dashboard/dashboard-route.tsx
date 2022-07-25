@@ -3,11 +3,11 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Header, Navigation } from '@archie-webapps/archie-dashboard/components';
 import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature/collateral';
-import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature/withdraw';
 import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature/history';
 import { WalletAndCollateralScreen } from '@archie-webapps/archie-dashboard/feature/home';
 import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature/rewards';
 import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature/settings';
+import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature/withdraw';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
