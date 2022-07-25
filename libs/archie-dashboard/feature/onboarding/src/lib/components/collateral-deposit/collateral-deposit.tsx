@@ -1,6 +1,6 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 
-import { calculateCollateralCreditValue } from '@archie-webapps/archie-dashboard/util-collateral';
+import { calculateCollateralCreditValue } from '@archie-webapps/archie-dashboard/util/collateral';
 import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 

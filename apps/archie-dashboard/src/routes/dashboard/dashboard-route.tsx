@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Header, Navigation } from '@archie-webapps/archie-dashboard/components';
-import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature-collateral';
-import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature-withdraw';
+import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature/collateral';
+import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature/withdraw';
 import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature/history';
 import { WalletAndCollateralScreen } from '@archie-webapps/archie-dashboard/feature/home';
 import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature/rewards';
