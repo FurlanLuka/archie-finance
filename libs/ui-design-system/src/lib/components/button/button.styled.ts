@@ -49,8 +49,8 @@ const Button = styled.button<ButtonProps>`
   :after {
     content: '';
     position: absolute;
-    border: 2px solid ${({ theme }) => theme.loaderBorder};
-    border-top: 2px solid ${({ theme }) => theme.loaderBorderTop};
+    border: 2px solid ${({ theme }) => theme.loadingBorder};
+    border-top: 2px solid ${({ theme }) => theme.loadingBorderTop};
     border-radius: 100%;
     width: 1.75rem;
     height: 1.75rem;
@@ -67,18 +67,18 @@ export const ButtonPrimary = styled(Button)`
 
 export const ButtonOutline = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
-  color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonPrimary)};
-  border-color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonPrimary)};
+  color: ${({ theme, color, isDisabled}) => (isDisabled ? theme.buttonDisabled : color ?? theme.buttonPrimary)};
+  border-color: ${({ theme, color, isDisabled}) => (isDisabled ? theme.buttonDisabled : color ?? theme.buttonPrimary)};
 `;
 
 export const ButtonGhost = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
-  color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonGhost)};
-  border-color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonGhost)};
+  color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonGhost)};
+  border-color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonGhost)};
 `;
 
 export const ButtonLight = styled(Button)`
-  background-color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonLight)};
+  background-color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonLight)};
   color: ${({ theme, color }) => color ?? theme.textPrimary};
-  border-color: ${({ theme, isDisabled}) => (isDisabled ? theme.buttonDisabled : theme.buttonLight)};
+  border-color: ${({ theme, isDisabled }) => (isDisabled ? theme.buttonDisabled : theme.buttonLight)};
 `;

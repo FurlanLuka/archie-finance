@@ -10,6 +10,7 @@
     "archie-dashboard-feature-settings": "libs/archie-dashboard/feature-settings",
     "archie-dashboard-feature-wallet-and-collateral": "libs/archie-dashboard/feature-wallet-and-collateral",
     "archie-dashboard-feature-withdraw": "libs/archie-dashboard/feature-withdraw",
+    "archie-dashboard-util-collateral": "libs/archie-dashboard/util-collateral",
     "shared-data-access-archie-api": "libs/shared/data-access-archie-api",
     "shared-data-access-session": "libs/shared/data-access-session",
     "ui-design-system": "libs/ui-design-system",

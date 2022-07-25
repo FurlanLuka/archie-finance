@@ -1,11 +1,13 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
 
 import { AssetPrice } from '@archie-webapps/shared/data-access-archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access-archie-api/asset_price/hooks/use-get-asset-price';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { ButtonOutline, CollateralCurrency } from '@archie-webapps/ui-design-system';
+import { theme } from '@archie-webapps/ui-theme';
 import { CollateralAssets } from '@archie-webapps/util-constants';
 
 import { AllocationCellStyled, ChangeCellStyled, ActionsCellStyled } from './table-fixtures.styled';
@@ -49,6 +51,22 @@ const ChangeCell: FC<ChangeCellProps> = ({ id }) => {
   );
 };
 
+interface AllocationCellProps {
+  value: number;
+}
+
+const AllocationCell: FC<AllocationCellProps> = ({ value }) => (
+  <AllocationCellStyled>
+    <span data-tip={`${value}%`}>{value.toFixed(2)}%</span>
+    <ReactTooltip
+      textColor={theme.tooltipText}
+      backgroundColor={theme.tooltipBackground}
+      effect="solid"
+      delayHide={1000}
+    />
+  </AllocationCellStyled>
+);
+
 interface ActionsCellProps {
   id: string;
 }
@@ -59,7 +77,7 @@ const ActionsCell: FC<ActionsCellProps> = ({ id }) => {
 
   return (
     <ActionsCellStyled>
-      <ButtonOutline small onClick={() => navigate(`add/${id}`)}>
+      <ButtonOutline small color={theme.textPositive} onClick={() => navigate(`add/${id}`)}>
         {t('btn_add')}
       </ButtonOutline>
       <ButtonOutline small onClick={() => navigate(`withdraw/${id}`)}>
@@ -105,7 +123,7 @@ export const tableColumns = [
         accessor: 'allocation',
         width: 1,
         Cell: ({ value }: any) => {
-          return <AllocationCellStyled>{value}</AllocationCellStyled>;
+          return <AllocationCell value={value} />;
         },
       },
       {
