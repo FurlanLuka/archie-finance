@@ -49,7 +49,7 @@ export const CollateralScreen: FC = () => {
         change: {
           collateral_asset: item.asset,
         },
-        allocation: `${getAssetsAllocationPercentage(item.price).toFixed(2)}%`,
+        allocation: getAssetsAllocationPercentage(item.price),
         actions: {
           collateral_asset: item.asset,
         },
