@@ -77,10 +77,12 @@ export interface Theme {
   // tooltip
   tooltipBackground: string;
   tooltipText: string;
-  // loader
+  // loading screen
+  loadingBackground: string;
+  loadingBorder: string;
+  loadingBorderTop: string;
+  // inline loader
   loaderBackground: string;
-  loaderBorder: string;
-  loaderBorderTop: string;
   // table
   tableBorderOuther: string;
   tableBorderInner: string;
@@ -134,10 +136,12 @@ export const theme: Theme = {
   // tooltip
   tooltipBackground: colors.coral_500,
   tooltipText: colors.white,
-  // loader
-  loaderBackground: colors.teal_800,
-  loaderBorder: colors.neutralgray_300,
-  loaderBorderTop: colors.neutralgray_400,
+  // loading screen
+  loadingBackground: colors.teal_800,
+  loadingBorder: colors.neutralgray_300,
+  loadingBorderTop: colors.neutralgray_400,
+  // inline loader
+  loaderBackground: colors.neutralgray_200,
   // table
   tableBorderOuther: colors.neutralgray_500,
   tableBorderInner: colors.neutralgray_200,

@@ -6,6 +6,7 @@ export * from './lib/components/header/header';
 export * from './lib/components/input-range/input-range';
 export * from './lib/components/input-text/input-text.styled';
 export * from './lib/components/layout/layout.styled';
+export * from './lib/components/loader/loader';
 export * from './lib/components/loading/loading';
 export * from './lib/components/modal/modal';
 export * from './lib/components/table/table';

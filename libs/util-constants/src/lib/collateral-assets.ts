@@ -8,7 +8,6 @@ export enum CollateralCurrency {
 }
 
 export interface CollateralAsset {
-  // TODO icon to string
   id: string;
   name: string;
   short: string;
@@ -55,7 +54,7 @@ export const CollateralAssets: Record<CollateralCurrency | string, CollateralAss
     interest_rate: 15,
     url: 'https://etherscan.io/address',
   },
-};
+}
 
 export const CollateralAssetsColor = {
   [CollateralCurrency.BTC]: '#f7931a',
