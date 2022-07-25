@@ -1,5 +1,4 @@
 import {
-  formatFiles,
   generateFiles,
   getWorkspaceLayout,
   offsetFromRoot,

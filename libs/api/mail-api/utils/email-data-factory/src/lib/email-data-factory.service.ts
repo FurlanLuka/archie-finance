@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
 import {
-  MarginCallBase,
-  MarginCallCompleted,
-} from '../../../../sendgrid/src/lib/sendgrid.interfaces';
+  CollateralLiquidatedMail,
+  MarginInfoMail,
+} from './email-data-factory.interfaces';
 
 @Injectable()
 export class EmailDataFactoryService {
@@ -11,9 +10,9 @@ export class EmailDataFactoryService {
     return price.toFixed(2);
   }
 
-  public createCollateralLiquidatedMail(
+  public createCollateralLiquidatedMail<T extends CollateralLiquidatedMail>(
     firstName: string,
-    marginCall: MarginCallCompleted,
+    marginCall: T,
   ) {
     return {
       firstName: firstName,
@@ -23,7 +22,7 @@ export class EmailDataFactoryService {
     };
   }
 
-  public createInfoData<T extends MarginCallBase>(
+  public createInfoData<T extends MarginInfoMail>(
     firstName: string,
     marginCall: T,
   ) {
