@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { dashboardNavItems } from '@archie-webapps/shared/constants';
+import { dashboardNavItems } from '@archie-webapps/archie-dashboard/constants';
 import { useAuthenticatedSession } from '@archie-webapps/shared/data-access/session';
 import { ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';

@@ -1,10 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 
+import { Step } from '@archie-webapps/archie-dashboard/constants';
+import { Header } from '@archie-webapps/archie-dashboard/ui/components';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
-import { Header, Loading, Page } from '@archie-webapps/shared/ui/design-system';
-import { Step } from '@archie-webapps/archie-dashboard/constants';
+import { Loading, Page } from '@archie-webapps/shared/ui/design-system';
 
 import { CardScreen } from '../card-screen/card-screen';
 import { CollateralizationScreen } from '../collateralization-screen/collateralization-screen';

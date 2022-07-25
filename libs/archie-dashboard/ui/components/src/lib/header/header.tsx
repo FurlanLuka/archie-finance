@@ -1,12 +1,10 @@
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { dashboardNavItems } from '@archie-webapps/archie-dashboard/constants';
 import { useAuthenticatedSession } from '@archie-webapps/shared/data-access/session';
+import { Container, ParagraphS } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
-import { dashboardNavItems } from '@archie-webapps/shared/constants';
-
-import { Container } from '../layout/layout.styled';
-import { ParagraphS } from '../typography/typography.styled';
 
 import { HeaderStyled, MobileNav } from './header.styled';
 

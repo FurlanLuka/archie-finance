@@ -22,6 +22,7 @@
       "@archie-webapps/archie-dashboard/feature/onboarding": ["libs/archie-dashboard/feature/onboarding/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature/rewards": ["libs/archie-dashboard/feature/rewards/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature/settings": ["libs/archie-dashboard/feature/settings/src/index.ts"],
+      "@archie-webapps/archie-dashboard/ui/components": ["libs/archie-dashboard/ui/components/src/index.ts"],
       "@archie-webapps/shared/constants": ["libs/shared/constants/src/index.ts"],
       "@archie-webapps/shared/data-access/archie-api/*": ["libs/shared/data-access/archie-api/src/*"],
       "@archie-webapps/shared/data-access/session": ["libs/shared/data-access/session/src/index.ts"],

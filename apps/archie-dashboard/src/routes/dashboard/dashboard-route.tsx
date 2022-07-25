@@ -5,10 +5,11 @@ import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature/history'
 import { WalletAndCollateralScreen } from '@archie-webapps/archie-dashboard/feature/home';
 import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature/rewards';
 import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature/settings';
+import { Header } from '@archie-webapps/archie-dashboard/ui/components';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
-import { Header, Loading, Page, Container } from '@archie-webapps/shared/ui/design-system';
+import { Loading, Page, Container } from '@archie-webapps/shared/ui/design-system';
 
 import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
 import { Navigation } from '../../components/navigation/navigation';
