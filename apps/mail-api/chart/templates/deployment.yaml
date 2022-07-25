@@ -78,7 +78,6 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
             - name: DD_LOGS_INJECTION
               value: 'true'
-
             - name: TYPEORM_USERNAME
               valueFrom:
                 secretKeyRef:
