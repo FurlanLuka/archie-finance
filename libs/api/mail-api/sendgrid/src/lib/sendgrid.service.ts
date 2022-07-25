@@ -4,69 +4,25 @@ import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
 import { SendEmailInternalError } from './sendgrid.errors';
 import {
-  DecryptedContact,
   LtvLimitApproaching,
   MarginCallCompleted,
   MarginCallStarted,
 } from './sendgrid.interfaces';
 import { EmailDataFactoryService } from '@archie/api/mail-api/utils/email-data-factory';
-import { CryptoService } from '@archie/api/utils/crypto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Contact } from './contact.entity';
+import { ContactService, DecryptedContact } from '@archie/api/mail-api/contact';
 
 @Injectable()
 export class SendgridService {
   constructor(
     private configService: ConfigService,
     private emailDataFactory: EmailDataFactoryService,
-    private cryptoService: CryptoService,
-    @InjectRepository(Contact) private contactRepository: Repository<Contact>,
+    private contactService: ContactService,
   ) {}
 
-  private async getContact(userId: string): Promise<DecryptedContact> {
-    const contact: Contact = await this.contactRepository.findOneBy({
-      userId,
-    });
-
-    const [firstName, email] = this.cryptoService.decryptMultiple([
-      contact.encryptedFirstName,
-      contact.encryptedEmail,
-    ]);
-
-    return { firstName, email };
-  }
-
-  public async saveFirstName(userId: string, firstName: string): Promise<void> {
-    const encryptedFirstName: string = this.cryptoService.encrypt(firstName);
-
-    await this.contactRepository.upsert(
-      {
-        userId,
-        encryptedFirstName,
-      },
-      {
-        conflictPaths: ['userId'],
-      },
-    );
-  }
-
-  public async saveEmail(userId: string, email: string): Promise<void> {
-    const encryptedEmail: string = this.cryptoService.encrypt(email);
-
-    await this.contactRepository.upsert(
-      {
-        userId,
-        encryptedEmail,
-      },
-      {
-        conflictPaths: ['userId'],
-      },
-    );
-  }
-
   public async sendMarginCallCompletedMail(marginCall: MarginCallCompleted) {
-    const contact: DecryptedContact = await this.getContact(marginCall.userId);
+    const contact: DecryptedContact = await this.contactService.getContact(
+      marginCall.userId,
+    );
 
     if (marginCall.liquidationAmount > 0) {
       await this.sendEmail(
@@ -91,7 +47,9 @@ export class SendgridService {
   }
 
   public async sendMarginCallStartedMail(marginCall: MarginCallStarted) {
-    const contact: DecryptedContact = await this.getContact(marginCall.userId);
+    const contact: DecryptedContact = await this.contactService.getContact(
+      marginCall.userId,
+    );
 
     await this.sendEmail(
       contact.email,
@@ -103,7 +61,9 @@ export class SendgridService {
   }
 
   public async sendLtvLimitApproachingMail(marginCall: LtvLimitApproaching) {
-    const contact: DecryptedContact = await this.getContact(marginCall.userId);
+    const contact: DecryptedContact = await this.contactService.getContact(
+      marginCall.userId,
+    );
 
     await this.sendEmail(
       contact.email,

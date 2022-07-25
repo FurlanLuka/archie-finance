@@ -8,6 +8,7 @@
     "api-collateral-api-constants": "libs/api/collateral-api/constants",
     "api-credit-api-constants": "libs/api/credit-api/constants",
     "api-mail-api-constants": "libs/api/mail-api/constants",
+    "api-mail-api-contact": "libs/api/mail-api/contact",
     "api-mail-api-sendgrid": "libs/api/mail-api/sendgrid",
     "api-mail-api-utils-email-data-factory": "libs/api/mail-api/utils/email-data-factory",
     "api-onboarding-api-constants": "libs/api/onboarding-api/constants",

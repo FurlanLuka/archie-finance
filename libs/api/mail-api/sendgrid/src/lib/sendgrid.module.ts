@@ -6,12 +6,10 @@ import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
 import { EmailDataFactoryModule } from '@archie/api/mail-api/utils/email-data-factory';
 import { CryptoModule } from '@archie/api/utils/crypto';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Contact } from './contact.entity';
+import { ContactModule } from '@archie/api/mail-api/contact';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Contact]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -32,6 +30,7 @@ import { Contact } from './contact.entity';
       }),
     }),
     EmailDataFactoryModule,
+    ContactModule,
   ],
   controllers: [SendgirdQueueController],
   providers: [SendgridService],

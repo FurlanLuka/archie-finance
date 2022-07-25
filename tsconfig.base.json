@@ -33,6 +33,9 @@
       "@archie/api/mail-api/constants": [
         "libs/api/mail-api/constants/src/index.ts"
       ],
+      "@archie/api/mail-api/contact": [
+        "libs/api/mail-api/contact/src/index.ts"
+      ],
       "@archie/api/mail-api/sendgrid": [
         "libs/api/mail-api/sendgrid/src/index.ts"
       ],

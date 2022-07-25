@@ -11,9 +11,7 @@ import {
 import { ConfigService } from '@archie/api/utils/config';
 import {
   AppliedToWaitlistDto,
-  EmailVerifiedDto,
   JoinedWaitlistDto,
-  KycSubmittedDto,
   LtvLimitApproachingDto,
   MarginCallCompletedDto,
   MarginCallStartedDto,
@@ -24,10 +22,6 @@ import {
   MARGIN_CALL_COMPLETED_EXCHANGE,
   MARGIN_CALL_STARTED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
-import {
-  EMAIL_VERIFIED_EXCHANGE,
-  KYC_SUBMITTED_EXCHANGE,
-} from '@archie/api/user-api/constants';
 
 @Controller()
 export class SendgirdQueueController {
@@ -73,15 +67,5 @@ export class SendgirdQueueController {
     payload: LtvLimitApproachingDto,
   ): Promise<void> {
     await this.sendgridService.sendLtvLimitApproachingMail(payload);
-  }
-
-  @Subscribe(KYC_SUBMITTED_EXCHANGE, SERVICE_QUEUE_NAME)
-  async kycSubmittedHandler(payload: KycSubmittedDto): Promise<void> {
-    await this.sendgridService.saveFirstName(payload.userId, payload.firstName);
-  }
-
-  @Subscribe(EMAIL_VERIFIED_EXCHANGE, SERVICE_QUEUE_NAME)
-  async emailVerifiedHandler(payload: EmailVerifiedDto): Promise<void> {
-    await this.sendgridService.saveEmail(payload.userId, payload.email);
   }
 }
