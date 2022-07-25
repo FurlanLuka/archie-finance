@@ -11,11 +11,14 @@ import {
   ConfigVariables,
 } from '@archie/api/credit-api/constants';
 import { CreditModule } from '../credit/credit.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Credit } from '../credit/credit.entity';
 
 @Module({
   controllers: [RizeController, RizeQueueController],
   providers: [RizeService],
   imports: [
+    TypeOrmModule.forFeature([Credit]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       inject: [ConfigService],

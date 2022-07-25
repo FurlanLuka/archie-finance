@@ -195,10 +195,7 @@ export class FireblocksWebhookService {
         '',
         {
           asset: assetId,
-          destinationAddress: transaction.destinationAddress,
-          status: transaction.status,
           transactionId: transaction.id,
-          withdrawalAmount: transaction.amount,
           userId: userVaultAccount.userId,
         },
       );

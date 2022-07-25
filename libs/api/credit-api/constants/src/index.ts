@@ -19,7 +19,12 @@ export enum ConfigVariables {
   RIZE_ENVIRONMENT = 'RIZE_ENVIRONMENT',
   RIZE_PROGRAM_ID = 'RIZE_PROGRAM_ID',
   RIZE_HMAC_KEY = 'RIZE_HMAC_KEY',
+  RIZE_MQ_HOST = 'RIZE_MQ_HOST',
+  RIZE_MQ_TOPIC_PREFIX = 'RIZE_MQ_TOPIC_PREFIX',
+  RIZE_MQ_USERNAME = 'RIZE_MQ_USERNAME',
+  RIZE_MQ_PASSWORD = 'RIZE_MQ_PASSWORD',
   QUEUE_URL = 'QUEUE_URL',
+  LIQUIDATION_VAULT_ACCOUNT_ID = 'LIQUIDATION_VAULT_ACCOUNT_ID',
 }
 
 export const COLLATERAL_RECEIVED_EXCHANGE = {
@@ -37,13 +42,38 @@ export const PHONE_NUMBER_VERIFIED_EXCHANGE = {
   type: 'fanout',
 };
 
-export const COLLATERAL_DEPOSITED_EXCHANGE = {
-  name: 'credit.collateral.deposited.fx',
+export const MARGIN_CALL_COMPLETED_EXCHANGE = {
+  name: 'credit.margin_call.completed.fx',
   type: 'fanout',
 };
 
-export const MARGIN_CALL_COMPLETED_EXCHANGE = {
-  name: 'credit.margin_call.completed.fx',
+export const LTV_LIMIT_APPROACHING_EXCHANGE = {
+  name: 'credit.margin_call.ltv_limit_approaching.fx',
+  type: 'fanout',
+};
+
+export const MARGIN_CHECK_REQUESTED_EXCHANGE = {
+  name: 'credit.margin_call.check_requested.fx',
+  type: 'fanout',
+};
+
+export const CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE = {
+  name: 'credit.limit.adjust_requested.fx',
+  type: 'fanout',
+};
+
+export const CREDIT_LIMIT_DECREASED = {
+  name: 'credit.limit.decreased.fx',
+  type: 'fanout',
+};
+
+export const CREDIT_LIMIT_INCREASED = {
+  name: 'credit.limit.increased.fx',
+  type: 'fanout',
+};
+
+export const COLLATERAL_DEPOSITED_EXCHANGE = {
+  name: 'credit.collateral.deposited.fx',
   type: 'fanout',
 };
 
@@ -54,6 +84,11 @@ export const MARGIN_CALL_STARTED_EXCHANGE = {
 
 export const COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE = {
   name: 'credit.collateral.withdraw.initialized.fx',
+  type: 'fanout',
+};
+
+export const COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE = {
+  name: 'credit.collateral.withdraw.transaction.created.fx',
   type: 'fanout',
 };
 

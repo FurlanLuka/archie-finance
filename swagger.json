@@ -475,6 +475,17 @@
         ]
       }
     },
+    "/internal/margins/check": {
+      "post": {
+        "operationId": "MarginInternalController_checkMargin",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/v1/rize/users": {
       "post": {
         "operationId": "RizeController_createUser",
@@ -677,6 +688,95 @@
         }
       }
     },
+    "/v1/collateral/withdraw": {
+      "post": {
+        "operationId": "CollateralWithdrawalController_withdrawUserCollateral",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollateralWithdrawCreateDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "CollateralWithdrawalController_getUserWithdrawals",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/collateral/withdraw/{asset}/max_amount": {
+      "get": {
+        "operationId": "CollateralWithdrawalController_getUserMaxWithdrawalAmount",
+        "parameters": [
+          {
+            "name": "asset",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/v1/onboarding": {
       "get": {
         "operationId": "OnboardingController_getOnboardingRecord",
@@ -832,6 +932,78 @@
         ]
       }
     },
+    "/v1/user/mfa/enroll": {
+      "post": {
+        "operationId": "UserController_enrollMfa",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSendEnrollmentTicketResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/user/mfa/enrollments": {
+      "get": {
+        "operationId": "UserController_getMfaEnrollments",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EnrollmentDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/user/mfa/enrollment": {
+      "get": {
+        "operationId": "UserController_isMfaEnrolled",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/internal/user/email-address/{userId}": {
       "get": {
         "operationId": "InternalUserController_getEmailAddress",
@@ -969,6 +1141,9 @@
           "price": {
             "type": "number"
           },
+          "dailyChange": {
+            "type": "number"
+          },
           "currency": {
             "type": "string"
           }
@@ -976,6 +1151,7 @@
         "required": [
           "asset",
           "price",
+          "dailyChange",
           "currency"
         ]
       },
@@ -1016,6 +1192,9 @@
           },
           "interest": {
             "type": "number"
+          },
+          "liquidation_wallet": {
+            "type": "string"
           }
         },
         "required": [
@@ -1023,7 +1202,8 @@
           "coinapi_id",
           "network",
           "ltv",
-          "interest"
+          "interest",
+          "liquidation_wallet"
         ]
       },
       "GetCreditResponseDto": {
@@ -1180,6 +1360,7 @@
               "dispute",
               "external_transfer",
               "fee",
+              "credit",
               "internal_transfer",
               "other",
               "reversed_transfer",
@@ -1195,7 +1376,7 @@
               "failed"
             ]
           },
-          "amount": {
+          "us_dollar_amount": {
             "type": "string"
           },
           "settled_at": {
@@ -1203,15 +1384,52 @@
           },
           "created_at": {
             "type": "string"
+          },
+          "is_adjustment": {
+            "type": "boolean"
+          },
+          "mcc": {
+            "type": "string",
+            "nullable": true
+          },
+          "merchant_location": {
+            "type": "string",
+            "nullable": true
+          },
+          "merchant_name": {
+            "type": "string",
+            "nullable": true
+          },
+          "merchant_number": {
+            "type": "string",
+            "nullable": true
+          },
+          "denial_reason": {
+            "type": "string",
+            "nullable": true
+          },
+          "net_asset": {
+            "type": "string",
+            "enum": [
+              "positive",
+              "negative"
+            ]
           }
         },
         "required": [
           "description",
           "type",
           "status",
-          "amount",
+          "us_dollar_amount",
           "settled_at",
-          "created_at"
+          "created_at",
+          "is_adjustment",
+          "mcc",
+          "merchant_location",
+          "merchant_name",
+          "merchant_number",
+          "denial_reason",
+          "net_asset"
         ]
       },
       "CollateralDto": {
@@ -1259,6 +1477,25 @@
           "value"
         ]
       },
+      "CollateralWithdrawCreateDto": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string"
+          },
+          "withdrawalAmount": {
+            "type": "number"
+          },
+          "destinationAddress": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "asset",
+          "withdrawalAmount",
+          "destinationAddress"
+        ]
+      },
       "GetOnboardingResponseDto": {
         "type": "object",
         "properties": {
@@ -1268,13 +1505,13 @@
           "emailVerificationStage": {
             "type": "boolean"
           },
-          "phoneVerificationStage": {
-            "type": "boolean"
-          },
           "collateralizationStage": {
             "type": "boolean"
           },
           "cardActivationStage": {
+            "type": "boolean"
+          },
+          "mfaEnrollmentStage": {
             "type": "boolean"
           },
           "completed": {
@@ -1284,9 +1521,9 @@
         "required": [
           "kycStage",
           "emailVerificationStage",
-          "phoneVerificationStage",
           "collateralizationStage",
           "cardActivationStage",
+          "mfaEnrollmentStage",
           "completed"
         ]
       },
@@ -1467,6 +1704,52 @@
         },
         "required": [
           "isVerified"
+        ]
+      },
+      "GetSendEnrollmentTicketResponseDto": {
+        "type": "object",
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          },
+          "ticket_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id",
+          "ticket_url"
+        ]
+      },
+      "EnrollmentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "object"
+          },
+          "enrolled_at": {
+            "type": "string"
+          },
+          "last_auth": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "auth_method": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "enrolled_at",
+          "last_auth",
+          "type",
+          "auth_method"
         ]
       },
       "GetEmailAddressResponseDto": {

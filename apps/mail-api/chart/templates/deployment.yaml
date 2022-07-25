@@ -78,6 +78,31 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
             - name: DD_LOGS_INJECTION
               value: 'true'
+            - name: TYPEORM_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: username
+            - name: TYPEORM_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: password
+            - name: TYPEORM_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: hostname
+            - name: TYPEORM_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: port
+            - name: TYPEORM_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: database
             - name: SENDGRID_API_KEY
               valueFrom:
                 secretKeyRef:
@@ -98,11 +123,26 @@ spec:
                 secretKeyRef:
                   name: sendgrid-secrets
                   key: verify-email-template-id
-            - name: SENDGRID_WELCOME_EMAIL_TEMPLATE_ID
+            - name: SENDGRID_MARGIN_CALL_EXITED_TEMPLATE_ID
               valueFrom:
                 secretKeyRef:
                   name: sendgrid-secrets
-                  key: welcome-email-template-id
+                  key: margin-call-exited-template-id
+            - name: SENDGRID_MARGIN_CALL_REACHED_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: margin-call-reached-template-id
+            - name: SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: margin-call-in-danger-template-id
+            - name: SENDGRID_COLLATERAL_LIQUIDATED_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: sendgrid-secrets
+                  key: collateral-liquidated-template-id
             - name: ARCHIE_MARKETING_WEBSITE_URL
               valueFrom:
                 secretKeyRef:
@@ -113,6 +153,11 @@ spec:
                 secretKeyRef:
                   name: queue-secrets
                   key: queue-url
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: cryptography-secrets
+                  key: encryption-key
           {{- end }}
       imagePullSecrets:
         - name: regcred

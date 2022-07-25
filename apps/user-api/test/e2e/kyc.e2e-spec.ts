@@ -7,7 +7,7 @@ import {
 import { AppModule } from '../../src/app.module';
 import { clearDatabase } from '../e2e-test-utils/database.utils';
 import { Connection } from 'typeorm';
-import { AuthGuard } from '../../src/global/auth/auth.guard';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   generateUserAccessToken,
   verifyAccessToken,

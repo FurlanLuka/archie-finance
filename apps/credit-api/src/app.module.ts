@@ -7,8 +7,10 @@ import { HealthModule } from '@archie/api/utils/health';
 import { CreditModule } from './modules/credit/credit.module';
 import { InternalApiModule } from '@archie/api/utils/internal';
 import { AptoModule } from './modules/apto/apto.module';
+import { MarginModule } from './modules/margin/margin.module';
 import { RizeModule } from './modules/rize/rize.module';
 import { CollateralModule } from './modules/collateral/collateral.module';
+import { CollateralWithdrawalModule } from './modules/collateral/withdrawal/collateral_withdrawal.module';
 
 @Module({
   imports: [
@@ -24,6 +26,10 @@ import { CollateralModule } from './modules/collateral/collateral.module';
         ConfigVariables.RIZE_ENVIRONMENT,
         ConfigVariables.RIZE_PROGRAM_ID,
         ConfigVariables.RIZE_HMAC_KEY,
+        ConfigVariables.RIZE_MQ_HOST,
+        ConfigVariables.RIZE_MQ_PASSWORD,
+        ConfigVariables.RIZE_MQ_USERNAME,
+        ConfigVariables.RIZE_MQ_TOPIC_PREFIX,
         ConfigVariables.QUEUE_URL,
       ],
       parse: (_configVariable, value) => value,
@@ -61,8 +67,10 @@ import { CollateralModule } from './modules/collateral/collateral.module';
     HealthModule,
     CreditModule,
     AptoModule,
+    MarginModule,
     RizeModule,
     CollateralModule,
+    CollateralWithdrawalModule,
   ],
   controllers: [],
   providers: [],

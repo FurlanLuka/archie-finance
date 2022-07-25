@@ -1,3 +1,4 @@
+import { TransactionStatus } from 'fireblocks-sdk';
 import {
   Column,
   CreateDateColumn,
@@ -18,7 +19,7 @@ export class CollateralWithdrawal {
   @Column('varchar', { nullable: false, select: false })
   userId: string;
 
-  @Column('varchar', { nullable: false, select: false })
+  @Column('varchar', { nullable: true, select: false })
   transactionId: string;
 
   @Column('varchar', { nullable: false })
@@ -32,6 +33,9 @@ export class CollateralWithdrawal {
 
   @Column('varchar', { nullable: true })
   destinationAddress: string;
+
+  @Column('varchar', { nullable: false })
+  status: TransactionStatus;
 
   @CreateDateColumn()
   createdAt: Date;

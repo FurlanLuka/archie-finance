@@ -1,5 +1,11 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import {
+  CreateTransactionResponse,
   DepositAddressResponse,
   FireblocksSDK,
   GenerateAddressResponse,
@@ -14,6 +20,12 @@ import { AssetList } from '@archie/api/utils/interfaces/asset_information';
 import { UserVaultAccount } from '../user_vault_account/user_vault_account.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import {
+  CollateralWithdrawInitializedDto,
+  LiquidateAssetsDto,
+} from './fireblocks.dto';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE } from '@archie/api/credit-api/constants';
 
 @Injectable()
 export class FireblocksService {
@@ -24,6 +36,7 @@ export class FireblocksService {
     private userVaultAccountRepository: Repository<UserVaultAccount>,
     private configService: ConfigService,
     private cryptoService: CryptoService,
+    private amqpConnection: AmqpConnection,
   ) {
     this.fireblocksClient = new FireblocksSDK(
       cryptoService.base64decode(
@@ -90,20 +103,11 @@ export class FireblocksService {
     withdrawalAmount,
     userId,
     destinationAddress,
-  }: {
-    asset: string;
-    withdrawalAmount: number;
-    userId: string;
-    destinationAddress: string;
-  }): Promise<void> {
+    withdrawalId,
+  }: CollateralWithdrawInitializedDto): Promise<CreateTransactionResponse> {
     const assetList: AssetList = this.configService.get(
       ConfigVariables.ASSET_LIST,
     );
-
-    Logger.log({
-      code: 'ASSET_LIST',
-      ...assetList,
-    });
 
     const fireblocksAsset = assetList[asset];
 
@@ -111,7 +115,6 @@ export class FireblocksService {
       throw new NotFoundException();
     }
 
-    // TODO event based this?
     const userVaultAccount: UserVaultAccount | null =
       await this.userVaultAccountRepository.findOneBy({
         userId,
@@ -121,11 +124,6 @@ export class FireblocksService {
       // TODO handle no vault account or something
       return;
     }
-
-    Logger.log({
-      code: 'ASSET_INFORMATION',
-      ...fireblocksAsset,
-    });
 
     const transaction = await this.fireblocksClient.createTransaction({
       assetId: fireblocksAsset.fireblocks_id,
@@ -140,10 +138,96 @@ export class FireblocksService {
           address: destinationAddress,
         },
       },
+      extraParameters: {
+        withdrawalId,
+      },
     });
     Logger.log({
       code: 'FIREBLOCKS_SERVICE_CREATED_TRANSACTION',
       transaction,
     });
+    this.amqpConnection.publish(
+      COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE.name,
+      '',
+      {
+        withdrawalId,
+        transactionId: transaction.id,
+      },
+    );
+
+    return transaction;
+  }
+
+  public async liquidateAssets({
+    userId,
+    liquidation,
+  }: LiquidateAssetsDto): Promise<void> {
+    Logger.log({
+      code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
+      params: {
+        userId,
+        liquidation,
+      },
+    });
+    const internalVaultAccountId = this.configService.get(
+      ConfigVariables.FIREBLOCKS_VAULT_ACCOUNT_ID,
+    );
+    if (!internalVaultAccountId) {
+      Logger.error({
+        code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
+        message: 'Missing FIREBLOCKS_VAULT_ACCOUNT_ID env variable',
+      });
+      throw new InternalServerErrorException();
+    }
+
+    const assetList: AssetList = this.configService.get(
+      ConfigVariables.ASSET_LIST,
+    );
+
+    const userVaultAccount: UserVaultAccount | null =
+      await this.userVaultAccountRepository.findOneBy({
+        userId,
+      });
+
+    if (!userVaultAccount) {
+      Logger.error({
+        code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
+        message: `No user account for userId: ${userId}`,
+      });
+      throw new NotFoundException();
+    }
+    await Promise.all(
+      liquidation.map(async ({ asset, amount }) => {
+        const fireblocksAsset = assetList[asset];
+
+        if (!fireblocksAsset) {
+          Logger.error({
+            code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
+            message: `Asset ${asset} not in assetList}`,
+            asset,
+            assetList,
+          });
+          throw new NotFoundException();
+        }
+
+        const transaction = await this.fireblocksClient.createTransaction({
+          assetId: fireblocksAsset.fireblocks_id,
+          amount: amount,
+          source: {
+            type: PeerType.VAULT_ACCOUNT,
+            id: userVaultAccount.vaultAccountId,
+          },
+          destination: {
+            type: PeerType.VAULT_ACCOUNT,
+            id: internalVaultAccountId,
+          },
+        });
+        Logger.log({
+          code: 'FIREBLOCKS_SERVICE_LIQUIDATION_TRANSACTION_CREATED',
+          asset,
+          transaction,
+        });
+      }),
+    );
   }
 }
