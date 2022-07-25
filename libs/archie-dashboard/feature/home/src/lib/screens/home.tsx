@@ -23,7 +23,7 @@ import { RevealCardModal } from '../components/modals/reveal-card/reveal-card';
 import { tableData } from '../constants/table-data';
 import { tableColumns } from '../fixtures/table-fixture';
 
-import { WalletAndCollateralStyled } from './wallet-and-collateral.styled';
+import { HomeStyled } from './home.styled';
 
 export const WalletAndCollateralScreen: FC = () => {
   const { t } = useTranslation();
@@ -38,7 +38,7 @@ export const WalletAndCollateralScreen: FC = () => {
   const date = 'February, 2022';
 
   return (
-    <WalletAndCollateralStyled>
+    <HomeStyled>
       <SubtitleS className="title">{t('dashboard.title', { name })}</SubtitleS>
       <ParagraphXS color={theme.textSecondary} className="subtitle">
         {t('dashboard.subtitle', { date })}
@@ -179,6 +179,6 @@ export const WalletAndCollateralScreen: FC = () => {
           <Table columns={columns} data={data} />
         </Card>
       </div>
-    </WalletAndCollateralStyled>
+    </HomeStyled>
   );
 };
