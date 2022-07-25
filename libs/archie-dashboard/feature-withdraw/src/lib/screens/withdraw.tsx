@@ -8,7 +8,6 @@ import { RequestState } from '@archie-webapps/shared/data-access-archie-api/inte
 import { Card, Loader, ParagraphM, ParagraphS } from '@archie-webapps/ui-design-system';
 
 import { WithdrawalForm } from '../components/withdrawal-form/withdrawal-form';
-import { WithdrawalSkeleton } from '../components/withdrawal-skeleton/withdrawal-skeleton';
 
 import { WithdrawScreenStyled } from './withdraw.styled';
 
@@ -54,7 +53,7 @@ export const WithdrawScreen: FC = () => {
             {t('dashboard_withdraw.subtitle', {
               asset: asset.asset,
               assetAmount: asset.assetAmount,
-              assetValue: asset.price,
+              assetValue: asset.price.toFixed(2),
             })}
           </ParagraphS>
           <WithdrawalForm

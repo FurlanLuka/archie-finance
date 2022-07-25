@@ -9,13 +9,13 @@ const stretchdelay = keyframes`
   }
 `;
 
-export const LoaderStyled = styled.div`
+export const LoaderStyled = styled.div<{ color?: string }>`
   width: 50px;
   height: 35px;
 
   .rect {
     display: inline-block;
-    background-color: currentColor;
+    background-color: ${({ color, theme }) => color ?? theme.loaderBackground};
     height: 100%;
     width: 5px;
     margin-left: 2px;

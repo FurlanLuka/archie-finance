@@ -11,8 +11,4 @@ export const LoadingStyled = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-
-  .loader {
-    color: ${({ theme }) => theme.backgroundPrimary};
-  }
 `;

@@ -1,9 +1,15 @@
+import { useTheme } from 'styled-components';
+
 import { Loader } from '../loader/loader';
 
 import { LoadingStyled } from './loading.styled';
 
-export const Loading = () => (
-  <LoadingStyled>
-    <Loader className="loader" />
-  </LoadingStyled>
-);
+export const Loading = () => {
+  const { backgroundPrimary } = useTheme();
+
+  return (
+    <LoadingStyled>
+      <Loader color={backgroundPrimary} />
+    </LoadingStyled>
+  );
+};

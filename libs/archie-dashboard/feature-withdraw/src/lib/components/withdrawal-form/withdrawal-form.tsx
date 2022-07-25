@@ -47,7 +47,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
     mode: 'all',
     reValidateMode: 'onChange',
     defaultValues: {
-      withdrawAmount: 0,
+      withdrawAmount: maxAmount,
       withdrawAddress: '',
     },
     resolver: yupResolver(WithdrawSchema),
@@ -110,10 +110,10 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
           {withdrawalAmount > 0 && withdrawalAmount <= maxAmount && (
             <ParagraphXS color={theme.textSecondary} weight={500} className="credit-limit">
               {t('dashboard_withdraw.form.credit_change', {
-                initialCollateralValue,
-                initialCreditValue,
-                updatedCollateralValue,
-                updatedCreditValue,
+                initialCollateralValue: initialCollateralValue.toFixed(2),
+                initialCreditValue: initialCreditValue.toFixed(2),
+                updatedCollateralValue: updatedCollateralValue.toFixed(2),
+                updatedCreditValue: updatedCreditValue.toFixed(2),
               })}
             </ParagraphXS>
           )}
