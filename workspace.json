@@ -34,6 +34,7 @@
     "microservice": "libs/api/utils/microservice",
     "onboarding-api": "apps/onboarding-api",
     "plugin-deployment": "libs/plugin-deployment",
+    "plugin-migration-generator": "libs/plugin/migration-generator",
     "plugin-workspace-generator": "libs/plugin/workspace-generator",
     "referral-system-api": "apps/referral-system-api",
     "user-api": "apps/user-api"

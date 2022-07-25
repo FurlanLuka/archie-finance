@@ -11,7 +11,6 @@ export class MigrationGeneratorService {
   constructor(private dataSource: DataSource) {}
 
   public async generateMigration(serviceName: string) {
-    console.log('herererererere')
     const upSqls: string[] = [];
     const downSqls: string[] = [];
     const sqlInMemory = await this.dataSource.driver
@@ -51,7 +50,9 @@ export class MigrationGeneratorService {
       downSqls,
     );
 
+    console.log('_______START-MIGRATION-CODE_______');
     console.log(fileContent);
+    console.log('_______END-MIGRATION-CODE_______');
   }
 
   private queryParams(parameters: any[] | undefined): string {
@@ -73,7 +74,7 @@ export class MigrationGeneratorService {
     upSqls: string[],
     downSqls: string[],
   ): string {
-    const migrationName = `${name}-${timestamp}`;
+    const migrationName = `${this.formatServiceName(name)}${timestamp}`;
 
     return `import { MigrationInterface, QueryRunner } from "typeorm";
 
@@ -92,5 +93,15 @@ ${downSqls.join(`
 
 }
 `;
+  }
+
+  private formatServiceName(serviceName: string): string {
+    const nameParts: string[] = serviceName.split('-');
+
+    const capitalizedNameParts = nameParts.map(
+      (part) => part.charAt(0).toUpperCase() + part.slice(1),
+    );
+
+    return capitalizedNameParts.join('');
   }
 }

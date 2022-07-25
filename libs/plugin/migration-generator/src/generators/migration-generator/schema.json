@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "DeploymentConfigGenerator",
+  "title": "",
+  "type": "object",
+  "properties": {
+    "projectName": {
+      "description": "The microservice project to target",
+      "type": "string",
+      "$default": {
+        "$source": "projectName"
+      },
+      "x-prompt": "What microservice project would you like to target?"
+    }
+  },
+  "required": ["projectName"]
+}
