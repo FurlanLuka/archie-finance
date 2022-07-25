@@ -8,74 +8,69 @@ import {
   MarginCallCompleted,
   MarginCallStarted,
 } from './sendgrid.interfaces';
-import { InternalApiService } from '@archie/api/utils/internal';
-import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
-import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
 import { EmailDataFactoryService } from '@archie/api/mail-api/utils/email-data-factory';
+import { ContactService, DecryptedContact } from '@archie/api/mail-api/contact';
 
 @Injectable()
 export class SendgridService {
   constructor(
     private configService: ConfigService,
-    private internalApiService: InternalApiService,
     private emailDataFactory: EmailDataFactoryService,
+    private contactService: ContactService,
   ) {}
 
   public async sendMarginCallCompletedMail(marginCall: MarginCallCompleted) {
-    const emailAddress: GetEmailAddressResponse =
-      await this.internalApiService.getUserEmailAddress(marginCall.userId);
-    const kyc: GetKycResponse = await this.internalApiService.getKyc(
+    const contact: DecryptedContact = await this.contactService.getContact(
       marginCall.userId,
     );
 
     if (marginCall.liquidationAmount > 0) {
       await this.sendEmail(
-        emailAddress.email,
+        contact.email,
         this.configService.get(
           ConfigVariables.SENDGRID_COLLATERAL_LIQUIDATED_TEMPLATE_ID,
         ),
-        this.emailDataFactory.createCollateralLiquidatedMail(kyc, marginCall),
+        this.emailDataFactory.createCollateralLiquidatedMail(
+          contact.firstName,
+          marginCall,
+        ),
       );
     } else {
       await this.sendEmail(
-        emailAddress.email,
+        contact.email,
         this.configService.get(
           ConfigVariables.SENDGRID_MARGIN_CALL_EXITED_TEMPLATE_ID,
         ),
-        this.emailDataFactory.createInfoData(kyc, marginCall),
+        this.emailDataFactory.createInfoData(contact.firstName, marginCall),
       );
     }
   }
 
   public async sendMarginCallStartedMail(marginCall: MarginCallStarted) {
-    const emailAddress: GetEmailAddressResponse =
-      await this.internalApiService.getUserEmailAddress(marginCall.userId);
-    const kyc: GetKycResponse = await this.internalApiService.getKyc(
+    const contact: DecryptedContact = await this.contactService.getContact(
       marginCall.userId,
     );
 
     await this.sendEmail(
-      emailAddress.email,
+      contact.email,
       this.configService.get(
         ConfigVariables.SENDGRID_MARGIN_CALL_REACHED_TEMPLATE_ID,
       ),
-      this.emailDataFactory.createInfoData(kyc, marginCall),
+      this.emailDataFactory.createInfoData(contact.firstName, marginCall),
     );
   }
 
   public async sendLtvLimitApproachingMail(marginCall: LtvLimitApproaching) {
-    const emailAddress: GetEmailAddressResponse =
-      await this.internalApiService.getUserEmailAddress(marginCall.userId);
-    const kyc: GetKycResponse = await this.internalApiService.getKyc(
+    const contact: DecryptedContact = await this.contactService.getContact(
       marginCall.userId,
     );
 
     await this.sendEmail(
-      emailAddress.email,
+      contact.email,
       this.configService.get(
         ConfigVariables.SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID,
       ),
-      this.emailDataFactory.createInfoData(kyc, marginCall),
+      this.emailDataFactory.createInfoData(contact.firstName, marginCall),
     );
   }
 

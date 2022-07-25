@@ -18,7 +18,6 @@ import {
   DebitCardDoesNotExist,
 } from './rize.errors';
 import {
-  CardActivatedDto,
   CreditLimitDto,
   GetTransactionsQueryDto,
   MarginCallCompletedDto,
