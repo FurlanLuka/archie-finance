@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature-history';
-import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature-rewards';
-import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature-settings';
-import { WalletAndCollateralScreen } from '@archie-webapps/archie-dashboard/feature-wallet-and-collateral';
+import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature/rewards';
+import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature/settings';
+import { WalletAndCollateralScreen } from '@archie-webapps/archie-dashboard/feature/home';
+import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature/history';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access-archie-api/interface';
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access-archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access-archie-api/onboarding/hooks/use-get-onboarding';
