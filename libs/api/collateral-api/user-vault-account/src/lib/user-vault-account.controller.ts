@@ -1,5 +1,4 @@
 import { Controller } from '@nestjs/common';
-import { FireblocksService } from '@archie/api/collateral-api/fireblocks';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,

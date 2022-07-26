@@ -1,26 +1,17 @@
-import {
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   CreateTransactionResponse,
   DepositAddressResponse,
-  PeerType,
   VaultAccountResponse,
 } from 'fireblocks-sdk';
 import { Repository } from 'typeorm';
-import { FireblocksService } from '@archie/api/collateral-api/fireblocks';
-import { UserVaultAccount } from './user-vault-account.entity';
 import {
+  FireblocksService,
   CollateralWithdrawInitializedDto,
   LiquidateAssetsDto,
-} from '../../../fireblocks/src/lib/fireblocks.dto';
-import { AssetList } from '@archie/api/utils/interfaces/asset_information';
-import { ConfigVariables } from '@archie/api/collateral-api/constants';
-import { COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE } from '@archie/api/credit-api/constants';
+} from '@archie/api/collateral-api/fireblocks';
+import { UserVaultAccount } from './user-vault-account.entity';
 
 @Injectable()
 export class UserVaultAccountService {
