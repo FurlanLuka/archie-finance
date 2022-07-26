@@ -3,17 +3,8 @@ import styled from 'styled-components';
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
 export const KycScreenStyled = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: ${({ theme }) => theme.backgroundPrimary};
-  box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.08);
-  border: 0;
-  border-radius: 1rem;
   width: 100%;
   max-width: 496px;
-  padding: 1.5rem;
-  text-align: center;
 
   .title {
     margin-bottom: 0.5rem;

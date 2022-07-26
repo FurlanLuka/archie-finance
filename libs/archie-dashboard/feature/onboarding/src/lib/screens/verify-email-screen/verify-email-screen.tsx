@@ -5,13 +5,13 @@ import ReactCodeInput from 'react-verification-code-input';
 import { useCompleteAptoVerification } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-complete-apto-verification';
 import { useStartAptoVerification } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-start-apto-verification';
 import { MutationQueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { ButtonPrimary, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, Card, ParagraphXS, ParagraphXXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { VerifyScreenStyled } from './verify-screen.styled';
+import { VerifyEmailScreenStyled } from './verify-email-screen.styled';
 
-export const VerifyScreen: FC = () => {
+export const VerifyEmailScreen: FC = () => {
   const { t } = useTranslation();
 
   const [code, setCode] = useState('');
@@ -51,26 +51,28 @@ export const VerifyScreen: FC = () => {
   };
 
   return (
-    <VerifyScreenStyled>
-      <SubtitleM className="title">{t('verify_step.title')}</SubtitleM>
-      <ParagraphXS className="subtitle">{t('verify_step.subtitle')}</ParagraphXS>
-      <ReactCodeInput onComplete={(values) => setCode(values)} className="code-input" />
-      <ParagraphXS className="resend-text">{t('verify_step.resend_text')}</ParagraphXS>
-      <button className="resend-btn" onClick={handleResend}>
-        <ParagraphXS weight={700} color={theme.textHighlight}>
-          {t('verify_step.resend_btn')}
-        </ParagraphXS>
-      </button>
-      <hr className="divider" />
-      <ButtonPrimary
-        type="submit"
-        onClick={handleSubmit}
-        isDisabled={!isValid}
-        isLoading={useCompleteAptoVerificationQuery.state === RequestState.LOADING}
-      >
-        {t('btn_next')}
-        <Icon name="arrow-right" fill={theme.textLight} />
-      </ButtonPrimary>
-    </VerifyScreenStyled>
+    <VerifyEmailScreenStyled>
+      <Card column alignItems="center" padding="1.5rem">
+        <SubtitleM className="title">{t('verify_email_step.title')}</SubtitleM>
+        <ParagraphXS className="subtitle">{t('verify_email_step.subtitle')}</ParagraphXS>
+        <ParagraphXS className="text">{t('verify_email_step.text_1')}</ParagraphXS>
+        <div className="">
+          <ParagraphXS className="text">{t('verify_email_step.text_2')}</ParagraphXS>
+          <button className="resend-btn" onClick={handleResend}>
+            <ParagraphXS weight={700} color={theme.textHighlight}>
+              {t('verify_email_step.link')}
+            </ParagraphXS>
+          </button>
+        </div>
+        <hr className="divider" />
+        <ButtonPrimary
+          type="submit"
+          onClick={handleSubmit}
+          isLoading={useCompleteAptoVerificationQuery.state === RequestState.LOADING}
+        >
+          {t('verify_email_step.btn')}
+        </ButtonPrimary>
+      </Card>
+    </VerifyEmailScreenStyled>
   );
 };

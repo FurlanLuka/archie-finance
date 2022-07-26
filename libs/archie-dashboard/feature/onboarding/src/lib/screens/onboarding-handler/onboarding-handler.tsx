@@ -10,7 +10,7 @@ import { Loading, Page } from '@archie-webapps/shared/ui/design-system';
 import { CardScreen } from '../card-screen/card-screen';
 import { CollateralizationScreen } from '../collateralization-screen/collateralization-screen';
 import { KycScreen } from '../kyc-screen/kyc-screen';
-import { VerifyScreen } from '../verify-screen/verify-screen';
+import { VerifyEmailScreen } from '../verify-email-screen/verify-email-screen';
 
 import { OnboardingStyled } from './onboarding-handler.styled';
 
@@ -19,7 +19,7 @@ function getCurrentStep(step: Step) {
     case Step.KYC:
       return <KycScreen />;
     case Step.COLLATERALIZE:
-      return <CollateralizationScreen />;
+      return <VerifyEmailScreen />;
     case Step.CARD:
       return <CardScreen />;
     default:

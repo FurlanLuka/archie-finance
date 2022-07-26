@@ -8,7 +8,14 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useCreateKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-create-kyc';
-import { ButtonPrimary, InputText, ParagraphS, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
+import {
+  ButtonPrimary,
+  Card,
+  InputText,
+  ParagraphS,
+  ParagraphXS,
+  SubtitleM,
+} from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -70,135 +77,137 @@ export const KycScreen: FC = () => {
 
   return (
     <KycScreenStyled>
-      <SubtitleM className="title">{t('kyc_step.title')}</SubtitleM>
-      <ParagraphXS className="subtitle">{t('kyc_step.subtitle')}</ParagraphXS>
-      <form onSubmit={onSubmit}>
-        <div className="input-group">
+      <Card column alignItems="center" padding="1.5rem">
+        <SubtitleM className="title">{t('kyc_step.title')}</SubtitleM>
+        <ParagraphXS className="subtitle">{t('kyc_step.subtitle')}</ParagraphXS>
+        <form onSubmit={onSubmit}>
+          <div className="input-group">
+            <InputText>
+              {t('kyc_step.label.first_name')}
+              <input placeholder={t('kyc_step.placeholder.first_name')} {...register('firstName')} />
+              {errors.firstName?.message && (
+                <ParagraphXS className="error" color={theme.textDanger}>
+                  {t(errors.firstName.message)}
+                </ParagraphXS>
+              )}
+            </InputText>
+            <InputText>
+              {t('kyc_step.label.last_name')}
+              <input placeholder={t('kyc_step.placeholder.last_name')} {...register('lastName')} />
+              {errors.lastName?.message && (
+                <ParagraphXS className="error" color={theme.textDanger}>
+                  {t(errors.lastName.message)}
+                </ParagraphXS>
+              )}
+            </InputText>
+          </div>
           <InputText>
-            {t('kyc_step.label.first_name')}
-            <input placeholder={t('kyc_step.placeholder.first_name')} {...register('firstName')} />
-            {errors.firstName?.message && (
-              <ParagraphXS className="error" color={theme.textDanger}>
-                {t(errors.firstName.message)}
-              </ParagraphXS>
-            )}
-          </InputText>
-          <InputText>
-            {t('kyc_step.label.last_name')}
-            <input placeholder={t('kyc_step.placeholder.last_name')} {...register('lastName')} />
-            {errors.lastName?.message && (
-              <ParagraphXS className="error" color={theme.textDanger}>
-                {t(errors.lastName.message)}
-              </ParagraphXS>
-            )}
-          </InputText>
-        </div>
-        <InputText>
-          {t('kyc_step.label.date_of_birth')}
-          <Controller
-            control={control}
-            name="dateOfBirth"
-            render={({ field: { onChange, value } }) => (
-              <ReactInput
-                value={value}
-                placeholder={t('kyc_step.placeholder.date_of_birth')}
-                onChange={onChange}
-                parse={templateParser('xx-xx-xxxx', parseDigit)}
-                format={templateFormatter('xx-xx-xxxx')}
-              />
-            )}
-          />
-          {errors.dateOfBirth?.message && (
-            <ParagraphXS className="error" color={theme.textDanger}>
-              {t(errors.dateOfBirth.message)}
-            </ParagraphXS>
-          )}
-        </InputText>
-        <InputText>
-          {t('kyc_step.label.address')}
-          <Controller
-            control={control}
-            name="address"
-            render={({ field: { onChange, value } }) => (
-              <>
-                <Autocomplete
-                  apiKey="AIzaSyA-k_VEX0soa2kljYKTjtFUg4irF3hKZwQ"
-                  onPlaceSelected={(place) => {
-                    const add = addAddress(place);
-                    onChange(add);
-                  }}
-                  placeholder={t('kyc_step.placeholder.address')}
-                  options={{ types: ['address'] }}
-                />
-                {errors.address && (
-                  <ParagraphXS className="error" color={theme.textDanger}>
-                    {!value ? t('kyc_step.error.required_field') : t(getAddressError(errors.address))}
-                  </ParagraphXS>
-                )}
-              </>
-            )}
-          />
-        </InputText>
-        <InputText>
-          {t('kyc_step.label.apt_unit')}
-          <input placeholder={t('kyc_step.placeholder.apt_unit')} {...register('aptUnit')} />
-          {errors.aptUnit?.message && (
-            <ParagraphXS className="error" color={theme.textDanger}>
-              {t(errors.aptUnit.message)}
-            </ParagraphXS>
-          )}
-        </InputText>
-        <InputText>
-          {t('kyc_step.label.phone_number')}
-          <div className="phone-number">
-            <ParagraphS weight={700}>+1</ParagraphS>
+            {t('kyc_step.label.date_of_birth')}
             <Controller
               control={control}
-              name="phoneNumber"
+              name="dateOfBirth"
               render={({ field: { onChange, value } }) => (
                 <ReactInput
                   value={value}
-                  placeholder={t('kyc_step.placeholder.phone_number')}
+                  placeholder={t('kyc_step.placeholder.date_of_birth')}
                   onChange={onChange}
-                  parse={templateParser('(xxx) xxx-xxxx', parseDigit)}
-                  format={templateFormatter('(xxx) xxx-xxxx')}
+                  parse={templateParser('xx-xx-xxxx', parseDigit)}
+                  format={templateFormatter('xx-xx-xxxx')}
                 />
               )}
             />
-          </div>
-          {errors.phoneNumber?.message && (
-            <ParagraphXS className="error" color={theme.textDanger}>
-              {t(errors.phoneNumber.message)}
-            </ParagraphXS>
-          )}
-        </InputText>
-        <InputText>
-          {t('kyc_step.label.ssn')}
-          <Controller
-            control={control}
-            name="ssn"
-            render={({ field: { onChange, value } }) => (
-              <ReactInput
-                value={value}
-                onChange={onChange}
-                placeholder={t('kyc_step.placeholder.ssn')}
-                parse={templateParser('xxx-xx-xxxx', parseDigit)}
-                format={templateFormatter('xxx-xx-xxxx')}
-              />
+            {errors.dateOfBirth?.message && (
+              <ParagraphXS className="error" color={theme.textDanger}>
+                {t(errors.dateOfBirth.message)}
+              </ParagraphXS>
             )}
-          />
-          {errors.ssn?.message && (
-            <ParagraphXS className="error" color={theme.textDanger}>
-              {t(errors.ssn.message)}
-            </ParagraphXS>
-          )}
-        </InputText>
-        <hr className="divider" />
-        <ButtonPrimary type="submit" isLoading={mutationRequest.state === RequestState.LOADING}>
-          {t('btn_next')}
-          <Icon name="arrow-right" fill={theme.textLight} />
-        </ButtonPrimary>
-      </form>
+          </InputText>
+          <InputText>
+            {t('kyc_step.label.address')}
+            <Controller
+              control={control}
+              name="address"
+              render={({ field: { onChange, value } }) => (
+                <>
+                  <Autocomplete
+                    apiKey="AIzaSyA-k_VEX0soa2kljYKTjtFUg4irF3hKZwQ"
+                    onPlaceSelected={(place) => {
+                      const add = addAddress(place);
+                      onChange(add);
+                    }}
+                    placeholder={t('kyc_step.placeholder.address')}
+                    options={{ types: ['address'] }}
+                  />
+                  {errors.address && (
+                    <ParagraphXS className="error" color={theme.textDanger}>
+                      {!value ? t('kyc_step.error.required_field') : t(getAddressError(errors.address))}
+                    </ParagraphXS>
+                  )}
+                </>
+              )}
+            />
+          </InputText>
+          <InputText>
+            {t('kyc_step.label.apt_unit')}
+            <input placeholder={t('kyc_step.placeholder.apt_unit')} {...register('aptUnit')} />
+            {errors.aptUnit?.message && (
+              <ParagraphXS className="error" color={theme.textDanger}>
+                {t(errors.aptUnit.message)}
+              </ParagraphXS>
+            )}
+          </InputText>
+          <InputText>
+            {t('kyc_step.label.phone_number')}
+            <div className="phone-number">
+              <ParagraphS weight={700}>+1</ParagraphS>
+              <Controller
+                control={control}
+                name="phoneNumber"
+                render={({ field: { onChange, value } }) => (
+                  <ReactInput
+                    value={value}
+                    placeholder={t('kyc_step.placeholder.phone_number')}
+                    onChange={onChange}
+                    parse={templateParser('(xxx) xxx-xxxx', parseDigit)}
+                    format={templateFormatter('(xxx) xxx-xxxx')}
+                  />
+                )}
+              />
+            </div>
+            {errors.phoneNumber?.message && (
+              <ParagraphXS className="error" color={theme.textDanger}>
+                {t(errors.phoneNumber.message)}
+              </ParagraphXS>
+            )}
+          </InputText>
+          <InputText>
+            {t('kyc_step.label.ssn')}
+            <Controller
+              control={control}
+              name="ssn"
+              render={({ field: { onChange, value } }) => (
+                <ReactInput
+                  value={value}
+                  onChange={onChange}
+                  placeholder={t('kyc_step.placeholder.ssn')}
+                  parse={templateParser('xxx-xx-xxxx', parseDigit)}
+                  format={templateFormatter('xxx-xx-xxxx')}
+                />
+              )}
+            />
+            {errors.ssn?.message && (
+              <ParagraphXS className="error" color={theme.textDanger}>
+                {t(errors.ssn.message)}
+              </ParagraphXS>
+            )}
+          </InputText>
+          <hr className="divider" />
+          <ButtonPrimary type="submit" isLoading={mutationRequest.state === RequestState.LOADING}>
+            {t('btn_next')}
+            <Icon name="arrow-right" fill={theme.textLight} />
+          </ButtonPrimary>
+        </form>
+      </Card>
     </KycScreenStyled>
   );
 };
