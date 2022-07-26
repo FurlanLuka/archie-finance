@@ -33,6 +33,12 @@
         "command": "npm run build onboarding-api && node dist/apps/onboarding-api/main build-swagger"
       }
     },
+    "generate-migration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build onboarding-api && node dist/apps/onboarding-api/main generate-migration"
+      }
+    },
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {

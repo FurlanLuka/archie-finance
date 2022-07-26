@@ -1,9 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import { ConfigVariables } from '@archie/api/referral-system-api/constants';
+import {
+  ConfigVariables,
+  SERVICE_NAME,
+} from '@archie/api/referral-system-api/constants';
 import { HealthModule } from '@archie/api/utils/health';
 import { WaitlistModule } from '@archie/api/referral-system-api/waitlist';
+import { migrations } from './migrations';
 
 @Module({
   imports: [
@@ -27,9 +31,12 @@ import { WaitlistModule } from '@archie/api/referral-system-api/waitlist';
         password: configService.get(ConfigVariables.TYPEORM_PASSWORD),
         database: configService.get(ConfigVariables.TYPEORM_DATABASE),
         port: configService.get(ConfigVariables.TYPEORM_PORT),
-        synchronize: true,
+        synchronize: false,
         autoLoadEntities: true,
         keepConnectionAlive: true,
+        migrationsRun: true,
+        migrationsTableName: `${SERVICE_NAME}-migrations`,
+        migrations: migrations,
       }),
       inject: [ConfigService],
     }),
