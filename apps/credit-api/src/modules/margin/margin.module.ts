@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Credit } from '../credit/credit.entity';
 import {
+  MarginController,
   MarginInternalController,
   MarginQueueController,
 } from './margin.controller';
@@ -22,7 +23,11 @@ import { MarginCollateralValueCheckModule } from './collateral_value_checks/marg
 import { CreditLimitModule } from './credit_limit/credit_limit.module';
 
 @Module({
-  controllers: [MarginQueueController, MarginInternalController],
+  controllers: [
+    MarginQueueController,
+    MarginInternalController,
+    MarginController,
+  ],
   imports: [
     TypeOrmModule.forFeature([Credit, LiquidationLog, MarginCall, Collateral]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
