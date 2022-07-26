@@ -18,6 +18,9 @@ export const VerifyEmailScreenStyled = styled.div`
     width: 90%;
     margin-bottom: 1.5rem;
 
+    @media (max-width: ${breakpoints.screenSM}) {
+      width: 100%;
+    }
   }
 
   .link {
@@ -25,6 +28,10 @@ export const VerifyEmailScreenStyled = styled.div`
     justify-content: flex-start;
     width: 90%;
     margin-bottom: 2rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      width: 100%;
+    }
   }
 
   .logout-btn {

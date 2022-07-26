@@ -16,7 +16,6 @@ import {
 import { ButtonPrimary, Container, Card, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
 
 import imgCardReady from '../../../assets/img-card-ready.png';
-import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
 import { CardScreenStyled } from './card-screen.styled';
@@ -77,7 +76,6 @@ export const CardScreen: FC = () => {
   return (
     <Container column mobileColumn alignItems="center">
       <StepsIndicator currentStep={Step.CARD} />
-      <EmailVerificationAlert />
       <CardScreenStyled>
         <Card column alignItems="center" padding="2.5rem 10% 3.5rem" mobilePadding="2.5rem 1.5rem 3.5rem">
           <SubtitleM className="title">{getTitle()}</SubtitleM>
