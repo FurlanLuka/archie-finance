@@ -1,4 +1,9 @@
-import { generateFiles, getWorkspaceLayout, offsetFromRoot, Tree } from '@nrwl/devkit';
+import {
+  generateFiles,
+  getWorkspaceLayout,
+  offsetFromRoot,
+  Tree,
+} from '@nrwl/devkit';
 import { MicroserviceModuleGeneratorSchema } from './schema';
 import { exec } from 'child_process';
 import { promisify } from 'util';
@@ -48,7 +53,10 @@ export default async function (
 
   const { stdout } = await execute(
     `npx nx run ${normalizedOptions.projectName}:generate-migration`,
+    { maxBuffer: 1024 * 500 },
   );
+
+  console.log(stdout);
 
   const migrationCode: string = stdout
     .split(MIGRATION_START_OUTPUT)[1]

@@ -1,11 +1,10 @@
-
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class AssetPriceApi1658757099014 implements MigrationInterface {
-name = 'AssetPriceApi1658757099014'
+  name = 'AssetPriceApi1658757099014';
 
-public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             CREATE TABLE "asset_price" (
                 "asset" character varying NOT NULL,
                 "price" double precision NOT NULL,
@@ -16,7 +15,7 @@ public async up(queryRunner: QueryRunner): Promise<void> {
                 CONSTRAINT "PK_42afd6a022e3436e6469cba7d9e" PRIMARY KEY ("asset")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE "asset_price_history" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "asset" character varying NOT NULL,
@@ -28,16 +27,14 @@ public async up(queryRunner: QueryRunner): Promise<void> {
                 CONSTRAINT "PK_26d98c4a4679bbe91a268302cd7" PRIMARY KEY ("id")
             )
         `);
-}
+  }
 
-public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             DROP TABLE "asset_price"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE "asset_price_history"
         `);
+  }
 }
-
-}
-

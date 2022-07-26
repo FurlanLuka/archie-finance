@@ -6,8 +6,6 @@ export async function start(appName: string, module: unknown) {
     (arg) => arg === 'generate-migration',
   );
 
-  console.log(generateMigrations);
-
   if (generateMigrations) {
     await generateMigration(appName, module);
   } else {

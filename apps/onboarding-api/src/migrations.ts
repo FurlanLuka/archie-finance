@@ -1,5 +1,5 @@
-import { OnboardingApi1658758017645 } from './migrations/OnboardingApi1658758017645';
+import { OnboardingApi1658823435686 } from './migrations/OnboardingApi1658823435686';
 
 export const migrations = [
-  OnboardingApi1658758017645,
+  OnboardingApi1658823435686,
   ]

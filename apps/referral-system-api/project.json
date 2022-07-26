@@ -36,7 +36,7 @@
     "generate-migration": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "npm run build asset-price-api && node dist/apps/asset-price-api/main generate-migration"
+        "command": "npm run build referral-system-api && node dist/apps/referral-system-api/main generate-migration"
       }
     },
     "serve": {

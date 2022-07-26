@@ -8,7 +8,11 @@ import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
 import { AssetInformationModule } from './modules/asset_information/asset_information.module';
-import { ConfigVariables } from '@archie/api/collateral-api/constants';
+import {
+  ConfigVariables,
+  SERVICE_NAME,
+} from '@archie/api/collateral-api/constants';
+import { migrations } from './migrations';
 
 @Module({
   imports: [
@@ -47,6 +51,9 @@ import { ConfigVariables } from '@archie/api/collateral-api/constants';
         synchronize: false,
         autoLoadEntities: true,
         keepConnectionAlive: true,
+        migrationsRun: true,
+        migrationsTableName: `${SERVICE_NAME}-migrations`,
+        migrations: migrations,
       }),
       inject: [ConfigService],
     }),

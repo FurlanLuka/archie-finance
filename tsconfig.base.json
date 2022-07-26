@@ -92,6 +92,7 @@
     "tmp",
     "dist",
     "**/*spec.ts",
+    "**/*spec.skip.ts",
     "**/__data__",
     "**/__mocks__"
   ]
