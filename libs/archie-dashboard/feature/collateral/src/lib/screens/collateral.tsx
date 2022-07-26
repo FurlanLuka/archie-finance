@@ -47,6 +47,7 @@ export const CollateralScreen: FC = () => {
 
     return 0;
   };
+  console.log('wat', getCollateralValueResponse);
 
   const data = useMemo(() => {
     if (getCollateralValueResponse.state === RequestState.SUCCESS) {
