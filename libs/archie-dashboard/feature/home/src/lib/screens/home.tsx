@@ -39,9 +39,9 @@ export const WalletAndCollateralScreen: FC = () => {
 
   return (
     <HomeStyled>
-      <SubtitleS className="title">{t('dashboard.title', { name })}</SubtitleS>
+    <SubtitleS className="title">{t('dashboard_wallet_and_collateral.title', { name })}</SubtitleS>
       <ParagraphXS color={theme.textSecondary} className="subtitle">
-        {t('dashboard.subtitle', { date })}
+        {t('dashboard_wallet_and_collateral.subtitle', { date })}
       </ParagraphXS>
       {/* <MarginCallAlert /> */}
       <div className="section-cards">

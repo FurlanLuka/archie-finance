@@ -8,9 +8,14 @@ interface DashboardNavItem {
 
 export const dashboardNavItems: DashboardNavItem[] = [
   {
-    icon: 'wallet',
-    name: 'Wallet & Collateral',
+    icon: 'home',
+    name: 'Home',
     path: '/',
+  },
+  {
+    icon: 'wallet',
+    name: 'Collateral',
+    path: '/collateral',
   },
   {
     icon: 'bitcoin-outline',

@@ -4,6 +4,9 @@
   "btn_yes": "Yes",
   "btn_cancel": "Cancel",
   "btn_continue": "Continue",
+  "btn_add": "Add",
+  "btn_claim": "Claim",
+  "ltv": "LTV",
   "steps_indicator": {
     "first": "Sign up",
     "second": "Collateralize",
@@ -48,7 +51,7 @@
   "verify_step": {
     "title": "Verify phone number",
     "subtitle": "Enter the 6-digit code you received via SMS",
-    "resend_text": "Didn’t get it?",
+    "resend_text": "Didn't get it?",
     "resend_btn": "Resend"
   },
   "collateralization_step": {
@@ -113,11 +116,6 @@
     "text": "You are collaterizing {{collateral}} for a credit line of ${{credit_value}}.",
     "button_text": "Let's go!"
   },
-  "dashboard": {
-    "title": "Hi, {{name}}",
-    "subtitle": "Member since {{date}}",
-    "reveal_card_modal": "Show card details?"
-  },
   "setup_2fa_banner": {
     "title": "Protect your funds with 2FA",
     "text": "Setup Multi-Factor Authentication using your authenticator app.",
@@ -127,5 +125,39 @@
     "title": "You have reached margin call",
     "text": "The value of your ArchCredit collateral has dropped and you have reached an LTV rate above 75%. Action is required to prevent liquidiating a portion of your collateral. We recommend sending more collateral to your ArchCredit; paying down your balance through your bank may take up to 3 days. Archie will automatically undergo a partial lidquidation if your LTV reaches 90%",
     "btn": "Cure"
+  },
+  "dashboard_wallet_and_collateral": {
+    "title": "Hi, {{name}}",
+    "subtitle": "Member since {{date}}",
+    "reveal_card_modal": "Show card details?"
+  },
+  "dashboard_collateral": {
+    "title": "My Wallet"
+  },
+  "dashboard_withdraw": {
+    "title": "Withdraw {{currentAsset}}",
+    "subtitle": "You currently have {{assetAmount}} {{asset}} (~${{assetValue}}).",
+    "address_title": "What address would you like to send your {{currentAsset}} to?",
+    "form": {
+      "amount_label": "How much {{currentAsset}} would you like to withdraw? Max is {{maxAmount}}",
+      "address_label": "Send {{currentAsset}} to:",
+      "amount_placeholder": "max: {{maxWithdrawAmount}} {{currentAsset}}",
+      "address_placeholder": "Enter your address",
+      "required_field_error": "This field is required",
+      "amount_type_error": "Amount must be a number",
+      "amount_min_error": "You must withdraw more than 0",
+      "amount_max_error": "You cannot withdraw more than {{maxAmount}}",
+      "credit_change": "Withdrawing this amount will reduce your Archie Collateral from ${{initialCollateralValue}} to ${{updatedCollateralValue}}. This reduces your credit limit from ${{initialCreditValue}} to ${{updatedCreditValue}}"
+    },
+    "successfull_withdrawal_modal": {
+      "title": "Withdrawal Successfully Initiated",
+      "subtitle": "We have initiated your withdrawal request. Follow along on the",
+      "link": "the blockchain explorer"
+    },
+    "enter_2fa_code_modal": {
+      "title": "Enter Your 2-Factor Authentication Code",
+      "subtitle": "To complete this action, please verify your 2-Factor Authentication Code from your 2FA application"
+    },
+    "btn": "Withdraw Collateral"
   }
 }

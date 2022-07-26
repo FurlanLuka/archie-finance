@@ -29,16 +29,6 @@ export const LoanToValueStyled = styled.div`
   }
 
   .status-label {
-    font-size: 0.625rem;
-    color: ${({ theme }) => theme.loanToValueActive};
-    font-weight: 700;
-    line-height: 1.6;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border: 1px solid ${({ theme }) => theme.loanToValueActive};
-    border-radius: 0.5rem;
-    max-width: fit-content;
-    padding: 0 1rem;
     margin-top: 0.25rem;
   }
 `;

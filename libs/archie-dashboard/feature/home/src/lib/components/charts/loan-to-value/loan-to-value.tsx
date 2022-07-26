@@ -1,16 +1,20 @@
 import { ResponsivePie } from '@nivo/pie';
 import { FC } from 'react';
 
-import { SubtitleM, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
+import { LoanToValueStatus, LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
+import { Badge, SubtitleM, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { LoanToValueStyled } from './loan-to-value.styled';
 
+// Temp data
+const good = 'good';
+
 const data = [
   {
-    id: 'good',
+    id: LoanToValueStatus.GOOD,
     value: 20,
-    color: theme.loanToValueActive,
+    color: LoanToValueColor[good],
   },
   {
     id: 'not-good',
@@ -36,7 +40,9 @@ export const LoanToValue: FC = () => (
       <SubtitleM weight={400} color={theme.loanToValueActive}>
         20%
       </SubtitleM>
-      <div className="status-label">GOOD</div>
+      <Badge statusColor={LoanToValueColor[good]} className="status-label">
+        {LoanToValueText[good]}
+      </Badge>
     </div>
   </LoanToValueStyled>
 );

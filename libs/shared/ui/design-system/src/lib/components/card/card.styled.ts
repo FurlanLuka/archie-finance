@@ -7,6 +7,7 @@ export interface CardProps {
   alignItems?: string;
   justifyContent?: string;
   maxWidth?: string;
+  minHeight?: string;
   padding?: string;
   mobileRow?: boolean;
   columnReverse?: boolean;
@@ -28,6 +29,7 @@ export const Card = styled.div<CardProps>`
   border-radius: 0.5rem;
   width: 100%;
   max-width: ${({ maxWidth }) => maxWidth ?? '100%'};
+  min-height: ${({ minHeight }) => minHeight ?? '100%'};
   padding: ${({ padding }) => padding};
 
   @media (max-width: ${breakpoints.screenSM}) {

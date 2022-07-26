@@ -1,7 +1,13 @@
 import { IconName } from '@archie-webapps/shared/ui/icons';
 
+export enum CollateralCurrency {
+  BTC = 'BTC',
+  ETH = 'ETH',
+  SOL = 'SOL',
+  USDC = 'USDC',
+}
+
 export interface CollateralAsset {
-  // TODO icon to string
   id: string;
   name: string;
   short: string;
@@ -11,8 +17,8 @@ export interface CollateralAsset {
   url: string;
 }
 
-export const collateralAssets: Record<string, CollateralAsset> = {
-  BTC: {
+export const CollateralAssets: Record<CollateralCurrency | string, CollateralAsset> = {
+  [CollateralCurrency.BTC]: {
     id: 'BTC',
     name: 'Bitcoin',
     short: 'BTC',
@@ -21,7 +27,7 @@ export const collateralAssets: Record<string, CollateralAsset> = {
     interest_rate: 15,
     url: 'https://www.blockchain.com/btc/address',
   },
-  ETH: {
+  [CollateralCurrency.ETH]: {
     id: 'ETH',
     name: 'Ethereum',
     short: 'ETH',
@@ -30,7 +36,7 @@ export const collateralAssets: Record<string, CollateralAsset> = {
     interest_rate: 15,
     url: 'https://etherscan.io/address',
   },
-  SOL: {
+  [CollateralCurrency.SOL]: {
     id: 'SOL',
     name: 'Solana',
     short: 'SOL',
@@ -39,7 +45,7 @@ export const collateralAssets: Record<string, CollateralAsset> = {
     interest_rate: 15,
     url: 'https://explorer.solana.com/address',
   },
-  USDC: {
+  [CollateralCurrency.USDC]: {
     id: 'USDC',
     name: 'USD Coin',
     short: 'USDC',
@@ -48,4 +54,11 @@ export const collateralAssets: Record<string, CollateralAsset> = {
     interest_rate: 15,
     url: 'https://etherscan.io/address',
   },
-};
+}
+
+export const CollateralAssetsColor = {
+  [CollateralCurrency.BTC]: '#f7931a',
+  [CollateralCurrency.ETH]: '#627eea',
+  [CollateralCurrency.SOL]: '#bd40f2',
+  [CollateralCurrency.USDC]: '#3e73c4',
+}

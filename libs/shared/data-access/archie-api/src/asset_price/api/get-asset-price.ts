@@ -4,6 +4,7 @@ import { getRequest } from '../../helpers';
 export interface AssetPrice {
   asset: string;
   price: number;
+  dailyChange: number;
   currency: string;
 }
 

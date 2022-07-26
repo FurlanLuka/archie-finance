@@ -1,5 +1,6 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 
+import { calculateCollateralCreditValue } from '@archie-webapps/archie-dashboard/utils';
 import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 
@@ -8,7 +9,7 @@ import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-en
 
 import { CreateCreditLine } from './blocks/create_credit_line/create_credit_line';
 import { NotEnoughCollateral } from './blocks/not-enough-collateral/not-enough-collateral';
-import { calculateCollateralValue, formatEntireCollateral } from './collateral-deposit.helpers';
+import { formatEntireCollateral } from './collateral-deposit.helpers';
 import { usePollCollateralDeposit } from './use-poll-collateral-deposit';
 
 export const CollateralDeposit: FC = () => {
@@ -27,7 +28,7 @@ export const CollateralDeposit: FC = () => {
     [currentCollateral],
   );
   const collateralText = useMemo(() => formatEntireCollateral(currentCollateral), [currentCollateral]);
-  const collateralTotalValue = useMemo(() => calculateCollateralValue(currentCollateral), [currentCollateral]);
+  const collateralTotalValue = useMemo(() => calculateCollateralCreditValue(currentCollateral), [currentCollateral]);
 
   usePollCollateralDeposit({
     onCollateralChange,

@@ -1,5 +1,5 @@
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
-import { collateralAssets } from '@archie-webapps/shared/constants';
+import { CollateralAssets } from '@archie-webapps/shared/constants';
 
 export function formatEntireCollateral(collateral: CollateralValue[]): string {
   const collateralText = collateral.reduce((text, collateralEntry, i) => {
@@ -15,7 +15,7 @@ export function formatEntireCollateral(collateral: CollateralValue[]): string {
 
 export function calculateCollateralValue(collateral: CollateralValue[]): number {
   return collateral.reduce((sum, collateralEntry) => {
-    const assetInfo = collateralAssets[collateralEntry.asset];
+    const assetInfo = CollateralAssets[collateralEntry.asset];
 
     if (!assetInfo) {
       console.warn('Missing asset info', { assetInfo, collateralEntry });

@@ -1,13 +1,13 @@
+import { theme } from '@archie-webapps/shared/ui/theme';
+
+import { Loader } from '../loader/loader';
+
 import { LoadingStyled } from './loading.styled';
 
-export const Loading = () => (
-  <LoadingStyled>
-    <div className="inner">
-      <div className="rect rect1"></div>
-      <div className="rect rect2"></div>
-      <div className="rect rect3"></div>
-      <div className="rect rect4"></div>
-      <div className="rect rect5"></div>
-    </div>
-  </LoadingStyled>
-);
+export const Loading = () => {
+  return (
+    <LoadingStyled>
+      <Loader color={theme.backgroundPrimary} />
+    </LoadingStyled>
+  );
+};
