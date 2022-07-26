@@ -1,9 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DepositAddressResponse, VaultAccountResponse } from 'fireblocks-sdk';
+import {
+  CreateTransactionResponse,
+  DepositAddressResponse,
+  PeerType,
+  VaultAccountResponse,
+} from 'fireblocks-sdk';
 import { Repository } from 'typeorm';
 import { FireblocksService } from '@archie/api/collateral-api/fireblocks';
 import { UserVaultAccount } from './user-vault-account.entity';
+import {
+  CollateralWithdrawInitializedDto,
+  LiquidateAssetsDto,
+} from '../../../fireblocks/src/lib/fireblocks.dto';
+import { AssetList } from '@archie/api/utils/interfaces/asset_information';
+import { ConfigVariables } from '@archie/api/collateral-api/constants';
+import { COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE } from '@archie/api/credit-api/constants';
 
 @Injectable()
 export class UserVaultAccountService {
@@ -62,5 +79,46 @@ export class UserVaultAccountService {
       await this.fireblocksService.createVaultAsset(userVaultAccount.id, asset);
 
     return createVaultAssetResponse.address;
+  }
+
+  public async withdrawAsset(
+    collateralWithdrawInitialized: CollateralWithdrawInitializedDto,
+  ): Promise<CreateTransactionResponse> {
+    const userVaultAccount: UserVaultAccount | null =
+      await this.userVaultAccount.findOneBy({
+        userId: collateralWithdrawInitialized.userId,
+      });
+
+    if (!userVaultAccount) {
+      // TODO handle no vault account or something
+      return;
+    }
+
+    await this.fireblocksService.withdrawAsset(
+      collateralWithdrawInitialized,
+      userVaultAccount.vaultAccountId,
+    );
+  }
+
+  public async liquidateAssets(
+    assetsToLiquidate: LiquidateAssetsDto,
+  ): Promise<void> {
+    const userVaultAccount: UserVaultAccount | null =
+      await this.userVaultAccount.findOneBy({
+        userId: assetsToLiquidate.userId,
+      });
+
+    if (!userVaultAccount) {
+      Logger.error({
+        code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
+        message: `No user account for userId: ${assetsToLiquidate.userId}`,
+      });
+      throw new NotFoundException();
+    }
+
+    await this.fireblocksService.liquidateAssets(
+      assetsToLiquidate,
+      userVaultAccount.vaultAccountId,
+    );
   }
 }

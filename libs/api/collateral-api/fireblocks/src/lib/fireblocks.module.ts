@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { FireblocksService } from './fireblocks.service';
 import { CryptoModule } from '@archie/api/utils/crypto';
-import { UserVaultAccount } from '@archie/api/collateral-api/user-vault-account';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import {
@@ -11,14 +10,11 @@ import {
   MARGIN_CALL_COMPLETED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
-import { FireblocksQueueController } from './fireblocks.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
     PassportModule,
     CryptoModule.register(),
-    TypeOrmModule.forFeature([UserVaultAccount]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -39,6 +35,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   ],
   providers: [FireblocksService],
   exports: [FireblocksService],
-  controllers: [FireblocksQueueController],
+  controllers: [],
 })
 export class FireblocksModule {}

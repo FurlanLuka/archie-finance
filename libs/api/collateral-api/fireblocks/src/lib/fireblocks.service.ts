@@ -17,9 +17,6 @@ import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { ConfigService } from '@archie/api/utils/config';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { AssetList } from '@archie/api/utils/interfaces/asset_information';
-import { UserVaultAccount } from '@archie/api/collateral-api/user-vault-account';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import {
   CollateralWithdrawInitializedDto,
   LiquidateAssetsDto,
@@ -32,8 +29,6 @@ export class FireblocksService {
   private fireblocksClient: FireblocksSDK;
 
   constructor(
-    @InjectRepository(UserVaultAccount)
-    private userVaultAccountRepository: Repository<UserVaultAccount>,
     private configService: ConfigService,
     private cryptoService: CryptoService,
     private amqpConnection: AmqpConnection,
@@ -98,13 +93,15 @@ export class FireblocksService {
     return this.fireblocksClient.getVaultAccounts();
   }
 
-  public async withdrawAsset({
-    asset,
-    withdrawalAmount,
-    userId,
-    destinationAddress,
-    withdrawalId,
-  }: CollateralWithdrawInitializedDto): Promise<CreateTransactionResponse> {
+  public async withdrawAsset(
+    {
+      asset,
+      withdrawalAmount,
+      destinationAddress,
+      withdrawalId,
+    }: CollateralWithdrawInitializedDto,
+    vaultAccountId: string,
+  ): Promise<CreateTransactionResponse> {
     const assetList: AssetList = this.configService.get(
       ConfigVariables.ASSET_LIST,
     );
@@ -115,22 +112,12 @@ export class FireblocksService {
       throw new NotFoundException();
     }
 
-    const userVaultAccount: UserVaultAccount | null =
-      await this.userVaultAccountRepository.findOneBy({
-        userId,
-      });
-
-    if (!userVaultAccount) {
-      // TODO handle no vault account or something
-      return;
-    }
-
     const transaction = await this.fireblocksClient.createTransaction({
       assetId: fireblocksAsset.fireblocks_id,
       amount: withdrawalAmount,
       source: {
         type: PeerType.VAULT_ACCOUNT,
-        id: userVaultAccount.vaultAccountId,
+        id: vaultAccountId,
       },
       destination: {
         type: PeerType.ONE_TIME_ADDRESS,
@@ -158,10 +145,10 @@ export class FireblocksService {
     return transaction;
   }
 
-  public async liquidateAssets({
-    userId,
-    liquidation,
-  }: LiquidateAssetsDto): Promise<void> {
+  public async liquidateAssets(
+    { userId, liquidation }: LiquidateAssetsDto,
+    vaultAccountId: string,
+  ): Promise<void> {
     Logger.log({
       code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
       params: {
@@ -184,18 +171,6 @@ export class FireblocksService {
       ConfigVariables.ASSET_LIST,
     );
 
-    const userVaultAccount: UserVaultAccount | null =
-      await this.userVaultAccountRepository.findOneBy({
-        userId,
-      });
-
-    if (!userVaultAccount) {
-      Logger.error({
-        code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
-        message: `No user account for userId: ${userId}`,
-      });
-      throw new NotFoundException();
-    }
     await Promise.all(
       liquidation.map(async ({ asset, amount }) => {
         const fireblocksAsset = assetList[asset];
@@ -215,7 +190,7 @@ export class FireblocksService {
           amount: amount,
           source: {
             type: PeerType.VAULT_ACCOUNT,
-            id: userVaultAccount.vaultAccountId,
+            id: vaultAccountId,
           },
           destination: {
             type: PeerType.VAULT_ACCOUNT,
