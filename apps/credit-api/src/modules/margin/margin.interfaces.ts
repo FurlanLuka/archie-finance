@@ -20,3 +20,7 @@ export interface UsersLtv {
   priceForMarginCall: number;
   priceForPartialCollateralSale: number;
 }
+
+export interface LtvResponse {
+  ltv: number;
+}

@@ -4,7 +4,7 @@ import { Credit } from '../credit/credit.entity';
 import { In, Repository } from 'typeorm';
 import { LiquidationLog } from './liquidation_logs.entity';
 import { MarginCall } from './margin_calls.entity';
-import { UsersLtv } from './margin.interfaces';
+import { LtvResponse, UsersLtv } from './margin.interfaces';
 import { MarginLtvService } from './ltv/margin_ltv.service';
 import { MarginCallsService } from './calls/margin_calls.service';
 import { Collateral } from '../collateral/collateral.entity';
@@ -58,6 +58,39 @@ export class MarginService {
         userIds: chunk,
       });
     }
+  }
+
+  public async getCurrentLtv(userId: string): Promise<LtvResponse> {
+    const collaterals: Collateral[] = await this.collateralRepository.find({
+      where: {
+        userId,
+      },
+    });
+    const credits: Credit[] = await this.creditRepository.find({
+      where: {
+        userId,
+      },
+    });
+    const liquidationLogs: LiquidationLog[] =
+      await this.liquidationLogsRepository.find({
+        where: {
+          userId,
+        },
+      });
+    const assetPrices: GetAssetPricesResponse =
+      await this.internalApiService.getAssetPrices();
+
+    const ltv: UsersLtv = this.marginLtvService.calculateUsersLtv(
+      userId,
+      credits,
+      liquidationLogs,
+      collaterals,
+      assetPrices,
+    );
+
+    return {
+      ltv: ltv.ltv,
+    };
   }
 
   public async checkMargin(userIds: string[]): Promise<void> {

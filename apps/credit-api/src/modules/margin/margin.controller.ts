@@ -1,4 +1,4 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { MarginService } from './margin.service';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
@@ -7,6 +7,9 @@ import {
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
 import { CheckMarginMessage } from './margin.interfaces';
+import { AuthGuard } from '@archie/api/utils/auth0';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { LtvResponseDto } from './margin.dto';
 
 @Controller()
 export class MarginQueueController {
@@ -20,6 +23,18 @@ export class MarginQueueController {
   @Subscribe(CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE, SERVICE_QUEUE_NAME)
   async checkCreditLimitHandler(message: CheckMarginMessage): Promise<void> {
     return this.marginService.checkCreditLimit(message.userIds);
+  }
+}
+
+@Controller('v1/margins')
+export class MarginController {
+  constructor(private marginService: MarginService) {}
+
+  @Get('ltv')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async checkMarginHandler(@Req() request): Promise<LtvResponseDto> {
+    return this.marginService.getCurrentLtv(request.user.sub);
   }
 }
 
