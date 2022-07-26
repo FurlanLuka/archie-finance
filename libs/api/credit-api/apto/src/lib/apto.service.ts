@@ -41,8 +41,10 @@ import {
 } from '@archie/api/credit-api/constants';
 import { AptoCard } from './apto_card.entity';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { CreditService } from '@archie/api/credit-api/credit';
-import { GetCreditResponse } from '../../../credit/src/lib/credit.interfaces';
+import {
+  CreditService,
+  GetCreditResponse,
+} from '@archie/api/credit-api/credit';
 
 @Injectable()
 export class AptoService {

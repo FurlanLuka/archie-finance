@@ -23,9 +23,11 @@ import { CARD_ACTIVATED_EXCHANGE } from '@archie/api/credit-api/constants';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Credit } from '../../../credit/src/lib/credit.entity';
-import { CreditService } from '@archie/api/credit-api/credit';
-import { GetCreditResponse } from '../../../credit/src/lib/credit.interfaces';
+import {
+  Credit,
+  CreditService,
+  GetCreditResponse,
+} from '@archie/api/credit-api/credit';
 
 @Injectable()
 export class RizeService {

@@ -1,7 +1,7 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import nock = require('nock');
 import { verifyAccessToken } from '../e2e-test-utils/mock.auth.utils';
-import { AppModule } from '../../../../../apps/credit-api/src/app.module';
+import { AppModule } from '../../src/app.module';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
@@ -13,16 +13,16 @@ import {
 } from '@nestjs/common';
 import { clearDatabase } from '../e2e-test-utils/database.utils';
 import { Connection, Repository } from 'typeorm';
-import { AuthGuard } from '../../../utils/auth0/src/lib/auth.guard';
+import { AuthGuard } from '../../../../libs/api/utils/auth0/src/lib/auth.guard';
 import { Collateral } from '../../src/modules/collateral/collateral.entity';
-import { LiquidationLog } from '../../margin/src/lib/liquidation_logs.entity';
-import { MarginNotification } from '../../margin/src/lib/margin_notifications.entity';
+import { LiquidationLog } from '../../../../libs/api/credit-api/margin/src/lib/liquidation_logs.entity';
+import { MarginNotification } from '../../../../libs/api/credit-api/margin/src/lib/margin_notifications.entity';
 import { Credit } from '../../src/modules/credit/credit.entity';
 import { CollateralWithdrawal } from '../../src/modules/collateral/withdrawal/collateral_withdrawal.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '../../constants/src';
-import { ConfigVariables } from '../../../user-api/constants/src';
+import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '@archie/api/credit-api/constants';
+import { ConfigVariables } from '@archie/api/user-api/constants';
 import {
   assetPriceResponse,
   createUserCollateral,

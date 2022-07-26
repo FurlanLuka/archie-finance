@@ -1,4 +1,4 @@
-import { user } from '../../../../test/test-data/user.data';
+import { user } from '../../../../../../../apps/credit-api/test/test-data/user.data';
 import { Collateral } from '../collateral.entity';
 import { CollateralDeposit } from '../collateral_deposit.entity';
 

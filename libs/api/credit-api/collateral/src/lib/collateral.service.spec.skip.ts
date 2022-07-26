@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getConnectionToken, getRepositoryToken } from '@nestjs/typeorm';
 import { when } from 'jest-when';
-import { user } from '../../../test/test-data/user.data';
+import { user } from '../../../../../../apps/credit-api/test/test-data/user.data';
 import { Connection, Repository } from 'typeorm';
 import {
   getMockConnectionProvider,
   getMockQueryRunner,
-} from '../../../test/unit-test-utils/mock.connection.utils';
-import { getMockRepositoryProvider } from '../../../test/unit-test-utils/mock.repository.utils';
+} from '../../../../../../apps/credit-api/test/unit-test-utils/mock.connection.utils';
+import { getMockRepositoryProvider } from '../../../../../../apps/credit-api/test/unit-test-utils/mock.repository.utils';
 import { Collateral } from './collateral.entity';
 import { CollateralService } from './collateral.service';
 import { CollateralDeposit } from './collateral_deposit.entity';

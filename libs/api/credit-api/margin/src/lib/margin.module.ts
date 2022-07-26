@@ -19,8 +19,8 @@ import {
 } from '@archie/api/credit-api/constants';
 import { MarginCollateralValueCheckModule } from './collateral_value_checks/margin_collateral_value_cheks.module';
 import { CreditLimitModule } from './credit_limit/credit_limit.module';
-import { Credit } from '../../../credit/src/lib/credit.entity';
-import { Collateral } from '../../../collateral/src/lib/collateral.entity';
+import { Credit } from '@archie/api/credit-api/credit';
+import { Collateral } from '@archie/api/credit-api/collateral';
 
 @Module({
   controllers: [

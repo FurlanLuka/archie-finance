@@ -15,10 +15,9 @@ import {
   CollateralWithdrawalController,
   CollateralWithdrawalQueueController,
 } from './collateral-withdrawal.controller';
-import { Credit } from '../../../credit/src/lib/credit.entity';
-import { LiquidationLog } from '../../../margin/src/lib/liquidation_logs.entity';
-import { Collateral } from '../../../collateral/src/lib/collateral.entity';
-import { MarginLtvModule } from '../../../margin/src/lib/ltv/margin_ltv.module';
+import { Credit } from '@archie/api/credit-api/credit';
+import { Collateral } from '@archie/api/credit-api/collateral';
+import { MarginLtvModule, LiquidationLog } from '@archie/api/credit-api/margin';
 
 @Module({
   imports: [
