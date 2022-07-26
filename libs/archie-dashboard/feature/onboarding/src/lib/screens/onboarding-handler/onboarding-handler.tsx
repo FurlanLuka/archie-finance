@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 
-import { Step } from '@archie-webapps/archie-dashboard/constants';
 import { Header } from '@archie-webapps/archie-dashboard/components';
+import { Step } from '@archie-webapps/archie-dashboard/constants';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
