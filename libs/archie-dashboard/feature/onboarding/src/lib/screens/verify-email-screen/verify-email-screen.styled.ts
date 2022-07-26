@@ -14,35 +14,20 @@ export const VerifyEmailScreenStyled = styled.div`
     margin-bottom: 3rem;
   }
 
-  .code-input {
-    width: 100% !important;
-    margin-bottom: 3rem;
+  .text {
+    width: 90%;
+    margin-bottom: 1.5rem;
 
-    div {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    input {
-      font-family: ${({ theme }) => theme.fontPrimary};
-      font-size: 2rem;
-      color: ${({ theme }) => theme.textPrimary};
-      border: 1px solid ${({ theme }) => theme.borderHighlight} !important;
-      border-radius: 0.5rem;
-      height: 6rem !important;
-      width: 15% !important;
-
-      @media (max-width: ${breakpoints.screenSM}) {
-        height: 4.5rem !important;
-      }
-    }
   }
 
-  .resend-text {
-    margin-bottom: 0.5rem;
+  .link {
+    display: flex;
+    justify-content: flex-start;
+    width: 90%;
+    margin-bottom: 2rem;
   }
 
-  .resend-btn {
+  .logout-btn {
     background-color: ${({ theme }) => theme.buttonOutline};
     color: ${({ theme }) => theme.textHighlight};
     border: 0;
@@ -57,7 +42,7 @@ export const VerifyEmailScreenStyled = styled.div`
     margin-bottom: 1.5rem;
   }
 
-  button {
+  .resend-btn {
     margin-bottom: 0.5rem;
   }
 `;
