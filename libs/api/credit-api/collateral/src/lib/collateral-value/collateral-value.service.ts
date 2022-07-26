@@ -1,4 +1,4 @@
-import { Collateral } from '../../../../collateral/src/lib/collateral.entity';
+import { Collateral } from '../collateral.entity';
 import {
   GetAssetPriceResponse,
   GetAssetPricesResponse,

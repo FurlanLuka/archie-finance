@@ -17,7 +17,7 @@ import {
 } from './collateral-withdrawal.controller';
 import { Credit } from '@archie/api/credit-api/credit';
 import { Collateral } from '@archie/api/credit-api/collateral';
-import { MarginLtvModule, LiquidationLog } from '@archie/api/credit-api/margin';
+import { LiquidationLog, MarginLtvModule } from '@archie/api/credit-api/margin';
 
 @Module({
   imports: [
