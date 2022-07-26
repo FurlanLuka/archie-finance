@@ -85,10 +85,16 @@
       "@archie/api/utils/microservice": [
         "libs/api/utils/microservice/src/index.ts"
       ],
+      "@archie/api/utils/migration-generator": [
+        "libs/api/utils/migration-generator/src/index.ts"
+      ],
       "@archie/api/utils/openapi": ["libs/api/utils/openapi/src/index.ts"],
       "@archie/api/utils/queue": ["libs/api/utils/queue/src/index.ts"],
       "@archie/api/utils/tracing": ["libs/api/utils/tracing/src/index.ts"],
       "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"],
+      "@archie/plugin/migration-generator": [
+        "libs/plugin/migration-generator/src/index.ts"
+      ],
       "@archie/plugin/workspace-generator": [
         "libs/plugin/workspace-generator/src/index.ts"
       ]
@@ -100,6 +106,7 @@
     "tmp",
     "dist",
     "**/*spec.ts",
+    "**/*spec.skip.ts",
     "**/__data__",
     "**/__mocks__"
   ]

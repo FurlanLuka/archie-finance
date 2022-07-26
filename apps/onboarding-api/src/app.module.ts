@@ -2,10 +2,14 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import { ConfigVariables } from '@archie/api/onboarding-api/constants';
+import {
+  ConfigVariables,
+  SERVICE_NAME,
+} from '@archie/api/onboarding-api/constants';
 import { OnboardingModule } from '@archie/api/onboarding-api/onboarding';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
+import { migrations } from './migrations';
 
 @Module({
   imports: [
@@ -30,9 +34,12 @@ import { HealthModule } from '@archie/api/utils/health';
         password: configService.get(ConfigVariables.TYPEORM_PASSWORD),
         database: configService.get(ConfigVariables.TYPEORM_DATABASE),
         port: configService.get(ConfigVariables.TYPEORM_PORT),
-        synchronize: true,
+        synchronize: false,
         autoLoadEntities: true,
         keepConnectionAlive: true,
+        migrationsRun: true,
+        migrationsTableName: `${SERVICE_NAME}-migrations`,
+        migrations: migrations,
       }),
       inject: [ConfigService],
     }),
