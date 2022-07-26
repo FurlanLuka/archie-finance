@@ -486,6 +486,29 @@
         }
       }
     },
+    "/v1/margins/ltv": {
+      "get": {
+        "operationId": "MarginController_checkMarginHandler",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LtvResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/v1/rize/users": {
       "post": {
         "operationId": "RizeController_createUser",
@@ -1034,27 +1057,6 @@
         }
       }
     },
-    "/v1/email_waitlist": {
-      "put": {
-        "operationId": "EmailWaitlistController_addToWaitlist",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EmailWaitlistDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
     "/v1/waitlist": {
       "post": {
         "operationId": "WaitlistController_create",
@@ -1343,6 +1345,17 @@
           "cardholder_last_name",
           "issued_at",
           "name_on_card"
+        ]
+      },
+      "LtvResponseDto": {
+        "type": "object",
+        "properties": {
+          "ltv": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "ltv"
         ]
       },
       "TransactionResponseDto": {
@@ -1761,17 +1774,6 @@
         },
         "required": [
           "email"
-        ]
-      },
-      "EmailWaitlistDto": {
-        "type": "object",
-        "properties": {
-          "emailAddress": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "emailAddress"
         ]
       },
       "CreateDto": {
