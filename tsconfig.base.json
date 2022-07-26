@@ -27,9 +27,23 @@
       "@archie/api/collateral-api/constants": [
         "libs/api/collateral-api/constants/src/index.ts"
       ],
+      "@archie/api/credit-api/apto": ["libs/api/credit-api/apto/src/index.ts"],
+      "@archie/api/credit-api/collateral": [
+        "libs/api/credit-api/collateral/src/index.ts"
+      ],
+      "@archie/api/credit-api/collateral-withdrawal": [
+        "libs/api/credit-api/collateral-withdrawal/src/index.ts"
+      ],
       "@archie/api/credit-api/constants": [
         "libs/api/credit-api/constants/src/index.ts"
       ],
+      "@archie/api/credit-api/credit": [
+        "libs/api/credit-api/credit/src/index.ts"
+      ],
+      "@archie/api/credit-api/margin": [
+        "libs/api/credit-api/margin/src/index.ts"
+      ],
+      "@archie/api/credit-api/rize": ["libs/api/credit-api/rize/src/index.ts"],
       "@archie/api/mail-api/constants": [
         "libs/api/mail-api/constants/src/index.ts"
       ],

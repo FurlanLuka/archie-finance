@@ -4,13 +4,13 @@ import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
-import { CreditModule } from './modules/credit/credit.module';
 import { InternalApiModule } from '@archie/api/utils/internal';
-import { AptoModule } from './modules/apto/apto.module';
-import { MarginModule } from './modules/margin/margin.module';
-import { RizeModule } from './modules/rize/rize.module';
-import { CollateralModule } from './modules/collateral/collateral.module';
-import { CollateralWithdrawalModule } from './modules/collateral/withdrawal/collateral_withdrawal.module';
+import { CreditModule } from '@archie/api/credit-api/credit';
+import { CollateralModule } from '@archie/api/credit-api/collateral';
+import { RizeModule } from '@archie/api/credit-api/rize';
+import { MarginModule } from '@archie/api/credit-api/margin';
+import { AptoModule } from '@archie/api/credit-api/apto';
+import { CollateralWithdrawalModule } from '@archie/api/credit-api/collateral-withdrawal';
 
 @Module({
   imports: [
