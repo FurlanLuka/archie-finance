@@ -33,6 +33,12 @@
         "command": "npm run build user-api && node dist/apps/user-api/main build-swagger"
       }
     },
+    "generate-migration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build user-api && node dist/apps/user-api/main generate-migration"
+      }
+    },
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {

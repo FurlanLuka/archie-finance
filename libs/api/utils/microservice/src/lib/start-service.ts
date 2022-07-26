@@ -5,8 +5,8 @@ import * as winston from 'winston';
 import { Openapi } from '@archie/api/utils/openapi';
 import { AllExceptionsFilter } from '@archie/api/utils/tracing';
 
-export async function createMicroservice(
-  name: string,
+export async function startService(
+  _name: string,
   module: unknown,
 ): Promise<INestApplication> {
   const app = await NestFactory.create(module, {
@@ -17,7 +17,6 @@ export async function createMicroservice(
             winston.format.timestamp(),
             winston.format.ms(),
             winston.format.json(),
-            // utilities.format.nestLike(`${name}`, { prettyPrint: false }),
           ),
         }),
       ],

@@ -19,7 +19,7 @@ export class AssetPriceHistory {
   @Column('float')
   price: number;
 
-  @Column('float', { nullable: true })
+  @Column('float', { nullable: false })
   dailyChange: number;
 
   @Column('varchar')

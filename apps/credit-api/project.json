@@ -33,6 +33,12 @@
         "command": "npm run build credit-api && node dist/apps/credit-api/main build-swagger"
       }
     },
+    "generate-migration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build credit-api && node dist/apps/credit-api/main generate-migration"
+      }
+    },
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {

@@ -1,11 +1,11 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, Module, Provider } from '@nestjs/common';
 import { CryptoOptions } from './crypto.interfaces';
 import { CryptoService } from './crypto.service';
 
 @Module({})
 export class CryptoModule {
   static register(options?: CryptoOptions): DynamicModule {
-    const provider = options
+    const provider: Provider = options
       ? {
           inject: options.inject,
           provide: 'CRYPTO_OPTIONS',
