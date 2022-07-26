@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import { ConfigVariables } from '@archie/api/credit-api/constants';
+import {
+  ConfigVariables,
+  SERVICE_NAME,
+} from '@archie/api/credit-api/constants';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
 import { CreditModule } from './modules/credit/credit.module';
@@ -11,6 +14,7 @@ import { MarginModule } from './modules/margin/margin.module';
 import { RizeModule } from './modules/rize/rize.module';
 import { CollateralModule } from './modules/collateral/collateral.module';
 import { CollateralWithdrawalModule } from './modules/collateral/withdrawal/collateral_withdrawal.module';
+import { migrations } from './migrations';
 
 @Module({
   imports: [
@@ -46,6 +50,9 @@ import { CollateralWithdrawalModule } from './modules/collateral/withdrawal/coll
         synchronize: false,
         autoLoadEntities: true,
         keepConnectionAlive: true,
+        migrationsRun: true,
+        migrationsTableName: `${SERVICE_NAME}-migrations`,
+        migrations: migrations,
       }),
       inject: [ConfigService],
     }),
