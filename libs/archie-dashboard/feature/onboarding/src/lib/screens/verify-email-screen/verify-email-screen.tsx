@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
@@ -15,6 +15,9 @@ export const VerifyEmailScreen: FC = () => {
   const { t } = useTranslation();
   const { logout } = useAuthenticatedSession();
 
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [counter, setCounter] = useState(30);
+
   const getEmailVerificationResponse: QueryResponse<EmailVerificationResponse> = useGetEmailVerification();
   const mutationResponse = useResendEmailVerification();
 
@@ -30,6 +33,20 @@ export const VerifyEmailScreen: FC = () => {
     if (mutationResponse.state === RequestState.IDLE) {
       mutationResponse.mutate({});
     }
+
+    setBtnDisabled(true);
+
+    const counting = setInterval(() => {
+      if (counter > 0) {
+        setCounter((counter) => counter - 1);
+      }
+    }, 1000);
+
+    setTimeout(() => {
+      setBtnDisabled(false);
+      clearInterval(counting);
+      setCounter(30);
+    }, 30000);
   };
 
   if (getEmailVerificationResponse.state === RequestState.LOADING) {
@@ -53,8 +70,10 @@ export const VerifyEmailScreen: FC = () => {
           </button>
         </div>
         <hr className="divider" />
-        <ButtonPrimary className="resend-btn" type="submit" onClick={handleResend}>
-          {t('verify_email_step.resend_btn')}
+        <ButtonPrimary className="resend-btn" type="submit" isDisabled={btnDisabled} onClick={handleResend}>
+          {btnDisabled
+            ? t('verify_email_step.resend_btn_disabled', { counter: `00:${counter}` })
+            : t('verify_email_step.resend_btn')}
         </ButtonPrimary>
       </Card>
     </VerifyEmailScreenStyled>

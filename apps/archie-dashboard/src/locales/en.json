@@ -60,7 +60,8 @@
     "text_1": "Check your email for a verification link from Archie. Once you have verified your email, we'll create your Archie Credit Line.",
     "text_2": "The email is not correct?",
     "logout_btn": "Log out.",
-    "resend_btn": "Resend verification email"
+    "resend_btn": "Resend verification email",
+    "resend_btn_disabled": "Resend in {{counter}}"
   },
   "collateralization_step": {
     "title": "Create your credit line",
