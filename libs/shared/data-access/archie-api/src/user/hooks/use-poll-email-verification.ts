@@ -3,15 +3,15 @@ import { QueryClient, useQueryClient } from 'react-query';
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';
 import { ONBOARDING_RECORD_QUERY_KEY } from '../../onboarding/hooks/use-get-onboarding';
-import { getEmailVerification, GetEmailVerificationResponse } from '../api/get-email-verification';
+import { getEmailVerification, EmailVerificationResponse } from '../api/get-email-verification';
 
-export const EMAIL_VERIFICATION_QUERY_KEY = 'email_verification_record';
+export const EMAIL_VERIFICATION_RECORD_QUERY_KEY = 'email_verification_record';
 
-export const usePollEmailVerification = (): QueryResponse<GetEmailVerificationResponse> => {
+export const usePollEmailVerification = (): QueryResponse<EmailVerificationResponse> => {
   const queryClient: QueryClient = useQueryClient();
 
   return useExtendedQuery(
-    EMAIL_VERIFICATION_QUERY_KEY,
+    EMAIL_VERIFICATION_RECORD_QUERY_KEY,
     async (accessToken: string) => getEmailVerification(accessToken),
     {
       refetchInterval: (data) => {
