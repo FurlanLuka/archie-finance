@@ -1,5 +1,5 @@
 import { LiquidationLog } from '../liquidation_logs.entity';
-import { UsersLtv } from '../margin.interfaces';
+import { LtvStatus, UsersLtv } from '../margin.interfaces';
 import { CollateralValue } from '@archie/api/utils/interfaces/collateral';
 import { Injectable } from '@nestjs/common';
 import { MarginNotification } from '../margin_notifications.entity';
@@ -16,8 +16,10 @@ import { Credit } from '@archie/api/credit-api/credit';
 
 @Injectable()
 export class MarginLtvService {
-  LTV_ALERT_LIMITS = [65, 70, 73];
-  LTV_LIMIT = 75;
+  LTV_OK_LIMIT = 50;
+  LTV_WARNING_LIMIT = 65;
+  LTV_ALERT_LIMITS = [this.LTV_WARNING_LIMIT, 70, 73];
+  LTV_MARGIN_CALL_LIMIT = 75;
   COLLATERAL_SALE_LTV_LIMIT = 85;
 
   constructor(
@@ -26,6 +28,14 @@ export class MarginLtvService {
     private amqpConnection: AmqpConnection,
     private collateralValueService: CollateralValueService,
   ) {}
+
+  public getLtvStatus(ltv: UsersLtv): LtvStatus {
+    if (ltv.userOnlyHasStableCoins || ltv.ltv < this.LTV_OK_LIMIT)
+      return LtvStatus.good;
+    else if (ltv.ltv < this.LTV_WARNING_LIMIT) return LtvStatus.ok;
+    else if (ltv.ltv < this.LTV_MARGIN_CALL_LIMIT) return LtvStatus.warning;
+    else return LtvStatus.margin_call;
+  }
 
   public calculateUsersLtv(
     userId: string,
@@ -86,7 +96,7 @@ export class MarginLtvService {
   }
 
   public calculatePriceForMarginCall(loanedBalance: number): number {
-    return loanedBalance / (this.LTV_LIMIT / 100);
+    return loanedBalance / (this.LTV_MARGIN_CALL_LIMIT / 100);
   }
 
   public calculatePriceForCollateralSale(loanedBalance: number): number {
@@ -121,7 +131,8 @@ export class MarginLtvService {
           return (
             marginNotificationNotSentYet &&
             ltv >= limit &&
-            ltv < (this.LTV_ALERT_LIMITS[index + 1] ?? this.LTV_LIMIT)
+            ltv <
+              (this.LTV_ALERT_LIMITS[index + 1] ?? this.LTV_MARGIN_CALL_LIMIT)
           );
         },
       ).some((alert: boolean) => alert);
