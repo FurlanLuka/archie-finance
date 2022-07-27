@@ -167,7 +167,7 @@
     "subtitle_credit": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it.",
     "collateral_received_modal": {
       "title": "Collateral received",
-      "text": "With your latest addition your collateral of {{collateral}} adds up to a credit value of {{credit_value}}.",
+      "text": "Your collateral now includes {{collateral}}. Your credit limit is now ${{credit_value}}.",
       "btn": "Got it!"
     }
   }

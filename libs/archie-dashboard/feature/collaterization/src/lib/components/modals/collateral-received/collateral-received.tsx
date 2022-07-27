@@ -25,7 +25,7 @@ export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
         <ParagraphXS>
           {t('dashboard_collaterization.collateral_received_modal.text', {
             collateral: collateralText,
-            credit_value: creditValue,
+            credit_value: creditValue.toFixed(2),
           })}
         </ParagraphXS>
         <ButtonPrimary onClick={onConfirm} maxWidth="fit-content">
