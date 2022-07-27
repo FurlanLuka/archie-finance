@@ -1,6 +1,7 @@
 import { FC, useMemo, useState } from 'react';
 
 import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
+import { usePollCollateralDeposit } from '@archie-webapps/archie-dashboard/hooks';
 import { calculateCollateralCreditValue } from '@archie-webapps/archie-dashboard/utils';
 
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
@@ -9,7 +10,6 @@ import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-en
 import { CreateCreditLine } from './blocks/create_credit_line/create_credit_line';
 import { NotEnoughCollateral } from './blocks/not-enough-collateral/not-enough-collateral';
 import { formatEntireCollateral } from './collateral-deposit.helpers';
-import { usePollCollateralDeposit } from './use-poll-collateral-deposit';
 
 export const CollateralDeposit: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

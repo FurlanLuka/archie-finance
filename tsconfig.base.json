@@ -28,6 +28,7 @@
       "@archie-webapps/archie-dashboard/feature/rewards": ["libs/archie-dashboard/feature/rewards/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature/settings": ["libs/archie-dashboard/feature/settings/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature/withdraw": ["libs/archie-dashboard/feature/withdraw/src/index.ts"],
+      "@archie-webapps/archie-dashboard/hooks": ["libs/archie-dashboard/hooks/src/index.ts"],
       "@archie-webapps/archie-dashboard/utils": ["libs/archie-dashboard/utils/src/index.ts"],
       "@archie-webapps/shared/constants": ["libs/shared/constants/src/index.ts"],
       "@archie-webapps/shared/data-access/archie-api/*": ["libs/shared/data-access/archie-api/src/*"],

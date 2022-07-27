@@ -1,0 +1,23 @@
+{
+  "root": "libs/archie-dashboard/hooks",
+  "sourceRoot": "libs/archie-dashboard/hooks/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/archie-dashboard/hooks/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/archie-dashboard/hooks"],
+      "options": {
+        "jestConfig": "libs/archie-dashboard/hooks/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
