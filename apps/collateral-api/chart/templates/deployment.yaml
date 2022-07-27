@@ -81,82 +81,72 @@ spec:
             - name: AUTH0_DOMAIN
               valueFrom:
                 secretKeyRef:
-                  name: auth0-secrets
+                  name: auth0-shared-secrets
                   key: domain
             - name: AUTH0_AUDIENCE
               valueFrom:
                 secretKeyRef:
-                  name: auth0-secrets
+                  name: auth0-shared-secrets
                   key: audience
-            - name: SENDGRID_API_KEY
+           - name: TYPEORM_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: api-key
-            - name: SENDGRID_MAILING_LIST_ID
-              valueFrom:
-                secretKeyRef:
-                  name: sendgrid-secrets
-                  key: mailing-list-id
-            - name: TYPEORM_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: database-secrets
-                  key: username
+                  name: collateral-api-secrets
+                  key: db-username
             - name: TYPEORM_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: password
+                  name: collateral-api-secrets
+                  key: db-password
             - name: TYPEORM_HOST
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: hostname
+                  name: collateral-api-secrets
+                  key: db-hostname
             - name: TYPEORM_PORT
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: port
+                  name: collateral-api-secrets
+                  key: db-port
             - name: TYPEORM_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: database
-            - name: FIREBLOCKS_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-secrets
-                  key: api-key
-            - name: FIREBLOCKS_PRIVATE_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-secrets
-                  key: private-key
-            - name: FIREBLOCKS_PUBLIC_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-secrets
-                  key: public-key
-            - name: FIREBLOCKS_VAULT_ACCOUNT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-secrets
-                  key: vault-account-id
+                  name: collateral-api-secrets
+                  key: db-database
             - name: ASSET_LIST
               valueFrom:
                 secretKeyRef:
-                  name: asset-secrets
+                  name: collateral-api-secrets
                   key: enabled-assets
+            - name: FIREBLOCKS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: collateral-api-secrets
+                  key: fireblocks-api-key
+            - name: FIREBLOCKS_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: collateral-api-secrets
+                  key: fireblocks-private-key
+            - name: FIREBLOCKS_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: collateral-api-secrets
+                  key: fireblocks-public-key
+            - name: FIREBLOCKS_VAULT_ACCOUNT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: collateral-api-secrets
+                  key: fireblocks-vault-account-id
             - name: INTERNAL_API_URL
               valueFrom:
                 secretKeyRef:
-                  name: internal-api-secrets
+                  name: internal-api-shared-secrets
                   key: internal-api-url
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:
-                  name: queue-secrets
+                  name: queue-shared-secrets
                   key: queue-url
           {{- end }}
       imagePullSecrets:

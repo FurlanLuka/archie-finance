@@ -85,67 +85,37 @@ spec:
             - name: TYPEORM_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: username
+                  name: referral-system-api-secrets
+                  key: db-username
             - name: TYPEORM_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: password
+                  name: referral-system-api-secrets
+                  key: db-password
             - name: TYPEORM_HOST
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: hostname
+                  name: referral-system-api-secrets
+                  key: db-hostname
             - name: TYPEORM_PORT
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: port
+                  name: referral-system-api-secrets
+                  key: db-port
             - name: TYPEORM_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: database
-            - name: SENDGRID_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: sendgrid-secrets
-                  key: api-key
-            - name: SENDGRID_API_URL
-              valueFrom:
-                secretKeyRef:
-                  name: sendgrid-secrets
-                  key: api-url
-            - name: SENDGRID_MAILING_LIST_ID
-              valueFrom:
-                secretKeyRef:
-                  name: sendgrid-secrets
-                  key: mailing-list-id
-            - name: SENDGRID_VERIFY_EMAIL_TEMPLATAE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: sendgrid-secrets
-                  key: verify-email-template-id
-            - name: SENDGRID_WELCOME_EMAIL_TEMPLATE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: sendgrid-secrets
-                  key: welcome-email-template-id
-            - name: ARCHIE_MARKETING_WEBSITE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: archie-secrets
-                  key: marketing-website-url
+                  name: referral-system-api-secrets
+                  key: db-database
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:
-                  name: queue-secrets
+                  name: queue-shared-secrets
                   key: queue-url
             - name: ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: cryptography-secrets
+                  name: referral-system-api-secrets
                   key: encryption-key
           {{- end }}
       imagePullSecrets:
