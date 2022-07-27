@@ -37,6 +37,7 @@ export class UserService {
 
     return {
       isVerified: user.email_verified,
+      email: user.email,
     };
   }
 

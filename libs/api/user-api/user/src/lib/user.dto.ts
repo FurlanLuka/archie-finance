@@ -14,6 +14,7 @@ export class GetEmailVerificationResponseDto
   implements GetEmailVerificationResponse
 {
   isVerified: boolean;
+  email: string;
 }
 
 export class GetEmailAddressResponseDto implements GetEmailAddressResponse {
