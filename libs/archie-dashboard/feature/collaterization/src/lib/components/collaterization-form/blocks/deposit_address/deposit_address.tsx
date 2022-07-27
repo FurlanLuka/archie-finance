@@ -10,9 +10,6 @@ import { Icon } from '@archie-webapps/shared/ui/icons';
 import QRCode from 'react-qr-code';
 import { DepositAddressStyled } from './deposit_address.styled';
 
-interface DepositAddressProps {
-  assetInfo: CollateralAsset;
-}
 const fieldId = 'address';
 
 const handleCopyToClipboard = (value?: string) => {
@@ -29,7 +26,12 @@ const handleCopyToClipboard = (value?: string) => {
   });
 };
 
-export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo }) => {
+interface DepositAddressProps {
+  assetInfo: CollateralAsset;
+  assetAmount: number;
+}
+
+export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount }) => {
   const { t } = useTranslation();
   const getDepositAddressResponse = useGetDepositAddress(assetInfo.id, true);
 
@@ -46,7 +48,7 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo }) => {
       <ParagraphXS weight={700}>
         <Trans
           values={{
-            required_collateral: 1,
+            required_collateral: assetAmount,
           }}
         >
           collateralization_step.address.title

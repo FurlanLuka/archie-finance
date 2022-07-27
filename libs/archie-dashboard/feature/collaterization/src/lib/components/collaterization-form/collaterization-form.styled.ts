@@ -33,15 +33,9 @@ export const CollaterizationFormStyled = styled.div`
   width: 100%;
   max-width: 730px;
 
-  .inputs {
-    display: flex;
-    gap: 2rem;
+  .credit-slider {
     width: 100%;
     margin-bottom: 4rem;
-
-    @media (max-width: ${breakpoints.screenMD}) {
-      flex-direction: column;
-    }
   }
 
   .result {

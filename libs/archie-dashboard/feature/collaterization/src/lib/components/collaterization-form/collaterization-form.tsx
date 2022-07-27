@@ -2,8 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactTooltip from 'react-tooltip';
 
-import { MAX_LINE_OF_CREDIT, MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
-import { CollateralAssetSelect } from '@archie-webapps/archie-dashboard/components';
+import { MAX_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { InputRange, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
@@ -56,21 +55,14 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
 
   return (
     <CollaterizationFormStyled>
-      <div className="inputs">
-        <CollateralAssetSelect
-          selectedAsset={assetInfo}
-          setSelectedAsset={() => {
-            console.log('nope');
-          }}
-        />
-        <InputRange
-          label={t('collateralization_step.inputs.input_range_label')}
-          min={MIN_LINE_OF_CREDIT}
-          max={MAX_LINE_OF_CREDIT}
-          value={lineOfCredit}
-          onChange={setLineOfCredit}
-        />
-      </div>
+      <InputRange
+        className="credit-slider"
+        label={t('collateralization_step.inputs.input_range_label')}
+        min={50}
+        max={MAX_LINE_OF_CREDIT}
+        value={lineOfCredit}
+        onChange={setLineOfCredit}
+      />
       <div className="result">
         <div className="result-item">
           <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
@@ -99,7 +91,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
           <SubtitleM weight={400}>{assetInfo.interest_rate}%</SubtitleM>
         </div>
       </div>
-      <DepositAddress assetInfo={assetInfo} />
+      <DepositAddress assetInfo={assetInfo} assetAmount={requiredCollateral} />
     </CollaterizationFormStyled>
   );
 };
