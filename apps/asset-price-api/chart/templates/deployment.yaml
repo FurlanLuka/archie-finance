@@ -152,7 +152,7 @@ spec:
               {{- if not .Values.local }}
               valueFrom:
                 secretKeyRef:
-                  name: internal-api-secrets
+                  name: internal-api-shared-secrets
                   key: internal-api-url
               {{- else }}
               value: http://host.minikube.internal
