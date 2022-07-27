@@ -1352,10 +1352,20 @@
         "properties": {
           "ltv": {
             "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "good",
+              "ok",
+              "warning",
+              "margin_call"
+            ]
           }
         },
         "required": [
-          "ltv"
+          "ltv",
+          "status"
         ]
       },
       "TransactionResponseDto": {

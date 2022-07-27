@@ -4,7 +4,7 @@ import { Credit } from '../credit/credit.entity';
 import { In, Repository } from 'typeorm';
 import { LiquidationLog } from './liquidation_logs.entity';
 import { MarginCall } from './margin_calls.entity';
-import { LtvResponse, UsersLtv } from './margin.interfaces';
+import { LtvResponse, LtvStatus, UsersLtv } from './margin.interfaces';
 import { MarginLtvService } from './ltv/margin_ltv.service';
 import { MarginCallsService } from './calls/margin_calls.service';
 import { Collateral } from '../collateral/collateral.entity';
@@ -87,9 +87,11 @@ export class MarginService {
       collaterals,
       assetPrices,
     );
+    const ltvStatus: LtvStatus = this.marginLtvService.getLtvStatus(ltv);
 
     return {
       ltv: ltv.ltv,
+      status: ltvStatus,
     };
   }
 
