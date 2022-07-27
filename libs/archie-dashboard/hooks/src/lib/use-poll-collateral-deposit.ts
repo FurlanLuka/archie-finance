@@ -5,6 +5,7 @@ import { usePollCollateralValue } from '@archie-webapps/shared/data-access/archi
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 
 interface UsePollCollateralDepositParams {
+  initialCollateral: CollateralValue[];
   onCollateralAmountChange: () => void;
 }
 
@@ -30,9 +31,10 @@ function isCollateralAmountEqual(currentCollateral: CollateralValue[], newCollat
 
 export function usePollCollateralDeposit({
   onCollateralAmountChange,
+  initialCollateral,
 }: UsePollCollateralDepositParams): UsePollCollateralDepositResult {
   const [shouldPoll, setShouldPoll] = useState(true);
-  const [currentCollateral, setCurrentCollateral] = useState<CollateralValue[]>([]);
+  const [currentCollateral, setCurrentCollateral] = useState<CollateralValue[]>(initialCollateral);
 
   const getCollateralResponse = usePollCollateralValue(shouldPoll);
 

@@ -1,36 +1,37 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { TotalCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-total-value';
-import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-total-value';
-import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
+import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
+import { calculateCollateralTotalValue, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { Card, ParagraphM, ParagraphS } from '@archie-webapps/shared/ui/design-system';
 
 import { CollaterizationStyled } from './collaterization.styled';
 import { useParams } from 'react-router-dom';
 import { CollateralizationRouteParams } from '../interfaces/routing';
 import { AddCollateral } from '../components/add-collateral/add-collateral';
+import { CollateralDeposit } from '../components/collateral-updated/collateral-updated';
 
 export const CollaterizationScreen: FC = () => {
   const { t } = useTranslation();
   const { asset } = useParams<CollateralizationRouteParams>();
 
-  const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = useGetCollateralTotalValue();
+  const getCollateralValueResponse = useGetCollateralValue();
 
-  function getSubtitle() {
-    if (getCollateralTotalValueResponse.state === RequestState.LOADING) {
+  function getContent() {
+    if (getCollateralValueResponse.state === RequestState.LOADING) {
       return <ParagraphS className="subtitle">{t('dashboard_collaterization.subtitle_loading')}</ParagraphS>;
     }
 
-    if (getCollateralTotalValueResponse.state === RequestState.SUCCESS) {
-      const collateralTotalValue = getCollateralTotalValueResponse.data.value;
+    if (getCollateralValueResponse.state === RequestState.SUCCESS) {
+      const collateralTotalValue = calculateCollateralTotalValue(getCollateralValueResponse.data);
 
       return (
         <>
           <ParagraphS className="subtitle">
             {t('dashboard_collaterization.subtitle', { collateralTotalValue: getFormattedValue(collateralTotalValue) })}
           </ParagraphS>
+          <CollateralDeposit initialCollateral={getCollateralValueResponse.data} />
         </>
       );
     }
@@ -44,7 +45,7 @@ export const CollaterizationScreen: FC = () => {
         <ParagraphM weight={800} className="title">
           {t('dashboard_collaterization.title', { asset })}
         </ParagraphM>
-        {getSubtitle()}
+        {getContent()}
         <AddCollateral />
       </Card>
     </CollaterizationStyled>
