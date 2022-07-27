@@ -13,27 +13,29 @@ import {
 } from '@nestjs/common';
 import { clearDatabase } from '../e2e-test-utils/database.utils';
 import { Connection, Repository } from 'typeorm';
-import { AuthGuard } from '../../../../libs/api/utils/auth0/src/lib/auth.guard';
-import { Collateral } from '../../src/modules/collateral/collateral.entity';
-import { LiquidationLog } from '../../src/modules/margin/liquidation_logs.entity';
-import { MarginNotification } from '../../src/modules/margin/margin_notifications.entity';
-import { Credit } from '../../src/modules/credit/credit.entity';
-import { CollateralWithdrawal } from '../../src/modules/collateral/withdrawal/collateral_withdrawal.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '../../../../libs/api/credit-api/constants/src';
-import { ConfigVariables } from '../../../../libs/api/user-api/constants/src';
+import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '@archie/api/credit-api/constants';
+import { ConfigVariables } from '@archie/api/user-api/constants';
 import {
   assetPriceResponse,
   createUserCollateral,
   defaultCollateralTotal,
   ETH_PRICE,
 } from '../test-data/collateral.data';
+import { TransactionStatus } from 'fireblocks-sdk';
+import { Credit } from '../../../../libs/api/credit-api/credit/src';
+import {
+  LiquidationLog,
+  MarginNotification,
+} from '../../../../libs/api/credit-api/margin/src';
+import { Collateral } from '../../../../libs/api/credit-api/collateral/src';
+import { CollateralWithdrawal } from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.entity';
+import { AuthGuard } from '@nestjs/passport';
 import {
   CollateralWithdrawalController,
   CollateralWithdrawalQueueController,
-} from '../../src/modules/collateral/withdrawal/collateral_withdrawal.controller';
-import { TransactionStatus } from 'fireblocks-sdk';
+} from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.controller';
 
 describe('CollateralWithdrawalController (e2e)', () => {
   let app: INestApplication;

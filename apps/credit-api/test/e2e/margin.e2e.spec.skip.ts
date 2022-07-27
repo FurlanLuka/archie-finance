@@ -9,24 +9,20 @@ import { AppModule } from '../../src/app.module';
 import { clearDatabase } from '../e2e-test-utils/database.utils';
 import { Connection, Repository } from 'typeorm';
 import { verifyAccessToken } from '../e2e-test-utils/mock.auth.utils';
-import { AuthGuard } from '../../../../libs/api/utils/auth0/src/lib/auth.guard';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
   CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,
   LTV_LIMIT_APPROACHING_EXCHANGE,
   MARGIN_CALL_COMPLETED_EXCHANGE,
   MARGIN_CALL_STARTED_EXCHANGE,
-} from '../../../../libs/api/credit-api/constants/src';
+} from '@archie/api/credit-api/constants';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { MarginQueueController } from '../../src/modules/margin/margin.controller';
-import { Credit } from '../../src/modules/credit/credit.entity';
-import nock = require('nock');
-import { ConfigVariables } from '../../../../libs/api/user-api/constants/src';
+import { MarginQueueController } from '../../../../libs/api/credit-api/margin/src/lib/margin.controller';
+import * as nock from 'nock';
+import { ConfigVariables } from '@archie/api/user-api/constants';
 import { ConfigService } from '@nestjs/config';
-import { MarginNotification } from '../../src/modules/margin/margin_notifications.entity';
-import { MarginCall } from '../../src/modules/margin/margin_calls.entity';
 import { DateTime } from 'luxon';
-import { LiquidationLog } from '../../src/modules/margin/liquidation_logs.entity';
 import {
   assetPriceResponse,
   BTC_PRICE,
@@ -39,8 +35,14 @@ import {
 } from '../test-data/collateral.data';
 import { UUID_REGEX } from '../e2e-test-utils/regex.utils';
 import { closeToMatcher } from '../e2e-test-utils/jest.utils';
-import { Collateral } from '../../src/modules/collateral/collateral.entity';
-import { MarginCollateralCheck } from '../../src/modules/margin/margin_collateral_check.entity';
+import { Credit } from '@archie/api/credit-api/credit';
+import {
+  LiquidationLog,
+  MarginCall,
+  MarginCollateralCheck,
+  MarginNotification,
+} from '@archie/api/credit-api/margin';
+import { Collateral } from '@archie/api/credit-api/collateral';
 
 describe('MarginQueueController (e2e)', () => {
   let app: INestApplication;
