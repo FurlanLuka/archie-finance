@@ -1723,10 +1723,14 @@
         "properties": {
           "isVerified": {
             "type": "boolean"
+          },
+          "email": {
+            "type": "string"
           }
         },
         "required": [
-          "isVerified"
+          "isVerified",
+          "email"
         ]
       },
       "GetSendEnrollmentTicketResponseDto": {
