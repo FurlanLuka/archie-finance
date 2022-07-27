@@ -30,6 +30,12 @@ export const CollaterizationStyled = styled.div`
     max-width: 530px;
   }
 
+  .subtitle-asset {
+    text-align: center;
+    margin: 1rem 0;
+    max-width: 530px;
+  }
+
   .loader-container {
     display: flex;
     flex: 1;

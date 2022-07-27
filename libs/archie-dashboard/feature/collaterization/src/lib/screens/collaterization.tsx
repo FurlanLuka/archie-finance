@@ -24,14 +24,27 @@ export const CollaterizationScreen: FC = () => {
     }
 
     if (getCollateralValueResponse.state === RequestState.SUCCESS) {
-      const collateralTotalValue = calculateCollateralTotalValue(getCollateralValueResponse.data);
+      const initialCollateral = getCollateralValueResponse.data;
+      const collateralTotalValue = calculateCollateralTotalValue(initialCollateral);
+      const currentAsset = initialCollateral.find((c) => c.asset === asset);
 
       return (
         <>
+          {currentAsset && (
+            <ParagraphS className="subtitle-asset">
+              {t('dashboard_collaterization.subtitle_asset', {
+                collateral: currentAsset.assetAmount,
+                collateral_asset: currentAsset.asset,
+                collateral_value: currentAsset.price.toFixed(2),
+              })}
+            </ParagraphS>
+          )}
           <ParagraphS className="subtitle">
-            {t('dashboard_collaterization.subtitle', { collateralTotalValue: getFormattedValue(collateralTotalValue) })}
+            {t('dashboard_collaterization.subtitle_credit', {
+              collateralTotalValue: getFormattedValue(collateralTotalValue),
+            })}
           </ParagraphS>
-          <CollateralDeposit initialCollateral={getCollateralValueResponse.data} />
+          <CollateralDeposit initialCollateral={initialCollateral} />
         </>
       );
     }

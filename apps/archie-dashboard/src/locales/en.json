@@ -163,7 +163,8 @@
   "dashboard_collaterization": {
     "title": "Send {{asset}} to your Collateral Wallet",
     "subtitle_loading": "With ArchCredit, your Crypto is your credit.",
-    "subtitle": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it.",
+    "subtitle_asset": "You currently have {{collateral}} {{collateral_asset}} (~${{collateral_value}}).",
+    "subtitle_credit": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it.",
     "collateral_received_modal": {
       "title": "Collateral received",
       "text": "With your latest addition your collateral of {{collateral}} adds up to a credit value of {{credit_value}}.",
