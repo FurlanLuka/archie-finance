@@ -9,16 +9,22 @@ import {
   LTV_LIMIT_APPROACHING_EXCHANGE,
 } from '@archie/api/credit-api/constants';
 import { CollateralValueModule } from '@archie/api/credit-api/collateral';
+import { QueueModule, QueueService } from '@archie/api/utils/queue';
 
 @Module({
   controllers: [],
   imports: [
     TypeOrmModule.forFeature([MarginNotification]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        exchanges: [LTV_LIMIT_APPROACHING_EXCHANGE],
+      imports: [ConfigModule, QueueModule],
+      inject: [ConfigService, QueueService],
+      useFactory: (
+        configService: ConfigService,
+        queueService: QueueService,
+      ) => ({
+        exchanges: queueService.createExchanges([
+          LTV_LIMIT_APPROACHING_EXCHANGE,
+        ]),
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
       }),

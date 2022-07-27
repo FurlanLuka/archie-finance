@@ -12,6 +12,7 @@ import {
 } from '@archie/api/credit-api/constants';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Credit, CreditModule } from '@archie/api/credit-api/credit';
+import { QueueModule, QueueService } from '@archie/api/utils/queue';
 
 @Module({
   controllers: [RizeController, RizeQueueController],
@@ -19,10 +20,13 @@ import { Credit, CreditModule } from '@archie/api/credit-api/credit';
   imports: [
     TypeOrmModule.forFeature([Credit]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        exchanges: [CARD_ACTIVATED_EXCHANGE],
+      imports: [ConfigModule, QueueModule],
+      inject: [ConfigService, QueueService],
+      useFactory: (
+        configService: ConfigService,
+        queueService: QueueService,
+      ) => ({
+        exchanges: queueService.createExchanges([CARD_ACTIVATED_EXCHANGE]),
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
       }),

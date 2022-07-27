@@ -12,16 +12,20 @@ import {
   COLLATERAL_RECEIVED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
 import { ConfigService, ConfigModule } from '@archie/api/utils/config';
+import { QueueModule, QueueService } from '@archie/api/utils/queue';
 
 @Module({
   controllers: [CreditController, InternalCreditController],
   imports: [
     TypeOrmModule.forFeature([Credit]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        exchanges: [COLLATERAL_RECEIVED_EXCHANGE],
+      imports: [ConfigModule, QueueModule],
+      inject: [ConfigService, QueueService],
+      useFactory: (
+        configService: ConfigService,
+        queueService: QueueService,
+      ) => ({
+        exchanges: queueService.createExchanges([COLLATERAL_RECEIVED_EXCHANGE]),
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
       }),

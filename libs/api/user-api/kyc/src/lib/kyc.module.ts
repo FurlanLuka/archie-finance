@@ -9,15 +9,19 @@ import {
   ConfigVariables,
 } from '@archie/api/user-api/constants';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
+import { QueueModule, QueueService } from '@archie/api/utils/queue';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Kyc]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        exchanges: [KYC_SUBMITTED_EXCHANGE],
+      imports: [ConfigModule, QueueModule],
+      inject: [ConfigService, QueueService],
+      useFactory: (
+        configService: ConfigService,
+        queueService: QueueService,
+      ) => ({
+        exchanges: queueService.createExchanges([KYC_SUBMITTED_EXCHANGE]),
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
       }),

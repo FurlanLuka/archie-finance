@@ -9,16 +9,23 @@ import {
 } from '@archie/api/credit-api/constants';
 import { Credit, CreditModule } from '@archie/api/credit-api/credit';
 import { CreditLimitService } from './credit_limit.service';
+import { QueueModule, QueueService } from '@archie/api/utils/queue';
 
 @Module({
   controllers: [],
   imports: [
     TypeOrmModule.forFeature([Credit]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        exchanges: [CREDIT_LIMIT_DECREASED, CREDIT_LIMIT_INCREASED],
+      imports: [ConfigModule, QueueModule],
+      inject: [ConfigService, QueueService],
+      useFactory: (
+        configService: ConfigService,
+        queueService: QueueService,
+      ) => ({
+        exchanges: queueService.createExchanges([
+          CREDIT_LIMIT_DECREASED,
+          CREDIT_LIMIT_INCREASED,
+        ]),
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
       }),

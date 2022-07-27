@@ -14,6 +14,7 @@ import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { COLLATERAL_DEPOSITED_EXCHANGE } from '@archie/api/credit-api/constants';
 import { CollateralValueModule } from './collateral-value/collateral-value.module';
+import { QueueModule, QueueService } from '@archie/api/utils/queue';
 
 @Module({
   imports: [
@@ -26,10 +27,15 @@ import { CollateralValueModule } from './collateral-value/collateral-value.modul
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        exchanges: [COLLATERAL_DEPOSITED_EXCHANGE],
+      imports: [ConfigModule, QueueModule],
+      inject: [ConfigService, QueueService],
+      useFactory: (
+        configService: ConfigService,
+        queueService: QueueService,
+      ) => ({
+        exchanges: queueService.createExchanges([
+          COLLATERAL_DEPOSITED_EXCHANGE,
+        ]),
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
         enableControllerDiscovery: true,

@@ -15,6 +15,7 @@ import {
 } from '@archie/api/credit-api/constants';
 import { ConfigService, ConfigModule } from '@archie/api/utils/config';
 import { CreditModule } from '@archie/api/credit-api/credit';
+import { QueueModule, QueueService } from '@archie/api/utils/queue';
 
 @Module({
   controllers: [AptoController],
@@ -29,10 +30,16 @@ import { CreditModule } from '@archie/api/credit-api/credit';
     AptoApiModule,
     CreditModule,
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        exchanges: [PHONE_NUMBER_VERIFIED_EXCHANGE, CARD_ACTIVATED_EXCHANGE],
+      imports: [ConfigModule, QueueModule],
+      inject: [ConfigService, QueueService],
+      useFactory: (
+        configService: ConfigService,
+        queueService: QueueService,
+      ) => ({
+        exchanges: queueService.createExchanges([
+          PHONE_NUMBER_VERIFIED_EXCHANGE,
+          CARD_ACTIVATED_EXCHANGE,
+        ]),
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
       }),

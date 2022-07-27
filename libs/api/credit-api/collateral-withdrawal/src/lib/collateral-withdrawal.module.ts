@@ -18,6 +18,7 @@ import {
 import { Credit } from '@archie/api/credit-api/credit';
 import { Collateral } from '@archie/api/credit-api/collateral';
 import { LiquidationLog, MarginLtvModule } from '@archie/api/credit-api/margin';
+import { QueueModule, QueueService } from '@archie/api/utils/queue';
 
 @Module({
   imports: [
@@ -35,14 +36,17 @@ import { LiquidationLog, MarginLtvModule } from '@archie/api/credit-api/margin';
       }),
     }),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        exchanges: [
+      imports: [ConfigModule, QueueModule],
+      inject: [ConfigService, QueueService],
+      useFactory: (
+        configService: ConfigService,
+        queueService: QueueService,
+      ) => ({
+        exchanges: QueueService.getRetryExchangeName([
           COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
           COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE,
           COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
-        ],
+        ]),
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
         enableControllerDiscovery: true,

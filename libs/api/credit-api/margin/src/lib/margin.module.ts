@@ -21,6 +21,7 @@ import { MarginCollateralValueCheckModule } from './collateral_value_checks/marg
 import { CreditLimitModule } from './credit_limit/credit_limit.module';
 import { Credit } from '@archie/api/credit-api/credit';
 import { Collateral } from '@archie/api/credit-api/collateral';
+import { QueueModule, QueueService } from '@archie/api/utils/queue';
 
 @Module({
   controllers: [
@@ -31,13 +32,16 @@ import { Collateral } from '@archie/api/credit-api/collateral';
   imports: [
     TypeOrmModule.forFeature([Credit, LiquidationLog, MarginCall, Collateral]),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        exchanges: [
+      imports: [ConfigModule, QueueModule],
+      inject: [ConfigService, QueueService],
+      useFactory: (
+        configService: ConfigService,
+        queueService: QueueService,
+      ) => ({
+        exchanges: queueService.createExchanges([
           MARGIN_CHECK_REQUESTED_EXCHANGE,
           CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,
-        ],
+        ]),
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
       }),

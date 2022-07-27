@@ -10,20 +10,24 @@ import {
   MARGIN_CALL_COMPLETED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
+import { QueueModule, QueueService } from '@archie/api/utils/queue';
 
 @Module({
   imports: [
     PassportModule,
     CryptoModule.register(),
     RabbitMQModule.forRootAsync(RabbitMQModule, {
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        exchanges: [
+      imports: [ConfigModule, QueueModule],
+      inject: [ConfigService, QueueService],
+      useFactory: (
+        configService: ConfigService,
+        queueService: QueueService,
+      ) => ({
+        exchanges: queueService.createExchanges([
           COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
           COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE,
           MARGIN_CALL_COMPLETED_EXCHANGE,
-        ],
+        ]),
         uri: configService.get(ConfigVariables.QUEUE_URL),
         connectionInitOptions: { wait: false },
         enableControllerDiscovery: true,

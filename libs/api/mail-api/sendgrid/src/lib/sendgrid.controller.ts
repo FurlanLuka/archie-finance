@@ -7,6 +7,7 @@ import {
 import {
   SERVICE_QUEUE_NAME,
   ConfigVariables,
+  LTV_LIMIT_APPROACHING_RETRY_EXCHANGE,
 } from '@archie/api/mail-api/constants';
 import { ConfigService } from '@archie/api/utils/config';
 import {
@@ -62,7 +63,7 @@ export class SendgirdQueueController {
     await this.sendgridService.sendMarginCallStartedMail(payload);
   }
 
-  @Subscribe(LTV_LIMIT_APPROACHING_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(LTV_LIMIT_APPROACHING_EXCHANGE, SERVICE_QUEUE_NAME, true)
   async LtvLimitApproachingHandler(
     payload: LtvLimitApproachingDto,
   ): Promise<void> {
