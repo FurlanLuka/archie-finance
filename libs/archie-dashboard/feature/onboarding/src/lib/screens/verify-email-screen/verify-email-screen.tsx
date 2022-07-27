@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { EmailVerificationResponse } from '@archie-webapps/shared/data-access/archie-api/user/api/get-email-verification';
+import { usePollEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
 import { useGetEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-get-email-verification';
 import { useResendEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
 import { useAuthenticatedSession } from '@archie-webapps/shared/data-access/session';
@@ -20,6 +21,7 @@ export const VerifyEmailScreen: FC = () => {
 
   const getEmailVerificationResponse: QueryResponse<EmailVerificationResponse> = useGetEmailVerification();
   const mutationResponse = useResendEmailVerification();
+  usePollEmailVerification();
 
   const getEmailVerification = () => {
     if (getEmailVerificationResponse.state === RequestState.SUCCESS) {
