@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DepositAddressModule } from './modules/deposit_address/deposit_address.module';
-import { UserVaultAccountModule } from './modules/user_vault_account/user_vault_account.module';
-import { OmnibusVaultAccountModule } from './modules/omnibus_vault_account/omnibus_vault_account.module';
-import { FireblocksWebhookModule } from './modules/fireblocks_webhook/fireblocks_webhook.module';
+import { DepositAddressModule } from '@archie/api/collateral-api/deposit-address';
+import { UserVaultAccountModule } from '@archie/api/collateral-api/user-vault-account';
+import { OmnibusVaultAccountModule } from '@archie/api/collateral-api/omnibus-vault-account';
+import { FireblocksWebhookModule } from '@archie/api/collateral-api/fireblocks-webhook';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
-import { AssetInformationModule } from './modules/asset_information/asset_information.module';
+import { AssetInformationModule } from '@archie/api/collateral-api/asset-information';
 import {
   ConfigVariables,
   SERVICE_NAME,
