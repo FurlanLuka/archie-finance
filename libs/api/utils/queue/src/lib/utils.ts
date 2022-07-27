@@ -1,14 +1,16 @@
 import {
+  RABBIT_HANDLER,
   RabbitMQExchangeConfig,
   RabbitSubscribe,
 } from '@golevelup/nestjs-rabbitmq';
-import { applyDecorators, Logger } from '@nestjs/common';
+import { applyDecorators, Logger, SetMetadata } from '@nestjs/common';
 import { defaultNackErrorHandler } from '@golevelup/nestjs-rabbitmq/lib/amqp/errorBehaviors';
 import { Channel, ConsumeMessage } from 'amqplib';
 import { QueueService } from './queue.service';
 
 const INITIAL_DELAY = 20000;
 const MAX_RETRIES = 10;
+export const RABBIT_RETRY_HANDLER = 'RABBIT_RETRY_HANDLER';
 
 export function Subscribe(
   exchange: RabbitMQExchangeConfig,
@@ -27,8 +29,9 @@ export function Subscribe(
       errorHandler: createErrorHandler(exchange, queueName, requeueOnError),
     }),
     requeueOnError
-      ? RabbitSubscribe({
-          exchange: `${exchange.name}.retry`,
+      ? SetMetadata(RABBIT_RETRY_HANDLER, {
+          type: 'subscribe',
+          exchange: QueueService.getRetryExchangeName(exchange),
           createQueueIfNotExists: true,
           queue: `${queueName}_${exchange.name}`,
           routingKey: queueName,

@@ -42,7 +42,7 @@ import { QueueModule, QueueService } from '@archie/api/utils/queue';
         configService: ConfigService,
         queueService: QueueService,
       ) => ({
-        exchanges: QueueService.getRetryExchangeName([
+        exchanges: queueService.createExchanges([
           COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
           COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE,
           COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,

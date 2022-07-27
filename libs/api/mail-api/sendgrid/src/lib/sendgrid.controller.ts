@@ -62,7 +62,7 @@ export class SendgirdQueueController {
     await this.sendgridService.sendMarginCallStartedMail(payload);
   }
 
-  @Subscribe(LTV_LIMIT_APPROACHING_EXCHANGE, SERVICE_QUEUE_NAME, true)
+  @Subscribe(LTV_LIMIT_APPROACHING_EXCHANGE, SERVICE_QUEUE_NAME)
   async LtvLimitApproachingHandler(
     payload: LtvLimitApproachingDto,
   ): Promise<void> {
