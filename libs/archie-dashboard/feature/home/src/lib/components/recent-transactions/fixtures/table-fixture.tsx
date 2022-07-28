@@ -1,6 +1,11 @@
 import { FC } from 'react';
+import { Column } from 'react-table';
 
-import { TransactionStatus, TransactionStatusColor, TransactionStatusText } from '../constants/transactions-status';
+import { TransactionStatusColor, TransactionStatusText } from '@archie-webapps/archie-dashboard/constants';
+import {
+  Transaction,
+  TransactionStatus,
+} from '@archie-webapps/shared/data-access/archie-api/payment/api/get-transactions';
 
 import { StatusCellStyled, DescriptionCellStyled } from './table-fixtures.styled';
 
@@ -24,20 +29,23 @@ const DescriptionCell: FC<DescriptionCellProps> = ({ title, code }) => (
   </DescriptionCellStyled>
 );
 
-export const tableColumns = [
+export const tableColumns: Column<Transaction>[] = [
   {
     Header: '',
     id: 'hidden',
     columns: [
       {
         Header: 'Date',
-        accessor: 'date',
+        accessor: 'created_at',
         width: 1,
       },
       {
         Header: 'Description',
-        accessor: 'description',
         width: 2,
+        accessor: (row) => ({
+          title: row.merchant_name,
+          code: row.merchant_number,
+        }),
         Cell: ({ value: { title, code } }: any) => {
           return <DescriptionCell title={title} code={code} />;
         },
@@ -52,7 +60,7 @@ export const tableColumns = [
       },
       {
         Header: 'Amount',
-        accessor: 'amount',
+        accessor: 'us_dollar_amount',
         width: 1,
       },
     ],

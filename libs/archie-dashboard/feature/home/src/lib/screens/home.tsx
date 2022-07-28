@@ -1,16 +1,13 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
-  ButtonGhost,
   ButtonOutline,
   Card,
-  ParagraphM,
   ParagraphS,
   ParagraphXS,
   ParagraphXXS,
   SubtitleS,
-  Table,
 } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -20,8 +17,7 @@ import { CollateralValue } from '../components/charts/collateral-value/collatera
 import { LoanToValue } from '../components/charts/loan-to-value/loan-to-value';
 import { NextPayment } from '../components/charts/next-payment/next-payment';
 import { RevealCardModal } from '../components/modals/reveal-card/reveal-card';
-import { tableData } from '../constants/table-data';
-import { tableColumns } from '../fixtures/table-fixture';
+import { RecentTransactions } from '../components/recent-transactions/recent-transactions';
 
 import { HomeStyled } from './home.styled';
 
@@ -31,15 +27,12 @@ export const WalletAndCollateralScreen: FC = () => {
   const [revealCardModalOpen, setRevealCardModalOpen] = useState(false);
   const [revealCardData, setRevealCardData] = useState(false);
 
-  const columns = useMemo(() => tableColumns, []);
-  const data = useMemo(() => tableData, []);
-
   const name = 'Lando';
   const date = 'February, 2022';
 
   return (
     <HomeStyled>
-    <SubtitleS className="title">{t('dashboard_wallet_and_collateral.title', { name })}</SubtitleS>
+      <SubtitleS className="title">{t('dashboard_wallet_and_collateral.title', { name })}</SubtitleS>
       <ParagraphXS color={theme.textSecondary} className="subtitle">
         {t('dashboard_wallet_and_collateral.subtitle', { date })}
       </ParagraphXS>
@@ -165,20 +158,7 @@ export const WalletAndCollateralScreen: FC = () => {
           </div>
         </Card>
       </div>
-
-      <div className="section-table">
-        <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
-          <ParagraphM weight={800} className="table-title">
-            Recent Transactions
-          </ParagraphM>
-          <div className="btn-group">
-            <ButtonOutline maxWidth="auto" small className="table-btn">
-              View More
-            </ButtonOutline>
-          </div>
-          <Table columns={columns} data={data} />
-        </Card>
-      </div>
+      <RecentTransactions />
     </HomeStyled>
   );
 };

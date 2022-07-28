@@ -4,7 +4,7 @@ import { useTable, Column } from 'react-table';
 import { TableStyled } from './table.styled';
 
 export interface TableProps {
-  columns: Column<Record<string, unknown>>[];
+  columns: Column<any>[];
   data: Record<string, unknown>[];
 }
 
