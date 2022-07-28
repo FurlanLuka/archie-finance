@@ -8,7 +8,8 @@ import { Channel, ConsumeMessage } from 'amqplib';
 import { QueueService } from './queue.service';
 
 const INITIAL_DELAY = 20000;
-const MAX_RETRIES = 10;
+const MAX_RETRIES = 5;
+const RETRY_BACKOFF = 2;
 export const RABBIT_RETRY_HANDLER = 'RABBIT_RETRY_HANDLER';
 
 export function Subscribe(
@@ -62,7 +63,7 @@ function createErrorHandler(
     });
 
     if (requeueOnError) {
-      const delay: number = headers['x-delay'] ?? INITIAL_DELAY / 2;
+      const delay: number = headers['x-delay'] ?? INITIAL_DELAY / RETRY_BACKOFF;
 
       if (retryAttempt < MAX_RETRIES) {
         channel.publish(
@@ -71,7 +72,7 @@ function createErrorHandler(
           msg.content,
           {
             headers: {
-              'x-delay': delay * 2,
+              'x-delay': delay * RETRY_BACKOFF,
               'x-retry': retryAttempt + 1,
             },
           },
