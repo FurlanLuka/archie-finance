@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
+import { LoanToValueStatus, LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
 import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralCurrency } from '@archie-webapps/shared/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
@@ -43,11 +43,10 @@ export const CollateralScreen: FC = () => {
 
   const getLTV = () => {
     if (getLTVResponse.state === RequestState.SUCCESS) {
-      console.log(getLTVResponse.data);
-      return getLTVResponse.data.ltv;
+      return getLTVResponse.data;
     }
 
-    return 0;
+    return { ltv: 0, status: LoanToValueStatus.GOOD };
   };
 
   const getAssetsAllocation = (asset: string) => {
@@ -99,9 +98,9 @@ export const CollateralScreen: FC = () => {
             <ParagraphXS weight={700} color={theme.textSecondary}>
               {t('ltv')}:
             </ParagraphXS>
-            <ParagraphM>{getLTV()}%</ParagraphM>
+            <ParagraphM>{getLTV().ltv.toFixed(2)}%</ParagraphM>
           </div>
-          <Badge statusColor={LoanToValueColor['good']}>{LoanToValueText['good']}</Badge>
+          <Badge statusColor={LoanToValueColor[getLTV().status]}>{LoanToValueText[getLTV().status]}</Badge>
         </div>
 
         <AssetsAllocation
