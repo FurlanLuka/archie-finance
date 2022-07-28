@@ -1,10 +1,12 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
+import { LoanToValueStatus, LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
 import { calculateCollateralTotalValue, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
+import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
+import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { Loading, Card, Badge, SubtitleS, ParagraphM, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
@@ -17,7 +19,9 @@ export const CollateralScreen: FC = () => {
   const { t } = useTranslation();
 
   const getCollateralValueResponse: QueryResponse<CollateralValue[]> = useGetCollateralValue();
+  const getLTVResponse: QueryResponse<LTV> = useGetLTV();
 
+  // TODO display loader if ltv or this is loading
   function getContent() {
     switch (getCollateralValueResponse.state) {
       case RequestState.ERROR:
@@ -29,10 +33,13 @@ export const CollateralScreen: FC = () => {
         return <CollateralInfo collateral={getCollateralValueResponse.data} />;
     }
   }
+  const getLTV = () => {
+    if (getLTVResponse.state === RequestState.SUCCESS) {
+      return getLTVResponse.data;
+    }
 
-  // Temp data
-  const ltv = 22;
-  const good = 'good';
+    return { ltv: 0, status: LoanToValueStatus.GOOD };
+  };
 
   return (
     <CollateralStyled>
@@ -50,9 +57,9 @@ export const CollateralScreen: FC = () => {
             <ParagraphXS weight={700} color={theme.textSecondary}>
               {t('ltv')}:
             </ParagraphXS>
-            <ParagraphM>{ltv}%</ParagraphM>
+            <ParagraphM>{getLTV().ltv.toFixed(2)}%</ParagraphM>
           </div>
-          <Badge statusColor={LoanToValueColor[good]}>{LoanToValueText[good]}</Badge>
+          <Badge statusColor={LoanToValueColor[getLTV().status]}>{LoanToValueText[getLTV().status]}</Badge>
         </div>
         {getContent()}
       </Card>

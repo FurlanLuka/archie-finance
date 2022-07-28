@@ -21,15 +21,15 @@ export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
   return (
     <Modal isOpen={true} maxWidth="800px">
       <CollateralReceivedModalStyled>
-        <ParagraphM weight={700}>{t('dashboard_collaterization.collateral_received_modal.title')}</ParagraphM>
+        <ParagraphM weight={700}>{t('dashboard_collateralization.collateral_received_modal.title')}</ParagraphM>
         <ParagraphXS>
-          {t('dashboard_collaterization.collateral_received_modal.text', {
+          {t('dashboard_collateralization.collateral_received_modal.text', {
             collateral: collateralText,
             credit_value: creditValue.toFixed(2),
           })}
         </ParagraphXS>
         <ButtonPrimary onClick={onConfirm} maxWidth="fit-content">
-          {t('dashboard_collaterization.collateral_received_modal.btn')}
+          {t('dashboard_collateralization.collateral_received_modal.btn')}
         </ButtonPrimary>
       </CollateralReceivedModalStyled>
     </Modal>

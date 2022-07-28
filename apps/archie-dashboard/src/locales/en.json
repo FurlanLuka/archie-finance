@@ -160,7 +160,7 @@
     },
     "btn": "Withdraw Collateral"
   },
-  "dashboard_collaterization": {
+  "dashboard_collateralization": {
     "title": "Send {{asset}} to your Collateral Wallet",
     "subtitle_loading": "With ArchCredit, your Crypto is your credit.",
     "subtitle_asset": "You currently have {{collateral}} {{collateral_asset}} (~${{collateral_value}}).",

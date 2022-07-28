@@ -36,11 +36,15 @@ const fadeOut = keyframes`
   }
 `;
 
+<<<<<<< HEAD:libs/archie-dashboard/feature/collateralization/src/lib/components/collaterization-form/blocks/deposit_address/deposit_address.styled.ts
 export const DepositAddressStyled = styled.div`
   position: relative;
   background-color: ${({ theme }) => theme.backgroundSecondary};
   border-top: 1px solid ${({ theme }) => theme.borderPrimary};
   border-bottom: 1px solid ${({ theme }) => theme.borderPrimary};
+=======
+export const CollateralizationFormStyled = styled.div`
+>>>>>>> feature/collateral-flow:libs/archie-dashboard/feature/collateralization/src/lib/components/collateralization-form.styled.ts
   width: 100%;
   min-height: 470px;
   padding: 1.5rem 1rem;

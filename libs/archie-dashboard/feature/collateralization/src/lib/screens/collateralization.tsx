@@ -6,13 +6,14 @@ import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie
 import { calculateCollateralTotalValue, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { ButtonOutline, Card, ParagraphM, ParagraphS } from '@archie-webapps/shared/ui/design-system';
 
-import { CollaterizationStyled } from './collaterization.styled';
 import { Link, useParams } from 'react-router-dom';
 import { CollateralizationRouteParams } from '../interfaces/routing';
 import { AddCollateral } from '../components/add-collateral/add-collateral';
 import { CollateralDeposit } from '../components/collateral-updated/collateral-updated';
 
-export const CollaterizationScreen: FC = () => {
+import { CollateralizationStyled } from './collateralization.styled'
+
+export const CollateralizationScreen: FC = () => {
   const { t } = useTranslation();
   const { asset } = useParams<CollateralizationRouteParams>();
 
@@ -20,7 +21,7 @@ export const CollaterizationScreen: FC = () => {
 
   function getContent() {
     if (getCollateralValueResponse.state === RequestState.LOADING) {
-      return <ParagraphS className="subtitle">{t('dashboard_collaterization.subtitle_loading')}</ParagraphS>;
+      return <ParagraphS className="subtitle">{t('dashboard_collateralization.subtitle_loading')}</ParagraphS>;
     }
 
     if (getCollateralValueResponse.state === RequestState.SUCCESS) {
@@ -32,7 +33,7 @@ export const CollaterizationScreen: FC = () => {
         <>
           {currentAsset && (
             <ParagraphS className="subtitle-asset">
-              {t('dashboard_collaterization.subtitle_asset', {
+              {t('dashboard_collateralization.subtitle_asset', {
                 collateral: currentAsset.assetAmount,
                 collateral_asset: currentAsset.asset,
                 collateral_value: currentAsset.price.toFixed(2),
@@ -40,7 +41,7 @@ export const CollaterizationScreen: FC = () => {
             </ParagraphS>
           )}
           <ParagraphS className="subtitle">
-            {t('dashboard_collaterization.subtitle_credit', {
+            {t('dashboard_collateralization.subtitle_credit', {
               collateralTotalValue: getFormattedValue(collateralTotalValue),
             })}
           </ParagraphS>
@@ -53,10 +54,10 @@ export const CollaterizationScreen: FC = () => {
   }
 
   return (
-    <CollaterizationStyled>
+    <CollateralizationStyled>
       <Card column alignItems="center" padding="2.5rem 1.5rem 3.5rem" minHeight="720px">
         <ParagraphM weight={800} className="title">
-          {t('dashboard_collaterization.title', { asset })}
+          {t('dashboard_collateralization.title', { asset })}
         </ParagraphM>
         {getContent()}
         <AddCollateral />
@@ -64,6 +65,6 @@ export const CollaterizationScreen: FC = () => {
           <ButtonOutline>{t('btn_cancel')}</ButtonOutline>
         </Link>
       </Card>
-    </CollaterizationStyled>
+    </CollateralizationStyled>
   );
 };

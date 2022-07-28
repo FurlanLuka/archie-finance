@@ -57,8 +57,16 @@ export const CollateralAssets: Record<CollateralCurrency | string, CollateralAss
 };
 
 export const CollateralAssetsColor = {
+<<<<<<< HEAD
   [CollateralCurrency.BTC]: '#f7931a',
   [CollateralCurrency.ETH]: '#627eea',
   [CollateralCurrency.SOL]: '#bd40f2',
   [CollateralCurrency.USDC]: '#3e73c4',
 };
+=======
+  [CollateralCurrency.BTC]: '#f59d33',
+  [CollateralCurrency.ETH]: '#8097ed',
+  [CollateralCurrency.SOL]: '#c257ef',
+  [CollateralCurrency.USDC]: '#5376ab',
+}
+>>>>>>> feature/collateral-flow
