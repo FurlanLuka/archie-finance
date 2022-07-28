@@ -60,7 +60,6 @@ export class QueueModule implements OnModuleInit {
       const handler = discoveredMethod.handler.bind(
         discoveredMethod.parentClass.instance,
       );
-      console.log(meta);
 
       this.amqpConnection.createSubscriber(
         handler,
