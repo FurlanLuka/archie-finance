@@ -1,11 +1,13 @@
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
+import { LoanToValueStatus, LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
 import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralCurrency } from '@archie-webapps/shared/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
+import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
+import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import {
   Loading,
@@ -27,6 +29,7 @@ export const CollateralScreen: FC = () => {
   const { t } = useTranslation();
 
   const getCollateralValueResponse: QueryResponse<CollateralValue[]> = useGetCollateralValue();
+  const getLTVResponse: QueryResponse<LTV> = useGetLTV();
 
   const getAssetsAllocationPercentage = (price: number) => (price / getCollateralTotalValue()) * 100;
 
@@ -36,6 +39,14 @@ export const CollateralScreen: FC = () => {
     }
 
     return 0;
+  };
+
+  const getLTV = () => {
+    if (getLTVResponse.state === RequestState.SUCCESS) {
+      return getLTVResponse.data;
+    }
+
+    return { ltv: 0, status: LoanToValueStatus.GOOD };
   };
 
   const getAssetsAllocation = (asset: string) => {
@@ -69,13 +80,9 @@ export const CollateralScreen: FC = () => {
 
   const columns = useMemo(() => tableColumns, []);
 
-  if (getCollateralValueResponse.state === RequestState.LOADING) {
+  if (getCollateralValueResponse.state === RequestState.LOADING || getLTVResponse.state === RequestState.LOADING) {
     return <Loading />;
   }
-
-  // Temp data
-  const ltv = 22;
-  const good = 'good';
 
   return (
     <CollateralStyled>
@@ -91,9 +98,9 @@ export const CollateralScreen: FC = () => {
             <ParagraphXS weight={700} color={theme.textSecondary}>
               {t('ltv')}:
             </ParagraphXS>
-            <ParagraphM>{ltv}%</ParagraphM>
+            <ParagraphM>{getLTV().ltv.toFixed(2)}%</ParagraphM>
           </div>
-          <Badge statusColor={LoanToValueColor[good]}>{LoanToValueText[good]}</Badge>
+          <Badge statusColor={LoanToValueColor[getLTV().status]}>{LoanToValueText[getLTV().status]}</Badge>
         </div>
 
         <AssetsAllocation
