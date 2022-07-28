@@ -1,25 +1,15 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
-import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
-import { CollateralCurrency } from '@archie-webapps/shared/constants';
+import { calculateCollateralTotalValue, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import {
-  Loading,
-  Card,
-  Table,
-  Badge,
-  SubtitleS,
-  ParagraphM,
-  ParagraphXS,
-} from '@archie-webapps/shared/ui/design-system';
+import { Loading, Card, Badge, SubtitleS, ParagraphM, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { AssetsAllocation } from '../components/assets-allocation/assets-allocation';
-import { tableColumns } from '../fixtures/table-fixture';
+import { CollateralInfo } from '../components/collateral-info/collateral-info';
 
 import { CollateralStyled } from './collateral.styled';
 
@@ -28,50 +18,16 @@ export const CollateralScreen: FC = () => {
 
   const getCollateralValueResponse: QueryResponse<CollateralValue[]> = useGetCollateralValue();
 
-  const getAssetsAllocationPercentage = (price: number) => (price / getCollateralTotalValue()) * 100;
-
-  const getCollateralTotalValue = () => {
-    if (getCollateralValueResponse.state === RequestState.SUCCESS) {
-      return getCollateralValueResponse.data.reduce((sum, item) => sum + item.price, 0);
+  function getContent() {
+    switch (getCollateralValueResponse.state) {
+      case RequestState.ERROR:
+        return <div>Something went wrong :(</div>;
+      case RequestState.LOADING:
+      case RequestState.IDLE:
+        return <Loading />;
+      case RequestState.SUCCESS:
+        return <CollateralInfo collateral={getCollateralValueResponse.data} />;
     }
-
-    return 0;
-  };
-
-  const getAssetsAllocation = (asset: string) => {
-    if (getCollateralValueResponse.state === RequestState.SUCCESS) {
-      const current = getCollateralValueResponse.data.find((item) => item.asset === asset);
-
-      return getAssetsAllocationPercentage(current?.price ?? 0);
-    }
-
-    return 0;
-  };
-  console.log('wat', getCollateralValueResponse);
-
-  const data = useMemo(() => {
-    if (getCollateralValueResponse.state === RequestState.SUCCESS) {
-      return getCollateralValueResponse.data.map((item) => ({
-        collateral_asset: item.asset,
-        balance: `$${getFormattedValue(item.price)}`,
-        holdings: `${item.assetAmount} ${item.asset}`,
-        change: {
-          collateral_asset: item.asset,
-        },
-        allocation: getAssetsAllocationPercentage(item.price),
-        actions: {
-          collateral_asset: item.asset,
-        },
-      }));
-    }
-
-    return [];
-  }, [getCollateralValueResponse]);
-
-  const columns = useMemo(() => tableColumns, []);
-
-  if (getCollateralValueResponse.state === RequestState.LOADING) {
-    return <Loading />;
   }
 
   // Temp data
@@ -84,9 +40,11 @@ export const CollateralScreen: FC = () => {
         <ParagraphM weight={800} className="title">
           {t('dashboard_collateral.title')}
         </ParagraphM>
-        <SubtitleS weight={400} className="total">
-          ${getFormattedValue(getCollateralTotalValue())}
-        </SubtitleS>
+        {getCollateralValueResponse.state === RequestState.SUCCESS && (
+          <SubtitleS weight={400} className="total">
+            ${getFormattedValue(calculateCollateralTotalValue(getCollateralValueResponse.data))}
+          </SubtitleS>
+        )}
         <div className="title-group">
           <div className="ltv-group">
             <ParagraphXS weight={700} color={theme.textSecondary}>
@@ -96,15 +54,7 @@ export const CollateralScreen: FC = () => {
           </div>
           <Badge statusColor={LoanToValueColor[good]}>{LoanToValueText[good]}</Badge>
         </div>
-
-        <AssetsAllocation
-          btc={getAssetsAllocation(CollateralCurrency.BTC)}
-          eth={getAssetsAllocation(CollateralCurrency.ETH)}
-          sol={getAssetsAllocation(CollateralCurrency.SOL)}
-          usdc={getAssetsAllocation(CollateralCurrency.USDC)}
-        />
-
-        <Table columns={columns} data={data} />
+        {getContent()}
       </Card>
     </CollateralStyled>
   );

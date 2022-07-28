@@ -42,4 +42,8 @@ export const CollaterizationStyled = styled.div`
     align-items: center;
     justify-content: center;
   }
+
+  .cancel-btn {
+    margin-top: 1rem;
+  }
 `;
