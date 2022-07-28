@@ -43,6 +43,7 @@ export const CollateralScreen: FC = () => {
 
   const getLTV = () => {
     if (getLTVResponse.state === RequestState.SUCCESS) {
+      console.log(getLTVResponse.data);
       return getLTVResponse.data.ltv;
     }
 
