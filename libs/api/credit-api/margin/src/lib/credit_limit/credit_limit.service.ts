@@ -3,19 +3,19 @@ import { UsersLtv } from '../margin.interfaces';
 import { GetAssetListResponse } from '@archie/api/utils/interfaces/asset_information';
 import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
-  CREDIT_LIMIT_DECREASED,
-  CREDIT_LIMIT_INCREASED,
+  CREDIT_LIMIT_DECREASED_TOPIC,
+  CREDIT_LIMIT_INCREASED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import { Credit, CreditService } from '@archie/api/credit-api/credit';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class CreditLimitService {
   constructor(
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
     private creditService: CreditService,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
   ) {}
 
   public async adjustCreditLimit(
@@ -56,7 +56,7 @@ export class CreditLimitService {
       .setParameter('creditIncrease', increasedAmount)
       .execute();
 
-    this.amqpConnection.publish(CREDIT_LIMIT_INCREASED.name, '', {
+    this.queueService.publish(CREDIT_LIMIT_INCREASED_TOPIC, {
       userId: userId,
       amount: increasedAmount,
     });
@@ -98,7 +98,7 @@ export class CreditLimitService {
         });
       }
 
-      this.amqpConnection.publish(CREDIT_LIMIT_DECREASED.name, '', {
+      this.queueService.publish(CREDIT_LIMIT_DECREASED_TOPIC, {
         userId: userId,
         amount: decreaseAmount,
       });

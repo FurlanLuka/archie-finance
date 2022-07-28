@@ -1,17 +1,17 @@
 import { LiquidatedCollateralAssets, UsersLtv } from '../margin.interfaces';
 import { Injectable } from '@nestjs/common';
 import {
-  MARGIN_CALL_COMPLETED_EXCHANGE,
-  MARGIN_CALL_STARTED_EXCHANGE,
+  MARGIN_CALL_COMPLETED_TOPIC,
+  MARGIN_CALL_STARTED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import { Repository } from 'typeorm';
 import { MarginCall } from '../margin_calls.entity';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { DateTime, Interval } from 'luxon';
 import { MarginLtvService } from '../ltv/margin_ltv.service';
 import { MarginLiquidationService } from './liquidation/margin_liquidation.service';
 import { MarginNotification } from '../margin_notifications.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class MarginCallsService {
@@ -24,7 +24,7 @@ export class MarginCallsService {
     private marginNotificationsRepository: Repository<MarginNotification>,
     @InjectRepository(MarginCall)
     private marginCallsRepository: Repository<MarginCall>,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
     private marginLtvService: MarginLtvService,
     private marginLiquidationService: MarginLiquidationService,
   ) {}
@@ -33,7 +33,7 @@ export class MarginCallsService {
     await this.marginCallsRepository.softDelete({
       userId: usersLtv.userId,
     });
-    this.amqpConnection.publish(MARGIN_CALL_COMPLETED_EXCHANGE.name, '', {
+    this.queueService.publish(MARGIN_CALL_COMPLETED_TOPIC, {
       userId: usersLtv.userId,
       liquidation: [],
       liquidationAmount: 0,
@@ -94,7 +94,7 @@ export class MarginCallsService {
       const loanedBalance: number =
         usersLtv.loanedBalance - liquidatedCollateralAssets.loanRepaymentAmount;
 
-      this.amqpConnection.publish(MARGIN_CALL_COMPLETED_EXCHANGE.name, '', {
+      this.queueService.publish(MARGIN_CALL_COMPLETED_TOPIC, {
         userId: usersLtv.userId,
         liquidation: liquidatedCollateralAssets.liquidatedAssets.map(
           (asset) => ({
@@ -114,7 +114,7 @@ export class MarginCallsService {
           liquidatedCollateralAssets.loanRepaymentAmount,
       });
     } else if (alreadyActiveMarginCall === undefined) {
-      this.amqpConnection.publish(MARGIN_CALL_STARTED_EXCHANGE.name, '', {
+      this.queueService.publish(MARGIN_CALL_STARTED_TOPIC, {
         userId: usersLtv.userId,
         ltv: usersLtv.ltv,
         priceForMarginCall: usersLtv.priceForMarginCall,

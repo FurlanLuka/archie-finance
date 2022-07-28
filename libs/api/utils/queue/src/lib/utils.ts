@@ -1,11 +1,8 @@
-import {
-  RabbitMQExchangeConfig,
-  RabbitSubscribe,
-} from '@golevelup/nestjs-rabbitmq';
+import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { applyDecorators, Logger, SetMetadata } from '@nestjs/common';
 import { defaultNackErrorHandler } from '@golevelup/nestjs-rabbitmq/lib/amqp/errorBehaviors';
 import { Channel, ConsumeMessage } from 'amqplib';
-import { QueueService } from './queue.service';
+import { QueueUtilService } from './queue-util.service';
 
 const INITIAL_DELAY = 20000;
 const MAX_RETRIES = 5;
@@ -13,30 +10,33 @@ const RETRY_BACKOFF = 2;
 export const RABBIT_RETRY_HANDLER = 'RABBIT_RETRY_HANDLER';
 
 export function Subscribe(
-  exchange: RabbitMQExchangeConfig,
+  routingKey: string,
   queueName: string,
   requeueOnError = true,
+  exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
 ) {
+  const fullQueueName = `${queueName}-${exchange}_${routingKey}`;
+
   const baseQueueOptions = {
     createQueueIfNotExists: true,
-    queue: `${queueName}_${exchange.name}`,
+    queue: fullQueueName,
     queueOptions: {
       durable: true,
     },
-    errorHandler: createErrorHandler(exchange, queueName, requeueOnError),
+    errorHandler: createErrorHandler(fullQueueName, requeueOnError, exchange),
   };
 
   const decorators = [
     RabbitSubscribe({
-      exchange: exchange.name,
-      routingKey: '',
+      exchange: exchange,
+      routingKey: routingKey,
       ...baseQueueOptions,
     }),
     requeueOnError
       ? SetMetadata(RABBIT_RETRY_HANDLER, {
           type: 'subscribe',
-          routingKey: queueName,
-          exchange: QueueService.getRetryExchangeName(exchange),
+          routingKey: baseQueueOptions.queue,
+          exchange: QueueUtilService.getRetryExchangeName(exchange),
           ...baseQueueOptions,
         })
       : undefined,
@@ -46,16 +46,16 @@ export function Subscribe(
 }
 
 function createErrorHandler(
-  exchange: RabbitMQExchangeConfig,
-  queueName: string,
+  routingKey: string,
   requeueOnError: boolean,
+  exchange: string,
 ) {
   return (channel: Channel, msg: ConsumeMessage, error) => {
     const headers = msg.properties.headers;
     const retryAttempt: number = headers['x-retry'] ?? 0;
 
     Logger.error({
-      message: `Event handling failed for exchange "${exchange.name}"`,
+      message: `Event handling failed for routing key "${routingKey}"`,
       payload: msg.content.toString(),
       error,
       requeue: requeueOnError,
@@ -67,8 +67,8 @@ function createErrorHandler(
 
       if (retryAttempt < MAX_RETRIES) {
         channel.publish(
-          QueueService.getRetryExchangeName(exchange),
-          queueName,
+          QueueUtilService.getRetryExchangeName(exchange),
+          routingKey,
           msg.content,
           {
             headers: {

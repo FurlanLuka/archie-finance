@@ -5,6 +5,7 @@ import { SendgridModule } from '@archie/api/mail-api/sendgrid';
 import { HealthModule } from '@archie/api/utils/health';
 import { InternalApiModule } from '@archie/api/utils/internal';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { QueueModule } from '@archie/api/utils/queue';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     HealthModule,
     SendgridModule,
+    QueueModule.register(),
   ],
   controllers: [],
   providers: [],

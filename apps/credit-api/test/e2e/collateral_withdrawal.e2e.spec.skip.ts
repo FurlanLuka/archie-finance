@@ -15,7 +15,7 @@ import { clearDatabase } from '../e2e-test-utils/database.utils';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '@archie/api/credit-api/constants';
+import { COLLATERAL_WITHDRAW_INITIALIZED_TOPIC } from '@archie/api/credit-api/constants';
 import { ConfigVariables } from '@archie/api/user-api/constants';
 import {
   assetPriceResponse,

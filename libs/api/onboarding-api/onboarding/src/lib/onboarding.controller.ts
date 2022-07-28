@@ -7,13 +7,13 @@ import {
 } from './onboarding.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
-  KYC_SUBMITTED_EXCHANGE,
-  EMAIL_VERIFIED_EXCHANGE,
-  MFA_ENROLLED_EXCHANGE,
+  KYC_SUBMITTED_TOPIC,
+  EMAIL_VERIFIED_TOPIC,
+  MFA_ENROLLED_TOPIC,
 } from '@archie/api/user-api/constants';
 import {
-  COLLATERAL_RECEIVED_EXCHANGE,
-  CARD_ACTIVATED_EXCHANGE,
+  COLLATERAL_RECEIVED_TOPIC,
+  CARD_ACTIVATED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
 import { Subscribe } from '@archie/api/utils/queue';
@@ -34,7 +34,7 @@ export class OnboardingController {
 export class OnboardingQueueController {
   constructor(private onboardingService: OnboardingService) {}
 
-  @Subscribe(KYC_SUBMITTED_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(KYC_SUBMITTED_TOPIC, SERVICE_QUEUE_NAME)
   async kycSubmittedEventHandler(
     payload: CompleteOnboardingStageDto,
   ): Promise<void> {
@@ -44,7 +44,7 @@ export class OnboardingQueueController {
     );
   }
 
-  @Subscribe(EMAIL_VERIFIED_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(EMAIL_VERIFIED_TOPIC, SERVICE_QUEUE_NAME)
   async emailVerifiedEventHandler(
     payload: CompleteOnboardingStageDto,
   ): Promise<void> {
@@ -54,7 +54,7 @@ export class OnboardingQueueController {
     );
   }
 
-  @Subscribe(MFA_ENROLLED_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(MFA_ENROLLED_TOPIC, SERVICE_QUEUE_NAME)
   async mfaEnrollmentEventHandler(
     payload: CompleteOnboardingStageDto,
   ): Promise<void> {
@@ -64,7 +64,7 @@ export class OnboardingQueueController {
     );
   }
 
-  @Subscribe(COLLATERAL_RECEIVED_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(COLLATERAL_RECEIVED_TOPIC, SERVICE_QUEUE_NAME)
   async collateralReceivedEventHandler(
     payload: CompleteOnboardingStageDto,
   ): Promise<void> {
@@ -74,7 +74,7 @@ export class OnboardingQueueController {
     );
   }
 
-  @Subscribe(CARD_ACTIVATED_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(CARD_ACTIVATED_TOPIC, SERVICE_QUEUE_NAME)
   async cardActivatedEventHandler(
     payload: CompleteOnboardingStageDto,
   ): Promise<void> {

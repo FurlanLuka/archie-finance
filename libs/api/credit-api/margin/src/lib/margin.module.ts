@@ -10,21 +10,10 @@ import { LiquidationLog } from './liquidation_logs.entity';
 import { MarginCall } from './margin_calls.entity';
 import { MarginLtvModule } from './ltv/margin_ltv.module';
 import { MarginCallsModule } from './calls/margin_calls.module';
-import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import {
-  ConfigVariables,
-  CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,
-  MARGIN_CHECK_REQUESTED_EXCHANGE,
-} from '@archie/api/credit-api/constants';
 import { MarginCollateralValueCheckModule } from './collateral_value_checks/margin_collateral_value_cheks.module';
 import { CreditLimitModule } from './credit_limit/credit_limit.module';
 import { Credit } from '@archie/api/credit-api/credit';
 import { Collateral } from '@archie/api/credit-api/collateral';
-import {
-  QueueModule,
-  QueueService,
-  RabbitMQCustomModule,
-} from '@archie/api/utils/queue';
 
 @Module({
   controllers: [
@@ -34,21 +23,6 @@ import {
   ],
   imports: [
     TypeOrmModule.forFeature([Credit, LiquidationLog, MarginCall, Collateral]),
-    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
-      imports: [ConfigModule, QueueModule],
-      inject: [ConfigService, QueueService],
-      useFactory: (
-        configService: ConfigService,
-        queueService: QueueService,
-      ) => ({
-        exchanges: queueService.createExchanges([
-          MARGIN_CHECK_REQUESTED_EXCHANGE,
-          CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,
-        ]),
-        uri: configService.get(ConfigVariables.QUEUE_URL),
-        connectionInitOptions: { wait: false },
-      }),
-    }),
     MarginLtvModule,
     MarginCallsModule,
     MarginCollateralValueCheckModule,

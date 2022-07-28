@@ -5,16 +5,7 @@ import { WaitlistService } from './waitlist.service';
 import { WaitlistController } from './waitlist.controller';
 import { Waitlist } from './waitlist.entity';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import {
-  ConfigVariables,
-  JOINED_WAITLIST_EXCHANGE,
-  APPLIED_TO_WAITLIST_EXCHANGE,
-} from '@archie/api/referral-system-api/constants';
-import {
-  QueueModule,
-  QueueService,
-  RabbitMQCustomModule,
-} from '@archie/api/utils/queue';
+import { ConfigVariables } from '@archie/api/referral-system-api/constants';
 
 @Module({
   imports: [
@@ -24,21 +15,6 @@ import {
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
-      }),
-    }),
-    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
-      imports: [ConfigModule, QueueModule],
-      inject: [ConfigService, QueueService],
-      useFactory: (
-        configService: ConfigService,
-        queueService: QueueService,
-      ) => ({
-        exchanges: queueService.createExchanges([
-          JOINED_WAITLIST_EXCHANGE,
-          APPLIED_TO_WAITLIST_EXCHANGE,
-        ]),
-        uri: configService.get(ConfigVariables.QUEUE_URL),
-        connectionInitOptions: { wait: false },
       }),
     }),
   ],

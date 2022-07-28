@@ -7,18 +7,7 @@ import { AptoCard } from './apto_card.entity';
 import { AptoCardApplication } from './apto_card_application.entity';
 import { AptoUser } from './apto_user.entity';
 import { AptoVerification } from './apto_verification.entity';
-import {
-  CARD_ACTIVATED_EXCHANGE,
-  ConfigVariables,
-  PHONE_NUMBER_VERIFIED_EXCHANGE,
-} from '@archie/api/credit-api/constants';
-import { ConfigService, ConfigModule } from '@archie/api/utils/config';
 import { CreditModule } from '@archie/api/credit-api/credit';
-import {
-  QueueModule,
-  QueueService,
-  RabbitMQCustomModule,
-} from '@archie/api/utils/queue';
 
 @Module({
   controllers: [AptoController],
@@ -32,21 +21,6 @@ import {
     ]),
     AptoApiModule,
     CreditModule,
-    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
-      imports: [ConfigModule, QueueModule],
-      inject: [ConfigService, QueueService],
-      useFactory: (
-        configService: ConfigService,
-        queueService: QueueService,
-      ) => ({
-        exchanges: queueService.createExchanges([
-          PHONE_NUMBER_VERIFIED_EXCHANGE,
-          CARD_ACTIVATED_EXCHANGE,
-        ]),
-        uri: configService.get(ConfigVariables.QUEUE_URL),
-        connectionInitOptions: { wait: false },
-      }),
-    }),
   ],
 })
 export class AptoModule {}

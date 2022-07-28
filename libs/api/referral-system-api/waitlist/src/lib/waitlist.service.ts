@@ -10,12 +10,12 @@ import {
 import { ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
-  JOINED_WAITLIST_EXCHANGE,
-  APPLIED_TO_WAITLIST_EXCHANGE,
+  JOINED_WAITLIST_TOPIC,
+  APPLIED_TO_WAITLIST_TOPIC,
 } from '@archie/api/referral-system-api/constants';
 import { v4 } from 'uuid';
 import { EmailVerificationInternalError } from './waitlist.errors';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable({})
 export class WaitlistService {
@@ -23,7 +23,7 @@ export class WaitlistService {
     @InjectRepository(Waitlist) private waitlist: Repository<Waitlist>,
     private dataSource: DataSource,
     private cryptoService: CryptoService,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
     private configService: ConfigService,
   ) {}
 
@@ -42,7 +42,7 @@ export class WaitlistService {
 
     const id: string = v4();
 
-    this.amqpConnection.publish(APPLIED_TO_WAITLIST_EXCHANGE.name, '', {
+    this.queueService.publish(APPLIED_TO_WAITLIST_TOPIC, {
       emailAddress,
       verifyAddress: `${this.configService.get(
         ConfigVariables.ARCHIE_MARKETING_WEBSITE_URL,
@@ -127,7 +127,7 @@ export class WaitlistService {
         waitlistEntity.emailAddress,
       );
 
-      this.amqpConnection.publish(JOINED_WAITLIST_EXCHANGE.name, '', {
+      this.queueService.publish(JOINED_WAITLIST_TOPIC, {
         emailAddress,
       });
 

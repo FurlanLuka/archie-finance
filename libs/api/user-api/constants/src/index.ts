@@ -19,15 +19,8 @@ export enum ConfigVariables {
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
 }
 
-export const KYC_SUBMITTED_EXCHANGE = {
-  name: 'user.kyc.submitted.fx',
-  type: 'fanout',
-};
-export const EMAIL_VERIFIED_EXCHANGE = {
-  name: 'user.email.verified.fx',
-  type: 'fanout',
-};
-export const MFA_ENROLLED_EXCHANGE = {
-  name: 'user.mfa.enrolled.fx',
-  type: 'fanout',
-};
+export const KYC_SUBMITTED_TOPIC = 'user.kyc.submitted';
+
+export const EMAIL_VERIFIED_TOPIC = 'user.email.verified';
+
+export const MFA_ENROLLED_TOPIC = 'user.mfa.enrolled';

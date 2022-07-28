@@ -6,34 +6,10 @@ import {
 } from './credit.controller';
 import { Credit } from './credit.entity';
 import { CreditService } from './credit.service';
-import {
-  ConfigVariables,
-  COLLATERAL_RECEIVED_EXCHANGE,
-} from '@archie/api/credit-api/constants';
-import { ConfigService, ConfigModule } from '@archie/api/utils/config';
-import {
-  QueueModule,
-  QueueService,
-  RabbitMQCustomModule,
-} from '@archie/api/utils/queue';
 
 @Module({
   controllers: [CreditController, InternalCreditController],
-  imports: [
-    TypeOrmModule.forFeature([Credit]),
-    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
-      imports: [ConfigModule, QueueModule],
-      inject: [ConfigService, QueueService],
-      useFactory: (
-        configService: ConfigService,
-        queueService: QueueService,
-      ) => ({
-        exchanges: queueService.createExchanges([COLLATERAL_RECEIVED_EXCHANGE]),
-        uri: configService.get(ConfigVariables.QUEUE_URL),
-        connectionInitOptions: { wait: false },
-      }),
-    }),
-  ],
+  imports: [TypeOrmModule.forFeature([Credit])],
   providers: [CreditService],
   exports: [CreditService],
 })

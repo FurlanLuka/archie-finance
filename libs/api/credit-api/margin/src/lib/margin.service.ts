@@ -8,16 +8,16 @@ import { MarginLtvService } from './ltv/margin_ltv.service';
 import { MarginCallsService } from './calls/margin_calls.service';
 import { InternalApiService } from '@archie/api/utils/internal';
 import { GetAssetPricesResponse } from '@archie/api/utils/interfaces/asset_price';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { GetAssetListResponse } from '@archie/api/utils/interfaces/asset_information';
 import { MarginCollateralValueCheckService } from './collateral_value_checks/margin_collaterall_value_checks.service';
 import {
-  CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,
-  MARGIN_CHECK_REQUESTED_EXCHANGE,
+  CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC,
+  MARGIN_CHECK_REQUESTED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import { CreditLimitService } from './credit_limit/credit_limit.service';
 import { Credit } from '@archie/api/credit-api/credit';
 import { Collateral } from '@archie/api/credit-api/collateral';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class MarginService {
@@ -35,7 +35,7 @@ export class MarginService {
     private marginLtvService: MarginLtvService,
     private marginCallsService: MarginCallsService,
     private internalApiService: InternalApiService,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
     private marginCollateralCheckService: MarginCollateralValueCheckService,
     private creditLimitService: CreditLimitService,
   ) {}
@@ -54,7 +54,7 @@ export class MarginService {
     for (let i = 0; i < userIds.length; i += chunkSize) {
       const chunk: string[] = userIds.slice(i, i + chunkSize);
 
-      this.amqpConnection.publish(MARGIN_CHECK_REQUESTED_EXCHANGE.name, '', {
+      this.queueService.publish(MARGIN_CHECK_REQUESTED_TOPIC, {
         userIds: chunk,
       });
     }
@@ -181,13 +181,9 @@ export class MarginService {
     await this.marginCollateralCheckService.updateMarginChecks(
       uniqueFilteredApplicableUsers,
     );
-    this.amqpConnection.publish(
-      CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE.name,
-      '',
-      {
-        userIds: uniqueFilteredApplicableUsers.map((user) => user.userId),
-      },
-    );
+    this.queueService.publish(CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC, {
+      userIds: uniqueFilteredApplicableUsers.map((user) => user.userId),
+    });
   }
 
   public async checkCreditLimit(userIds: string[]) {

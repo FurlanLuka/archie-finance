@@ -8,6 +8,7 @@ import {
 import { HealthModule } from '@archie/api/utils/health';
 import { WaitlistModule } from '@archie/api/referral-system-api/waitlist';
 import { migrations } from './migrations';
+import { QueueModule } from '@archie/api/utils/queue';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { migrations } from './migrations';
     }),
     HealthModule,
     WaitlistModule,
+    QueueModule.register(),
   ],
   controllers: [],
   providers: [],

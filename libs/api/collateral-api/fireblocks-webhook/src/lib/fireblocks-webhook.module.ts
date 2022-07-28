@@ -7,17 +7,6 @@ import { FireblocksWebhookStrategy } from './guard/fireblocks_webhook.strategy';
 import { CryptoModule } from '@archie/api/utils/crypto';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserVaultAccount } from '@archie/api/collateral-api/user-vault-account';
-import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import { ConfigVariables } from '@archie/api/collateral-api/constants';
-import {
-  COLLATERAL_DEPOSITED_EXCHANGE,
-  COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
-} from '@archie/api/credit-api/constants';
-import {
-  QueueModule,
-  QueueService,
-  RabbitMQCustomModule,
-} from '@archie/api/utils/queue';
 
 @Module({
   imports: [
@@ -29,21 +18,6 @@ import {
       useFactory: () => ({}),
     }),
     TypeOrmModule.forFeature([UserVaultAccount]),
-    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
-      imports: [ConfigModule, QueueModule],
-      inject: [ConfigService, QueueService],
-      useFactory: (
-        configService: ConfigService,
-        queueService: QueueService,
-      ) => ({
-        exchanges: queueService.createExchanges([
-          COLLATERAL_DEPOSITED_EXCHANGE,
-          COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
-        ]),
-        uri: configService.get(ConfigVariables.QUEUE_URL),
-        connectionInitOptions: { wait: false },
-      }),
-    }),
   ],
   providers: [FireblocksWebhookService, FireblocksWebhookStrategy],
   controllers: [FireblocksWebhookController],

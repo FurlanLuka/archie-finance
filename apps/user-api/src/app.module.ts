@@ -9,6 +9,7 @@ import { CryptoModule } from '@archie/api/utils/crypto';
 import { KycModule } from '@archie/api/user-api/kyc';
 import { UserModule } from '@archie/api/user-api/user';
 import { migrations } from './migrations';
+import { QueueModule } from '@archie/api/utils/queue';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { migrations } from './migrations';
     KycModule,
     HealthModule,
     UserModule,
+    QueueModule.register(),
   ],
   controllers: [],
   providers: [],

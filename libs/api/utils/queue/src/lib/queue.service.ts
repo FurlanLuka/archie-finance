@@ -1,25 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { RabbitMQExchangeConfig } from '@golevelup/nestjs-rabbitmq';
+import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { QueueUtilService } from './queue-util.service';
+import { Options } from 'amqplib';
 
 @Injectable()
 export class QueueService {
-  public createExchanges(exchanges: RabbitMQExchangeConfig[]) {
-    return exchanges.flatMap((exchange: RabbitMQExchangeConfig) => {
-      const retryExchange: RabbitMQExchangeConfig = {
-        name: QueueService.getRetryExchangeName(exchange),
-        type: 'x-delayed-message',
-        options: {
-          arguments: {
-            'x-delayed-type': 'direct',
-          },
-        },
-      };
+  constructor(private amqpConnection: AmqpConnection) {}
 
-      return [exchange, retryExchange];
-    });
-  }
-
-  public static getRetryExchangeName(exchange: RabbitMQExchangeConfig) {
-    return `${exchange.name}.retry`;
+  public publish<T>(
+    routingKey: string,
+    message: T,
+    exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
+    options?: Options.Publish,
+  ) {
+    this.amqpConnection.publish(exchange, routingKey, message, options);
   }
 }

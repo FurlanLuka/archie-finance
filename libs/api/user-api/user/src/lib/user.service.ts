@@ -10,17 +10,17 @@ import {
   GetMfaEnrollmentResponse,
 } from './user.interfaces';
 import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
-  EMAIL_VERIFIED_EXCHANGE,
-  MFA_ENROLLED_EXCHANGE,
+  EMAIL_VERIFIED_TOPIC,
+  MFA_ENROLLED_TOPIC,
 } from '@archie/api/user-api/constants';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class UserService {
   constructor(
     private auth0Service: Auth0Service,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
   ) {}
 
   async isEmailVerified(userId: string): Promise<GetEmailVerificationResponse> {
@@ -29,7 +29,7 @@ export class UserService {
     });
 
     if (user.email_verified) {
-      this.amqpConnection.publish(EMAIL_VERIFIED_EXCHANGE.name, '', {
+      this.queueService.publish(EMAIL_VERIFIED_TOPIC, {
         userId,
         email: user.email,
       });
@@ -99,7 +99,7 @@ export class UserService {
     );
 
     if (hasEnrolledAuthenticator !== undefined) {
-      this.amqpConnection.publish(MFA_ENROLLED_EXCHANGE.name, '', {
+      this.queueService.publish(MFA_ENROLLED_TOPIC, {
         userId,
       });
     }

@@ -3,9 +3,8 @@ import { LtvStatus, UsersLtv } from '../margin.interfaces';
 import { CollateralValue } from '@archie/api/utils/interfaces/collateral';
 import { Injectable } from '@nestjs/common';
 import { MarginNotification } from '../margin_notifications.entity';
-import { LTV_LIMIT_APPROACHING_EXCHANGE } from '@archie/api/credit-api/constants';
+import { LTV_LIMIT_APPROACHING_TOPIC } from '@archie/api/credit-api/constants';
 import { Repository } from 'typeorm';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GetAssetPricesResponse } from '@archie/api/utils/interfaces/asset_price';
 import {
@@ -13,6 +12,7 @@ import {
   CollateralValueService,
 } from '@archie/api/credit-api/collateral';
 import { Credit } from '@archie/api/credit-api/credit';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class MarginLtvService {
@@ -25,7 +25,7 @@ export class MarginLtvService {
   constructor(
     @InjectRepository(MarginNotification)
     private marginNotificationsRepository: Repository<MarginNotification>,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
     private collateralValueService: CollateralValueService,
   ) {}
 
@@ -138,7 +138,7 @@ export class MarginLtvService {
       ).some((alert: boolean) => alert);
 
       if (shouldSendNotification) {
-        this.amqpConnection.publish(LTV_LIMIT_APPROACHING_EXCHANGE.name, '', {
+        this.queueService.publish(LTV_LIMIT_APPROACHING_TOPIC, {
           userId,
           ltv,
           priceForMarginCall,

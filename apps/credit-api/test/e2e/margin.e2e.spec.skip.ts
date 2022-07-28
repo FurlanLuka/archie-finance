@@ -12,10 +12,10 @@ import { verifyAccessToken } from '../e2e-test-utils/mock.auth.utils';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
-  CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE,
-  LTV_LIMIT_APPROACHING_EXCHANGE,
-  MARGIN_CALL_COMPLETED_EXCHANGE,
-  MARGIN_CALL_STARTED_EXCHANGE,
+  CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC,
+  LTV_LIMIT_APPROACHING_TOPIC,
+  MARGIN_CALL_COMPLETED_TOPIC,
+  MARGIN_CALL_STARTED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MarginQueueController } from '../../../../libs/api/credit-api/margin/src/lib/margin.controller';
@@ -117,7 +117,7 @@ describe('MarginQueueController (e2e)', () => {
     await module.close();
   });
 
-  describe('CHECK_MARGIN_EXCHANGE flow', () => {
+  describe('CHECK_MARGIN_TOPIC flow', () => {
     it('Should adjust credit limit at the first time and not send notification in case LTV is under 65% and no margin calls are active', async () => {
       const ltv = 64;
       await creditRepository.save({
@@ -132,7 +132,7 @@ describe('MarginQueueController (e2e)', () => {
 
       expect(amqpConnectionPublish).toBeCalledTimes(1);
       expect(amqpConnectionPublish).toBeCalledWith(
-        CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE.name,
+        CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC,
         '',
         {
           userIds: [userId],
@@ -155,7 +155,7 @@ describe('MarginQueueController (e2e)', () => {
           .checkMarginHandler({ userIds: [userId] });
 
         expect(amqpConnectionPublish).toBeCalledWith(
-          LTV_LIMIT_APPROACHING_EXCHANGE.name,
+          LTV_LIMIT_APPROACHING_TOPIC,
           '',
           {
             userId,
