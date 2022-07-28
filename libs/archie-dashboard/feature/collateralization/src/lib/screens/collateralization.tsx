@@ -7,11 +7,11 @@ import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access/a
 import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { Card, Loader, ParagraphM, ParagraphS } from '@archie-webapps/shared/ui/design-system';
 
-import { CollaterizationForm } from '../components/collaterization-form';
+import { CollateralizationForm } from '../components/collateralization-form';
 
-import { CollaterizationStyled } from './collaterization.styled';
+import { CollateralizationStyled } from './collateralization.styled';
 
-export const CollaterizationScreen: FC = () => {
+export const CollateralizationScreen: FC = () => {
   const { t } = useTranslation();
 
   const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = useGetCollateralTotalValue();
@@ -31,9 +31,11 @@ export const CollaterizationScreen: FC = () => {
       return (
         <>
           <ParagraphS className="subtitle">
-            {t('dashboard_collaterization.subtitle', { collateralTotalValue: getFormattedValue(collateralTotalValue) })}
+            {t('dashboard_collateralization.subtitle', {
+              collateralTotalValue: getFormattedValue(collateralTotalValue),
+            })}
           </ParagraphS>
-          <CollaterizationForm />
+          <CollateralizationForm />
         </>
       );
     }
@@ -42,13 +44,13 @@ export const CollaterizationScreen: FC = () => {
   }
 
   return (
-    <CollaterizationStyled>
+    <CollateralizationStyled>
       <Card column alignItems="center" padding="2.5rem 1.5rem 3.5rem" minHeight="720px">
         <ParagraphM weight={800} className="title">
-          {t('dashboard_collaterization.title')}
+          {t('dashboard_collateralization.title')}
         </ParagraphM>
         {getContent()}
       </Card>
-    </CollaterizationStyled>
+    </CollateralizationStyled>
   );
 };

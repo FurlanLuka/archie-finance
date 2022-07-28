@@ -17,9 +17,9 @@ import { theme } from '@archie-webapps/shared/ui/theme';
 
 // import { CollateralAssetSelect } from '../../components/collateral-asset-select/collateral-asset-select';
 
-import { CollaterizationFormStyled } from './collaterization-form.styled';
+import { CollateralizationFormStyled } from './collateralization-form.styled';
 
-export const CollaterizationForm: FC = () => {
+export const CollateralizationForm: FC = () => {
   const { t } = useTranslation();
 
   const [lineOfCredit, setLineOfCredit] = useState(200);
@@ -83,7 +83,7 @@ export const CollaterizationForm: FC = () => {
     });
 
   return (
-    <CollaterizationFormStyled>
+    <CollateralizationFormStyled>
       <div className="inputs">
         <CollateralAssetSelect selectedAsset={selectedCollateralAsset} setSelectedAsset={setSelectedCollateralAsset} />
         <InputRange
@@ -227,6 +227,6 @@ export const CollaterizationForm: FC = () => {
         </div>
         <div className={`overlay ${getDepositAddress() && 'fade-out'}`} />
       </div>
-    </CollaterizationFormStyled>
+    </CollateralizationFormStyled>
   );
 };

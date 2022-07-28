@@ -1,8 +1,8 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/shared/ui/theme';
 
-export const CollaterizationStyled = styled.div`
+export const CollateralizationStyled = styled.div`
   width: 100%;
   max-width: calc(1000px + 4rem);
   margin-left: ${NAV_WIDTH};
