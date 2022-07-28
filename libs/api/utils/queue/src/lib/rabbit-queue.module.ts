@@ -22,7 +22,7 @@ import {
 } from '@nestjs/common';
 import { ExternalContextCreator } from '@nestjs/core/helpers/external-context-creator';
 import { groupBy } from 'lodash';
-import { RABBIT_RETRY_HANDLER } from '@archie/api/utils/queue';
+import { RABBIT_RETRY_HANDLER } from './utils';
 
 // COPIED from https://github.com/golevelup/nestjs/blob/1d26ad53cd2cfae7be9b1d8b6b87ff2ef5f9758d/packages/rabbitmq/src/rabbitmq.module.ts
 

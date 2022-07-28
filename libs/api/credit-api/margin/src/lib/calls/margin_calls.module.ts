@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MarginCallsService } from './margin_calls.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MarginNotification } from '@archie/api/credit-api/margin';
 import { MarginCall } from '../margin_calls.entity';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import {
@@ -16,6 +15,7 @@ import {
   QueueService,
   RabbitMQCustomModule,
 } from '@archie/api/utils/queue';
+import { MarginNotification } from '../margin_notifications.entity';
 
 @Module({
   controllers: [],

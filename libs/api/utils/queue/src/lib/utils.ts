@@ -1,5 +1,4 @@
 import {
-  RABBIT_HANDLER,
   RabbitMQExchangeConfig,
   RabbitSubscribe,
 } from '@golevelup/nestjs-rabbitmq';
