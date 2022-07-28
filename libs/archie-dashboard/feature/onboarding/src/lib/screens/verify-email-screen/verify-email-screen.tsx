@@ -1,10 +1,10 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { EmailVerificationResponse } from '@archie-webapps/shared/data-access/archie-api/user/api/get-email-verification';
-import { usePollEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
 import { useGetEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-get-email-verification';
+import { usePollEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
 import { useResendEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
 import { useAuthenticatedSession } from '@archie-webapps/shared/data-access/session';
 import { ButtonPrimary, Card, Loading, SubtitleM, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
@@ -15,6 +15,9 @@ import { VerifyEmailScreenStyled } from './verify-email-screen.styled';
 export const VerifyEmailScreen: FC = () => {
   const { t } = useTranslation();
   const { logout } = useAuthenticatedSession();
+
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const interval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [counter, setCounter] = useState(30);
@@ -31,6 +34,18 @@ export const VerifyEmailScreen: FC = () => {
     return '';
   };
 
+  useEffect(() => {
+    return () => {
+      if (timer.current) {
+        clearTimeout(timer.current);
+      }
+
+      if (interval.current) {
+        clearInterval(interval.current);
+      }
+    };
+  }, []);
+
   const handleResend = () => {
     if (mutationResponse.state === RequestState.IDLE) {
       mutationResponse.mutate({});
@@ -38,15 +53,19 @@ export const VerifyEmailScreen: FC = () => {
 
     setBtnDisabled(true);
 
-    const counting = setInterval(() => {
+    interval.current = setInterval(() => {
       if (counter > 0) {
         setCounter((counter) => counter - 1);
       }
     }, 1000);
 
-    setTimeout(() => {
+    timer.current = setTimeout(() => {
       setBtnDisabled(false);
-      clearInterval(counting);
+
+      if (interval.current) {
+        clearInterval(interval.current);
+      }
+
       setCounter(30);
     }, 30000);
   };
