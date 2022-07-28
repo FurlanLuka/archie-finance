@@ -13,6 +13,7 @@ export interface CardProps {
   columnReverse?: boolean;
   mobileJustifyContent?: string;
   mobileAlignItems?: string;
+  mobilePadding?: string;
   backgroundImage?: string;
 }
 
@@ -37,6 +38,7 @@ export const Card = styled.div<CardProps>`
       columnReverse ? 'column-reverse' : mobileRow ? 'row' : 'column'};
     justify-content: ${({ mobileJustifyContent }) => mobileJustifyContent};
     align-items: ${({ mobileAlignItems }) => mobileAlignItems};
+    padding: ${({ mobilePadding }) => mobilePadding};
   }
 
   .p-bottom {

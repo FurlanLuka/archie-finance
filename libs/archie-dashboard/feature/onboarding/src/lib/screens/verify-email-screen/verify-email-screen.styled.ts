@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
-export const KycScreenStyled = styled.div`
+export const VerifyEmailScreenStyled = styled.div`
   width: 100%;
   max-width: 496px;
 
@@ -11,36 +11,34 @@ export const KycScreenStyled = styled.div`
   }
 
   .subtitle {
-    margin-bottom: 2rem;
+    margin-bottom: 3rem;
   }
 
-  form {
-    width: 100%;
-  }
-
-  .input-group {
-    display: flex;
-    gap: 1rem;
+  .text {
+    width: 90%;
+    margin-bottom: 1.5rem;
 
     @media (max-width: ${breakpoints.screenSM}) {
-      flex-direction: column;
-      gap: 0;
+      width: 100%;
     }
   }
 
-  .phone-number {
+  .link {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    width: 100%;
+    justify-content: flex-start;
+    width: 90%;
+    margin-bottom: 2rem;
 
-    p {
-      margin-top: 0.35rem;
+    @media (max-width: ${breakpoints.screenSM}) {
+      width: 100%;
     }
   }
 
-  .error {
-    margin: 0.25rem 0;
+  .logout-btn {
+    background-color: ${({ theme }) => theme.buttonOutline};
+    color: ${({ theme }) => theme.textHighlight};
+    border: 0;
+    margin-bottom: 1rem;
   }
 
   .divider {
@@ -51,7 +49,7 @@ export const KycScreenStyled = styled.div`
     margin-bottom: 1.5rem;
   }
 
-  button {
+  .resend-btn {
     margin-bottom: 0.5rem;
   }
 `;

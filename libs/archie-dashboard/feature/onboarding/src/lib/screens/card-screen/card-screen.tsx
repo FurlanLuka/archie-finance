@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { Step } from '@archie-webapps/archie-dashboard/constants';
 import { TotalCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-total-value';
 import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-total-value';
 import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
@@ -12,11 +13,9 @@ import {
   QueryResponse,
   RequestState,
 } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { ButtonPrimary, Container, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
-import { Step } from '@archie-webapps/archie-dashboard/constants';
+import { ButtonPrimary, Container, Card, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
 
 import imgCardReady from '../../../assets/img-card-ready.png';
-import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
 import { CardScreenStyled } from './card-screen.styled';
@@ -77,30 +76,31 @@ export const CardScreen: FC = () => {
   return (
     <Container column mobileColumn alignItems="center">
       <StepsIndicator currentStep={Step.CARD} />
-      <EmailVerificationAlert />
       <CardScreenStyled>
-        <SubtitleM className="title">{getTitle()}</SubtitleM>
-        <ParagraphXS className="subtitle">
-          {stage === Stage.COMPLETE && (
-            <Trans
-              components={{ br: <br /> }}
-              values={{ total_value: getCollateralTotalValue(), credit_value: getCreditValue() }}
-            >
-              card_step.subtitle
-            </Trans>
-          )}
-        </ParagraphXS>
-        <div className="image">
-          <img src={imgCardReady} alt={t('card_step.img_alt')} />
-        </div>
-        <ButtonPrimary
-          maxWidth="20rem"
-          isLoading={getCollateralTotalValueResponse.state === RequestState.LOADING}
-          isDisabled={!(getCreditQueryResponse.state === RequestState.SUCCESS && stage === Stage.COMPLETE)}
-          onClick={() => navigate('/collateral')}
-        >
-          {t('card_step.btn')}
-        </ButtonPrimary>
+        <Card column alignItems="center" padding="2.5rem 10% 3.5rem" mobilePadding="2.5rem 1.5rem 3.5rem">
+          <SubtitleM className="title">{getTitle()}</SubtitleM>
+          <ParagraphXS className="subtitle">
+            {stage === Stage.COMPLETE && (
+              <Trans
+                components={{ br: <br /> }}
+                values={{ total_value: getCollateralTotalValue(), credit_value: getCreditValue() }}
+              >
+                card_step.subtitle
+              </Trans>
+            )}
+          </ParagraphXS>
+          <div className="image">
+            <img src={imgCardReady} alt={t('card_step.img_alt')} />
+          </div>
+          <ButtonPrimary
+            maxWidth="20rem"
+            isLoading={getCollateralTotalValueResponse.state === RequestState.LOADING}
+            isDisabled={!(getCreditQueryResponse.state === RequestState.SUCCESS && stage === Stage.COMPLETE)}
+            onClick={() => navigate('/collateral')}
+          >
+            {t('card_step.btn')}
+          </ButtonPrimary>
+        </Card>
       </CardScreenStyled>
     </Container>
   );
