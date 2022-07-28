@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import {
   ConfigVariables,
   CREDIT_LIMIT_DECREASED,
@@ -9,13 +8,17 @@ import {
 } from '@archie/api/credit-api/constants';
 import { Credit, CreditModule } from '@archie/api/credit-api/credit';
 import { CreditLimitService } from './credit_limit.service';
-import { QueueModule, QueueService } from '@archie/api/utils/queue';
+import {
+  QueueModule,
+  QueueService,
+  RabbitMQCustomModule,
+} from '@archie/api/utils/queue';
 
 @Module({
   controllers: [],
   imports: [
     TypeOrmModule.forFeature([Credit]),
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
       imports: [ConfigModule, QueueModule],
       inject: [ConfigService, QueueService],
       useFactory: (

@@ -17,28 +17,27 @@ export function Subscribe(
   queueName: string,
   requeueOnError = true,
 ) {
+  const baseQueueOptions = {
+    createQueueIfNotExists: true,
+    queue: `${queueName}_${exchange.name}`,
+    queueOptions: {
+      durable: true,
+    },
+    errorHandler: createErrorHandler(exchange, queueName, requeueOnError),
+  };
+
   const decorators = [
     RabbitSubscribe({
       exchange: exchange.name,
-      createQueueIfNotExists: true,
-      queue: `${queueName}_${exchange.name}`,
       routingKey: '',
-      queueOptions: {
-        durable: true,
-      },
-      errorHandler: createErrorHandler(exchange, queueName, requeueOnError),
+      ...baseQueueOptions,
     }),
     requeueOnError
       ? SetMetadata(RABBIT_RETRY_HANDLER, {
           type: 'subscribe',
-          exchange: QueueService.getRetryExchangeName(exchange),
-          createQueueIfNotExists: true,
-          queue: `${queueName}_${exchange.name}`,
           routingKey: queueName,
-          queueOptions: {
-            durable: true,
-          },
-          errorHandler: createErrorHandler(exchange, queueName, requeueOnError),
+          exchange: QueueService.getRetryExchangeName(exchange),
+          ...baseQueueOptions,
         })
       : undefined,
   ].filter((decorator) => decorator !== undefined);

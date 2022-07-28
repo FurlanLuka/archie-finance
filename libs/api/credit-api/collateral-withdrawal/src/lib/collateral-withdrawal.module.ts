@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { CollateralWithdrawal } from './collateral-withdrawal.entity';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import {
   COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
   COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
@@ -18,7 +17,11 @@ import {
 import { Credit } from '@archie/api/credit-api/credit';
 import { Collateral } from '@archie/api/credit-api/collateral';
 import { LiquidationLog, MarginLtvModule } from '@archie/api/credit-api/margin';
-import { QueueModule, QueueService } from '@archie/api/utils/queue';
+import {
+  QueueModule,
+  QueueService,
+  RabbitMQCustomModule,
+} from '@archie/api/utils/queue';
 
 @Module({
   imports: [
@@ -35,7 +38,7 @@ import { QueueModule, QueueService } from '@archie/api/utils/queue';
         internalApiUrl: configService.get(ConfigVariables.INTERNAL_API_URL),
       }),
     }),
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
       imports: [ConfigModule, QueueModule],
       inject: [ConfigService, QueueService],
       useFactory: (

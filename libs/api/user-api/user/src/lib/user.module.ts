@@ -8,12 +8,15 @@ import {
   EMAIL_VERIFIED_EXCHANGE,
   MFA_ENROLLED_EXCHANGE,
 } from '@archie/api/user-api/constants';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
-import { QueueModule, QueueService } from '@archie/api/utils/queue';
+import {
+  QueueModule,
+  QueueService,
+  RabbitMQCustomModule,
+} from '@archie/api/utils/queue';
 @Module({
   imports: [
     Auth0Module,
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
       imports: [ConfigModule, QueueModule],
       inject: [ConfigService, QueueService],
       useFactory: (

@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { MarginCallsService } from './margin_calls.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MarginNotification } from '../margin_notifications.entity';
+import { MarginNotification } from '@archie/api/credit-api/margin';
 import { MarginCall } from '../margin_calls.entity';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
@@ -12,13 +11,17 @@ import {
 } from '@archie/api/credit-api/constants';
 import { MarginLiquidationModule } from './liquidation/margin_liquidation.module';
 import { MarginLtvModule } from '../ltv/margin_ltv.module';
-import { QueueModule, QueueService } from '@archie/api/utils/queue';
+import {
+  QueueModule,
+  QueueService,
+  RabbitMQCustomModule,
+} from '@archie/api/utils/queue';
 
 @Module({
   controllers: [],
   imports: [
     TypeOrmModule.forFeature([MarginNotification, MarginCall]),
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
       imports: [ConfigModule, QueueModule],
       inject: [ConfigService, QueueService],
       useFactory: (

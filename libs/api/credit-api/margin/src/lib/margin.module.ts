@@ -10,7 +10,6 @@ import { LiquidationLog } from './liquidation_logs.entity';
 import { MarginCall } from './margin_calls.entity';
 import { MarginLtvModule } from './ltv/margin_ltv.module';
 import { MarginCallsModule } from './calls/margin_calls.module';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
@@ -21,7 +20,11 @@ import { MarginCollateralValueCheckModule } from './collateral_value_checks/marg
 import { CreditLimitModule } from './credit_limit/credit_limit.module';
 import { Credit } from '@archie/api/credit-api/credit';
 import { Collateral } from '@archie/api/credit-api/collateral';
-import { QueueModule, QueueService } from '@archie/api/utils/queue';
+import {
+  QueueModule,
+  QueueService,
+  RabbitMQCustomModule,
+} from '@archie/api/utils/queue';
 
 @Module({
   controllers: [
@@ -31,7 +34,7 @@ import { QueueModule, QueueService } from '@archie/api/utils/queue';
   ],
   imports: [
     TypeOrmModule.forFeature([Credit, LiquidationLog, MarginCall, Collateral]),
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
       imports: [ConfigModule, QueueModule],
       inject: [ConfigService, QueueService],
       useFactory: (

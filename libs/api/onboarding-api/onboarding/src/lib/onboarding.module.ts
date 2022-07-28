@@ -6,14 +6,14 @@ import {
 } from './onboarding.controller';
 import { Onboarding } from './onboarding.entity';
 import { OnboardingService } from './onboarding.service';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigVariables } from '@archie/api/onboarding-api/constants';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
+import { RabbitMQCustomModule } from '@archie/api/utils/queue';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Onboarding]),
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({

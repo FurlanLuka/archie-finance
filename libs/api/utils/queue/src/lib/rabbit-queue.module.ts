@@ -8,6 +8,7 @@ import {
   AmqpConnectionManager,
   RABBIT_ARGS_METADATA,
   RABBIT_CONFIG_TOKEN,
+  RABBIT_HANDLER,
   RabbitHandlerConfig,
   RabbitMQConfig,
   RabbitRpcParamsFactory,
@@ -26,16 +27,16 @@ import { RABBIT_RETRY_HANDLER } from '@archie/api/utils/queue';
 // COPIED from https://github.com/golevelup/nestjs/blob/1d26ad53cd2cfae7be9b1d8b6b87ff2ef5f9758d/packages/rabbitmq/src/rabbitmq.module.ts
 
 declare const placeholder: IConfigurableDynamicRootModule<
-  RabbitMQRetryModule,
+  RabbitMQCustomModule,
   RabbitMQConfig
 >;
 
 @Module({
   imports: [DiscoveryModule],
 })
-export class RabbitMQRetryModule
+export class RabbitMQCustomModule
   extends createConfigurableDynamicRootModule<
-    RabbitMQRetryModule,
+    RabbitMQCustomModule,
     RabbitMQConfig
   >(RABBIT_CONFIG_TOKEN, {
     providers: [
@@ -44,8 +45,8 @@ export class RabbitMQRetryModule
         useFactory: async (
           config: RabbitMQConfig,
         ): Promise<AmqpConnectionManager> => {
-          await RabbitMQRetryModule.AmqpConnectionFactory(config);
-          return RabbitMQRetryModule.connectionManager;
+          await RabbitMQCustomModule.AmqpConnectionFactory(config);
+          return RabbitMQCustomModule.connectionManager;
         },
         inject: [RABBIT_CONFIG_TOKEN],
       },
@@ -67,7 +68,7 @@ export class RabbitMQRetryModule
   })
   implements OnApplicationBootstrap, OnApplicationShutdown
 {
-  private readonly logger = new Logger(RabbitMQRetryModule.name);
+  private readonly logger = new Logger(RabbitMQCustomModule.name);
 
   private static connectionManager = new AmqpConnectionManager();
   private static bootstrapped = false;
@@ -85,23 +86,23 @@ export class RabbitMQRetryModule
     const connection = new AmqpConnection(config);
     this.connectionManager.addConnection(connection);
     await connection.init();
-    const logger = config.logger || new Logger(RabbitMQRetryModule.name);
+    const logger = config.logger || new Logger(RabbitMQCustomModule.name);
     logger.log('Successfully connected to RabbitMQ');
     return connection;
   }
 
   public static build(config: RabbitMQConfig): DynamicModule {
-    const logger = config.logger || new Logger(RabbitMQRetryModule.name);
+    const logger = config.logger || new Logger(RabbitMQCustomModule.name);
     logger.warn(
       'build() is deprecated. use forRoot() or forRootAsync() to configure RabbitMQ',
     );
     return {
-      module: RabbitMQRetryModule,
+      module: RabbitMQCustomModule,
       providers: [
         {
           provide: AmqpConnection,
           useFactory: async (): Promise<AmqpConnection> => {
-            return RabbitMQRetryModule.AmqpConnectionFactory(config);
+            return RabbitMQCustomModule.AmqpConnectionFactory(config);
           },
         },
         RabbitRpcParamsFactory,
@@ -112,7 +113,7 @@ export class RabbitMQRetryModule
 
   public static attach(connection: AmqpConnection): DynamicModule {
     return {
-      module: RabbitMQRetryModule,
+      module: RabbitMQCustomModule,
       providers: [
         {
           provide: AmqpConnection,
@@ -134,12 +135,11 @@ export class RabbitMQRetryModule
     );
   }
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
   public async onApplicationBootstrap() {
-    if (RabbitMQRetryModule.bootstrapped) {
+    if (RabbitMQCustomModule.bootstrapped) {
       return;
     }
-    RabbitMQRetryModule.bootstrapped = true;
+    RabbitMQCustomModule.bootstrapped = true;
 
     for (const connection of this.connectionManager.getConnections()) {
       if (!connection.configuration.registerHandlers) {
@@ -154,8 +154,13 @@ export class RabbitMQRetryModule
 
       let rabbitMeta =
         await this.discover.providerMethodsWithMetaAtKey<RabbitHandlerConfig>(
-          RABBIT_RETRY_HANDLER, // Changed from RABBIT_HANDLER
+          RABBIT_RETRY_HANDLER,
         );
+      rabbitMeta = rabbitMeta.concat(
+        await this.discover.providerMethodsWithMetaAtKey<RabbitHandlerConfig>(
+          RABBIT_HANDLER,
+        ),
+      );
 
       if (connection.configuration.enableControllerDiscovery) {
         this.logger.log(
@@ -163,7 +168,12 @@ export class RabbitMQRetryModule
         );
         rabbitMeta = rabbitMeta.concat(
           await this.discover.controllerMethodsWithMetaAtKey<RabbitHandlerConfig>(
-            RABBIT_RETRY_HANDLER, // Changed from RABBIT_HANDLER
+            RABBIT_RETRY_HANDLER,
+          ),
+        );
+        rabbitMeta = rabbitMeta.concat(
+          await this.discover.controllerMethodsWithMetaAtKey<RabbitHandlerConfig>(
+            RABBIT_HANDLER,
           ),
         );
       }
@@ -203,7 +213,6 @@ export class RabbitMQRetryModule
             const handlerDisplayName = `${discoveredMethod.parentClass.name}.${
               discoveredMethod.methodName
             } {${config.type}} -> ${
-              // eslint-disable-next-line sonarjs/no-nested-template-literals
               queueOptions?.channel ? `${queueOptions.channel}::` : ''
             }${exchange}::${routingKey}::${queue || 'amqpgen'}`;
 

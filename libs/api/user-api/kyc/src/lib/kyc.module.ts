@@ -3,18 +3,21 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { InternalKycController, KycController } from './kyc.controller';
 import { Kyc } from './kyc.entity';
 import { KycService } from './kyc.service';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import {
   KYC_SUBMITTED_EXCHANGE,
   ConfigVariables,
 } from '@archie/api/user-api/constants';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import { QueueModule, QueueService } from '@archie/api/utils/queue';
+import {
+  QueueModule,
+  QueueService,
+  RabbitMQCustomModule,
+} from '@archie/api/utils/queue';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Kyc]),
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
       imports: [ConfigModule, QueueModule],
       inject: [ConfigService, QueueService],
       useFactory: (

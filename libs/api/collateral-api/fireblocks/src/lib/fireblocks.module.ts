@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
 import { FireblocksService } from './fireblocks.service';
 import { CryptoModule } from '@archie/api/utils/crypto';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import {
   COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE,
@@ -10,13 +9,17 @@ import {
   MARGIN_CALL_COMPLETED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
-import { QueueModule, QueueService } from '@archie/api/utils/queue';
+import {
+  QueueModule,
+  QueueService,
+  RabbitMQCustomModule,
+} from '@archie/api/utils/queue';
 
 @Module({
   imports: [
     PassportModule,
     CryptoModule.register(),
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
       imports: [ConfigModule, QueueModule],
       inject: [ConfigService, QueueService],
       useFactory: (

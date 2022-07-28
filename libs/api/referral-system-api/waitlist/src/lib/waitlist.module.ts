@@ -4,14 +4,17 @@ import { CryptoModule } from '@archie/api/utils/crypto';
 import { WaitlistService } from './waitlist.service';
 import { WaitlistController } from './waitlist.controller';
 import { Waitlist } from './waitlist.entity';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
   JOINED_WAITLIST_EXCHANGE,
   APPLIED_TO_WAITLIST_EXCHANGE,
 } from '@archie/api/referral-system-api/constants';
-import { QueueModule, QueueService } from '@archie/api/utils/queue';
+import {
+  QueueModule,
+  QueueService,
+  RabbitMQCustomModule,
+} from '@archie/api/utils/queue';
 
 @Module({
   imports: [
@@ -23,7 +26,7 @@ import { QueueModule, QueueService } from '@archie/api/utils/queue';
         encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
       }),
     }),
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
       imports: [ConfigModule, QueueModule],
       inject: [ConfigService, QueueService],
       useFactory: (

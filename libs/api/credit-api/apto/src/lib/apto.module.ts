@@ -7,7 +7,6 @@ import { AptoCard } from './apto_card.entity';
 import { AptoCardApplication } from './apto_card_application.entity';
 import { AptoUser } from './apto_user.entity';
 import { AptoVerification } from './apto_verification.entity';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import {
   CARD_ACTIVATED_EXCHANGE,
   ConfigVariables,
@@ -15,7 +14,11 @@ import {
 } from '@archie/api/credit-api/constants';
 import { ConfigService, ConfigModule } from '@archie/api/utils/config';
 import { CreditModule } from '@archie/api/credit-api/credit';
-import { QueueModule, QueueService } from '@archie/api/utils/queue';
+import {
+  QueueModule,
+  QueueService,
+  RabbitMQCustomModule,
+} from '@archie/api/utils/queue';
 
 @Module({
   controllers: [AptoController],
@@ -29,7 +32,7 @@ import { QueueModule, QueueService } from '@archie/api/utils/queue';
     ]),
     AptoApiModule,
     CreditModule,
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
       imports: [ConfigModule, QueueModule],
       inject: [ConfigService, QueueService],
       useFactory: (

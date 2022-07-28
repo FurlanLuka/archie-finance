@@ -6,19 +6,22 @@ import {
 } from './credit.controller';
 import { Credit } from './credit.entity';
 import { CreditService } from './credit.service';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import {
   ConfigVariables,
   COLLATERAL_RECEIVED_EXCHANGE,
 } from '@archie/api/credit-api/constants';
 import { ConfigService, ConfigModule } from '@archie/api/utils/config';
-import { QueueModule, QueueService } from '@archie/api/utils/queue';
+import {
+  QueueModule,
+  QueueService,
+  RabbitMQCustomModule,
+} from '@archie/api/utils/queue';
 
 @Module({
   controllers: [CreditController, InternalCreditController],
   imports: [
     TypeOrmModule.forFeature([Credit]),
-    RabbitMQModule.forRootAsync(RabbitMQModule, {
+    RabbitMQCustomModule.forRootAsync(RabbitMQCustomModule, {
       imports: [ConfigModule, QueueModule],
       inject: [ConfigService, QueueService],
       useFactory: (
