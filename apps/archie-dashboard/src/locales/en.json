@@ -126,7 +126,7 @@
     "text": "The value of your ArchCredit collateral has dropped and you have reached an LTV rate above 75%. Action is required to prevent liquidiating a portion of your collateral. We recommend sending more collateral to your ArchCredit; paying down your balance through your bank may take up to 3 days. Archie will automatically undergo a partial lidquidation if your LTV reaches 90%",
     "btn": "Cure"
   },
-  "dashboard_wallet_and_collateral": {
+  "dashboard_home": {
     "title": "Hi, {{name}}",
     "subtitle": "Member since {{date}}",
     "reveal_card_modal": "Show card details?"
@@ -159,5 +159,9 @@
       "subtitle": "To complete this action, please verify your 2-Factor Authentication Code from your 2FA application"
     },
     "btn": "Withdraw Collateral"
+  },
+  "dashboard_collateralization": {
+    "title": "Send Crypto to your Collateral Wallet",
+    "subtitle": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it."
   }
 }

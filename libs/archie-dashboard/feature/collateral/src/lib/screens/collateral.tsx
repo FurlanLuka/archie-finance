@@ -2,6 +2,7 @@ import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
+import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralCurrency } from '@archie-webapps/shared/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
@@ -30,7 +31,6 @@ export const CollateralScreen: FC = () => {
   const getCollateralValueResponse: QueryResponse<CollateralValue[]> = useGetCollateralValue();
   const getLTVResponse: QueryResponse<LTV> = useGetLTV();
 
-  const getFormattedValue = (value: number) => value.toLocaleString(undefined, { maximumFractionDigits: 2 });
   const getAssetsAllocationPercentage = (price: number) => (price / getCollateralTotalValue()) * 100;
 
   const getCollateralTotalValue = () => {

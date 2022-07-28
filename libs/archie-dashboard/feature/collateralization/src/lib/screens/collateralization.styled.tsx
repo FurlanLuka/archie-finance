@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/shared/ui/theme';
 
-export const WithdrawScreenStyled = styled.div`
+export const CollateralizationStyled = styled.div`
   width: 100%;
   max-width: calc(1000px + 4rem);
   margin-left: ${NAV_WIDTH};
@@ -25,7 +25,9 @@ export const WithdrawScreenStyled = styled.div`
   }
 
   .subtitle {
+    text-align: center;
     margin-bottom: 3rem;
+    max-width: 530px;
   }
 
   .loader-container {

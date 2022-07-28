@@ -77,7 +77,7 @@ const ActionsCell: FC<ActionsCellProps> = ({ id }) => {
 
   return (
     <ActionsCellStyled>
-      <ButtonOutline small color={theme.textPositive}>
+      <ButtonOutline small color={theme.textPositive} onClick={() => navigate(`add/${id}`)}>
         {t('btn_add')}
       </ButtonOutline>
       <ButtonOutline small onClick={() => navigate(`withdraw/${id}`)}>

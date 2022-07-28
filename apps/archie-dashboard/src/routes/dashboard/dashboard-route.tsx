@@ -3,6 +3,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Header, Navigation } from '@archie-webapps/archie-dashboard/components';
 import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature/collateral';
+import { CollateralizationScreen } from '@archie-webapps/archie-dashboard/feature/collateralization';
 import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature/history';
 import { WalletAndCollateralScreen } from '@archie-webapps/archie-dashboard/feature/home';
 import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature/rewards';
@@ -42,6 +43,7 @@ export const DashboardRoute: FC = () => {
               <Route path="/" element={<WalletAndCollateralScreen />} />
               <Route path="/collateral" element={<CollateralScreen />} />
               <Route path="/collateral/withdraw/*" element={<WithdrawScreen />} />
+              <Route path="/collateral/add/*" element={<CollateralizationScreen />} />
               <Route path="/rewards" element={<RewardsScreen />} />
               <Route path="/history" element={<HistoryScreen />} />
               <Route path="/settings" element={<SettingsScreen />} />

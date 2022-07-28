@@ -38,19 +38,9 @@ const scale = keyframes`
   }
 `;
 
-export const CollateralizationScreenStyled = styled.div`
+export const CollateralizationFormStyled = styled.div`
   width: 100%;
-  max-width: 928px;
-
-  .title {
-    margin-bottom: 0.5rem;
-    text-align: center;
-  }
-
-  .subtitle {
-    margin-bottom: 3.5rem;
-    text-align: center;
-  }
+  max-width: 730px;
 
   .inputs {
     display: flex;

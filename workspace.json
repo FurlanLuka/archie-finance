@@ -5,6 +5,7 @@
     "archie-dashboard-components": "libs/archie-dashboard/components",
     "archie-dashboard-constants": "libs/archie-dashboard/constants",
     "archie-dashboard-feature-collateral": "libs/archie-dashboard/feature/collateral",
+    "archie-dashboard-feature-collateralization": "libs/archie-dashboard/feature/collateralization",
     "archie-dashboard-feature-history": "libs/archie-dashboard/feature/history",
     "archie-dashboard-feature-home": "libs/archie-dashboard/feature/home",
     "archie-dashboard-feature-onboarding": "libs/archie-dashboard/feature/onboarding",

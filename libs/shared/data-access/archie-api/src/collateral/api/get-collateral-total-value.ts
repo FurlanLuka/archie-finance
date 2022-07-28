@@ -2,7 +2,7 @@ import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
 
 export interface TotalCollateralValue {
-  value: string;
+  value: number;
 }
 
 export const ERROR_LIST = new Map<string, string>([]);
