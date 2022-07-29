@@ -80,19 +80,14 @@ export class UserQueueController {
   async getEmailAddress(
     payload: GetEmailAddressPayload,
   ): Promise<RPCResponse<GetEmailAddressResponse>> {
-    Logger.log(`here111: ${Logger.log(payload)}`);
     try {
       const data = await this.userService.getEmailAddress(payload.userId);
-
-      Logger.log(data);
 
       return {
         type: RPCResponseType.SUCCESS,
         data,
       };
     } catch (error) {
-      Logger.error(error);
-      
       return {
         type: RPCResponseType.ERROR,
         message: error.message,

@@ -219,17 +219,12 @@ export class RizeService {
       await this.rizeApiService.searchCustomers(userId);
     this.rizeValidatorService.validateCustomerDoesNotExist(existingCustomer);
 
-    Logger.log(`userId: ${userId}`);
-
     const kyc: GetKycResponse = await this.queueService.request<
       GetKycResponse,
       GetKycPayload
     >(GET_USER_KYC_RPC, {
       userId: `${userId}`,
     });
-
-    Logger.log(`kyc: ${JSON.stringify(kyc)}`);
-    Logger.log(`userId: ${userId}`);
 
     const emailAddressResponse: GetEmailAddressResponse =
       await this.queueService.request<
@@ -238,8 +233,6 @@ export class RizeService {
       >(GET_USER_EMAIL_ADDRESS_RPC, {
         userId: `${userId}`,
       });
-
-    Logger.log(`email: ${JSON.stringify(emailAddressResponse)}`);
 
     const customerId: string =
       existingCustomer !== null
