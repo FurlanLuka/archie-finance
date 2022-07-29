@@ -31,7 +31,6 @@
     "api-user-api-constants": "libs/api/user-api/constants",
     "api-user-api-kyc": "libs/api/user-api/kyc",
     "api-user-api-user": "libs/api/user-api/user",
-    "api-utils-api-interfaces": "libs/api/utils/api-interfaces",
     "api-utils-auth0": "libs/api/utils/auth0",
     "api-utils-config": "libs/api/utils/config",
     "api-utils-crypto": "libs/api/utils/crypto",

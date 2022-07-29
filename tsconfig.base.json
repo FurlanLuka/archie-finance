@@ -96,7 +96,6 @@
       "@archie/api/utils/config": ["libs/api/utils/config/src/index.ts"],
       "@archie/api/utils/crypto": ["libs/api/utils/crypto/src/index.ts"],
       "@archie/api/utils/health": ["libs/api/utils/health/src/index.ts"],
-      "@archie/api/utils/interfaces/*": ["libs/api/utils/api-interfaces/src/*"],
       "@archie/api/utils/microservice": [
         "libs/api/utils/microservice/src/index.ts"
       ],

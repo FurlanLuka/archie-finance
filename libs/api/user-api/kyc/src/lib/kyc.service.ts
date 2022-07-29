@@ -5,7 +5,7 @@ import { Kyc } from './kyc.entity';
 import {
   CreateKycResponse,
   GetKycResponse,
-} from '@archie/api/utils/interfaces/kyc';
+} from './kyc.interfaces';
 import { KycDto } from './kyc.interfaces';
 import { DateTime } from 'luxon';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';

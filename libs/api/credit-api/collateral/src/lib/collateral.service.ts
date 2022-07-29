@@ -7,8 +7,8 @@ import { CollateralDeposit } from './collateral_deposit.entity';
 import {
   GetCollateralValueResponse,
   GetTotalCollateralValueResponse,
-  GetUserCollateral,
-} from '@archie/api/utils/interfaces/collateral';
+  GetCollateralResponse,
+} from './collateral.interfaces';
 import { DepositCreationInternalError } from './collateral.errors';
 import { CreateDepositDto } from './collateral.interfaces';
 import { CollateralValueService } from './collateral-value/collateral-value.service';
@@ -118,7 +118,9 @@ export class CollateralService {
     };
   }
 
-  public async getUserCollateral(userId: string): Promise<GetUserCollateral> {
+  public async getUserCollateral(
+    userId: string,
+  ): Promise<GetCollateralResponse[]> {
     const userCollateral: Collateral[] = await this.collateralRepository.findBy(
       {
         userId,
@@ -133,10 +135,9 @@ export class CollateralService {
 
   public async getUserCollateralValue(
     userId: string,
-  ): Promise<GetCollateralValueResponse> {
-    const userCollateral: GetUserCollateral = await this.getUserCollateral(
-      userId,
-    );
+  ): Promise<GetCollateralValueResponse[]> {
+    const userCollateral: GetCollateralResponse[] =
+      await this.getUserCollateral(userId);
 
     const assetPrices: GetAssetPriceResponse[] =
       await this.queueService.request(GET_ASSET_PRICES_RPC);
@@ -150,7 +151,7 @@ export class CollateralService {
   public async getUserTotalCollateralValue(
     userId: string,
   ): Promise<GetTotalCollateralValueResponse> {
-    const userCollateralValue: GetCollateralValueResponse =
+    const userCollateralValue: GetCollateralValueResponse[] =
       await this.getUserCollateralValue(userId);
 
     return {
