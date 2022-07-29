@@ -17,3 +17,5 @@ export enum ConfigVariables {
   INTERNAL_API_URL = 'INTERNAL_API_URL',
   QUEUE_URL = 'QUEUE_URL',
 }
+
+export const GET_ASSET_INFORMATION_RPC = 'get.asset_information.rpc';

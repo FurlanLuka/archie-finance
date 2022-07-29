@@ -1,6 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { UsersLtv } from '../margin.interfaces';
-import { GetAssetListResponse } from '@archie/api/utils/interfaces/asset_information';
 import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -9,6 +8,7 @@ import {
 } from '@archie/api/credit-api/constants';
 import { Credit, CreditService } from '@archie/api/credit-api/credit';
 import { QueueService } from '@archie/api/utils/queue';
+import { AssetList } from '@archie/api/collateral-api/asset-information';
 
 @Injectable()
 export class CreditLimitService {
@@ -20,7 +20,7 @@ export class CreditLimitService {
 
   public async adjustCreditLimit(
     usersLtv: UsersLtv,
-    assetList: GetAssetListResponse,
+    assetList: AssetList,
     credits: Credit[],
   ) {
     const creditLimit: number = this.creditService.getCreditLimit(

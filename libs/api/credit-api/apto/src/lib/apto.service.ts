@@ -23,7 +23,7 @@ import {
   StartVerificationResponse,
 } from './api/apto_api.interfaces';
 import { AptoVerification } from './apto_verification.entity';
-import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
+import { GetKycPayload, GetKycResponse } from '@archie/api/user-api/kyc';
 import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
 import { AptoUser } from './apto_user.entity';
 import {
@@ -45,6 +45,7 @@ import {
   GetCreditResponse,
 } from '@archie/api/credit-api/credit';
 import { QueueService } from '@archie/api/utils/queue';
+import { GET_USER_KYC_RPC } from '@archie/api/user-api/constants';
 
 @Injectable()
 export class AptoService {
@@ -67,7 +68,12 @@ export class AptoService {
   public async startPhoneVerification(
     userId: string,
   ): Promise<StartPhoneVerificationResponse> {
-    const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
+    const kyc: GetKycResponse = await this.queueService.request<
+      GetKycResponse,
+      GetKycPayload
+    >(GET_USER_KYC_RPC, {
+      userId,
+    });
 
     const startPhoneVerificationResponse: StartVerificationResponse =
       await this.aptoApiService.startVerificationProcess(
@@ -216,7 +222,13 @@ export class AptoService {
       throw new BadRequestException();
     }
 
-    const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
+    const kyc: GetKycResponse = await this.queueService.request<
+      GetKycResponse,
+      GetKycPayload
+    >(GET_USER_KYC_RPC, {
+      userId,
+    });
+
     const emailAddressResponse: GetEmailAddressResponse =
       await this.internalApiService.getUserEmailAddress(userId);
 

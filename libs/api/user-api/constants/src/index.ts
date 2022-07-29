@@ -22,3 +22,5 @@ export const KYC_SUBMITTED_TOPIC = 'user.kyc.submitted';
 export const EMAIL_VERIFIED_TOPIC = 'user.email.verified';
 
 export const MFA_ENROLLED_TOPIC = 'user.mfa.enrolled';
+
+export const GET_USER_KYC_RPC = 'get.user.kyc.rpc'

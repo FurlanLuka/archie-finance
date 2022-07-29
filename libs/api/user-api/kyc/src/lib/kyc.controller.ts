@@ -8,11 +8,26 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { KycDto, CreateKycResponseDto, GetKycResponseDto } from './kyc.dto';
+import {
+  KycDto,
+  CreateKycResponse,
+  GetKycResponse,
+  GetKycPayload,
+} from './kyc.interfaces';
 import { KycService } from './kyc.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
+import {
+  RequestHandler,
+  RPCResponse,
+  RPCResponseType,
+} from '@archie/api/utils/queue';
+import {
+  GET_USER_KYC_RPC,
+  SERVICE_QUEUE_NAME,
+} from '@archie/api/user-api/constants';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 
 @Controller('v1/kyc')
 export class KycController {
@@ -22,7 +37,7 @@ export class KycController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @ApiErrorResponse([KycNotFoundError])
-  async getKyc(@Req() request): Promise<GetKycResponseDto> {
+  async getKyc(@Req() request): Promise<GetKycResponse> {
     return this.kycService.getKyc(request.user.sub);
   }
 
@@ -33,18 +48,31 @@ export class KycController {
   async createKyc(
     @Body() body: KycDto,
     @Req() request,
-  ): Promise<CreateKycResponseDto> {
+  ): Promise<CreateKycResponse> {
     return this.kycService.createKyc(body, request.user.sub);
   }
 }
 
-@Controller('internal/kyc')
-export class InternalKycController {
+@Controller()
+export class KycQueueController {
   constructor(private readonly kycService: KycService) {}
 
-  @Get(':userId')
-  @ApiErrorResponse([KycNotFoundError])
-  async getKyc(@Param('userId') userId: string): Promise<GetKycResponseDto> {
-    return this.kycService.getKyc(userId);
+  @RequestHandler(GET_USER_KYC_RPC, SERVICE_QUEUE_NAME)
+  async getKyc(
+    @RabbitPayload() payload: GetKycPayload,
+  ): Promise<RPCResponse<GetKycResponse>> {
+    try {
+      const data = await this.kycService.getKyc(payload.userId);
+
+      return {
+        type: RPCResponseType.SUCCESS,
+        data,
+      };
+    } catch (error) {
+      return {
+        type: RPCResponseType.ERROR,
+        message: error.message,
+      };
+    }
   }
 }

@@ -1,25 +1,18 @@
-import {
-  Collateral,
-  CollateralValue,
-  GetTotalCollateralValueResponse,
-} from '@archie/api/utils/interfaces/collateral';
 import { IsNumber, IsString } from 'class-validator';
 import { TransactionStatus } from 'fireblocks-sdk';
 
-export class CollateralDto implements Collateral {
+export class GetCollateralResponse {
   asset: string;
   amount: number;
 }
 
-export class CollateralValueDto implements CollateralValue {
+export class GetCollateralValueResponse {
   asset: string;
   assetAmount: number;
   price: number;
 }
 
-export class GetTotalCollateralValueResponseDto
-  implements GetTotalCollateralValueResponse
-{
+export class GetTotalCollateralValueResponse {
   value: number;
 }
 
@@ -60,4 +53,12 @@ export class CollateralWithdrawCompletedDto {
   destinationAddress: string;
   @IsString()
   status: TransactionStatus;
+}
+
+export class GetCollateralPayload {
+  userId: string;
+}
+
+export class GetCollateralValuePayload {
+  userId: string;
 }

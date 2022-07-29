@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   CollateralController,
   CollateralQueueController,
-  InternalCollateralController,
 } from './collateral.controller';
 import { Collateral } from './collateral.entity';
 import { CollateralService } from './collateral.service';
@@ -27,10 +26,6 @@ import { CollateralValueModule } from './collateral-value/collateral-value.modul
   ],
   exports: [CollateralService],
   providers: [CollateralService],
-  controllers: [
-    CollateralController,
-    InternalCollateralController,
-    CollateralQueueController,
-  ],
+  controllers: [CollateralController, CollateralQueueController],
 })
 export class CollateralModule {}

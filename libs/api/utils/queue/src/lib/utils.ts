@@ -1,4 +1,4 @@
-import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { RabbitRPC, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { applyDecorators, Logger, SetMetadata } from '@nestjs/common';
 import { defaultNackErrorHandler } from '@golevelup/nestjs-rabbitmq/lib/amqp/errorBehaviors';
 import { Channel, ConsumeMessage } from 'amqplib';
@@ -7,6 +7,7 @@ import { QueueUtilService } from './queue-util.service';
 const INITIAL_DELAY = 20000;
 const MAX_RETRIES = 5;
 const RETRY_BACKOFF = 2;
+
 export const RABBIT_RETRY_HANDLER = 'RABBIT_RETRY_HANDLER';
 
 export function Subscribe(
@@ -41,6 +42,26 @@ export function Subscribe(
   ].filter((decorator) => decorator !== undefined);
 
   return applyDecorators(...decorators);
+}
+
+export function RequestHandler(
+  routingKey: string,
+  queueName: string,
+  exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
+) {
+  const fullQueueName = `${queueName}-${exchange}_${routingKey}`;
+
+  return applyDecorators(
+    RabbitRPC({
+      exchange,
+      createQueueIfNotExists: true,
+      queue: fullQueueName,
+      routingKey: routingKey,
+      queueOptions: {
+        durable: true,
+      },
+    }),
+  );
 }
 
 function createErrorHandler(

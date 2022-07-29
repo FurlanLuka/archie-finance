@@ -1,18 +1,27 @@
 import { AuthGuard } from '@archie/api/utils/auth0';
-import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { CollateralService } from './collateral.service';
 import {
-  CollateralDto,
-  CollateralValueDto,
   CreateDepositDto,
-  GetTotalCollateralValueResponseDto,
-} from './collateral.dto';
+  GetCollateralPayload,
+  GetCollateralResponse,
+  GetCollateralValuePayload,
+  GetCollateralValueResponse,
+  GetTotalCollateralValueResponse,
+} from './collateral.interfaces';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   COLLATERAL_DEPOSITED_TOPIC,
+  GET_COLLATERAL_RPC,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
-import { Subscribe } from '@archie/api/utils/queue';
+import {
+  RequestHandler,
+  RPCResponse,
+  RPCResponseType,
+  Subscribe,
+} from '@archie/api/utils/queue';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 
 @Controller('v1/collateral')
 export class CollateralController {
@@ -21,14 +30,16 @@ export class CollateralController {
   @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getCollateral(@Req() request): Promise<CollateralDto[]> {
+  async getCollateral(@Req() request): Promise<GetCollateralResponse[]> {
     return this.collateralService.getUserCollateral(request.user.sub);
   }
 
   @Get('value')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getUserCollateralValue(@Req() request): Promise<CollateralValueDto[]> {
+  async getUserCollateralValue(
+    @Req() request,
+  ): Promise<GetCollateralValueResponse[]> {
     return this.collateralService.getUserCollateralValue(request.user.sub);
   }
 
@@ -37,27 +48,8 @@ export class CollateralController {
   @ApiBearerAuth()
   async getUserTotalCollateralValue(
     @Req() request,
-  ): Promise<GetTotalCollateralValueResponseDto> {
+  ): Promise<GetTotalCollateralValueResponse> {
     return this.collateralService.getUserTotalCollateralValue(request.user.sub);
-  }
-}
-
-@Controller('internal/collateral')
-export class InternalCollateralController {
-  constructor(private collateralService: CollateralService) {}
-
-  @Get(':userId')
-  async getCollateral(
-    @Param('userId') userId: string,
-  ): Promise<CollateralDto[]> {
-    return this.collateralService.getUserCollateral(userId);
-  }
-
-  @Get('value/:userId')
-  async getUserCollateralValue(
-    @Param('userId') userId: string,
-  ): Promise<CollateralValueDto[]> {
-    return this.collateralService.getUserCollateralValue(userId);
   }
 }
 
@@ -68,5 +60,47 @@ export class CollateralQueueController {
   @Subscribe(COLLATERAL_DEPOSITED_TOPIC, SERVICE_QUEUE_NAME)
   async collateralDepositedHandler(payload: CreateDepositDto): Promise<void> {
     await this.collateralService.createDeposit(payload);
+  }
+
+  @RequestHandler(GET_COLLATERAL_RPC, SERVICE_QUEUE_NAME)
+  async getCollateral(
+    @RabbitPayload() payload: GetCollateralPayload,
+  ): Promise<RPCResponse<GetCollateralResponse[]>> {
+    try {
+      const data = await this.collateralService.getUserCollateral(
+        payload.userId,
+      );
+
+      return {
+        type: RPCResponseType.SUCCESS,
+        data,
+      };
+    } catch (error) {
+      return {
+        type: RPCResponseType.ERROR,
+        message: error.message,
+      };
+    }
+  }
+
+  @RequestHandler(GET_COLLATERAL_RPC, SERVICE_QUEUE_NAME)
+  async getCollateralValue(
+    @RabbitPayload() payload: GetCollateralValuePayload,
+  ): Promise<RPCResponse<GetCollateralValueResponse[]>> {
+    try {
+      const data = await this.collateralService.getUserCollateralValue(
+        payload.userId,
+      );
+
+      return {
+        type: RPCResponseType.SUCCESS,
+        data,
+      };
+    } catch (error) {
+      return {
+        type: RPCResponseType.ERROR,
+        message: error.message,
+      };
+    }
   }
 }

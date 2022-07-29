@@ -59,3 +59,6 @@ export const COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC =
 
 export const COLLATERAL_WITHDRAW_COMPLETED_TOPIC =
   'credit.collateral.withdraw.completed';
+
+export const GET_COLLATERAL_RPC = 'get.collateral.rpc';
+export const GET_COLLATERAL_VALUE_RPC = 'get.collateral.value.rpc';

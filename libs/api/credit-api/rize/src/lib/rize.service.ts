@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
+import { GetKycResponse, GetKycPayload } from '@archie/api/user-api/kyc';
 import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
 import { InternalApiService } from '@archie/api/utils/internal';
 import { RizeApiService } from './api/rize_api.service';
@@ -28,6 +28,7 @@ import {
   GetCreditResponse,
 } from '@archie/api/credit-api/credit';
 import { QueueService } from '@archie/api/utils/queue';
+import { GET_USER_KYC_RPC } from '@archie/api/user-api/constants';
 
 @Injectable()
 export class RizeService {
@@ -214,7 +215,13 @@ export class RizeService {
       await this.rizeApiService.searchCustomers(userId);
     this.rizeValidatorService.validateCustomerDoesNotExist(existingCustomer);
 
-    const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
+    const kyc: GetKycResponse = await this.queueService.request<
+      GetKycResponse,
+      GetKycPayload
+    >(GET_USER_KYC_RPC, {
+      userId,
+    });
+
     const emailAddressResponse: GetEmailAddressResponse =
       await this.internalApiService.getUserEmailAddress(userId);
 
