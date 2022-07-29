@@ -13,6 +13,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   COLLATERAL_DEPOSITED_TOPIC,
   GET_COLLATERAL_RPC,
+  GET_COLLATERAL_VALUE_RPC,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
 import {
@@ -83,7 +84,7 @@ export class CollateralQueueController {
     }
   }
 
-  @RequestHandler(GET_COLLATERAL_RPC, SERVICE_QUEUE_NAME)
+  @RequestHandler(GET_COLLATERAL_VALUE_RPC, SERVICE_QUEUE_NAME)
   async getCollateralValue(
     @RabbitPayload() payload: GetCollateralValuePayload,
   ): Promise<RPCResponse<GetCollateralValueResponse[]>> {
