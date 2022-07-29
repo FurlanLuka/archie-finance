@@ -81,82 +81,82 @@ spec:
             - name: TYPEORM_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: username
+                  name: mail-api-secrets
+                  key: db-username
             - name: TYPEORM_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: password
+                  name: mail-api-secrets
+                  key: db-password
             - name: TYPEORM_HOST
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: hostname
+                  name: mail-api-secrets
+                  key: db-hostname
             - name: TYPEORM_PORT
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: port
+                  name: mail-api-secrets
+                  key: db-port
             - name: TYPEORM_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: database
+                  name: mail-api-secrets
+                  key: db-database
             - name: SENDGRID_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: api-key
+                  name: mail-api-secrets
+                  key: sendgrid-api-key
             - name: SENDGRID_API_URL
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: api-url
+                  name: mail-api-secrets
+                  key: sendgrid-api-url
             - name: SENDGRID_MAILING_LIST_ID
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: mailing-list-id
+                  name: mail-api-secrets
+                  key: sendgrid-mailing-list-id
             - name: SENDGRID_VERIFY_EMAIL_TEMPLATAE_ID
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: verify-email-template-id
+                  name: mail-api-secrets
+                  key: sendgrid-verify-email-template-id
             - name: SENDGRID_MARGIN_CALL_EXITED_TEMPLATE_ID
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: margin-call-exited-template-id
+                  name: mail-api-secrets
+                  key: sendgrid-margin-call-exited-template-id
             - name: SENDGRID_MARGIN_CALL_REACHED_TEMPLATE_ID
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: margin-call-reached-template-id
+                  name: mail-api-secrets
+                  key: sendgrid-margin-call-reached-template-id
             - name: SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: margin-call-in-danger-template-id
+                  name: mail-api-secrets
+                  key: sendgrid-margin-call-in-danger-template-id
             - name: SENDGRID_COLLATERAL_LIQUIDATED_TEMPLATE_ID
               valueFrom:
                 secretKeyRef:
-                  name: sendgrid-secrets
-                  key: collateral-liquidated-template-id
+                  name: mail-api-secrets
+                  key: sendgrid-collateral-liquidated-template-id
             - name: ARCHIE_MARKETING_WEBSITE_URL
               valueFrom:
                 secretKeyRef:
-                  name: archie-secrets
+                  name: mail-api-secrets
                   key: marketing-website-url
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:
-                  name: queue-secrets
+                  name: queue-shared-secrets
                   key: queue-url
             - name: ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: cryptography-secrets
+                  name: mail-api-secrets
                   key: encryption-key
           {{- end }}
       imagePullSecrets:

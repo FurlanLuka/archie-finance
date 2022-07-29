@@ -18,6 +18,7 @@ import { QueueModule } from '@archie/api/utils/queue';
         ConfigVariables.TYPEORM_USERNAME,
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
+        ConfigVariables.TYPEORM_PORT,
         ConfigVariables.QUEUE_URL,
         ConfigVariables.ENCRYPTION_KEY,
       ],

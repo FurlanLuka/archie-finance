@@ -81,38 +81,38 @@ spec:
             - name: TYPEORM_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: username
+                  name: asset-price-api-secrets
+                  key: db-username
             - name: TYPEORM_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: password
+                  name: asset-price-api-secrets
+                  key: db-password
             - name: TYPEORM_HOST
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: hostname
+                  name: asset-price-api-secrets
+                  key: db-hostname
             - name: TYPEORM_PORT
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: port
+                  name: asset-price-api-secrets
+                  key: db-port
             - name: TYPEORM_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: database
+                  name: asset-price-api-secrets
+                  key: db-database
             - name: ASSET_LIST
               valueFrom:
                 secretKeyRef:
-                  name: asset-secrets
+                  name: asset-price-api-secrets
                   key: enabled-assets
             - name: COINGECKO_API_URI
               valueFrom:
                 secretKeyRef:
-                  name: coingecko-secrets
-                  key: api-url
+                  name: asset-price-api-secrets
+                  key: coingecko-api-url
           {{- end }}
       imagePullSecrets:
         - name: regcred
@@ -152,7 +152,7 @@ spec:
               {{- if not .Values.local }}
               valueFrom:
                 secretKeyRef:
-                  name: internal-api-secrets
+                  name: internal-api-shared-secrets
                   key: internal-api-url
               {{- else }}
               value: http://host.minikube.internal

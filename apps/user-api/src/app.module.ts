@@ -24,8 +24,6 @@ import { QueueModule } from '@archie/api/utils/queue';
         ConfigVariables.TYPEORM_USERNAME,
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
-        ConfigVariables.SENDGRID_API_KEY,
-        ConfigVariables.SENDGRID_MAILING_LIST_ID,
         ConfigVariables.INTERNAL_API_URL,
         ConfigVariables.QUEUE_URL,
         ConfigVariables.ENCRYPTION_KEY,

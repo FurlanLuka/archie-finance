@@ -81,87 +81,82 @@ spec:
             - name: AUTH0_DOMAIN
               valueFrom:
                 secretKeyRef:
-                  name: auth0-secrets
+                  name: auth0-shared-secrets
                   key: domain
             - name: AUTH0_AUDIENCE
               valueFrom:
                 secretKeyRef:
-                  name: auth0-secrets
+                  name: auth0-shared-secrets
                   key: audience
             - name: TYPEORM_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: username
+                  name: credit-api-secrets
+                  key: db-username
             - name: TYPEORM_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: password
+                  name: credit-api-secrets
+                  key: db-password
             - name: TYPEORM_HOST
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: hostname
+                  name: credit-api-secrets
+                  key: db-hostname
             - name: TYPEORM_PORT
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: port
+                  name: credit-api-secrets
+                  key: db-port
             - name: TYPEORM_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: database-secrets
-                  key: database
+                  name: credit-api-secrets
+                  key: db-database
             - name: INTERNAL_API_URL
               valueFrom:
                 secretKeyRef:
-                  name: internal-api-secrets
+                  name: internal-api-shared-secrets
                   key: internal-api-url
-            - name: FUNDING_BALANCE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: apto-secrets
-                  key: funding-balance-id
             - name: RIZE_PROGRAM_ID
               valueFrom:
                 secretKeyRef:
-                  name: rize-secrets
-                  key: program-id
+                  name: credit-api-secrets
+                  key: rize-program-id
             - name: RIZE_HMAC_KEY
               valueFrom:
                 secretKeyRef:
-                  name: rize-secrets
-                  key: hmac-key
+                  name: credit-api-secrets
+                  key: rize-hmac-key
             - name: RIZE_ENVIRONMENT
               valueFrom:
                 secretKeyRef:
-                  name: rize-secrets
+                  name: credit-api-secrets
                   key: rize-environment
             - name: RIZE_MQ_HOST
               valueFrom:
                 secretKeyRef:
-                  name: rize-secrets
+                  name: credit-api-secrets
                   key: rize-mq-host
             - name: RIZE_MQ_TOPIC_PREFIX
               valueFrom:
                 secretKeyRef:
-                  name: rize-secrets
+                  name: credit-api-secrets
                   key: rize-mq-topic-prefix
             - name: RIZE_MQ_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: rize-secrets
+                  name: credit-api-secrets
                   key: rize-mq-username
             - name: RIZE_MQ_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: rize-secrets
+                  name: credit-api-secrets
                   key: rize-mq-password
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:
-                  name: queue-secrets
+                  name: queue-shared-secrets
                   key: queue-url
           {{- end }}
       imagePullSecrets:
@@ -202,7 +197,7 @@ spec:
                   {{- if not .Values.local }}
                   valueFrom:
                     secretKeyRef:
-                      name: internal-api-secrets
+                      name: internal-api-shared-secrets
                       key: internal-api-url
                   {{- else }}
                   value: http://host.minikube.internal
