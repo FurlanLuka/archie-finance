@@ -5,13 +5,13 @@ import { ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
 import { AssetsAllocationStyled } from './assets-allocation.styled';
 
 interface AssetsAllocationProps {
-  btc: number;
-  eth: number;
-  sol: number;
-  usdc: number;
+  btc?: number;
+  eth?: number;
+  sol?: number;
+  usdc?: number;
 }
 
-export const AssetsAllocation: FC<AssetsAllocationProps> = ({ btc, eth, sol, usdc }) => (
+export const AssetsAllocation: FC<AssetsAllocationProps> = ({ btc = 0, eth = 0, sol = 0, usdc = 0 }) => (
   <AssetsAllocationStyled btc={btc} eth={eth} sol={sol} usdc={usdc}>
     <div className="range" />
     <div className="legend">

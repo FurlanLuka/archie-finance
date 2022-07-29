@@ -161,7 +161,14 @@
     "btn": "Withdraw Collateral"
   },
   "dashboard_collateralization": {
-    "title": "Send Crypto to your Collateral Wallet",
-    "subtitle": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it."
+    "title": "Send {{asset}} to your Collateral Wallet",
+    "subtitle_loading": "With ArchCredit, your Crypto is your credit.",
+    "subtitle_asset": "You currently have {{collateral}} {{collateral_asset}} (~${{collateral_value}}).",
+    "subtitle_credit": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it.",
+    "collateral_received_modal": {
+      "title": "Collateral received",
+      "text": "Your collateral now includes {{collateral}}. Your credit limit is now ${{credit_value}}.",
+      "btn": "Got it!"
+    }
   }
 }
