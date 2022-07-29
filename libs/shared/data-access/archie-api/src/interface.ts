@@ -11,6 +11,8 @@ export enum RequestState {
   ERROR,
   SUCCESS,
   IDLE,
+  LOADING_NEXT_PAGE,
+  ERROR_NEXT_PAGE,
 }
 
 interface LoadingQueryResponse {
@@ -57,3 +59,28 @@ export type MutationQueryResponse<Payload = any, Response = any> =
   | ErrorMutationQueryResponse
   | SuccessMutationQueryResponse<Response>
   | IdleMutationQueryResponse<Payload>;
+
+interface SuccessInfiniteQueryResponse<T> {
+  state: RequestState.SUCCESS;
+  pages: T[];
+  hasNextPage: boolean;
+  fetchNextPage: () => Promise<void>;
+}
+
+interface LoadingNextPageResponse<T> {
+  state: RequestState.LOADING_NEXT_PAGE;
+  pages: T[];
+}
+
+interface ErrorNextPageResponse<T> {
+  state: RequestState.ERROR_NEXT_PAGE;
+  pages: T[];
+}
+
+export type InfiniteQueryResponse<T> =
+  | LoadingQueryResponse
+  | ErrorQueryResponse
+  | SuccessInfiniteQueryResponse<T>
+  | IdleQueryResponse
+  | LoadingNextPageResponse<T>
+  | ErrorNextPageResponse<T>;
