@@ -19,7 +19,6 @@ import { UserService } from './user.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { GetMfaEnrollmentResponse } from './user.interfaces';
-import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 import {
   RequestHandler,
   RPCResponse,
@@ -79,7 +78,7 @@ export class UserQueueController {
 
   @RequestHandler(GET_USER_EMAIL_ADDRESS_RPC, SERVICE_QUEUE_NAME)
   async getEmailAddress(
-    @RabbitPayload() payload: GetEmailAddressPayload,
+    payload: GetEmailAddressPayload,
   ): Promise<RPCResponse<GetEmailAddressResponse>> {
     Logger.log(`here111: ${Logger.log(payload)}`);
     try {

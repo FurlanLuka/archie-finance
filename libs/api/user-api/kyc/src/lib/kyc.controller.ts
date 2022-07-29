@@ -27,7 +27,6 @@ import {
   GET_USER_KYC_RPC,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/user-api/constants';
-import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 
 @Controller('v1/kyc')
 export class KycController {
@@ -59,7 +58,7 @@ export class KycQueueController {
 
   @RequestHandler(GET_USER_KYC_RPC, SERVICE_QUEUE_NAME)
   async getKyc(
-    @RabbitPayload() payload: GetKycPayload,
+    payload: GetKycPayload,
   ): Promise<RPCResponse<GetKycResponse>> {
     Logger.log(`here222: ${JSON.stringify(payload)}`)
     try {
