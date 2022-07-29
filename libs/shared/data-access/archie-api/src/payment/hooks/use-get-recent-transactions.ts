@@ -9,6 +9,7 @@ export const useGetRecentTransactions = (): QueryResponse<Transaction[]> => {
     getTransactions(0, 5, accessToken),
   );
 
+  // we don't need pagination data here so we just override the success state
   if (queryResponse.state === RequestState.SUCCESS) {
     return {
       state: RequestState.SUCCESS,

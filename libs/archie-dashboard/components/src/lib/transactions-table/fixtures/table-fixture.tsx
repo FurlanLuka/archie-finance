@@ -47,7 +47,7 @@ const AmountCell: FC<AmountCellProps> = ({ amount }) =>
     <AmountCellStyled isNegative={false}>{`+$${amount}`}</AmountCellStyled>
   );
 
-export const tableColumns: Column<Transaction>[] = [
+export const transactionColumns: Column<Transaction>[] = [
   {
     Header: '',
     id: 'hidden',

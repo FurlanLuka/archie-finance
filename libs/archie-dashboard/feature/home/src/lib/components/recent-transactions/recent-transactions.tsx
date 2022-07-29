@@ -1,17 +1,17 @@
 import { FC, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
+import { transactionColumns } from '@archie-webapps/archie-dashboard/components';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetRecentTransactions } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-recent-transactions';
 import { ButtonOutline, Card, Loader, ParagraphM, Table } from '@archie-webapps/shared/ui/design-system';
 
-import { tableColumns } from './fixtures/table-fixture';
 import { RecentTransactionsStyled } from './recent-transactions.styled';
 
 export const RecentTransactions: FC = () => {
   const getRecentTransactionsResponse = useGetRecentTransactions();
 
-  const columns = useMemo(() => tableColumns, []);
+  const columns = useMemo(() => transactionColumns, []);
   const data = useMemo(() => {
     if (getRecentTransactionsResponse.state === RequestState.SUCCESS) {
       return getRecentTransactionsResponse.data;

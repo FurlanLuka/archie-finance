@@ -4,15 +4,21 @@ import { getTransactions, GetTransactionsResponse } from '../api/get-transaction
 
 const TRANSACTIONS_RECORD_QUERY_KEY = 'transactions_record';
 
-function getNextPage(lastPage: GetTransactionsResponse) {
-  return 420;
+function getNextPage({ meta }: GetTransactionsResponse) {
+  if (meta.page * meta.limit + meta.count < meta.totalCount) {
+    return meta.page + 1;
+  }
+
+  return undefined;
 }
+
+const PAGE_SIZE = 10;
 
 export const useGetTransactions = (): InfiniteQueryResponse<GetTransactionsResponse> => {
   return useExtendedInfiniteQuery(
     TRANSACTIONS_RECORD_QUERY_KEY,
     getNextPage,
     async (accessToken: string, paginationParams: PaginationParams) =>
-      getTransactions(paginationParams.page, 2, accessToken),
+      getTransactions(paginationParams.page, PAGE_SIZE, accessToken),
   );
 };
