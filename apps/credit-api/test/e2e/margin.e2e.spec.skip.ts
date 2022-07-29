@@ -650,36 +650,6 @@ describe('MarginQueueController (e2e)', () => {
       expect(marginCall).toEqual(null);
     });
 
-    it('Should not send notification in case LTV is at 65% but the user only holds USDC', async () => {
-      const ltv = 65;
-      await creditRepository.save({
-        userId,
-        totalCredit: 100,
-        availableCredit: 100 - ltv,
-      });
-      await collateralRepository.delete({
-        userId,
-      });
-      await collateralRepository.save({
-        userId,
-        asset: 'USDC',
-        amount: 100,
-      });
-
-      await app
-        .get(MarginQueueController)
-        .checkMarginHandler({ userIds: [userId] });
-
-      expect(amqpConnectionPublish).toBeCalledTimes(1);
-      expect(amqpConnectionPublish).toBeCalledWith(
-        CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE.name,
-        '',
-        {
-          userIds: [userId],
-        },
-      );
-    });
-
     it('Should not do anything in case collateral value did not change for at least 10%', async () => {
       const collateralBalance = 100;
       await marginCollateralCheckRepository.save({
