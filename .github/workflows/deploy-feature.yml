@@ -18,7 +18,7 @@ jobs:
       ENVIRONMENT: development
       ECR_REPOSITORY: archie-development-container-repository
       AWS_REGION: us-east-1
-      BASE_BRANCH_NAME: feature/rpc
+      BASE_BRANCH_NAME: feature/rpc~2
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
