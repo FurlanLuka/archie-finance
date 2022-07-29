@@ -1,8 +1,7 @@
 import { LiquidationLog } from '../../liquidation_logs.entity';
 import {
-  CollateralValue,
   GetCollateralValueResponse,
-} from '@archie/api/utils/interfaces/collateral';
+} from '@archie/api/credit-api/collateral';
 import {
   Injectable,
   InternalServerErrorException,
@@ -82,13 +81,13 @@ export class MarginLiquidationService {
   public async getAssetsToLiquidate(
     userId: string,
     amount: number,
-    collateralAssets: GetCollateralValueResponse,
+    collateralAssets: GetCollateralValueResponse[],
     marginCall: MarginCall,
   ): Promise<Partial<LiquidationLog>[]> {
-    const sortedCollateralAssetsByAllocation: GetCollateralValueResponse =
+    const sortedCollateralAssetsByAllocation: GetCollateralValueResponse[] =
       collateralAssets
         .slice()
-        .sort((a: CollateralValue, b: CollateralValue) =>
+        .sort((a: GetCollateralValueResponse, b: GetCollateralValueResponse) =>
           a.price >= b.price ? -1 : 1,
         );
 

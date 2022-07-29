@@ -7,7 +7,6 @@ import {
 } from '@archie/api/credit-api/constants';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
-import { InternalApiModule } from '@archie/api/utils/internal';
 import { CreditModule } from '@archie/api/credit-api/credit';
 import { CollateralModule } from '@archie/api/credit-api/collateral';
 import { RizeModule } from '@archie/api/credit-api/rize';
@@ -27,7 +26,6 @@ import { QueueModule } from '@archie/api/utils/queue';
         ConfigVariables.TYPEORM_USERNAME,
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
-        ConfigVariables.INTERNAL_API_URL,
         ConfigVariables.RIZE_ENVIRONMENT,
         ConfigVariables.RIZE_PROGRAM_ID,
         ConfigVariables.RIZE_HMAC_KEY,
@@ -64,13 +62,6 @@ import { QueueModule } from '@archie/api/utils/queue';
         audience: configService.get(ConfigVariables.AUTH0_AUDIENCE),
       }),
       inject: [ConfigService],
-    }),
-    InternalApiModule.register({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        internalApiUrl: configService.get(ConfigVariables.INTERNAL_API_URL),
-      }),
     }),
     HealthModule,
     CreditModule,

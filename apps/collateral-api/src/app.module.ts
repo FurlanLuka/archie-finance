@@ -30,7 +30,6 @@ import { QueueModule } from '@archie/api/utils/queue';
         ConfigVariables.FIREBLOCKS_API_KEY,
         ConfigVariables.FIREBLOCKS_PRIVATE_KEY,
         ConfigVariables.FIREBLOCKS_PUBLIC_KEY,
-        ConfigVariables.INTERNAL_API_URL,
         ConfigVariables.QUEUE_URL,
       ],
       parse: (configVariable, value) => {

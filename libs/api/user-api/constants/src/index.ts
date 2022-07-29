@@ -12,7 +12,6 @@ export enum ConfigVariables {
   TYPEORM_PASSWORD = 'TYPEORM_PASSWORD',
   TYPEORM_DATABASE = 'TYPEORM_DATABASE',
   TYPEORM_PORT = 'TYPEORM_PORT',
-  INTERNAL_API_URL = 'INTERNAL_API_URL',
   QUEUE_URL = 'QUEUE_URL',
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
 }
@@ -23,4 +22,5 @@ export const EMAIL_VERIFIED_TOPIC = 'user.email.verified';
 
 export const MFA_ENROLLED_TOPIC = 'user.mfa.enrolled';
 
-export const GET_USER_KYC_RPC = 'get.user.kyc.rpc'
+export const GET_USER_KYC_RPC = 'get.user.kyc.rpc';
+export const GET_USER_EMAIL_ADDRESS_RPC = 'get.user.email_address.rpc';

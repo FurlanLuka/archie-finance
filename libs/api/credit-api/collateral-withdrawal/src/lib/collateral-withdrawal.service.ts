@@ -1,4 +1,3 @@
-import { InternalApiService } from '@archie/api/utils/internal';
 import { COLLATERAL_WITHDRAW_INITIALIZED_TOPIC } from '@archie/api/credit-api/constants';
 import {
   BadRequestException,
@@ -43,7 +42,6 @@ export class CollateralWithdrawalService {
     @InjectRepository(LiquidationLog)
     private liquidationLogsRepository: Repository<LiquidationLog>,
     private marginLtvService: MarginLtvService,
-    private internalApiService: InternalApiService,
     private queueService: QueueService,
   ) {}
 

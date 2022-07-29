@@ -3,22 +3,31 @@ import {
   BadRequestException,
   Controller,
   Get,
-  NotFoundException,
-  Param,
   Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
 import {
-  GetEmailVerificationResponseDto,
-  GetEmailAddressResponseDto,
-  GetSendEnrollmentTicketResponseDto,
-  EnrollmentDto,
-} from './user.dto';
+  GetSendEnrollmentTicketResponse,
+  GetEnrollmentResponse,
+  GetEmailVerificationResponse,
+  GetEmailAddressResponse,
+  GetEmailAddressPayload,
+} from './user.interfaces';
 import { UserService } from './user.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { GetMfaEnrollmentResponse } from './user.interfaces';
+import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
+import {
+  RequestHandler,
+  RPCResponse,
+  RPCResponseType,
+} from '@archie/api/utils/queue';
+import {
+  GET_USER_EMAIL_ADDRESS_RPC,
+  SERVICE_QUEUE_NAME,
+} from '@archie/api/user-api/constants';
 
 @Controller('v1/user')
 export class UserController {
@@ -29,7 +38,7 @@ export class UserController {
   @ApiBearerAuth()
   async checkEmailVerification(
     @Req() request,
-  ): Promise<GetEmailVerificationResponseDto> {
+  ): Promise<GetEmailVerificationResponse> {
     return this.userService.isEmailVerified(request.user.sub);
   }
 
@@ -44,14 +53,14 @@ export class UserController {
   @Post('mfa/enroll')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async enrollMfa(@Req() request): Promise<GetSendEnrollmentTicketResponseDto> {
+  async enrollMfa(@Req() request): Promise<GetSendEnrollmentTicketResponse> {
     return this.userService.enrollMfa(request.user.sub);
   }
 
   @Get('mfa/enrollments')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getMfaEnrollments(@Req() request): Promise<EnrollmentDto[]> {
+  async getMfaEnrollments(@Req() request): Promise<GetEnrollmentResponse[]> {
     return this.userService.getMfaEnrollments(request.user.sub);
   }
 
@@ -63,15 +72,26 @@ export class UserController {
   }
 }
 
-@Controller('internal/user')
-export class InternalUserController {
+@Controller()
+export class UserQueueController {
   constructor(private userService: UserService) {}
 
-  @Get('email-address/:userId')
-  @ApiErrorResponse([NotFoundException])
+  @RequestHandler(GET_USER_EMAIL_ADDRESS_RPC, SERVICE_QUEUE_NAME)
   async getEmailAddress(
-    @Param('userId') userId: string,
-  ): Promise<GetEmailAddressResponseDto> {
-    return this.userService.getEmailAddress(userId);
+    @RabbitPayload() payload: GetEmailAddressPayload,
+  ): Promise<RPCResponse<GetEmailAddressResponse>> {
+    try {
+      const data = await this.userService.getEmailAddress(payload.userId);
+
+      return {
+        type: RPCResponseType.SUCCESS,
+        data,
+      };
+    } catch (error) {
+      return {
+        type: RPCResponseType.ERROR,
+        message: error.message,
+      };
+    }
   }
 }

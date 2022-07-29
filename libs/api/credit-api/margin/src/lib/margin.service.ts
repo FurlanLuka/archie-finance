@@ -6,7 +6,6 @@ import { MarginCall } from './margin_calls.entity';
 import { LtvResponse, LtvStatus, UsersLtv } from './margin.interfaces';
 import { MarginLtvService } from './ltv/margin_ltv.service';
 import { MarginCallsService } from './calls/margin_calls.service';
-import { InternalApiService } from '@archie/api/utils/internal';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { MarginCollateralValueCheckService } from './collateral_value_checks/margin_collaterall_value_checks.service';
 import {
@@ -36,7 +35,6 @@ export class MarginService {
     private collateralRepository: Repository<Collateral>,
     private marginLtvService: MarginLtvService,
     private marginCallsService: MarginCallsService,
-    private internalApiService: InternalApiService,
     private queueService: QueueService,
     private marginCollateralCheckService: MarginCollateralValueCheckService,
     private creditLimitService: CreditLimitService,

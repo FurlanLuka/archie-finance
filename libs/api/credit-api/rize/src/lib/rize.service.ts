@@ -1,7 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { GetKycResponse, GetKycPayload } from '@archie/api/user-api/kyc';
-import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
-import { InternalApiService } from '@archie/api/utils/internal';
 import { RizeApiService } from './api/rize_api.service';
 import {
   ComplianceDocumentAcknowledgementRequest,
@@ -28,7 +26,14 @@ import {
   GetCreditResponse,
 } from '@archie/api/credit-api/credit';
 import { QueueService } from '@archie/api/utils/queue';
-import { GET_USER_KYC_RPC } from '@archie/api/user-api/constants';
+import {
+  GET_USER_EMAIL_ADDRESS_RPC,
+  GET_USER_KYC_RPC,
+} from '@archie/api/user-api/constants';
+import {
+  GetEmailAddressPayload,
+  GetEmailAddressResponse,
+} from '@archie/api/user-api/user';
 
 @Injectable()
 export class RizeService {
@@ -36,7 +41,6 @@ export class RizeService {
 
   constructor(
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
-    private internalApiService: InternalApiService,
     private rizeApiService: RizeApiService,
     private rizeFactoryService: RizeFactoryService,
     private rizeValidatorService: RizeValidatorService,
@@ -223,7 +227,12 @@ export class RizeService {
     });
 
     const emailAddressResponse: GetEmailAddressResponse =
-      await this.internalApiService.getUserEmailAddress(userId);
+      await this.queueService.request<
+        GetEmailAddressResponse,
+        GetEmailAddressPayload
+      >(GET_USER_EMAIL_ADDRESS_RPC, {
+        userId,
+      });
 
     const customerId: string =
       existingCustomer !== null

@@ -1,8 +1,7 @@
 import { Collateral } from '../collateral.entity';
 import {
   GetAssetPriceResponse,
-  GetAssetPricesResponse,
-} from '@archie/api/utils/interfaces/asset_price';
+} from '@archie/api/asset-price-api/asset-price';
 import {
   GetCollateralValueResponse,
   GetUserCollateral,
@@ -11,7 +10,7 @@ import {
 export class CollateralValueService {
   public getUserCollateralValue(
     userCollateral: Collateral[] | GetUserCollateral,
-    assetPrices: GetAssetPricesResponse,
+    assetPrices: GetAssetPriceResponse[],
   ): GetCollateralValueResponse {
     return userCollateral.map((collateral: Collateral) => {
       const assetPrice: GetAssetPriceResponse | undefined = assetPrices.find(
