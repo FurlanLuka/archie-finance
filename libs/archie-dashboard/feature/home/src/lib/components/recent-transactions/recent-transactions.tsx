@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetRecentTransactions } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-recent-transactions';
@@ -10,17 +10,22 @@ import { RecentTransactionsStyled } from './recent-transactions.styled';
 export const RecentTransactions: FC = () => {
   const getRecentTransactionsResponse = useGetRecentTransactions();
 
+  const columns = useMemo(() => tableColumns, []);
+  const data = useMemo(() => {
+    if (getRecentTransactionsResponse.state === RequestState.SUCCESS) {
+      return getRecentTransactionsResponse.data as any;
+    }
+
+    return [];
+  }, [getRecentTransactionsResponse]);
+
   function getContent() {
     if (getRecentTransactionsResponse.state === RequestState.LOADING) {
       return <Loader />;
     }
 
-    if (getRecentTransactionsResponse.state === RequestState.ERROR) {
-      return null;
-    }
-
     if (getRecentTransactionsResponse.state === RequestState.SUCCESS) {
-      return <Table columns={tableColumns} data={getRecentTransactionsResponse.data as any} />;
+      return <Table columns={columns} data={data} />;
     }
 
     return null;
