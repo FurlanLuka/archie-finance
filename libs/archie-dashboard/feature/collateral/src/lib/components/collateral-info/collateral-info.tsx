@@ -7,8 +7,8 @@ import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/c
 import { Table } from '@archie-webapps/shared/ui/design-system';
 
 import { tableColumns } from '../../fixtures/table-fixture';
-import { AssetsAllocation } from '../assets-allocation/assets-allocation';
 import { AddNewAsset } from '../add-new-asset/add-new-asset';
+import { AssetsAllocation } from '../assets-allocation/assets-allocation';
 
 type AssetMap = Record<
   CollateralCurrency,
@@ -30,6 +30,7 @@ interface CollateralInfoProps {
 }
 export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral }) => {
   const totalValue = calculateCollateralTotalValue(collateral);
+  const columns = useMemo(() => tableColumns, []);
 
   const assetMap: AssetMap = useMemo(() => {
     return collateral.reduce(
@@ -52,6 +53,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral }) => {
     );
   }, [collateral, totalValue]);
 
+  const tableData = useMemo(() => Object.values(assetMap), [assetMap]);
   const notAddedAssets = Object.values(CollateralAssets).filter((asset) => assetMap[asset.id] === undefined);
 
   return (
@@ -62,7 +64,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral }) => {
         sol={assetMap[CollateralCurrency.SOL]?.allocation}
         usdc={assetMap[CollateralCurrency.USDC]?.allocation}
       />
-      <Table columns={tableColumns} data={Object.values(assetMap)} />
+      <Table columns={columns} data={tableData} />
       {notAddedAssets.length > 0 && <AddNewAsset assets={notAddedAssets} />}
     </>
   );
