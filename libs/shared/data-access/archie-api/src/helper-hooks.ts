@@ -78,8 +78,8 @@ export const useExtendedQuery = <TQueryFnData>(
 
 export const useExtendedInfiniteQuery = <TQueryFnData>(
   queryKey: string,
-  queryFn: (accessToken: string, paginationParams: PaginationParams) => Promise<TQueryFnData>,
   getNextPage: (lastPage: TQueryFnData, allPages: TQueryFnData[]) => number | undefined,
+  queryFn: (accessToken: string, paginationParams: PaginationParams) => Promise<TQueryFnData>,
   options?: Omit<
     UseInfiniteQueryOptions<TQueryFnData, ApiErrors, TQueryFnData, TQueryFnData, QueryKey>,
     'queryKey' | 'queryFn'
@@ -93,7 +93,7 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
   const request = useInfiniteQuery<TQueryFnData, ApiErrors>(
     queryKey,
     // TODO check why the line below throws error if we try to use sessionRefreshInfiniteWrapper
-    async ({ pageParam = 1 }) => {
+    async ({ pageParam = 0 }) => {
       const paginationParams = { page: pageParam };
 
       try {

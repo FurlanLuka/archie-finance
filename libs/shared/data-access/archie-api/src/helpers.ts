@@ -96,7 +96,7 @@ export const sessionRefreshInfiniteWrapper = <TQueryFnData>(
   setAccessToken: React.Dispatch<React.SetStateAction<string | undefined>>,
   setSessionState: React.Dispatch<React.SetStateAction<SessionState>>,
   getAccessTokenSilently: () => Promise<string>,
-): (() => Promise<TQueryFnData>) => {
+): QueryFunction<TQueryFnData, QueryKey> => {
   const wrapper = async (): Promise<TQueryFnData> => {
     try {
       return await queryFn(accessToken, paginationParams);
