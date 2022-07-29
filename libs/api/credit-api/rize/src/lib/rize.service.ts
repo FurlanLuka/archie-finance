@@ -225,17 +225,18 @@ export class RizeService {
       GetKycResponse,
       GetKycPayload
     >(GET_USER_KYC_RPC, {
-      userId,
+      userId: `${userId}`,
     });
 
     Logger.log(`kyc: ${JSON.stringify(kyc)}`);
+    Logger.log(`userId: ${userId}`);
 
     const emailAddressResponse: GetEmailAddressResponse =
       await this.queueService.request<
         GetEmailAddressResponse,
         GetEmailAddressPayload
       >(GET_USER_EMAIL_ADDRESS_RPC, {
-        userId,
+        userId: `${userId}`,
       });
 
     Logger.log(`email: ${JSON.stringify(emailAddressResponse)}`);
