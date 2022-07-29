@@ -48,10 +48,6 @@ export class OnboardingService {
         userId,
       });
 
-    if (onboardingRecord.completed) {
-      return;
-    }
-
     const updatedOnboardingRecord: Onboarding = {
       ...onboardingRecord,
       [stage]: true,
