@@ -81,7 +81,7 @@ export class UserQueueController {
   async getEmailAddress(
     @RabbitPayload() payload: GetEmailAddressPayload,
   ): Promise<RPCResponse<GetEmailAddressResponse>> {
-    Logger.log('here111');
+    Logger.log(`here111: ${Logger.log(payload)}`);
     try {
       const data = await this.userService.getEmailAddress(payload.userId);
 

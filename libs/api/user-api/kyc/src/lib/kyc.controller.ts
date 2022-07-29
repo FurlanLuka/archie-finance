@@ -61,7 +61,7 @@ export class KycQueueController {
   async getKyc(
     @RabbitPayload() payload: GetKycPayload,
   ): Promise<RPCResponse<GetKycResponse>> {
-    Logger.log('here222')
+    Logger.log(`here222: ${JSON.stringify(payload)}`)
     try {
       const data = await this.kycService.getKyc(payload.userId);
 
