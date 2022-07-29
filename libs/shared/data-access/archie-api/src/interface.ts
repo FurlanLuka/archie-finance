@@ -84,3 +84,15 @@ export type InfiniteQueryResponse<T> =
   | IdleQueryResponse
   | LoadingNextPageResponse<T>
   | ErrorNextPageResponse<T>;
+
+export interface PaginationParams {
+  page: number;
+}
+
+// Stolen from BE
+export interface PaginationMeta {
+  totalCount: number;
+  count: number;
+  page: number;
+  limit: number;
+}

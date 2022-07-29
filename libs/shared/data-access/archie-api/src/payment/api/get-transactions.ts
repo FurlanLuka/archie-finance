@@ -1,5 +1,6 @@
 import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
+import { PaginationMeta } from '../../interface';
 
 export enum NetAsset {
   positive = 'positive',
@@ -31,8 +32,17 @@ export interface Transaction {
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const getTransactions = async (page: number, pageSize: number, accessToken: string): Promise<Transaction[]> => {
-  return getRequest<Transaction[]>(
+export interface GetTransactionsResponse {
+  meta: PaginationMeta;
+  data: Transaction[];
+}
+
+export const getTransactions = async (
+  page: number,
+  pageSize: number,
+  accessToken: string,
+): Promise<GetTransactionsResponse> => {
+  return getRequest<GetTransactionsResponse>(
     `${API_URL}/v1/rize/users/transactions?page=${page}&limit=${pageSize}`,
     {
       headers: {

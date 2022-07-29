@@ -1,14 +1,14 @@
 import { useExtendedInfiniteQuery } from '../../helper-hooks';
 import { InfiniteQueryResponse, PaginationParams } from '../../interface';
-import { getTransactions, Transaction } from '../api/get-transactions';
+import { getTransactions, GetTransactionsResponse } from '../api/get-transactions';
 
 const TRANSACTIONS_RECORD_QUERY_KEY = 'transactions_record';
 
-function getNextPage(lastPage: Transaction[]) {
+function getNextPage(lastPage: GetTransactionsResponse) {
   return 420;
 }
 
-export const useGetTransactions = (): InfiniteQueryResponse<Transaction[]> => {
+export const useGetTransactions = (): InfiniteQueryResponse<GetTransactionsResponse> => {
   return useExtendedInfiniteQuery(
     TRANSACTIONS_RECORD_QUERY_KEY,
     getNextPage,
