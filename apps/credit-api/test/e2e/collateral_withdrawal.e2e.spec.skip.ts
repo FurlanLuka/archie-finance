@@ -44,8 +44,6 @@ describe('CollateralWithdrawalController (e2e)', () => {
 
   let creditRepository: Repository<Credit>;
   let configService: ConfigService;
-  let marginNotificationsRepositiory: Repository<MarginNotification>;
-  let liquidationLogsRepository: Repository<LiquidationLog>;
   let collateralRepository: Repository<Collateral>;
   let collateralWithdrawalRepository: Repository<CollateralWithdrawal>;
 
