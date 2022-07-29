@@ -26,7 +26,7 @@ export class QueueService {
     const response = await this.amqpConnection.request<RPCResponse<K>>({
       exchange,
       routingKey,
-      payload,
+      payload: payload,
       timeout: 10_000,
       ...options,
     });
