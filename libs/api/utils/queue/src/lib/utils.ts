@@ -15,15 +15,13 @@ export function Subscribe(
   requeueOnError = true,
   exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
 ) {
-  const fullQueueName = `${queueName}-${exchange}_${routingKey}`;
-
   const baseQueueOptions = {
     createQueueIfNotExists: true,
-    queue: fullQueueName,
+    queue: `${queueName}-${exchange}_${routingKey}`,
     queueOptions: {
       durable: true,
     },
-    errorHandler: createErrorHandler(fullQueueName, requeueOnError, exchange),
+    errorHandler: createErrorHandler(routingKey, requeueOnError, exchange),
   };
 
   const decorators = [
@@ -35,7 +33,7 @@ export function Subscribe(
     requeueOnError
       ? SetMetadata(RABBIT_RETRY_HANDLER, {
           type: 'subscribe',
-          routingKey: baseQueueOptions.queue,
+          routingKey: routingKey,
           exchange: QueueUtilService.getRetryExchangeName(exchange),
           ...baseQueueOptions,
         })
