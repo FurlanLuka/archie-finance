@@ -10,11 +10,6 @@ import {
   Product,
   DebitCard,
   DebitCardAccessToken,
-<<<<<<< HEAD
-  RizeTransaction,
-  AdjustmentType,
-=======
->>>>>>> develop
   RizeTransaction,
   AdjustmentType,
 } from './rize_api.interfaces';

@@ -19,12 +19,24 @@ export class QueueUtilService {
           },
         },
       };
+      const deadLetterExchange: RabbitMQExchangeConfig = {
+        name: QueueUtilService.getDeadLetterExchangeName(exchange.name),
+        type: 'direct',
+      };
 
-      return [exchange, retryExchange];
+      return [exchange, retryExchange, deadLetterExchange];
     });
   }
 
   public static getRetryExchangeName(exchange: string) {
     return `${exchange}.retry`;
+  }
+
+  public static getDeadLetterExchangeName(exchange: string) {
+    return `${exchange}.dead`;
+  }
+
+  public static getDeadLetterQueueName(queueName: string) {
+    return `${queueName}.dead`;
   }
 }

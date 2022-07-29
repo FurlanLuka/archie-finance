@@ -3,7 +3,6 @@ import {
   TransactionStatus,
   TransactionType,
 } from './api/rize_api.interfaces';
-import { TransactionDto } from './rize.dto';
 
 export interface Transaction {
   created_at: string;
@@ -30,9 +29,5 @@ export interface PaginationMeta {
 
 export interface TransactionResponse {
   meta: PaginationMeta;
-<<<<<<< HEAD
-  data: TransactionDto[];
-=======
   data: Transaction[];
->>>>>>> develop
 }
