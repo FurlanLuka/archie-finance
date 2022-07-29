@@ -30,5 +30,9 @@ export interface PaginationMeta {
 
 export interface TransactionResponse {
   meta: PaginationMeta;
+<<<<<<< HEAD
   data: TransactionDto[];
+=======
+  data: Transaction[];
+>>>>>>> develop
 }
