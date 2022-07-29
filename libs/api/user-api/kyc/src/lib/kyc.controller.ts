@@ -3,7 +3,7 @@ import {
   Body,
   Controller,
   Get,
-  Param,
+  Logger,
   Post,
   Req,
   UseGuards,
@@ -61,14 +61,19 @@ export class KycQueueController {
   async getKyc(
     @RabbitPayload() payload: GetKycPayload,
   ): Promise<RPCResponse<GetKycResponse>> {
+    Logger.log('here222')
     try {
       const data = await this.kycService.getKyc(payload.userId);
+
+      Logger.log(data);
 
       return {
         type: RPCResponseType.SUCCESS,
         data,
       };
     } catch (error) {
+      Logger.error(error);
+  
       return {
         type: RPCResponseType.ERROR,
         message: error.message,
