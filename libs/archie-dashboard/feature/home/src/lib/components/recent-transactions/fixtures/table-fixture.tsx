@@ -1,13 +1,15 @@
+import { format } from 'date-fns';
 import { FC } from 'react';
 import { Column } from 'react-table';
 
 import { TransactionStatusColor, TransactionStatusText } from '@archie-webapps/archie-dashboard/constants';
 import {
+  NetAsset,
   Transaction,
   TransactionStatus,
 } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-transactions';
 
-import { StatusCellStyled, DescriptionCellStyled } from './table-fixtures.styled';
+import { StatusCellStyled, DescriptionCellStyled, AmountCellStyled } from './table-fixtures.styled';
 
 interface StatusCellProps {
   status: TransactionStatus;
@@ -29,6 +31,22 @@ const DescriptionCell: FC<DescriptionCellProps> = ({ title, code }) => (
   </DescriptionCellStyled>
 );
 
+interface DateCellProps {
+  date: string;
+}
+
+const DateCell: FC<DateCellProps> = ({ date }) => <div>{format(new Date(date), 'M/d')}</div>;
+
+interface AmountCellProps {
+  amount: number;
+}
+const AmountCell: FC<AmountCellProps> = ({ amount }) =>
+  amount < 0 ? (
+    <AmountCellStyled isNegative={true}>{`-$${-amount}`}</AmountCellStyled> // need to display -$X
+  ) : (
+    <AmountCellStyled isNegative={false}>{`+$${amount}`}</AmountCellStyled>
+  );
+
 export const tableColumns: Column<Transaction>[] = [
   {
     Header: '',
@@ -37,7 +55,9 @@ export const tableColumns: Column<Transaction>[] = [
       {
         Header: 'Date',
         accessor: 'created_at',
-        width: 1,
+        Cell: ({ value }: any) => {
+          return <DateCell date={value} />;
+        },
       },
       {
         Header: 'Description',
@@ -60,8 +80,16 @@ export const tableColumns: Column<Transaction>[] = [
       },
       {
         Header: 'Amount',
-        accessor: 'us_dollar_amount',
+        accessor: (row) => {
+          if (row.net_asset === NetAsset.negative) {
+            return -row.us_dollar_amount;
+          }
+          return row.us_dollar_amount;
+        },
         width: 1,
+        Cell: ({ value }: any) => {
+          return <AmountCell amount={value} />;
+        },
       },
     ],
   },

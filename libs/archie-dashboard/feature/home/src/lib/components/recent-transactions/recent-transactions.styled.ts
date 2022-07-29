@@ -4,4 +4,8 @@ export const RecentTransactionsStyled = styled.div`
   .table-btn {
     margin-bottom: 2rem;
   }
+
+  .history-link {
+    width: fit-content;
+  }
 `;

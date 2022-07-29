@@ -1,4 +1,5 @@
 import { FC, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetRecentTransactions } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-recent-transactions';
@@ -13,7 +14,7 @@ export const RecentTransactions: FC = () => {
   const columns = useMemo(() => tableColumns, []);
   const data = useMemo(() => {
     if (getRecentTransactionsResponse.state === RequestState.SUCCESS) {
-      return getRecentTransactionsResponse.data as any;
+      return getRecentTransactionsResponse.data;
     }
 
     return [];
@@ -37,9 +38,11 @@ export const RecentTransactions: FC = () => {
         <ParagraphM weight={800} className="table-title">
           Recent Transactions
         </ParagraphM>
-        <ButtonOutline maxWidth="auto" small className="table-btn">
-          View More
-        </ButtonOutline>
+        <Link to="/history" className="history-link">
+          <ButtonOutline small className="table-btn">
+            View More
+          </ButtonOutline>
+        </Link>
         {getContent()}
       </Card>
     </RecentTransactionsStyled>

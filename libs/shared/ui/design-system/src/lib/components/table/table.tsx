@@ -5,7 +5,7 @@ import { TableStyled } from './table.styled';
 
 export interface TableProps {
   columns: Column<any>[];
-  data: Record<string, unknown>[];
+  data: Record<string, any>[];
 }
 
 export const Table: FC<TableProps> = ({ columns, data }) => {

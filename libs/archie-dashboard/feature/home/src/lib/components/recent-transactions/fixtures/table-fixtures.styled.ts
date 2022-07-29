@@ -17,3 +17,7 @@ export const DescriptionCellStyled = styled.div`
     color: ${({ theme }) => theme.textSecondary};
   }
 `;
+
+export const AmountCellStyled = styled.div<{ isNegative: boolean }>`
+  color: ${({ isNegative, theme }) => (isNegative ? theme.textDanger : theme.textSuccess)};
+`;

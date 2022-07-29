@@ -3,7 +3,7 @@ import { theme } from '@archie-webapps/shared/ui/theme';
 
 export const TransactionStatusText = {
   [TransactionStatus.PENDING]: 'Pending',
-  [TransactionStatus.SETTLED]: 'Settles',
+  [TransactionStatus.SETTLED]: 'Settled',
   [TransactionStatus.FAILED]: 'Failed',
   [TransactionStatus.QUEUED]: 'Queued',
 };
