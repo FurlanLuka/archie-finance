@@ -1,10 +1,12 @@
 import { FC, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { transactionColumns } from '@archie-webapps/archie-dashboard/components';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetTransactions } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-transactions';
 import { ButtonOutline, Loading, Table } from '@archie-webapps/shared/ui/design-system';
-import { useTranslation } from 'react-i18next';
+
+import { TransactionsTableStyled } from './transactions-table.styled';
 
 export const TransactionsTable: FC = () => {
   const { t } = useTranslation();
@@ -34,8 +36,8 @@ export const TransactionsTable: FC = () => {
         <>
           <Table data={data} columns={columns} />
           {getTransactionsResponse.hasNextPage && (
-            <ButtonOutline small onClick={getTransactionsResponse.fetchNextPage} maxWidth="fit-content">
-              {t('dashboard_history.btn_load_more')}
+            <ButtonOutline className="load-button" small onClick={getTransactionsResponse.fetchNextPage}>
+              {t('dashboard_history.transactions.btn_load_more')}
             </ButtonOutline>
           )}
         </>
@@ -46,8 +48,8 @@ export const TransactionsTable: FC = () => {
       return (
         <>
           <Table data={data} columns={columns} />
-          <ButtonOutline small isLoading>
-            {t('dashboard_history.btn_loading')}
+          <ButtonOutline className="load-button" small isLoading>
+            {t('dashboard_history.transactions.btn_loading')}
           </ButtonOutline>
         </>
       );
@@ -56,5 +58,5 @@ export const TransactionsTable: FC = () => {
     return null;
   }
 
-  return <div>{getContent()}</div>;
+  return <TransactionsTableStyled>{getContent()}</TransactionsTableStyled>;
 };

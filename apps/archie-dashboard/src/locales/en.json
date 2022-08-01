@@ -172,7 +172,7 @@
     "btn": "Withdraw Collateral"
   },
   "dashboard_history": {
-    "title": "History",
+    "transactions.title": "Transactions",
     "transactions.btn_load_more": "Load more",
     "transactions.btn_loading": "Loading"
   }

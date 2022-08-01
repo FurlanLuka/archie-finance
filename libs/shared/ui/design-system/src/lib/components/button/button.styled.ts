@@ -30,7 +30,7 @@ const Button = styled.button<ButtonProps>`
   padding: ${({ small }) => (small ? '0.25rem 1rem' : '1rem 2rem')};
   pointer-events: ${({ isDisabled, isLoading }) => (isDisabled || isLoading ? 'none' : 'all')};
   cursor: pointer;
-  
+
   :hover {
     opacity: ${({ isDisabled, isLoading }) => (isDisabled || isLoading ? '1' : '0.5')};
   }
@@ -53,8 +53,8 @@ const Button = styled.button<ButtonProps>`
     border: 2px solid ${({ theme }) => theme.loadingBorder};
     border-top: 2px solid ${({ theme }) => theme.loadingBorderTop};
     border-radius: 100%;
-    width: 1.75rem;
-    height: 1.75rem;
+    width: ${({ small }) => (small ? '.75rem' : '1.75rem')};
+    height: ${({ small }) => (small ? '.75rem' : '1.75rem')};
     animation: ${spin} 0.8s linear infinite;
     display: ${({ isLoading }) => (isLoading ? 'flex' : 'none')};
   }
@@ -68,8 +68,8 @@ export const ButtonPrimary = styled(Button)`
 
 export const ButtonOutline = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
-  color: ${({ theme, color, isDisabled}) => (isDisabled ? theme.buttonDisabled : color ?? theme.buttonPrimary)};
-  border-color: ${({ theme, color, isDisabled}) => (isDisabled ? theme.buttonDisabled : color ?? theme.buttonPrimary)};
+  color: ${({ theme, color, isDisabled }) => (isDisabled ? theme.buttonDisabled : color ?? theme.buttonPrimary)};
+  border-color: ${({ theme, color, isDisabled }) => (isDisabled ? theme.buttonDisabled : color ?? theme.buttonPrimary)};
 `;
 
 export const ButtonGhost = styled(Button)`

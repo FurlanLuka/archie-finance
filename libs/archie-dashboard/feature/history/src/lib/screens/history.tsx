@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SubtitleS } from '@archie-webapps/shared/ui/design-system';
+import { Card, SubtitleS } from '@archie-webapps/shared/ui/design-system';
 
 import { TransactionsTable } from '../components/transactions-table/transactions-table';
 
@@ -12,8 +12,10 @@ export const HistoryScreen: FC = () => {
 
   return (
     <HistoryStyled>
-      <SubtitleS className="title">{t('dashboard_history.title')}</SubtitleS>
-      <TransactionsTable />
+      <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
+        <SubtitleS className="title">{t('dashboard_history.transactions.title')}</SubtitleS>
+        <TransactionsTable />
+      </Card>
     </HistoryStyled>
   );
 };
