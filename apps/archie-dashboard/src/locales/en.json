@@ -168,5 +168,10 @@
       "subtitle": "To complete this action, please verify your 2-Factor Authentication Code from your 2FA application"
     },
     "btn": "Withdraw Collateral"
+  },
+  "dashboard_error": {
+    "title": "Something went wrong",
+    "error_image_alt": "Something went wrong",
+    "btn_reload": "Reload?"
   }
 }
