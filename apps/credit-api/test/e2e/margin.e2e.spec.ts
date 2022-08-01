@@ -6,9 +6,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AppModule } from '../../src/app.module';
-import { clearDatabase } from '../e2e-test-utils/database.utils';
 import { Connection, Repository } from 'typeorm';
-import { verifyAccessToken } from '../e2e-test-utils/mock.auth.utils';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
@@ -32,9 +30,7 @@ import {
   ETH_PRICE,
   SOL_PRICE,
   SOL_STARTING_AMOUNT,
-} from '../test-data/collateral.data';
-import { UUID_REGEX } from '../e2e-test-utils/regex.utils';
-import { closeToMatcher } from '../e2e-test-utils/jest.utils';
+} from '../test-data/collateral.stubs';
 import { Credit } from '@archie/api/credit-api/credit';
 import {
   LiquidationLog,
@@ -43,8 +39,15 @@ import {
   MarginNotification,
 } from '@archie/api/credit-api/margin';
 import { Collateral } from '@archie/api/credit-api/collateral';
-import { amqpStub, GLOBAL_EXCHANGE_NAME } from '../e2e-test-utils/queue.utils';
 import { RizeService } from '../../../../libs/api/credit-api/rize/src';
+import {
+  verifyAccessToken,
+  amqpStub,
+  clearDatabase,
+  GLOBAL_EXCHANGE_NAME,
+  UUID_REGEX,
+  closeToMatcher,
+} from '@archie-microservices/test/integration';
 
 describe.only('MarginQueueController (e2e)', () => {
   let app: INestApplication;

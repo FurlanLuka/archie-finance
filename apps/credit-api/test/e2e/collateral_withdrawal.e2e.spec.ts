@@ -1,6 +1,5 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import nock = require('nock');
-import { verifyAccessToken } from '../e2e-test-utils/mock.auth.utils';
 import { AppModule } from '../../src/app.module';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -11,7 +10,6 @@ import {
   NotFoundException,
   ValidationPipe,
 } from '@nestjs/common';
-import { clearDatabase } from '../e2e-test-utils/database.utils';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
@@ -22,7 +20,7 @@ import {
   createUserCollateral,
   defaultCollateralTotal,
   ETH_PRICE,
-} from '../test-data/collateral.data';
+} from '../test-data/collateral.stubs';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { Credit } from '../../../../libs/api/credit-api/credit/src';
 import {
@@ -36,8 +34,13 @@ import {
   CollateralWithdrawalController,
   CollateralWithdrawalQueueController,
 } from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.controller';
-import { amqpStub, GLOBAL_EXCHANGE_NAME } from '../e2e-test-utils/queue.utils';
 import { RizeService } from '../../../../libs/api/credit-api/rize/src';
+import {
+  verifyAccessToken,
+  amqpStub,
+  clearDatabase,
+  GLOBAL_EXCHANGE_NAME,
+} from '@archie-microservices/test/integration';
 
 describe('CollateralWithdrawalController (e2e)', () => {
   let app: INestApplication;
