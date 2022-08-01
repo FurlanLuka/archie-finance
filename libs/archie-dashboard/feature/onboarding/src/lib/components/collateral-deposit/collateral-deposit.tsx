@@ -1,14 +1,14 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 
-import { calculateCollateralCreditValue } from '@archie-webapps/archie-dashboard/utils';
 import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
+import { calculateCollateralCreditValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 
+import { CreateCreditLine } from '../alerts/create-credit-line/create-credit-line';
+import { NotEnoughCollateral } from '../alerts/not-enough-collateral/not-enough-collateral';
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';
 
-import { CreateCreditLine } from './blocks/create_credit_line/create_credit_line';
-import { NotEnoughCollateral } from './blocks/not-enough-collateral/not-enough-collateral';
 import { formatEntireCollateral } from './collateral-deposit.helpers';
 import { usePollCollateralDeposit } from './use-poll-collateral-deposit';
 
@@ -30,6 +30,7 @@ export const CollateralDeposit: FC = () => {
   const collateralText = useMemo(() => formatEntireCollateral(currentCollateral), [currentCollateral]);
   const collateralTotalValue = useMemo(() => calculateCollateralCreditValue(currentCollateral), [currentCollateral]);
 
+  // is this hook going to be used somewhere else? if not let's have it here, as we do in collateralization-screen
   usePollCollateralDeposit({
     onCollateralChange,
     shouldPoll,
