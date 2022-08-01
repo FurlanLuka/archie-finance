@@ -11,7 +11,13 @@ export const VerifyEmailScreenStyled = styled.div`
   }
 
   .subtitle {
+    width: 90%;
+    text-align: center;
     margin-bottom: 3rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      width: 100%;
+    }
   }
 
   .text {
