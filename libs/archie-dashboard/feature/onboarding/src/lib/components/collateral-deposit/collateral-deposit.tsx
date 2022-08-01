@@ -1,15 +1,18 @@
 import { FC, useCallback, useMemo, useState } from 'react';
 
-import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
 import { calculateCollateralCreditValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 
-import { CreateCreditLine } from '../alerts/create-credit-line/create-credit-line';
-import { NotEnoughCollateral } from '../alerts/not-enough-collateral/not-enough-collateral';
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';
+import { CreateCreditLine } from '../toasts/create-credit-line/create-credit-line';
+import { NotEnoughCollateral } from '../toasts/not-enough-collateral/not-enough-collateral';
 
-import { formatEntireCollateral } from './collateral-deposit.helpers';
+import {
+  formatEntireCollateral,
+  getCollateralDepositState,
+  CollateralDepositState,
+} from './collateral-deposit.helpers';
 import { usePollCollateralDeposit } from './use-poll-collateral-deposit';
 
 export const CollateralDeposit: FC = () => {
@@ -27,31 +30,36 @@ export const CollateralDeposit: FC = () => {
     },
     [currentCollateral],
   );
+
   const collateralText = useMemo(() => formatEntireCollateral(currentCollateral), [currentCollateral]);
   const collateralTotalValue = useMemo(() => calculateCollateralCreditValue(currentCollateral), [currentCollateral]);
 
+  const currentCollateralDepositState = getCollateralDepositState(isModalOpen, collateralTotalValue, currentCollateral);
+
   // is this hook going to be used somewhere else? if not let's have it here, as we do in collateralization-screen
+  // TODO after merging https://github.com/Archie-Finance/archie-web-apps/pull/41
   usePollCollateralDeposit({
     onCollateralChange,
     shouldPoll,
   });
 
-  if (isModalOpen) {
-    if (collateralTotalValue > MIN_LINE_OF_CREDIT) {
-      return (
-        <CollateralReceivedModal
-          onClose={() => {
-            setIsModalOpen(false);
-            setShouldPoll(true);
-          }}
-          onConfirm={() => {
-            setIsModalOpen(false);
-          }}
-          collateralText={collateralText}
-          creditValue={collateralTotalValue}
-        />
-      );
-    }
+  if (currentCollateralDepositState === CollateralDepositState.COLLATERAL_RECEIVED_MODAL) {
+    return (
+      <CollateralReceivedModal
+        onClose={() => {
+          setIsModalOpen(false);
+          setShouldPoll(true);
+        }}
+        onConfirm={() => {
+          setIsModalOpen(false);
+        }}
+        collateralText={collateralText}
+        creditValue={collateralTotalValue}
+      />
+    );
+  }
+
+  if (currentCollateralDepositState === CollateralDepositState.NOT_ENOUGH_COLLATERAL_MODAL) {
     return (
       <NotEnoughCollateralModal
         collateralText={collateralText}
@@ -64,12 +72,13 @@ export const CollateralDeposit: FC = () => {
     );
   }
 
-  if (!isModalOpen && currentCollateral.length > 0) {
-    if (collateralTotalValue > MIN_LINE_OF_CREDIT) {
-      return <CreateCreditLine collateralText={collateralText} creditValue={collateralTotalValue} />;
-    }
+  if (currentCollateralDepositState === CollateralDepositState.CREATE_CREDIT_LINE_TOAST) {
+    return <CreateCreditLine collateralText={collateralText} creditValue={collateralTotalValue} />;
+  }
+
+  if (currentCollateralDepositState === CollateralDepositState.NOT_ENOUGH_COLLATERAL_TOAST) {
     return <NotEnoughCollateral creditValue={collateralTotalValue} collateralText={collateralText} />;
   }
 
-  return null;
+  return <></>;
 };
