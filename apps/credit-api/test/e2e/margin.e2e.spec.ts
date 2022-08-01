@@ -45,15 +45,15 @@ import {
 import { Collateral } from '@archie/api/credit-api/collateral';
 import { amqpStub, GLOBAL_EXCHANGE_NAME } from '../e2e-test-utils/queue.utils';
 
-describe('MarginQueueController (e2e)', () => {
+describe.only('MarginQueueController (e2e)', () => {
   let app: INestApplication;
   let module: TestingModule;
 
   let creditRepository: Repository<Credit>;
   let configService: ConfigService;
   let marginNotificationsRepositiory: Repository<MarginNotification>;
-  let marginCallRepository: Repository<MarginCall>;
   let liquidationLogsRepository: Repository<LiquidationLog>;
+  let marginCallRepository: Repository<MarginCall>;
   let collateralRepository: Repository<Collateral>;
   let marginCollateralCheckRepository: Repository<MarginCollateralCheck>;
 
