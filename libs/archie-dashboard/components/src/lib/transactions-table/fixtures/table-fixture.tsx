@@ -10,6 +10,7 @@ import {
 } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-transactions';
 
 import { StatusCellStyled, DescriptionCellStyled, AmountCellStyled } from './table-fixtures.styled';
+import { getRowDescription } from './table-fixture.helpers';
 
 interface StatusCellProps {
   status: TransactionStatus;
@@ -62,10 +63,7 @@ export const transactionColumns: Column<Transaction>[] = [
       {
         Header: 'Description',
         width: 2,
-        accessor: (row) => ({
-          title: row.merchant_name,
-          code: row.merchant_number,
-        }),
+        accessor: (row) => getRowDescription(row),
         Cell: ({ value: { title, code } }: any) => {
           return <DescriptionCell title={title} code={code} />;
         },
