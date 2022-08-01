@@ -49,7 +49,7 @@ import {
   closeToMatcher,
 } from '@archie-microservices/test/integration';
 
-describe.only('MarginQueueController (e2e)', () => {
+describe('MarginQueueController (e2e)', () => {
   let app: INestApplication;
   let module: TestingModule;
 

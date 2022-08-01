@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@archie-microservices/test/integration": [
-        "libs/test/integration/src/index.ts"
+        "libs/api/test/integration/src/index.ts"
       ],
       "@archie/api/asset-price-api/asset-price": [
         "libs/api/asset-price-api/asset-price/src/index.ts"
