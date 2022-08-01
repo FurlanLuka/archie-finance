@@ -26,12 +26,12 @@ export async function startService(
   await Openapi.generate(app);
 
   const { httpAdapter } = app.get(HttpAdapterHost);
-  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors();
 
-  await app.listen(80);
+  await app.listen(process.env.PORT ?? 80);
 
   return app;
 }
