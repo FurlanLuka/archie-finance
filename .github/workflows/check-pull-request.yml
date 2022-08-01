@@ -15,7 +15,7 @@ jobs:
       AUTH0_DOMAIN: auth.dev.archie.finance
       AUTH0_AUDIENCE: https://api.dev.archie.finance
 
-      TYPEORM_HOST: postgres
+      TYPEORM_HOST: localhost
       TYPEORM_USERNAME: postgres
       TYPEORM_PASSWORD: postgres
       TYPEORM_DATABASE: postgres
@@ -43,7 +43,20 @@ jobs:
       postgres:
         image: postgres:alpine
         env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options:
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      rabbitmq:
+        image: rabbitmq:management-alpine
+        ports:
+          - 5672:5672
     steps:
       - uses: actions/checkout@v2
         with:
