@@ -1,5 +1,9 @@
-import { TransactionResponse } from './rize.interfaces';
-import { IsNumber, Max, Min } from 'class-validator';
+import {
+  PaginationMeta,
+  Transaction,
+  TransactionResponse,
+} from './rize.interfaces';
+import { IsNumber, Max } from 'class-validator';
 import { Type } from 'class-transformer';
 import {
   NetAsset,
@@ -8,6 +12,18 @@ import {
 } from './api/rize_api.interfaces';
 
 export class TransactionResponseDto implements TransactionResponse {
+  meta: PaginationMetaDto;
+  data: TransactionDto[];
+}
+
+class PaginationMetaDto implements PaginationMeta {
+  totalCount: number;
+  count: number;
+  page: number;
+  limit: number;
+}
+
+class TransactionDto implements Transaction {
   description: string;
   type: TransactionType;
   status: TransactionStatus;

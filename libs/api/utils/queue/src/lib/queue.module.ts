@@ -66,6 +66,21 @@ export class QueueModule implements OnModuleInit {
         meta,
         discoveredMethod.methodName,
       );
+      this.createDeadLetterQueue(meta);
     });
+  }
+
+  private createDeadLetterQueue(meta: RabbitHandlerConfig) {
+    const { queue } = this.amqpConnection.channel.assertQueue(
+      QueueUtilService.getDeadLetterQueueName(meta.queue),
+      {
+        durable: true,
+      },
+    );
+    this.amqpConnection.channel.bindQueue(
+      queue,
+      meta.queueOptions.arguments['x-dead-letter-exchange'],
+      meta.queueOptions.arguments['x-dead-letter-routing-key'],
+    );
   }
 }

@@ -7,14 +7,14 @@ import {
   Customer,
   DebitCard,
   DebitCardAccessToken,
-  Transaction,
   TransactionEvent,
   TransactionStatus,
   TransactionType,
   RizeTransaction,
   CustomerEvent,
+  RizeList,
 } from './api/rize_api.interfaces';
-import { TransactionResponse } from './rize.interfaces';
+import { Transaction, TransactionResponse } from './rize.interfaces';
 import { RizeFactoryService } from './factory/rize_factory.service';
 import { RizeValidatorService } from './validator/rize_validator.service';
 import { CARD_ACTIVATED_TOPIC } from '@archie/api/credit-api/constants';
@@ -188,30 +188,42 @@ export class RizeService {
     userId: string,
     page: number,
     limit: number,
-  ): Promise<TransactionResponse[]> {
+  ): Promise<TransactionResponse> {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
     this.rizeValidatorService.validateCustomerExists(customer);
 
-    const transactions: Transaction[] =
+    const rizeTransactions: RizeList<RizeTransaction> =
       await this.rizeApiService.getTransactions(customer.uid, page, limit);
 
-    return transactions.map((txn: Transaction) => ({
-      status: txn.status,
-      us_dollar_amount: txn.us_dollar_amount,
-      created_at: txn.created_at,
-      settled_at: txn.settled_at,
-      description: txn.description,
-      type: txn.type,
-      is_adjustment: txn.adjustment_uid !== null,
-      mcc: txn.mcc,
-      merchant_location: txn.merchant_location,
-      merchant_name: txn.merchant_name,
-      merchant_number: txn.merchant_number,
-      denial_reason: txn.denial_reason,
-      net_asset: txn.net_asset,
-    }));
+    const transactions: Transaction[] = rizeTransactions.data.map(
+      (txn: RizeTransaction) => ({
+        status: txn.status,
+        us_dollar_amount: txn.us_dollar_amount,
+        created_at: txn.created_at,
+        settled_at: txn.settled_at,
+        description: txn.description,
+        type: txn.type,
+        is_adjustment: txn.adjustment_uid !== null,
+        mcc: txn.mcc,
+        merchant_location: txn.merchant_location,
+        merchant_name: txn.merchant_name,
+        merchant_number: txn.merchant_number,
+        denial_reason: txn.denial_reason,
+        net_asset: txn.net_asset,
+      }),
+    );
+
+    return {
+      meta: {
+        totalCount: rizeTransactions.total_count,
+        count: rizeTransactions.count,
+        limit,
+        page,
+      },
+      data: transactions,
+    };
   }
 
   public async createUser(userId: string, userIp: string): Promise<void> {

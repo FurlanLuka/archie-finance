@@ -4,7 +4,7 @@ import {
   TransactionType,
 } from './api/rize_api.interfaces';
 
-export interface TransactionResponse {
+export interface Transaction {
   created_at: string;
   settled_at: string;
   description: string;
@@ -18,4 +18,16 @@ export interface TransactionResponse {
   merchant_number: string | null;
   denial_reason: string | null;
   net_asset: NetAsset;
+}
+
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  totalCount: number;
+  count: number;
+}
+
+export interface TransactionResponse {
+  meta: PaginationMeta;
+  data: Transaction[];
 }

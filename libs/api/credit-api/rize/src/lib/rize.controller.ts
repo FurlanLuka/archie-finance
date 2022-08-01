@@ -73,7 +73,7 @@ export class RizeController {
   public async getTransactions(
     @Request() req,
     @Query() query: GetTransactionsQueryDto,
-  ): Promise<TransactionResponseDto[]> {
+  ): Promise<TransactionResponseDto> {
     return this.rizeService.getTransactions(
       req.user.sub,
       query.page,

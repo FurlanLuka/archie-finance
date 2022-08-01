@@ -1,6 +1,9 @@
 import { RabbitRPC, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { applyDecorators, Logger, SetMetadata } from '@nestjs/common';
-import { defaultNackErrorHandler } from '@golevelup/nestjs-rabbitmq/lib/amqp/errorBehaviors';
+import {
+  ackErrorHandler,
+  defaultNackErrorHandler,
+} from '@golevelup/nestjs-rabbitmq/lib/amqp/errorBehaviors';
 import { Channel, ConsumeMessage } from 'amqplib';
 import { QueueUtilService } from './queue-util.service';
 
@@ -19,10 +22,15 @@ export function Subscribe(
   const baseQueueOptions = {
     createQueueIfNotExists: true,
     queue: `${queueName}-${exchange}_${routingKey}`,
+    errorHandler: createErrorHandler(routingKey, requeueOnError, exchange),
     queueOptions: {
       durable: true,
+      arguments: {
+        'x-dead-letter-exchange':
+          QueueUtilService.getDeadLetterExchangeName(exchange),
+        'x-dead-letter-routing-key': routingKey,
+      },
     },
-    errorHandler: createErrorHandler(routingKey, requeueOnError, exchange),
   };
 
   const decorators = [
@@ -97,10 +105,14 @@ function createErrorHandler(
           },
         );
       } else {
-        // TODO: push to dead letter queue
+        return pushToDeadLetterQueue(channel, msg, error);
       }
     }
 
-    return defaultNackErrorHandler(channel, msg, error);
+    return ackErrorHandler(channel, msg, error);
   };
+}
+
+function pushToDeadLetterQueue(channel: Channel, msg: ConsumeMessage, error) {
+  return defaultNackErrorHandler(channel, msg, error);
 }
