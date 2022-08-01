@@ -12,10 +12,10 @@ import {
   formatEntireCollateral,
   getCollateralDepositState,
   CollateralDepositState,
-} from './collateral-deposit.helpers';
+} from './collateral-deposit-alerts.helpers';
 import { usePollCollateralDeposit } from './use-poll-collateral-deposit';
 
-export const CollateralDeposit: FC = () => {
+export const CollateralDepositAlerts: FC = () => {
   const [shouldPoll, setShouldPoll] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentCollateral, setCurrentCollateral] = useState<CollateralValue[]>([]);

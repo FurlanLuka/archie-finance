@@ -22,7 +22,7 @@ import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralAssetSelect } from '../../components/collateral-asset-select/collateral-asset-select';
-import { CollateralDeposit } from '../../components/collateral-deposit/collateral-deposit';
+import { CollateralDepositAlerts } from '../../components/collateral-deposit-alerts/collateral-deposit-alerts';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
 import { CollateralizationScreenStyled } from './collateralization-screen.styled';
@@ -92,7 +92,7 @@ export const CollateralizationScreen: FC = () => {
 
   return (
     <Container column mobileColumn alignItems="center">
-      <CollateralDeposit />
+      <CollateralDepositAlerts />
       <StepsIndicator currentStep={Step.COLLATERALIZE} />
       <CollateralizationScreenStyled>
         <Card column alignItems="center" padding="2.5rem 10% 3.5rem" mobilePadding="2.5rem 1.5rem 3.5rem">

@@ -1,15 +1,6 @@
 import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 
-export const formatEntireCollateral = (collateral: CollateralValue[]): string => 
-  collateral.reduce((text, collateralEntry, i) => {
-    if (i === 0) {
-      return `${collateralEntry.assetAmount} ${collateralEntry.asset}`;
-    }
-
-    return `${text}, ${collateralEntry.assetAmount} ${collateralEntry.asset}`;
-  }, '');
-
 export enum CollateralDepositState {
   COLLATERAL_RECEIVED_MODAL = 'collateral_received_modal',
   NOT_ENOUGH_COLLATERAL_MODAL= 'not_enough_collateral_modal',
@@ -41,3 +32,12 @@ export const getCollateralDepositState = (
 
   return CollateralDepositState.NONE
 }
+
+export const formatEntireCollateral = (collateral: CollateralValue[]): string => 
+  collateral.reduce((text, collateralEntry, i) => {
+    if (i === 0) {
+      return `${collateralEntry.assetAmount} ${collateralEntry.asset}`;
+    }
+
+    return `${text}, ${collateralEntry.assetAmount} ${collateralEntry.asset}`;
+  }, '');
