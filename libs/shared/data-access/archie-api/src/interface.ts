@@ -7,12 +7,12 @@ export interface ApiErrorResponse {
 }
 
 export enum RequestState {
-  LOADING,
-  ERROR,
-  SUCCESS,
-  IDLE,
-  LOADING_NEXT_PAGE,
-  ERROR_NEXT_PAGE,
+  LOADING = 'LOADING',
+  ERROR = 'ERROR',
+  SUCCESS = 'SUCCESS',
+  IDLE = 'IDLE',
+  LOADING_NEXT_PAGE = 'LOADING_NEXT_PAGE',
+  ERROR_NEXT_PAGE = 'ERROR_NEXT_PAGE',
 }
 
 interface LoadingQueryResponse {
