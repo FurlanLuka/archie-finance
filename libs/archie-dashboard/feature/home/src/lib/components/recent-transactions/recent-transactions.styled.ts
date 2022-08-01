@@ -8,4 +8,8 @@ export const RecentTransactionsStyled = styled.div`
   .history-link {
     width: fit-content;
   }
+
+  .loader {
+    margin: 1.5rem auto;
+  }
 `;

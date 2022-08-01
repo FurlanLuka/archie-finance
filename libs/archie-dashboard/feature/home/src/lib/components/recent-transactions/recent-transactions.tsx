@@ -1,4 +1,5 @@
 import { FC, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { transactionColumns } from '@archie-webapps/archie-dashboard/components';
@@ -9,12 +10,13 @@ import { ButtonOutline, Card, Loader, ParagraphM, Table } from '@archie-webapps/
 import { RecentTransactionsStyled } from './recent-transactions.styled';
 
 export const RecentTransactions: FC = () => {
+  const { t } = useTranslation();
   const getRecentTransactionsResponse = useGetRecentTransactions();
 
   const columns = useMemo(() => transactionColumns, []);
   const data = useMemo(() => {
     if (getRecentTransactionsResponse.state === RequestState.SUCCESS) {
-      return getRecentTransactionsResponse.data;
+      return [];
     }
 
     return [];
@@ -22,11 +24,20 @@ export const RecentTransactions: FC = () => {
 
   function getContent() {
     if (getRecentTransactionsResponse.state === RequestState.LOADING) {
-      return <Loader />;
+      return <Loader className="loader" />;
     }
 
     if (getRecentTransactionsResponse.state === RequestState.SUCCESS) {
-      return <Table columns={columns} data={data} />;
+      return (
+        <>
+          <Link to="/history" className="history-link">
+            <ButtonOutline small className="table-btn">
+              {t('dashboard_wallet_and_collateral.recent_transactions.link_history')}
+            </ButtonOutline>
+          </Link>
+          <Table columns={columns} data={data} />
+        </>
+      );
     }
 
     return null;
@@ -36,13 +47,8 @@ export const RecentTransactions: FC = () => {
     <RecentTransactionsStyled>
       <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
         <ParagraphM weight={800} className="table-title">
-          Recent Transactions
+          {t('dashboard_wallet_and_collateral.recent_transactions.title')}
         </ParagraphM>
-        <Link to="/history" className="history-link">
-          <ButtonOutline small className="table-btn">
-            View More
-          </ButtonOutline>
-        </Link>
         {getContent()}
       </Card>
     </RecentTransactionsStyled>

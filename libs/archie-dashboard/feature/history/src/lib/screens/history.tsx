@@ -12,7 +12,7 @@ export const HistoryScreen: FC = () => {
 
   return (
     <HistoryStyled>
-      <SubtitleS className="title">History</SubtitleS>
+      <SubtitleS className="title">{t('dashboard_history.title')}</SubtitleS>
       <TransactionsTable />
     </HistoryStyled>
   );

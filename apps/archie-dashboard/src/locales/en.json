@@ -138,7 +138,9 @@
   "dashboard_wallet_and_collateral": {
     "title": "Hi, {{name}}",
     "subtitle": "Member since {{date}}",
-    "reveal_card_modal": "Show card details?"
+    "reveal_card_modal": "Show card details?",
+    "recent_transactions.title": "Recent transactions",
+    "recent_transactions.link_history": "View more"
   },
   "dashboard_collateral": {
     "title": "My Wallet"
@@ -168,5 +170,10 @@
       "subtitle": "To complete this action, please verify your 2-Factor Authentication Code from your 2FA application"
     },
     "btn": "Withdraw Collateral"
+  },
+  "dashboard_history": {
+    "title": "History",
+    "transactions.btn_load_more": "Load more",
+    "transactions.btn_loading": "Loading"
   }
 }
