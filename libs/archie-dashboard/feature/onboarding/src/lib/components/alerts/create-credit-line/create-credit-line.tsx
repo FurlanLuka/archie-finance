@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useCreateCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-create-credit-line';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { ButtonGhost, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonLight, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 
 import { CreateCreditLineStyled } from './create-credit-line.styled';
 
@@ -30,9 +30,9 @@ export const CreateCreditLine: FC<CreateCreditLineProps> = ({ collateralText, cr
           credit_value: creditValue,
         })}
       </ParagraphXS>
-      <ButtonGhost small maxWidth="fit-content" onClick={handleClick}>
+      <ButtonLight small maxWidth="fit-content" onClick={handleClick}>
         {t('collateral_credit_line_popup.button_text')}
-      </ButtonGhost>
+      </ButtonLight>
     </CreateCreditLineStyled>
   );
 };
