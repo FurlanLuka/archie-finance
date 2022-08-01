@@ -18,6 +18,7 @@ import {
   DebitCardDoesNotExist,
 } from './rize.errors';
 import {
+  CardImageResponseDto,
   CreditLimitDto,
   GetTransactionsQueryDto,
   MarginCallCompletedDto,
@@ -57,13 +58,14 @@ export class RizeController {
     status: 200,
     description: 'Debit card image',
   })
-  public async getVirtualCard(@Request() req, @Response() res): Promise<void> {
+  public async getVirtualCard(@Request() req): Promise<CardImageResponseDto> {
     const virtualCard: string = await this.rizeService.getVirtualCard(
       req.user.sub,
     );
 
-    res.writeHead(200, { 'Content-Type': 'image/png' });
-    res.end(Buffer.from(virtualCard, 'base64'));
+    return {
+      image: virtualCard,
+    };
   }
 
   @Get('users/transactions')
