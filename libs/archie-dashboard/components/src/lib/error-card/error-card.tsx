@@ -7,10 +7,10 @@ import errorImg from '../../assets/bell-alert.png';
 
 import { ErrorCardStyled } from './error-screen.styled';
 
-interface ErrorScreenProps {
+interface ErrorCardProps {
   description?: string;
 }
-export const ErrorScreen: FC<ErrorScreenProps> = ({ description }) => {
+export const ErrorCard: FC<ErrorCardProps> = ({ description }) => {
   const { t } = useTranslation();
 
   return (
