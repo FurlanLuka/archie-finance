@@ -22,8 +22,8 @@ import {
 } from '@archie/api/utils/interfaces/collateral';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
-  COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
-  COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE,
+  COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
+  COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
 
@@ -77,16 +77,13 @@ export class CollateralWithdrawalQueueController {
     private collateralWithdrawalService: CollateralWithdrawalService,
   ) {}
 
-  @Subscribe(COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(COLLATERAL_WITHDRAW_COMPLETED_TOPIC, SERVICE_QUEUE_NAME)
   async collateralWithdrawCompleteHandler(
     payload: CollateralWithdrawCompletedDto,
   ): Promise<void> {
     await this.collateralWithdrawalService.handleWithdrawalComplete(payload);
   }
-  @Subscribe(
-    COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE,
-    SERVICE_QUEUE_NAME,
-  )
+  @Subscribe(COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC, SERVICE_QUEUE_NAME)
   async collateralWithdrawTransactionCreatedHandler(
     payload: CollateralWithdrawTransactionCreatedDto,
   ): Promise<void> {

@@ -9,15 +9,15 @@ import {
 import { KycDto } from './kyc.dto';
 import { DateTime } from 'luxon';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { KYC_SUBMITTED_EXCHANGE } from '@archie/api/user-api/constants';
+import { KYC_SUBMITTED_TOPIC } from '@archie/api/user-api/constants';
 import { CryptoService } from '@archie/api/utils/crypto';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class KycService {
   constructor(
     @InjectRepository(Kyc) private kycRepository: Repository<Kyc>,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
     private cryptoService: CryptoService,
   ) {}
 
@@ -101,7 +101,7 @@ export class KycService {
       ssn: encryptedData[11],
     });
 
-    this.amqpConnection.publish(KYC_SUBMITTED_EXCHANGE.name, '', {
+    this.queueService.publish(KYC_SUBMITTED_TOPIC, {
       userId,
       firstName: payload.firstName,
     });

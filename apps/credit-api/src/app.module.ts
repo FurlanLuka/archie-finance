@@ -15,6 +15,7 @@ import { MarginModule } from '@archie/api/credit-api/margin';
 import { AptoModule } from '@archie/api/credit-api/apto';
 import { CollateralWithdrawalModule } from '@archie/api/credit-api/collateral-withdrawal';
 import { migrations } from './migrations';
+import { QueueModule } from '@archie/api/utils/queue';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { migrations } from './migrations';
     RizeModule,
     CollateralModule,
     CollateralWithdrawalModule,
+    QueueModule.register(),
   ],
   controllers: [],
   providers: [],

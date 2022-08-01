@@ -10,6 +10,7 @@ import { OnboardingModule } from '@archie/api/onboarding-api/onboarding';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
 import { migrations } from './migrations';
+import { QueueModule } from '@archie/api/utils/queue';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { migrations } from './migrations';
     }),
     HealthModule,
     OnboardingModule,
+    QueueModule.register(),
   ],
   controllers: [],
   providers: [],

@@ -19,8 +19,7 @@ import {
 import { Transaction, TransactionResponse } from './rize.interfaces';
 import { RizeFactoryService } from './factory/rize_factory.service';
 import { RizeValidatorService } from './validator/rize_validator.service';
-import { CARD_ACTIVATED_EXCHANGE } from '@archie/api/credit-api/constants';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { CARD_ACTIVATED_TOPIC } from '@archie/api/credit-api/constants';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
@@ -28,6 +27,7 @@ import {
   CreditService,
   GetCreditResponse,
 } from '@archie/api/credit-api/credit';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class RizeService {
@@ -39,7 +39,7 @@ export class RizeService {
     private rizeApiService: RizeApiService,
     private rizeFactoryService: RizeFactoryService,
     private rizeValidatorService: RizeValidatorService,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
     private creditService: CreditService,
   ) {
     this.rizeEventListener = this.rizeEventListener.bind(this);
@@ -264,7 +264,7 @@ export class RizeService {
       customerId,
       complianceWorkflow.product_uid,
     );
-    this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
+    this.queueService.publish(CARD_ACTIVATED_TOPIC, {
       userId,
       customerId,
     });

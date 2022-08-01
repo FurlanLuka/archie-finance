@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Credit } from './credit.entity';
@@ -16,8 +16,8 @@ import {
   CreateCreditMinimumCollateralError,
   CreditNotFoundError,
 } from './credit.errors';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { COLLATERAL_RECEIVED_EXCHANGE } from '@archie/api/credit-api/constants';
+import { COLLATERAL_RECEIVED_TOPIC } from '@archie/api/credit-api/constants';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class CreditService {
@@ -26,7 +26,7 @@ export class CreditService {
 
   constructor(
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
     private internalApiService: InternalApiService,
   ) {}
 
@@ -68,7 +68,7 @@ export class CreditService {
       totalCollateralValue = this.MAXIMUM_CREDIT;
     }
 
-    this.amqpConnection.publish(COLLATERAL_RECEIVED_EXCHANGE.name, '', {
+    this.queueService.publish(COLLATERAL_RECEIVED_TOPIC, {
       userId,
     });
 

@@ -21,8 +21,8 @@ import {
   CollateralWithdrawInitializedDto,
   LiquidateAssetsDto,
 } from './fireblocks.dto';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE } from '@archie/api/credit-api/constants';
+import { COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC } from '@archie/api/credit-api/constants';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class FireblocksService {
@@ -31,7 +31,7 @@ export class FireblocksService {
   constructor(
     private configService: ConfigService,
     private cryptoService: CryptoService,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
   ) {
     this.fireblocksClient = new FireblocksSDK(
       cryptoService.base64decode(
@@ -133,14 +133,10 @@ export class FireblocksService {
       code: 'FIREBLOCKS_SERVICE_CREATED_TRANSACTION',
       transaction,
     });
-    this.amqpConnection.publish(
-      COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE.name,
-      '',
-      {
-        withdrawalId,
-        transactionId: transaction.id,
-      },
-    );
+    this.queueService.publish(COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC, {
+      withdrawalId,
+      transactionId: transaction.id,
+    });
 
     return transaction;
   }

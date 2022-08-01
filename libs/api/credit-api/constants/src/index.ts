@@ -24,75 +24,38 @@ export enum ConfigVariables {
   RIZE_MQ_USERNAME = 'RIZE_MQ_USERNAME',
   RIZE_MQ_PASSWORD = 'RIZE_MQ_PASSWORD',
   QUEUE_URL = 'QUEUE_URL',
-  LIQUIDATION_VAULT_ACCOUNT_ID = 'LIQUIDATION_VAULT_ACCOUNT_ID',
 }
 
-export const COLLATERAL_RECEIVED_EXCHANGE = {
-  name: 'credit.collateral.received.fx',
-  type: 'fanout',
-};
+export const COLLATERAL_RECEIVED_TOPIC = 'credit.collateral.received';
 
-export const CARD_ACTIVATED_EXCHANGE = {
-  name: 'credit.card.activated.fx',
-  type: 'fanout',
-};
+export const CARD_ACTIVATED_TOPIC = 'credit.card.activated';
 
-export const PHONE_NUMBER_VERIFIED_EXCHANGE = {
-  name: 'apto.phone_number.verified.fx',
-  type: 'fanout',
-};
+export const PHONE_NUMBER_VERIFIED_TOPIC = 'apto.phone_number.verified';
 
-export const MARGIN_CALL_COMPLETED_EXCHANGE = {
-  name: 'credit.margin_call.completed.fx',
-  type: 'fanout',
-};
+export const MARGIN_CALL_COMPLETED_TOPIC = 'credit.margin_call.completed';
 
-export const LTV_LIMIT_APPROACHING_EXCHANGE = {
-  name: 'credit.margin_call.ltv_limit_approaching.fx',
-  type: 'fanout',
-};
+export const LTV_LIMIT_APPROACHING_TOPIC =
+  'credit.margin_call.ltv_limit_approaching';
 
-export const MARGIN_CHECK_REQUESTED_EXCHANGE = {
-  name: 'credit.margin_call.check_requested.fx',
-  type: 'fanout',
-};
+export const MARGIN_CHECK_REQUESTED_TOPIC =
+  'credit.margin_call.check_requested';
 
-export const CREDIT_LIMIT_ADJUST_REQUESTED_EXCHANGE = {
-  name: 'credit.limit.adjust_requested.fx',
-  type: 'fanout',
-};
+export const CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC =
+  'credit.limit.adjust_requested';
 
-export const CREDIT_LIMIT_DECREASED = {
-  name: 'credit.limit.decreased.fx',
-  type: 'fanout',
-};
+export const CREDIT_LIMIT_DECREASED_TOPIC = 'credit.limit.decreased';
 
-export const CREDIT_LIMIT_INCREASED = {
-  name: 'credit.limit.increased.fx',
-  type: 'fanout',
-};
+export const CREDIT_LIMIT_INCREASED_TOPIC = 'credit.limit.increased';
 
-export const COLLATERAL_DEPOSITED_EXCHANGE = {
-  name: 'credit.collateral.deposited.fx',
-  type: 'fanout',
-};
+export const COLLATERAL_DEPOSITED_TOPIC = 'credit.collateral.deposited';
 
-export const MARGIN_CALL_STARTED_EXCHANGE = {
-  name: 'credit.margin_call.started.fx',
-  type: 'fanout',
-};
+export const MARGIN_CALL_STARTED_TOPIC = 'credit.margin_call.started';
 
-export const COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE = {
-  name: 'credit.collateral.withdraw.initialized.fx',
-  type: 'fanout',
-};
+export const COLLATERAL_WITHDRAW_INITIALIZED_TOPIC =
+  'credit.collateral.withdraw.initialized';
 
-export const COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE = {
-  name: 'credit.collateral.withdraw.transaction.created.fx',
-  type: 'fanout',
-};
+export const COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC =
+  'credit.collateral.withdraw.transaction.created';
 
-export const COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE = {
-  name: 'credit.collateral.withdraw.completed.fx',
-  type: 'fanout',
-};
+export const COLLATERAL_WITHDRAW_COMPLETED_TOPIC =
+  'credit.collateral.withdraw.completed';

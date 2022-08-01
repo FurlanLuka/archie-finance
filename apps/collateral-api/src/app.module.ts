@@ -13,6 +13,7 @@ import {
   SERVICE_NAME,
 } from '@archie/api/collateral-api/constants';
 import { migrations } from './migrations';
+import { QueueModule } from '@archie/api/utils/queue';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { migrations } from './migrations';
     OmnibusVaultAccountModule,
     FireblocksWebhookModule,
     AssetInformationModule,
+    QueueModule.register(),
   ],
   controllers: [],
   providers: [],

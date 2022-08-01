@@ -35,16 +35,16 @@ import {
 import { AptoCardApplication } from './apto_card_application.entity';
 import { ConfigService } from '@archie/api/utils/config';
 import {
-  CARD_ACTIVATED_EXCHANGE,
-  PHONE_NUMBER_VERIFIED_EXCHANGE,
+  CARD_ACTIVATED_TOPIC,
+  PHONE_NUMBER_VERIFIED_TOPIC,
   ConfigVariables,
 } from '@archie/api/credit-api/constants';
 import { AptoCard } from './apto_card.entity';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
   CreditService,
   GetCreditResponse,
 } from '@archie/api/credit-api/credit';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class AptoService {
@@ -61,7 +61,7 @@ export class AptoService {
     @InjectRepository(AptoCard)
     private aptoCardRepository: Repository<AptoCard>,
     private creditService: CreditService,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
   ) {}
 
   public async startPhoneVerification(
@@ -128,7 +128,7 @@ export class AptoService {
         secret,
       );
 
-    this.amqpConnection.publish(PHONE_NUMBER_VERIFIED_EXCHANGE.name, '', {
+    this.queueService.publish(PHONE_NUMBER_VERIFIED_TOPIC, {
       userId,
     });
 
@@ -429,7 +429,7 @@ export class AptoService {
         cardId: issueCardResponse.account_id,
       });
 
-      this.amqpConnection.publish(CARD_ACTIVATED_EXCHANGE.name, '', {
+      this.queueService.publish(CARD_ACTIVATED_TOPIC, {
         userId: aptoCardApplication.userId,
       });
 

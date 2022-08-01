@@ -1,8 +1,8 @@
 import { Controller } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
-  APPLIED_TO_WAITLIST_EXCHANGE,
-  JOINED_WAITLIST_EXCHANGE,
+  APPLIED_TO_WAITLIST_TOPIC,
+  JOINED_WAITLIST_TOPIC,
 } from '@archie/api/referral-system-api/constants';
 import {
   SERVICE_QUEUE_NAME,
@@ -18,9 +18,9 @@ import {
 } from './sendgrid.dto';
 import { SendgridService } from './sendgrid.service';
 import {
-  LTV_LIMIT_APPROACHING_EXCHANGE,
-  MARGIN_CALL_COMPLETED_EXCHANGE,
-  MARGIN_CALL_STARTED_EXCHANGE,
+  LTV_LIMIT_APPROACHING_TOPIC,
+  MARGIN_CALL_COMPLETED_TOPIC,
+  MARGIN_CALL_STARTED_TOPIC,
 } from '@archie/api/credit-api/constants';
 
 @Controller()
@@ -30,7 +30,7 @@ export class SendgirdQueueController {
     private configService: ConfigService,
   ) {}
 
-  @Subscribe(APPLIED_TO_WAITLIST_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(APPLIED_TO_WAITLIST_TOPIC, SERVICE_QUEUE_NAME)
   async appliedToWaitlistEventHandler(
     payload: AppliedToWaitlistDto,
   ): Promise<void> {
@@ -45,24 +45,24 @@ export class SendgirdQueueController {
     );
   }
 
-  @Subscribe(JOINED_WAITLIST_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(JOINED_WAITLIST_TOPIC, SERVICE_QUEUE_NAME)
   async joinedWaitlistEventHandler(payload: JoinedWaitlistDto): Promise<void> {
     await this.sendgridService.addToWaitlist(payload.emailAddress);
   }
 
-  @Subscribe(MARGIN_CALL_COMPLETED_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(MARGIN_CALL_COMPLETED_TOPIC, SERVICE_QUEUE_NAME)
   async marginCallCompletedHandler(
     payload: MarginCallCompletedDto,
   ): Promise<void> {
     await this.sendgridService.sendMarginCallCompletedMail(payload);
   }
 
-  @Subscribe(MARGIN_CALL_STARTED_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(MARGIN_CALL_STARTED_TOPIC, SERVICE_QUEUE_NAME)
   async marginCallStartedHandler(payload: MarginCallStartedDto): Promise<void> {
     await this.sendgridService.sendMarginCallStartedMail(payload);
   }
 
-  @Subscribe(LTV_LIMIT_APPROACHING_EXCHANGE, SERVICE_QUEUE_NAME)
+  @Subscribe(LTV_LIMIT_APPROACHING_TOPIC, SERVICE_QUEUE_NAME)
   async LtvLimitApproachingHandler(
     payload: LtvLimitApproachingDto,
   ): Promise<void> {

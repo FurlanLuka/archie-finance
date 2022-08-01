@@ -12,12 +12,6 @@ export enum ConfigVariables {
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
 }
 
-export const APPLIED_TO_WAITLIST_EXCHANGE = {
-  name: 'waitlist.joined.fx',
-  type: 'fanout',
-};
+export const APPLIED_TO_WAITLIST_TOPIC = 'waitlist.joined';
 
-export const JOINED_WAITLIST_EXCHANGE = {
-  name: 'waitlist.joined.fx',
-  type: 'fanout',
-};
+export const JOINED_WAITLIST_TOPIC = 'waitlist.joined';

@@ -15,7 +15,7 @@ import { clearDatabase } from '../e2e-test-utils/database.utils';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '@archie/api/credit-api/constants';
+import { COLLATERAL_WITHDRAW_INITIALIZED_TOPIC } from '@archie/api/credit-api/constants';
 import { ConfigVariables } from '@archie/api/user-api/constants';
 import {
   assetPriceResponse,
@@ -36,6 +36,7 @@ import {
   CollateralWithdrawalController,
   CollateralWithdrawalQueueController,
 } from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.controller';
+import { amqpStub, GLOBAL_EXCHANGE_NAME } from '../e2e-test-utils/queue.utils';
 
 describe('CollateralWithdrawalController (e2e)', () => {
   let app: INestApplication;
@@ -43,13 +44,10 @@ describe('CollateralWithdrawalController (e2e)', () => {
 
   let creditRepository: Repository<Credit>;
   let configService: ConfigService;
-  let marginNotificationsRepositiory: Repository<MarginNotification>;
-  let liquidationLogsRepository: Repository<LiquidationLog>;
   let collateralRepository: Repository<Collateral>;
   let collateralWithdrawalRepository: Repository<CollateralWithdrawal>;
 
   const userId = 'userId';
-  const amqpConnectionPublish: jest.Mock = jest.fn();
 
   const defaultUserCollateral = createUserCollateral(userId);
   const MAX_LTV = 30;
@@ -73,9 +71,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         },
       })
       .overrideProvider(AmqpConnection)
-      .useValue({
-        publish: amqpConnectionPublish,
-      })
+      .useValue(amqpStub)
       .compile();
 
     app = module.createNestApplication();
@@ -106,7 +102,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
   });
 
   afterEach(async () => {
-    amqpConnectionPublish.mockReset();
+    amqpStub.publish.mockReset();
     const connection: Connection = app.get(Connection);
     await clearDatabase(connection);
     await connection.close();
@@ -305,10 +301,10 @@ describe('CollateralWithdrawalController (e2e)', () => {
         updatedAt: expect.any(Date),
       });
 
-      expect(amqpConnectionPublish).toBeCalledTimes(1);
-      expect(amqpConnectionPublish).toBeCalledWith(
-        COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE.name,
-        '',
+      expect(amqpStub.publish).toBeCalledTimes(1);
+      expect(amqpStub.publish).toBeCalledWith(
+        GLOBAL_EXCHANGE_NAME,
+        COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
         {
           asset,
           withdrawalAmount,
@@ -316,6 +312,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
           destinationAddress,
           withdrawalId: expect.any(String),
         },
+        undefined,
       );
       const userCollateral = await collateralRepository.findOneBy({
         userId,

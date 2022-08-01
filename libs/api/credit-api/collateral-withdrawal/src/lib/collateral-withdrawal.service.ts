@@ -4,8 +4,7 @@ import {
   GetUserWithdrawals,
 } from '@archie/api/utils/interfaces/collateral';
 import { InternalApiService } from '@archie/api/utils/internal';
-import { COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE } from '@archie/api/credit-api/constants';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { COLLATERAL_WITHDRAW_INITIALIZED_TOPIC } from '@archie/api/credit-api/constants';
 import {
   BadRequestException,
   HttpException,
@@ -31,6 +30,7 @@ import {
   LiquidationLog,
   MarginLtvService,
 } from '@archie/api/credit-api/margin';
+import { QueueService } from '@archie/api/utils/queue';
 
 const MAX_LTV = 30;
 @Injectable()
@@ -45,7 +45,7 @@ export class CollateralWithdrawalService {
     private liquidationLogsRepository: Repository<LiquidationLog>,
     private marginLtvService: MarginLtvService,
     private internalApiService: InternalApiService,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
   ) {}
 
   public async handleWithdrawalTransactionCreated({
@@ -53,7 +53,7 @@ export class CollateralWithdrawalService {
     transactionId,
   }: CollateralWithdrawTransactionCreatedDto): Promise<void> {
     Logger.log({
-      code: 'COLLATERAL_WITHDRAW_TRANSACTION_CREATED_EXCHANGE',
+      code: 'COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC',
       params: {
         withdrawalId,
         transactionId,
@@ -247,17 +247,13 @@ export class CollateralWithdrawalService {
         .setParameter('withdrawalAmount', withdrawalAmount)
         .execute();
 
-      this.amqpConnection.publish(
-        COLLATERAL_WITHDRAW_INITIALIZED_EXCHANGE.name,
-        '',
-        {
-          asset,
-          withdrawalAmount,
-          userId,
-          destinationAddress,
-          withdrawalId: withdrawal.id,
-        },
-      );
+      this.queueService.publish(COLLATERAL_WITHDRAW_INITIALIZED_TOPIC, {
+        asset,
+        withdrawalAmount,
+        userId,
+        destinationAddress,
+        withdrawalId: withdrawal.id,
+      });
 
       return withdrawal;
     } catch (error) {

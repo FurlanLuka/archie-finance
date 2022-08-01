@@ -17,11 +17,11 @@ import { AssetList } from '@archie/api/utils/interfaces/asset_information';
 import { UserVaultAccount } from '@archie/api/collateral-api/user-vault-account';
 import { Repository } from 'typeorm';
 import { FireblocksWebhookError } from './fireblocks-webhook.errors';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
-  COLLATERAL_DEPOSITED_EXCHANGE,
-  COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE,
+  COLLATERAL_DEPOSITED_TOPIC,
+  COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
 } from '@archie/api/credit-api/constants';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class FireblocksWebhookService {
@@ -30,7 +30,7 @@ export class FireblocksWebhookService {
     private configService: ConfigService,
     @InjectRepository(UserVaultAccount)
     private userVaultAccountRepository: Repository<UserVaultAccount>,
-    private amqpConnection: AmqpConnection,
+    private queueService: QueueService,
   ) {}
 
   public async webhookHandler(payload: FireblocksWebhookDto): Promise<void> {
@@ -108,7 +108,7 @@ export class FireblocksWebhookService {
         },
       });
 
-      this.amqpConnection.publish(COLLATERAL_DEPOSITED_EXCHANGE.name, '', {
+      this.queueService.publish(COLLATERAL_DEPOSITED_TOPIC, {
         transactionId: transaction.id,
         userId,
         asset: assetId,
@@ -190,15 +190,11 @@ export class FireblocksWebhookService {
           userId: userVaultAccount.userId,
         },
       });
-      this.amqpConnection.publish(
-        COLLATERAL_WITHDRAW_COMPLETED_EXCHANGE.name,
-        '',
-        {
-          asset: assetId,
-          transactionId: transaction.id,
-          userId: userVaultAccount.userId,
-        },
-      );
+      this.queueService.publish(COLLATERAL_WITHDRAW_COMPLETED_TOPIC, {
+        asset: assetId,
+        transactionId: transaction.id,
+        userId: userVaultAccount.userId,
+      });
     } catch (error) {
       throw new FireblocksWebhookError({
         transactionId: transaction.id,
