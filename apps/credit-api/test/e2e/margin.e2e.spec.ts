@@ -44,6 +44,7 @@ import {
 } from '@archie/api/credit-api/margin';
 import { Collateral } from '@archie/api/credit-api/collateral';
 import { amqpStub, GLOBAL_EXCHANGE_NAME } from '../e2e-test-utils/queue.utils';
+import { RizeService } from '../../../../libs/api/credit-api/rize/src';
 
 describe.only('MarginQueueController (e2e)', () => {
   let app: INestApplication;
@@ -82,6 +83,8 @@ describe.only('MarginQueueController (e2e)', () => {
       })
       .overrideProvider(AmqpConnection)
       .useValue(amqpStub)
+      .overrideProvider(RizeService)
+      .useValue({})
       .compile();
 
     app = module.createNestApplication();

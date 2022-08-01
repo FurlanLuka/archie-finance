@@ -37,6 +37,7 @@ import {
   CollateralWithdrawalQueueController,
 } from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.controller';
 import { amqpStub, GLOBAL_EXCHANGE_NAME } from '../e2e-test-utils/queue.utils';
+import { RizeService } from '../../../../libs/api/credit-api/rize/src';
 
 describe('CollateralWithdrawalController (e2e)', () => {
   let app: INestApplication;
@@ -74,6 +75,8 @@ describe('CollateralWithdrawalController (e2e)', () => {
       })
       .overrideProvider(AmqpConnection)
       .useValue(amqpStub)
+      .overrideProvider(RizeService)
+      .useValue({})
       .compile();
 
     app = module.createNestApplication();
