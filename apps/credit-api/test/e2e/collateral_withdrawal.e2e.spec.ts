@@ -40,7 +40,7 @@ import {
   amqpStub,
   clearDatabase,
   GLOBAL_EXCHANGE_NAME,
-} from '@archie-microservices/test/integration';
+} from '@archie/test/integration';
 
 describe('CollateralWithdrawalController (e2e)', () => {
   let app: INestApplication;

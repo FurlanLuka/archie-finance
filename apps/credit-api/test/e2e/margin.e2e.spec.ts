@@ -47,7 +47,7 @@ import {
   GLOBAL_EXCHANGE_NAME,
   UUID_REGEX,
   closeToMatcher,
-} from '@archie-microservices/test/integration';
+} from '@archie/test/integration';
 
 describe('MarginQueueController (e2e)', () => {
   let app: INestApplication;

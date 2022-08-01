@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@archie-microservices/test/integration": [
+      "@archie/test/integration": [
         "libs/api/test/integration/src/index.ts"
       ],
       "@archie/api/asset-price-api/asset-price": [
