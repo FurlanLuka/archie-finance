@@ -15,15 +15,15 @@ jobs:
       AUTH0_DOMAIN: auth.dev.archie.finance
       AUTH0_AUDIENCE: https://api.dev.archie.finance
 
-      TYPEORM_HOST: host.minikube.internal
+      TYPEORM_HOST: postgres
       TYPEORM_USERNAME: postgres
       TYPEORM_PASSWORD: postgres
       TYPEORM_DATABASE: postgres
       TYPEORM_PORT: 5432
       TZ: UTC
 
-      INTERNAL_API_URL: http://host.minikube.internal
-      QUEUE_URL: amqp://host.minikube.internal
+      INTERNAL_API_URL: http://localhost
+      QUEUE_URL: amqp://localhost
 
       APTO_API_KEY: ''
       APTO_API_URL: ''
@@ -32,13 +32,13 @@ jobs:
       APTO_PRIVATE_KEY: ''
       APTO_FUNDING_BALANCE_ID: ''
 
-      RIZE_ENVIRONMENT: ''
-      RIZE_PROGRAM_ID: ''
-      RIZE_HMAC_KEY: ''
-      RIZE_MQ_HOST: ''
-      RIZE_MQ_TOPIC_PREFIX: ''
-      RIZE_MQ_USERNAME: ''
-      RIZE_MQ_PASSWORD: ''
+      RIZE_ENVIRONMENT: 'sandbox'
+      RIZE_PROGRAM_ID: 'test'
+      RIZE_HMAC_KEY: 'test'
+      RIZE_MQ_HOST: 'test'
+      RIZE_MQ_TOPIC_PREFIX: 'test'
+      RIZE_MQ_USERNAME: 'test'
+      RIZE_MQ_PASSWORD: 'test'
     services:
       postgres:
         image: postgres:alpine
