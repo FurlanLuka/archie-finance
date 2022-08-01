@@ -45,6 +45,7 @@ export const VerifyEmailScreenStyled = styled.div`
     color: ${({ theme }) => theme.textHighlight};
     border: 0;
     margin-bottom: 1rem;
+    cursor: pointer;
   }
 
   .divider {
