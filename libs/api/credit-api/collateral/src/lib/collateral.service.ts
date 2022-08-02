@@ -7,13 +7,14 @@ import { CollateralDeposit } from './collateral_deposit.entity';
 import {
   GetCollateralValueResponse,
   GetTotalCollateralValueResponse,
-  GetUserCollateral,
-} from '@archie/api/utils/interfaces/collateral';
-import { GetAssetPricesResponse } from '@archie/api/utils/interfaces/asset_price';
-import { InternalApiService } from '@archie/api/utils/internal';
+  GetCollateralResponse,
+} from './collateral.interfaces';
 import { DepositCreationInternalError } from './collateral.errors';
-import { CreateDepositDto } from './collateral.dto';
+import { CreateDepositDto } from './collateral.interfaces';
 import { CollateralValueService } from './collateral-value/collateral-value.service';
+import { QueueService } from '@archie/api/utils/queue';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 
 @Injectable()
 export class CollateralService {
@@ -23,7 +24,7 @@ export class CollateralService {
     @InjectRepository(CollateralDeposit)
     private collateralDepositRepository: Repository<CollateralDeposit>,
     private dataSource: DataSource,
-    private internalApiService: InternalApiService,
+    private queueService: QueueService,
     private collateralValueService: CollateralValueService,
   ) {}
 
@@ -117,7 +118,9 @@ export class CollateralService {
     };
   }
 
-  public async getUserCollateral(userId: string): Promise<GetUserCollateral> {
+  public async getUserCollateral(
+    userId: string,
+  ): Promise<GetCollateralResponse[]> {
     const userCollateral: Collateral[] = await this.collateralRepository.findBy(
       {
         userId,
@@ -132,13 +135,12 @@ export class CollateralService {
 
   public async getUserCollateralValue(
     userId: string,
-  ): Promise<GetCollateralValueResponse> {
-    const userCollateral: GetUserCollateral = await this.getUserCollateral(
-      userId,
-    );
+  ): Promise<GetCollateralValueResponse[]> {
+    const userCollateral: GetCollateralResponse[] =
+      await this.getUserCollateral(userId);
 
-    const assetPrices: GetAssetPricesResponse =
-      await this.internalApiService.getAssetPrices();
+    const assetPrices: GetAssetPriceResponse[] =
+      await this.queueService.request(GET_ASSET_PRICES_RPC);
 
     return this.collateralValueService.getUserCollateralValue(
       userCollateral,
@@ -149,7 +151,7 @@ export class CollateralService {
   public async getUserTotalCollateralValue(
     userId: string,
   ): Promise<GetTotalCollateralValueResponse> {
-    const userCollateralValue: GetCollateralValueResponse =
+    const userCollateralValue: GetCollateralValueResponse[] =
       await this.getUserCollateralValue(userId);
 
     return {

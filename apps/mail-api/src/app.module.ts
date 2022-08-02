@@ -3,7 +3,6 @@ import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
 import { SendgridModule } from '@archie/api/mail-api/sendgrid';
 import { HealthModule } from '@archie/api/utils/health';
-import { InternalApiModule } from '@archie/api/utils/internal';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { QueueModule } from '@archie/api/utils/queue';
 
@@ -38,13 +37,6 @@ import { QueueModule } from '@archie/api/utils/queue';
         keepConnectionAlive: true,
       }),
       inject: [ConfigService],
-    }),
-    InternalApiModule.register({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        internalApiUrl: configService.get(ConfigVariables.INTERNAL_API_URL),
-      }),
     }),
     HealthModule,
     SendgridModule,

@@ -16,7 +16,7 @@ import {
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { ConfigService } from '@archie/api/utils/config';
 import { CryptoService } from '@archie/api/utils/crypto';
-import { AssetList } from '@archie/api/utils/interfaces/asset_information';
+import { AssetList } from '@archie/api/collateral-api/asset-information';
 import {
   CollateralWithdrawInitializedDto,
   LiquidateAssetsDto,

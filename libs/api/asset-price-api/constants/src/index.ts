@@ -1,5 +1,5 @@
-export const SERVICE_NAME = 'asset-price-api'
-export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`
+export const SERVICE_NAME = 'asset-price-api';
+export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
 export enum ConfigVariables {
   TYPEORM_HOST = 'TYPEORM_HOST',
@@ -9,16 +9,7 @@ export enum ConfigVariables {
   TYPEORM_PORT = 'TYPEORM_PORT',
   COINGECKO_API_URI = 'COINGECKO_API_URI',
   ASSET_LIST = 'ASSET_LIST',
+  QUEUE_URL = 'QUEUE_URL',
 }
 
-export interface AssetList {
-  [key: string]: AssetInformation;
-}
-
-interface AssetInformation {
-  fireblocks_id: string;
-  coingecko_id: string;
-  network: string;
-  ltv: number;
-  interest: number;
-}
+export const GET_ASSET_PRICES_RPC = 'get.asset_prices.rpc';

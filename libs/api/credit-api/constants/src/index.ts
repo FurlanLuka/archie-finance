@@ -9,7 +9,6 @@ export enum ConfigVariables {
   TYPEORM_PASSWORD = 'TYPEORM_PASSWORD',
   TYPEORM_DATABASE = 'TYPEORM_DATABASE',
   TYPEORM_PORT = 'TYPEORM_PORT',
-  INTERNAL_API_URL = 'INTERNAL_API_URL',
   APTO_API_KEY = 'APTO_API_KEY',
   APTO_API_URL = 'APTO_API_URL',
   APTO_CARD_PROGRAME_ID = 'APTO_CARD_PROGRAME_ID',
@@ -59,3 +58,6 @@ export const COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC =
 
 export const COLLATERAL_WITHDRAW_COMPLETED_TOPIC =
   'credit.collateral.withdraw.completed';
+
+export const GET_COLLATERAL_RPC = 'get.collateral.rpc';
+export const GET_COLLATERAL_VALUE_RPC = 'get.collateral.value.rpc';

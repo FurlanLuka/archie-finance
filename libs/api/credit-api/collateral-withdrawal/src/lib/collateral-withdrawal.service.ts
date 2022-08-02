@@ -1,9 +1,3 @@
-import {
-  GetCollateralWithdrawal,
-  GetUserWithdrawalAmount,
-  GetUserWithdrawals,
-} from '@archie/api/utils/interfaces/collateral';
-import { InternalApiService } from '@archie/api/utils/internal';
 import { COLLATERAL_WITHDRAW_INITIALIZED_TOPIC } from '@archie/api/credit-api/constants';
 import {
   BadRequestException,
@@ -18,7 +12,9 @@ import { Repository } from 'typeorm';
 import {
   CollateralWithdrawCompletedDto,
   CollateralWithdrawTransactionCreatedDto,
-} from './collateral-withdrawal.dto';
+  GetCollateralWithdrawalResponse,
+  GetUserMaxWithdrawalAmountResponse,
+} from './collateral-withdrawal.interfaces';
 import { CollateralWithdrawal } from './collateral-withdrawal.entity';
 import {
   WithdrawalCreationInternalError,
@@ -31,6 +27,8 @@ import {
   MarginLtvService,
 } from '@archie/api/credit-api/margin';
 import { QueueService } from '@archie/api/utils/queue';
+import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 
 const MAX_LTV = 30;
 @Injectable()
@@ -44,7 +42,6 @@ export class CollateralWithdrawalService {
     @InjectRepository(LiquidationLog)
     private liquidationLogsRepository: Repository<LiquidationLog>,
     private marginLtvService: MarginLtvService,
-    private internalApiService: InternalApiService,
     private queueService: QueueService,
   ) {}
 
@@ -120,8 +117,9 @@ export class CollateralWithdrawalService {
   public async getUserMaxWithdrawalAmount(
     userId: string,
     asset: string,
-  ): Promise<GetUserWithdrawalAmount> {
-    const assetPrices = await this.internalApiService.getAssetPrices();
+  ): Promise<GetUserMaxWithdrawalAmountResponse> {
+    const assetPrices: GetAssetPriceResponse[] =
+      await this.queueService.request(GET_ASSET_PRICES_RPC);
 
     const assetPrice = assetPrices.find((a) => a.asset === asset);
 
@@ -201,7 +199,7 @@ export class CollateralWithdrawalService {
     asset: string,
     withdrawalAmount: number,
     destinationAddress: string,
-  ): Promise<GetCollateralWithdrawal> {
+  ): Promise<GetCollateralWithdrawalResponse> {
     try {
       const userCollateral = await this.collateralRepository.findOneBy({
         userId,
@@ -271,7 +269,9 @@ export class CollateralWithdrawalService {
     }
   }
 
-  public async getUserWithdrawals(userId: string): Promise<GetUserWithdrawals> {
+  public async getUserWithdrawals(
+    userId: string,
+  ): Promise<GetCollateralWithdrawalResponse[]> {
     return this.collateralWithdrawalRepository.findBy({
       userId,
     });

@@ -13,7 +13,7 @@ import {
 } from './fireblocks-webhook.interfaces';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
-import { AssetList } from '@archie/api/utils/interfaces/asset_information';
+import { AssetList } from '@archie/api/collateral-api/asset-information';
 import { UserVaultAccount } from '@archie/api/collateral-api/user-vault-account';
 import { Repository } from 'typeorm';
 import { FireblocksWebhookError } from './fireblocks-webhook.errors';

@@ -3,6 +3,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoingeckoModule } from '@archie/api/asset-price-api/coingecko';
 import {
   AssetPriceController,
+  AssetPriceQueueController,
   InternalAssetPriceController,
 } from './asset_price.controller';
 import { AssetPrice } from './asset_price.entity';
@@ -14,7 +15,11 @@ import { AssetPriceHistory } from './asset_price_history.entity';
     TypeOrmModule.forFeature([AssetPrice, AssetPriceHistory]),
     CoingeckoModule,
   ],
-  controllers: [AssetPriceController, InternalAssetPriceController],
+  controllers: [
+    AssetPriceController,
+    InternalAssetPriceController,
+    AssetPriceQueueController,
+  ],
   providers: [AssetPriceService],
 })
 export class AssetPriceModule {}

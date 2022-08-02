@@ -113,6 +113,11 @@ spec:
                 secretKeyRef:
                   name: asset-price-api-secrets
                   key: coingecko-api-url
+            - name: QUEUE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: queue-shared-secrets
+                  key: queue-url
           {{- end }}
       imagePullSecrets:
         - name: regcred

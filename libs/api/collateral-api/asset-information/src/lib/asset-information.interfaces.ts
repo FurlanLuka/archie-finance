@@ -4,18 +4,15 @@ export enum AssetType {
   BTC = 'BTC',
 }
 
-export interface AssetList {
+export class AssetList {
   [key: string]: AssetInformation;
 }
 
-export interface AssetInformation {
+export class AssetInformation {
   fireblocks_id: string;
-  coinapi_id: string;
+  coingecko_id: string;
   network: AssetType;
   ltv: number;
   interest: number;
   liquidation_wallet: string;
 }
-
-export type GetAssetListResponse = AssetList;
-export type GetAssetInformationResponse = AssetInformation;

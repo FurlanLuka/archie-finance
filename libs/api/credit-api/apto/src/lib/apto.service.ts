@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { InternalApiService } from '@archie/api/utils/internal';
 import { AptoApiService } from './api/apto_api.service';
 import {
   AddressDataPoint,
@@ -23,8 +22,7 @@ import {
   StartVerificationResponse,
 } from './api/apto_api.interfaces';
 import { AptoVerification } from './apto_verification.entity';
-import { GetKycResponse } from '@archie/api/utils/interfaces/kyc';
-import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
+import { GetKycPayload, GetKycResponse } from '@archie/api/user-api/kyc';
 import { AptoUser } from './apto_user.entity';
 import {
   AptoCardApplicationNextAction,
@@ -45,12 +43,19 @@ import {
   GetCreditResponse,
 } from '@archie/api/credit-api/credit';
 import { QueueService } from '@archie/api/utils/queue';
+import {
+  GET_USER_EMAIL_ADDRESS_RPC,
+  GET_USER_KYC_RPC,
+} from '@archie/api/user-api/constants';
+import {
+  GetEmailAddressPayload,
+  GetEmailAddressResponse,
+} from '@archie/api/user-api/user';
 
 @Injectable()
 export class AptoService {
   constructor(
     private aptoApiService: AptoApiService,
-    private internalApiService: InternalApiService,
     private configService: ConfigService,
     @InjectRepository(AptoVerification)
     private aptoVerificationRepository: Repository<AptoVerification>,
@@ -67,7 +72,12 @@ export class AptoService {
   public async startPhoneVerification(
     userId: string,
   ): Promise<StartPhoneVerificationResponse> {
-    const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
+    const kyc: GetKycResponse = await this.queueService.request<
+      GetKycResponse,
+      GetKycPayload
+    >(GET_USER_KYC_RPC, {
+      userId,
+    });
 
     const startPhoneVerificationResponse: StartVerificationResponse =
       await this.aptoApiService.startVerificationProcess(
@@ -216,9 +226,20 @@ export class AptoService {
       throw new BadRequestException();
     }
 
-    const kyc: GetKycResponse = await this.internalApiService.getKyc(userId);
+    const kyc: GetKycResponse = await this.queueService.request<
+      GetKycResponse,
+      GetKycPayload
+    >(GET_USER_KYC_RPC, {
+      userId,
+    });
+
     const emailAddressResponse: GetEmailAddressResponse =
-      await this.internalApiService.getUserEmailAddress(userId);
+      await this.queueService.request<
+        GetEmailAddressResponse,
+        GetEmailAddressPayload
+      >(GET_USER_EMAIL_ADDRESS_RPC, {
+        userId,
+      });
 
     const birthdateDataPoint: BirthdateDataPoint = {
       type: DataType.BIRTHDATE,

@@ -9,7 +9,7 @@ import {
   GetEmailVerificationResponse,
   GetMfaEnrollmentResponse,
 } from './user.interfaces';
-import { GetEmailAddressResponse } from '@archie/api/utils/interfaces/user';
+import { GetEmailAddressResponse } from './user.interfaces';
 import {
   EMAIL_VERIFIED_TOPIC,
   MFA_ENROLLED_TOPIC,

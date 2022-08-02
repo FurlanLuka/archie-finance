@@ -13,13 +13,10 @@ import {
   CollateralWithdrawCompletedDto,
   CollateralWithdrawCreateDto,
   CollateralWithdrawTransactionCreatedDto,
-} from './collateral-withdrawal.dto';
+  GetCollateralWithdrawalResponse,
+  GetUserMaxWithdrawalAmountResponse,
+} from './collateral-withdrawal.interfaces';
 import { CollateralWithdrawalService } from './collateral-withdrawal.service';
-import {
-  GetUserWithdrawalAmount,
-  GetCollateralWithdrawal,
-  GetUserWithdrawals,
-} from '@archie/api/utils/interfaces/collateral';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
@@ -39,7 +36,7 @@ export class CollateralWithdrawalController {
   async withdrawUserCollateral(
     @Req() request,
     @Body() body: CollateralWithdrawCreateDto,
-  ): Promise<GetCollateralWithdrawal> {
+  ): Promise<GetCollateralWithdrawalResponse> {
     return this.collateralWithdrawalService.withdrawUserCollateral(
       request.user.sub,
       body.asset,
@@ -51,7 +48,9 @@ export class CollateralWithdrawalController {
   @Get('')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getUserWithdrawals(@Req() request): Promise<GetUserWithdrawals> {
+  async getUserWithdrawals(
+    @Req() request,
+  ): Promise<GetCollateralWithdrawalResponse[]> {
     return this.collateralWithdrawalService.getUserWithdrawals(
       request.user.sub,
     );
@@ -63,7 +62,7 @@ export class CollateralWithdrawalController {
   async getUserMaxWithdrawalAmount(
     @Req() request,
     @Param('asset') asset: string,
-  ): Promise<GetUserWithdrawalAmount> {
+  ): Promise<GetUserMaxWithdrawalAmountResponse> {
     return this.collateralWithdrawalService.getUserMaxWithdrawalAmount(
       request.user.sub,
       asset,
