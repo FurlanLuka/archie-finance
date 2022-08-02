@@ -8,7 +8,6 @@ import {
 import { AppModule } from '../../src/app.module';
 import { Connection, Repository } from 'typeorm';
 import { AuthGuard } from '@archie/api/utils/auth0';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import {
   CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC,
   LTV_LIMIT_APPROACHING_TOPIC,
@@ -16,9 +15,7 @@ import {
   MARGIN_CALL_STARTED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { MarginQueueController } from '../../../../libs/api/credit-api/margin/src/lib/margin.controller';
-import * as nock from 'nock';
-import { ConfigVariables } from '@archie/api/user-api/constants';
+import { MarginQueueController } from '@archie/api/credit-api/margin';
 import { ConfigService } from '@nestjs/config';
 import { DateTime } from 'luxon';
 import {
@@ -39,15 +36,17 @@ import {
   MarginNotification,
 } from '@archie/api/credit-api/margin';
 import { Collateral } from '@archie/api/credit-api/collateral';
-import { RizeService } from '../../../../libs/api/credit-api/rize/src';
+import { RizeService } from '@archie/api/credit-api/rize';
 import {
   verifyAccessToken,
-  amqpStub,
+  queueStub,
   clearDatabase,
-  GLOBAL_EXCHANGE_NAME,
   UUID_REGEX,
   closeToMatcher,
 } from '@archie/test/integration';
+import { when } from 'jest-when';
+import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
+import { QueueService } from '@archie/api/utils/queue';
 
 describe('MarginQueueController (e2e)', () => {
   let app: INestApplication;
@@ -84,8 +83,8 @@ describe('MarginQueueController (e2e)', () => {
           return true;
         },
       })
-      .overrideProvider(AmqpConnection)
-      .useValue(amqpStub)
+      .overrideProvider(QueueService)
+      .useValue(queueStub)
       .overrideProvider(RizeService)
       .useValue({})
       .compile();
@@ -107,14 +106,15 @@ describe('MarginQueueController (e2e)', () => {
       getRepositoryToken(MarginCollateralCheck),
     );
 
-    nock(configService.get(ConfigVariables.INTERNAL_API_URL))
-      .get(`/internal/asset_price`)
-      .reply(200, assetPriceResponse);
+    when(queueStub.request)
+      .calledWith(GET_ASSET_PRICES_RPC)
+      .mockResolvedValue(assetPriceResponse);
     await collateralRepository.save(createUserCollateral(userId));
   });
 
   afterEach(async () => {
-    amqpStub.publish.mockReset();
+    queueStub.publish.mockReset();
+    queueStub.request.mockReset();
     const connection: Connection = app.get(Connection);
     await clearDatabase(connection);
     await connection.close();
@@ -134,14 +134,12 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpStub.publish).toBeCalledTimes(1);
-      expect(amqpStub.publish).toBeCalledWith(
-        GLOBAL_EXCHANGE_NAME,
+      expect(queueStub.publish).toBeCalledTimes(1);
+      expect(queueStub.publish).toBeCalledWith(
         CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC,
         {
           userIds: [userId],
         },
-        undefined,
       );
     });
 
@@ -159,8 +157,7 @@ describe('MarginQueueController (e2e)', () => {
           .get(MarginQueueController)
           .checkMarginHandler({ userIds: [userId] });
 
-        expect(amqpStub.publish).toBeCalledWith(
-          GLOBAL_EXCHANGE_NAME,
+        expect(queueStub.publish).toBeCalledWith(
           LTV_LIMIT_APPROACHING_TOPIC,
           {
             userId,
@@ -169,7 +166,6 @@ describe('MarginQueueController (e2e)', () => {
             priceForMarginCall: userLoan / MARGIN_CALL_START_LTV,
             priceForPartialCollateralSale: userLoan / COLLATERAL_SALE_LTV,
           },
-          undefined,
         );
         expect(
           await marginNotificationsRepositiory.findOne({
@@ -204,13 +200,11 @@ describe('MarginQueueController (e2e)', () => {
           .get(MarginQueueController)
           .checkMarginHandler({ userIds: [userId] });
 
-        expect(amqpStub.publish).toBeCalledWith(
-          GLOBAL_EXCHANGE_NAME,
+        expect(queueStub.publish).toBeCalledWith(
           CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC,
           {
             userIds: [userId],
           },
-          undefined,
         );
       },
     );
@@ -234,8 +228,7 @@ describe('MarginQueueController (e2e)', () => {
           .get(MarginQueueController)
           .checkMarginHandler({ userIds: [userId] });
 
-        expect(amqpStub.publish).toBeCalledWith(
-          GLOBAL_EXCHANGE_NAME,
+        expect(queueStub.publish).toBeCalledWith(
           LTV_LIMIT_APPROACHING_TOPIC,
           {
             userId,
@@ -244,7 +237,6 @@ describe('MarginQueueController (e2e)', () => {
             priceForMarginCall: userLoan / MARGIN_CALL_START_LTV,
             priceForPartialCollateralSale: userLoan / COLLATERAL_SALE_LTV,
           },
-          undefined,
         );
         expect(
           await marginNotificationsRepositiory.findOne({
@@ -286,8 +278,7 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpStub.publish).toBeCalledWith(
-        GLOBAL_EXCHANGE_NAME,
+      expect(queueStub.publish).toBeCalledWith(
         MARGIN_CALL_STARTED_TOPIC,
         {
           userId,
@@ -296,7 +287,6 @@ describe('MarginQueueController (e2e)', () => {
           priceForMarginCall: userLoan / MARGIN_CALL_START_LTV,
           priceForPartialCollateralSale: userLoan / COLLATERAL_SALE_LTV,
         },
-        undefined,
       );
       expect(
         await marginCallRepository.findOne({
@@ -332,7 +322,7 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpStub.publish).toBeCalledTimes(1);
+      expect(queueStub.publish).toBeCalledTimes(1);
     });
 
     it('Should reset margin call attempt if LTV falls under 75 within 72 hours and send email', async () => {
@@ -356,8 +346,7 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpStub.publish).toBeCalledWith(
-        GLOBAL_EXCHANGE_NAME,
+      expect(queueStub.publish).toBeCalledWith(
         MARGIN_CALL_COMPLETED_TOPIC,
         {
           userId,
@@ -368,7 +357,6 @@ describe('MarginQueueController (e2e)', () => {
           priceForMarginCall: 0,
           priceForPartialCollateralSale: 0,
         },
-        undefined,
       );
       const marginCall: MarginCall | undefined =
         await marginCallRepository.findOne({
@@ -464,8 +452,7 @@ describe('MarginQueueController (e2e)', () => {
       );
       const newCollateralBalance: number =
         defaultCollateralTotal - liquidatedPrice;
-      expect(amqpStub.publish).toBeCalledWith(
-        GLOBAL_EXCHANGE_NAME,
+      expect(queueStub.publish).toBeCalledWith(
         MARGIN_CALL_COMPLETED_TOPIC,
         {
           userId,
@@ -478,7 +465,6 @@ describe('MarginQueueController (e2e)', () => {
           priceForPartialCollateralSale:
             (userLoan - liquidatedPrice) / COLLATERAL_SALE_LTV,
         },
-        undefined,
       );
       expect(
         await marginNotificationsRepositiory.findOne({
@@ -598,8 +584,7 @@ describe('MarginQueueController (e2e)', () => {
       );
       const newCollateralBalance: number =
         defaultCollateralTotal - liquidatedPrice;
-      expect(amqpStub.publish).toBeCalledWith(
-        GLOBAL_EXCHANGE_NAME,
+      expect(queueStub.publish).toBeCalledWith(
         MARGIN_CALL_COMPLETED_TOPIC,
         {
           userId,
@@ -612,7 +597,6 @@ describe('MarginQueueController (e2e)', () => {
           priceForPartialCollateralSale:
             (userLoan - liquidatedPrice) / COLLATERAL_SALE_LTV,
         },
-        undefined,
       );
       expect(
         await marginNotificationsRepositiory.findOne({
@@ -679,7 +663,7 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpStub.publish).toBeCalledTimes(0);
+      expect(queueStub.publish).toBeCalledTimes(0);
     });
 
     it('Should not check anything in case collateral value did not change for at least 10%', async () => {
@@ -699,7 +683,7 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpStub.publish).toBeCalledTimes(0);
+      expect(queueStub.publish).toBeCalledTimes(0);
     });
 
     it('Should check for the margin call and adjust credit line in case collateral value changes by at least 10%', async () => {
@@ -719,14 +703,12 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
-      expect(amqpStub.publish).toBeCalledTimes(2);
-      expect(amqpStub.publish).toBeCalledWith(
-        GLOBAL_EXCHANGE_NAME,
+      expect(queueStub.publish).toBeCalledTimes(2);
+      expect(queueStub.publish).toBeCalledWith(
         CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC,
         {
           userIds: [userId],
         },
-        undefined,
       );
     });
   });
