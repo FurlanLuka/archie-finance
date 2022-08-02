@@ -61,6 +61,9 @@
       "@archie/api/credit-api/margin": [
         "libs/api/credit-api/margin/src/index.ts"
       ],
+      "@archie/api/credit-api/peach": [
+        "libs/api/credit-api/peach/src/index.ts"
+      ],
       "@archie/api/credit-api/rize": ["libs/api/credit-api/rize/src/index.ts"],
       "@archie/api/mail-api/constants": [
         "libs/api/mail-api/constants/src/index.ts"

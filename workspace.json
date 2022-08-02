@@ -18,6 +18,7 @@
     "api-credit-api-constants": "libs/api/credit-api/constants",
     "api-credit-api-credit": "libs/api/credit-api/credit",
     "api-credit-api-margin": "libs/api/credit-api/margin",
+    "api-credit-api-peach": "libs/api/credit-api/peach",
     "api-credit-api-rize": "libs/api/credit-api/rize",
     "api-mail-api-constants": "libs/api/mail-api/constants",
     "api-mail-api-contact": "libs/api/mail-api/contact",
