@@ -16,7 +16,7 @@ export const RecentTransactions: FC = () => {
   const columns = useMemo(() => transactionColumns, []);
   const data = useMemo(() => {
     if (getRecentTransactionsResponse.state === RequestState.SUCCESS) {
-      return [];
+      return getRecentTransactionsResponse.data;
     }
 
     return [];

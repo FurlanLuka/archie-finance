@@ -21,3 +21,7 @@ export const DescriptionCellStyled = styled.div`
 export const AmountCellStyled = styled.div<{ isNegative: boolean }>`
   color: ${({ isNegative, theme }) => (isNegative ? theme.textDanger : theme.textSuccess)};
 `;
+
+export const TypeCellStyled = styled.div`
+  font-size: 1rem;
+`;

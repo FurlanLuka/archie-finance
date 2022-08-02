@@ -2,15 +2,20 @@ import { format } from 'date-fns';
 import { FC } from 'react';
 import { Column } from 'react-table';
 
-import { TransactionStatusColor, TransactionStatusText } from '@archie-webapps/archie-dashboard/constants';
+import {
+  TransactionStatusColor,
+  TransactionStatusText,
+  TransactionTypeText,
+} from '@archie-webapps/archie-dashboard/constants';
 import {
   NetAsset,
   Transaction,
   TransactionStatus,
+  TransactionType,
 } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-transactions';
 
-import { StatusCellStyled, DescriptionCellStyled, AmountCellStyled } from './table-fixtures.styled';
 import { getRowDescription } from './table-fixture.helpers';
+import { StatusCellStyled, DescriptionCellStyled, AmountCellStyled, TypeCellStyled } from './table-fixtures.styled';
 
 interface StatusCellProps {
   status: TransactionStatus;
@@ -19,6 +24,12 @@ interface StatusCellProps {
 const StatusCell: FC<StatusCellProps> = ({ status }) => (
   <StatusCellStyled color={TransactionStatusColor[status]}>{TransactionStatusText[status]}</StatusCellStyled>
 );
+
+interface TypeCellProps {
+  type: TransactionType;
+}
+
+const TypeCell: FC<TypeCellProps> = ({ type }) => <TypeCellStyled>{TransactionTypeText[type]}</TypeCellStyled>;
 
 interface DescriptionCellProps {
   title: string;
@@ -66,6 +77,14 @@ export const transactionColumns: Column<Transaction>[] = [
         accessor: (row) => getRowDescription(row),
         Cell: ({ value: { title, code } }: any) => {
           return <DescriptionCell title={title} code={code} />;
+        },
+      },
+      {
+        Header: 'Type',
+        accessor: 'type',
+        width: 1,
+        Cell: ({ value }: any) => {
+          return <TypeCell type={value}>{value}</TypeCell>;
         },
       },
       {

@@ -14,9 +14,23 @@ export enum TransactionStatus {
   FAILED = 'failed',
 }
 
+export enum TransactionType {
+  atm_withdrawal = 'atm_withdrawal',
+  card_purchase = 'card_purchase',
+  card_refund = 'card_refund',
+  dispute = 'dispute',
+  external_transfer = 'external_transfer',
+  fee = 'fee',
+  credit = 'credit',
+  internal_transfer = 'internal_transfer',
+  other = 'other',
+  reversed_transfer = 'reversed_transfer',
+  third_party_transfer = 'third_party_transfer',
+}
+
 export interface Transaction {
   description: string;
-  type: string;
+  type: TransactionType;
   status: TransactionStatus;
   us_dollar_amount: string;
   settled_at: string;
