@@ -97,6 +97,45 @@ export const HomeStyled = styled.div`
     padding: 0.5rem 1.5rem;
   }
 
+  /* Temp, just for Rize */
+  .number-overlay {
+    position: absolute;
+    left: 1rem;
+    bottom: 96px;
+    display: flex;
+    align-items: center;
+    font-size: 1.55rem;
+    color: #393838;
+    width: 200px;
+    height: 2rem;
+    background-color: #dce1e4;
+  }
+
+  .expiry-overlay {
+    position: absolute;
+    left: 2.4rem;
+    bottom: 60px;
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #727375;
+    height: 2rem;
+    background-color: #dce1e4;
+  }
+
+  .cvv-overlay {
+    position: absolute;
+    right: 9.4rem;
+    bottom: 60px;
+    display: flex;
+    align-items: center;
+    font-size: 0.875rem;
+    color: #727375;
+    height: 2rem;
+    background-color: #dce1e4;
+  }
+  /* Temp, just for Rize, use card-data and card-status instead */
+
   .text-group {
     display: flex;
     align-items: flex-end;

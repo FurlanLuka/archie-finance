@@ -87,6 +87,13 @@ export const WalletAndCollateralScreen: FC = () => {
           className="archie-card clickable"
           onClick={() => (revealCardData ? setRevealCardModalOpen(false) : setRevealCardModalOpen(true))}
         >
+          {!revealCardData && (
+            <>
+              <div className="number-overlay">•••• •••• ••••</div>
+              <div className="expiry-overlay">••/••</div>
+              <div className="cvv-overlay">•••</div>
+            </>
+          )}
           {/* <div className="card-data">
             <ParagraphS weight={500}>{revealCardData ? '3443 6546 6457 8021' : '•••• •••• •••• 8021'}</ParagraphS>
             <div className="card-data-group">
