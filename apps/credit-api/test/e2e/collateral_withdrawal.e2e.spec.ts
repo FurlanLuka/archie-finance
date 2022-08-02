@@ -4,7 +4,6 @@ import { AppModule } from '../../src/app.module';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
-  BadRequestException,
   ExecutionContext,
   INestApplication,
   NotFoundException,
@@ -29,18 +28,18 @@ import {
 } from '../../../../libs/api/credit-api/margin/src';
 import { Collateral } from '../../../../libs/api/credit-api/collateral/src';
 import { CollateralWithdrawal } from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.entity';
-import { AuthGuard } from '@nestjs/passport';
-import {
-  CollateralWithdrawalController,
-  CollateralWithdrawalQueueController,
-} from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.controller';
+import { AuthGuard } from '@archie/api/utils/auth0';
+import { CollateralWithdrawalQueueController } from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.controller';
 import { RizeService } from '../../../../libs/api/credit-api/rize/src';
 import {
+  generateUserAccessToken,
   verifyAccessToken,
   amqpStub,
   clearDatabase,
   GLOBAL_EXCHANGE_NAME,
+  user,
 } from '@archie/test/integration';
+import * as request from 'supertest';
 
 describe('CollateralWithdrawalController (e2e)', () => {
   let app: INestApplication;
@@ -53,11 +52,13 @@ describe('CollateralWithdrawalController (e2e)', () => {
   let marginNotificationsRepositiory: Repository<MarginNotification>;
   let liquidationLogsRepository: Repository<LiquidationLog>;
 
-  const userId = 'userId';
+  const userId = user.id;
+  const accessToken = generateUserAccessToken();
 
   const defaultUserCollateral = createUserCollateral(userId);
   const MAX_LTV = 30;
   const destinationAddress = 'my_address';
+  const desiredAsset = 'ETH';
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
@@ -118,24 +119,16 @@ describe('CollateralWithdrawalController (e2e)', () => {
   });
 
   describe('GET /:asset/max_amount', () => {
-    // defaultCollateralTotal = 100
     it('should return 400 if unsupported asset', async () => {
-      try {
-        await app
-          .get(CollateralWithdrawalController)
-          .getUserMaxWithdrawalAmount(
-            {
-              user: { sub: userId },
-            },
-            'TEH',
-          );
-      } catch (error) {
-        expect(error).toBeInstanceOf(BadRequestException);
-      }
+      const asset = 'TEH';
+
+      await request(app.getHttpServer())
+        .get(`/v1/collateral/withdraw/${asset}/max_amount`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(400);
     });
 
     it('should return 0 if user has no collateral in the desired asset', async () => {
-      const desiredAsset = 'ETH';
       await collateralRepository.delete({
         userId,
       });
@@ -143,16 +136,12 @@ describe('CollateralWithdrawalController (e2e)', () => {
         defaultUserCollateral.filter((a) => a.asset !== desiredAsset),
       );
 
-      const response = await app
-        .get(CollateralWithdrawalController)
-        .getUserMaxWithdrawalAmount(
-          {
-            user: { sub: userId },
-          },
-          desiredAsset,
-        );
+      const response: request.Response = await request(app.getHttpServer())
+        .get(`/v1/collateral/withdraw/${desiredAsset}/max_amount`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
 
-      expect(response.maxAmount).toEqual(0);
+      expect(response.body.maxAmount).toEqual(0);
     });
 
     it('should return 0 if user has an LTV of more than .3', async () => {
@@ -162,16 +151,12 @@ describe('CollateralWithdrawalController (e2e)', () => {
         availableCredit: 20,
       });
 
-      const response = await app
-        .get(CollateralWithdrawalController)
-        .getUserMaxWithdrawalAmount(
-          {
-            user: { sub: userId },
-          },
-          'ETH',
-        );
+      const response: request.Response = await request(app.getHttpServer())
+        .get(`/v1/collateral/withdraw/${desiredAsset}/max_amount`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
 
-      expect(response.maxAmount).toEqual(0);
+      expect(response.body.maxAmount).toEqual(0);
     });
 
     it('should return maximum amount if user has not loaned any', async () => {
@@ -181,16 +166,12 @@ describe('CollateralWithdrawalController (e2e)', () => {
         availableCredit: 60,
       });
 
-      const response = await app
-        .get(CollateralWithdrawalController)
-        .getUserMaxWithdrawalAmount(
-          {
-            user: { sub: userId },
-          },
-          'ETH',
-        );
+      const response: request.Response = await request(app.getHttpServer())
+        .get(`/v1/collateral/withdraw/${desiredAsset}/max_amount`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
 
-      expect(response.maxAmount).toEqual(
+      expect(response.body.maxAmount).toEqual(
         defaultUserCollateral.find((c) => c.asset === 'ETH').amount,
       );
     });
@@ -202,16 +183,12 @@ describe('CollateralWithdrawalController (e2e)', () => {
         availableCredit: 51,
       });
 
-      const response = await app
-        .get(CollateralWithdrawalController)
-        .getUserMaxWithdrawalAmount(
-          {
-            user: { sub: userId },
-          },
-          'ETH',
-        );
+      const response: request.Response = await request(app.getHttpServer())
+        .get(`/v1/collateral/withdraw/${desiredAsset}/max_amount`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
 
-      expect(response.maxAmount).toEqual(
+      expect(response.body.maxAmount).toEqual(
         defaultUserCollateral.find((c) => c.asset === 'ETH').amount,
       );
     });
@@ -224,89 +201,72 @@ describe('CollateralWithdrawalController (e2e)', () => {
         availableCredit: 60 - loanAmount,
       });
 
-      const response = await app
-        .get(CollateralWithdrawalController)
-        .getUserMaxWithdrawalAmount(
-          {
-            user: { sub: userId },
-          },
-          'ETH',
-        );
+      const response: request.Response = await request(app.getHttpServer())
+        .get(`/v1/collateral/withdraw/${desiredAsset}/max_amount`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
 
-      expect(response.maxAmount).toEqual(
+      expect(response.body.maxAmount).toEqual(
         (defaultCollateralTotal - loanAmount / (MAX_LTV / 100)) / ETH_PRICE, // ltv from service is returned * 100
       );
     });
   });
   describe('POST /collateral/withdraw', () => {
     it('should return 400 bad request if trying to withdraw more than collateralized', async () => {
-      try {
-        await app.get(CollateralWithdrawalController).withdrawUserCollateral(
-          {
-            user: { sub: userId },
-          },
-          { asset: 'ETH', destinationAddress, withdrawalAmount: 1000 },
-        );
-      } catch (error) {
-        expect(error).toBeInstanceOf(BadRequestException);
-      }
+      await request(app.getHttpServer())
+        .post(`/v1/collateral/withdraw`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          asset: desiredAsset,
+          destinationAddress,
+          withdrawalAmount: 1000,
+        })
+        .expect(400);
     });
 
     it('should return 400 if user tries to withdraw a not supported asset', async () => {
-      try {
-        await app.get(CollateralWithdrawalController).withdrawUserCollateral(
-          {
-            user: { sub: userId },
-          },
-          { asset: 'ADA', destinationAddress, withdrawalAmount: 1000 },
-        );
-      } catch (error) {
-        expect(error).toBeInstanceOf(BadRequestException);
-      }
+      await request(app.getHttpServer())
+        .post(`/v1/collateral/withdraw`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ asset: 'ADA', destinationAddress, withdrawalAmount: 1000 })
+        .expect(400);
     });
 
     it('should return 400 if user tries to withdraw an asset which they have not collateralized', async () => {
-      const desiredAsset = 'ETH';
       await collateralRepository.delete({
         userId,
       });
       await collateralRepository.save(
         defaultUserCollateral.filter((a) => a.asset !== desiredAsset),
       );
-      try {
-        await app.get(CollateralWithdrawalController).withdrawUserCollateral(
-          {
-            user: { sub: userId },
-          },
-          { asset: desiredAsset, destinationAddress, withdrawalAmount: 1 },
-        );
-      } catch (error) {
-        expect(error).toBeInstanceOf(BadRequestException);
-      }
+
+      await request(app.getHttpServer())
+        .post(`/v1/collateral/withdraw`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ asset: desiredAsset, destinationAddress, withdrawalAmount: 1 })
+        .expect(400);
     });
 
     it('should withdraw collateral and publish to the exchange', async () => {
-      const asset = 'ETH';
       const withdrawalAmount = 5;
-      const response = await app
-        .get(CollateralWithdrawalController)
-        .withdrawUserCollateral(
-          {
-            user: { sub: userId },
-          },
-          { asset, destinationAddress, withdrawalAmount },
-        );
-      expect(response).toEqual({
+
+      const response = await request(app.getHttpServer())
+        .post(`/v1/collateral/withdraw`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({ asset: desiredAsset, destinationAddress, withdrawalAmount })
+        .expect(201);
+
+      expect(response.body).toEqual({
         userId,
-        asset,
+        asset: desiredAsset,
         withdrawalAmount,
         currentAmount: 10,
         destinationAddress,
         transactionId: null,
         status: TransactionStatus.SUBMITTED,
         id: expect.any(String),
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
       });
 
       expect(amqpStub.publish).toBeCalledTimes(1);
@@ -314,7 +274,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         GLOBAL_EXCHANGE_NAME,
         COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
         {
-          asset,
+          asset: desiredAsset,
           withdrawalAmount,
           userId,
           destinationAddress,
@@ -324,7 +284,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
       );
       const userCollateral = await collateralRepository.findOneBy({
         userId,
-        asset,
+        asset: desiredAsset,
       });
       expect(userCollateral.amount).toEqual(10 - withdrawalAmount);
     });
@@ -335,7 +295,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
       const transactionId = 'transaction_id';
       const withdrawal = await collateralWithdrawalRepository.save({
         userId,
-        asset: 'ETH',
+        asset: desiredAsset,
         withdrawalAmount: 5,
         currentAmount: 10,
         destinationAddress,
@@ -364,7 +324,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
 
       const withdrawal = await collateralWithdrawalRepository.save({
         userId,
-        asset: 'ETH',
+        asset: desiredAsset,
         withdrawalAmount: 5,
         currentAmount: 10,
         destinationAddress,
@@ -377,7 +337,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .collateralWithdrawCompleteHandler({
           userId,
           transactionId,
-          asset: 'ETH',
+          asset: desiredAsset,
         });
 
       const withdrawalResult = await collateralWithdrawalRepository.findOne({
@@ -391,27 +351,25 @@ describe('CollateralWithdrawalController (e2e)', () => {
     it('should throw not found if transaction id has not been synced yet', async () => {
       const transactionId = 'transaction_id';
 
-      try {
-        await collateralWithdrawalRepository.save({
+      await collateralWithdrawalRepository.save({
+        userId,
+        asset: desiredAsset,
+        withdrawalAmount: 5,
+        currentAmount: 10,
+        destinationAddress,
+        transactionId: null,
+        status: TransactionStatus.SUBMITTED,
+      });
+
+      const action: Promise<void> = app
+        .get(CollateralWithdrawalQueueController)
+        .collateralWithdrawCompleteHandler({
           userId,
-          asset: 'ETH',
-          withdrawalAmount: 5,
-          currentAmount: 10,
-          destinationAddress,
-          transactionId: null,
-          status: TransactionStatus.SUBMITTED,
+          transactionId,
+          asset: desiredAsset,
         });
 
-        await app
-          .get(CollateralWithdrawalQueueController)
-          .collateralWithdrawCompleteHandler({
-            userId,
-            transactionId,
-            asset: 'ETH',
-          });
-      } catch (error) {
-        expect(error).toBeInstanceOf(NotFoundException);
-      }
+      await expect(action).rejects.toBeInstanceOf(NotFoundException);
     });
   });
 });
