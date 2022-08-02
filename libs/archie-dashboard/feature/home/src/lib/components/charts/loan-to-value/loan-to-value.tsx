@@ -5,7 +5,7 @@ import { LoanToValueStatus, LoanToValueColor, LoanToValueText } from '@archie-we
 import { Badge, SubtitleM, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { LoanToValueStyled } from './loan-to-value.styled';
+import { LoanToValueChartStyled } from './loan-to-value.styled';
 
 // Temp data
 const good = 'good';
@@ -23,8 +23,8 @@ const data = [
   },
 ];
 
-export const LoanToValue: FC = () => (
-  <LoanToValueStyled>
+export const LoanToValueChart: FC = () => (
+  <LoanToValueChartStyled>
     <ResponsivePie
       data={data}
       innerRadius={0.9}
@@ -44,5 +44,5 @@ export const LoanToValue: FC = () => (
         {LoanToValueText[good]}
       </Badge>
     </div>
-  </LoanToValueStyled>
+  </LoanToValueChartStyled>
 );

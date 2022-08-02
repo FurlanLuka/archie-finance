@@ -103,6 +103,16 @@ export const Card = styled.div<CardProps>`
     letter-spacing: 0.02em;
   }
 
+  .text-group {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.25rem;
+
+    p {
+      padding-bottom: 0.25rem;
+    }
+  }
+
   .btn-group {
     display: flex;
     gap: 0.5rem;

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
-export const LoanToValueStyled = styled.div`
+export const LoanToValueChartStyled = styled.div`
   position: relative;
   height: 216px;
   width: 216px;
