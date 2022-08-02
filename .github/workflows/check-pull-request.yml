@@ -12,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     env:
+      # GLOBAL
+      ACTIONS_SIGNING_SECRET: ACTIONS_SIGNING_SECRET
+
+      # CREDIT API
       AUTH0_DOMAIN: auth.dev.archie.finance
       AUTH0_AUDIENCE: https://api.dev.archie.finance
 
