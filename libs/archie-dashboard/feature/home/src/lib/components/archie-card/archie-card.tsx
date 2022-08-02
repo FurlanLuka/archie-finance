@@ -16,29 +16,38 @@ export const ArchieCard: FC = () => {
 
   const getCardsImageResponse: QueryResponse<CardsImage> = useGetCardsImage();
 
-  const getCardsImage = () => {
-    if (getCardsImageResponse.state === RequestState.SUCCESS) {
-      return getCardsImageResponse.data.image;
-    }
+  if (getCardsImageResponse.state === RequestState.LOADING) {
+    return (
+      <ArchieCardStyled>
+        <Card className="archie-card">
+          <div className="skeleton"></div>
+        </Card>
+      </ArchieCardStyled>
+    );
+  }
 
-    return '';
-  };
+  if (getCardsImageResponse.state === RequestState.ERROR) {
+    return <div>Something went wrong :(</div>; // TODO: replace with error state
+  }
 
-  return (
-    <ArchieCardStyled>
-      <Card
-        backgroundImage={`data:image/jpeg;base64,${getCardsImage()}`}
-        className="archie-card clickable"
-        onClick={() => (revealCardData ? setRevealCardModalOpen(false) : setRevealCardModalOpen(true))}
-      >
-        {!revealCardData && (
-          <>
-            <div className="number-overlay">•••• •••• ••••</div>
-            <div className="expiry-overlay">••/••</div>
-            <div className="cvv-overlay">•••</div>
-          </>
-        )}
-        {/* <div className="card-data">
+  if (getCardsImageResponse.state === RequestState.SUCCESS) {
+    const cardsImageData = getCardsImageResponse.data;
+
+    return (
+      <ArchieCardStyled>
+        <Card
+          backgroundImage={`data:image/jpeg;base64,${cardsImageData.image}`}
+          className="archie-card clickable"
+          onClick={() => (revealCardData ? setRevealCardModalOpen(false) : setRevealCardModalOpen(true))}
+        >
+          {!revealCardData && (
+            <>
+              <div className="number-overlay">•••• •••• ••••</div>
+              <div className="expiry-overlay">••/••</div>
+              <div className="cvv-overlay">•••</div>
+            </>
+          )}
+          {/* <div className="card-data">
             <ParagraphS weight={500}>{revealCardData ? '3443 6546 6457 8021' : '•••• •••• •••• 8021'}</ParagraphS>
             <div className="card-data-group">
               <ParagraphS weight={500}>
@@ -56,12 +65,15 @@ export const ArchieCard: FC = () => {
               Active
             </ParagraphXXS>
           </div> */}
-      </Card>
-      <RevealCardModal
-        isOpen={revealCardModalOpen}
-        close={() => setRevealCardModalOpen(false)}
-        onConfirm={() => setRevealCardData(true)}
-      />
-    </ArchieCardStyled>
-  );
+        </Card>
+        <RevealCardModal
+          isOpen={revealCardModalOpen}
+          close={() => setRevealCardModalOpen(false)}
+          onConfirm={() => setRevealCardData(true)}
+        />
+      </ArchieCardStyled>
+    );
+  }
+
+  return <></>;
 };

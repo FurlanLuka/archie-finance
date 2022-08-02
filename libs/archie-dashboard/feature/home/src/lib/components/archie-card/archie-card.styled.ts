@@ -3,7 +3,10 @@ import styled from 'styled-components';
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
 export const ArchieCardStyled = styled.div`
-  width: 100%;
+
+  @media (max-width: ${breakpoints.screenSM}) {
+    width: 100%;
+  }  
 
   .archie-card {
     max-width: 420px;

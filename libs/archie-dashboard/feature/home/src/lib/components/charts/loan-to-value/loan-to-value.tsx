@@ -2,47 +2,52 @@ import { ResponsivePie } from '@nivo/pie';
 import { FC } from 'react';
 
 import { LoanToValueStatus, LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
+import { LtvStatus } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { Badge, SubtitleM, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { LoanToValueChartStyled } from './loan-to-value.styled';
 
-// Temp data
-const good = 'good';
+interface LoanToValueChartProps {
+  ltv: number;
+  status: LtvStatus;
+}
 
-const data = [
-  {
-    id: LoanToValueStatus.GOOD,
-    value: 20,
-    color: LoanToValueColor[good],
-  },
-  {
-    id: 'not-good',
-    value: 80,
-    color: theme.loanToValueDefault,
-  },
-];
+export const LoanToValueChart: FC<LoanToValueChartProps> = ({ ltv, status }) => {
+  const data = [
+    {
+      id: LoanToValueStatus.GOOD,
+      value: ltv.toFixed(2),
+      color: LoanToValueColor[status],
+    },
+    {
+      id: 'until_margin_call',
+      value: (100 - ltv).toFixed(2),
+      color: theme.loanToValueDefault,
+    },
+  ];
 
-export const LoanToValueChart: FC = () => (
-  <LoanToValueChartStyled>
-    <ResponsivePie
-      data={data}
-      innerRadius={0.9}
-      padAngle={0.5}
-      cornerRadius={50}
-      colors={{ datum: 'data.color' }}
-      enableArcLabels={false}
-      enableArcLinkLabels={false}
-      animate={true}
-    />
-    <div className="centered-metrics">
-      <ParagraphXXS weight={700}>Loan-to-value</ParagraphXXS>
-      <SubtitleM weight={400} color={theme.loanToValueActive}>
-        20%
-      </SubtitleM>
-      <Badge statusColor={LoanToValueColor[good]} className="status-label">
-        {LoanToValueText[good]}
-      </Badge>
-    </div>
-  </LoanToValueChartStyled>
-);
+  return (
+    <LoanToValueChartStyled>
+      <ResponsivePie
+        data={data}
+        innerRadius={0.9}
+        padAngle={0.5}
+        cornerRadius={50}
+        colors={{ datum: 'data.color' }}
+        enableArcLabels={false}
+        enableArcLinkLabels={false}
+        animate={true}
+      />
+      <div className="centered-metrics">
+        <ParagraphXXS weight={700}>Loan-to-value</ParagraphXXS>
+        <SubtitleM weight={400} color={theme.loanToValueActive}>
+          {ltv.toFixed(2)}%
+        </SubtitleM>
+        <Badge statusColor={LoanToValueColor[status]} className="status-label">
+          {LoanToValueText[status]}
+        </Badge>
+      </div>
+    </LoanToValueChartStyled>
+  );
+};

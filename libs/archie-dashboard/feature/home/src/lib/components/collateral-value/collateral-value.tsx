@@ -17,36 +17,46 @@ export const CollateralValue: FC = () => {
 
   const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = useGetCollateralTotalValue();
 
-  const getCollateralTotalValue = () => {
-    if (getCollateralTotalValueResponse.state === RequestState.SUCCESS) {
-      return getCollateralTotalValueResponse.data.value;
-    }
+  if (getCollateralTotalValueResponse.state === RequestState.LOADING) {
+    return (
+      <Card>
+        <div className="skeleton"></div>
+      </Card>
+    );
+  }
 
-    return 0;
-  };
+  if (getCollateralTotalValueResponse.state === RequestState.ERROR) {
+    return <div>Something went wrong :(</div>; // TODO: replace with error state
+  }
 
-  return (
-    <Card column alignItems="flex-start" justifyContent="space-between" padding="1.5rem">
-      <div>
-        <ParagraphXS weight={700} className="card-title">
-          Collateral Value
-        </ParagraphXS>
-        <div className="text-group card-info">
-          <SubtitleS weight={400}>${getFormattedValue(getCollateralTotalValue())}</SubtitleS>
-          {/* <ParagraphXS weight={500} color={theme.textSuccess}>
+  if (getCollateralTotalValueResponse.state === RequestState.SUCCESS) {
+    const collateralTotalValue = getCollateralTotalValueResponse.data.value;
+
+    return (
+      <Card column alignItems="flex-start" justifyContent="space-between" padding="1.5rem">
+        <div>
+          <ParagraphXS weight={700} className="card-title">
+            Collateral Value
+          </ParagraphXS>
+          <div className="text-group card-info">
+            <SubtitleS weight={400}>${getFormattedValue(collateralTotalValue)}</SubtitleS>
+            {/* <ParagraphXS weight={500} color={theme.textSuccess}>
             ↑
           </ParagraphXS> */}
+          </div>
         </div>
-      </div>
-      {/* <CollateralValueChart /> */}
-      <div className="btn-group">
-        <ButtonOutline maxWidth="auto" small onClick={() => navigate('/collateral')}>
-          Add
-        </ButtonOutline>
-        <ButtonOutline maxWidth="auto" small isDisabled>
-          Redeem
-        </ButtonOutline>
-      </div>
-    </Card>
-  );
+        {/* <CollateralValueChart /> */}
+        <div className="btn-group">
+          <ButtonOutline maxWidth="auto" small onClick={() => navigate('/collateral')}>
+            Add
+          </ButtonOutline>
+          <ButtonOutline maxWidth="auto" small isDisabled>
+            Redeem
+          </ButtonOutline>
+        </div>
+      </Card>
+    );
+  }
+
+  return <></>;
 };

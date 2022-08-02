@@ -1,6 +1,12 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/shared/ui/theme';
+
+const load = keyframes`
+  100% {
+    transform: translateX(100%);
+  }
+`;
 
 export const HomeStyled = styled.div`
   width: 100%;
@@ -41,6 +47,27 @@ export const HomeStyled = styled.div`
 
     @media (max-width: ${breakpoints.screenSM}) {
       max-width: 100%;
+    }
+  }
+
+  /* Move it to design system */
+  .skeleton {
+    position: absolute;
+    /* background-color: ${({ theme }) => theme.backgroundSecondary}; */
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(to right, #fff 8%, #ececec 38%, #fff 54%);
+      animation: ${load} 1s linear infinite;
     }
   }
 `;
