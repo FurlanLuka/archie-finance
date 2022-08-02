@@ -7,7 +7,6 @@ import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/c
 import { Table } from '@archie-webapps/shared/ui/design-system';
 
 import { tableColumns } from '../../fixtures/table-fixture';
-import { AddNewAsset } from '../add-new-asset/add-new-asset';
 import { AssetsAllocation } from '../assets-allocation/assets-allocation';
 
 type AssetMap = Record<
@@ -22,6 +21,7 @@ type AssetMap = Record<
     allocation: number;
     actions: {
       collateral_asset: string;
+      isHolding: boolean;
     };
   }
 >;
@@ -32,6 +32,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral }) => {
   const totalValue = calculateCollateralTotalValue(collateral);
   const columns = useMemo(() => tableColumns, []);
 
+  // TODO we probably won't need the isHolding check here if we fix the BE bug which leaves collateral in the DB after withdrawing it
   const assetMap: AssetMap = useMemo(() => {
     return collateral.reduce(
       (map, item) => ({
@@ -46,6 +47,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral }) => {
           allocation: (item.price / totalValue) * 100,
           actions: {
             collateral_asset: item.asset,
+            isHolding: item.assetAmount > 0,
           },
         },
       }),
@@ -53,8 +55,25 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral }) => {
     );
   }, [collateral, totalValue]);
 
-  const tableData = useMemo(() => Object.values(assetMap), [assetMap]);
-  const notAddedAssets = Object.values(CollateralAssets).filter((asset) => assetMap[asset.id] === undefined);
+  const tableData = useMemo(() => {
+    const notAddedAssets = Object.values(CollateralAssets).filter((asset) => assetMap[asset.id] === undefined);
+
+    return Object.values(assetMap).concat(
+      notAddedAssets.map((item) => ({
+        collateral_asset: item.id,
+        balance: '$0',
+        holdings: `0 ${item.short}`,
+        change: {
+          collateral_asset: item.id,
+        },
+        allocation: 0,
+        actions: {
+          collateral_asset: item.id,
+          isHolding: false,
+        },
+      })),
+    );
+  }, [assetMap]);
 
   return (
     <>
@@ -65,7 +84,6 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral }) => {
         usdc={assetMap[CollateralCurrency.USDC]?.allocation}
       />
       <Table columns={columns} data={tableData} />
-      {notAddedAssets.length > 0 && <AddNewAsset assets={notAddedAssets} />}
     </>
   );
 };
