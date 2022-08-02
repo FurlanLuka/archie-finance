@@ -237,13 +237,17 @@ export class CollateralWithdrawalService {
         status: TransactionStatus.SUBMITTED,
       });
 
-      await this.collateralRepository
-        .createQueryBuilder('Collateral')
-        .update(Collateral)
-        .where('userId = :userId AND asset = :asset', { userId, asset })
-        .set({ amount: () => 'amount - :withdrawalAmount' })
-        .setParameter('withdrawalAmount', withdrawalAmount)
-        .execute();
+      if (userCollateral.amount - withdrawalAmount === 0) {
+        await this.collateralRepository.delete(userCollateral.id);
+      } else {
+        await this.collateralRepository
+          .createQueryBuilder('Collateral')
+          .update(Collateral)
+          .where('userId = :userId AND asset = :asset', { userId, asset })
+          .set({ amount: () => 'amount - :withdrawalAmount' })
+          .setParameter('withdrawalAmount', withdrawalAmount)
+          .execute();
+      }
 
       this.queueService.publish(COLLATERAL_WITHDRAW_INITIALIZED_TOPIC, {
         asset,
