@@ -68,3 +68,7 @@ export class CreditLimitDto {
   userId: string;
   amount: number;
 }
+
+export class CardImageResponseDto {
+  image: string;
+}
