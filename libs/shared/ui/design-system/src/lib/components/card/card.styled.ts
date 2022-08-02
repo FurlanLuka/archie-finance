@@ -25,7 +25,11 @@ export const Card = styled.div<CardProps>`
   align-items: ${({ alignItems }) => alignItems};
   background-color: ${({ theme }) => theme.backgroundPrimary};
   background-image: ${({ backgroundImage }) => `url(${backgroundImage})`};
-  background-size: cover;
+  /* Temp, just for Rize */
+  background-size: 102%;
+  background-position: center;
+  /* Temp, just for Rize, should be "cover" instead */
+  /* background-size: cover; */
   box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.08);
   border-radius: 0.5rem;
   width: 100%;

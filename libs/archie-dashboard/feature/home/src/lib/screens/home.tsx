@@ -1,8 +1,15 @@
 import { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
+import { TotalCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-total-value';
+import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-total-value';
+import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
+import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
+import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { CardsImage } from '@archie-webapps/shared/data-access/archie-api/rize/api/get-cards-image';
+import { useGetCardsImage } from '@archie-webapps/shared/data-access/archie-api/rize/hooks/use-cards-image';
 import {
-  ButtonGhost,
   ButtonOutline,
   Card,
   ParagraphM,
@@ -31,6 +38,36 @@ export const WalletAndCollateralScreen: FC = () => {
   const [revealCardModalOpen, setRevealCardModalOpen] = useState(false);
   const [revealCardData, setRevealCardData] = useState(false);
 
+  const getCardsImageResponse: QueryResponse<CardsImage> = useGetCardsImage();
+  const getCreditQueryResponse: QueryResponse<GetCreditResponse> = useGetCredit();
+  const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = useGetCollateralTotalValue();
+
+  const getCardsImage = () => {
+    if (getCardsImageResponse.state === RequestState.SUCCESS) {
+      return getCardsImageResponse.data.image;
+    }
+
+    return '';
+  };
+
+  const getCredit = () => {
+    if (getCreditQueryResponse.state === RequestState.SUCCESS) {
+      return getCreditQueryResponse.data;
+    }
+
+    return { totalCredit: 0, availableCredit: 0 };
+  };
+
+  const getCollateralTotalValue = () => {
+    if (getCollateralTotalValueResponse.state === RequestState.SUCCESS) {
+      return getCollateralTotalValueResponse.data.value;
+    }
+
+    return 0;
+  };
+
+  getCredit();
+
   const columns = useMemo(() => tableColumns, []);
   const data = useMemo(() => tableData, []);
 
@@ -46,11 +83,11 @@ export const WalletAndCollateralScreen: FC = () => {
       {/* <MarginCallAlert /> */}
       <div className="section-cards">
         <Card
-          backgroundImage={imgCard}
+          backgroundImage={`data:image/jpeg;base64,${getCardsImage()}`}
           className="archie-card clickable"
           onClick={() => (revealCardData ? setRevealCardModalOpen(false) : setRevealCardModalOpen(true))}
         >
-          <div className="card-data">
+          {/* <div className="card-data">
             <ParagraphS weight={500}>{revealCardData ? '3443 6546 6457 8021' : '•••• •••• •••• 8021'}</ParagraphS>
             <div className="card-data-group">
               <ParagraphS weight={500}>
@@ -67,7 +104,7 @@ export const WalletAndCollateralScreen: FC = () => {
             <ParagraphXXS weight={800} color={theme.textLight}>
               Active
             </ParagraphXXS>
-          </div>
+          </div> */}
         </Card>
         <RevealCardModal
           isOpen={revealCardModalOpen}
@@ -81,7 +118,7 @@ export const WalletAndCollateralScreen: FC = () => {
                 ArchCredit Balance
               </ParagraphXS>
               <SubtitleS weight={400} className="card-info border-active">
-                $1,000.00
+                ${getFormattedValue(getCredit().totalCredit - getCredit().availableCredit)}
               </SubtitleS>
               <div className="btn-group">
                 <ButtonOutline maxWidth="auto" small>
@@ -94,10 +131,10 @@ export const WalletAndCollateralScreen: FC = () => {
                 Available Credit
               </ParagraphXS>
               <SubtitleS weight={400} className="card-info border-default">
-                $4,000.00
+                ${getFormattedValue(getCredit().availableCredit)}
               </SubtitleS>
               <ParagraphXXS color={theme.textSecondary} weight={500} className="card-text">
-                Line of Credit: $5,000.00
+                Line of Credit: ${getFormattedValue(getCredit().totalCredit)}
               </ParagraphXXS>
             </div>
           </div>
@@ -108,17 +145,19 @@ export const WalletAndCollateralScreen: FC = () => {
       </div>
 
       <div className="section-cards">
-        <Card column alignItems="flex-start" padding="1.5rem">
-          <ParagraphXS weight={700} className="card-title">
-            Collateral Value
-          </ParagraphXS>
-          <div className="text-group card-info">
-            <SubtitleS weight={400}>$10,000</SubtitleS>
-            <ParagraphXS weight={500} color={theme.textSuccess}>
-              ↑
+        <Card column alignItems="flex-start" justifyContent="space-between" padding="1.5rem">
+          <div>
+            <ParagraphXS weight={700} className="card-title">
+              Collateral Value
             </ParagraphXS>
+            <div className="text-group card-info">
+              <SubtitleS weight={400}>${getFormattedValue(getCollateralTotalValue())}</SubtitleS>
+              {/* <ParagraphXS weight={500} color={theme.textSuccess}>
+              ↑
+            </ParagraphXS> */}
+            </div>
           </div>
-          <CollateralValue />
+          {/* <CollateralValue /> */}
           <div className="btn-group">
             <ButtonOutline maxWidth="auto" small>
               Add
