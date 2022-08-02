@@ -3,21 +3,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Credit } from './credit.entity';
 import { GetCreditResponse } from './credit.interfaces';
-import { InternalApiService } from '@archie/api/utils/internal';
-import {
-  GetCollateralValueResponse,
-  CollateralValue,
-} from '@archie/api/utils/interfaces/collateral';
-import {
-  GetAssetListResponse,
-  AssetInformation,
-} from '@archie/api/utils/interfaces/asset_information';
 import {
   CreateCreditMinimumCollateralError,
   CreditNotFoundError,
 } from './credit.errors';
-import { COLLATERAL_RECEIVED_TOPIC } from '@archie/api/credit-api/constants';
+import {
+  COLLATERAL_RECEIVED_TOPIC,
+  GET_COLLATERAL_VALUE_RPC,
+} from '@archie/api/credit-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
+import {
+  AssetInformation,
+  AssetList,
+} from '@archie/api/collateral-api/asset-information';
+import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
+import { GetCollateralValuePayload, GetCollateralValueResponse } from '@archie/api/credit-api/collateral';
 
 @Injectable()
 export class CreditService {
@@ -27,7 +27,6 @@ export class CreditService {
   constructor(
     @InjectRepository(Credit) private creditRepository: Repository<Credit>,
     private queueService: QueueService,
-    private internalApiService: InternalApiService,
   ) {}
 
   public async createCredit(userId: string): Promise<GetCreditResponse> {
@@ -42,11 +41,17 @@ export class CreditService {
       };
     }
 
-    const collateralValue: GetCollateralValueResponse =
-      await this.internalApiService.getUserCollateralValue(userId);
+    const collateralValue: GetCollateralValueResponse[] =
+      await this.queueService.request<
+        GetCollateralValueResponse[],
+        GetCollateralValuePayload
+      >(GET_COLLATERAL_VALUE_RPC, {
+        userId,
+      });
 
-    const assetList: GetAssetListResponse =
-      await this.internalApiService.getAssetList();
+    const assetList: AssetList = await this.queueService.request(
+      GET_ASSET_INFORMATION_RPC,
+    );
 
     let totalCollateralValue: number = this.getCreditLimit(
       collateralValue,
@@ -85,10 +90,10 @@ export class CreditService {
   }
 
   public getCreditLimit(
-    collateralValue: GetCollateralValueResponse,
-    assetList: GetAssetListResponse,
+    collateralValue: GetCollateralValueResponse[],
+    assetList: AssetList,
   ): number {
-    return collateralValue.reduce((sum: number, value: CollateralValue) => {
+    return collateralValue.reduce((sum: number, value: GetCollateralValueResponse) => {
       if (assetList[value.asset] === undefined) {
         return sum;
       }

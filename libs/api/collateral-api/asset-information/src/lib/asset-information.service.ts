@@ -1,21 +1,17 @@
 import { ConfigService } from '@archie/api/utils/config';
-import {
-  GetAssetInformationResponse,
-  GetAssetListResponse,
-  AssetList,
-} from '@archie/api/utils/interfaces/asset_information';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { AssetInformation, AssetList } from './asset-information.interfaces';
 
 @Injectable()
 export class AssetInformationService {
   constructor(private configService: ConfigService) {}
 
-  public getAssetList(): GetAssetListResponse {
+  public getAssetList(): AssetList {
     return this.configService.get(ConfigVariables.ASSET_LIST);
   }
 
-  public getAssetInformation(asset: string): GetAssetInformationResponse {
+  public getAssetInformation(asset: string): AssetInformation {
     const assetList: AssetList = this.configService.get(
       ConfigVariables.ASSET_LIST,
     );

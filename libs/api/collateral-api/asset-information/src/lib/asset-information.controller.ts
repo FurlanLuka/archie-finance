@@ -1,25 +1,34 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
-import {
-  GetAssetListResponseDto,
-  GetAssetInformationResponseDto,
-} from './asset-information.dto';
+import { Controller } from '@nestjs/common';
 import { AssetInformationService } from './asset-information.service';
-import { ApiErrorResponse } from '@archie/api/utils/openapi';
+import { AssetList } from './asset-information.interfaces';
+import {
+  RequestHandler,
+  RPCResponse,
+  RPCResponseType,
+} from '@archie/api/utils/queue';
+import {
+  GET_ASSET_INFORMATION_RPC,
+  SERVICE_QUEUE_NAME,
+} from '@archie/api/collateral-api/constants';
 
-@Controller('internal/asset_information')
-export class InternalAssetInformationController {
+@Controller()
+export class AssetInformationQueueController {
   constructor(private assetInformationService: AssetInformationService) {}
 
-  @Get()
-  getAssetList(): GetAssetListResponseDto {
-    return this.assetInformationService.getAssetList();
-  }
+  @RequestHandler(GET_ASSET_INFORMATION_RPC, SERVICE_QUEUE_NAME)
+  getAssetList(): RPCResponse<AssetList> {
+    try {
+      const data = this.assetInformationService.getAssetList();
 
-  @Get(':asset')
-  @ApiErrorResponse([NotFoundException])
-  getAssetInformation(
-    @Param('asset') asset: string,
-  ): GetAssetInformationResponseDto {
-    return this.assetInformationService.getAssetInformation(asset);
+      return {
+        type: RPCResponseType.SUCCESS,
+        data,
+      };
+    } catch (error) {
+      return {
+        type: RPCResponseType.ERROR,
+        message: error.message,
+      };
+    }
   }
 }

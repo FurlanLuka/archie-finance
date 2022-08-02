@@ -1,10 +1,6 @@
 import { Transform, Type } from 'class-transformer';
 import { Equals, IsString, Length, MaxDate } from 'class-validator';
 import { DateTime } from 'luxon';
-import {
-  CreateKycResponse,
-  GetKycResponse,
-} from '@archie/api/utils/interfaces/kyc';
 
 export class KycDto {
   @IsString()
@@ -48,7 +44,7 @@ export class KycDto {
   ssn: string;
 }
 
-export class GetKycResponseDto implements GetKycResponse {
+export class GetKycResponse {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
@@ -63,6 +59,8 @@ export class GetKycResponseDto implements GetKycResponse {
   ssn: string;
 }
 
-export class CreateKycResponseDto
-  extends GetKycResponseDto
-  implements CreateKycResponse {}
+export class CreateKycResponse extends GetKycResponse {}
+
+export class GetKycPayload {
+  userId: string;
+}

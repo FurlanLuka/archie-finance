@@ -6,9 +6,7 @@ import { MarginCall } from './margin_calls.entity';
 import { LtvResponse, LtvStatus, UsersLtv } from './margin.interfaces';
 import { MarginLtvService } from './ltv/margin_ltv.service';
 import { MarginCallsService } from './calls/margin_calls.service';
-import { InternalApiService } from '@archie/api/utils/internal';
-import { GetAssetPricesResponse } from '@archie/api/utils/interfaces/asset_price';
-import { GetAssetListResponse } from '@archie/api/utils/interfaces/asset_information';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { MarginCollateralValueCheckService } from './collateral_value_checks/margin_collaterall_value_checks.service';
 import {
   CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC,
@@ -18,6 +16,9 @@ import { CreditLimitService } from './credit_limit/credit_limit.service';
 import { Credit } from '@archie/api/credit-api/credit';
 import { Collateral } from '@archie/api/credit-api/collateral';
 import { QueueService } from '@archie/api/utils/queue';
+import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
+import { AssetList } from '@archie/api/collateral-api/asset-information';
+import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
 
 @Injectable()
 export class MarginService {
@@ -34,7 +35,6 @@ export class MarginService {
     private collateralRepository: Repository<Collateral>,
     private marginLtvService: MarginLtvService,
     private marginCallsService: MarginCallsService,
-    private internalApiService: InternalApiService,
     private queueService: QueueService,
     private marginCollateralCheckService: MarginCollateralValueCheckService,
     private creditLimitService: CreditLimitService,
@@ -45,6 +45,7 @@ export class MarginService {
       .createQueryBuilder('credit')
       .select('DISTINCT credit.userId')
       .getRawMany();
+
     const userIds: string[] = credits.map((credit) => credit.userId);
 
     const chunkSize: number = Math.ceil(
@@ -77,8 +78,9 @@ export class MarginService {
           userId,
         },
       });
-    const assetPrices: GetAssetPricesResponse =
-      await this.internalApiService.getAssetPrices();
+
+    const assetPrices: GetAssetPriceResponse[] =
+      await this.queueService.request(GET_ASSET_PRICES_RPC);
 
     const ltv: UsersLtv = this.marginLtvService.calculateUsersLtv(
       userId,
@@ -118,8 +120,9 @@ export class MarginService {
           userId: In(userIds),
         },
       });
-    const assetPrices: GetAssetPricesResponse =
-      await this.internalApiService.getAssetPrices();
+
+      const assetPrices: GetAssetPriceResponse[] =
+      await this.queueService.request(GET_ASSET_PRICES_RPC);
 
     const userLtvs: UsersLtv[] = userIds.map((userId: string) =>
       this.marginLtvService.calculateUsersLtv(
@@ -203,8 +206,9 @@ export class MarginService {
         userId: In(userIds),
       },
     });
-    const assetPrices: GetAssetPricesResponse =
-      await this.internalApiService.getAssetPrices();
+
+    const assetPrices: GetAssetPriceResponse[] =
+      await this.queueService.request(GET_ASSET_PRICES_RPC);
 
     const userLtvs: UsersLtv[] = userIds.map((userId: string) =>
       this.marginLtvService.calculateUsersLtv(
@@ -216,8 +220,9 @@ export class MarginService {
       ),
     );
 
-    const assetsList: GetAssetListResponse =
-      await this.internalApiService.getAssetList();
+    const assetsList: AssetList = await this.queueService.request(
+      GET_ASSET_INFORMATION_RPC,
+    );
 
     await Promise.all(
       userLtvs.map((userLtv: UsersLtv) =>

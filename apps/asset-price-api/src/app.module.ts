@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigVariables } from '@archie/api/asset-price-api/constants';
 import { AssetPriceModule } from '@archie/api/asset-price-api/asset-price';
 import { migrations } from './migrations';
+import { QueueModule } from '@archie/api/utils/queue';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { migrations } from './migrations';
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_PORT,
         ConfigVariables.TYPEORM_USERNAME,
+        ConfigVariables.QUEUE_URL,
       ],
       parse: (configVariable: ConfigVariables, value) => {
         if (configVariable === ConfigVariables.ASSET_LIST) {
@@ -43,6 +45,7 @@ import { migrations } from './migrations';
       }),
       inject: [ConfigService],
     }),
+    QueueModule.register(),
     AssetPriceModule,
     HealthModule,
   ],

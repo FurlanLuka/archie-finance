@@ -3,28 +3,25 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AssetPrice } from './asset_price.entity';
 import { Repository } from 'typeorm';
 import { AssetPriceHistory } from './asset_price_history.entity';
-import { ConfigService } from '@archie/api/utils/config';
-import { ConfigVariables } from '@archie/api/asset-price-api/constants';
-import {
-  GetAssetPriceResponse,
-  GetAssetPricesResponse,
-} from '@archie/api/utils/interfaces/asset_price';
+import { GetAssetPriceResponse } from './asset_price.interfaces';
 import { CoingeckoService } from '@archie/api/asset-price-api/coingecko';
 import { CoinPriceResponse } from '@archie/api/asset-price-api/coingecko';
-import { AssetList } from '@archie/api/asset-price-api/constants';
+import { AssetList } from '@archie/api/collateral-api/asset-information';
+import { QueueService } from '@archie/api/utils/queue';
+import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
 
 @Injectable()
 export class AssetPriceService {
   constructor(
     private coingeckoService: CoingeckoService,
-    private configService: ConfigService,
     @InjectRepository(AssetPrice)
     private assetPriceRepository: Repository<AssetPrice>,
     @InjectRepository(AssetPriceHistory)
     private assetPriceHistoryRepository: Repository<AssetPriceHistory>,
+    private queueService: QueueService,
   ) {}
 
-  public async getAssetPrices(): Promise<GetAssetPricesResponse> {
+  public async getAssetPrices(): Promise<GetAssetPriceResponse[]> {
     return this.assetPriceRepository.find();
   }
 
@@ -42,14 +39,9 @@ export class AssetPriceService {
   }
 
   public async getCoinPrices(): Promise<void> {
-    const assetList: AssetList = this.configService.get(
-      ConfigVariables.ASSET_LIST,
+    const assetList: AssetList = await this.queueService.request(
+      GET_ASSET_INFORMATION_RPC,
     );
-
-    Logger.log({
-      log: 'ASSET_LIST',
-      list: JSON.stringify(assetList),
-    });
 
     const assets: string[] = Object.keys(assetList).map(
       (asset: string) => assetList[asset].coingecko_id,

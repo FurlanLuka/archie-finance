@@ -7,7 +7,6 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { FinishPhoneVerificationDto } from '@archie/api/utils/interfaces/apto';
 import { AptoService } from './apto.service';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import {
@@ -18,6 +17,12 @@ import {
 } from './apto.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
+import { IsString } from 'class-validator';
+
+export class FinishPhoneVerificationDto {
+  @IsString()
+  secret: string;
+}
 
 @Controller('v1/apto')
 export class AptoController {

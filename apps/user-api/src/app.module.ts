@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
-import { InternalApiModule } from '@archie/api/utils/internal';
 import { ConfigVariables, SERVICE_NAME } from '@archie/api/user-api/constants';
 import { CryptoModule } from '@archie/api/utils/crypto';
 import { KycModule } from '@archie/api/user-api/kyc';
@@ -24,7 +23,6 @@ import { QueueModule } from '@archie/api/utils/queue';
         ConfigVariables.TYPEORM_USERNAME,
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
-        ConfigVariables.INTERNAL_API_URL,
         ConfigVariables.QUEUE_URL,
         ConfigVariables.ENCRYPTION_KEY,
       ],
@@ -55,13 +53,6 @@ import { QueueModule } from '@archie/api/utils/queue';
         audience: configService.get(ConfigVariables.AUTH0_AUDIENCE),
       }),
       inject: [ConfigService],
-    }),
-    InternalApiModule.register({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        internalApiUrl: configService.get(ConfigVariables.INTERNAL_API_URL),
-      }),
     }),
     CryptoModule.register({
       imports: [ConfigModule],

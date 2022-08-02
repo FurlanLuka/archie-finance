@@ -1,12 +1,12 @@
 import { LiquidationLog } from '../liquidation_logs.entity';
 import { LtvStatus, UsersLtv } from '../margin.interfaces';
-import { CollateralValue } from '@archie/api/utils/interfaces/collateral';
+import { GetCollateralValueResponse } from '@archie/api/credit-api/collateral';
 import { Injectable } from '@nestjs/common';
 import { MarginNotification } from '../margin_notifications.entity';
 import { LTV_LIMIT_APPROACHING_TOPIC } from '@archie/api/credit-api/constants';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { GetAssetPricesResponse } from '@archie/api/utils/interfaces/asset_price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import {
   Collateral,
   CollateralValueService,
@@ -41,7 +41,7 @@ export class MarginLtvService {
     credits: Credit[],
     liquidationLogs: LiquidationLog[],
     collaterals: Collateral[],
-    assetPrices: GetAssetPricesResponse,
+    assetPrices: GetAssetPriceResponse[],
   ): UsersLtv {
     const usersCollateral: Collateral[] = collaterals.filter(
       (collateral: Collateral) => collateral.userId === userId,
@@ -53,7 +53,7 @@ export class MarginLtvService {
       );
 
     const totalCollateralValue: number = usersCollateralValue.reduce(
-      (collateralPrice: number, collateralValue: CollateralValue) =>
+      (collateralPrice: number, collateralValue: GetCollateralValueResponse) =>
         collateralPrice + collateralValue.price,
       0,
     );

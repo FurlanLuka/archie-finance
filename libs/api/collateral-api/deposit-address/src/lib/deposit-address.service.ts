@@ -12,7 +12,7 @@ import {
   AssetList,
   AssetInformation,
   AssetType,
-} from '@archie/api/utils/interfaces/asset_information';
+} from '@archie/api/collateral-api/asset-information';
 import {
   DepositAddressUnknownAssetError,
   GenerateOmnubusWalletInternalError,

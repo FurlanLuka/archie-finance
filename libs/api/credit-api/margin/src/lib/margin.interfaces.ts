@@ -1,4 +1,4 @@
-import { GetCollateralValueResponse } from '@archie/api/utils/interfaces/collateral';
+import { GetCollateralValueResponse } from '@archie/api/credit-api/collateral';
 import { LiquidationLog } from './liquidation_logs.entity';
 
 export interface LiquidatedCollateralAssets {
@@ -15,7 +15,7 @@ export interface UsersLtv {
   ltv: number;
   loanedBalance: number;
   collateralBalance: number;
-  collateralAllocation: GetCollateralValueResponse;
+  collateralAllocation: GetCollateralValueResponse[];
   priceForMarginCall: number;
   priceForPartialCollateralSale: number;
 }

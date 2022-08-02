@@ -1,7 +1,16 @@
 import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
-import { GetAssetPriceResponseDto } from './asset_price.dto';
+import { GetAssetPriceResponse } from './asset_price.interfaces';
 import { AssetPriceService } from './asset_price.service';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
+import {
+  RequestHandler,
+  RPCResponse,
+  RPCResponseType,
+} from '@archie/api/utils/queue';
+import {
+  GET_ASSET_PRICES_RPC,
+  SERVICE_QUEUE_NAME,
+} from '@archie/api/asset-price-api/constants';
 
 @Controller(['v1/asset_price'])
 export class AssetPriceController {
@@ -9,7 +18,7 @@ export class AssetPriceController {
 
   @Get()
   @ApiErrorResponse([NotFoundException])
-  async getAssetPrices(): Promise<GetAssetPriceResponseDto[]> {
+  async getAssetPrices(): Promise<GetAssetPriceResponse[]> {
     return this.assetPriceService.getAssetPrices();
   }
 
@@ -17,7 +26,7 @@ export class AssetPriceController {
   @ApiErrorResponse([NotFoundException])
   async getAssetPrice(
     @Param('asset') asset: string,
-  ): Promise<GetAssetPriceResponseDto> {
+  ): Promise<GetAssetPriceResponse> {
     return this.assetPriceService.getAssetPrice(asset);
   }
 }
@@ -26,21 +35,30 @@ export class AssetPriceController {
 export class InternalAssetPriceController {
   constructor(private assetPriceService: AssetPriceService) {}
 
-  @Get()
-  async getAssetPrices(): Promise<GetAssetPriceResponseDto[]> {
-    return this.assetPriceService.getAssetPrices();
-  }
-
   @Get('fetch')
   async fetchAssetPrices(): Promise<void> {
     return this.assetPriceService.getCoinPrices();
   }
+}
 
-  @Get(':asset')
-  @ApiErrorResponse([NotFoundException])
-  async getAssetPrice(
-    @Param('asset') asset: string,
-  ): Promise<GetAssetPriceResponseDto> {
-    return this.assetPriceService.getAssetPrice(asset);
+@Controller()
+export class AssetPriceQueueController {
+  constructor(private assetPriceService: AssetPriceService) {}
+
+  @RequestHandler(GET_ASSET_PRICES_RPC, SERVICE_QUEUE_NAME)
+  async getAssetPrices(): Promise<RPCResponse<GetAssetPriceResponse[]>> {
+    try {
+      const data = await this.assetPriceService.getAssetPrices();
+
+      return {
+        type: RPCResponseType.SUCCESS,
+        data,
+      };
+    } catch (error) {
+      return {
+        type: RPCResponseType.ERROR,
+        message: error.message ?? 'INTERNAL_SERVER_EXCEPTION',
+      };
+    }
   }
 }
