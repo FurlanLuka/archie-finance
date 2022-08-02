@@ -43,12 +43,4 @@ export const HomeStyled = styled.div`
       max-width: 100%;
     }
   }
-
-  .table-title {
-    margin-bottom: 1rem;
-  }
-
-  .table-btn {
-    margin-bottom: 2rem;
-  }
 `;
