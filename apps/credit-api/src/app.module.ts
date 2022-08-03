@@ -10,6 +10,7 @@ import { HealthModule } from '@archie/api/utils/health';
 import { CreditModule } from '@archie/api/credit-api/credit';
 import { CollateralModule } from '@archie/api/credit-api/collateral';
 import { RizeModule } from '@archie/api/credit-api/rize';
+import { PlaidModule } from '@archie/api/credit-api/plaid';
 import { MarginModule } from '@archie/api/credit-api/margin';
 import { AptoModule } from '@archie/api/credit-api/apto';
 import { CollateralWithdrawalModule } from '@archie/api/credit-api/collateral-withdrawal';
@@ -68,6 +69,7 @@ import { QueueModule } from '@archie/api/utils/queue';
     AptoModule,
     MarginModule,
     RizeModule,
+    PlaidModule,
     CollateralModule,
     CollateralWithdrawalModule,
     QueueModule.register(),

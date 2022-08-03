@@ -18,6 +18,7 @@
     "api-credit-api-constants": "libs/api/credit-api/constants",
     "api-credit-api-credit": "libs/api/credit-api/credit",
     "api-credit-api-margin": "libs/api/credit-api/margin",
+    "api-credit-api-plaid": "libs/api/credit-api/plaid",
     "api-credit-api-rize": "libs/api/credit-api/rize",
     "api-mail-api-constants": "libs/api/mail-api/constants",
     "api-mail-api-contact": "libs/api/mail-api/contact",
@@ -27,6 +28,7 @@
     "api-onboarding-api-onboarding": "libs/api/onboarding-api/onboarding",
     "api-referral-system-api-constants": "libs/api/referral-system-api/constants",
     "api-referral-system-api-waitlist": "libs/api/referral-system-api/waitlist",
+    "api-test-integration": "libs/api/test/integration",
     "api-user-api-auth0": "libs/api/user-api/auth0",
     "api-user-api-constants": "libs/api/user-api/constants",
     "api-user-api-kyc": "libs/api/user-api/kyc",
@@ -49,7 +51,6 @@
     "plugin-migration-generator": "libs/plugin/migration-generator",
     "plugin-workspace-generator": "libs/plugin/workspace-generator",
     "referral-system-api": "apps/referral-system-api",
-    "api-test-integration": "libs/api/test/integration",
     "user-api": "apps/user-api"
   }
 }
