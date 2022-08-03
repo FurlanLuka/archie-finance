@@ -287,7 +287,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
       }
     });
 
-    it.only('should remove collateral from the database if all of it was withdrawn', async () => {
+    it('should remove collateral from the database if all of it was withdrawn', async () => {
       const asset = 'ETH';
       const withdrawalAmount = ETH_STARTING_AMOUNT;
 

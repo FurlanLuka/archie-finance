@@ -237,16 +237,26 @@ export class CollateralWithdrawalService {
         status: TransactionStatus.SUBMITTED,
       });
 
-      if (userCollateral.amount - withdrawalAmount === 0) {
-        await this.collateralRepository.delete(userCollateral.id);
-      } else {
-        await this.collateralRepository
-          .createQueryBuilder('Collateral')
-          .update(Collateral)
-          .where('userId = :userId AND asset = :asset', { userId, asset })
-          .set({ amount: () => 'amount - :withdrawalAmount' })
-          .setParameter('withdrawalAmount', withdrawalAmount)
-          .execute();
+      const updatedCollateral = await this.collateralRepository
+        .createQueryBuilder('Collateral')
+        .update(Collateral)
+        .where(
+          'userId = :userId AND asset = :asset AND amount >= :withdrawalAmount',
+          { userId, asset, withdrawalAmount },
+        )
+        .set({ amount: () => 'amount - :withdrawalAmount' })
+        .setParameter('withdrawalAmount', withdrawalAmount)
+        .returning('*')
+        .execute()
+        .then((response) => {
+          return response.raw[0];
+        });
+
+      if (updatedCollateral?.id && updatedCollateral?.amount == 0) {
+        await this.collateralRepository.delete({
+          id: updatedCollateral.id,
+          amount: 0,
+        });
       }
 
       this.queueService.publish(COLLATERAL_WITHDRAW_INITIALIZED_TOPIC, {
