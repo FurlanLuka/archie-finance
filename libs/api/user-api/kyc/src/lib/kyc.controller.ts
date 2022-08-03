@@ -57,9 +57,7 @@ export class KycQueueController {
   constructor(private readonly kycService: KycService) {}
 
   @RequestHandler(GET_USER_KYC_RPC, SERVICE_QUEUE_NAME)
-  async getKyc(
-    payload: GetKycPayload,
-  ): Promise<RPCResponse<GetKycResponse>> {
+  async getKyc(payload: GetKycPayload): Promise<RPCResponse<GetKycResponse>> {
     try {
       const data = await this.kycService.getKyc(payload.userId);
 
