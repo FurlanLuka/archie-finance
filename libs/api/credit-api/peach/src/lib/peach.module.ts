@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
 import { PeachService } from './peach.service';
+import { PeachQueueController } from './peach.controller';
 
 @Module({
-  controllers: [],
+  controllers: [PeachQueueController],
   providers: [PeachService],
   exports: [PeachService],
 })
