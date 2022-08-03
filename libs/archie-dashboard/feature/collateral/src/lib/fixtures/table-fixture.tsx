@@ -69,18 +69,19 @@ const AllocationCell: FC<AllocationCellProps> = ({ value }) => (
 
 interface ActionsCellProps {
   id: string;
+  canClaim: boolean;
 }
 
-const ActionsCell: FC<ActionsCellProps> = ({ id }) => {
+const ActionsCell: FC<ActionsCellProps> = ({ canClaim, id }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
     <ActionsCellStyled>
-      <ButtonOutline small color={theme.textPositive}>
+      <ButtonOutline small color={theme.textPositive} onClick={() => navigate(`add/${id}`)}>
         {t('btn_add')}
       </ButtonOutline>
-      <ButtonOutline small onClick={() => navigate(`withdraw/${id}`)}>
+      <ButtonOutline isDisabled={!canClaim} small onClick={() => navigate(`withdraw/${id}`)}>
         {t('btn_claim')}
       </ButtonOutline>
     </ActionsCellStyled>
@@ -130,8 +131,8 @@ export const tableColumns = [
         Header: '',
         accessor: 'actions',
         width: 1,
-        Cell: ({ value: { collateral_asset } }: any) => {
-          return <ActionsCell id={collateral_asset} />;
+        Cell: ({ value: { collateral_asset, isHolding } }: any) => {
+          return <ActionsCell id={collateral_asset} canClaim={isHolding} />;
         },
       },
     ],

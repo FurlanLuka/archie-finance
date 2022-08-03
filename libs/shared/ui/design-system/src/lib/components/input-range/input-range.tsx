@@ -5,6 +5,7 @@ import { ParagraphS, ParagraphXS } from '../typography/typography.styled';
 import { InputRangeStyled } from './input-range.styled';
 
 export interface InputRangeProps {
+  className?: string;
   label: string;
   min: number;
   max: number;
@@ -12,11 +13,11 @@ export interface InputRangeProps {
   onChange: (value: number) => void;
 }
 
-export const InputRange: FC<InputRangeProps> = ({ label, min, max, value, onChange }) => {
+export const InputRange: FC<InputRangeProps> = ({ className, label, min, max, value, onChange }) => {
   const getBackgroundSize = () => ((value - min) * 100) / (max - min) + '% 100%';
 
   return (
-    <InputRangeStyled backgroundSize={getBackgroundSize()}>
+    <InputRangeStyled backgroundSize={getBackgroundSize()} className={className}>
       <div className="label">
         <ParagraphXS weight={700}>{label}</ParagraphXS>
         <ParagraphS>${value}</ParagraphS>

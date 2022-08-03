@@ -1,54 +1,38 @@
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 
-import { calculateCollateralCreditValue } from '@archie-webapps/archie-dashboard/utils';
-import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
+import { usePollCollateralDeposit } from '@archie-webapps/archie-dashboard/hooks';
+import { calculateCollateralCreditValue, formatEntireCollateral } from '@archie-webapps/archie-dashboard/utils';
 
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';
 import { CreateCreditLine } from '../toasts/create-credit-line/create-credit-line';
 import { NotEnoughCollateral } from '../toasts/not-enough-collateral/not-enough-collateral';
 
-import {
-  formatEntireCollateral,
-  getCollateralDepositState,
-  CollateralDepositState,
-} from './collateral-deposit-alerts.helpers';
-import { usePollCollateralDeposit } from './use-poll-collateral-deposit';
+import { getCollateralDepositState, CollateralDepositState } from './collateral-deposit-alerts.helpers';
 
 export const CollateralDepositAlerts: FC = () => {
-  const [shouldPoll, setShouldPoll] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentCollateral, setCurrentCollateral] = useState<CollateralValue[]>([]);
 
-  const onCollateralChange = useCallback(
-    (newCollateral: CollateralValue[]) => {
-      if (JSON.stringify(newCollateral) !== JSON.stringify(currentCollateral)) {
-        setShouldPoll(false);
-        setCurrentCollateral(newCollateral);
-        setIsModalOpen(true);
-      }
-    },
-    [currentCollateral],
-  );
+  const onCollateralAmountChange = () => {
+    setIsModalOpen(true);
+  };
+
+  const { currentCollateral, startPolling } = usePollCollateralDeposit({
+    onCollateralAmountChange,
+    initialCollateral: [], // we don't have any yet
+  });
 
   const collateralText = useMemo(() => formatEntireCollateral(currentCollateral), [currentCollateral]);
   const collateralTotalValue = useMemo(() => calculateCollateralCreditValue(currentCollateral), [currentCollateral]);
 
   const currentCollateralDepositState = getCollateralDepositState(isModalOpen, collateralTotalValue, currentCollateral);
 
-  // is this hook going to be used somewhere else? if not let's have it here, as we do in collateralization-screen
-  // TODO after merging https://github.com/Archie-Finance/archie-web-apps/pull/41
-  usePollCollateralDeposit({
-    onCollateralChange,
-    shouldPoll,
-  });
-
   if (currentCollateralDepositState === CollateralDepositState.COLLATERAL_RECEIVED_MODAL) {
     return (
       <CollateralReceivedModal
         onClose={() => {
           setIsModalOpen(false);
-          setShouldPoll(true);
+          startPolling();
         }}
         onConfirm={() => {
           setIsModalOpen(false);
@@ -66,7 +50,7 @@ export const CollateralDepositAlerts: FC = () => {
         creditValue={collateralTotalValue}
         onClose={() => {
           setIsModalOpen(false);
-          setShouldPoll(true);
+          startPolling();
         }}
       />
     );
