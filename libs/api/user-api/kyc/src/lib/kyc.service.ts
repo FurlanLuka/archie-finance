@@ -117,6 +117,7 @@ export class KycService {
       phoneNumber: payload.phoneNumber,
       phoneNumberCountryCode: payload.phoneNumberCountryCode,
       ssn: payload.ssn,
+
       createdAt: kyc.createdAt,
     };
   }

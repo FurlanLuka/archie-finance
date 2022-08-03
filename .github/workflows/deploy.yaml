@@ -68,6 +68,24 @@ jobs:
       RIZE_MQ_TOPIC_PREFIX: 'test'
       RIZE_MQ_USERNAME: 'test'
       RIZE_MQ_PASSWORD: 'test'
+    services:
+      postgres:
+        image: postgres:alpine
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options:
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      rabbitmq:
+        image: heidiks/rabbitmq-delayed-message-exchange:3.10.2-management
+        ports:
+          - 5672:5672
     steps:
       - uses: actions/checkout@v2
         name: Checkout
