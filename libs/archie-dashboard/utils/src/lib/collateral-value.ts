@@ -15,7 +15,7 @@ export const calculateCollateralCreditValue = (collateral: CollateralValue[]): n
 
       return sum;
     }
-
+    
     const entryValue = collateralEntry.price * (assetInfo.loan_to_value / 100);
 
     return sum + entryValue;
