@@ -1,39 +1,29 @@
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useMemo, useState } from 'react';
 
-import { calculateCollateralCreditValue } from '@archie-webapps/archie-dashboard/utils';
 import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
-import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
+import { usePollCollateralDeposit } from '@archie-webapps/archie-dashboard/hooks';
+import { calculateCollateralCreditValue, formatEntireCollateral } from '@archie-webapps/archie-dashboard/utils';
 
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';
 
 import { CreateCreditLine } from './blocks/create_credit_line/create_credit_line';
 import { NotEnoughCollateral } from './blocks/not-enough-collateral/not-enough-collateral';
-import { formatEntireCollateral } from './collateral-deposit.helpers';
-import { usePollCollateralDeposit } from './use-poll-collateral-deposit';
 
 export const CollateralDeposit: FC = () => {
-  const [shouldPoll, setShouldPoll] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentCollateral, setCurrentCollateral] = useState<CollateralValue[]>([]);
 
-  const onCollateralChange = useCallback(
-    (newCollateral: CollateralValue[]) => {
-      if (JSON.stringify(newCollateral) !== JSON.stringify(currentCollateral)) {
-        setShouldPoll(false);
-        setCurrentCollateral(newCollateral);
-        setIsModalOpen(true);
-      }
-    },
-    [currentCollateral],
-  );
+  const onCollateralAmountChange = () => {
+    setIsModalOpen(true);
+  };
+
+  const { currentCollateral, startPolling } = usePollCollateralDeposit({
+    onCollateralAmountChange,
+    initialCollateral: [], // we don't have any yet
+  });
+
   const collateralText = useMemo(() => formatEntireCollateral(currentCollateral), [currentCollateral]);
   const collateralTotalValue = useMemo(() => calculateCollateralCreditValue(currentCollateral), [currentCollateral]);
-
-  usePollCollateralDeposit({
-    onCollateralChange,
-    shouldPoll,
-  });
 
   if (isModalOpen) {
     if (collateralTotalValue > MIN_LINE_OF_CREDIT) {
@@ -41,7 +31,7 @@ export const CollateralDeposit: FC = () => {
         <CollateralReceivedModal
           onClose={() => {
             setIsModalOpen(false);
-            setShouldPoll(true);
+            startPolling();
           }}
           onConfirm={() => {
             setIsModalOpen(false);
@@ -57,7 +47,7 @@ export const CollateralDeposit: FC = () => {
         creditValue={collateralTotalValue}
         onClose={() => {
           setIsModalOpen(false);
-          setShouldPoll(true);
+          startPolling();
         }}
       />
     );
