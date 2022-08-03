@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     env:
+      # GLOBAL
       AUTH0_DOMAIN: auth.dev.archie.finance
       AUTH0_AUDIENCE: https://api.dev.archie.finance
 
@@ -25,6 +26,7 @@ jobs:
       INTERNAL_API_URL: http://localhost
       QUEUE_URL: amqp://localhost
 
+      # CREDIT API
       APTO_API_KEY: ''
       APTO_API_URL: ''
       APTO_CARD_PROGRAME_ID: ''
