@@ -121,7 +121,7 @@ export class MarginService {
         },
       });
 
-      const assetPrices: GetAssetPriceResponse[] =
+    const assetPrices: GetAssetPriceResponse[] =
       await this.queueService.request(GET_ASSET_PRICES_RPC);
 
     const userLtvs: UsersLtv[] = userIds.map((userId: string) =>
