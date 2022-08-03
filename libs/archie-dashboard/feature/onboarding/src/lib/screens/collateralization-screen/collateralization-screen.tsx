@@ -22,7 +22,6 @@ import {
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { EmailVerificationAlert } from '../../components/alerts/email-verification/email-verification';
 import { CollateralDeposit } from '../../components/collateral-deposit/collateral-deposit';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
 
@@ -95,11 +94,11 @@ export const CollateralizationScreen: FC = () => {
     <Container column mobileColumn alignItems="center">
       <CollateralDeposit />
       <StepsIndicator currentStep={Step.COLLATERALIZE} />
-      <EmailVerificationAlert />
       <CollateralizationScreenStyled>
         <Card column alignItems="center" padding="2.5rem 10% 3.5rem" mobilePadding="2.5rem 1.5rem 3.5rem">
           <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
           <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
+
           <div className="inputs">
             <CollateralAssetSelect
               selectedAsset={selectedCollateralAsset}
@@ -113,6 +112,7 @@ export const CollateralizationScreen: FC = () => {
               onChange={setLineOfCredit}
             />
           </div>
+
           <div className="result">
             <div className="result-item">
               <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
@@ -148,6 +148,7 @@ export const CollateralizationScreen: FC = () => {
               </SubtitleM>
             </div>
           </div>
+
           <div className="address">
             <ParagraphXS weight={700}>
               <Trans

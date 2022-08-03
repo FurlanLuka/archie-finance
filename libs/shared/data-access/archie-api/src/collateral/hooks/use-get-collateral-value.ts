@@ -1,6 +1,5 @@
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { getCollateralValue, CollateralValue } from '../api/get-collateral-value';
 
 export const COLLATERAL_VALUE_RECORD_QUERY_KEY = 'collateral_value_record';

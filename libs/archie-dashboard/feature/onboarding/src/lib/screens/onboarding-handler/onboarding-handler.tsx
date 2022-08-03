@@ -10,7 +10,7 @@ import { Loading, Page } from '@archie-webapps/shared/ui/design-system';
 import { CardScreen } from '../card-screen/card-screen';
 import { CollateralizationScreen } from '../collateralization-screen/collateralization-screen';
 import { KycScreen } from '../kyc-screen/kyc-screen';
-import { VerifyScreen } from '../verify-screen/verify-screen';
+import { VerifyEmailScreen } from '../verify-email-screen/verify-email-screen';
 
 import { OnboardingStyled } from './onboarding-handler.styled';
 
@@ -18,6 +18,8 @@ function getCurrentStep(step: Step) {
   switch (step) {
     case Step.KYC:
       return <KycScreen />;
+    case Step.VERIFY_EMAIL:
+      return <VerifyEmailScreen />;
     case Step.COLLATERALIZE:
       return <CollateralizationScreen />;
     case Step.CARD:
@@ -36,6 +38,8 @@ export const OnboardingHandler: FC = () => {
     if (queryResponse.state === RequestState.SUCCESS) {
       if (queryResponse.data.kycStage === false) {
         setCurrentStep(Step.KYC);
+      } else if (queryResponse.data.emailVerificationStage === false) {
+        setCurrentStep(Step.VERIFY_EMAIL);
       } else if (queryResponse.data.collateralizationStage === false) {
         setCurrentStep(Step.COLLATERALIZE);
       } else if (queryResponse.data.cardActivationStage === false) {

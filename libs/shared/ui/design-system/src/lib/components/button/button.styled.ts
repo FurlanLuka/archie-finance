@@ -28,8 +28,9 @@ const Button = styled.button<ButtonProps>`
   max-width: ${({ maxWidth }) => maxWidth ?? '100%'};
   width: 100%;
   padding: ${({ small }) => (small ? '0.25rem 1rem' : '1rem 2rem')};
-  cursor: ${({ isDisabled, isLoading }) => (isDisabled || isLoading ? 'not-allowed' : 'pointer')};
-
+  pointer-events: ${({ isDisabled, isLoading }) => (isDisabled || isLoading ? 'none' : 'all')};
+  cursor: pointer;
+  
   :hover {
     opacity: ${({ isDisabled, isLoading }) => (isDisabled || isLoading ? '1' : '0.5')};
   }
