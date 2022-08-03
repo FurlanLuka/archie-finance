@@ -17,6 +17,7 @@ import {
   createUserCollateral,
   defaultCollateralTotal,
   ETH_PRICE,
+  ETH_STARTING_AMOUNT,
 } from '../test-data/collateral.stubs';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { Credit } from '@archie/api/credit-api/credit';
@@ -284,6 +285,49 @@ describe('CollateralWithdrawalController (e2e)', () => {
       } catch (error) {
         expect(error).toBeInstanceOf(BadRequestException);
       }
+    });
+
+    it('should remove collateral from the database if all of it was withdrawn', async () => {
+      const asset = 'ETH';
+      const withdrawalAmount = ETH_STARTING_AMOUNT;
+
+      const response = await app
+        .get(CollateralWithdrawalController)
+        .withdrawUserCollateral(
+          {
+            user: { sub: userId },
+          },
+          { asset, destinationAddress, withdrawalAmount },
+        );
+      expect(response).toEqual({
+        userId,
+        asset,
+        withdrawalAmount,
+        currentAmount: 10,
+        destinationAddress,
+        transactionId: null,
+        status: TransactionStatus.SUBMITTED,
+        id: expect.any(String),
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
+
+      expect(queueStub.publish).toBeCalledTimes(1);
+      expect(queueStub.publish).toBeCalledWith(
+        COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
+        {
+          asset,
+          withdrawalAmount,
+          userId,
+          destinationAddress,
+          withdrawalId: expect.any(String),
+        },
+      );
+      const userCollateral = await collateralRepository.findOneBy({
+        userId,
+        asset,
+      });
+      expect(userCollateral).toBeNull();
     });
 
     it('should withdraw collateral and publish to the exchange', async () => {
