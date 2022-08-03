@@ -8,3 +8,4 @@ export * from './lib/margin_notifications.entity';
 
 export * from './lib/ltv/margin_ltv.module';
 export * from './lib/ltv/margin_ltv.service';
+export * from './lib/margin.controller';
