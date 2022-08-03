@@ -1,16 +1,16 @@
 import { FC, useMemo, useState } from 'react';
 
-import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
 import { usePollCollateralDeposit } from '@archie-webapps/archie-dashboard/hooks';
 import { calculateCollateralCreditValue, formatEntireCollateral } from '@archie-webapps/archie-dashboard/utils';
 
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';
+import { CreateCreditLine } from '../toasts/create-credit-line/create-credit-line';
+import { NotEnoughCollateral } from '../toasts/not-enough-collateral/not-enough-collateral';
 
-import { CreateCreditLine } from './blocks/create_credit_line/create_credit_line';
-import { NotEnoughCollateral } from './blocks/not-enough-collateral/not-enough-collateral';
+import { getCollateralDepositState, CollateralDepositState } from './collateral-deposit-alerts.helpers';
 
-export const CollateralDeposit: FC = () => {
+export const CollateralDepositAlerts: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onCollateralAmountChange = () => {
@@ -25,22 +25,25 @@ export const CollateralDeposit: FC = () => {
   const collateralText = useMemo(() => formatEntireCollateral(currentCollateral), [currentCollateral]);
   const collateralTotalValue = useMemo(() => calculateCollateralCreditValue(currentCollateral), [currentCollateral]);
 
-  if (isModalOpen) {
-    if (collateralTotalValue > MIN_LINE_OF_CREDIT) {
-      return (
-        <CollateralReceivedModal
-          onClose={() => {
-            setIsModalOpen(false);
-            startPolling();
-          }}
-          onConfirm={() => {
-            setIsModalOpen(false);
-          }}
-          collateralText={collateralText}
-          creditValue={collateralTotalValue}
-        />
-      );
-    }
+  const currentCollateralDepositState = getCollateralDepositState(isModalOpen, collateralTotalValue, currentCollateral);
+
+  if (currentCollateralDepositState === CollateralDepositState.COLLATERAL_RECEIVED_MODAL) {
+    return (
+      <CollateralReceivedModal
+        onClose={() => {
+          setIsModalOpen(false);
+          startPolling();
+        }}
+        onConfirm={() => {
+          setIsModalOpen(false);
+        }}
+        collateralText={collateralText}
+        creditValue={collateralTotalValue}
+      />
+    );
+  }
+
+  if (currentCollateralDepositState === CollateralDepositState.NOT_ENOUGH_COLLATERAL_MODAL) {
     return (
       <NotEnoughCollateralModal
         collateralText={collateralText}
@@ -53,12 +56,13 @@ export const CollateralDeposit: FC = () => {
     );
   }
 
-  if (!isModalOpen && currentCollateral.length > 0) {
-    if (collateralTotalValue > MIN_LINE_OF_CREDIT) {
-      return <CreateCreditLine collateralText={collateralText} creditValue={collateralTotalValue} />;
-    }
+  if (currentCollateralDepositState === CollateralDepositState.CREATE_CREDIT_LINE_TOAST) {
+    return <CreateCreditLine collateralText={collateralText} creditValue={collateralTotalValue} />;
+  }
+
+  if (currentCollateralDepositState === CollateralDepositState.NOT_ENOUGH_COLLATERAL_TOAST) {
     return <NotEnoughCollateral creditValue={collateralTotalValue} collateralText={collateralText} />;
   }
 
-  return null;
+  return <></>;
 };

@@ -48,11 +48,20 @@
       "ssn_digits": "Invalid SSN/TIN"
     }
   },
-  "verify_step": {
+  "verify_phone_step": {
     "title": "Verify phone number",
     "subtitle": "Enter the 6-digit code you received via SMS",
     "resend_text": "Didn't get it?",
     "resend_btn": "Resend"
+  },
+  "verify_email_step": {
+    "title": "Verify Your Email",
+    "subtitle": "A verification email was sent to {{email}}.",
+    "text_1": "Check your email for a verification link from Archie. Once you have verified your email, we'll create your Archie Credit Line.",
+    "text_2": "The email is not correct?",
+    "logout_btn": "Log out.",
+    "resend_btn": "Resend verification email",
+    "resend_btn_disabled": "Resend in {{counter}}"
   },
   "collateralization_step": {
     "title": "Create your credit line",
@@ -107,6 +116,7 @@
   "not_enough_collateral_modal": {
     "title": "We received your collateral, but...",
     "text": "Your current collateral of {{collateral}} adds up to a ${{credit_value}} credit line. The minimum required value is ${{min_value}}. Please deposit at least {{difference}} worth of cryptocurrency more.",
+    "img_alt": "Not enough collateral",
     "btn": "Collateralize more"
   },
   "not_enough_collateral_popup": {

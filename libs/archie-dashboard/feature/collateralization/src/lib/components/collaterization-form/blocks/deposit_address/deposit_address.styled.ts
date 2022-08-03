@@ -27,6 +27,7 @@ const hide = keyframes`
     visibility: hidden;
   }
 `;
+
 const fadeOut = keyframes`
   0% {
     opacity: 1;
