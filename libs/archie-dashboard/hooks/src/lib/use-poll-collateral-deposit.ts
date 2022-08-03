@@ -14,13 +14,14 @@ interface UsePollCollateralDepositResult {
   startPolling: VoidFunction;
 }
 
-function isCollateralAmountEqual(currentCollateral: CollateralValue[], newCollateral: CollateralValue[]) {
+const isCollateralAmountEqual = (currentCollateral: CollateralValue[], newCollateral: CollateralValue[]) => {
   if (currentCollateral.length !== newCollateral.length) {
     return false;
   }
 
   return currentCollateral.every((collateralAsset) => {
     const matchingAsset = newCollateral.find((newAsset) => newAsset.asset === collateralAsset.asset);
+
     if (!matchingAsset) {
       return false;
     }
@@ -29,20 +30,19 @@ function isCollateralAmountEqual(currentCollateral: CollateralValue[], newCollat
   });
 }
 
-export function usePollCollateralDeposit({
-  onCollateralAmountChange,
-  initialCollateral,
-}: UsePollCollateralDepositParams): UsePollCollateralDepositResult {
+export const usePollCollateralDeposit = ({ onCollateralAmountChange, initialCollateral }: UsePollCollateralDepositParams): UsePollCollateralDepositResult => {
   const [shouldPoll, setShouldPoll] = useState(true);
   const [currentCollateral, setCurrentCollateral] = useState<CollateralValue[]>(initialCollateral);
 
   const getCollateralResponse = usePollCollateralValue(shouldPoll);
 
   useEffect(() => {
-    // if we're not even polling don't check (same query key is used)
+    // if we're not polling don't check 
+    // (same query key is used)
     if (!shouldPoll) {
       return;
     }
+
     if (getCollateralResponse.state === RequestState.SUCCESS) {
       const newCollateral = getCollateralResponse.data;
 
@@ -50,14 +50,13 @@ export function usePollCollateralDeposit({
         setShouldPoll(false);
         onCollateralAmountChange();
       }
+      
       // always update collateral in case the price changed
       setCurrentCollateral(newCollateral);
     }
   }, [shouldPoll, getCollateralResponse, onCollateralAmountChange, currentCollateral]);
 
-  function startPolling() {
-    setShouldPoll(true);
-  }
+  const startPolling = () => setShouldPoll(true);
 
   return { currentCollateral, startPolling };
 }

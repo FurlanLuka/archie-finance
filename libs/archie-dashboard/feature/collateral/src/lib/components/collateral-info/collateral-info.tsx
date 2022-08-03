@@ -25,9 +25,11 @@ type AssetMap = Record<
     };
   }
 >;
+
 interface CollateralInfoProps {
   collateral: CollateralValue[];
 }
+
 export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral }) => {
   const totalValue = calculateCollateralTotalValue(collateral);
   const columns = useMemo(() => tableColumns, []);

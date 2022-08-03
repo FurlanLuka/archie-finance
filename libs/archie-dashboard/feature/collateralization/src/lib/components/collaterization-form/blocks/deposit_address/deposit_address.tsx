@@ -1,30 +1,16 @@
+import { FC } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import ReactTooltip from 'react-tooltip';
+import QRCode from 'react-qr-code';
+
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { useGetDepositAddress } from '@archie-webapps/shared/data-access/archie-api/deposit_address/hooks/use-get-deposit-address';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
-import { FC } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import ReactTooltip from 'react-tooltip';
 import { theme } from '@archie-webapps/shared/ui/theme';
 import { Icon } from '@archie-webapps/shared/ui/icons';
-import QRCode from 'react-qr-code';
+
 import { DepositAddressStyled } from './deposit_address.styled';
-
-const fieldId = 'address';
-
-const handleCopyToClipboard = (value?: string) => {
-  if (!value) {
-    return;
-  }
-
-  navigator.clipboard.writeText(value).then(() => {
-    document.getElementById(fieldId)?.classList.add('copied');
-
-    setTimeout(() => {
-      document.getElementById(fieldId)?.classList.remove('copied');
-    }, 1000);
-  });
-};
 
 interface DepositAddressProps {
   assetInfo: CollateralAsset;
@@ -41,6 +27,20 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
     }
 
     return undefined;
+  };
+
+  const handleCopyToClipboard = (value?: string) => {
+    if (!value) {
+      return;
+    }
+
+    navigator.clipboard.writeText(value).then(() => {
+      document.getElementById('address')?.classList.add('copied');
+
+      setTimeout(() => {
+        document.getElementById('address')?.classList.remove('copied');
+      }, 1000);
+    });
   };
 
   return (

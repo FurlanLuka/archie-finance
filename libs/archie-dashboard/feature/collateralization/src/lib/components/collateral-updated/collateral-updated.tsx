@@ -10,9 +10,11 @@ import { useNavigate } from 'react-router-dom';
 interface CollateralDepositProps {
   initialCollateral: CollateralValue[];
 }
+
 export const CollateralDeposit: FC<CollateralDepositProps> = ({ initialCollateral }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onCollateralAmountChange = () => {
     setIsModalOpen(true);

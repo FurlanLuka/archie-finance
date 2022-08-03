@@ -16,21 +16,6 @@ interface CollateralizationFormProps {
   assetPrice: AssetPrice;
 }
 
-const collateralFieldId = 'collateral';
-
-const handleCopyToClipboard = (value?: string) => {
-  if (!value) {
-    return;
-  }
-  navigator.clipboard.writeText(value).then(() => {
-    document.getElementById(collateralFieldId)?.classList.add('copied');
-
-    setTimeout(() => {
-      document.getElementById(collateralFieldId)?.classList.remove('copied');
-    }, 1000);
-  });
-};
-
 export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInfo, assetPrice }) => {
   const { t } = useTranslation();
 
@@ -51,6 +36,20 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
         : Number(requiredCollateral.toFixed(4)) * 1;
 
     return `${value} ${assetInfo.short}`;
+  };
+
+  const handleCopyToClipboard = (value?: string) => {
+    if (!value) {
+      return;
+    }
+
+    navigator.clipboard.writeText(value).then(() => {
+      document.getElementById('collateral')?.classList.add('copied');
+
+      setTimeout(() => {
+        document.getElementById('collateral')?.classList.remove('copied');
+      }, 1000);
+    });
   };
 
   return (
