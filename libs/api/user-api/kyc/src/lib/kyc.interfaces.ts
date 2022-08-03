@@ -57,6 +57,7 @@ export class GetKycResponse {
   phoneNumberCountryCode: string;
   phoneNumber: string;
   ssn: string;
+  createdAt: Date;
 }
 
 export class CreateKycResponse extends GetKycResponse {}

@@ -49,7 +49,7 @@ export class Kyc {
   @Column('varchar', { nullable: false })
   ssn: string;
 
-  @CreateDateColumn({ select: false })
+  @CreateDateColumn({ select: true })
   createdAt: Date;
 
   @UpdateDateColumn({ select: false })

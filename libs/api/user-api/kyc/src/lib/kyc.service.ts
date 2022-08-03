@@ -2,10 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Kyc } from './kyc.entity';
-import {
-  CreateKycResponse,
-  GetKycResponse,
-} from './kyc.interfaces';
+import { CreateKycResponse, GetKycResponse } from './kyc.interfaces';
 import { KycDto } from './kyc.interfaces';
 import { DateTime } from 'luxon';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
@@ -58,6 +55,7 @@ export class KycService {
       phoneNumber: decryptedData[9],
       phoneNumberCountryCode: decryptedData[10],
       ssn: decryptedData[11],
+      createdAt: kycRecord.createdAt,
     };
   }
 
@@ -85,7 +83,7 @@ export class KycService {
       payload.ssn,
     ]);
 
-    await this.kycRepository.save({
+    const kyc: Kyc = await this.kycRepository.save({
       userId,
       firstName: encryptedData[0],
       lastName: encryptedData[1],
@@ -119,6 +117,7 @@ export class KycService {
       phoneNumber: payload.phoneNumber,
       phoneNumberCountryCode: payload.phoneNumberCountryCode,
       ssn: payload.ssn,
+      createdAt: kyc.createdAt,
     };
   }
 }
