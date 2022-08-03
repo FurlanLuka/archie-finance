@@ -23,6 +23,7 @@ export enum ConfigVariables {
   RIZE_MQ_USERNAME = 'RIZE_MQ_USERNAME',
   RIZE_MQ_PASSWORD = 'RIZE_MQ_PASSWORD',
   QUEUE_URL = 'QUEUE_URL',
+  ENCRYPTION_KEY = 'ENCRYPTION_KEY',
 }
 
 export const COLLATERAL_RECEIVED_TOPIC = 'credit.collateral.received';

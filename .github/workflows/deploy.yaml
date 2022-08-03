@@ -53,6 +53,8 @@ jobs:
       INTERNAL_API_URL: http://localhost
       QUEUE_URL: amqp://localhost
 
+      ENCRYPTION_KEY: ')J@McQfTjWnZr4u7x!A%D*G-KaPdRgUk'
+
       # CREDIT API
       APTO_API_KEY: ''
       APTO_API_URL: ''
