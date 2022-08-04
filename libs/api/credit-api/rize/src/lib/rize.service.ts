@@ -34,6 +34,7 @@ import {
   GetEmailAddressPayload,
   GetEmailAddressResponse,
 } from '@archie/api/user-api/user';
+import { CardActivatedPayload } from './rize.dto';
 
 @Injectable()
 export class RizeService {
@@ -280,7 +281,7 @@ export class RizeService {
       customerId,
       complianceWorkflow.product_uid,
     );
-    this.queueService.publish(CARD_ACTIVATED_TOPIC, {
+    this.queueService.publish<CardActivatedPayload>(CARD_ACTIVATED_TOPIC, {
       userId,
       customerId,
     });

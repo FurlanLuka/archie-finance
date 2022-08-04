@@ -9,23 +9,26 @@ import {
   EMAIL_VERIFIED_TOPIC,
   KYC_SUBMITTED_TOPIC,
 } from '@archie/api/user-api/constants';
+import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
+import { EmailVerifiedPayload } from '@archie/api/user-api/user';
+import { CardActivatedPayload } from '../../../rize/src/lib/rize.dto';
 
 @Controller()
 export class PeachQueueController {
   constructor(private peachService: PeachService) {}
 
   @Subscribe(KYC_SUBMITTED_TOPIC, SERVICE_QUEUE_NAME)
-  async kycSubmittedHandler(payload: any): Promise<void> {
-    await this.peachService.initPerson();
+  async kycSubmittedHandler(payload: KycSubmittedPayload): Promise<void> {
+    await this.peachService.handleKycSubmittedEvent(payload);
   }
 
   @Subscribe(EMAIL_VERIFIED_TOPIC, SERVICE_QUEUE_NAME)
-  async emailVerifiedHandler(payload: any): Promise<void> {
-    await this.peachService.addEmailContact();
+  async emailVerifiedHandler(payload: EmailVerifiedPayload): Promise<void> {
+    await this.peachService.handleEmailVerifiedEvent(payload);
   }
 
   @Subscribe(CARD_ACTIVATED_TOPIC, SERVICE_QUEUE_NAME)
-  async cardActivatedHandler(payload: any): Promise<void> {
-    await this.peachService.initBorrower();
+  async cardActivatedHandler(payload: CardActivatedPayload): Promise<void> {
+    await this.peachService.handleCardActivatedEvent(payload);
   }
 }

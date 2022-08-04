@@ -5,6 +5,7 @@ import { Kyc } from './kyc.entity';
 import {
   CreateKycResponse,
   GetKycResponse,
+  KycSubmittedPayload,
 } from './kyc.interfaces';
 import { KycDto } from './kyc.interfaces';
 import { DateTime } from 'luxon';
@@ -101,9 +102,9 @@ export class KycService {
       ssn: encryptedData[11],
     });
 
-    this.queueService.publish(KYC_SUBMITTED_TOPIC, {
+    this.queueService.publish<KycSubmittedPayload>(KYC_SUBMITTED_TOPIC, {
       userId,
-      firstName: payload.firstName,
+      ...payload,
     });
 
     return {

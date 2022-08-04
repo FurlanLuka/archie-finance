@@ -68,3 +68,8 @@ export class CreditLimitDto {
   userId: string;
   amount: number;
 }
+
+export class CardActivatedPayload {
+  userId: string;
+  customerId: string;
+}
