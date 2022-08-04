@@ -9,6 +9,10 @@ import {
 import { Credit, CreditService } from '@archie/api/credit-api/credit';
 import { QueueService } from '@archie/api/utils/queue';
 import { AssetList } from '@archie/api/collateral-api/asset-information';
+import {
+  CreditLimitDecreasedPayload,
+  CreditLimitIncreasedPayload,
+} from '@archie/api/credit-api/margin';
 
 @Injectable()
 export class CreditLimitService {
@@ -56,10 +60,13 @@ export class CreditLimitService {
       .setParameter('creditIncrease', increasedAmount)
       .execute();
 
-    this.queueService.publish(CREDIT_LIMIT_INCREASED_TOPIC, {
-      userId: userId,
-      amount: increasedAmount,
-    });
+    this.queueService.publish<CreditLimitIncreasedPayload>(
+      CREDIT_LIMIT_INCREASED_TOPIC,
+      {
+        userId: userId,
+        amount: increasedAmount,
+      },
+    );
   }
 
   private async decreaseCreditLimit(
@@ -98,10 +105,13 @@ export class CreditLimitService {
         });
       }
 
-      this.queueService.publish(CREDIT_LIMIT_DECREASED_TOPIC, {
-        userId: userId,
-        amount: decreaseAmount,
-      });
+      this.queueService.publish<CreditLimitDecreasedPayload>(
+        CREDIT_LIMIT_DECREASED_TOPIC,
+        {
+          userId: userId,
+          amount: decreaseAmount,
+        },
+      );
     }
   }
 }

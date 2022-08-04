@@ -3,6 +3,9 @@ import axios, { AxiosError, AxiosInstance } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
 import {
+  CreditLimit,
+  CreditLine,
+  HomeAddress,
   IdentityType,
   PeachErrorData,
   PeachErrorResponse,
@@ -66,20 +69,25 @@ export class PeachApiService {
   public async addHomeAddressContact(
     personId: string,
     kyc: KycSubmittedPayload,
-  ): Promise<void> {
-    await this.peachClient.post(`/people/${personId}/contacts`, {
-      contactType: 'address',
-      label: 'home',
-      affiliation: 'self',
-      status: 'primary',
-      address: {
-        addressLine1: `${kyc.addressStreetNumber} ${kyc.addressStreet}`,
-        city: kyc.addressLocality,
-        state: kyc.addressRegion,
-        postalCode: kyc.addressPostalCode,
-        country: kyc.addressCountry,
+  ): Promise<HomeAddress> {
+    const response = await this.peachClient.post(
+      `/people/${personId}/contacts`,
+      {
+        contactType: 'address',
+        label: 'home',
+        affiliation: 'self',
+        status: 'primary',
+        address: {
+          addressLine1: `${kyc.addressStreetNumber} ${kyc.addressStreet}`,
+          city: kyc.addressLocality,
+          state: kyc.addressRegion,
+          postalCode: kyc.addressPostalCode,
+          country: kyc.addressCountry,
+        },
       },
-    });
+    );
+
+    return response.data.data;
   }
 
   public async addMobilePhoneContact(
@@ -129,6 +137,69 @@ export class PeachApiService {
         roles: [this.configService.get(ConfigVariables.PEACH_BORROWER_ROLE_ID)],
         associatedPersonId: personId,
       },
+    );
+  }
+
+  public async createCreditLine(
+    personId,
+    creditLimit: number,
+    addressContactId: string,
+  ): Promise<CreditLine> {
+    const response = await this.peachClient.post(`/people/${personId}/loans`, {
+      loanTypeId: this.configService.get(ConfigVariables.PEACH_LOAN_ID),
+      type: 'lineOfCredit',
+      // TODO: check if ok
+      servicedBy: 'creditor',
+      status: 'originated',
+      newDrawsAllowed: true,
+      atOrigination: {
+        // TODO: check if ok
+        interestRates: [{ days: null, rate: 0.0 }],
+        paymentFrequency: 'monthly',
+        // TODO: check if ok
+        originationLicense: 'nationalBank',
+        // TODO: check if ok
+        originatingCreditorName: 'Bank of Mars',
+        creditLimitAmount: creditLimit,
+        // TODO: should we define down payment? - Collateral value
+        // downPaymentAmount: 0,
+        personAddressId: addressContactId,
+        // TODO: merchantId should we define?
+      },
+    });
+
+    return response.data.data;
+  }
+
+  public async getCreditLimit(
+    personId: string,
+    loanId: string,
+  ): Promise<CreditLimit> {
+    const response = await this.peachClient.get(
+      `/people/${personId}/loans/${loanId}/credit-limit`,
+    );
+
+    return response.data.data;
+  }
+  public async updateCreditLimit(
+    personId: string,
+    loanId: string,
+    newAmount: number,
+  ): Promise<CreditLimit> {
+    const response = await this.peachClient.post(
+      `/people/${personId}/loans/${loanId}/credit-limit`,
+      {
+        creditLimitAmount: newAmount,
+      },
+    );
+
+    return response.data.data;
+  }
+
+  public async activateCreditLine(personId, loanId: string): Promise<void> {
+    await this.peachClient.post(
+      `/people/${personId}/loans/${loanId}/activate`,
+      {},
     );
   }
 }

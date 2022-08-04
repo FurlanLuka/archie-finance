@@ -17,7 +17,10 @@ import {
 import { Transaction, TransactionResponse } from './rize.interfaces';
 import { RizeFactoryService } from './factory/rize_factory.service';
 import { RizeValidatorService } from './validator/rize_validator.service';
-import { CARD_ACTIVATED_TOPIC } from '@archie/api/credit-api/constants';
+import {
+  CARD_ACTIVATED_TOPIC,
+  CREDIT_FUNDS_LOADED_TOPIC,
+} from '@archie/api/credit-api/constants';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
@@ -34,7 +37,7 @@ import {
   GetEmailAddressPayload,
   GetEmailAddressResponse,
 } from '@archie/api/user-api/user';
-import { CardActivatedPayload } from './rize.dto';
+import { CardActivatedPayload, FundsLoadedPayload } from './rize.dto';
 
 @Injectable()
 export class RizeService {
@@ -337,6 +340,11 @@ export class RizeService {
     );
 
     await this.rizeApiService.loadFunds(customer.uid, amount);
+
+    this.queueService.publish<FundsLoadedPayload>(CREDIT_FUNDS_LOADED_TOPIC, {
+      userId,
+      amount,
+    });
   }
 
   public async decreaseCreditLimit(

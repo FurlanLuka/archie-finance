@@ -1,13 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { PeachApiService } from './api/peach_api.service';
-import { Person } from './api/peach_api.interfaces';
+import { HomeAddress, Person } from './api/peach_api.interfaces';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
-import { CardActivatedPayload } from '../../../rize/src/lib/rize.dto';
+import {
+  CardActivatedPayload,
+  FundsLoadedPayload,
+} from '../../../rize/src/lib/rize.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Borrower } from './borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
+import {
+  CreditLimitDecreasedPayload,
+  CreditLimitIncreasedPayload,
+} from '@archie/api/credit-api/margin';
 
 @Injectable()
 export class PeachService {
@@ -32,7 +39,15 @@ export class PeachService {
     }
 
     await this.peachApiService.addMobilePhoneContact(borrower.personId, kyc);
-    await this.peachApiService.addHomeAddressContact(borrower.personId, kyc);
+    const homeAddress: HomeAddress =
+      await this.peachApiService.addHomeAddressContact(borrower.personId, kyc);
+
+    await this.borrowerRepository.update(
+      { userId: kyc.userId },
+      {
+        homeAddressContactId: homeAddress.id,
+      },
+    );
   }
 
   public async handleEmailVerifiedEvent(email: EmailVerifiedPayload) {
@@ -59,12 +74,77 @@ export class PeachService {
     await this.peachApiService.createUser(borrower.personId, email);
   }
 
-  // on funds loaded event
-  public onFundsLoaded() {
-    // POST Create Line of Credit - zero interest
-    // POST /api/people/{PERSON_ID}/loans/{LOAN_ID}/activate
-    // create draw - x interest
+  public async handleFundsLoadedEvent(founds: FundsLoadedPayload) {
+    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+      userId: founds.userId,
+    });
+    let creditLineId = borrower.loanId;
+
+    if (creditLineId === null) {
+      const creditLine = await this.peachApiService.createCreditLine(
+        borrower.personId,
+        founds.amount,
+        borrower.homeAddressContactId,
+      );
+      creditLineId = creditLine.id;
+
+      await this.borrowerRepository.update(
+        {
+          userId: founds.userId,
+        },
+        {
+          loanId: creditLine.id,
+        },
+      );
+    }
+
+    await this.peachApiService.activateCreditLine(
+      borrower.personId,
+      creditLineId,
+    );
   }
+
+  public async handleCreditLimitIncreased(
+    creditLimitincrease: CreditLimitIncreasedPayload,
+  ) {
+    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+      userId: creditLimitincrease.userId,
+    });
+    const currentCreditLimit = await this.peachApiService.getCreditLimit(
+      borrower.personId,
+      borrower.loanId,
+    );
+    const newCreditLimit: number =
+      currentCreditLimit.creditLimitAmount + creditLimitincrease.amount;
+
+    await this.peachApiService.updateCreditLimit(
+      borrower.personId,
+      borrower.loanId,
+      newCreditLimit,
+    );
+  }
+
+  public async handleCreditLimitDecreased(
+    creditLimitDecrease: CreditLimitDecreasedPayload,
+  ) {
+    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+      userId: creditLimitDecrease.userId,
+    });
+    const currentCreditLimit = await this.peachApiService.getCreditLimit(
+      borrower.personId,
+      borrower.loanId,
+    );
+    const newCreditLimit: number =
+      currentCreditLimit.creditLimitAmount - creditLimitDecrease.amount;
+
+    await this.peachApiService.updateCreditLimit(
+      borrower.personId,
+      borrower.loanId,
+      newCreditLimit,
+    );
+  }
+
+  // TODO: create draw somewhere!
 
   // on rize payment event
   public addPurchase() {

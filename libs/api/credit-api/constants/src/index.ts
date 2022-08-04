@@ -27,6 +27,7 @@ export enum ConfigVariables {
   PEACH_BASE_URL = 'PEACH_BASE_URL',
   PEACH_COMPANY_ID = 'PEACH_COMPANY_ID',
   PEACH_BORROWER_ROLE_ID = 'PEACH_BORROWER_ROLE_ID',
+  PEACH_LOAN_ID = 'PEACH_LOAN_ID',
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
 }
 
@@ -63,6 +64,8 @@ export const COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC =
 
 export const COLLATERAL_WITHDRAW_COMPLETED_TOPIC =
   'credit.collateral.withdraw.completed';
+
+export const CREDIT_FUNDS_LOADED_TOPIC = 'credit.founds.loaded';
 
 export const GET_COLLATERAL_RPC = 'get.collateral.rpc';
 export const GET_COLLATERAL_VALUE_RPC = 'get.collateral.value.rpc';

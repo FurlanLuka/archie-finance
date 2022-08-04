@@ -77,3 +77,8 @@ export class CardActivatedPayload {
 export class CardImageResponseDto {
   image: string;
 }
+
+export class FundsLoadedPayload {
+  userId: string;
+  amount: number;
+}

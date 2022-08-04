@@ -16,4 +16,10 @@ export class Borrower {
 
   @Column('varchar', { nullable: true })
   encryptedEmail: string | null;
+
+  @Column('varchar', { nullable: true })
+  homeAddressContactId: string | null;
+
+  @Column('varchar', { nullable: true })
+  loanId: string | null;
 }

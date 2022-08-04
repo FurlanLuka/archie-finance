@@ -40,6 +40,7 @@ import { PeachModule } from '@archie/api/credit-api/peach';
         ConfigVariables.PEACH_BORROWER_ROLE_ID,
         ConfigVariables.PEACH_COMPANY_ID,
         ConfigVariables.PEACH_API_KEY,
+        ConfigVariables.PEACH_LOAN_ID,
         ConfigVariables.PEACH_BASE_URL,
       ],
       parse: (_configVariable, value) => value,

@@ -21,6 +21,18 @@ export interface Person extends PeachResponse {
   companyId: string;
 }
 
+export interface HomeAddress extends PeachResponse {
+  id: string;
+}
+
+export interface CreditLine extends PeachResponse {
+  id: string;
+}
+
+export interface CreditLimit extends PeachResponse {
+  creditLimitAmount: number;
+}
+
 export interface PeachErrorResponse {
   config: AxiosRequestConfig;
   status: number;
