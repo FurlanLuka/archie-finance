@@ -26,13 +26,20 @@ export const HomeStyled = styled.div`
     padding: 1.5rem 1rem;
   }
 
-  .title {
-    margin-bottom: 0.5rem;
+  .section-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 68px;
+    margin-bottom: 1.5rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+        min-height: 58px;
+    }
   }
 
   .subtitle {
     letter-spacing: 0.02em;
-    margin-bottom: 1.5rem;
   }
 
   .section-cards {
