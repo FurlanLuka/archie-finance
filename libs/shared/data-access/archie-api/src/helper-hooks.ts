@@ -57,6 +57,7 @@ export const useExtendedQuery = <TQueryFnData>(
 
   return {
     state: RequestState.IDLE,
+    fetch: request.refetch,
   };
 };
 

@@ -15,6 +15,7 @@ import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/
 import { Loading, Page, Container } from '@archie-webapps/shared/ui/design-system';
 
 import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
+import { PaymentScreen } from './payment-screen';
 
 export const DashboardRoute: FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
@@ -45,6 +46,7 @@ export const DashboardRoute: FC = () => {
               <Route path="/collateral/withdraw/*" element={<WithdrawScreen />} />
               <Route path="/collateral/add/:asset" element={<CollateralizationScreen />} />
               <Route path="/rewards" element={<RewardsScreen />} />
+              <Route path="/payment" element={<PaymentScreen />} />
               <Route path="/history" element={<HistoryScreen />} />
               <Route path="/settings" element={<SettingsScreen />} />
             </Routes>

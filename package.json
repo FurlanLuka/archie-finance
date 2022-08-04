@@ -29,6 +29,7 @@
     "react-hook-form": "^7.33.0",
     "react-i18next": "^11.17.0",
     "react-loading-icons": "^1.0.8",
+    "react-plaid-link": "^3.3.2",
     "react-qr-code": "^2.0.7",
     "react-query": "^3.34.16",
     "react-router-dom": "^6.2.2",

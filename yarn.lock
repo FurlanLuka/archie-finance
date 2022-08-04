@@ -12934,6 +12934,14 @@ react-loading-icons@^1.0.8:
   resolved "https://registry.npmjs.org/react-loading-icons/-/react-loading-icons-1.0.8.tgz"
   integrity sha512-j0myUwDUPoo3qaPkbgnA7U2RNHqLLC+wXcpMWe+rtk3Iw+mGHltZ3QitPSHFKtsFKlpM9UlMmZGZ6sw6WVVW7w==
 
+react-plaid-link@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/react-plaid-link/-/react-plaid-link-3.3.2.tgz#58799baf7dc35a68cc84b62f721aa51f12df927b"
+  integrity sha512-W2L9C4RCE/KFFia2SUFFTi8SYRQ1UMUXh4iLE/oo4EQ8UYAT6msKzWvauj8bJirlrkzeiUtY6wgkmWil/okaNg==
+  dependencies:
+    prop-types "^15.7.2"
+    react-script-hook "^1.6.0"
+
 react-popper-tooltip@^3.1.1:
   version "3.1.1"
   resolved "https://registry.npmjs.org/react-popper-tooltip/-/react-popper-tooltip-3.1.1.tgz"
@@ -12992,6 +13000,11 @@ react-router@6.2.2, react-router@^6.0.0:
   integrity sha512-/MbxyLzd7Q7amp4gDOGaYvXwhEojkJD5BtExkuKmj39VEE0m3l/zipf6h2WIB2jyAO0lI6NGETh4RDcktRm4AQ==
   dependencies:
     history "^5.2.0"
+
+react-script-hook@^1.6.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/react-script-hook/-/react-script-hook-1.7.0.tgz#ebab9e40c6a18b7b1106cca611d325bb13392862"
+  integrity sha512-GLObryIE0DR8RLA5t6VF76y2pURMZdSaN3FDTgB4oD9gcwYzDE6vzCTp1ruKf9jvduggePb2+kh+o6/8gfjVNA==
 
 react-shallow-renderer@^16.13.1:
   version "16.14.1"

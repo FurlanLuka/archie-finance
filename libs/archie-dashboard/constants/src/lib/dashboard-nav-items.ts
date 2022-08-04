@@ -23,6 +23,11 @@ export const dashboardNavItems: DashboardNavItem[] = [
     path: '/rewards',
   },
   {
+    icon: 'wallet',
+    name: 'Payment',
+    path: '/payment',
+  },
+  {
     icon: 'paper',
     name: 'History',
     path: '/history',
