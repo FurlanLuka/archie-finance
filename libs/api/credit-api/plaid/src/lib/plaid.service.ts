@@ -1,12 +1,14 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { PlaidApiService } from './api/plaid-api.service';
+import { GetLinkTokenResponse } from './plaid.interfaces';
 
 @Injectable()
 export class PlaidService {
-  constructor() {
-    console.log('konso');
-  }
+  constructor(private plaidApiService: PlaidApiService) {}
 
-  public async helloPlaid(userId: string): Promise<string> {
-    return 'plaid bruh';
+  public async getLinkToken(userId: string): Promise<GetLinkTokenResponse> {
+    const token = await this.plaidApiService.createLinkToken(userId);
+
+    return { token: token.link_token };
   }
 }
