@@ -1,4 +1,4 @@
-import { GetAssetPriceResponse } from '@archie/api/utils/interfaces/asset_price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 
 export const SOL_PRICE = 0.28;
 export const BTC_PRICE = 26;
@@ -32,6 +32,7 @@ export const assetPriceResponse: GetAssetPriceResponse[] = [
 ];
 
 export const BTC_STARTING_AMOUNT = 1;
+export const ETH_STARTING_AMOUNT = 10;
 export const SOL_STARTING_AMOUNT = 100;
 
 export function createUserCollateral(userId: string) {
@@ -44,12 +45,12 @@ export function createUserCollateral(userId: string) {
     {
       userId,
       asset: 'ETH',
-      amount: 10,
+      amount: ETH_STARTING_AMOUNT,
     },
     {
       userId,
       asset: 'SOL',
-      amount: 100,
+      amount: SOL_STARTING_AMOUNT,
     },
     {
       userId,

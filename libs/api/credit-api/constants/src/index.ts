@@ -26,6 +26,7 @@ export enum ConfigVariables {
   PEACH_API_KEY = 'PEACH_API_KEY',
   PEACH_BASE_URL = 'PEACH_BASE_URL',
   PEACH_COMPANY_ID = 'PEACH_COMPANY_ID',
+  ENCRYPTION_KEY = 'ENCRYPTION_KEY',
 }
 
 export const COLLATERAL_RECEIVED_TOPIC = 'credit.collateral.received';

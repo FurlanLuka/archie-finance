@@ -1,6 +1,4 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
-import nock = require('nock');
-import { verifyAccessToken } from '../e2e-test-utils/mock.auth.utils';
 import { AppModule } from '../../src/app.module';
 import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -11,32 +9,38 @@ import {
   NotFoundException,
   ValidationPipe,
 } from '@nestjs/common';
-import { clearDatabase } from '../e2e-test-utils/database.utils';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { COLLATERAL_WITHDRAW_INITIALIZED_TOPIC } from '@archie/api/credit-api/constants';
-import { ConfigVariables } from '@archie/api/user-api/constants';
 import {
   assetPriceResponse,
   createUserCollateral,
   defaultCollateralTotal,
   ETH_PRICE,
-} from '../test-data/collateral.data';
+  ETH_STARTING_AMOUNT,
+} from '../test-data/collateral.stubs';
 import { TransactionStatus } from 'fireblocks-sdk';
-import { Credit } from '../../../../libs/api/credit-api/credit/src';
+import { Credit } from '@archie/api/credit-api/credit';
 import {
   LiquidationLog,
   MarginNotification,
-} from '../../../../libs/api/credit-api/margin/src';
-import { Collateral } from '../../../../libs/api/credit-api/collateral/src';
-import { CollateralWithdrawal } from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.entity';
-import { AuthGuard } from '@nestjs/passport';
+} from '@archie/api/credit-api/margin';
+import { Collateral } from '@archie/api/credit-api/collateral';
 import {
+  CollateralWithdrawal,
   CollateralWithdrawalController,
   CollateralWithdrawalQueueController,
-} from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.controller';
-import { amqpStub, GLOBAL_EXCHANGE_NAME } from '../e2e-test-utils/queue.utils';
+} from '@archie/api/credit-api/collateral-withdrawal';
+import { AuthGuard } from '@nestjs/passport';
+import { RizeService } from '@archie/api/credit-api/rize';
+import {
+  verifyAccessToken,
+  clearDatabase,
+  queueStub,
+} from '@archie/test/integration';
+import { when } from 'jest-when';
+import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
+import { QueueService } from '@archie/api/utils/queue';
 
 describe('CollateralWithdrawalController (e2e)', () => {
   let app: INestApplication;
@@ -46,6 +50,8 @@ describe('CollateralWithdrawalController (e2e)', () => {
   let configService: ConfigService;
   let collateralRepository: Repository<Collateral>;
   let collateralWithdrawalRepository: Repository<CollateralWithdrawal>;
+  let marginNotificationsRepositiory: Repository<MarginNotification>;
+  let liquidationLogsRepository: Repository<LiquidationLog>;
 
   const userId = 'userId';
 
@@ -70,8 +76,10 @@ describe('CollateralWithdrawalController (e2e)', () => {
           return true;
         },
       })
-      .overrideProvider(AmqpConnection)
-      .useValue(amqpStub)
+      .overrideProvider(QueueService)
+      .useValue(queueStub)
+      .overrideProvider(RizeService)
+      .useValue({})
       .compile();
 
     app = module.createNestApplication();
@@ -90,9 +98,10 @@ describe('CollateralWithdrawalController (e2e)', () => {
       getRepositoryToken(CollateralWithdrawal),
     );
 
-    nock(configService.get(ConfigVariables.INTERNAL_API_URL))
-      .get(`/internal/asset_price`)
-      .reply(200, assetPriceResponse);
+    when(queueStub.request)
+      .calledWith(GET_ASSET_PRICES_RPC)
+      .mockResolvedValue(assetPriceResponse);
+
     await collateralRepository.save(defaultUserCollateral);
     await creditRepository.save({
       userId,
@@ -102,7 +111,8 @@ describe('CollateralWithdrawalController (e2e)', () => {
   });
 
   afterEach(async () => {
-    amqpStub.publish.mockReset();
+    queueStub.publish.mockReset();
+    queueStub.request.mockReset();
     const connection: Connection = app.get(Connection);
     await clearDatabase(connection);
     await connection.close();
@@ -277,6 +287,49 @@ describe('CollateralWithdrawalController (e2e)', () => {
       }
     });
 
+    it('should remove collateral from the database if all of it was withdrawn', async () => {
+      const asset = 'ETH';
+      const withdrawalAmount = ETH_STARTING_AMOUNT;
+
+      const response = await app
+        .get(CollateralWithdrawalController)
+        .withdrawUserCollateral(
+          {
+            user: { sub: userId },
+          },
+          { asset, destinationAddress, withdrawalAmount },
+        );
+      expect(response).toEqual({
+        userId,
+        asset,
+        withdrawalAmount,
+        currentAmount: 10,
+        destinationAddress,
+        transactionId: null,
+        status: TransactionStatus.SUBMITTED,
+        id: expect.any(String),
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date),
+      });
+
+      expect(queueStub.publish).toBeCalledTimes(1);
+      expect(queueStub.publish).toBeCalledWith(
+        COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
+        {
+          asset,
+          withdrawalAmount,
+          userId,
+          destinationAddress,
+          withdrawalId: expect.any(String),
+        },
+      );
+      const userCollateral = await collateralRepository.findOneBy({
+        userId,
+        asset,
+      });
+      expect(userCollateral).toBeNull();
+    });
+
     it('should withdraw collateral and publish to the exchange', async () => {
       const asset = 'ETH';
       const withdrawalAmount = 5;
@@ -301,9 +354,8 @@ describe('CollateralWithdrawalController (e2e)', () => {
         updatedAt: expect.any(Date),
       });
 
-      expect(amqpStub.publish).toBeCalledTimes(1);
-      expect(amqpStub.publish).toBeCalledWith(
-        GLOBAL_EXCHANGE_NAME,
+      expect(queueStub.publish).toBeCalledTimes(1);
+      expect(queueStub.publish).toBeCalledWith(
         COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
         {
           asset,
@@ -312,7 +364,6 @@ describe('CollateralWithdrawalController (e2e)', () => {
           destinationAddress,
           withdrawalId: expect.any(String),
         },
-        undefined,
       );
       const userCollateral = await collateralRepository.findOneBy({
         userId,

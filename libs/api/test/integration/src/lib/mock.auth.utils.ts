@@ -1,5 +1,5 @@
 import { JwtPayload, sign, verify } from 'jsonwebtoken';
-import { user } from '../test-data/user.data';
+import { user } from './stubs/user.stubs';
 
 export const generateUserAccessToken = () => {
   return sign({}, process.env.ACTIONS_SIGNING_SECRET, {

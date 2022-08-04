@@ -557,10 +557,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/TransactionResponseDto"
-                  }
+                  "$ref": "#/components/schemas/TransactionResponseDto"
                 }
               }
             }
@@ -1368,7 +1365,30 @@
           "status"
         ]
       },
-      "TransactionResponseDto": {
+      "PaginationMetaDto": {
+        "type": "object",
+        "properties": {
+          "totalCount": {
+            "type": "number"
+          },
+          "count": {
+            "type": "number"
+          },
+          "page": {
+            "type": "number"
+          },
+          "limit": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "totalCount",
+          "count",
+          "page",
+          "limit"
+        ]
+      },
+      "TransactionDto": {
         "type": "object",
         "properties": {
           "description": {
@@ -1453,6 +1473,24 @@
           "merchant_number",
           "denial_reason",
           "net_asset"
+        ]
+      },
+      "TransactionResponseDto": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "$ref": "#/components/schemas/PaginationMetaDto"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TransactionDto"
+            }
+          }
+        },
+        "required": [
+          "meta",
+          "data"
         ]
       },
       "CollateralDto": {

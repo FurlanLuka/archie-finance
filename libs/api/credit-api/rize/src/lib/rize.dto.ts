@@ -73,3 +73,7 @@ export class CardActivatedPayload {
   userId: string;
   customerId: string;
 }
+
+export class CardImageResponseDto {
+  image: string;
+}
