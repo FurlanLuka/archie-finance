@@ -16,6 +16,7 @@ import { CollateralWithdrawalModule } from '@archie/api/credit-api/collateral-wi
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
 import { CryptoModule } from '@archie/api/utils/crypto';
+import { PeachModule } from '@archie/api/credit-api/peach';
 
 @Module({
   imports: [
@@ -36,6 +37,10 @@ import { CryptoModule } from '@archie/api/utils/crypto';
         ConfigVariables.RIZE_MQ_TOPIC_PREFIX,
         ConfigVariables.QUEUE_URL,
         ConfigVariables.ENCRYPTION_KEY,
+        ConfigVariables.PEACH_BORROWER_ROLE_ID,
+        ConfigVariables.PEACH_COMPANY_ID,
+        ConfigVariables.PEACH_API_KEY,
+        ConfigVariables.PEACH_BASE_URL,
       ],
       parse: (_configVariable, value) => value,
     }),
@@ -80,6 +85,7 @@ import { CryptoModule } from '@archie/api/utils/crypto';
         encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
       }),
     }),
+    PeachModule,
   ],
   controllers: [],
   providers: [],

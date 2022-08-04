@@ -2,14 +2,19 @@ import { Injectable } from '@nestjs/common';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
-import { IdentityType, Person, PersonStatus } from './peach_api.interfaces';
+import {
+  IdentityType,
+  PeachErrorData,
+  PeachErrorResponse,
+  Person,
+  PersonStatus,
+} from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 
 @Injectable()
 export class PeachApiService {
   MAX_REQUEST_TIMEOUT = 10000;
   CONTACT_ALREADY_EXISTS_STATUS = 400;
-  PERSON_ALREADY_EXISTS_STATUS = 409;
   peachClient: AxiosInstance;
 
   constructor(private configService: ConfigService) {
@@ -17,45 +22,45 @@ export class PeachApiService {
   }
 
   private createApiClient(): AxiosInstance {
-    return axios.create({
+    const axiosInstance: AxiosInstance = axios.create({
       baseURL: this.configService.get(ConfigVariables.PEACH_BASE_URL),
       timeout: this.MAX_REQUEST_TIMEOUT,
       headers: {
         'X-API-KEY': this.configService.get(ConfigVariables.PEACH_API_KEY),
       },
     });
+
+    axiosInstance.interceptors.response.use(undefined, (error: AxiosError) => {
+      const response: PeachErrorResponse = {
+        config: {
+          ...error.config,
+          headers: null,
+        },
+        status: error.response.status,
+        errorResponse: <PeachErrorData>error.response.data,
+      };
+
+      return Promise.reject(response);
+    });
+
+    return axiosInstance;
   }
 
-  public async tryCreatingPerson(kyc: KycSubmittedPayload): Promise<Person> {
-    try {
-      const response = await this.peachClient.post('/people', {
-        externalId: kyc.userId,
-        status: PersonStatus.active,
-        name: {
-          firstName: kyc.firstName,
-          lastName: kyc.lastName,
-        },
-        dateOfBirth: kyc.dateOfBirth,
-        identity: {
-          identityType: IdentityType.SSN,
-          value: kyc.ssn,
-        },
-      });
+  public async createPerson(kyc: KycSubmittedPayload): Promise<Person> {
+    const response = await this.peachClient.post('/people', {
+      status: PersonStatus.active,
+      name: {
+        firstName: kyc.firstName,
+        lastName: kyc.lastName,
+      },
+      dateOfBirth: kyc.dateOfBirth,
+      identity: {
+        identityType: IdentityType.SSN,
+        value: kyc.ssn,
+      },
+    });
 
-      return response.data.data;
-    } catch (error) {
-      const axiosError: AxiosError = error;
-
-      if (axiosError.response.status === this.PERSON_ALREADY_EXISTS_STATUS) {
-        const existingPerson = await this.peachClient.get(
-          `/people/${kyc.userId}`,
-        );
-
-        return existingPerson.data.data;
-      }
-
-      throw error;
-    }
+    return response.data.data;
   }
 
   public async addHomeAddressContact(
@@ -70,8 +75,7 @@ export class PeachApiService {
       address: {
         addressLine1: `${kyc.addressStreetNumber} ${kyc.addressStreet}`,
         city: kyc.addressLocality,
-        countryOrRegion: kyc.addressCountry,
-        state: kyc.addressRegion, // TODO: state !== region
+        state: kyc.addressRegion,
         postalCode: kyc.addressPostalCode,
         country: kyc.addressCountry,
       },
@@ -94,10 +98,9 @@ export class PeachApiService {
         receiveTextMessages: false,
       });
     } catch (error) {
-      const axiosError: AxiosError = error;
+      const axiosError: PeachErrorResponse = error;
 
-      if (axiosError.response.status !== this.CONTACT_ALREADY_EXISTS_STATUS)
-        throw error;
+      if (axiosError.status !== this.CONTACT_ALREADY_EXISTS_STATUS) throw error;
     }
   }
 
@@ -123,7 +126,7 @@ export class PeachApiService {
         authType: {
           email,
         },
-        roles: ['{{borrower_role_id}}'],
+        roles: [this.configService.get(ConfigVariables.PEACH_BORROWER_ROLE_ID)],
         associatedPersonId: personId,
       },
     );

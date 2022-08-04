@@ -27,7 +27,7 @@ export class PeachQueueController {
     await this.peachService.handleEmailVerifiedEvent(payload);
   }
 
-  @Subscribe(CARD_ACTIVATED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(CARD_ACTIVATED_TOPIC, SERVICE_QUEUE_NAME + '-peach')
   async cardActivatedHandler(payload: CardActivatedPayload): Promise<void> {
     await this.peachService.handleCardActivatedEvent(payload);
   }

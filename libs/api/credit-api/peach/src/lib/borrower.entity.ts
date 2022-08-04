@@ -14,6 +14,6 @@ export class Borrower {
   @Column('varchar')
   personId: string;
 
-  @Column('varchar')
-  encryptedEmail: string;
+  @Column('varchar', { nullable: true })
+  encryptedEmail: string | null;
 }

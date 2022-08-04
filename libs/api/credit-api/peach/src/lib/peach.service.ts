@@ -5,7 +5,7 @@ import { Person } from './api/peach_api.interfaces';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
 import { CardActivatedPayload } from '../../../rize/src/lib/rize.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Borrower } from './borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
 
@@ -19,27 +19,32 @@ export class PeachService {
   ) {}
 
   public async handleKycSubmittedEvent(kyc: KycSubmittedPayload) {
-    const person: Person = await this.peachApiService.tryCreatingPerson(kyc);
-    await this.peachApiService.addMobilePhoneContact(person.id, kyc);
-    await this.peachApiService.addHomeAddressContact(person.id, kyc);
-
-    await this.borrowerRepository.save({
+    let borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: kyc.userId,
-      personId: person.id,
     });
+
+    if (borrower === null) {
+      const person: Person = await this.peachApiService.createPerson(kyc);
+      borrower = await this.borrowerRepository.save({
+        userId: kyc.userId,
+        personId: person.id,
+      });
+    }
+
+    await this.peachApiService.addMobilePhoneContact(borrower.personId, kyc);
+    await this.peachApiService.addHomeAddressContact(borrower.personId, kyc);
   }
 
   public async handleEmailVerifiedEvent(email: EmailVerifiedPayload) {
     const encryptedEmail: string = this.cryptoService.encrypt(email.email);
     const borrower: Borrower = await this.borrowerRepository
-      .update(
-        {
-          userId: email.userId,
-        },
-        {
-          encryptedEmail: encryptedEmail,
-        },
-      )
+      .createQueryBuilder()
+      .update(Borrower, {
+        encryptedEmail,
+      })
+      .where('userId = :userId', { userId: email.userId })
+      .returning('*')
+      .execute()
       .then((response) => response.raw[0]);
 
     await this.peachApiService.addMailContact(borrower.personId, email.email);

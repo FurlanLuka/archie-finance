@@ -3,15 +3,16 @@ import { PeachService } from './peach.service';
 import { PeachQueueController } from './peach.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Borrower } from './borrower.entity';
+import { PeachApiModule } from './api/peach_api.module';
 import { CryptoModule } from '@archie/api/utils/crypto';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import { PeachApiModule } from './api/peach_api.module';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
 
 @Module({
   controllers: [PeachQueueController],
   imports: [
     TypeOrmModule.forFeature([Borrower]),
+    PeachApiModule,
     CryptoModule.register({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -19,7 +20,6 @@ import { ConfigVariables } from '@archie/api/credit-api/constants';
         encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
       }),
     }),
-    PeachApiModule,
   ],
   providers: [PeachService],
   exports: [PeachService],
