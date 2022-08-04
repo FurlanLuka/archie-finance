@@ -9,13 +9,13 @@ export const ArchieCardStyled = styled.div`
   }  
 
   .archie-card {
-    max-width: 420px;
-    min-width: 420px;
+    width: 420px;
     min-height: 264px;
 
     @media (max-width: ${breakpoints.screenSM}) {
-      min-width: 100%;
-      min-height: 225px;
+      width: 360px;
+      height: 220px;
+      min-height: 220px;
     }
   }
 
@@ -65,6 +65,12 @@ export const ArchieCardStyled = styled.div`
     width: 200px;
     height: 2rem;
     background-color: #dce1e4;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      bottom: 78px;
+      font-size: 1.35rem;
+      width: 160px;
+    }
   }
 
   .expiry-overlay {
@@ -77,6 +83,11 @@ export const ArchieCardStyled = styled.div`
     color: #727375;
     height: 2rem;
     background-color: #dce1e4;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      left: 2rem;
+      bottom: 46px;
+    }
   }
 
   .cvv-overlay {
@@ -89,6 +100,11 @@ export const ArchieCardStyled = styled.div`
     color: #727375;
     height: 2rem;
     background-color: #dce1e4;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      right: 7.8rem;
+      bottom: 46px;
+    }
   }
   /* Temp, just for Rize, use card-data and card-status instead */
 `;
