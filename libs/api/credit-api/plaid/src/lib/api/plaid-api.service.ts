@@ -9,6 +9,7 @@ import {
   PlaidEnvironments,
   Products,
   LinkTokenCreateRequest,
+  AccountBase,
 } from 'plaid';
 
 const PLAID_PRODUCTS: Products[] = [Products.Auth];
@@ -81,5 +82,13 @@ export class PlaidApiService {
       accessToken: accessTokenData.data.access_token,
       itemId: accessTokenData.data.item_id,
     };
+  }
+
+  public async getAccountsForItem(accessToken: string): Promise<AccountBase[]> {
+    const accountsData = await this.plaidClient.accountsGet({
+      access_token: accessToken,
+    });
+
+    return accountsData.data.accounts;
   }
 }

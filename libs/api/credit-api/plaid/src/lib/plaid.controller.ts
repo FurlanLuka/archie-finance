@@ -10,7 +10,11 @@ import {
 } from '@nestjs/common';
 import { PlaidService } from './plaid.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { GetLinkTokenResponse, SetAccessTokenBody } from './plaid.interfaces';
+import {
+  GetAccountsResponse,
+  GetLinkTokenResponse,
+  SetAccessTokenBody,
+} from './plaid.interfaces';
 
 @Controller('v1/plaid')
 export class PlaidController {
@@ -32,5 +36,12 @@ export class PlaidController {
     @Body() body: SetAccessTokenBody,
   ): Promise<void> {
     return this.plaidService.setAccessToken(req.user.sub, body.publicToken);
+  }
+
+  @Get('accounts')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  public async getAccounts(@Request() req): Promise<GetAccountsResponse> {
+    return this.plaidService.getUserAccounts(req.user.sub);
   }
 }

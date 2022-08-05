@@ -1,6 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PlaidApiService } from './api/plaid-api.service';
-import { GetLinkTokenResponse } from './plaid.interfaces';
+import {
+  AccountResponse,
+  GetAccountsResponse,
+  GetLinkTokenResponse,
+} from './plaid.interfaces';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { PlaidAccess } from './plaid.entity';
 import { Repository } from 'typeorm';
@@ -43,6 +47,42 @@ export class PlaidService {
         throw new PublicTokenExpiredException();
       }
 
+      throw err;
+    }
+  }
+
+  public async getUserAccounts(userId: string): Promise<GetAccountsResponse> {
+    try {
+      const accessItems = await this.plaidAccessRepository.find({
+        where: { userId },
+        select: ['accessToken', 'itemId'],
+      });
+
+      const allAccounts = await Promise.all(
+        accessItems.map(async (item) => {
+          const decryptedAccessToken: string = this.cryptoService.decrypt(
+            item.accessToken,
+          );
+
+          const itemAccounts = await this.plaidApiService.getAccountsForItem(
+            decryptedAccessToken,
+          );
+
+          const accountsResponse: AccountResponse[] = itemAccounts.map(
+            (account) => ({
+              id: account.account_id,
+              name: account.name,
+              officialName: account.official_name,
+              mask: account.mask,
+            }),
+          );
+
+          return accountsResponse;
+        }),
+      );
+
+      return allAccounts.flat(1);
+    } catch (err) {
       throw err;
     }
   }
