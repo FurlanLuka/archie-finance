@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PlaidApiService } from './api/plaid-api.service';
 import { GetLinkTokenResponse } from './plaid.interfaces';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { PlaidAccess } from './plaid.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PublicTokenExpiredException } from './plaid.errors';
 
 @Injectable()
 export class PlaidService {
@@ -25,17 +26,24 @@ export class PlaidService {
     userId: string,
     publicToken: string,
   ): Promise<void> {
-    const { accessToken, itemId } =
-      await this.plaidApiService.exchangePublicToken(publicToken);
-    console.log('gotsa da akses!', accessToken);
+    try {
+      const { accessToken, itemId } =
+        await this.plaidApiService.exchangePublicToken(publicToken);
 
-    const encryptedAccessToken: string =
-      this.cryptoService.encrypt(accessToken);
+      const encryptedAccessToken: string =
+        this.cryptoService.encrypt(accessToken);
 
-    await this.plaidAccessRepository.save({
-      userId,
-      accessToken: encryptedAccessToken,
-      itemId,
-    });
+      await this.plaidAccessRepository.save({
+        userId,
+        accessToken: encryptedAccessToken,
+        itemId,
+      });
+    } catch (err) {
+      if (err?.response?.data?.error_code === 'INVALID_PUBLIC_TOKEN') {
+        throw new PublicTokenExpiredException();
+      }
+
+      throw err;
+    }
   }
 }

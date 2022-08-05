@@ -66,6 +66,13 @@ import { CryptoModule } from '@archie/api/utils/crypto';
       }),
       inject: [ConfigService],
     }),
+    CryptoModule.register({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
+      }),
+    }),
     HealthModule,
     CreditModule,
     AptoModule,
@@ -75,13 +82,6 @@ import { CryptoModule } from '@archie/api/utils/crypto';
     CollateralModule,
     CollateralWithdrawalModule,
     QueueModule.register(),
-    CryptoModule.register({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
-      }),
-    }),
   ],
   controllers: [],
   providers: [],
