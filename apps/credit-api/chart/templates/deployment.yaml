@@ -148,6 +148,31 @@ spec:
                 secretKeyRef:
                   name: credit-api-secrets
                   key: rize-mq-password
+            - name: PEACH_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: credit-api-secrets
+                  key: peach-api-key
+            - name: PEACH_BASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: credit-api-secrets
+                  key: peach-base-url
+            - name: PEACH_COMPANY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: credit-api-secrets
+                  key: peach-company-id
+            - name: PEACH_BORROWER_ROLE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: credit-api-secrets
+                  key: peach-borrower-role-id
+            - name: PEACH_LOAN_ID
+              valueFrom:
+                secretKeyRef:
+                  name: credit-api-secrets
+                  key: peach-loan-id
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:

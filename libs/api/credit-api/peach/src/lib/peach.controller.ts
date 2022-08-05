@@ -63,7 +63,7 @@ export class PeachQueueController {
     await this.peachService.handleCreditLimitDecreased(payload);
   }
 
-  @Subscribe(TRANSACTION_UPDATED_TOPIC, SERVICE_QUEUE_NAME) z;
+  @Subscribe(TRANSACTION_UPDATED_TOPIC, SERVICE_QUEUE_NAME)
   async transactionUpdatedHandler(
     payload: TransactionUpdatedPayload,
   ): Promise<void> {
