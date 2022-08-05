@@ -40,6 +40,7 @@ export const ArchieCard: FC = () => {
           className="archie-card clickable"
           onClick={() => (revealCardData ? setRevealCardModalOpen(false) : setRevealCardModalOpen(true))}
         >
+          {/* Temp, just for Rize */}
           {!revealCardData && (
             <>
               <div className="number-overlay">•••• •••• ••••</div>
@@ -47,6 +48,7 @@ export const ArchieCard: FC = () => {
               <div className="cvv-overlay">•••</div>
             </>
           )}
+          {/* Temp, just for Rize, use card-data and card-status instead  */}
           {/* <div className="card-data">
             <ParagraphS weight={500}>{revealCardData ? '3443 6546 6457 8021' : '•••• •••• •••• 8021'}</ParagraphS>
             <div className="card-data-group">
