@@ -1,16 +1,23 @@
 import { FC } from 'react';
 import { usePlaidLink } from 'react-plaid-link';
 
-import { ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
+import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { useCreateAccessToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-create-access-token';
+import { ButtonPrimary, Loader } from '@archie-webapps/shared/ui/design-system';
 
 interface PlaidConnectProps {
   linkToken: string;
 }
 
 export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken }) => {
+  const createAccessTokenMutation = useCreateAccessToken();
+
   function onSuccess(publicToken: string) {
-    console.log('gotsa da token boss', publicToken);
+    if (createAccessTokenMutation.state === RequestState.IDLE) {
+      createAccessTokenMutation.mutate({ publicToken });
+    }
   }
+
   const config: Parameters<typeof usePlaidLink>[0] = {
     token: linkToken,
     onSuccess,
@@ -20,13 +27,17 @@ export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken }) => {
 
   return (
     <div>
-      <ButtonPrimary
-        onClick={() => {
-          open();
-        }}
-      >
-        Connect with Plaid
-      </ButtonPrimary>
+      {createAccessTokenMutation.state === RequestState.LOADING ? (
+        <Loader />
+      ) : (
+        <ButtonPrimary
+          onClick={() => {
+            open();
+          }}
+        >
+          Connect with Plaid
+        </ButtonPrimary>
+      )}
     </div>
   );
 };

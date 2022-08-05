@@ -7,7 +7,10 @@ import { Loader, Modal } from '@archie-webapps/shared/ui/design-system';
 import { AccountConnect } from '../../account-connect/account-connect';
 import { PlaidLink } from '../../plaid-link/plaid-link';
 
-export const ConnectAccountModal: FC = () => {
+interface ConnectAccountModalProps {
+  close: VoidFunction;
+}
+export const ConnectAccountModal: FC<ConnectAccountModalProps> = ({ close }) => {
   const getAccountsResponse = useGetAccounts();
 
   function getContent() {
@@ -30,5 +33,9 @@ export const ConnectAccountModal: FC = () => {
 
     return null;
   }
-  return <Modal isOpen>{getContent()}</Modal>;
+  return (
+    <Modal isOpen close={close}>
+      {getContent()}
+    </Modal>
+  );
 };

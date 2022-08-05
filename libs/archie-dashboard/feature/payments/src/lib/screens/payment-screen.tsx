@@ -6,6 +6,9 @@ import { ConnectAccountModal } from '../components/modals/connect-account/connec
 
 export const PaymentScreen: FC = () => {
   const [showModal, setShowModal] = useState(false);
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   return (
     <>
@@ -16,7 +19,7 @@ export const PaymentScreen: FC = () => {
       >
         Make a payment
       </ButtonPrimary>
-      {showModal && <ConnectAccountModal />}
+      {showModal && <ConnectAccountModal close={closeModal} />}
     </>
   );
 };
