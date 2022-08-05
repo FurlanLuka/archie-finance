@@ -156,8 +156,23 @@ spec:
             - name: ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: mail-api-secrets
+                  name: credit-api-secrets
                   key: encryption-key
+            - name: PLAID_ENVIRONMENT
+              valueFrom:
+                secretKeyRef:
+                  name: credit-api-secrets
+                  key: plaid-environment
+            - name: PLAID_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: credit-api-secrets
+                  key: plaid-client-id
+            - name: PLAID_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: credit-api-secrets
+                  key: plaid-secret
           {{- end }}
       imagePullSecrets:
         - name: regcred
