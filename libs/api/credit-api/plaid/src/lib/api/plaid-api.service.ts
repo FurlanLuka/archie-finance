@@ -68,4 +68,23 @@ export class PlaidApiService {
       throw err;
     }
   }
+
+  public async exchangePublicToken(publicToken: string): Promise<{
+    accessToken: string;
+    itemId: string;
+  }> {
+    try {
+      const accessTokenData = await this.plaidClient.itemPublicTokenExchange({
+        public_token: publicToken,
+      });
+
+      return {
+        accessToken: accessTokenData.data.access_token,
+        itemId: accessTokenData.data.item_id,
+      };
+    } catch (err) {
+      console.error('bruh', err);
+      throw err;
+    }
+  }
 }
