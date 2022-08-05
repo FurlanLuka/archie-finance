@@ -16,6 +16,7 @@ import { AptoModule } from '@archie/api/credit-api/apto';
 import { CollateralWithdrawalModule } from '@archie/api/credit-api/collateral-withdrawal';
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
+import { CryptoModule } from '@archie/api/utils/crypto';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { QueueModule } from '@archie/api/utils/queue';
         ConfigVariables.RIZE_MQ_USERNAME,
         ConfigVariables.RIZE_MQ_TOPIC_PREFIX,
         ConfigVariables.QUEUE_URL,
+        ConfigVariables.ENCRYPTION_KEY,
       ],
       parse: (_configVariable, value) => value,
     }),
@@ -73,6 +75,13 @@ import { QueueModule } from '@archie/api/utils/queue';
     CollateralModule,
     CollateralWithdrawalModule,
     QueueModule.register(),
+    CryptoModule.register({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
+      }),
+    }),
   ],
   controllers: [],
   providers: [],

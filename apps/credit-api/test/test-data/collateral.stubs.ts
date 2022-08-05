@@ -32,6 +32,7 @@ export const assetPriceResponse: GetAssetPriceResponse[] = [
 ];
 
 export const BTC_STARTING_AMOUNT = 1;
+export const ETH_STARTING_AMOUNT = 10;
 export const SOL_STARTING_AMOUNT = 100;
 
 export function createUserCollateral(userId: string) {
@@ -44,12 +45,12 @@ export function createUserCollateral(userId: string) {
     {
       userId,
       asset: 'ETH',
-      amount: 10,
+      amount: ETH_STARTING_AMOUNT,
     },
     {
       userId,
       asset: 'SOL',
-      amount: 100,
+      amount: SOL_STARTING_AMOUNT,
     },
     {
       userId,

@@ -153,6 +153,11 @@ spec:
                 secretKeyRef:
                   name: queue-shared-secrets
                   key: queue-url
+            - name: ENCRYPTION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: mail-api-secrets
+                  key: encryption-key
           {{- end }}
       imagePullSecrets:
         - name: regcred

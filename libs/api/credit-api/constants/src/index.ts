@@ -27,6 +27,7 @@ export enum ConfigVariables {
   PLAID_SECRET = 'PLAID_SECRET',
   PLAID_REDIRECT_URI = 'PLAID_REDIRECT_URI',
   QUEUE_URL = 'QUEUE_URL',
+  ENCRYPTION_KEY = 'ENCRYPTION_KEY',
 }
 
 export const COLLATERAL_RECEIVED_TOPIC = 'credit.collateral.received';
