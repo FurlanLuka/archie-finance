@@ -12,6 +12,7 @@ import { MarginLiquidationService } from './liquidation/margin_liquidation.servi
 import { MarginNotification } from '../margin_notifications.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueueService } from '@archie/api/utils/queue';
+import { MarginCallCompleted } from '../margin.dto';
 
 @Injectable()
 export class MarginCallsService {
@@ -33,15 +34,18 @@ export class MarginCallsService {
     await this.marginCallsRepository.softDelete({
       userId: usersLtv.userId,
     });
-    this.queueService.publish(MARGIN_CALL_COMPLETED_TOPIC, {
-      userId: usersLtv.userId,
-      liquidation: [],
-      liquidationAmount: 0,
-      ltv: usersLtv.ltv,
-      priceForMarginCall: usersLtv.priceForMarginCall,
-      priceForPartialCollateralSale: usersLtv.priceForPartialCollateralSale,
-      collateralBalance: usersLtv.collateralBalance,
-    });
+    this.queueService.publish<MarginCallCompleted>(
+      MARGIN_CALL_COMPLETED_TOPIC,
+      {
+        userId: usersLtv.userId,
+        liquidation: [],
+        liquidationAmount: 0,
+        ltv: usersLtv.ltv,
+        priceForMarginCall: usersLtv.priceForMarginCall,
+        priceForPartialCollateralSale: usersLtv.priceForPartialCollateralSale,
+        collateralBalance: usersLtv.collateralBalance,
+      },
+    );
   }
 
   public filterUsersWithExpiredMarginCall(
@@ -94,25 +98,30 @@ export class MarginCallsService {
       const loanedBalance: number =
         usersLtv.loanedBalance - liquidatedCollateralAssets.loanRepaymentAmount;
 
-      this.queueService.publish(MARGIN_CALL_COMPLETED_TOPIC, {
-        userId: usersLtv.userId,
-        liquidation: liquidatedCollateralAssets.liquidatedAssets.map(
-          (asset) => ({
-            asset: asset.asset,
-            amount: asset.amount,
-            price: asset.price,
-          }),
-        ),
-        liquidationAmount: liquidatedCollateralAssets.loanRepaymentAmount,
-        ltv: this.LIQUIDATE_TO_LTV,
-        priceForMarginCall:
-          this.marginLtvService.calculatePriceForMarginCall(loanedBalance),
-        priceForPartialCollateralSale:
-          this.marginLtvService.calculatePriceForCollateralSale(loanedBalance),
-        collateralBalance:
-          usersLtv.collateralBalance -
-          liquidatedCollateralAssets.loanRepaymentAmount,
-      });
+      this.queueService.publish<MarginCallCompleted>(
+        MARGIN_CALL_COMPLETED_TOPIC,
+        {
+          userId: usersLtv.userId,
+          liquidation: liquidatedCollateralAssets.liquidatedAssets.map(
+            (asset) => ({
+              asset: asset.asset,
+              amount: asset.amount,
+              price: asset.price,
+            }),
+          ),
+          liquidationAmount: liquidatedCollateralAssets.loanRepaymentAmount,
+          ltv: this.LIQUIDATE_TO_LTV,
+          priceForMarginCall:
+            this.marginLtvService.calculatePriceForMarginCall(loanedBalance),
+          priceForPartialCollateralSale:
+            this.marginLtvService.calculatePriceForCollateralSale(
+              loanedBalance,
+            ),
+          collateralBalance:
+            usersLtv.collateralBalance -
+            liquidatedCollateralAssets.loanRepaymentAmount,
+        },
+      );
     } else if (alreadyActiveMarginCall === undefined) {
       this.queueService.publish(MARGIN_CALL_STARTED_TOPIC, {
         userId: usersLtv.userId,

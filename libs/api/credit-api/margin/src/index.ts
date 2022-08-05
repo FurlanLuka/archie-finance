@@ -1,5 +1,6 @@
 export * from './lib/margin.service';
 export * from './lib/margin.module';
+export * from './lib/margin.dto';
 
 export * from './lib/liquidation_logs.entity';
 export * from './lib/margin_calls.entity';

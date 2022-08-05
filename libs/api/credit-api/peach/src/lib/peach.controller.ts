@@ -5,6 +5,7 @@ import {
   CREDIT_FUNDS_LOADED_TOPIC,
   CREDIT_LIMIT_DECREASED_TOPIC,
   CREDIT_LIMIT_INCREASED_TOPIC,
+  MARGIN_CALL_COMPLETED_TOPIC,
   SERVICE_QUEUE_NAME,
   TRANSACTION_UPDATED_TOPIC,
 } from '@archie/api/credit-api/constants';
@@ -23,6 +24,7 @@ import {
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
+  MarginCallCompleted,
 } from '@archie/api/credit-api/margin';
 
 @Controller()
@@ -80,6 +82,16 @@ export class PeachQueueController {
   )
   async transactionUpdatedHandler(
     payload: TransactionUpdatedPayload,
+  ): Promise<void> {
+    await this.peachService.handleTransactionsEvent(payload);
+  }
+
+  @Subscribe(
+    MARGIN_CALL_COMPLETED_TOPIC,
+    PeachQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async marginCallCompletedHandler(
+    payload: MarginCallCompleted,
   ): Promise<void> {
     await this.peachService.handleTransactionsEvent(payload);
   }

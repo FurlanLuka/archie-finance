@@ -15,6 +15,7 @@ import { CryptoService } from '@archie/api/utils/crypto';
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
+  MarginCallCompleted,
 } from '@archie/api/credit-api/margin';
 import { TransactionStatus } from '../../../rize/src/lib/api/rize_api.interfaces';
 
@@ -209,5 +210,9 @@ export class PeachService {
       borrower.drawId,
       transaction,
     );
+  }
+
+  public async handleMarginCallCompletedEvent(marginCall: MarginCallCompleted) {
+    // TODO: https://docs.peach.finance/tag/Transactions Service Credit
   }
 }
