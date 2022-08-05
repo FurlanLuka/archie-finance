@@ -91,4 +91,8 @@ export class PlaidApiService {
 
     return accountsData.data.accounts;
   }
+
+  public async unlinkAccount(accessToken: string): Promise<void> {
+    await this.plaidClient.itemRemove({ access_token: accessToken });
+  }
 }

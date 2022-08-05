@@ -2,8 +2,10 @@ import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
+  Param,
   Post,
   Request,
   UseGuards,
@@ -43,5 +45,15 @@ export class PlaidController {
   @ApiBearerAuth()
   public async getAccounts(@Request() req): Promise<GetAccountsResponse> {
     return this.plaidService.getUserAccounts(req.user.sub);
+  }
+
+  @Delete('accounts/:itemId')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  public async removeAccount(
+    @Request() req,
+    @Param('itemId') itemId: string,
+  ): Promise<void> {
+    return this.plaidService.removeAccount(req.user.sub, itemId);
   }
 }

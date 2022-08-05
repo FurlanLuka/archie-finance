@@ -86,4 +86,26 @@ export class PlaidService {
       throw err;
     }
   }
+
+  public async removeAccount(userId: string, itemId: string): Promise<void> {
+    console.log('evo nas', { userId, itemId });
+    try {
+      const accessItem = await this.plaidAccessRepository.findOneOrFail({
+        where: {
+          userId,
+          itemId,
+        },
+        select: ['accessToken'],
+      });
+
+      const decryptedAccessToken: string = this.cryptoService.decrypt(
+        accessItem.accessToken,
+      );
+
+      await this.plaidApiService.unlinkAccount(decryptedAccessToken);
+      await this.plaidAccessRepository.delete(accessItem);
+    } catch (err) {
+      throw err;
+    }
+  }
 }
