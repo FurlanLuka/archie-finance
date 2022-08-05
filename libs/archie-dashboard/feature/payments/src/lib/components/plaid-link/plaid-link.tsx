@@ -2,11 +2,11 @@ import { FC } from 'react';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetLinkToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-link-token';
-import { ButtonPrimary, Loader, Modal } from '@archie-webapps/shared/ui/design-system';
+import { Loader } from '@archie-webapps/shared/ui/design-system';
 
-import { PlaidConnect } from '../../plaid-connect/plaid-connect';
+import { PlaidConnect } from './blocks/plaid-connect/plaid-connect';
 
-export const LinkModal: FC = () => {
+export const PlaidLink: FC = () => {
   const getLinkTokenResponse = useGetLinkToken();
 
   function getContent() {
@@ -24,5 +24,5 @@ export const LinkModal: FC = () => {
 
     return <></>;
   }
-  return <Modal isOpen>{getContent()}</Modal>;
+  return getContent();
 };

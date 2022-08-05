@@ -6,6 +6,7 @@ import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature/colla
 import { CollateralizationScreen } from '@archie-webapps/archie-dashboard/feature/collateralization';
 import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature/history';
 import { WalletAndCollateralScreen } from '@archie-webapps/archie-dashboard/feature/home';
+import { PaymentScreen } from '@archie-webapps/archie-dashboard/feature/payments';
 import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature/rewards';
 import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature/settings';
 import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature/withdraw';
@@ -15,7 +16,6 @@ import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/
 import { Loading, Page, Container } from '@archie-webapps/shared/ui/design-system';
 
 import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
-import { PaymentScreen } from './payment-screen';
 
 export const DashboardRoute: FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
