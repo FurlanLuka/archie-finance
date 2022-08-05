@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
-interface NextPaymentStyledProps {
+interface NextPaymentChartStyledProps {
   backgroundSize: string;
 }
 
-export const NextPaymentStyled = styled.div<NextPaymentStyledProps>`
+export const NextPaymentChartStyled = styled.div<NextPaymentChartStyledProps>`
   width: 100%;
   margin-bottom: 0.75rem;
 

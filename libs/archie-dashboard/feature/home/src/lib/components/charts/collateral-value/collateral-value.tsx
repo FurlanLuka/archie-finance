@@ -4,7 +4,7 @@ import { FC } from 'react';
 
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { CollateralValueStyled } from './collateral-value.styled';
+import { CollateralValueChartStyled } from './collateral-value.styled';
 
 const data = [
   {
@@ -33,8 +33,8 @@ const data = [
   },
 ];
 
-export const CollateralValue: FC = () => (
-  <CollateralValueStyled>
+export const CollateralValueChart: FC = () => (
+  <CollateralValueChartStyled>
     <ResponsiveStream
       data={data}
       keys={['Collateral']}
@@ -54,5 +54,5 @@ export const CollateralValue: FC = () => (
       ]}
       fill={[{ match: { id: 'Collateral' }, id: 'gradient' }]}
     />
-  </CollateralValueStyled>
+  </CollateralValueChartStyled>
 );
