@@ -82,3 +82,11 @@ export class FundsLoadedPayload {
   userId: string;
   amount: number;
 }
+
+export class TransactionUpdatedPayload {
+  userId: string;
+  id: string;
+  status: TransactionStatus;
+  amount: number;
+  type: TransactionType;
+}

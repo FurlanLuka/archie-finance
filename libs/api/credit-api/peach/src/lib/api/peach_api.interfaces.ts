@@ -29,6 +29,10 @@ export interface CreditLine extends PeachResponse {
   id: string;
 }
 
+export interface Draw extends PeachResponse {
+  id: string;
+}
+
 export interface CreditLimit extends PeachResponse {
   creditLimitAmount: number;
 }
@@ -42,4 +46,25 @@ export interface PeachErrorResponse {
 export interface PeachErrorData {
   message: string;
   status: number;
+}
+
+export enum PeachTransactionType {
+  atm_withdrawal = 'regular',
+  card_purchase = 'regular',
+  card_refund = 'refund',
+  dispute = 'cashBack',
+  external_transfer = '',
+  fee = '',
+  credit = '',
+  internal_transfer = 'regular',
+  other = 'regular',
+  reversed_transfer = '',
+  third_party_transfer = '',
+}
+
+export enum PeachTransactionStatus {
+  queued = 'pending',
+  pending = 'pending',
+  settled = 'settled',
+  failed = 'canceled',
 }

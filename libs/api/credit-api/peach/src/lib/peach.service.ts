@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { PeachApiService } from './api/peach_api.service';
-import { HomeAddress, Person } from './api/peach_api.interfaces';
+import { Draw, HomeAddress, Person } from './api/peach_api.interfaces';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
 import {
   CardActivatedPayload,
   FundsLoadedPayload,
+  TransactionUpdatedPayload,
 } from '../../../rize/src/lib/rize.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -15,6 +16,7 @@ import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
 } from '@archie/api/credit-api/margin';
+import { TransactionStatus } from '../../../rize/src/lib/api/rize_api.interfaces';
 
 @Injectable()
 export class PeachService {
@@ -78,22 +80,34 @@ export class PeachService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: founds.userId,
     });
-    let creditLineId = borrower.loanId;
+    let creditLineId = await this.createActiveCreditLine(
+      borrower,
+      founds.amount,
+    );
+
+    await this.createActiveDraw(borrower, creditLineId);
+  }
+
+  private async createActiveCreditLine(
+    borrower: Borrower,
+    amount: number,
+  ): Promise<string> {
+    let creditLineId: string | null = borrower.creditLineId;
 
     if (creditLineId === null) {
       const creditLine = await this.peachApiService.createCreditLine(
         borrower.personId,
-        founds.amount,
+        amount,
         borrower.homeAddressContactId,
       );
       creditLineId = creditLine.id;
 
       await this.borrowerRepository.update(
         {
-          userId: founds.userId,
+          userId: borrower.userId,
         },
         {
-          loanId: creditLine.id,
+          creditLineId: creditLine.id,
         },
       );
     }
@@ -102,53 +116,98 @@ export class PeachService {
       borrower.personId,
       creditLineId,
     );
+
+    return creditLineId;
+  }
+
+  private async createActiveDraw(borrower: Borrower, creditLineId: string) {
+    let drawId: string | null = borrower.drawId;
+
+    if (drawId === null) {
+      const draw: Draw = await this.peachApiService.createDraw(
+        borrower.personId,
+        creditLineId,
+      );
+      drawId = draw.id;
+      await this.borrowerRepository.update(
+        {
+          userId: borrower.userId,
+        },
+        {
+          drawId,
+        },
+      );
+    }
+
+    await this.peachApiService.activateDraw(
+      borrower.personId,
+      creditLineId,
+      drawId,
+    );
   }
 
   public async handleCreditLimitIncreased(
-    creditLimitincrease: CreditLimitIncreasedPayload,
-  ) {
+    creditLimitIncrease: CreditLimitIncreasedPayload,
+  ): Promise<void> {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
-      userId: creditLimitincrease.userId,
+      userId: creditLimitIncrease.userId,
     });
     const currentCreditLimit = await this.peachApiService.getCreditLimit(
       borrower.personId,
-      borrower.loanId,
+      borrower.creditLineId,
     );
     const newCreditLimit: number =
-      currentCreditLimit.creditLimitAmount + creditLimitincrease.amount;
+      currentCreditLimit.creditLimitAmount + creditLimitIncrease.amount;
 
     await this.peachApiService.updateCreditLimit(
       borrower.personId,
-      borrower.loanId,
+      borrower.creditLineId,
       newCreditLimit,
     );
   }
 
   public async handleCreditLimitDecreased(
     creditLimitDecrease: CreditLimitDecreasedPayload,
-  ) {
+  ): Promise<void> {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: creditLimitDecrease.userId,
     });
     const currentCreditLimit = await this.peachApiService.getCreditLimit(
       borrower.personId,
-      borrower.loanId,
+      borrower.creditLineId,
     );
     const newCreditLimit: number =
       currentCreditLimit.creditLimitAmount - creditLimitDecrease.amount;
 
     await this.peachApiService.updateCreditLimit(
       borrower.personId,
-      borrower.loanId,
+      borrower.creditLineId,
       newCreditLimit,
     );
   }
 
-  // TODO: create draw somewhere!
+  public async handleTransactionsEvent(transaction: TransactionUpdatedPayload) {
+    if (transaction.status === TransactionStatus.queued) {
+      return;
+    }
+    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+      userId: transaction.userId,
+    });
 
-  // on rize payment event
-  public addPurchase() {
-    // if first purchase - activate draw
-    // create purchase
+    if (transaction.status === TransactionStatus.pending) {
+      return this.peachApiService.createPurchase(
+        borrower.personId,
+        borrower.creditLineId,
+        borrower.drawId,
+        transaction,
+      );
+    }
+
+    return this.peachApiService.updatePurchase(
+      borrower.personId,
+      borrower.creditLineId,
+      borrower.drawId,
+      transaction,
+    );
   }
 }

@@ -1,18 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GetKycResponse, GetKycPayload } from '@archie/api/user-api/kyc';
+import { GetKycPayload, GetKycResponse } from '@archie/api/user-api/kyc';
 import { RizeApiService } from './api/rize_api.service';
 import {
   ComplianceDocumentAcknowledgementRequest,
   ComplianceWorkflow,
   Customer,
+  CustomerEvent,
   DebitCard,
   DebitCardAccessToken,
+  RizeList,
+  RizeTransaction,
   TransactionEvent,
   TransactionStatus,
   TransactionType,
-  RizeTransaction,
-  CustomerEvent,
-  RizeList,
 } from './api/rize_api.interfaces';
 import { Transaction, TransactionResponse } from './rize.interfaces';
 import { RizeFactoryService } from './factory/rize_factory.service';
@@ -20,6 +20,7 @@ import { RizeValidatorService } from './validator/rize_validator.service';
 import {
   CARD_ACTIVATED_TOPIC,
   CREDIT_FUNDS_LOADED_TOPIC,
+  TRANSACTION_UPDATED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -37,7 +38,11 @@ import {
   GetEmailAddressPayload,
   GetEmailAddressResponse,
 } from '@archie/api/user-api/user';
-import { CardActivatedPayload, FundsLoadedPayload } from './rize.dto';
+import {
+  CardActivatedPayload,
+  FundsLoadedPayload,
+  TransactionUpdatedPayload,
+} from './rize.dto';
 
 @Injectable()
 export class RizeService {
@@ -126,15 +131,29 @@ export class RizeService {
       const userId: string = message.data.details.customer_external_uid;
       const amount: string = message.data.details.us_dollar_amount;
       const transactionId: string = message.data.details.transaction_uid;
+      const newStatus: TransactionStatus = message.data.details.new_status;
 
-      const transaction: RizeTransaction =
-        await this.rizeApiService.getTransaction(transactionId);
+      if (message.data.details.new_status === TransactionStatus.settled) {
+        const transaction: RizeTransaction =
+          await this.rizeApiService.getTransaction(transactionId);
 
-      if (transaction.net_asset === 'negative') {
-        await this.decreaseAvailableCredit(userId, Number(amount));
-      } else {
-        await this.increaseAvailableCredit(userId, Number(amount));
+        if (transaction.net_asset === 'negative') {
+          await this.decreaseAvailableCredit(userId, Number(amount));
+        } else {
+          await this.increaseAvailableCredit(userId, Number(amount));
+        }
       }
+
+      this.queueService.publish<TransactionUpdatedPayload>(
+        TRANSACTION_UPDATED_TOPIC,
+        {
+          userId,
+          id: transactionId,
+          status: newStatus,
+          amount: Number(message.data.details.us_dollar_amount),
+          type: message.data.details.type,
+        },
+      );
     }
   }
 
@@ -329,6 +348,11 @@ export class RizeService {
     );
 
     await this.rizeApiService.loadFunds(customerId, credit.availableCredit);
+
+    this.queueService.publish<FundsLoadedPayload>(CREDIT_FUNDS_LOADED_TOPIC, {
+      userId,
+      amount: credit.availableCredit,
+    });
   }
 
   public async increaseCreditLimit(
@@ -340,11 +364,6 @@ export class RizeService {
     );
 
     await this.rizeApiService.loadFunds(customer.uid, amount);
-
-    this.queueService.publish<FundsLoadedPayload>(CREDIT_FUNDS_LOADED_TOPIC, {
-      userId,
-      amount,
-    });
   }
 
   public async decreaseCreditLimit(

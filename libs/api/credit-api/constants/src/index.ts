@@ -67,5 +67,7 @@ export const COLLATERAL_WITHDRAW_COMPLETED_TOPIC =
 
 export const CREDIT_FUNDS_LOADED_TOPIC = 'credit.founds.loaded';
 
+export const TRANSACTION_UPDATED_TOPIC = 'credit.transaction.updated';
+
 export const GET_COLLATERAL_RPC = 'get.collateral.rpc';
 export const GET_COLLATERAL_VALUE_RPC = 'get.collateral.value.rpc';

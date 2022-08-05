@@ -5,19 +5,25 @@ import { ConfigVariables } from '@archie/api/credit-api/constants';
 import {
   CreditLimit,
   CreditLine,
+  Draw,
   HomeAddress,
   IdentityType,
   PeachErrorData,
   PeachErrorResponse,
+  PeachTransactionStatus,
+  PeachTransactionType,
   Person,
   PersonStatus,
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
+import { TransactionUpdatedPayload } from '../../../../rize/src/lib/rize.dto';
+import { TransactionType } from '../../../../rize/src/lib/api/rize_api.interfaces';
 
 @Injectable()
 export class PeachApiService {
   MAX_REQUEST_TIMEOUT = 10000;
   CONTACT_ALREADY_EXISTS_STATUS = 400;
+  ALREADY_ACTIVATED_STATUS = 400;
   peachClient: AxiosInstance;
 
   constructor(private configService: ConfigService) {
@@ -154,7 +160,7 @@ export class PeachApiService {
       newDrawsAllowed: true,
       atOrigination: {
         // TODO: check if ok
-        interestRates: [{ days: null, rate: 0.0 }],
+        interestRates: [{ days: null, rate: 15 }],
         paymentFrequency: 'monthly',
         // TODO: check if ok
         originationLicense: 'nationalBank',
@@ -196,10 +202,95 @@ export class PeachApiService {
     return response.data.data;
   }
 
-  public async activateCreditLine(personId, loanId: string): Promise<void> {
+  public async activateCreditLine(
+    personId: string,
+    loanId: string,
+  ): Promise<void> {
+    try {
+      await this.peachClient.post(
+        `/people/${personId}/loans/${loanId}/activate`,
+        {},
+      );
+    } catch (error) {
+      const axiosError: PeachErrorResponse = error;
+
+      if (axiosError.status !== this.ALREADY_ACTIVATED_STATUS) throw error;
+    }
+  }
+
+  public async createDraw(personId: string, loanId: string): Promise<Draw> {
+    const response = await this.peachClient.post(
+      `/people/${personId}/loans/${loanId}/draws`,
+      {
+        nickname: 'Draw nickname (CHANGE)',
+        status: 'originated',
+        atOrigination: {
+          // interestRates: [{ days: null, rate: 15 }],
+          minPaymentCalculation: {
+            percentageOfPrincipal: 10,
+            minAmount: 0,
+          },
+          autoAmortization: {
+            amortizationLogic: 'amortizeAfterEachPurchase',
+            duration: 1,
+          },
+        },
+      },
+    );
+
+    return response.data.data;
+  }
+
+  public async activateDraw(
+    personId: string,
+    loanId: string,
+    drawId: string,
+  ): Promise<void> {
+    try {
+      await this.peachClient.post(
+        `/people/${personId}/loans/${loanId}/draws/${drawId}/activate`,
+      );
+    } catch (error) {
+      const axiosError: PeachErrorResponse = error;
+
+      if (axiosError.status !== this.ALREADY_ACTIVATED_STATUS) throw error;
+    }
+  }
+
+  public async createPurchase(
+    personId: string,
+    loanId: string,
+    drawId: string,
+    transaction: TransactionUpdatedPayload,
+  ): Promise<void> {
     await this.peachClient.post(
-      `/people/${personId}/loans/${loanId}/activate`,
-      {},
+      `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases`,
+      {
+        externalId: transaction.id,
+        type: PeachTransactionType[transaction.type],
+        status: PeachTransactionStatus.pending,
+        amount: transaction.amount,
+      },
+    );
+  }
+
+  public async updatePurchase(
+    personId: string,
+    loanId: string,
+    drawId: string,
+    transaction: TransactionUpdatedPayload,
+  ): Promise<void> {
+    await this.peachClient.put(
+      `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases/ext-${transaction.id}`,
+      {
+        externalId: transaction.id,
+        type: PeachTransactionType[transaction.type],
+        amount: transaction.amount,
+        status:
+          transaction.type === TransactionType.dispute
+            ? 'dispute'
+            : PeachTransactionStatus[transaction.status],
+      },
     );
   }
 }

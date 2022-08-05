@@ -6,6 +6,7 @@ import {
   CREDIT_LIMIT_DECREASED_TOPIC,
   CREDIT_LIMIT_INCREASED_TOPIC,
   SERVICE_QUEUE_NAME,
+  TRANSACTION_UPDATED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import { PeachService } from './peach.service';
 import {
@@ -17,6 +18,7 @@ import { EmailVerifiedPayload } from '@archie/api/user-api/user';
 import {
   CardActivatedPayload,
   FundsLoadedPayload,
+  TransactionUpdatedPayload,
 } from '../../../rize/src/lib/rize.dto';
 import {
   CreditLimitDecreasedPayload,
@@ -61,6 +63,10 @@ export class PeachQueueController {
     await this.peachService.handleCreditLimitDecreased(payload);
   }
 
-  // TODO: handle purchase events
-  // TODO: handle down payments?? crypto
+  @Subscribe(TRANSACTION_UPDATED_TOPIC, SERVICE_QUEUE_NAME) z;
+  async transactionUpdatedHandler(
+    payload: TransactionUpdatedPayload,
+  ): Promise<void> {
+    await this.peachService.handleTransactionsEvent(payload);
+  }
 }

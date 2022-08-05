@@ -21,5 +21,8 @@ export class Borrower {
   homeAddressContactId: string | null;
 
   @Column('varchar', { nullable: true })
-  loanId: string | null;
+  creditLineId: string | null;
+
+  @Column('varchar', { nullable: true })
+  drawId: string | null;
 }
