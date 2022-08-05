@@ -14,7 +14,6 @@ export const getLinkToken = async (accessToken: string): Promise<GetPlaidLinkTok
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        'Access-Control-Allow-Origin': '*',
       },
     },
     ERROR_LIST,
