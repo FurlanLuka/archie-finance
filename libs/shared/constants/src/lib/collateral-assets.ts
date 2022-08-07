@@ -8,7 +8,7 @@ export enum CollateralCurrency {
 }
 
 export interface CollateralAsset {
-  id: string;
+  id: CollateralCurrency;
   name: string;
   short: string;
   icon: IconName;
@@ -19,7 +19,7 @@ export interface CollateralAsset {
 
 export const CollateralAssets: Record<CollateralCurrency | string, CollateralAsset> = {
   [CollateralCurrency.BTC]: {
-    id: 'BTC',
+    id: CollateralCurrency.BTC,
     name: 'Bitcoin',
     short: 'BTC',
     icon: 'bitcoin',
@@ -28,7 +28,7 @@ export const CollateralAssets: Record<CollateralCurrency | string, CollateralAss
     url: 'https://www.blockchain.com/btc/address',
   },
   [CollateralCurrency.ETH]: {
-    id: 'ETH',
+    id: CollateralCurrency.ETH,
     name: 'Ethereum',
     short: 'ETH',
     icon: 'ethereum',
@@ -37,7 +37,7 @@ export const CollateralAssets: Record<CollateralCurrency | string, CollateralAss
     url: 'https://etherscan.io/address',
   },
   [CollateralCurrency.SOL]: {
-    id: 'SOL',
+    id: CollateralCurrency.SOL,
     name: 'Solana',
     short: 'SOL',
     icon: 'solana',
@@ -46,7 +46,7 @@ export const CollateralAssets: Record<CollateralCurrency | string, CollateralAss
     url: 'https://explorer.solana.com/address',
   },
   [CollateralCurrency.USDC]: {
-    id: 'USDC',
+    id: CollateralCurrency.USDC,
     name: 'USD Coin',
     short: 'USDC',
     icon: 'usdcoin',
@@ -54,11 +54,11 @@ export const CollateralAssets: Record<CollateralCurrency | string, CollateralAss
     interest_rate: 15,
     url: 'https://etherscan.io/address',
   },
-}
+};
 
 export const CollateralAssetsColor = {
-  [CollateralCurrency.BTC]: '#f7931a',
-  [CollateralCurrency.ETH]: '#627eea',
-  [CollateralCurrency.SOL]: '#bd40f2',
-  [CollateralCurrency.USDC]: '#3e73c4',
-}
+  [CollateralCurrency.BTC]: '#f59d33',
+  [CollateralCurrency.ETH]: '#8097ed',
+  [CollateralCurrency.SOL]: '#c257ef',
+  [CollateralCurrency.USDC]: '#5376ab',
+};

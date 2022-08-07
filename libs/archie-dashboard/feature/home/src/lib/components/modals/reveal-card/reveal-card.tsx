@@ -22,7 +22,7 @@ export const RevealCardModal: FC<RevealCardModalProps> = ({ isOpen, close, onCon
   return (
     <Modal isOpen={isOpen} close={close} maxWidth="400px">
       <RevealCardModalStyled>
-        <ParagraphM weight={800}>{t('dashboard_wallet_and_collateral.reveal_card_modal')}</ParagraphM>
+        <ParagraphM weight={800}>{t('dashboard_home.reveal_card_modal')}</ParagraphM>
         <div className="btn-group">
           <ButtonOutline onClick={close}>{t('btn_cancel')}</ButtonOutline>
           <ButtonPrimary onClick={handleConfirm}>{t('btn_yes')}</ButtonPrimary>

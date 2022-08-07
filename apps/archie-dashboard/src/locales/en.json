@@ -116,6 +116,7 @@
   "not_enough_collateral_modal": {
     "title": "We received your collateral, but...",
     "text": "Your current collateral of {{collateral}} adds up to a ${{credit_value}} credit line. The minimum required value is ${{min_value}}. Please deposit at least {{difference}} worth of cryptocurrency more.",
+    "img_alt": "Not enough collateral",
     "btn": "Collateralize more"
   },
   "not_enough_collateral_popup": {
@@ -135,12 +136,10 @@
     "text": "The value of your ArchCredit collateral has dropped and you have reached an LTV rate above 75%. Action is required to prevent liquidiating a portion of your collateral. We recommend sending more collateral to your ArchCredit; paying down your balance through your bank may take up to 3 days. Archie will automatically undergo a partial lidquidation if your LTV reaches 90%",
     "btn": "Cure"
   },
-  "dashboard_wallet_and_collateral": {
+  "dashboard_home": {
     "title": "Hi, {{name}}",
     "subtitle": "Member since {{date}}",
-    "reveal_card_modal": "Show card details?",
-    "recent_transactions.title": "Recent transactions",
-    "recent_transactions.link_history": "View more"
+    "reveal_card_modal": "Show card details?"
   },
   "dashboard_collateral": {
     "title": "My Wallet"
@@ -171,9 +170,15 @@
     },
     "btn": "Withdraw Collateral"
   },
-  "dashboard_history": {
-    "transactions.title": "Transactions",
-    "transactions.btn_load_more": "Load more",
-    "transactions.btn_loading": "Loading"
+  "dashboard_collateralization": {
+    "title": "Send {{asset}} to your Collateral Wallet",
+    "subtitle_loading": "With ArchCredit, your Crypto is your credit.",
+    "subtitle_asset": "You currently have {{collateral}} {{collateral_asset}} (~${{collateral_value}}).",
+    "subtitle_credit": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it.",
+    "collateral_received_modal": {
+      "title": "Collateral received",
+      "text": "Your collateral now includes {{collateral}}. Your credit limit is now ${{credit_value}}.",
+      "btn": "Got it!"
+    }
   }
 }

@@ -8,7 +8,6 @@ export const Setup2faBannerStyled = styled.div`
   gap: 3rem;
   background-color: ${({ theme }) => theme.backgroundPositive};
   box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.08);
-  width: 100%;
   padding: 1rem;
   margin-left: ${NAV_WIDTH};
 
