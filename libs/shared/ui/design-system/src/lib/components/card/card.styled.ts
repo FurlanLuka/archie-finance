@@ -33,8 +33,8 @@ export const Card = styled.div<CardProps>`
   box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.08);
   border-radius: 0.5rem;
   width: 100%;
-  max-width: ${({ maxWidth }) => maxWidth ?? '100%'};
-  min-height: ${({ minHeight }) => minHeight ?? '100%'};
+  max-width: ${({ maxWidth }) => maxWidth};
+  min-height: ${({ minHeight }) => minHeight};
   padding: ${({ padding }) => padding};
 
   @media (max-width: ${breakpoints.screenSM}) {
