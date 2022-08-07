@@ -12,7 +12,7 @@ import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature/withdra
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
-import { Loading, Page, Container } from '@archie-webapps/shared/ui/design-system';
+import { LoaderFullScreen, Page, Container } from '@archie-webapps/shared/ui/design-system';
 
 import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
 
@@ -20,7 +20,7 @@ export const DashboardRoute: FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
 
   if (queryResponse.state === RequestState.LOADING) {
-    return <Loading />;
+    return <LoaderFullScreen />;
   }
 
   const isMfaSetup = queryResponse.state === RequestState.SUCCESS && queryResponse.data.mfaEnrollmentStage;

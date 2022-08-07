@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const LoadingStyled = styled.div`
+export const LoaderFullScreenStyled = styled.div`
   position: fixed;
   left: 0;
   top: 0;

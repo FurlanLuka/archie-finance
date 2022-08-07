@@ -2,13 +2,19 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
-import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
-import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-
+import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
+import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { ButtonOutline, Card, ParagraphXS, ParagraphXXS, SubtitleS } from '@archie-webapps/shared/ui/design-system';
+import {
+  ButtonOutline,
+  Card,
+  Skeleton,
+  ParagraphXS,
+  ParagraphXXS,
+  SubtitleS,
+} from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { LoanToValueChart } from '../charts/loan-to-value/loan-to-value';
@@ -22,7 +28,7 @@ export const AvailableCredit: FC = () => {
   if (getCreditQueryResponse.state === RequestState.LOADING || getLTVResponse.state === RequestState.LOADING) {
     return (
       <Card>
-        <div className="skeleton"></div>
+        <Skeleton />
       </Card>
     );
   }
