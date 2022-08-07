@@ -24,15 +24,19 @@ export const RecentTransactions: FC = () => {
 
   function getContent() {
     if (getRecentTransactionsResponse.state === RequestState.LOADING) {
-      return <Loader className="loader" />;
+      return (
+        <Card>
+          <div className="skeleton"></div>
+        </Card>
+      );
     }
 
     if (getRecentTransactionsResponse.state === RequestState.SUCCESS) {
       return (
         <>
           <Link to="/history" className="history-link">
-            <ButtonOutline small className="table-btn">
-              {t('dashboard_wallet_and_collateral.recent_transactions.link_history')}
+            <ButtonOutline small className="btn">
+              {t('dashboard_home.recent_transactions.btn')}
             </ButtonOutline>
           </Link>
           <Table columns={columns} data={data} />
@@ -46,8 +50,8 @@ export const RecentTransactions: FC = () => {
   return (
     <RecentTransactionsStyled>
       <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
-        <ParagraphM weight={800} className="table-title">
-          {t('dashboard_wallet_and_collateral.recent_transactions.title')}
+        <ParagraphM weight={800} className="title">
+          {t('dashboard_home.recent_transactions.title')}
         </ParagraphM>
         {getContent()}
       </Card>

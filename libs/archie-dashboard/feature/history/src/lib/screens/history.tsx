@@ -13,7 +13,7 @@ export const HistoryScreen: FC = () => {
   return (
     <HistoryStyled>
       <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
-        <SubtitleS className="title">{t('dashboard_history.transactions.title')}</SubtitleS>
+        <SubtitleS className="title">{t('dashboard_history.title')}</SubtitleS>
         <TransactionsTable />
       </Card>
     </HistoryStyled>
