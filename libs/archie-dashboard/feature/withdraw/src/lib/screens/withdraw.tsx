@@ -14,6 +14,7 @@ import { WithdrawScreenStyled } from './withdraw.styled';
 export const WithdrawScreen: FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
+  // TODO useParams this
   const currentAsset = location.pathname.slice(location.pathname.lastIndexOf('/') + 1);
 
   const getMaxWithdrawalAmountResponse = useGetMaxWithdrawalAmount(currentAsset);

@@ -100,6 +100,11 @@
     "img_alt": "Your Archie Card is ready",
     "btn": "Go to my dashboard"
   },
+  "error_indicator": {
+    "title": "Something went wrong",
+    "error_image_alt": "Something went wrong",
+    "btn_reload": "Reload?"
+  },
   "email_verification_alert": {
     "title": "Please verify your email",
     "text_1": "Check your email for a verification link from Archie. If you did not receive a verification email, click",
@@ -116,6 +121,7 @@
   "not_enough_collateral_modal": {
     "title": "We received your collateral, but...",
     "text": "Your current collateral of {{collateral}} adds up to a ${{credit_value}} credit line. The minimum required value is ${{min_value}}. Please deposit at least {{difference}} worth of cryptocurrency more.",
+    "img_alt": "Not enough collateral",
     "btn": "Collateralize more"
   },
   "not_enough_collateral_popup": {
@@ -135,7 +141,7 @@
     "text": "The value of your ArchCredit collateral has dropped and you have reached an LTV rate above 75%. Action is required to prevent liquidiating a portion of your collateral. We recommend sending more collateral to your ArchCredit; paying down your balance through your bank may take up to 3 days. Archie will automatically undergo a partial lidquidation if your LTV reaches 90%",
     "btn": "Cure"
   },
-  "dashboard_wallet_and_collateral": {
+  "dashboard_home": {
     "title": "Hi, {{name}}",
     "subtitle": "Member since {{date}}",
     "reveal_card_modal": "Show card details?"
@@ -169,9 +175,15 @@
     },
     "btn": "Withdraw Collateral"
   },
-  "dashboard_error": {
-    "title": "Something went wrong",
-    "error_image_alt": "Something went wrong",
-    "btn_reload": "Reload?"
+  "dashboard_collateralization": {
+    "title": "Send {{asset}} to your Collateral Wallet",
+    "subtitle_loading": "With ArchCredit, your Crypto is your credit.",
+    "subtitle_asset": "You currently have {{collateral}} {{collateral_asset}} (~${{collateral_value}}).",
+    "subtitle_credit": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it.",
+    "collateral_received_modal": {
+      "title": "Collateral received",
+      "text": "Your collateral now includes {{collateral}}. Your credit limit is now ${{credit_value}}.",
+      "btn": "Got it!"
+    }
   }
 }

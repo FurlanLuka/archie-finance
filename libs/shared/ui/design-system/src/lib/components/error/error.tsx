@@ -16,10 +16,10 @@ export const Error: FC<ErrorProps> = ({ description }) => {
 
   return (
     <ErrorStyled>
-      <SubtitleM className="title">{t('dashboard_error.title')}</SubtitleM>
+      <SubtitleM className="title">{t('error_indicator.title')}</SubtitleM>
       {description && <ParagraphM className="subtitle">{description}</ParagraphM>}
       <div className="error-img">
-        <img src={errorImg} alt={t('dashboard_error.error_image_alt')} />
+        <img src={errorImg} alt={t('error_indicator.error_image_alt')} />
       </div>
       <ButtonPrimary
         maxWidth="fit-content"
@@ -27,7 +27,7 @@ export const Error: FC<ErrorProps> = ({ description }) => {
           window.location.reload();
         }}
       >
-        {t('dashboard_error.btn_reload')}
+        {t('error_indicator.btn_reload')}
       </ButtonPrimary>
     </ErrorStyled>
   );

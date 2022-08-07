@@ -11,7 +11,13 @@ export const VerifyEmailScreenStyled = styled.div`
   }
 
   .subtitle {
+    width: 90%;
+    text-align: center;
     margin-bottom: 3rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      width: 100%;
+    }
   }
 
   .text {
@@ -39,6 +45,7 @@ export const VerifyEmailScreenStyled = styled.div`
     color: ${({ theme }) => theme.textHighlight};
     border: 0;
     margin-bottom: 1rem;
+    cursor: pointer;
   }
 
   .divider {
