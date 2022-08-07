@@ -1,6 +1,6 @@
 import { Story, Meta } from '@storybook/react';
 
-import { LoanToValueStatus, LoanToValueColor, LoanToValueText } from '@archie-webapps/util-constants';
+import { LoanToValueStatus, LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
 
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';

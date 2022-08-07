@@ -3,21 +3,24 @@ import { useTranslation } from 'react-i18next';
 
 import { ButtonPrimary, ParagraphM, SubtitleM } from '@archie-webapps/shared/ui/design-system';
 
-import errorImg from '../../assets/bell-alert.png';
+import errorImg from '../../../assets/bell-alert.png';
 
-import { ErrorCardStyled } from './error-screen.styled';
+import { ErrorStyled } from './error.styled';
 
-interface ErrorCardProps {
+export interface ErrorProps {
   description?: string;
 }
-export const ErrorCard: FC<ErrorCardProps> = ({ description }) => {
+
+export const Error: FC<ErrorProps> = ({ description }) => {
   const { t } = useTranslation();
 
   return (
-    <ErrorCardStyled padding="3rem 0" column alignItems="center">
-      <SubtitleM>{t('dashboard_error.title')}</SubtitleM>
+    <ErrorStyled>
+      <SubtitleM className="title">{t('dashboard_error.title')}</SubtitleM>
       {description && <ParagraphM className="subtitle">{description}</ParagraphM>}
-      <img src={errorImg} className="error-image" alt={t('dashboard_error.error_image_alt')} />
+      <div className="error-img">
+        <img src={errorImg} alt={t('dashboard_error.error_image_alt')} />
+      </div>
       <ButtonPrimary
         maxWidth="fit-content"
         onClick={() => {
@@ -26,6 +29,6 @@ export const ErrorCard: FC<ErrorCardProps> = ({ description }) => {
       >
         {t('dashboard_error.btn_reload')}
       </ButtonPrimary>
-    </ErrorCardStyled>
+    </ErrorStyled>
   );
 };
