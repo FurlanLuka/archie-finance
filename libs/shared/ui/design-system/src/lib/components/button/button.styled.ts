@@ -53,8 +53,8 @@ const Button = styled.button<ButtonProps>`
     border: 2px solid ${({ theme }) => theme.loadingBorder};
     border-top: 2px solid ${({ theme }) => theme.loadingBorderTop};
     border-radius: 100%;
-    width: ${({ small }) => (small ? '.75rem' : '1.75rem')};
-    height: ${({ small }) => (small ? '.75rem' : '1.75rem')};
+    width: ${({ small }) => (small ? '0.75rem' : '1.75rem')};
+    height: ${({ small }) => (small ? '0.75rem' : '1.75rem')};
     animation: ${spin} 0.8s linear infinite;
     display: ${({ isLoading }) => (isLoading ? 'flex' : 'none')};
   }

@@ -1,32 +1,30 @@
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { transactionColumns } from '@archie-webapps/archie-dashboard/components';
+import { TransactionsTable } from '@archie-webapps/archie-dashboard/components';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetTransactions } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-transactions';
-import { ButtonOutline, Loading, Table } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, Loading } from '@archie-webapps/shared/ui/design-system';
 
-import { TransactionsTableStyled } from './transactions-table.styled';
+import { RecentTransactionsStyled } from './recent-transactions.styled';
 
-export const TransactionsTable: FC = () => {
+export const RecentTransactions: FC = () => {
   const { t } = useTranslation();
+
   const getTransactionsResponse = useGetTransactions();
-  const columns = useMemo(() => transactionColumns, []);
 
   const data = useMemo(() => {
     if (
       getTransactionsResponse.state === RequestState.SUCCESS ||
       getTransactionsResponse.state === RequestState.LOADING_NEXT_PAGE
     ) {
-      return getTransactionsResponse.pages.flatMap((page) => {
-        return page.data;
-      });
+      return getTransactionsResponse.pages.flatMap((page) => page.data);
     }
 
     return [];
   }, [getTransactionsResponse]);
 
-  function getContent() {
+  const getContent = () => {
     if (getTransactionsResponse.state === RequestState.LOADING) {
       return <Loading />;
     }
@@ -34,7 +32,7 @@ export const TransactionsTable: FC = () => {
     if (getTransactionsResponse.state === RequestState.SUCCESS) {
       return (
         <>
-          <Table data={data} columns={columns} />
+          <TransactionsTable data={data} />
           {getTransactionsResponse.hasNextPage && (
             <ButtonOutline
               small
@@ -52,7 +50,7 @@ export const TransactionsTable: FC = () => {
     if (getTransactionsResponse.state === RequestState.LOADING_NEXT_PAGE) {
       return (
         <>
-          <Table data={data} columns={columns} />
+          <TransactionsTable data={data} />
           <ButtonOutline small maxWidth="fit-content" isLoading className="load-btn">
             {t('dashboard_history.btn_load_more')}
           </ButtonOutline>
@@ -61,7 +59,7 @@ export const TransactionsTable: FC = () => {
     }
 
     return null;
-  }
+  };
 
-  return <TransactionsTableStyled>{getContent()}</TransactionsTableStyled>;
+  return <RecentTransactionsStyled>{getContent()}</RecentTransactionsStyled>;
 };

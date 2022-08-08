@@ -1,10 +1,8 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useState } from 'react';
 import {
-  InfiniteData,
   MutationFunction,
   MutationKey,
-  QueryFunction,
   QueryKey,
   useInfiniteQuery,
   UseInfiniteQueryOptions,
@@ -19,7 +17,6 @@ import { SessionState, useAuthenticatedSession } from '@archie-webapps/shared/da
 import { ApiErrors, UnauthenticatedApiError } from './api-error';
 import {
   DefaultVariables,
-  sessionRefreshInfiniteWrapper,
   sessionRefreshWrapper,
   sessionRefreshWrapperMutation,
 } from './helpers';

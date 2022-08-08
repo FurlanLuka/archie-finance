@@ -4,7 +4,7 @@ import { getTransactions, GetTransactionsResponse } from '../api/get-transaction
 
 const TRANSACTIONS_RECORD_QUERY_KEY = 'transactions_record';
 
-function getNextPage({ meta }: GetTransactionsResponse) {
+const getNextPage = ({ meta }: GetTransactionsResponse) => {
   if (meta.page * meta.limit + meta.count < meta.totalCount) {
     return meta.page + 1;
   }

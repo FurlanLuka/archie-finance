@@ -67,11 +67,9 @@ const AmountCell: FC<AmountCellProps> = ({ amount }) => {
       {isPositive ? '-' : '+'}${Math.abs(amount)}
     </ParagraphXS>
   );
-
-  // return amount < 0 ? <ParagraphXS>{`- $${-amount}`}</ParagraphXS> : <ParagraphXS>{`+ $${amount}`}</ParagraphXS>;
 };
 
-export const transactionColumns: Column<Transaction>[] = [
+export const tableColumns: Column<Transaction>[] = [
   {
     Header: '',
     id: 'hidden',
