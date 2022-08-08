@@ -4,8 +4,10 @@ import { getRequest } from '../../helpers';
 export interface AccountResponse {
   id: string;
   name: string;
-  officialName: string;
   mask: string;
+  availableBalance: number;
+  currencyISO: string;
+  subtype: string;
 }
 
 export type GetAccountsResponse = AccountResponse[];
