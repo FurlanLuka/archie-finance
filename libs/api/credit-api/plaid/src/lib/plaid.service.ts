@@ -52,60 +52,56 @@ export class PlaidService {
   }
 
   public async getUserAccounts(userId: string): Promise<GetAccountsResponse> {
-    try {
-      const accessItems = await this.plaidAccessRepository.find({
-        where: { userId },
-        select: ['accessToken', 'itemId'],
-      });
+    const accessItems = await this.plaidAccessRepository.find({
+      where: { userId },
+      select: ['accessToken', 'itemId'],
+    });
 
-      const allAccounts = await Promise.all(
-        accessItems.map(async (item) => {
-          const decryptedAccessToken: string = this.cryptoService.decrypt(
-            item.accessToken,
-          );
+    const allAccounts = await Promise.all(
+      accessItems.map(async (item) => {
+        const decryptedAccessToken: string = this.cryptoService.decrypt(
+          item.accessToken,
+        );
 
-          const itemAccounts = await this.plaidApiService.getAccountsForItem(
-            decryptedAccessToken,
-          );
+        const itemAccounts = await this.plaidApiService.getAccountsForItem(
+          decryptedAccessToken,
+        );
+        // console.log('olakawnts', itemAccounts);
 
-          const accountsResponse: AccountResponse[] = itemAccounts.map(
-            (account) => ({
-              id: account.account_id,
-              name: account.name,
-              officialName: account.official_name,
-              mask: account.mask,
-            }),
-          );
+        // TODO check if we need type or subtype
+        const accountsResponse: AccountResponse[] = itemAccounts.map(
+          (account) => ({
+            id: account.account_id,
+            name: account.name,
+            mask: account.mask,
+            availableBalance: account.balances.available,
+            currencyISO: account.balances.iso_currency_code,
+            subtype: account.subtype,
+          }),
+        );
 
-          return accountsResponse;
-        }),
-      );
+        return accountsResponse;
+      }),
+    );
 
-      return allAccounts.flat(1);
-    } catch (err) {
-      throw err;
-    }
+    return allAccounts.flat(1);
   }
 
   public async removeAccount(userId: string, itemId: string): Promise<void> {
     console.log('evo nas', { userId, itemId });
-    try {
-      const accessItem = await this.plaidAccessRepository.findOneOrFail({
-        where: {
-          userId,
-          itemId,
-        },
-        select: ['accessToken'],
-      });
+    const accessItem = await this.plaidAccessRepository.findOneOrFail({
+      where: {
+        userId,
+        itemId,
+      },
+      select: ['accessToken'],
+    });
 
-      const decryptedAccessToken: string = this.cryptoService.decrypt(
-        accessItem.accessToken,
-      );
+    const decryptedAccessToken: string = this.cryptoService.decrypt(
+      accessItem.accessToken,
+    );
 
-      await this.plaidApiService.unlinkAccount(decryptedAccessToken);
-      await this.plaidAccessRepository.delete(accessItem);
-    } catch (err) {
-      throw err;
-    }
+    await this.plaidApiService.unlinkAccount(decryptedAccessToken);
+    await this.plaidAccessRepository.delete(accessItem);
   }
 }
