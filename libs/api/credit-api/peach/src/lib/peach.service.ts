@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { PeachApiService } from './api/peach_api.service';
-import { Draw, HomeAddress, Person } from './api/peach_api.interfaces';
+import {
+  Draw,
+  HomeAddress,
+  PaymentInstrument,
+  Person,
+} from './api/peach_api.interfaces';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
 import {
   CardActivatedPayload,
@@ -18,6 +23,8 @@ import {
   MarginCallCompleted,
 } from '@archie/api/credit-api/margin';
 import { TransactionStatus } from '../../../rize/src/lib/api/rize_api.interfaces';
+import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
+import { InternalCollateralTransactionCompletedPayload } from '../../../../collateral-api/fireblocks-webhook/src/lib/fireblocks-webhook.dto';
 
 @Injectable()
 export class PeachService {
@@ -212,7 +219,51 @@ export class PeachService {
     );
   }
 
-  public async handleMarginCallCompletedEvent(marginCall: MarginCallCompleted) {
-    // TODO: https://docs.peach.finance/tag/Transactions Service Credit
+  public async handleInternalTransactionCreatedEvent(
+    transaction: InternalCollateralTransactionCreatedPayload,
+  ): Promise<void> {
+    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+      userId: transaction.userId,
+    });
+
+    let liquidationInstrumentId: string | null =
+      borrower.liquidationInstrumentId;
+
+    if (liquidationInstrumentId === null) {
+      const paymentInstrument: PaymentInstrument =
+        await this.peachApiService.createLiquidationPaymentInstrument(
+          borrower.personId,
+        );
+      liquidationInstrumentId = paymentInstrument.id;
+
+      await this.borrowerRepository.update(
+        {
+          userId: transaction.userId,
+        },
+        {
+          liquidationInstrumentId,
+        },
+      );
+    }
+
+    await this.peachApiService.createPendingOneTimePaymentTransaction(
+      borrower,
+      liquidationInstrumentId,
+      transaction.price,
+      transaction.id,
+    );
+  }
+
+  public async handleInternalTransactionCompletedEvent(
+    transaction: InternalCollateralTransactionCompletedPayload,
+  ): Promise<void> {
+    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+      userId: transaction.userId,
+    });
+
+    await this.peachApiService.completeTransaction(
+      borrower,
+      transaction.transactionId,
+    );
   }
 }

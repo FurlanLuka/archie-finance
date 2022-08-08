@@ -24,5 +24,8 @@ export class Borrower {
   creditLineId: string | null;
 
   @Column('varchar', { nullable: true })
+  liquidationInstrumentId: string | null;
+
+  @Column('varchar', { nullable: true })
   drawId: string | null;
 }

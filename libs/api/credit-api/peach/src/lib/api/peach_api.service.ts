@@ -8,6 +8,7 @@ import {
   Draw,
   HomeAddress,
   IdentityType,
+  PaymentInstrument,
   PeachErrorData,
   PeachErrorResponse,
   PeachTransactionStatus,
@@ -18,6 +19,7 @@ import {
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { TransactionUpdatedPayload } from '../../../../rize/src/lib/rize.dto';
 import { TransactionType } from '../../../../rize/src/lib/api/rize_api.interfaces';
+import { Borrower } from '../borrower.entity';
 
 @Injectable()
 export class PeachApiService {
@@ -53,6 +55,54 @@ export class PeachApiService {
     });
 
     return axiosInstance;
+  }
+
+  public async createLiquidationPaymentInstrument(
+    personId: string,
+  ): Promise<PaymentInstrument> {
+    const response = await this.peachClient.post(
+      `/people/${personId}/payment-instruments`,
+      {
+        externalId: 'payment-instrument',
+        status: 'active',
+        instrumentType: 'paymentNetwork',
+        paymentNetworkName: 'Fireblocks internal transaction',
+      },
+    );
+
+    return response.data.data[0];
+  }
+
+  public async createPendingOneTimePaymentTransaction(
+    borrower: Borrower,
+    paymentInstrumentId: string,
+    amount: number,
+    externalId: string,
+  ): Promise<void> {
+    await this.peachClient.post(
+      `/people/${borrower.personId}/loans/${borrower.creditLineId}/transactions`,
+      {
+        externalId,
+        type: 'oneTime',
+        drawId: borrower.drawId,
+        isExternal: true,
+        status: 'pending',
+        paymentInstrumentId,
+        amount,
+      },
+    );
+  }
+
+  public async completeTransaction(
+    borrower: Borrower,
+    externalId: string,
+  ): Promise<void> {
+    await this.peachClient.post(
+      `/people/${borrower.personId}/loans/${borrower.creditLineId}/transactions/ext-${externalId}`,
+      {
+        status: 'succeeded',
+      },
+    );
   }
 
   public async createPerson(kyc: KycSubmittedPayload): Promise<Person> {

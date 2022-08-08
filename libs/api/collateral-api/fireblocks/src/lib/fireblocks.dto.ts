@@ -1,5 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsArray, IsNumber, IsString } from 'class-validator';
+import { AssetType } from '@archie/api/collateral-api/asset-information';
 
 export class CollateralWithdrawInitializedDto {
   @IsString()
@@ -29,4 +30,12 @@ export class LiquidateAssetsDto {
   @IsArray()
   @Type(() => LiquidationDto)
   liquidation: LiquidationDto[];
+}
+
+export class InternalCollateralTransactionCreatedPayload {
+  userId: string;
+  id: string;
+  amount: number;
+  price: number;
+  network: AssetType;
 }

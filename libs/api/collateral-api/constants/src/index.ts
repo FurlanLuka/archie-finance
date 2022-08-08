@@ -18,3 +18,9 @@ export enum ConfigVariables {
 }
 
 export const GET_ASSET_INFORMATION_RPC = 'get.asset_information.rpc';
+
+export const INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC =
+  'collateral.liquidation_transaction.created';
+
+export const INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC =
+  'collateral.liquidation_transaction.completed';

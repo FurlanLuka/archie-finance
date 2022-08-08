@@ -21,6 +21,10 @@ export interface Person extends PeachResponse {
   companyId: string;
 }
 
+export interface PaymentInstrument extends PeachResponse {
+  id: string;
+}
+
 export interface HomeAddress extends PeachResponse {
   id: string;
 }

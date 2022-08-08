@@ -5,7 +5,6 @@ import {
   CREDIT_FUNDS_LOADED_TOPIC,
   CREDIT_LIMIT_DECREASED_TOPIC,
   CREDIT_LIMIT_INCREASED_TOPIC,
-  MARGIN_CALL_COMPLETED_TOPIC,
   SERVICE_QUEUE_NAME,
   TRANSACTION_UPDATED_TOPIC,
 } from '@archie/api/credit-api/constants';
@@ -24,8 +23,13 @@ import {
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
-  MarginCallCompleted,
 } from '@archie/api/credit-api/margin';
+import {
+  INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
+  INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
+} from '@archie/api/collateral-api/constants';
+import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
+import { InternalCollateralTransactionCompletedPayload } from '../../../../collateral-api/fireblocks-webhook/src/lib/fireblocks-webhook.dto';
 
 @Controller()
 export class PeachQueueController {
@@ -87,12 +91,22 @@ export class PeachQueueController {
   }
 
   @Subscribe(
-    MARGIN_CALL_COMPLETED_TOPIC,
+    INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
+    PeachQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async internal(
+    payload: InternalCollateralTransactionCreatedPayload,
+  ): Promise<void> {
+    await this.peachService.handleInternalTransactionCreatedEvent(payload);
+  }
+
+  @Subscribe(
+    INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
     PeachQueueController.CONTROLLER_QUEUE_NAME,
   )
   async marginCallCompletedHandler(
-    payload: MarginCallCompleted,
+    payload: InternalCollateralTransactionCompletedPayload,
   ): Promise<void> {
-    await this.peachService.handleTransactionsEvent(payload);
+    await this.peachService.handleInternalTransactionCompletedEvent(payload);
   }
 }
