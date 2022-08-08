@@ -6,7 +6,6 @@ import {
   Post,
   Request,
   UseGuards,
-  Response,
   Query,
 } from '@nestjs/common';
 import { RizeService } from './rize.service';
