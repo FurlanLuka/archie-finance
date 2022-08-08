@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 export const RecentTransactionsStyled = styled.div`
-  .table-title {
+  .title {
     margin-bottom: 1rem;
   }
 
-  .table-btn {
-    margin-bottom: 2rem;
+  .btn {
+    margin-bottom: 2.5rem;
   }
 `;

@@ -21,6 +21,6 @@ export const HistoryStyled = styled.div`
   }
 
   .title {
-    margin-bottom: 0.5rem;
+    margin-bottom: 2rem;
   }
 `;
