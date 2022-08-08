@@ -19,14 +19,18 @@ export default {
 export const Default: Story = () => (
   <StoriesContainer>
     <StoriesTitle title="Skeleton" subtitle="default" />
-    <Skeleton />
+    <div style={{ position: 'relative', maxWidth: '400px', height: '200px' }}>
+      <Skeleton />
+    </div>
   </StoriesContainer>
 );
 
 export const WithBackgroundColor: Story<SkeletonProps> = (props) => (
   <StoriesContainer>
-    <StoriesTitle title="Loader" subtitle="with background color" />
-    <Skeleton {...props} />
+    <StoriesTitle title="Skeleton" subtitle="with background color" />
+    <div style={{ position: 'relative', maxWidth: '400px', height: '200px' }}>
+      <Skeleton {...props} />
+    </div>
   </StoriesContainer>
 );
 

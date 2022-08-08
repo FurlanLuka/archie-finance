@@ -14,6 +14,7 @@ import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/
 import {
   Container,
   Card,
+  Skeleton,
   InputRange,
   ParagraphS,
   ParagraphXS,
@@ -251,7 +252,7 @@ export const CollateralizationScreen: FC = () => {
                 </li>
               </ul>
             </div>
-            <div className={`overlay ${getDepositAddress() && 'fade-out'}`} />
+            {!getDepositAddress() && <Skeleton bgColor={theme.backgroundSecondary} />}
           </div>
         </Card>
       </CollateralizationScreenStyled>

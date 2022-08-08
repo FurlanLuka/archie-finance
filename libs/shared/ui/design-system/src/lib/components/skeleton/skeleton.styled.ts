@@ -12,6 +12,8 @@ export interface SkeletonProps {
 
 export const Skeleton = styled.div<SkeletonProps>`
   position: absolute;
+  top: 0;
+  left: 0;
   background-color: ${({ bgColor }) => bgColor};
   height: 100%;
   width: 100%;
@@ -25,7 +27,7 @@ export const Skeleton = styled.div<SkeletonProps>`
     bottom: 0;
     left: 0;
     transform: translateX(-100%);
-    background: linear-gradient(to right, #fff 8%, #ececec 38%, #fff 54%);
+    background: ${({ bgColor = '#fff'}) => `linear-gradient(to right, ${bgColor} 8%, #ececec 38%, ${bgColor} 54%)`}; 
     animation: ${load} 1s linear infinite;
   }
 `;

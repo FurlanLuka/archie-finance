@@ -2,15 +2,6 @@ import styled, { keyframes } from 'styled-components';
 
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
-const load = keyframes`
-  0% {
-    background-position: -500px 0;
-  }
-  100% {
-    background-position: 500px 0;
-  }
-`;
-
 const fadeOut = keyframes`
   0% {
     opacity: 1;
@@ -124,22 +115,6 @@ export const CollateralizationScreenStyled = styled.div`
     width: 100%;
     min-height: 470px;
     padding: 1.5rem 1rem;
-  }
-
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: ${({ theme }) => theme.backgroundSecondary};
-
-    &.fade-out {
-      background: linear-gradient(to right, #f9f9f9 8%, #ececec 38%, #f9f9f9 54%);
-      background-size: 1000px 500px;
-      animation: ${load} 1s linear infinite forwards, ${fadeOut} 0.4s ease-out 2s forwards,
-        ${hide} 0s linear 2s forwards;
-    }
   }
 
   .data {
