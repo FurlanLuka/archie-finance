@@ -3,7 +3,7 @@ import { FC, useState } from 'react';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { CardsImage } from '@archie-webapps/shared/data-access/archie-api/rize/api/get-cards-image';
 import { useGetCardsImage } from '@archie-webapps/shared/data-access/archie-api/rize/hooks/use-cards-image';
-import { Card } from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton } from '@archie-webapps/shared/ui/design-system';
 
 import imgCard from '../../assets/card-placeholder.png';
 import { RevealCardModal } from '../modals/reveal-card/reveal-card';
@@ -20,7 +20,7 @@ export const ArchieCard: FC = () => {
     return (
       <ArchieCardStyled>
         <Card className="archie-card">
-          <div className="skeleton"></div>
+          <Skeleton />
         </Card>
       </ArchieCardStyled>
     );

@@ -3,11 +3,11 @@ import { Story, Meta } from '@storybook/react';
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
 
-import { Loading } from './loading';
+import { LoaderFullScreen } from './loader-full-screen';
 
 export default {
-  title: 'Components/Loading Indicator',
-  component: Loading,
+  title: 'Layout/Loader Full Screen',
+  component: LoaderFullScreen,
   parameters: {
     layout: 'fullscreen',
     options: { showPanel: false },
@@ -16,7 +16,7 @@ export default {
 
 export const Default: Story = () => (
   <StoriesContainer>
-    <StoriesTitle title="Loading indicator" />
-    <Loading />
+    <StoriesTitle title="Loader Full Screen" />
+    <LoaderFullScreen />
   </StoriesContainer>
 );

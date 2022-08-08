@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { TransactionsTable } from '@archie-webapps/archie-dashboard/components';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetTransactions } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-transactions';
-import { ButtonOutline, Loading } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, LoaderFullScreen } from '@archie-webapps/shared/ui/design-system';
 
 import { RecentTransactionsStyled } from './recent-transactions.styled';
 
@@ -26,7 +26,7 @@ export const RecentTransactions: FC = () => {
 
   const getContent = () => {
     if (getTransactionsResponse.state === RequestState.LOADING) {
-      return <Loading />;
+      return <LoaderFullScreen />;
     }
 
     if (getTransactionsResponse.state === RequestState.SUCCESS) {

@@ -2,10 +2,11 @@ import { FC } from 'react';
 
 import { LoaderStyled } from './loader.styled';
 
-interface LoaderProps {
+export interface LoaderProps {
   className?: string;
   color?: string;
 }
+
 export const Loader: FC<LoaderProps> = ({ color, className }) => (
   <LoaderStyled className={className} color={color}>
     <div className="rect rect1"></div>

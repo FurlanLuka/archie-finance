@@ -1,15 +1,6 @@
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 import styled, { keyframes } from 'styled-components';
 
-const load = keyframes`
-  0% {
-    background-position: -500px 0;
-  }
-  100% {
-    background-position: 500px 0;
-  }
-`;
-
 const scale = keyframes`
   0% {
     transform: scale(0.9);
@@ -64,23 +55,7 @@ export const DepositAddressStyled = styled.div`
       }
     }
   }
-
-  .overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: ${({ theme }) => theme.backgroundSecondary};
-
-    &.fade-out {
-      background: linear-gradient(to right, #f9f9f9 8%, #ececec 38%, #f9f9f9 54%);
-      background-size: 1000px 500px;
-      animation: ${load} 1s linear infinite forwards, ${fadeOut} 0.4s ease-out 2s forwards,
-        ${hide} 0s linear 2s forwards;
-    }
-  }
-
+  
   .copied {
     transform-origin: center;
     animation: ${scale} 0.2s ease forwards;
