@@ -13,23 +13,18 @@ import {
   TransactionStatus,
   TransactionType,
 } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-transactions';
+import { ParagraphS, ParagraphXS, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { getRowDescription } from './table-fixture.helpers';
-import { StatusCellStyled, DescriptionCellStyled, AmountCellStyled, TypeCellStyled } from './table-fixtures.styled';
 
-interface StatusCellProps {
-  status: TransactionStatus;
+interface DateCellProps {
+  date: string;
 }
 
-const StatusCell: FC<StatusCellProps> = ({ status }) => (
-  <StatusCellStyled color={TransactionStatusColor[status]}>{TransactionStatusText[status]}</StatusCellStyled>
+const DateCell: FC<DateCellProps> = ({ date }) => (
+  <ParagraphXS weight={500}>{format(new Date(date), 'M/d')}</ParagraphXS>
 );
-
-interface TypeCellProps {
-  type: TransactionType;
-}
-
-const TypeCell: FC<TypeCellProps> = ({ type }) => <TypeCellStyled>{TransactionTypeText[type]}</TypeCellStyled>;
 
 interface DescriptionCellProps {
   title: string;
@@ -37,27 +32,44 @@ interface DescriptionCellProps {
 }
 
 const DescriptionCell: FC<DescriptionCellProps> = ({ title, code }) => (
-  <DescriptionCellStyled>
-    <div className="description-title">{title}</div>
-    <div className="description-code">{code}</div>
-  </DescriptionCellStyled>
+  <>
+    <ParagraphS weight={500}>{title}</ParagraphS>
+    <ParagraphXXS color={theme.textSecondary} weight={500}>
+      {code}
+    </ParagraphXXS>
+  </>
 );
 
-interface DateCellProps {
-  date: string;
+interface TypeCellProps {
+  type: TransactionType;
 }
 
-const DateCell: FC<DateCellProps> = ({ date }) => <div>{format(new Date(date), 'M/d')}</div>;
+const TypeCell: FC<TypeCellProps> = ({ type }) => <ParagraphXS weight={500}>{TransactionTypeText[type]}</ParagraphXS>;
+interface StatusCellProps {
+  status: TransactionStatus;
+}
+
+const StatusCell: FC<StatusCellProps> = ({ status }) => (
+  <ParagraphXS color={TransactionStatusColor[status]} weight={500}>
+    {TransactionStatusText[status]}
+  </ParagraphXS>
+);
 
 interface AmountCellProps {
   amount: number;
 }
-const AmountCell: FC<AmountCellProps> = ({ amount }) =>
-  amount < 0 ? (
-    <AmountCellStyled isNegative={true}>{`-$${-amount}`}</AmountCellStyled> // need to display -$X
-  ) : (
-    <AmountCellStyled isNegative={false}>{`+$${amount}`}</AmountCellStyled>
+
+const AmountCell: FC<AmountCellProps> = ({ amount }) => {
+  const isPositive = amount > 0;
+
+  return (
+    <ParagraphXS color={isPositive ? theme.textSuccess : theme.textDanger} weight={500}>
+      {isPositive ? '-' : '+'}${Math.abs(amount)}
+    </ParagraphXS>
   );
+
+  // return amount < 0 ? <ParagraphXS>{`- $${-amount}`}</ParagraphXS> : <ParagraphXS>{`+ $${amount}`}</ParagraphXS>;
+};
 
 export const transactionColumns: Column<Transaction>[] = [
   {
@@ -97,12 +109,7 @@ export const transactionColumns: Column<Transaction>[] = [
       },
       {
         Header: 'Amount',
-        accessor: (row) => {
-          if (row.net_asset === NetAsset.negative) {
-            return -row.us_dollar_amount;
-          }
-          return row.us_dollar_amount;
-        },
+        accessor: (row) => (row.net_asset === NetAsset.NEGATIVE ? -row.us_dollar_amount : row.us_dollar_amount),
         width: 1,
         Cell: ({ value }: any) => {
           return <AmountCell amount={value} />;

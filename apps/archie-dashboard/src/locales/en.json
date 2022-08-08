@@ -194,7 +194,8 @@
     "title": ""
   },
   "dashboard_history": {
-    "title": "Recent Transactions"
+    "title": "Recent Transactions",
+    "btn_load_more": "Load more"
   },
   "dashboard_settings": {
     "title": ""

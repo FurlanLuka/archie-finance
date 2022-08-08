@@ -12,17 +12,17 @@ export const TransactionStatusText = {
 };
 
 export const TransactionTypeText = {
-  [TransactionType.atm_withdrawal]: 'ATM withdrawal',
-  [TransactionType.card_purchase]: 'Card purchase',
-  [TransactionType.card_refund]: 'Card refund',
-  [TransactionType.dispute]: 'Dispute',
-  [TransactionType.external_transfer]: 'External transfer',
-  [TransactionType.fee]: 'Fee',
-  [TransactionType.credit]: 'Credit',
-  [TransactionType.internal_transfer]: 'Internal transfer',
-  [TransactionType.other]: 'Other',
-  [TransactionType.reversed_transfer]: 'Reversed transfer',
-  [TransactionType.third_party_transfer]: 'Third party_transfer',
+  [TransactionType.ATM_WITHDRAWAL]: 'ATM withdrawal',
+  [TransactionType.CARD_PURCHASE]: 'Card purchase',
+  [TransactionType.CARD_REFUND]: 'Card refund',
+  [TransactionType.DISPUTE]: 'Dispute',
+  [TransactionType.EXTERNAL_TRANSFER]: 'External transfer',
+  [TransactionType.FEE]: 'Fee',
+  [TransactionType.CREDIT]: 'Credit',
+  [TransactionType.INTERNAL_TRANSFER]: 'Internal transfer',
+  [TransactionType.OTHER]: 'Other',
+  [TransactionType.REVERSED_TRANSFER]: 'Reversed transfer',
+  [TransactionType.THIRD_PARTY_TRANSFER]: 'Third party_transfer',
 };
 
 export const TransactionStatusColor = {

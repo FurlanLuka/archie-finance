@@ -36,8 +36,13 @@ export const TransactionsTable: FC = () => {
         <>
           <Table data={data} columns={columns} />
           {getTransactionsResponse.hasNextPage && (
-            <ButtonOutline className="load-button" small onClick={getTransactionsResponse.fetchNextPage}>
-              {t('dashboard_history.transactions.btn_load_more')}
+            <ButtonOutline
+              small
+              maxWidth="fit-content"
+              className="load-btn"
+              onClick={getTransactionsResponse.fetchNextPage}
+            >
+              {t('dashboard_history.btn_load_more')}
             </ButtonOutline>
           )}
         </>
@@ -48,8 +53,8 @@ export const TransactionsTable: FC = () => {
       return (
         <>
           <Table data={data} columns={columns} />
-          <ButtonOutline className="load-button" small isLoading>
-            {t('dashboard_history.transactions.btn_loading')}
+          <ButtonOutline small maxWidth="fit-content" isLoading className="load-btn">
+            {t('dashboard_history.btn_load_more')}
           </ButtonOutline>
         </>
       );

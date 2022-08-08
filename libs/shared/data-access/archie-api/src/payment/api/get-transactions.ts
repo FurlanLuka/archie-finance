@@ -3,8 +3,8 @@ import { getRequest } from '../../helpers';
 import { PaginationMeta } from '../../interface';
 
 export enum NetAsset {
-  positive = 'positive',
-  negative = 'negative',
+  POSITIVE = 'positive',
+  NEGATIVE = 'negative',
 }
 
 export enum TransactionStatus {
@@ -15,17 +15,17 @@ export enum TransactionStatus {
 }
 
 export enum TransactionType {
-  atm_withdrawal = 'atm_withdrawal',
-  card_purchase = 'card_purchase',
-  card_refund = 'card_refund',
-  dispute = 'dispute',
-  external_transfer = 'external_transfer',
-  fee = 'fee',
-  credit = 'credit',
-  internal_transfer = 'internal_transfer',
-  other = 'other',
-  reversed_transfer = 'reversed_transfer',
-  third_party_transfer = 'third_party_transfer',
+  ATM_WITHDRAWAL = 'atm_withdrawal',
+  CARD_PURCHASE = 'card_purchase',
+  CARD_REFUND = 'card_refund',
+  DISPUTE = 'dispute',
+  EXTERNAL_TRANSFER = 'external_transfer',
+  FEE = 'fee',
+  CREDIT = 'credit',
+  INTERNAL_TRANSFER = 'internal_transfer',
+  OTHER = 'other',
+  REVERSED_TRANSFER = 'reversed_transfer',
+  THIRD_PARTY_TRANSFER = 'third_party_transfer',
 }
 
 export interface Transaction {
