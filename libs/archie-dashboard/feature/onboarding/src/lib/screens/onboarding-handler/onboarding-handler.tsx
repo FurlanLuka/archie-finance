@@ -5,7 +5,7 @@ import { Step } from '@archie-webapps/archie-dashboard/constants';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
-import { Loading, Page } from '@archie-webapps/shared/ui/design-system';
+import { LoaderFullScreen, Page } from '@archie-webapps/shared/ui/design-system';
 
 import { CardScreen } from '../card-screen/card-screen';
 import { CollateralizationScreen } from '../collateralization-screen/collateralization-screen';
@@ -53,7 +53,7 @@ export const OnboardingHandler: FC = () => {
       <Header />
       <Page>
         <OnboardingStyled>
-          {currentStep === undefined && <Loading />}
+          {currentStep === undefined && <LoaderFullScreen />}
           {currentStep !== undefined && getCurrentStep(currentStep)}
         </OnboardingStyled>
       </Page>

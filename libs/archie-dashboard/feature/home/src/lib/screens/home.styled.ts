@@ -56,25 +56,4 @@ export const HomeStyled = styled.div`
       max-width: 100%;
     }
   }
-
-  /* Move it to design system */
-  .skeleton {
-    position: absolute;
-    /* background-color: ${({ theme }) => theme.backgroundSecondary}; */
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-
-    &::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      transform: translateX(-100%);
-      background: linear-gradient(to right, #fff 8%, #ececec 38%, #fff 54%);
-      animation: ${load} 1s linear infinite;
-    }
-  }
 `;

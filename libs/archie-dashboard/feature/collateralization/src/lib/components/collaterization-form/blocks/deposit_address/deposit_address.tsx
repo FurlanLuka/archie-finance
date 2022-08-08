@@ -6,7 +6,7 @@ import QRCode from 'react-qr-code';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { useGetDepositAddress } from '@archie-webapps/shared/data-access/archie-api/deposit_address/hooks/use-get-deposit-address';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { Skeleton, ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 
@@ -128,7 +128,7 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
           </li>
         </ul>
       </div>
-      <div className={`overlay ${getDepositAddressResponse.state === RequestState.SUCCESS && 'fade-out'}`} />
+      {!(getDepositAddressResponse.state === RequestState.SUCCESS) && <Skeleton bgColor={theme.backgroundSecondary} />}
     </DepositAddressStyled>
   );
 };

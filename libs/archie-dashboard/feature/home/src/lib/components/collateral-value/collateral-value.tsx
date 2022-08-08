@@ -6,7 +6,7 @@ import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { TotalCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-total-value';
 import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-total-value';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { ButtonOutline, Card, ParagraphXS, SubtitleS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, Card, Skeleton, ParagraphXS, SubtitleS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralValueChart } from '../charts/collateral-value/collateral-value';
@@ -20,7 +20,7 @@ export const CollateralValue: FC = () => {
   if (getCollateralTotalValueResponse.state === RequestState.LOADING) {
     return (
       <Card>
-        <div className="skeleton"></div>
+        <Skeleton />
       </Card>
     );
   }

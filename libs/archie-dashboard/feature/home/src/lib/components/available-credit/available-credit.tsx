@@ -7,7 +7,14 @@ import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collate
 import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
 import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { ButtonOutline, Card, ParagraphXS, ParagraphXXS, SubtitleS } from '@archie-webapps/shared/ui/design-system';
+import {
+  ButtonOutline,
+  Card,
+  Skeleton,
+  ParagraphXS,
+  ParagraphXXS,
+  SubtitleS,
+} from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { LoanToValueChart } from '../charts/loan-to-value/loan-to-value';
@@ -21,7 +28,7 @@ export const AvailableCredit: FC = () => {
   if (getCreditQueryResponse.state === RequestState.LOADING || getLTVResponse.state === RequestState.LOADING) {
     return (
       <Card>
-        <div className="skeleton"></div>
+        <Skeleton />
       </Card>
     );
   }

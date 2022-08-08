@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { TransactionsTable } from '@archie-webapps/archie-dashboard/components';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetRecentTransactions } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-recent-transactions';
-import { ButtonOutline, Card, ParagraphM } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, Card, Skeleton, ParagraphM } from '@archie-webapps/shared/ui/design-system';
 
 import { RecentTransactionsStyled } from './recent-transactions.styled';
 
@@ -25,7 +25,7 @@ export const RecentTransactions: FC = () => {
   if (getRecentTransactionsResponse.state === RequestState.LOADING) {
     return (
       <Card minHeight="450px">
-        <div className="skeleton"></div>
+        <Skeleton />
       </Card>
     );
   }
