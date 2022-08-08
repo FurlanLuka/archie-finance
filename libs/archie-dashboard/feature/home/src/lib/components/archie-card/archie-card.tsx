@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { CardsImage } from '@archie-webapps/shared/data-access/archie-api/rize/api/get-cards-image';
@@ -11,6 +12,8 @@ import { RevealCardModal } from '../modals/reveal-card/reveal-card';
 import { ArchieCardStyled } from './archie-card.styled';
 
 export const ArchieCard: FC = () => {
+  const navigate = useNavigate();
+
   const [revealCardModalOpen, setRevealCardModalOpen] = useState(false);
   const [revealCardData, setRevealCardData] = useState(false);
 
@@ -27,7 +30,9 @@ export const ArchieCard: FC = () => {
   }
 
   if (getCardsImageResponse.state === RequestState.ERROR) {
-    return <div>Something went wrong :(</div>; // TODO: replace with error state
+    navigate('/error', { state: { description: 'Some description', action: 'Some action' } });
+
+    return <></>;
   }
 
   if (getCardsImageResponse.state === RequestState.SUCCESS) {
