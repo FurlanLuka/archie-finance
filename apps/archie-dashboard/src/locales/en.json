@@ -144,7 +144,16 @@
   "dashboard_home": {
     "title": "Hi, {{name}}",
     "subtitle": "Member since {{date}}",
-    "reveal_card_modal": "Show card details?"
+    "reveal_card_modal": "Show card details?",
+    "archie_card": {},
+    "available_credit": {},
+    "collateral_value": {},
+    "next_payment": {},
+    "my_rewards": {},
+    "recent_transactions": {
+      "title": "Recent Transactions",
+      "btn": "View More"
+    }
   },
   "dashboard_collateral": {
     "title": "My Wallet"
@@ -185,5 +194,15 @@
       "text": "Your collateral now includes {{collateral}}. Your credit limit is now ${{credit_value}}.",
       "btn": "Got it!"
     }
+  },
+  "dashboard_rewards": {
+    "title": ""
+  },
+  "dashboard_history": {
+    "title": "Recent Transactions",
+    "btn_load_more": "Load more"
+  },
+  "dashboard_settings": {
+    "title": ""
   }
 }
