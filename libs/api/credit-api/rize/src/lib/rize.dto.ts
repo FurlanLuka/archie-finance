@@ -7,6 +7,7 @@ import { IsNumber, Max } from 'class-validator';
 import { Type } from 'class-transformer';
 import {
   NetAsset,
+  RizeTransaction,
   TransactionStatus,
   TransactionType,
 } from './api/rize_api.interfaces';
@@ -83,10 +84,32 @@ export class FundsLoadedPayload {
   amount: number;
 }
 
-export class TransactionUpdatedPayload {
-  userId: string;
-  id: string;
+export class RizeTransactionDto implements RizeTransaction {
+  adjustment_uid: string | null;
+  created_at: string;
+  custodial_account_uids: string[];
+  debit_card_uid: string | null;
+  description: string;
+  destination_synthetic_account_uid: string;
+  id: number;
+  initial_action_at: string;
+  mcc: string | null;
+  merchant_location: string | null;
+  merchant_name: string | null;
+  merchant_number: string | null;
+  denial_reason: string | null;
+  net_asset: NetAsset;
+  settled_at: string | null;
+  settled_index: number;
+  source_synthetic_account_uid: string;
   status: TransactionStatus;
-  amount: number;
+  transaction_event_uids: string[];
+  transfer_uid: string | null;
   type: TransactionType;
+  uid: string;
+  us_dollar_amount: string;
+}
+
+export class TransactionUpdatedPayload extends RizeTransactionDto {
+  userId: string;
 }

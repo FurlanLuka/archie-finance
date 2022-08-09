@@ -319,14 +319,7 @@ export class PeachApiService {
         externalId: transaction.id,
         type: PeachTransactionType[transaction.type],
         status: PeachTransactionStatus.pending,
-        amount: transaction.amount,
-        // purchaseDate: 'transaction.', // TODO
-        purchaseDetails: {
-          description: '',
-          merchantName: '',
-          // merchant...
-          // TODO: add and check docs
-        },
+        ...this.createPurchaseDetails(transaction),
       },
     );
   }
@@ -341,12 +334,30 @@ export class PeachApiService {
       `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases/ext-${transaction.id}`,
       {
         type: PeachTransactionType[transaction.type],
-        amount: transaction.amount,
         status:
           transaction.type === TransactionType.dispute
             ? 'dispute'
             : PeachTransactionStatus[transaction.status],
+        ...this.createPurchaseDetails(transaction),
       },
     );
+  }
+
+  private createPurchaseDetails(transaction: TransactionUpdatedPayload) {
+    return {
+      amount: Number(transaction.us_dollar_amount),
+      purchaseDate: transaction.created_at,
+      purchaseDetails: {
+        description: transaction.description ?? undefined,
+        merchantName: transaction.merchant_name ?? undefined,
+        externalCardId: transaction.debit_card_uid ?? undefined,
+        merchantCity: transaction.merchant_location ?? undefined,
+        merchantId: transaction.merchant_number ?? undefined,
+        merchantCategoryCode: transaction.mcc ?? undefined,
+      },
+      declineReason: {
+        mainText: transaction.denial_reason ?? undefined,
+      },
+    };
   }
 }

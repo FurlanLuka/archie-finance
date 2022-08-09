@@ -11,6 +11,7 @@ import {
   RizeList,
   RizeTransaction,
   TransactionEvent,
+  TransactionEventDetails,
   TransactionStatus,
   TransactionType,
 } from './api/rize_api.interfaces';
@@ -122,20 +123,22 @@ export class RizeService {
   }
 
   private async handleTransactionsEvent(message: TransactionEvent) {
+    const transactionDetails: TransactionEventDetails = message.data.details;
+
     if (
       ![TransactionType.fee, TransactionType.credit].includes(
-        message.data.details.type,
+        transactionDetails.type,
       )
     ) {
-      const userId: string = message.data.details.customer_external_uid;
-      const amount: string = message.data.details.us_dollar_amount;
-      const transactionId: string = message.data.details.transaction_uid;
-      const newStatus: TransactionStatus = message.data.details.new_status;
+      const userId: string = transactionDetails.customer_external_uid;
+      const amount: string = transactionDetails.us_dollar_amount;
+      const transactionId: string = transactionDetails.transaction_uid;
+      const newStatus: TransactionStatus = transactionDetails.new_status;
 
-      if (message.data.details.new_status === TransactionStatus.settled) {
-        const transaction: RizeTransaction =
-          await this.rizeApiService.getTransaction(transactionId);
+      const transaction: RizeTransaction =
+        await this.rizeApiService.getTransaction(transactionId);
 
+      if (transactionDetails.new_status === TransactionStatus.settled) {
         if (transaction.net_asset === 'negative') {
           await this.decreaseAvailableCredit(userId, Number(amount));
         } else {
@@ -146,11 +149,9 @@ export class RizeService {
       this.queueService.publish<TransactionUpdatedPayload>(
         TRANSACTION_UPDATED_TOPIC,
         {
+          ...transaction,
           userId,
-          id: transactionId,
           status: newStatus,
-          amount: Number(message.data.details.us_dollar_amount),
-          type: message.data.details.type,
         },
       );
     }
