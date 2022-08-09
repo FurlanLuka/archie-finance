@@ -1,9 +1,6 @@
-import {
-  getWorkspaceLayout,
-  Tree,
-} from '@nrwl/devkit';
+import { getWorkspaceLayout, Tree } from '@nrwl/devkit';
 import { MicroserviceGenerator } from './schema';
-import { applicationGenerator } from '@nrwl/nest'
+import { applicationGenerator } from '@nrwl/nest';
 
 interface NormalizedSchema extends MicroserviceGenerator {
   serviceRoot: string;
@@ -25,7 +22,7 @@ function normalizeOptions(
   return {
     ...options,
     serviceRoot,
-    constantsRoot
+    constantsRoot,
   };
 }
 
@@ -42,10 +39,7 @@ function normalizeOptions(
 //   );
 // }
 
-export default async function (
-  tree: Tree,
-  options: MicroserviceGenerator,
-) {
+export default async function (tree: Tree, options: MicroserviceGenerator) {
   const normalizedOptions = normalizeOptions(tree, options);
 
   await applicationGenerator(tree, {

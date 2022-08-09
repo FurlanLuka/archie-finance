@@ -15,9 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@archie/test/integration": [
-        "libs/api/test/integration/src/index.ts"
-      ],
       "@archie/api/asset-price-api/asset-price": [
         "libs/api/asset-price-api/asset-price/src/index.ts"
       ],
@@ -117,7 +114,8 @@
       ],
       "@archie/plugin/workspace-generator": [
         "libs/plugin/workspace-generator/src/index.ts"
-      ]
+      ],
+      "@archie/test/integration": ["libs/api/test/integration/src/index.ts"]
     }
   },
   "exclude": [
