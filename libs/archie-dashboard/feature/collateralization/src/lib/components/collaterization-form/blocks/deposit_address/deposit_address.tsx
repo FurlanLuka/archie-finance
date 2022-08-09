@@ -46,13 +46,7 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
   return (
     <DepositAddressStyled>
       <ParagraphXS weight={700}>
-        <Trans
-          values={{
-            required_collateral: assetAmount,
-          }}
-        >
-          collateralization_step.address.title
-        </Trans>
+        {t('collateralization_step.address.title', { required_collateral: assetAmount })}
       </ParagraphXS>
       <div className="address-copy">
         <ParagraphS id="address">

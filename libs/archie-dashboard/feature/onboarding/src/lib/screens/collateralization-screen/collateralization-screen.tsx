@@ -152,13 +152,7 @@ export const CollateralizationScreen: FC = () => {
 
           <div className="address">
             <ParagraphXS weight={700}>
-              <Trans
-                values={{
-                  required_collateral: getFormattedCollateral(),
-                }}
-              >
-                collateralization_step.address.title
-              </Trans>
+              {t('collateralization_step.address.title', { required_collateral: getFormattedCollateral() })}
             </ParagraphXS>
             <div className="address-copy">
               <ParagraphS id="address">
