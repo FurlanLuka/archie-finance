@@ -3,13 +3,16 @@ import { PlaidApiService } from './api/plaid-api.service';
 import {
   AccountResponse,
   GetAccountsResponse,
+  GetLinkableAccountsResponse,
   GetLinkTokenResponse,
+  SetAccessTokenResponse,
 } from './plaid.interfaces';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { PlaidAccess } from './plaid.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PublicTokenExpiredException } from './plaid.errors';
+import { AccountBase } from 'plaid';
 
 @Injectable()
 export class PlaidService {
@@ -29,19 +32,22 @@ export class PlaidService {
   public async setAccessToken(
     userId: string,
     publicToken: string,
-  ): Promise<void> {
+  ): Promise<SetAccessTokenResponse> {
     try {
-      const { accessToken, itemId } =
-        await this.plaidApiService.exchangePublicToken(publicToken);
+      const { accessToken } = await this.plaidApiService.exchangePublicToken(
+        publicToken,
+      );
 
       const encryptedAccessToken: string =
         this.cryptoService.encrypt(accessToken);
 
-      await this.plaidAccessRepository.save({
+      const { itemId } = await this.plaidAccessRepository.save({
         userId,
         accessToken: encryptedAccessToken,
-        itemId,
+        accountId: null,
       });
+
+      return { itemId };
     } catch (err) {
       if (err?.response?.data?.error_code === 'INVALID_PUBLIC_TOKEN') {
         throw new PublicTokenExpiredException();
@@ -50,49 +56,75 @@ export class PlaidService {
       throw err;
     }
   }
+  private transformAccounts(accountsBase: AccountBase[]): AccountResponse[] {
+    const accountsResponse: AccountResponse[] = accountsBase.map((account) => ({
+      id: account.account_id,
+      name: account.name,
+      mask: account.mask,
+      availableBalance: account.balances.available,
+      currencyISO: account.balances.iso_currency_code,
+      subtype: account.subtype,
+    }));
 
-  public async getUserAccounts(userId: string): Promise<GetAccountsResponse> {
+    return accountsResponse;
+  }
+
+  public async getLinkableAccounts(
+    userId: string,
+    itemId: string,
+  ): Promise<GetLinkableAccountsResponse> {
+    const accessItem = await this.plaidAccessRepository.findOne({
+      where: { itemId, userId, accountId: null },
+      select: ['accessToken'],
+    });
+
+    const decryptedAccessToken: string = this.cryptoService.decrypt(
+      accessItem.accessToken,
+    );
+
+    const itemAccounts = await this.plaidApiService.getAccountsForItem(
+      decryptedAccessToken,
+    );
+
+    return this.transformAccounts(itemAccounts);
+  }
+
+  public async getConnectedUserAccounts(
+    userId: string,
+  ): Promise<GetAccountsResponse> {
     const accessItems = await this.plaidAccessRepository.find({
       where: { userId },
-      select: ['accessToken', 'itemId'],
+      select: ['accessToken', 'accountId'],
     });
 
     const allAccounts = await Promise.all(
-      accessItems.map(async (item) => {
-        const decryptedAccessToken: string = this.cryptoService.decrypt(
-          item.accessToken,
-        );
+      accessItems
+        .filter((a) => a.accountId !== null)
+        .map(async (item) => {
+          const decryptedAccessToken: string = this.cryptoService.decrypt(
+            item.accessToken,
+          );
 
-        const itemAccounts = await this.plaidApiService.getAccountsForItem(
-          decryptedAccessToken,
-        );
-        // console.log('olakawnts', itemAccounts);
+          const itemAccounts = await this.plaidApiService.getAccountsForItem(
+            decryptedAccessToken,
+          );
 
-        // TODO check if we need type or subtype
-        const accountsResponse: AccountResponse[] = itemAccounts.map(
-          (account) => ({
-            id: account.account_id,
-            name: account.name,
-            mask: account.mask,
-            availableBalance: account.balances.available,
-            currencyISO: account.balances.iso_currency_code,
-            subtype: account.subtype,
-          }),
-        );
+          const activeAccounts = itemAccounts.filter(
+            (a) => a.account_id === item.accountId,
+          );
 
-        return accountsResponse;
-      }),
+          return this.transformAccounts(activeAccounts);
+        }),
     );
 
     return allAccounts.flat(1);
   }
 
-  public async removeAccount(userId: string, itemId: string): Promise<void> {
-    console.log('evo nas', { userId, itemId });
+  public async removeAccount(userId: string, accountId: string): Promise<void> {
     const accessItem = await this.plaidAccessRepository.findOneOrFail({
       where: {
+        accountId,
         userId,
-        itemId,
       },
       select: ['accessToken'],
     });

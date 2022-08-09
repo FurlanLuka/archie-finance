@@ -16,11 +16,15 @@ export class PlaidAccess {
   @Column('varchar', { nullable: false, select: false })
   userId: string;
 
+  @Index()
+  @Column('varchar', { nullable: false, select: true })
+  itemId: string;
+
   @Column('varchar', { nullable: false, select: false })
   accessToken: string;
 
-  @Column('varchar', { nullable: false, select: false })
-  itemId: string;
+  @Column('varchar', { nullable: true, select: false })
+  accountId: string;
 
   @CreateDateColumn({ select: false })
   createdAt: Date;

@@ -6,6 +6,10 @@ export interface SetAccessTokenBody {
   publicToken: string;
 }
 
+export interface SetAccessTokenResponse {
+  itemId: string;
+}
+
 export interface AccountResponse {
   id: string;
   name: string;
@@ -16,3 +20,4 @@ export interface AccountResponse {
 }
 
 export type GetAccountsResponse = AccountResponse[];
+export type GetLinkableAccountsResponse = AccountResponse[];
