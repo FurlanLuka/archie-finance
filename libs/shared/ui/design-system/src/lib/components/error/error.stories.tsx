@@ -1,4 +1,5 @@
 import { Story, Meta } from '@storybook/react';
+import { withRouter } from 'storybook-addon-react-router-v6';
 
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -11,6 +12,7 @@ import { Error, ErrorProps } from './error';
 export default {
   title: 'Layout/Error',
   component: Error,
+  decorators: [withRouter],
   parameters: {
     layout: 'fullscreen',
     options: { showPanel: true },
@@ -24,6 +26,10 @@ export const Default: Story<ErrorProps> = (props) => (
   </StoriesContainer>
 );
 
+Default.args = {
+  prevPath: '/collateral',
+};
+
 export const WithDescription: Story<ErrorProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Error" subtitle="default" />
@@ -32,6 +38,7 @@ export const WithDescription: Story<ErrorProps> = (props) => (
 );
 
 WithDescription.args = {
+  prevPath: '/collateral',
   description: 'A more specific error description goes here.',
 };
 
@@ -47,5 +54,6 @@ export const InsideCard: Story<ErrorProps> = (props) => (
 );
 
 InsideCard.args = {
+  prevPath: '/collateral',
   description: 'A more specific error description goes here.',
 };

@@ -28,7 +28,7 @@ export const ArchieCard: FC = () => {
   }
 
   if (getCardsImageResponse.state === RequestState.ERROR) {
-    return <Navigate to="/error" state={{ description: 'Some description', action: 'Some action' }} />;
+    return <Navigate to="/error" state={{ prevPath: '/home' }} />;
   }
 
   if (getCardsImageResponse.state === RequestState.SUCCESS) {

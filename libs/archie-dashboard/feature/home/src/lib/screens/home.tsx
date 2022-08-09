@@ -18,7 +18,7 @@ import { RecentTransactions } from '../components/recent-transactions/recent-tra
 
 import { HomeStyled } from './home.styled';
 
-export const WalletAndCollateralScreen: FC = () => {
+export const HomeScreen: FC = () => {
   const { t } = useTranslation();
 
   const getKycResponse: QueryResponse<KycResponse> = useGetKyc();

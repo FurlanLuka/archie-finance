@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
 import { LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
 import { calculateCollateralTotalValue, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
@@ -34,7 +35,7 @@ export const CollateralScreen: FC = () => {
     }
 
     if (getCollateralValueResponse.state === RequestState.ERROR || getLTVResponse.state === RequestState.ERROR) {
-      return <div>Something went wrong :(</div>;
+      return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
     }
 
     if (getCollateralValueResponse.state === RequestState.SUCCESS && getLTVResponse.state === RequestState.SUCCESS) {
