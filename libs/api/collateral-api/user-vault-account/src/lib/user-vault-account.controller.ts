@@ -12,7 +12,7 @@ import {
 import { UserVaultAccountService } from './user-vault-account.service';
 
 @Controller()
-export class FireblocksQueueController {
+export class UserVaultQueueController {
   constructor(private userVaultAccountService: UserVaultAccountService) {}
 
   @Subscribe(COLLATERAL_WITHDRAW_INITIALIZED_TOPIC, SERVICE_QUEUE_NAME)

@@ -1,8 +1,8 @@
 
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class CreditApi1659692279990 implements MigrationInterface {
-name = 'CreditApi1659692279990'
+export class CreditApi1659964472832 implements MigrationInterface {
+name = 'CreditApi1659964472832'
 
 public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -13,6 +13,7 @@ public async up(queryRunner: QueryRunner): Promise<void> {
                 "encryptedEmail" character varying,
                 "homeAddressContactId" character varying,
                 "creditLineId" character varying,
+                "liquidationInstrumentId" character varying,
                 "drawId" character varying,
                 CONSTRAINT "PK_67619ea97397585e18ce4470581" PRIMARY KEY ("uuid")
             )

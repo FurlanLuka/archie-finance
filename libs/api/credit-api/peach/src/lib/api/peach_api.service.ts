@@ -275,9 +275,9 @@ export class PeachApiService {
         nickname: 'Draw nickname (CHANGE)',
         status: 'originated',
         atOrigination: {
-          // interestRates: [{ days: null, rate: 15 }],
+          // interestRates: [{ days: null, rate: 0.1 }],
           minPaymentCalculation: {
-            percentageOfPrincipal: 10,
+            percentageOfPrincipal: 0.1,
             minAmount: 0,
           },
           autoAmortization: {
@@ -320,6 +320,13 @@ export class PeachApiService {
         type: PeachTransactionType[transaction.type],
         status: PeachTransactionStatus.pending,
         amount: transaction.amount,
+        // purchaseDate: 'transaction.', // TODO
+        purchaseDetails: {
+          description: '',
+          merchantName: '',
+          // merchant...
+          // TODO: add and check docs
+        },
       },
     );
   }
@@ -333,7 +340,6 @@ export class PeachApiService {
     await this.peachClient.put(
       `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases/ext-${transaction.id}`,
       {
-        externalId: transaction.id,
         type: PeachTransactionType[transaction.type],
         amount: transaction.amount,
         status:

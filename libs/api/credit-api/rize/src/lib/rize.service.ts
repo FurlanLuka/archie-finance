@@ -125,8 +125,7 @@ export class RizeService {
     if (
       ![TransactionType.fee, TransactionType.credit].includes(
         message.data.details.type,
-      ) &&
-      message.data.details.new_status === TransactionStatus.settled
+      )
     ) {
       const userId: string = message.data.details.customer_external_uid;
       const amount: string = message.data.details.us_dollar_amount;

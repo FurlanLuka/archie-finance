@@ -20,7 +20,6 @@ import { CryptoService } from '@archie/api/utils/crypto';
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
-  MarginCallCompleted,
 } from '@archie/api/credit-api/margin';
 import { TransactionStatus } from '../../../rize/src/lib/api/rize_api.interfaces';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
