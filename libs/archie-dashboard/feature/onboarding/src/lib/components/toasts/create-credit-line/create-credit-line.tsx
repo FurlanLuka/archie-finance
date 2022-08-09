@@ -27,7 +27,7 @@ export const CreateCreditLine: FC<CreateCreditLineProps> = ({ collateralText, cr
       <ParagraphXS weight={700} className="text">
         {t('collateral_credit_line_popup.text', {
           collateral: collateralText,
-          credit_value: creditValue,
+          creditValue: creditValue.toFixed(2),
         })}
       </ParagraphXS>
       <ButtonLight small maxWidth="fit-content" onClick={handleClick}>

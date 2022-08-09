@@ -7,20 +7,18 @@ import { ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 import { NotEnoughCollateralStyled } from './not-enough-collateral.styled';
 
 interface NotEnoughCollateralProps {
-  collateralText: string;
   creditValue: number;
 }
 
-export const NotEnoughCollateral: FC<NotEnoughCollateralProps> = ({ collateralText, creditValue }) => {
+export const NotEnoughCollateral: FC<NotEnoughCollateralProps> = ({ creditValue }) => {
   const { t } = useTranslation();
   return (
     <NotEnoughCollateralStyled>
-      <ParagraphXS>
+      <ParagraphXS weight={700}>
         {t('not_enough_collateral_popup.text', {
-          collateral: collateralText,
-          credit_value: creditValue,
-          min_value: MIN_LINE_OF_CREDIT,
-          difference: MIN_LINE_OF_CREDIT - creditValue,
+          creditValue: creditValue.toFixed(2),
+          minValue: MIN_LINE_OF_CREDIT,
+          difference: (creditValue - MIN_LINE_OF_CREDIT).toFixed(2),
         })}
       </ParagraphXS>
     </NotEnoughCollateralStyled>
