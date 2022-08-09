@@ -7,12 +7,18 @@ import { AccountConnectStyled } from './account-connect.styled';
 
 interface AccountConnectProps {
   accounts: AccountResponse[];
+  selectAccount: (accountId: string) => void;
 }
 
-export const AccountConnect: FC<AccountConnectProps> = ({ accounts }) => {
+export const AccountConnect: FC<AccountConnectProps> = ({ accounts, selectAccount }) => {
   const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
+
   const handleConnect = () => {
-    console.log('connecting!');
+    if (!selectedAccount) {
+      return;
+    }
+
+    selectAccount(selectedAccount.id);
   };
 
   const handleSelect = (accountId: string) => {
@@ -51,7 +57,7 @@ export const AccountConnect: FC<AccountConnectProps> = ({ accounts }) => {
       <Select id="accounts" header={header} onChange={handleSelect}>
         {options}
       </Select>
-      <ButtonPrimary onClick={handleConnect} maxWidth="fit-content">
+      <ButtonPrimary onClick={handleConnect} maxWidth="fit-content" disabled={!selectedAccount}>
         Connect to Archie
       </ButtonPrimary>
     </AccountConnectStyled>

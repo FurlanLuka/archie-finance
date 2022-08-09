@@ -1,28 +1,35 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useGetLinkToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-link-token';
+import { useCreateLinkToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
 import { Loader } from '@archie-webapps/shared/ui/design-system';
 
 import { PlaidConnect } from './blocks/plaid-connect/plaid-connect';
 
 export const PlaidLink: FC = () => {
-  const getLinkTokenResponse = useGetLinkToken();
+  const createLinkTokenMutation = useCreateLinkToken();
+
+  useEffect(() => {
+    if (createLinkTokenMutation.state === RequestState.IDLE) {
+      createLinkTokenMutation.mutate({});
+    }
+  }, [createLinkTokenMutation]);
 
   function getContent() {
-    if (getLinkTokenResponse.state === RequestState.ERROR) {
+    if (createLinkTokenMutation.state === RequestState.ERROR) {
       return <div>Something went wrong :(</div>;
     }
 
-    if (getLinkTokenResponse.state === RequestState.LOADING) {
+    if (createLinkTokenMutation.state === RequestState.LOADING) {
       return <Loader />;
     }
 
-    if (getLinkTokenResponse.state === RequestState.SUCCESS) {
-      return <PlaidConnect linkToken={getLinkTokenResponse.data.token} />;
+    if (createLinkTokenMutation.state === RequestState.SUCCESS) {
+      return <PlaidConnect linkToken={createLinkTokenMutation.data.token} />;
     }
 
     return <></>;
   }
+
   return getContent();
 };

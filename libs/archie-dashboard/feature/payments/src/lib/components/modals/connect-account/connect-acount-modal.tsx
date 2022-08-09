@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-accounts';
@@ -11,6 +11,12 @@ interface ConnectAccountModalProps {
   close: VoidFunction;
 }
 export const ConnectAccountModal: FC<ConnectAccountModalProps> = ({ close }) => {
+  const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
+
+  const handleAccountSelect = (accountId: string) => {
+    setSelectedAccountId(accountId);
+  };
+
   const getAccountsResponse = useGetAccounts();
 
   function getContent() {
@@ -28,7 +34,7 @@ export const ConnectAccountModal: FC<ConnectAccountModalProps> = ({ close }) => 
         return <PlaidLink />;
       }
 
-      return <AccountConnect accounts={getAccountsResponse.data} />;
+      return <AccountConnect accounts={getAccountsResponse.data} selectAccount={handleAccountSelect} />;
     }
 
     return null;

@@ -22,6 +22,7 @@ export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken }) => {
     token: linkToken,
     onSuccess,
   };
+  console.log('tjoken!!!', linkToken);
 
   const { open, ready } = usePlaidLink(config);
 
