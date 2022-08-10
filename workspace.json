@@ -41,6 +41,8 @@
     "api-utils-openapi": "libs/api/utils/openapi",
     "api-utils-queue": "libs/api/utils/queue",
     "api-utils-tracing": "libs/api/utils/tracing",
+    "api-webhook-api-constants": "libs/api/webhook-api/constants",
+    "api-webhook-api-peach": "libs/api/webhook-api/peach",
     "asset-price-api": "apps/asset-price-api",
     "collateral-api": "apps/collateral-api",
     "credit-api": "apps/credit-api",

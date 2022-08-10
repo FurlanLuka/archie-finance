@@ -18,6 +18,9 @@
     {
       "inputFile": "./dist/apps/referral-system-api/target/generated/swagger.json"
     },
+    {
+      "inputFile": "./dist/apps/webhook-api/target/generated/swagger.json"
+    }
   ],
   "output": "./swagger.json"
 }

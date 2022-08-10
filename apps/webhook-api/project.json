@@ -39,6 +39,18 @@
         "lintFilePatterns": ["apps/webhook-api/**/*.ts"]
       }
     },
+    "build-openapi": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build webhook-api && node dist/apps/webhook-api/main build-swagger"
+      }
+    },
+    "generate-migration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build webhook-api && node dist/apps/webhook-api/main generate-migration"
+      }
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/webhook-api"],

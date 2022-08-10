@@ -1,0 +1,15 @@
+export const SERVICE_NAME = 'webhook-api';
+export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
+
+export enum ConfigVariables {
+  TYPEORM_HOST = 'TYPEORM_HOST',
+  TYPEORM_USERNAME = 'TYPEORM_USERNAME',
+  TYPEORM_PASSWORD = 'TYPEORM_PASSWORD',
+  TYPEORM_DATABASE = 'TYPEORM_DATABASE',
+  TYPEORM_PORT = 'TYPEORM_PORT',
+  QUEUE_URL = 'QUEUE_URL',
+  PEACH_BASE_URL = 'PEACH_BASE_URL',
+  PEACH_API_KEY = 'PEACH_API_KEY',
+}
+
+export const WEBHOOK_PAYMENT_APPLIED_TOPIC = 'webhook_peach.payment.applied';
