@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PlaidApiService } from './api/plaid-api.service';
 import {
   AccountResponse,
@@ -35,15 +35,28 @@ export class PlaidService {
     publicToken: string,
   ): Promise<SetAccessTokenResponse> {
     try {
-      const { accessToken } = await this.plaidApiService.exchangePublicToken(
-        publicToken,
-      );
+      const { accessToken, itemId } =
+        await this.plaidApiService.exchangePublicToken(publicToken);
+
+      const existingAccessItem = await this.plaidAccessRepository.findOne({
+        where: { userId, itemId },
+      });
+
+      // should we throw custom error here?
+      if (existingAccessItem) {
+        Logger.error({
+          code: 'ACCESS_TOKEN_ALREADY_EXCHANGED',
+        });
+
+        throw new BadRequestException();
+      }
 
       const encryptedAccessToken: string =
         this.cryptoService.encrypt(accessToken);
 
-      const { itemId } = await this.plaidAccessRepository.save({
+      await this.plaidAccessRepository.save({
         userId,
+        itemId,
         accessToken: encryptedAccessToken,
         accountId: null,
       });

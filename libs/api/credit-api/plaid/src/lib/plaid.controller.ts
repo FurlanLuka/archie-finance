@@ -36,7 +36,7 @@ export class PlaidController {
 
   @Post('access_tokens')
   @UseGuards(AuthGuard)
-  @HttpCode(204)
+  @HttpCode(201)
   @ApiBearerAuth()
   @ApiErrorResponse([PublicTokenExpiredException])
   public async setAccessToken(
