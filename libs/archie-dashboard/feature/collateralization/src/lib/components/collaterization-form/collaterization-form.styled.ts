@@ -20,15 +20,6 @@ const fadeOut = keyframes`
   }
 `;
 
-const scale = keyframes`
-  0% {
-    transform: scale(0.9);
-  }
-  100% {
-    transform: scale(1);
-  }
-`;
-
 export const CollaterizationFormStyled = styled.div`
   width: 100%;
   max-width: 730px;
@@ -84,11 +75,6 @@ export const CollaterizationFormStyled = styled.div`
     &.fade-out {
       animation: ${fadeOut} 0.4s ease-out 2s forwards, ${hide} 0s linear 2s forwards;
     }
-  }
-
-  .copied {
-    transform-origin: center;
-    animation: ${scale} 0.2s ease forwards;
   }
 
   .data {
