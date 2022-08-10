@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { usePlaidLink } from 'react-plaid-link';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
@@ -7,9 +7,10 @@ import { ButtonPrimary, Loader } from '@archie-webapps/shared/ui/design-system';
 
 interface PlaidConnectProps {
   linkToken: string;
+  onAccessTokenCreate: (itemId: string) => void;
 }
 
-export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken }) => {
+export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken, onAccessTokenCreate }) => {
   const createAccessTokenMutation = useCreateAccessToken();
 
   function onSuccess(publicToken: string) {
@@ -17,6 +18,12 @@ export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken }) => {
       createAccessTokenMutation.mutate({ publicToken });
     }
   }
+
+  useEffect(() => {
+    if (createAccessTokenMutation.state === RequestState.SUCCESS) {
+      onAccessTokenCreate(createAccessTokenMutation.data.itemId);
+    }
+  }, [createAccessTokenMutation, onAccessTokenCreate]);
 
   const config: Parameters<typeof usePlaidLink>[0] = {
     token: linkToken,

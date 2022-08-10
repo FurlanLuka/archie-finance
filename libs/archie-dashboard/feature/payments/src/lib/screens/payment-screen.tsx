@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 
 import { ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectAccountModal } from '../components/modals/connect-account/connect-acount-modal';
+import { PaymentFlowModal } from '../components/modals/payment-flow/payment-flow';
 
 export const PaymentScreen: FC = () => {
   const [showModal, setShowModal] = useState(false);
@@ -19,7 +19,7 @@ export const PaymentScreen: FC = () => {
       >
         Make a payment
       </ButtonPrimary>
-      {showModal && <ConnectAccountModal close={closeModal} />}
+      {showModal && <PaymentFlowModal close={closeModal} />}
     </>
   );
 };

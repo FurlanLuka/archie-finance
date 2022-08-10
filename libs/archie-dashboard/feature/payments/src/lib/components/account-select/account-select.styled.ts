@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const AccountConnectStyled = styled.div`
+export const AccountSelectStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;

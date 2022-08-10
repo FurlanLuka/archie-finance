@@ -6,7 +6,12 @@ import { Loader } from '@archie-webapps/shared/ui/design-system';
 
 import { PlaidConnect } from './blocks/plaid-connect/plaid-connect';
 
-export const PlaidLink: FC = () => {
+// TODO 2 layer prop passing isn't optimal, rework if the flow becomes more complex
+interface PlaidLinkProps {
+  onAccessTokenCreate: (itemId: string) => void;
+}
+
+export const PlaidLink: FC<PlaidLinkProps> = ({ onAccessTokenCreate }) => {
   const createLinkTokenMutation = useCreateLinkToken();
 
   useEffect(() => {
@@ -25,7 +30,7 @@ export const PlaidLink: FC = () => {
     }
 
     if (createLinkTokenMutation.state === RequestState.SUCCESS) {
-      return <PlaidConnect linkToken={createLinkTokenMutation.data.token} />;
+      return <PlaidConnect onAccessTokenCreate={onAccessTokenCreate} linkToken={createLinkTokenMutation.data.token} />;
     }
 
     return <></>;
