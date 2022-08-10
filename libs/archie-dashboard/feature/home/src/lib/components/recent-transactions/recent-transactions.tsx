@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 
 import { TransactionsTable } from '@archie-webapps/archie-dashboard/components';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
@@ -31,7 +31,7 @@ export const RecentTransactions: FC = () => {
   }
 
   if (getRecentTransactionsResponse.state === RequestState.ERROR) {
-    return <div>Something went wrong :(</div>; // TODO: replace with error state
+    return <Navigate to="/error" state={{ prevPath: '/home' }} />;
   }
 
   if (getRecentTransactionsResponse.state === RequestState.SUCCESS) {

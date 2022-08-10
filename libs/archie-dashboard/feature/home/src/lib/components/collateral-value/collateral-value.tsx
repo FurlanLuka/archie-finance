@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 
 import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { TotalCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-total-value';
@@ -26,7 +26,7 @@ export const CollateralValue: FC = () => {
   }
 
   if (getCollateralTotalValueResponse.state === RequestState.ERROR) {
-    return <div>Something went wrong :(</div>; // TODO: replace with error state
+    return <Navigate to="/error" state={{ prevPath: '/home' }} />;
   }
 
   if (getCollateralTotalValueResponse.state === RequestState.SUCCESS) {

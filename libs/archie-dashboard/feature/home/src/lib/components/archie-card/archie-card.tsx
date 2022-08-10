@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { CardsImage } from '@archie-webapps/shared/data-access/archie-api/rize/api/get-cards-image';
@@ -27,7 +28,7 @@ export const ArchieCard: FC = () => {
   }
 
   if (getCardsImageResponse.state === RequestState.ERROR) {
-    return <div>Something went wrong :(</div>; // TODO: replace with error state
+    return <Navigate to="/error" state={{ prevPath: '/home' }} />;
   }
 
   if (getCardsImageResponse.state === RequestState.SUCCESS) {

@@ -1,6 +1,7 @@
-import { format, formatISO, parse, parseISO } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { KycResponse } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
@@ -18,12 +19,16 @@ import { RecentTransactions } from '../components/recent-transactions/recent-tra
 
 import { HomeStyled } from './home.styled';
 
-export const WalletAndCollateralScreen: FC = () => {
+export const HomeScreen: FC = () => {
   const { t } = useTranslation();
 
   const getKycResponse: QueryResponse<KycResponse> = useGetKyc();
 
   const getTitle = () => {
+    if (getKycResponse.state === RequestState.ERROR) {
+      return <Navigate to="/error" state={{ prevPath: '/home' }} />;
+    }
+
     if (getKycResponse.state === RequestState.SUCCESS) {
       const kycData = getKycResponse.data;
 

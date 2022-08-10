@@ -2,10 +2,11 @@ import { FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { Header, Navigation } from '@archie-webapps/archie-dashboard/components';
+import { ErrorScreen } from '@archie-webapps/archie-dashboard/components';
 import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature/collateral';
 import { CollateralizationScreen } from '@archie-webapps/archie-dashboard/feature/collateralization';
 import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature/history';
-import { WalletAndCollateralScreen } from '@archie-webapps/archie-dashboard/feature/home';
+import { HomeScreen } from '@archie-webapps/archie-dashboard/feature/home';
 import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature/rewards';
 import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature/settings';
 import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature/withdraw';
@@ -40,13 +41,15 @@ export const DashboardRoute: FC = () => {
           <Container justifyContent="center" maxWidth="100%">
             <Navigation />
             <Routes>
-              <Route path="/" element={<WalletAndCollateralScreen />} />
+              <Route path="/" element={<HomeScreen />} />
+              <Route path="/home" element={<HomeScreen />} />
               <Route path="/collateral" element={<CollateralScreen />} />
               <Route path="/collateral/withdraw/*" element={<WithdrawScreen />} />
               <Route path="/collateral/add/:asset" element={<CollateralizationScreen />} />
               <Route path="/rewards" element={<RewardsScreen />} />
               <Route path="/history" element={<HistoryScreen />} />
               <Route path="/settings" element={<SettingsScreen />} />
+              <Route path="/error" element={<ErrorScreen />} />
             </Routes>
           </Container>
         </Container>

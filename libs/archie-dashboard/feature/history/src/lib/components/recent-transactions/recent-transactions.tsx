@@ -1,5 +1,6 @@
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
 import { TransactionsTable } from '@archie-webapps/archie-dashboard/components';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
@@ -27,6 +28,10 @@ export const RecentTransactions: FC = () => {
   const getContent = () => {
     if (getTransactionsResponse.state === RequestState.LOADING) {
       return <LoaderFullScreen />;
+    }
+
+    if (getTransactionsResponse.state === RequestState.ERROR) {
+      return <Navigate to="/error" state={{ prevPath: '/history' }} />;
     }
 
     if (getTransactionsResponse.state === RequestState.SUCCESS) {

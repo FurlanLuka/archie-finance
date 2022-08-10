@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
 import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
@@ -34,7 +35,7 @@ export const AvailableCredit: FC = () => {
   }
 
   if (getCreditQueryResponse.state === RequestState.ERROR || getLTVResponse.state === RequestState.ERROR) {
-    return <div>Something went wrong :(</div>; // TODO: replace with error state
+    return <Navigate to="/error" state={{ prevPath: '/home' }} />;
   }
 
   if (getCreditQueryResponse.state === RequestState.SUCCESS && getLTVResponse.state === RequestState.SUCCESS) {

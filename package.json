@@ -83,6 +83,7 @@
     "nx": "13.9.0",
     "prettier": "^2.5.1",
     "react-test-renderer": "17.0.2",
+    "storybook-addon-react-router-v6": "^0.1.13",
     "themeprovider-storybook": "^1.8.0",
     "ts-jest": "27.0.5",
     "ttf-loader": "^1.0.2",

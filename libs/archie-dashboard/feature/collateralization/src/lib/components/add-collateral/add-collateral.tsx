@@ -1,4 +1,6 @@
 import { CollateralAssets } from '@archie-webapps/shared/constants';
+import { Navigate } from 'react-router-dom';
+
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { Loader } from '@archie-webapps/shared/ui/design-system';
@@ -31,12 +33,12 @@ export const AddCollateral: FC = () => {
         const assetPrice = getAssetPriceResponse.data.find((p) => p.asset === assetInfo.id);
 
         if (!assetPrice) {
-          return <div>Couldn't fetch price :(</div>;
+          return <Navigate to="/error" state={{ prevPath: '/collateral', description: "Couldn't fetch price" }} />;
         }
 
         return <CollateralizationForm assetInfo={assetInfo} assetPrice={assetPrice} />;
       case RequestState.ERROR:
-        return <div>Something went wrong :(</div>;
+        return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
       default:
         return null;
     }
