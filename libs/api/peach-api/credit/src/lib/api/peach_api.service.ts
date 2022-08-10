@@ -18,10 +18,6 @@ import {
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
-import {
-  TransactionType,
-  TransactionUpdatedPayload,
-} from '@archie/api/credit-api/rize';
 
 @Injectable()
 export class PeachApiService {
@@ -313,7 +309,7 @@ export class PeachApiService {
     personId: string,
     loanId: string,
     drawId: string,
-    transaction: TransactionUpdatedPayload,
+    transaction,
   ): Promise<void> {
     await this.peachClient.post(
       `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases`,
@@ -330,14 +326,14 @@ export class PeachApiService {
     personId: string,
     loanId: string,
     drawId: string,
-    transaction: TransactionUpdatedPayload,
+    transaction,
   ): Promise<void> {
     await this.peachClient.put(
       `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases/ext-${transaction.id}`,
       {
         type: PeachTransactionType[transaction.type],
         status:
-          transaction.type === TransactionType.dispute
+          transaction.type === 'dispute'
             ? 'dispute'
             : PeachTransactionStatus[transaction.status],
         ...this.createPurchaseDetails(transaction),
@@ -345,7 +341,7 @@ export class PeachApiService {
     );
   }
 
-  private createPurchaseDetails(transaction: TransactionUpdatedPayload) {
+  private createPurchaseDetails(transaction) {
     return {
       amount: Number(transaction.us_dollar_amount),
       purchaseDate: transaction.created_at,

@@ -26,11 +26,6 @@ import {
 } from '@archie/api/collateral-api/constants';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
-import {
-  CardActivatedPayload,
-  FundsLoadedPayload,
-  TransactionUpdatedPayload,
-} from '@archie/api/credit-api/rize';
 
 @Controller()
 export class PeachQueueController {
@@ -49,7 +44,7 @@ export class PeachQueueController {
   }
 
   @Subscribe(CARD_ACTIVATED_TOPIC, PeachQueueController.CONTROLLER_QUEUE_NAME)
-  async cardActivatedHandler(payload: CardActivatedPayload): Promise<void> {
+  async cardActivatedHandler(payload): Promise<void> {
     await this.peachService.handleCardActivatedEvent(payload);
   }
 
@@ -57,7 +52,7 @@ export class PeachQueueController {
     CREDIT_FUNDS_LOADED_TOPIC,
     PeachQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async creditFundsLoadedHandler(payload: FundsLoadedPayload): Promise<void> {
+  async creditFundsLoadedHandler(payload): Promise<void> {
     await this.peachService.handleFundsLoadedEvent(payload);
   }
 
@@ -85,9 +80,7 @@ export class PeachQueueController {
     TRANSACTION_UPDATED_TOPIC,
     PeachQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async transactionUpdatedHandler(
-    payload: TransactionUpdatedPayload,
-  ): Promise<void> {
+  async transactionUpdatedHandler(payload): Promise<void> {
     await this.peachService.handleTransactionsEvent(payload);
   }
 

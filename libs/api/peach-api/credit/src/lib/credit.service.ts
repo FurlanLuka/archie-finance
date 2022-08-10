@@ -18,12 +18,6 @@ import {
 } from '@archie/api/credit-api/margin';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
-import {
-  CardActivatedPayload,
-  FundsLoadedPayload,
-  TransactionUpdatedPayload,
-  TransactionStatus,
-} from '@archie/api/credit-api/rize';
 
 @Injectable()
 export class PeachCreditService {
@@ -74,7 +68,7 @@ export class PeachCreditService {
     await this.peachApiService.addMailContact(borrower.personId, email.email);
   }
 
-  public async handleCardActivatedEvent(activatedCard: CardActivatedPayload) {
+  public async handleCardActivatedEvent(activatedCard) {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: activatedCard.userId,
     });
@@ -83,7 +77,7 @@ export class PeachCreditService {
     await this.peachApiService.createUser(borrower.personId, email);
   }
 
-  public async handleFundsLoadedEvent(founds: FundsLoadedPayload) {
+  public async handleFundsLoadedEvent(founds) {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: founds.userId,
     });
@@ -193,15 +187,15 @@ export class PeachCreditService {
     );
   }
 
-  public async handleTransactionsEvent(transaction: TransactionUpdatedPayload) {
-    if (transaction.status === TransactionStatus.queued) {
+  public async handleTransactionsEvent(transaction) {
+    if (transaction.status === 'queued') {
       return;
     }
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: transaction.userId,
     });
 
-    if (transaction.status === TransactionStatus.pending) {
+    if (transaction.status === 'pending') {
       return this.peachApiService.createPurchase(
         borrower.personId,
         borrower.creditLineId,
