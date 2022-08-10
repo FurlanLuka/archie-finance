@@ -2,6 +2,7 @@ import { FC, useMemo, useState } from 'react';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/interfaces';
+import { useConnectAccount } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-connect-account';
 import { useGetLinkableAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-linkable-accounts';
 import { ButtonPrimary, Loader, ParagraphXS, Select, SelectOption } from '@archie-webapps/shared/ui/design-system';
 
@@ -17,10 +18,19 @@ export const AccountSelect: FC<AccountSelectProps> = ({ itemId }) => {
   const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
 
   const getLinkableAccountsResponse = useGetLinkableAccounts(itemId);
+  const connectAccountMutation = useConnectAccount();
 
   const handleConfirmClick = () => {
+    console.log('confirm', selectedAccount, connectAccountMutation);
     if (!selectedAccount) {
       return;
+    }
+    if (connectAccountMutation.state === RequestState.IDLE) {
+      console.log('mutating!');
+      connectAccountMutation.mutate({
+        itemId,
+        accountId: selectedAccount.id,
+      });
     }
   };
 
