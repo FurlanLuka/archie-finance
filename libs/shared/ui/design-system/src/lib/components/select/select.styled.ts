@@ -10,7 +10,6 @@ export const SelectStyled = styled.div`
   width: 100%;
 
   .select-header {
-    position: relative;
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -24,11 +23,14 @@ export const SelectStyled = styled.div`
     @media (max-width: ${breakpoints.screenSM}) {
       padding: 0 0.5rem;
     }
+
+    & > :first-child {
+      flex: 1;
+    }
   }
 
   .select-header-caret {
-    position: absolute;
-    right: 0.75rem;
+    margin-left: auto;
     transform: rotate(0);
     transition: transform 0.3s linear;
 
