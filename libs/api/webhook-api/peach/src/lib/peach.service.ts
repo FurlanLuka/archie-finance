@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PeachApiService } from './api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
-import { PeachEvent } from './peach_webhook.entity';
+import { PeachEvent } from './peach_events.entity';
 import { EventsResponse, PaymentApplied } from './api/peach_api.interfaces';
 import { QueueService } from '@archie/api/utils/queue';
 import { WEBHOOK_PAYMENT_APPLIED_TOPIC } from '@archie/api/webhook-api/constants';

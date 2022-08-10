@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { PeachWebhookService } from './peach.service';
 import { PeachApiModule } from './api/peach_api.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PeachEvent } from './peach_webhook.entity';
+import { PeachEvent } from './peach_events.entity';
 import { PeachApiService } from './api/peach_api.service';
 import { PeachWebhookController } from './peach.controller';
 
