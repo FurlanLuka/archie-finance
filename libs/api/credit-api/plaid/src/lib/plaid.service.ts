@@ -140,7 +140,7 @@ export class PlaidService {
       {
         itemId,
         userId,
-        accountId: null,
+        accountId: IsNull(),
       },
       {
         accountId,
