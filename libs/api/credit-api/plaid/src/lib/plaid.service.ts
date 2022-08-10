@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { PlaidApiService } from './api/plaid-api.service';
 import {
   AccountResponse,
+  ConnectAccountBody,
   GetAccountsResponse,
   GetLinkableAccountsResponse,
   GetLinkTokenResponse,
@@ -9,7 +10,7 @@ import {
 } from './plaid.interfaces';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { PlaidAccess } from './plaid.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PublicTokenExpiredException } from './plaid.errors';
 import { AccountBase } from 'plaid';
@@ -93,31 +94,45 @@ export class PlaidService {
     userId: string,
   ): Promise<GetAccountsResponse> {
     const accessItems = await this.plaidAccessRepository.find({
-      where: { userId },
+      where: { userId, accountId: Not(IsNull()) },
       select: ['accessToken', 'accountId'],
     });
 
     const allAccounts = await Promise.all(
-      accessItems
-        .filter((a) => a.accountId !== null)
-        .map(async (item) => {
-          const decryptedAccessToken: string = this.cryptoService.decrypt(
-            item.accessToken,
-          );
+      accessItems.map(async (item) => {
+        const decryptedAccessToken: string = this.cryptoService.decrypt(
+          item.accessToken,
+        );
 
-          const itemAccounts = await this.plaidApiService.getAccountsForItem(
-            decryptedAccessToken,
-          );
+        const itemAccounts = await this.plaidApiService.getAccountsForItem(
+          decryptedAccessToken,
+        );
 
-          const activeAccounts = itemAccounts.filter(
-            (a) => a.account_id === item.accountId,
-          );
+        const activeAccounts = itemAccounts.filter(
+          (a) => a.account_id === item.accountId,
+        );
 
-          return this.transformAccounts(activeAccounts);
-        }),
+        return this.transformAccounts(activeAccounts);
+      }),
     );
 
-    return allAccounts.flat(1);
+    return allAccounts.flat();
+  }
+
+  public async connectAccount(
+    userId: string,
+    { itemId, accountId }: ConnectAccountBody,
+  ): Promise<void> {
+    await this.plaidAccessRepository.update(
+      {
+        itemId,
+        userId,
+        accountId: null,
+      },
+      {
+        accountId,
+      },
+    );
   }
 
   public async removeAccount(userId: string, accountId: string): Promise<void> {

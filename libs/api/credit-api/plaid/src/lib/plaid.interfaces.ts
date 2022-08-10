@@ -10,6 +10,11 @@ export interface SetAccessTokenResponse {
   itemId: string;
 }
 
+export interface ConnectAccountBody {
+  itemId: string;
+  accountId: string;
+}
+
 export interface AccountResponse {
   id: string;
   name: string;

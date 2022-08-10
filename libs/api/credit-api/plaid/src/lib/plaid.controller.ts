@@ -14,6 +14,7 @@ import {
 import { PlaidService } from './plaid.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
+  ConnectAccountBody,
   GetAccountsResponse,
   GetLinkableAccountsResponse,
   GetLinkTokenResponse,
@@ -62,6 +63,16 @@ export class PlaidController {
     @Request() req,
   ): Promise<GetLinkableAccountsResponse> {
     return this.plaidService.getConnectedUserAccounts(req.user.sub);
+  }
+
+  @Post('connected_accounts')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  public async connectAccount(
+    @Request() req,
+    @Body() body: ConnectAccountBody,
+  ): Promise<void> {
+    return this.plaidService.connectAccount(req.user.sub, body);
   }
 
   @Delete('accounts/:id')
