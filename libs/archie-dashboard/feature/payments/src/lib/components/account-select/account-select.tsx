@@ -6,6 +6,7 @@ import { useGetLinkableAccounts } from '@archie-webapps/shared/data-access/archi
 import { ButtonPrimary, Loader, ParagraphXS, Select, SelectOption } from '@archie-webapps/shared/ui/design-system';
 
 import { AccountSelectStyled } from './account-select.styled';
+import { AccountItem } from './blocks/account-item/account-item';
 
 interface AccountSelectProps {
   itemId: string;
@@ -28,28 +29,16 @@ export const AccountSelect: FC<AccountSelectProps> = ({ itemId }) => {
   };
 
   const header = selectedAccount ? (
-    <div>
-      <div>
-        {selectedAccount.name} {selectedAccount.availableBalance}
-      </div>
-      <div>
-        {selectedAccount.subtype} {selectedAccount.mask} Funds available
-      </div>
-    </div>
+    <AccountItem account={selectedAccount} />
   ) : (
-    <span>Select account to connect</span>
+    <ParagraphXS weight={700}>Select account to connect</ParagraphXS>
   );
 
   const options = useMemo(() => {
     if (getLinkableAccountsResponse.state === RequestState.SUCCESS) {
       return getLinkableAccountsResponse.data.map((account) => (
-        <SelectOption className="account" key={account.id} value={account.id}>
-          <div>
-            {account.name} {account.availableBalance}
-          </div>
-          <div>
-            {account.subtype} {account.mask} Funds available
-          </div>
+        <SelectOption key={account.id} value={account}>
+          <AccountItem account={account} />
         </SelectOption>
       ));
     }
