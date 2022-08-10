@@ -8,11 +8,6 @@ import {
   Person,
 } from './api/peach_api.interfaces';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
-import {
-  CardActivatedPayload,
-  FundsLoadedPayload,
-  TransactionUpdatedPayload,
-} from '../../../rize/src/lib/rize.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Borrower } from './borrower.entity';
@@ -21,12 +16,17 @@ import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
 } from '@archie/api/credit-api/margin';
-import { TransactionStatus } from '../../../rize/src/lib/api/rize_api.interfaces';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
-import { InternalCollateralTransactionCompletedPayload } from '../../../../collateral-api/fireblocks-webhook/src/lib/fireblocks-webhook.dto';
+import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
+import {
+  CardActivatedPayload,
+  FundsLoadedPayload,
+  TransactionUpdatedPayload,
+  TransactionStatus,
+} from '@archie/api/credit-api/rize';
 
 @Injectable()
-export class PeachService {
+export class PeachCreditService {
   constructor(
     private peachApiService: PeachApiService,
     @InjectRepository(Borrower)
@@ -87,7 +87,7 @@ export class PeachService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: founds.userId,
     });
-    let creditLineId = await this.createActiveCreditLine(
+    const creditLineId = await this.createActiveCreditLine(
       borrower,
       founds.amount,
     );

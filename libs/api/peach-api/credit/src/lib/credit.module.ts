@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { PeachService } from './peach.service';
-import { PeachQueueController } from './peach.controller';
+import { PeachCreditService } from './credit.service';
+import { PeachQueueController } from './credit.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Borrower } from './borrower.entity';
 import { PeachApiModule } from './api/peach_api.module';
@@ -21,7 +21,7 @@ import { ConfigVariables } from '@archie/api/credit-api/constants';
       }),
     }),
   ],
-  providers: [PeachService],
-  exports: [PeachService],
+  providers: [PeachCreditService],
+  exports: [PeachCreditService],
 })
-export class PeachModule {}
+export class PeachCreditModule {}

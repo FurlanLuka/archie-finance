@@ -17,9 +17,11 @@ import {
   PersonStatus,
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
-import { TransactionUpdatedPayload } from '../../../../rize/src/lib/rize.dto';
-import { TransactionType } from '../../../../rize/src/lib/api/rize_api.interfaces';
 import { Borrower } from '../borrower.entity';
+import {
+  TransactionType,
+  TransactionUpdatedPayload,
+} from '@archie/api/credit-api/rize';
 
 @Injectable()
 export class PeachApiService {

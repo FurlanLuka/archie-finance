@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'api-credit-api-peach',
+  displayName: 'api-peach-api/credit',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -12,5 +12,5 @@ export default {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../../coverage/libs/api/credit-api/peach',
+  coverageDirectory: '../../../../coverage/libs/api/peach-api/credit',
 };

@@ -8,18 +8,14 @@ import {
   SERVICE_QUEUE_NAME,
   TRANSACTION_UPDATED_TOPIC,
 } from '@archie/api/credit-api/constants';
-import { PeachService } from './peach.service';
+import { PeachCreditService } from './credit.service';
 import {
   EMAIL_VERIFIED_TOPIC,
   KYC_SUBMITTED_TOPIC,
 } from '@archie/api/user-api/constants';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
-import {
-  CardActivatedPayload,
-  FundsLoadedPayload,
-  TransactionUpdatedPayload,
-} from '../../../rize/src/lib/rize.dto';
+
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
@@ -29,13 +25,18 @@ import {
   INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
 } from '@archie/api/collateral-api/constants';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
-import { InternalCollateralTransactionCompletedPayload } from '../../../../collateral-api/fireblocks-webhook/src/lib/fireblocks-webhook.dto';
+import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
+import {
+  CardActivatedPayload,
+  FundsLoadedPayload,
+  TransactionUpdatedPayload,
+} from '@archie/api/credit-api/rize';
 
 @Controller()
 export class PeachQueueController {
   private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-peach`;
 
-  constructor(private peachService: PeachService) {}
+  constructor(private peachService: PeachCreditService) {}
 
   @Subscribe(KYC_SUBMITTED_TOPIC, PeachQueueController.CONTROLLER_QUEUE_NAME)
   async kycSubmittedHandler(payload: KycSubmittedPayload): Promise<void> {

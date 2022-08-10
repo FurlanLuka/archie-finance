@@ -43,7 +43,7 @@ export default async function (tree: Tree, options: MicroserviceGenerator) {
   const normalizedOptions = normalizeOptions(tree, options);
 
   await applicationGenerator(tree, {
-    name: 'test',
+    name: 'peach-api',
     standaloneConfig: true,
   });
 

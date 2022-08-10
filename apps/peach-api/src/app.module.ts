@@ -1,21 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import {
-  ConfigVariables,
-  SERVICE_NAME,
-} from '@archie/api/credit-api/constants';
+import { ConfigVariables, SERVICE_NAME } from '@archie/api/peach-api/constants';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
-import { CreditModule } from '@archie/api/credit-api/credit';
-import { CollateralModule } from '@archie/api/credit-api/collateral';
-import { RizeModule } from '@archie/api/credit-api/rize';
-import { MarginModule } from '@archie/api/credit-api/margin';
-import { AptoModule } from '@archie/api/credit-api/apto';
-import { CollateralWithdrawalModule } from '@archie/api/credit-api/collateral-withdrawal';
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
 import { CryptoModule } from '@archie/api/utils/crypto';
+import { PeachCreditModule } from '@archie/api/peach-api/credit';
 
 @Module({
   imports: [
@@ -27,13 +19,6 @@ import { CryptoModule } from '@archie/api/utils/crypto';
         ConfigVariables.TYPEORM_USERNAME,
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
-        ConfigVariables.RIZE_ENVIRONMENT,
-        ConfigVariables.RIZE_PROGRAM_ID,
-        ConfigVariables.RIZE_HMAC_KEY,
-        ConfigVariables.RIZE_MQ_HOST,
-        ConfigVariables.RIZE_MQ_PASSWORD,
-        ConfigVariables.RIZE_MQ_USERNAME,
-        ConfigVariables.RIZE_MQ_TOPIC_PREFIX,
         ConfigVariables.QUEUE_URL,
         ConfigVariables.ENCRYPTION_KEY,
         ConfigVariables.PEACH_BORROWER_ROLE_ID,
@@ -70,14 +55,6 @@ import { CryptoModule } from '@archie/api/utils/crypto';
       }),
       inject: [ConfigService],
     }),
-    HealthModule,
-    CreditModule,
-    AptoModule,
-    MarginModule,
-    RizeModule,
-    CollateralModule,
-    CollateralWithdrawalModule,
-    QueueModule.register(),
     CryptoModule.register({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -85,6 +62,9 @@ import { CryptoModule } from '@archie/api/utils/crypto';
         encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
       }),
     }),
+    HealthModule,
+    QueueModule.register(),
+    PeachCreditModule,
   ],
   controllers: [],
   providers: [],

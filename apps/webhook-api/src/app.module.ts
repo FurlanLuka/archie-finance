@@ -8,10 +8,10 @@ import {
 } from '@archie/api/webhook-api/constants';
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
+import { HealthModule } from '@archie/api/utils/health';
 
 @Module({
   imports: [
-    PeachWebhookModule,
     ConfigModule.register({
       requiredEnvironmentVariables: [
         ConfigVariables.TYPEORM_HOST,
@@ -42,6 +42,8 @@ import { QueueModule } from '@archie/api/utils/queue';
       inject: [ConfigService],
     }),
     QueueModule.register(),
+    PeachWebhookModule,
+    HealthModule,
   ],
   controllers: [],
   providers: [],
