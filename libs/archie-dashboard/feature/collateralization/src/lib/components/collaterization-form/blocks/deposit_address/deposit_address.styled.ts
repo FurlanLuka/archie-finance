@@ -1,32 +1,5 @@
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
-import styled, { keyframes } from 'styled-components';
-
-const scale = keyframes`
-  0% {
-    transform: scale(0.9);
-  }
-  100% {
-    transform: scale(1);
-  }
-`;
-
-const hide = keyframes`
-  0% {
-    visibility: visible;
-  }
-  100% {
-    visibility: hidden;
-  }
-`;
-
-const fadeOut = keyframes`
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-`;
+import styled from 'styled-components';
 
 export const DepositAddressStyled = styled.div`
   position: relative;
@@ -54,11 +27,6 @@ export const DepositAddressStyled = styled.div`
         max-width: 12rem;
       }
     }
-  }
-  
-  .copied {
-    transform-origin: center;
-    animation: ${scale} 0.2s ease forwards;
   }
 
   .btn-copy {

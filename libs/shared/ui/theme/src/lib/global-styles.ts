@@ -1,6 +1,24 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle, keyframes } from 'styled-components';
 
 import { breakpoints } from './breakpoints';
+
+const scale = keyframes`
+  0% {
+    transform: scale(0.99);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
+const fadeOut = keyframes`
+  0% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+`;
 
 export const GlobalStyles = createGlobalStyle`
   * {
@@ -74,6 +92,11 @@ export const GlobalStyles = createGlobalStyle`
 
   .clickable {
     cursor: pointer;
+  }
+
+  .copied {
+    transform-origin: center;
+    animation: ${scale} 0.2s ease forwards, ${fadeOut} 0.8s ease forwards;
   }
 
   ::-moz-selection { 
