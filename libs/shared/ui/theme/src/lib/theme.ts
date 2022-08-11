@@ -74,6 +74,7 @@ export interface Theme {
   // border
   borderPrimary: string;
   borderHighlight: string;
+  borderDark: string;
   // tooltip
   tooltipBackground: string;
   tooltipText: string;
@@ -133,6 +134,7 @@ export const theme: Theme = {
   // border
   borderPrimary: colors.neutralgray_200,
   borderHighlight: colors.coral_500,
+  borderDark: colors.black,
   // tooltip
   tooltipBackground: colors.coral_500,
   tooltipText: colors.white,
