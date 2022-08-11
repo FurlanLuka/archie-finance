@@ -5,6 +5,7 @@ import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/arch
 import { Loader, Modal } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectAccount } from '../../connect-account/connect-acount';
+import { SchedulePayment } from '../../schedule-payment/schedule-payment';
 
 interface PaymentFlowModalProps {
   close: VoidFunction;
@@ -28,8 +29,7 @@ export const PaymentFlowModal: FC<PaymentFlowModalProps> = ({ close }) => {
         return <ConnectAccount />;
       }
 
-      // Schedule payment flow goes here
-      return <div>Your accounts! {JSON.stringify(getConnectedAccountsResponse.data)}</div>;
+      return <SchedulePayment connectedAccounts={getConnectedAccountsResponse.data} />;
     }
 
     return null;

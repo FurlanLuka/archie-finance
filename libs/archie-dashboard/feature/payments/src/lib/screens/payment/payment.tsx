@@ -15,9 +15,6 @@ export const PaymentScreen: FC = () => {
 
   return (
     <PaymentScreenStyled>
-      <ParagraphM weight={800} className="title">
-        Accounts and payments
-      </ParagraphM>
       <ButtonPrimary
         className="payment"
         onClick={() => {

@@ -6,15 +6,15 @@ import { useConnectAccount } from '@archie-webapps/shared/data-access/archie-api
 import { useGetLinkableAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-linkable-accounts';
 import { ButtonPrimary, Loader, ParagraphXS, Select, SelectOption } from '@archie-webapps/shared/ui/design-system';
 
+import { AccountItem } from '../account-item/account-item';
+
 import { AccountSelectStyled } from './account-select.styled';
-import { AccountItem } from './blocks/account-item/account-item';
 
 interface AccountSelectProps {
   itemId: string;
   onConnect?: VoidFunction;
 }
 
-// rework so it fetches accounts for item, onConfirm call connect endpoint
 export const AccountSelect: FC<AccountSelectProps> = ({ itemId, onConnect }) => {
   const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
 
