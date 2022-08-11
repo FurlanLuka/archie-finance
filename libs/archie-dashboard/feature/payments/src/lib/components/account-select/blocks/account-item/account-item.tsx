@@ -14,7 +14,7 @@ export const AccountItem: FC<AccountItemProps> = ({ account }) => (
     <div className="account-info">
       <ParagraphXS weight={700}>{account.name}</ParagraphXS>
       <ParagraphXS className="subtitle">
-        {account.name} ...${account.mask}
+        {account.name} ...{account.mask}
       </ParagraphXS>
     </div>
     <div className="account-balance">

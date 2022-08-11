@@ -28,7 +28,7 @@ export const ConnectedAccounts: FC = () => {
           <ParagraphM weight={800} className="title">
             Your accounts
           </ParagraphM>
-          <ButtonPrimary maxWidth="fit-content" onClick={() => setIsAddAccountOpen(true)}>
+          <ButtonPrimary maxWidth="fit-content" onClick={() => setIsAddAccountOpen(true)} className="add-acount">
             Add account
           </ButtonPrimary>
           <div className="account-list">

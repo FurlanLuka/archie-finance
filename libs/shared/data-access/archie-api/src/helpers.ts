@@ -42,6 +42,22 @@ export const getRequest = async <Response = any>(
   }
 };
 
+export const deleteRequest = async <Response = any>(
+  endpoint: string,
+  requestConfig: AxiosRequestConfig,
+  errorList: Map<string, string>,
+): Promise<Response> => {
+  try {
+    const response: AxiosResponse<Response> = await axios.delete(endpoint, requestConfig);
+
+    return response.data;
+  } catch (error: any) {
+    const errorObject: AxiosError<ApiErrorResponse> = error;
+
+    throw mapErrorResponse((errorObject.response as AxiosResponse<ApiErrorResponse>).data, errorList);
+  }
+};
+
 export const postRequest = async <Payload = any, Response = any>(
   endpoint: string,
   payload: Payload,
