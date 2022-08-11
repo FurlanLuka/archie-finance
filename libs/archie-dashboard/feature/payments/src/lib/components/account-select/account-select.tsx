@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/interfaces';
@@ -11,22 +11,27 @@ import { AccountItem } from './blocks/account-item/account-item';
 
 interface AccountSelectProps {
   itemId: string;
+  onConnect?: VoidFunction;
 }
 
 // rework so it fetches accounts for item, onConfirm call connect endpoint
-export const AccountSelect: FC<AccountSelectProps> = ({ itemId }) => {
+export const AccountSelect: FC<AccountSelectProps> = ({ itemId, onConnect }) => {
   const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
 
   const getLinkableAccountsResponse = useGetLinkableAccounts(itemId);
   const connectAccountMutation = useConnectAccount();
 
+  useEffect(() => {
+    if (connectAccountMutation.state === RequestState.SUCCESS) {
+      onConnect?.();
+    }
+  }, [connectAccountMutation, onConnect]);
+
   const handleConfirmClick = () => {
-    console.log('confirm', selectedAccount, connectAccountMutation);
     if (!selectedAccount) {
       return;
     }
     if (connectAccountMutation.state === RequestState.IDLE) {
-      console.log('mutating!');
       connectAccountMutation.mutate({
         itemId,
         accountId: selectedAccount.id,

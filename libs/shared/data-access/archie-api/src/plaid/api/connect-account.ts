@@ -6,11 +6,9 @@ export interface ConnectAccountBody extends DefaultVariables {
   accountId: string;
 }
 
-export type ConnectAccountResponse = void;
-
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const connectAccount = async ({ accessToken, ...body }: DefaultVariables): Promise<ConnectAccountResponse> => {
+export const connectAccount = async ({ accessToken, ...body }: DefaultVariables): Promise<void> => {
   // TODO change to API_URL
   //
   return postRequest(

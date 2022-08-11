@@ -28,7 +28,7 @@ export const PaymentFlowModal: FC<PaymentFlowModalProps> = ({ close }) => {
         return <ConnectAccount />;
       }
 
-      console.log('jmamo neke akawnte', getConnectedAccountsResponse.data);
+      // Schedule payment flow goes here
       return <div>Your accounts! {JSON.stringify(getConnectedAccountsResponse.data)}</div>;
     }
 

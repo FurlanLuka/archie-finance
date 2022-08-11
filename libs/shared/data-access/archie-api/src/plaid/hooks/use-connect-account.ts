@@ -2,7 +2,7 @@ import { useQueryClient } from 'react-query';
 
 import { useExtendedMutation } from '../../helper-hooks';
 import { MutationQueryResponse } from '../../interface';
-import { connectAccount, ConnectAccountBody, ConnectAccountResponse } from '../api/connect-account';
+import { connectAccount, ConnectAccountBody } from '../api/connect-account';
 
 import { CONNECTED_ACCOUNTS_RECORD_QUERY_KEY } from './use-get-connected-accounts';
 
