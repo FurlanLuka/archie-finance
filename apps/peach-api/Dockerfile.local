@@ -8,7 +8,7 @@ COPY . /service
 ENV NX_DAEMON=false
 
 RUN npm i
-RUN nx run peach-api:build --skip-nx-cache
+RUN npm run build:peach-api --skip-nx-cache
 RUN if [ "$LOCAL" != "" ] ; then cp apps/peach-api/.env dist/apps/peach-api ; fi
 RUN npm prune --production
 

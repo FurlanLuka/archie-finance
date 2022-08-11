@@ -3,6 +3,7 @@ import { MarginService } from './margin.service';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC,
+  CREDIT_LINE_UPDATED_TOPIC,
   MARGIN_CHECK_REQUESTED_TOPIC,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
@@ -10,6 +11,7 @@ import { CheckMarginMessage } from './margin.interfaces';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { LtvResponseDto } from './margin.dto';
+import { CreditLineUpdatedDto } from '../../../credit/src/lib/credit.dto';
 
 @Controller()
 export class MarginQueueController {
@@ -23,6 +25,11 @@ export class MarginQueueController {
   @Subscribe(CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC, SERVICE_QUEUE_NAME)
   async checkCreditLimitHandler(message: CheckMarginMessage): Promise<void> {
     return this.marginService.checkCreditLimit(message.userIds);
+  }
+
+  @Subscribe(CREDIT_LINE_UPDATED_TOPIC, SERVICE_QUEUE_NAME)
+  async creditLineUpdatedHandler(message: CreditLineUpdatedDto): Promise<void> {
+    return this.marginService.handleCreditLineUpdatedEvent(message.userId);
   }
 }
 

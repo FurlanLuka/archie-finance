@@ -11,7 +11,7 @@ export interface PeachErrorData {
   status: number;
 }
 
-export interface PaymentApplied {
+export interface Payment {
   accrualDate: string | null;
   amount: number;
   caseExternalId: string | null;
@@ -24,8 +24,8 @@ export interface PaymentApplied {
   deletedAt: string | null;
   discriminator: string;
   effectiveAt: string;
-  eventClass: 'PaymentAppliedEvent';
-  eventType: 'payment.applied';
+  eventClass: string;
+  eventType: string;
   id: string;
   interactionId: string | null;
   isExternal: boolean;
@@ -38,7 +38,7 @@ export interface PaymentApplied {
   paymentInstrumentExternalId: string | null;
   paymentInstrumentId: string;
   paymentInstrumentType: string;
-  personExternalId: string | null;
+  personExternalId: string;
   personId: string;
   requestId: string;
   sessionId: string | null;

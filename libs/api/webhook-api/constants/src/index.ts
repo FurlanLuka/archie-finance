@@ -12,4 +12,5 @@ export enum ConfigVariables {
   PEACH_API_KEY = 'PEACH_API_KEY',
 }
 
-export const WEBHOOK_PAYMENT_APPLIED_TOPIC = 'webhook_peach.payment.applied';
+export const WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC =
+  'webhook_peach.payment.confirmed';

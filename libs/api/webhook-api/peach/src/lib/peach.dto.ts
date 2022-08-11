@@ -1,6 +1,6 @@
-import { PaymentApplied } from './api/peach_api.interfaces';
+import { Payment } from './api/peach_api.interfaces';
 
-export class WebhookPaymentAppliedPayload implements PaymentApplied {
+export class WebhookPaymentPayload implements Payment {
   accrualDate: string | null;
   amount: number;
   caseExternalId: string | null;
@@ -13,8 +13,8 @@ export class WebhookPaymentAppliedPayload implements PaymentApplied {
   deletedAt: string | null;
   discriminator: string;
   effectiveAt: string;
-  eventClass: 'PaymentAppliedEvent';
-  eventType: 'payment.applied';
+  eventClass: string;
+  eventType: string;
   id: string;
   interactionId: string | null;
   isExternal: boolean;
@@ -27,7 +27,7 @@ export class WebhookPaymentAppliedPayload implements PaymentApplied {
   paymentInstrumentExternalId: string | null;
   paymentInstrumentId: string;
   paymentInstrumentType: string;
-  personExternalId: string | null;
+  personExternalId: string;
   personId: string;
   requestId: string;
   sessionId: string | null;

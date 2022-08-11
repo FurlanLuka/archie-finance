@@ -5,8 +5,8 @@ import { PeachWebhookService } from './peach.service';
 export class PeachWebhookController {
   constructor(private peachWebhookService: PeachWebhookService) {}
 
-  @Post('payments/applied')
+  @Post('confirmed_payments')
   public async paymentAppliedHandler() {
-    await this.peachWebhookService.handlePaymentAppliedEvent();
+    await this.peachWebhookService.handlePaymentConfirmedEvent();
   }
 }

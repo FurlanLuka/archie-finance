@@ -15,6 +15,10 @@ import {
   CreditNotFoundError,
 } from './credit.errors';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
+import { Subscribe } from '@archie/api/utils/queue';
+import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/constants';
+import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
+import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/credit';
 
 @Controller('v1/credit')
 export class CreditController {
@@ -55,5 +59,22 @@ export class InternalCreditController {
     @Param('userId') userId: string,
   ): Promise<GetCreditResponseDto> {
     return this.creditService.getCredit(userId);
+  }
+}
+
+@Controller()
+export class CreditQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-credit`;
+
+  constructor(private creditService: CreditService) {}
+
+  @Subscribe(
+    CREDIT_LINE_PAYMENT_RECEIVED_TOPIC,
+    CreditQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async creditLinePaymentReceivedHandler(
+    payload: CreditLinePaymentReceivedPayload,
+  ): Promise<void> {
+    await this.creditService.updateCredit(payload);
   }
 }

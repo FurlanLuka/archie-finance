@@ -8,6 +8,7 @@ import {
   Draw,
   HomeAddress,
   IdentityType,
+  Credit,
   PaymentInstrument,
   PeachErrorData,
   PeachErrorResponse,
@@ -105,6 +106,7 @@ export class PeachApiService {
 
   public async createPerson(kyc: KycSubmittedPayload): Promise<Person> {
     const response = await this.peachClient.post('/people', {
+      externalId: kyc.userId,
       status: PersonStatus.active,
       name: {
         firstName: kyc.firstName,
@@ -356,6 +358,25 @@ export class PeachApiService {
       declineReason: {
         mainText: transaction.denial_reason ?? undefined,
       },
+    };
+  }
+
+  public async getCreditBalance(
+    personId: string,
+    loanId: string,
+  ): Promise<Credit> {
+    const response = await this.peachClient.get(
+      `people/${personId}/loans/${loanId}/balances`,
+    );
+
+    if (response.data.data.isLocked) {
+      throw new Error('Balance change is in progress, retry');
+    }
+
+    return {
+      availableCreditAmount: response.data.availableCreditAmount,
+      creditLimitAmount: response.data.creditLimitAmount,
+      calculatedAt: response.data.calculatedAt,
     };
   }
 }

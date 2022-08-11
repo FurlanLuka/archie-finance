@@ -8,5 +8,5 @@ export class PeachEvent {
   uuid: string;
 
   @Column('varchar', { nullable: true })
-  lastFetchedPaymentAppliedEventId: string | null;
+  lastFetchedPaymentConfirmedEventId: string | null;
 }

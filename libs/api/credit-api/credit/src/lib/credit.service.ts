@@ -9,6 +9,7 @@ import {
 } from './credit.errors';
 import {
   COLLATERAL_RECEIVED_TOPIC,
+  CREDIT_LINE_UPDATED_TOPIC,
   GET_COLLATERAL_VALUE_RPC,
 } from '@archie/api/credit-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
@@ -17,7 +18,12 @@ import {
   AssetList,
 } from '@archie/api/collateral-api/asset-information';
 import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
-import { GetCollateralValuePayload, GetCollateralValueResponse } from '@archie/api/credit-api/collateral';
+import {
+  GetCollateralValuePayload,
+  GetCollateralValueResponse,
+} from '@archie/api/credit-api/collateral';
+import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/credit';
+import { CreditLineUpdatedDto } from './credit.dto';
 
 @Injectable()
 export class CreditService {
@@ -93,18 +99,21 @@ export class CreditService {
     collateralValue: GetCollateralValueResponse[],
     assetList: AssetList,
   ): number {
-    return collateralValue.reduce((sum: number, value: GetCollateralValueResponse) => {
-      if (assetList[value.asset] === undefined) {
-        return sum;
-      }
+    return collateralValue.reduce(
+      (sum: number, value: GetCollateralValueResponse) => {
+        if (assetList[value.asset] === undefined) {
+          return sum;
+        }
 
-      const assetInformation: AssetInformation = assetList[value.asset];
+        const assetInformation: AssetInformation = assetList[value.asset];
 
-      const actualCollateralValue: number =
-        (value.price / 100) * assetInformation.ltv;
+        const actualCollateralValue: number =
+          (value.price / 100) * assetInformation.ltv;
 
-      return sum + Math.floor(actualCollateralValue);
-    }, 0);
+        return sum + Math.floor(actualCollateralValue);
+      },
+      0,
+    );
   }
 
   public async getCredit(userId: string): Promise<GetCreditResponse> {
@@ -120,5 +129,27 @@ export class CreditService {
       availableCredit: credit.availableCredit,
       totalCredit: credit.totalCredit,
     };
+  }
+
+  public async updateCredit(
+    credit: CreditLinePaymentReceivedPayload,
+  ): Promise<void> {
+    // TODO: this introduces a race condition.
+    // option 1: If calculated at < updated at then return failed event
+    // use locks -- shared between services??
+    // do updates first on peach then our local copy -- peach already has locks (our local copy ONLY for reads)
+    await this.creditRepository.update(
+      {
+        userId: credit.userId,
+      },
+      {
+        availableCredit: credit.availableCreditAmount,
+        totalCredit: credit.creditLimitAmount,
+      },
+    );
+
+    this.queueService.publish<CreditLineUpdatedDto>(CREDIT_LINE_UPDATED_TOPIC, {
+      userId: credit.userId,
+    });
   }
 }

@@ -3,10 +3,10 @@ import { PeachApiService } from './api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, Repository } from 'typeorm';
 import { PeachEvent } from './peach_events.entity';
-import { EventsResponse, PaymentApplied } from './api/peach_api.interfaces';
+import { EventsResponse, Payment } from './api/peach_api.interfaces';
 import { QueueService } from '@archie/api/utils/queue';
-import { WEBHOOK_PAYMENT_APPLIED_TOPIC } from '@archie/api/webhook-api/constants';
-import { WebhookPaymentAppliedPayload } from './peach.dto';
+import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
+import { WebhookPaymentPayload } from './peach.dto';
 
 @Injectable()
 export class PeachWebhookService {
@@ -19,44 +19,43 @@ export class PeachWebhookService {
 
   // This is just a temporary solution until Peach implements webhooks
   // Currently we just poll for new events
-  public async handlePaymentAppliedEvent() {
+  public async handlePaymentConfirmedEvent() {
     const peachEvent: PeachEvent | null =
       await this.peachEventRepository.findOneBy({
-        lastFetchedPaymentAppliedEventId: Not(null),
+        lastFetchedPaymentConfirmedEventId: Not(null),
       });
 
-    const paymentAppliedEvents: EventsResponse<PaymentApplied> =
-      await this.peachApi.getPaymentAppliedEvent(
-        peachEvent?.lastFetchedPaymentAppliedEventId,
+    const paymentEvents: EventsResponse<Payment> =
+      await this.peachApi.getPaymentConfirmedEvent(
+        peachEvent?.lastFetchedPaymentConfirmedEventId,
       );
 
-    paymentAppliedEvents.data.forEach((event: PaymentApplied) => {
-      console.log(event);
-      this.queueService.publish<WebhookPaymentAppliedPayload>(
-        WEBHOOK_PAYMENT_APPLIED_TOPIC,
+    paymentEvents.data.forEach((event: Payment) => {
+      this.queueService.publish<WebhookPaymentPayload>(
+        WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC,
         {
           ...event,
-          amount: event.amount / 100, // Peach returns amount without decimals eg. 1100 for 11.00$
+          amount: event.amount / 100, // Peach returns amount in cents eg. 1100 for 11.00$
         },
       );
     });
 
-    if (paymentAppliedEvents.data.length > 0) {
-      const lastEvent: PaymentApplied =
-        paymentAppliedEvents.data[paymentAppliedEvents.data.length - 1];
+    if (paymentEvents.data.length > 0) {
+      const lastEvent: Payment =
+        paymentEvents.data[paymentEvents.data.length - 1];
 
       await this.peachEventRepository.upsert(
         {
           uuid: peachEvent?.uuid,
-          lastFetchedPaymentAppliedEventId: lastEvent.id,
+          lastFetchedPaymentConfirmedEventId: lastEvent.id,
         },
         {
           conflictPaths: ['uuid'],
         },
       );
 
-      if (paymentAppliedEvents.nextUrl !== null) {
-        await this.handlePaymentAppliedEvent();
+      if (paymentEvents.nextUrl !== null) {
+        await this.handlePaymentConfirmedEvent();
       }
     }
   }

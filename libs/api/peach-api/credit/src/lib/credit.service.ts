@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { PeachApiService } from './api/peach_api.service';
 import {
+  Credit,
   Draw,
   HomeAddress,
   PaymentInstrument,
@@ -18,6 +19,10 @@ import {
 } from '@archie/api/credit-api/margin';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
+import { WebhookPaymentPayload } from '@archie/api/webhook-api/peach';
+import { QueueService } from '@archie/api/utils/queue';
+import { CreditLinePaymentReceivedPayload } from './credit.dto';
+import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/constants';
 
 @Injectable()
 export class PeachCreditService {
@@ -26,6 +31,7 @@ export class PeachCreditService {
     @InjectRepository(Borrower)
     private borrowerRepository: Repository<Borrower>,
     private cryptoService: CryptoService,
+    private queueService: QueueService,
   ) {}
 
   public async handleKycSubmittedEvent(kyc: KycSubmittedPayload) {
@@ -257,6 +263,23 @@ export class PeachCreditService {
     await this.peachApiService.completeTransaction(
       borrower,
       transaction.transactionId,
+    );
+  }
+
+  public async handlePaymentConfirmedEvent(
+    payment: WebhookPaymentPayload,
+  ): Promise<void> {
+    const credit: Credit = await this.peachApiService.getCreditBalance(
+      payment.personId,
+      payment.loanId,
+    );
+
+    await this.queueService.publish<CreditLinePaymentReceivedPayload>(
+      CREDIT_LINE_PAYMENT_RECEIVED_TOPIC,
+      {
+        ...credit,
+        userId: payment.personExternalId,
+      },
     );
   }
 }

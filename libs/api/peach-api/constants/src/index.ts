@@ -17,3 +17,6 @@ export enum ConfigVariables {
   PEACH_LOAN_ID = 'PEACH_LOAN_ID',
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
 }
+
+export const CREDIT_LINE_PAYMENT_RECEIVED_TOPIC =
+  'peach.credit_line_payment.received';

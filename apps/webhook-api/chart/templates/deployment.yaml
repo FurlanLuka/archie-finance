@@ -139,7 +139,7 @@ spec:
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: check-margin-calls
+  name: check-new-peach-payment
 spec:
   schedule: "*/5 * * * *"
   jobTemplate:
@@ -165,5 +165,5 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - curl -X POST ${INTERNAL_API_URL}/internal/webhook/peach/payments/applied
+                - curl -X POST ${INTERNAL_API_URL}/internal/webhook/peach/confirmed_payments
           restartPolicy: OnFailure

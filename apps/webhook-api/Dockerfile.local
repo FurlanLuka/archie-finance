@@ -8,7 +8,7 @@ COPY . /service
 ENV NX_DAEMON=false
 
 RUN npm i
-RUN nx run webhook-api:build --skip-nx-cache
+RUN npm run build:webhook-api --skip-nx-cache
 RUN if [ "$LOCAL" != "" ] ; then cp apps/webhook-api/.env dist/apps/webhook-api ; fi
 RUN npm prune --production
 

@@ -116,7 +116,7 @@ async function buildMicroservices(microservices, debugEnabled) {
     console.log('Build successful ✅');
   } catch (error) {
     if (debugEnabled) {
-      console.error(error);
+      console.error(JSON.stringify(error, null, 2));
     }
     throw new Error('Error while building microservices');
   }

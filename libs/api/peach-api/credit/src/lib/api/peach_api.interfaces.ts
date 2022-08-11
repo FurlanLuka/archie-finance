@@ -41,6 +41,12 @@ export interface CreditLimit extends PeachResponse {
   creditLimitAmount: number;
 }
 
+export interface Credit {
+  availableCreditAmount: number;
+  creditLimitAmount: number;
+  calculatedAt: string;
+}
+
 export interface PeachErrorResponse {
   config: AxiosRequestConfig;
   status: number;

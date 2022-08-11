@@ -4,7 +4,7 @@ import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/webhook-api/constants';
 import {
   EventsResponse,
-  PaymentApplied,
+  Payment,
   PeachErrorData,
   PeachErrorResponse,
 } from './peach_api.interfaces';
@@ -43,12 +43,12 @@ export class PeachApiService {
     return axiosInstance;
   }
 
-  public async getPaymentAppliedEvent(
+  public async getPaymentConfirmedEvent(
     lastFetchedPaymentEventId: string | null,
-  ): Promise<EventsResponse<PaymentApplied>> {
+  ): Promise<EventsResponse<Payment>> {
     const response = await this.peachClient.get(`events`, {
       params: {
-        events: 'payment.applied',
+        events: 'payment.confirmed',
         limit: 100,
         startingAfter: lastFetchedPaymentEventId ?? undefined,
       },

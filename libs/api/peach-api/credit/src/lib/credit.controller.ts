@@ -26,6 +26,8 @@ import {
 } from '@archie/api/collateral-api/constants';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
+import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
+import { WebhookPaymentPayload } from '@archie/api/webhook-api/peach';
 
 @Controller()
 export class PeachQueueController {
@@ -88,7 +90,7 @@ export class PeachQueueController {
     INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
     PeachQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async internal(
+  async internalTransactionCreatedHandler(
     payload: InternalCollateralTransactionCreatedPayload,
   ): Promise<void> {
     await this.peachService.handleInternalTransactionCreatedEvent(payload);
@@ -98,9 +100,19 @@ export class PeachQueueController {
     INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
     PeachQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async marginCallCompletedHandler(
+  async internalTransactionCompletedHandler(
     payload: InternalCollateralTransactionCompletedPayload,
   ): Promise<void> {
     await this.peachService.handleInternalTransactionCompletedEvent(payload);
+  }
+
+  @Subscribe(
+    WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC,
+    PeachQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async peachWebhookPaymentConfirmedHandler(
+    payload: WebhookPaymentPayload,
+  ): Promise<void> {
+    await this.peachService.handlePaymentConfirmedEvent(payload);
   }
 }
