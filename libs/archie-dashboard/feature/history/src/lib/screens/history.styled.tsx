@@ -21,6 +21,11 @@ export const HistoryStyled = styled.div`
   }
 
   .title {
+    margin-right: auto;
     margin-bottom: 2rem;
+  }
+
+  .load-btn {
+    margin-top: 1.5rem;
   }
 `;

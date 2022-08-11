@@ -21,26 +21,18 @@ export const CollateralizationStyled = styled.div`
   }
 
   .title {
-    margin-bottom: 0.5rem;
-  }
-
-  .subtitle {
-    text-align: center;
-    margin-bottom: 3rem;
-    max-width: 530px;
+    margin-bottom: 1rem;
   }
 
   .subtitle-asset {
     text-align: center;
-    margin: 1rem 0;
-    max-width: 530px;
+    margin-bottom: 3rem;
   }
 
-  .loader-container {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
+  .subtitle-credit {
+    text-align: center;
+    max-width: 530px;
+    margin-bottom: 1rem;
   }
 
   .cancel-btn {

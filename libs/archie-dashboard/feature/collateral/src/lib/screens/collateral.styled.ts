@@ -20,12 +20,19 @@ export const CollateralStyled = styled.div`
     padding: 1.5rem 1rem;
   }
 
+  .title-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+
   .title,
   .total {
     margin-bottom: 0.75rem;
   }
 
-  .title-group {
+  .ltv {
     display: flex;
     align-items: center;
     gap: 0.5rem;

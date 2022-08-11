@@ -4,6 +4,7 @@ import ReactTooltip from 'react-tooltip';
 import QRCode from 'react-qr-code';
 
 import { CollateralAsset } from '@archie-webapps/shared/constants';
+import { QR_CODE } from '@archie-webapps/shared/ui/theme';
 import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { useGetDepositAddress } from '@archie-webapps/shared/data-access/archie-api/deposit_address/hooks/use-get-deposit-address';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
@@ -11,7 +12,7 @@ import { Skeleton, ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/des
 import { theme } from '@archie-webapps/shared/ui/theme';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 
-import { DepositAddressStyled } from './deposit_address.styled';
+import { DepositAddressStyled } from './deposit-address.styled';
 
 interface DepositAddressProps {
   assetInfo: CollateralAsset;
@@ -52,7 +53,7 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
         </button>
       </div>
       <div className="address-code">
-        <QRCode value={getDepositAddress() ?? ''} size={96} />
+        <QRCode value={getDepositAddress() ?? ''} size={QR_CODE} />
         <div className="info">
           <div className="info-group">
             <ParagraphXS>
