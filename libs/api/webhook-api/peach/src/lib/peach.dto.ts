@@ -34,5 +34,4 @@ export class WebhookPaymentPayload implements Payment {
   transactionExternalId: string | null;
   transactionId: string;
   updatedAt: string | null;
-  userId: string;
 }

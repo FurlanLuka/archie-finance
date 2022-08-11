@@ -45,7 +45,6 @@ export interface Payment {
   transactionExternalId: string | null;
   transactionId: string;
   updatedAt: string | null;
-  userId: string;
 }
 
 export interface EventsResponse<T> {

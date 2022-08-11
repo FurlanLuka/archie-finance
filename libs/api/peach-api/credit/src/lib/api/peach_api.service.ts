@@ -62,7 +62,6 @@ export class PeachApiService {
     const response = await this.peachClient.post(
       `/people/${personId}/payment-instruments`,
       {
-        externalId: 'payment-instrument',
         status: 'active',
         instrumentType: 'paymentNetwork',
         paymentNetworkName: 'Fireblocks internal transaction',
@@ -316,7 +315,7 @@ export class PeachApiService {
     await this.peachClient.post(
       `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases`,
       {
-        externalId: transaction.id,
+        externalId: String(transaction.id),
         type: PeachTransactionType[transaction.type],
         status: PeachTransactionStatus.pending,
         ...this.createPurchaseDetails(transaction),
@@ -331,7 +330,9 @@ export class PeachApiService {
     transaction,
   ): Promise<void> {
     await this.peachClient.put(
-      `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases/ext-${transaction.id}`,
+      `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases/ext-${String(
+        transaction.id,
+      )}`,
       {
         type: PeachTransactionType[transaction.type],
         status:
@@ -368,15 +369,16 @@ export class PeachApiService {
     const response = await this.peachClient.get(
       `people/${personId}/loans/${loanId}/balances`,
     );
+    const responseBody = response.data.data;
 
-    if (response.data.data.isLocked) {
+    if (responseBody.isLocked) {
       throw new Error('Balance change is in progress, retry');
     }
 
     return {
-      availableCreditAmount: response.data.availableCreditAmount,
-      creditLimitAmount: response.data.creditLimitAmount,
-      calculatedAt: response.data.calculatedAt,
+      availableCreditAmount: responseBody.availableCreditAmount,
+      creditLimitAmount: responseBody.creditLimitAmount,
+      calculatedAt: responseBody.calculatedAt,
     };
   }
 }
