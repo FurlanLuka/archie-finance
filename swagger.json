@@ -908,6 +908,17 @@
           }
         }
       }
+    },
+    "/internal/webhook/peach/confirmed_payments": {
+      "post": {
+        "operationId": "PeachWebhookController_paymentAppliedHandler",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {
