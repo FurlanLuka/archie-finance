@@ -89,8 +89,8 @@ export class PlaidService {
     userId: string,
     itemId: string,
   ): Promise<GetLinkableAccountsResponse> {
-    const accessItem = await this.plaidAccessRepository.findOne({
-      where: { itemId, userId, accountId: null },
+    const accessItem = await this.plaidAccessRepository.findOneOrFail({
+      where: { itemId, userId, accountId: IsNull() },
       select: ['accessToken'],
     });
 
