@@ -15,11 +15,7 @@ import {
 import { SessionState, useAuthenticatedSession } from '@archie-webapps/shared/data-access/session';
 
 import { ApiErrors, UnauthenticatedApiError } from './api-error';
-import {
-  DefaultVariables,
-  sessionRefreshWrapper,
-  sessionRefreshWrapperMutation,
-} from './helpers';
+import { DefaultVariables, sessionRefreshWrapper, sessionRefreshWrapperMutation } from './helpers';
 import {
   InfiniteQueryResponse,
   MutationQueryResponse,
@@ -129,6 +125,10 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
     }
   };
 
+  const fetch = async (): Promise<void> => {
+    await request.refetch();
+  };
+
   if (isFetchingNextPageError) {
     return {
       state: RequestState.ERROR_NEXT_PAGE,
@@ -167,6 +167,7 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
 
   return {
     state: RequestState.IDLE,
+    fetch,
   };
 };
 

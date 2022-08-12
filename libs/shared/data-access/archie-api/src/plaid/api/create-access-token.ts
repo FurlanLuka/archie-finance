@@ -15,10 +15,8 @@ export const createAccessToken = async ({
   accessToken,
   ...body
 }: DefaultVariables): Promise<CreateAccessTokenResponse> => {
-  // TODO change to API_URL
-  //
   return postRequest(
-    `http://localhost:80/v1/plaid/access_tokens`,
+    `${API_URL}/v1/plaid/access_tokens`,
     body,
     {
       headers: {

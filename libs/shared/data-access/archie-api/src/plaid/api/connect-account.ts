@@ -9,10 +9,8 @@ export interface ConnectAccountBody extends DefaultVariables {
 export const ERROR_LIST = new Map<string, string>([]);
 
 export const connectAccount = async ({ accessToken, ...body }: DefaultVariables): Promise<void> => {
-  // TODO change to API_URL
-  //
   return postRequest(
-    `http://localhost:80/v1/plaid/connected_accounts`,
+    `${API_URL}/v1/plaid/connected_accounts`,
     body,
     {
       headers: {

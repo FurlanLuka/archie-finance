@@ -11,9 +11,8 @@ export const ERROR_LIST = new Map<string, string>([]);
 export const createLinkToken = async ({
   accessToken,
 }: CreatePlaidLinkTokenBody): Promise<CreatePlaidLinkTokenResponse> => {
-  // TODO change to API_URL
   return postRequest<Record<string, never>, CreatePlaidLinkTokenResponse>(
-    `http://localhost:80/v1/plaid/link_tokens`,
+    `${API_URL}/v1/plaid/link_tokens`,
     {},
     {
       headers: {

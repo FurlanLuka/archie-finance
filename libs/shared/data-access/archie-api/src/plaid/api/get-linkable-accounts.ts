@@ -11,9 +11,8 @@ export const getLinkableAccounts = async (
   accessToken: string,
   itemId: string,
 ): Promise<GetLinkableAccountsResponse> => {
-  // TODO change to API_URL
   return getRequest<GetLinkableAccountsResponse>(
-    `http://localhost:80/v1/plaid/linkable_accounts/${itemId}`,
+    `${API_URL}/v1/plaid/linkable_accounts/${itemId}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,

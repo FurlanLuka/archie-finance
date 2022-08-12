@@ -8,9 +8,8 @@ export type GetConnectedAccountsResponse = AccountResponse[];
 export const ERROR_LIST = new Map<string, string>([]);
 
 export const getConnectedAccounts = async (accessToken: string): Promise<GetConnectedAccountsResponse> => {
-  // TODO change to API_URL
   return getRequest<GetConnectedAccountsResponse>(
-    `http://localhost:80/v1/plaid/connected_accounts`,
+    `${API_URL}/v1/plaid/connected_accounts`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
