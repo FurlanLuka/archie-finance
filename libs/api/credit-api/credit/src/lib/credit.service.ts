@@ -22,7 +22,7 @@ import {
   GetCollateralValuePayload,
   GetCollateralValueResponse,
 } from '@archie/api/credit-api/collateral';
-import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/credit';
+import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/borrower';
 import { CreditLineUpdatedDto } from './credit.dto';
 
 @Injectable()

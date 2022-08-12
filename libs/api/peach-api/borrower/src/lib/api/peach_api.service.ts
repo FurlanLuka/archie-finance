@@ -199,6 +199,7 @@ export class PeachApiService {
     personId,
     creditLimit: number,
     addressContactId: string,
+    downPaymentAmount: number,
   ): Promise<CreditLine> {
     const response = await this.peachClient.post(`/people/${personId}/loans`, {
       loanTypeId: this.configService.get(ConfigVariables.PEACH_LOAN_ID),
@@ -217,9 +218,8 @@ export class PeachApiService {
         originatingCreditorName: 'Bank of Mars',
         creditLimitAmount: creditLimit,
         // TODO: should we define down payment? - Collateral value
-        // downPaymentAmount: 0,
+        downPaymentAmount,
         personAddressId: addressContactId,
-        // TODO: merchantId should we define?
       },
     });
 

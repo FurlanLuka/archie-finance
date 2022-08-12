@@ -83,8 +83,8 @@
       "@archie/api/peach-api/constants": [
         "libs/api/peach-api/constants/src/index.ts"
       ],
-      "@archie/api/peach-api/credit": [
-        "libs/api/peach-api/credit/src/index.ts"
+      "@archie/api/peach-api/borrower": [
+        "libs/api/peach-api/borrower/src/index.ts"
       ],
       "@archie/api/referral-system-api/constants": [
         "libs/api/referral-system-api/constants/src/index.ts"

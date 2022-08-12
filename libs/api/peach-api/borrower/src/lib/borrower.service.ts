@@ -21,11 +21,16 @@ import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collate
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/peach';
 import { QueueService } from '@archie/api/utils/queue';
-import { CreditLinePaymentReceivedPayload } from './credit.dto';
+import { CreditLinePaymentReceivedPayload } from './borrower.dto';
 import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/constants';
+import {
+  GetCollateralValuePayload,
+  GetCollateralValueResponse,
+} from '@archie/api/credit-api/collateral';
+import { GET_COLLATERAL_VALUE_RPC } from '@archie/api/credit-api/constants';
 
 @Injectable()
-export class PeachCreditService {
+export class PeachBorrowerService {
   constructor(
     private peachApiService: PeachApiService,
     @InjectRepository(Borrower)
@@ -87,6 +92,7 @@ export class PeachCreditService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: founds.userId,
     });
+
     const creditLineId = await this.createActiveCreditLine(
       borrower,
       founds.amount,
@@ -102,10 +108,24 @@ export class PeachCreditService {
     let creditLineId: string | null = borrower.creditLineId;
 
     if (creditLineId === null) {
+      const collateralValue: GetCollateralValueResponse[] =
+        await this.queueService.request<
+          GetCollateralValueResponse[],
+          GetCollateralValuePayload
+        >(GET_COLLATERAL_VALUE_RPC, {
+          userId: borrower.userId,
+        });
+      const downPayment: number = collateralValue.reduce(
+        (price: number, collateral: GetCollateralValueResponse) =>
+          price + collateral.price,
+        0,
+      );
+
       const creditLine = await this.peachApiService.createCreditLine(
         borrower.personId,
         amount,
         borrower.homeAddressContactId,
+        downPayment,
       );
       creditLineId = creditLine.id;
 

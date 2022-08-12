@@ -7,7 +7,7 @@ import { HealthModule } from '@archie/api/utils/health';
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
 import { CryptoModule } from '@archie/api/utils/crypto';
-import { PeachCreditModule } from '@archie/api/peach-api/credit';
+import { PeachBorrowerModule } from '@archie/api/peach-api/borrower';
 
 @Module({
   imports: [
@@ -64,7 +64,7 @@ import { PeachCreditModule } from '@archie/api/peach-api/credit';
     }),
     HealthModule,
     QueueModule.register(),
-    PeachCreditModule,
+    PeachBorrowerModule,
   ],
   controllers: [],
   providers: [],

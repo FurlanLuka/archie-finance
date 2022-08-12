@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { PeachCreditService } from './credit.service';
-import { PeachQueueController } from './credit.controller';
+import { PeachBorrowerService } from './borrower.service';
+import { PeachBorrowerQueueController } from './borrower.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Borrower } from './borrower.entity';
 import { PeachApiModule } from './api/peach_api.module';
@@ -9,7 +9,7 @@ import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
 
 @Module({
-  controllers: [PeachQueueController],
+  controllers: [PeachBorrowerQueueController],
   imports: [
     TypeOrmModule.forFeature([Borrower]),
     PeachApiModule,
@@ -21,7 +21,7 @@ import { ConfigVariables } from '@archie/api/credit-api/constants';
       }),
     }),
   ],
-  providers: [PeachCreditService],
-  exports: [PeachCreditService],
+  providers: [PeachBorrowerService],
+  exports: [PeachBorrowerService],
 })
-export class PeachCreditModule {}
+export class PeachBorrowerModule {}
