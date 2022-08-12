@@ -1,10 +1,15 @@
 import { FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useCreateLinkToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
-import { Loader } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, ParagraphM, ParagraphS } from '@archie-webapps/shared/ui/design-system';
+
+import plaidLogo from '../../../assets/plaid_logo.png';
 
 import { PlaidConnect } from './blocks/plaid-connect/plaid-connect';
+import { PlaidConnectLoading } from './blocks/plaid-connect/plaid-connect.loading';
+import { PlaidLinkStyled } from './plaid-link.styled';
 
 // TODO 2 layer prop passing isn't optimal, rework if the flow becomes more complex
 interface PlaidLinkProps {
@@ -12,6 +17,7 @@ interface PlaidLinkProps {
 }
 
 export const PlaidLink: FC<PlaidLinkProps> = ({ onAccessTokenCreate }) => {
+  const { t } = useTranslation();
   const createLinkTokenMutation = useCreateLinkToken();
 
   useEffect(() => {
@@ -26,7 +32,7 @@ export const PlaidLink: FC<PlaidLinkProps> = ({ onAccessTokenCreate }) => {
     }
 
     if (createLinkTokenMutation.state === RequestState.LOADING) {
-      return <Loader />;
+      return <PlaidConnectLoading />;
     }
 
     if (createLinkTokenMutation.state === RequestState.SUCCESS) {
@@ -36,5 +42,11 @@ export const PlaidLink: FC<PlaidLinkProps> = ({ onAccessTokenCreate }) => {
     return <></>;
   }
 
-  return getContent();
+  return (
+    <PlaidLinkStyled>
+      <ParagraphM weight={800}>{t('dashboard_payment.plaid_connect.title')}</ParagraphM>
+      <ParagraphS className="text">{t('dashboard_payment.plaid_connect.text')}</ParagraphS>
+      {getContent()}
+    </PlaidLinkStyled>
+  );
 };

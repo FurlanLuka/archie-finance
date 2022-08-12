@@ -17,7 +17,7 @@ export const ConnectedAccounts: FC = () => {
 
   function getContent() {
     if (getConnectedAccountsResponse.state === RequestState.LOADING) {
-      return <Loader />;
+      return <Loader className="loader" />;
     }
 
     if (getConnectedAccountsResponse.state === RequestState.ERROR) {
@@ -26,19 +26,11 @@ export const ConnectedAccounts: FC = () => {
 
     if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
       return (
-        <>
-          <ParagraphM weight={800} className="title">
-            {t('dashboard_payment.connected_accounts.title')}
-          </ParagraphM>
-          <ButtonPrimary maxWidth="fit-content" onClick={() => setIsAddAccountOpen(true)} className="add-acount">
-            {t('dashboard_payment.connected_accounts.btn_add')}
-          </ButtonPrimary>
-          <div className="account-list">
-            {getConnectedAccountsResponse.data.map((account) => (
-              <ConnectedAccount key={account.id} account={account} />
-            ))}
-          </div>
-        </>
+        <div className="account-list">
+          {getConnectedAccountsResponse.data.map((account) => (
+            <ConnectedAccount key={account.id} account={account} />
+          ))}
+        </div>
       );
     }
 
@@ -47,6 +39,12 @@ export const ConnectedAccounts: FC = () => {
 
   return (
     <ConnectedAccountsStyled>
+      <ParagraphM weight={800} className="title">
+        {t('dashboard_payment.connected_accounts.title')}
+      </ParagraphM>
+      <ButtonPrimary className="add-account" maxWidth="fit-content" onClick={() => setIsAddAccountOpen(true)}>
+        {t('dashboard_payment.connected_accounts.btn_add')}
+      </ButtonPrimary>
       {getContent()}
       {isAddAccountOpen && (
         <Modal isOpen close={() => setIsAddAccountOpen(false)} maxWidth="800px">

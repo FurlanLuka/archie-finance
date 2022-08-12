@@ -4,7 +4,11 @@ import { usePlaidLink } from 'react-plaid-link';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useCreateAccessToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-create-access-token';
-import { ButtonPrimary, Loader } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
+
+import plaidLogo from '../../../../../assets/plaid_logo.png';
+
+import { PlaidConnectStyled } from './plaid-connect.styled';
 
 interface PlaidConnectProps {
   linkToken: string;
@@ -35,18 +39,18 @@ export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken, onAccessTokenCr
   const { open } = usePlaidLink(config);
 
   return (
-    <div>
-      {createAccessTokenMutation.state === RequestState.LOADING ? (
-        <Loader />
-      ) : (
-        <ButtonPrimary
-          onClick={() => {
-            open();
-          }}
-        >
-          {t('dashboard_payment.plaid_connect.btn_connect')}
-        </ButtonPrimary>
-      )}
-    </div>
+    <PlaidConnectStyled>
+      <ButtonPrimary
+        className="connect"
+        isLoading={createAccessTokenMutation.state === RequestState.LOADING}
+        disabled={createAccessTokenMutation.state === RequestState.LOADING}
+        onClick={() => {
+          open();
+        }}
+      >
+        {t('dashboard_payment.plaid_connect.btn_connect')}
+      </ButtonPrimary>
+      <img src={plaidLogo} alt="Plaid" />
+    </PlaidConnectStyled>
   );
 };

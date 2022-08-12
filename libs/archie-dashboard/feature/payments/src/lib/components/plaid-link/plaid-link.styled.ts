@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
-export const AccountSelectStyled = styled.div`
+export const PlaidLinkStyled = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2rem;
+  gap: 1.5rem;
 
-  .loader {
-    margin: 0.5rem auto 1rem;
+  .text {
+    margin-bottom: .5rem;
   }
 `;

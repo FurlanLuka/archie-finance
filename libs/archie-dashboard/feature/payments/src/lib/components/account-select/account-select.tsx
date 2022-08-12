@@ -5,7 +5,14 @@ import { RequestState } from '@archie-webapps/shared/data-access/archie-api/inte
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/interfaces';
 import { useConnectAccount } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-connect-account';
 import { useGetLinkableAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-linkable-accounts';
-import { ButtonPrimary, Loader, ParagraphXS, Select, SelectOption } from '@archie-webapps/shared/ui/design-system';
+import {
+  ButtonPrimary,
+  Loader,
+  ParagraphS,
+  ParagraphXS,
+  Select,
+  SelectOption,
+} from '@archie-webapps/shared/ui/design-system';
 
 import { AccountItem } from '../account-item/account-item';
 
@@ -64,14 +71,7 @@ export const AccountSelect: FC<AccountSelectProps> = ({ itemId, onConnect }) => 
 
   function getContent() {
     if (getLinkableAccountsResponse.state === RequestState.LOADING) {
-      return (
-        <>
-          <Loader />
-          <ButtonPrimary maxWidth="fit-content" isLoading>
-            {t('dashboard_payment.account_select.btn_connect')}
-          </ButtonPrimary>
-        </>
-      );
+      return <Loader className="loader" />;
     }
 
     if (getLinkableAccountsResponse.state === RequestState.ERROR) {
@@ -85,7 +85,12 @@ export const AccountSelect: FC<AccountSelectProps> = ({ itemId, onConnect }) => 
           <Select id="accounts" header={header} onChange={handleSelect}>
             {options}
           </Select>
-          <ButtonPrimary onClick={handleConfirmClick} maxWidth="fit-content" disabled={!selectedAccount}>
+          <ButtonPrimary
+            onClick={handleConfirmClick}
+            maxWidth="fit-content"
+            disabled={!selectedAccount}
+            isLoading={connectAccountMutation.state === RequestState.LOADING}
+          >
             {t('dashboard_payment.account_select.btn_connect')}
           </ButtonPrimary>
         </>
@@ -97,7 +102,7 @@ export const AccountSelect: FC<AccountSelectProps> = ({ itemId, onConnect }) => 
 
   return (
     <AccountSelectStyled>
-      <ParagraphXS>{t('dashboard_payment.account_select.label')}</ParagraphXS>
+      <ParagraphS weight={700}>{t('dashboard_payment.account_select.label')}</ParagraphS>
       {getContent()}
     </AccountSelectStyled>
   );
