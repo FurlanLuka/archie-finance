@@ -19,16 +19,12 @@ import {
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { LoanToValueChart } from '../charts/loan-to-value/loan-to-value';
-import { PaymentConfirmModal } from '../modals/payment-confirm/payment-confirm';
-import { PaymentScheduleModal } from '../modals/payment-schedule/payment-schedule';
-import { PaymentScheduledModal } from '../modals/payment-scheduled/payment-scheduled';
+import { MakePaymentModal } from '../modals/make-payment/make-payment';
 
 export const AvailableCredit: FC = () => {
   const { t } = useTranslation();
 
-  const [paymentScheduleModalOpen, setPaymentScheduleModalOpen] = useState(false);
-  const [paymentConfirmModalOpen, setPaymentConfirmModalOpen] = useState(false);
-  const [paymentScheduledModalOpen, setPaymentScheduledModalOpen] = useState(false);
+  const [makePaymentModalOpen, setMakePaymentModalOpen] = useState(true);
 
   const getCreditQueryResponse: QueryResponse<GetCreditResponse> = useGetCredit();
   const getLTVResponse: QueryResponse<LTV> = useGetLTV();
@@ -61,7 +57,7 @@ export const AvailableCredit: FC = () => {
                 ${getFormattedValue(creditData.totalCredit - creditData.availableCredit)}
               </SubtitleS>
               <div className="btn-group">
-                <ButtonOutline maxWidth="auto" small onClick={() => setPaymentScheduleModalOpen(true)}>
+                <ButtonOutline maxWidth="auto" small onClick={() => setMakePaymentModalOpen(true)}>
                   Pay now
                 </ButtonOutline>
               </div>
@@ -82,23 +78,10 @@ export const AvailableCredit: FC = () => {
             <LoanToValueChart ltv={ltvData.ltv} status={ltvData.status} />
           </div>
         </Card>
-        <PaymentScheduleModal
-          isOpen={paymentScheduleModalOpen}
-          close={() => setPaymentScheduleModalOpen(false)}
-          onConfirm={() => setPaymentConfirmModalOpen(true)}
-        />
-        <PaymentConfirmModal
-          isOpen={paymentConfirmModalOpen}
-          close={() => setPaymentConfirmModalOpen(false)}
-          onConfirm={() => {
-            setPaymentConfirmModalOpen(false);
-            setPaymentScheduledModalOpen(true);
-          }}
-        />
-        <PaymentScheduledModal
-          isOpen={paymentScheduledModalOpen}
-          close={() => setPaymentScheduledModalOpen(false)}
-          onConfirm={() => setPaymentScheduledModalOpen(false)}
+        <MakePaymentModal
+          isOpen={makePaymentModalOpen}
+          close={() => setMakePaymentModalOpen(false)}
+          onConfirm={() => console.log('confirmed')}
         />
       </>
     );
