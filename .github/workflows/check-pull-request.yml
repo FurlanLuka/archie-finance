@@ -43,6 +43,13 @@ jobs:
       RIZE_MQ_TOPIC_PREFIX: 'test'
       RIZE_MQ_USERNAME: 'test'
       RIZE_MQ_PASSWORD: 'test'
+
+      ## Peach api
+      PEACH_API_KEY: 'test'
+      PEACH_BASE_URL: 'https://sandboxapi.peach.finance/api'
+      PEACH_COMPANY_ID: 'CP-25K9-4GJ6'
+      PEACH_BORROWER_ROLE_ID: 'RL-G2K6-NLK4'
+      PEACH_LOAN_ID: 'LT-GDB3-WEBO'
     services:
       postgres:
         image: postgres:alpine
