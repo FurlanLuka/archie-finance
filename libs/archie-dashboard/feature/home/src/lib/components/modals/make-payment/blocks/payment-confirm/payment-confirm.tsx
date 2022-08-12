@@ -5,17 +5,19 @@ import {
   ButtonOutline,
   ButtonPrimary,
   ParagraphM,
-  ParagraphS,
   SubtitleS,
+  ParagraphS,
+  ParagraphXS,
 } from '@archie-webapps/shared/ui/design-system';
 
 import { PaymentConfirmModalStyled } from './payment-confirm.styled';
 
 interface PaymentConfirmModalProps {
   onConfirm: () => void;
+  onBack: () => void;
 }
 
-export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({ onConfirm }) => {
+export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({ onConfirm, onBack }) => {
   const { t } = useTranslation();
 
   const handleConfirm = () => {
@@ -23,7 +25,7 @@ export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({ onConfirm })
   };
 
   const handleBack = () => {
-    onConfirm();
+    onBack();
   };
 
   // Temp data
@@ -38,11 +40,11 @@ export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({ onConfirm })
         {t('dashboard_home.payment_confirm_modal.title')}
       </ParagraphM>
       <ParagraphS weight={600}>{t('dashboard_home.payment_confirm_modal.credit_for', { name })}</ParagraphS>
-      <ParagraphS>{t('dashboard_home.payment_confirm_modal.last_payment', { lastPayment, date })}</ParagraphS>
+      <ParagraphXS>{t('dashboard_home.payment_confirm_modal.last_payment', { lastPayment, date })}</ParagraphXS>
       <div className="divider" />
-      <ParagraphS weight={800} className="balance-note">
+      <ParagraphXS weight={800} className="balance-note">
         {t('dashboard_home.payment_confirm_modal.balance_note')}
-      </ParagraphS>
+      </ParagraphXS>
       <SubtitleS weight={400} className="balance-value">
         ${newPayment}
       </SubtitleS>
