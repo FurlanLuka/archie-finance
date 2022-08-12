@@ -22,8 +22,8 @@ import {
   GetCollateralValuePayload,
   GetCollateralValueResponse,
 } from '@archie/api/credit-api/collateral';
-import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/borrower';
-import { CreditLineUpdatedDto } from './credit.dto';
+import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { CreditLineUpdatedDto } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class CreditService {

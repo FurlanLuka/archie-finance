@@ -12,7 +12,7 @@ import { MarginLiquidationService } from './liquidation/margin_liquidation.servi
 import { MarginNotification } from '../margin_notifications.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueueService } from '@archie/api/utils/queue';
-import { MarginCallCompleted } from '../margin.dto';
+import { MarginCallCompleted } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class MarginCallsService {

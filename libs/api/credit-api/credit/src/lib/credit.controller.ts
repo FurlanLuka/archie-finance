@@ -18,7 +18,7 @@ import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { Subscribe } from '@archie/api/utils/queue';
 import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
-import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/borrower';
+import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
 
 @Controller('v1/credit')
 export class CreditController {

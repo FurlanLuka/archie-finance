@@ -1,6 +1,4 @@
-import { Payment } from './api/peach_api.interfaces';
-
-export class WebhookPaymentPayload implements Payment {
+export class WebhookPaymentPayload {
   accrualDate: string | null;
   amount: number;
   caseExternalId: string | null;

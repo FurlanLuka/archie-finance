@@ -58,6 +58,9 @@
       "@archie/api/credit-api/credit": [
         "libs/api/credit-api/credit/src/index.ts"
       ],
+      "@archie/api/credit-api/data-transfer-objects": [
+        "libs/api/credit-api/data-transfer-objects/src/index.ts"
+      ],
       "@archie/api/credit-api/margin": [
         "libs/api/credit-api/margin/src/index.ts"
       ],
@@ -80,11 +83,14 @@
       "@archie/api/onboarding-api/onboarding": [
         "libs/api/onboarding-api/onboarding/src/index.ts"
       ],
+      "@archie/api/peach-api/borrower": [
+        "libs/api/peach-api/borrower/src/index.ts"
+      ],
       "@archie/api/peach-api/constants": [
         "libs/api/peach-api/constants/src/index.ts"
       ],
-      "@archie/api/peach-api/borrower": [
-        "libs/api/peach-api/borrower/src/index.ts"
+      "@archie/api/peach-api/data-transfer-objects": [
+        "libs/api/peach-api/data-transfer-objects/src/index.ts"
       ],
       "@archie/api/referral-system-api/constants": [
         "libs/api/referral-system-api/constants/src/index.ts"
@@ -113,6 +119,9 @@
       "@archie/api/utils/tracing": ["libs/api/utils/tracing/src/index.ts"],
       "@archie/api/webhook-api/constants": [
         "libs/api/webhook-api/constants/src/index.ts"
+      ],
+      "@archie/api/webhook-api/data-transfer-objects": [
+        "libs/api/webhook-api/data-transfer-objects/src/index.ts"
       ],
       "@archie/api/webhook-api/peach": [
         "libs/api/webhook-api/peach/src/index.ts"

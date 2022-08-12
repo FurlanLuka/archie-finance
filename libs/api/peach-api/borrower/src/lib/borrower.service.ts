@@ -13,21 +13,21 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Borrower } from './borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
-import {
-  CreditLimitDecreasedPayload,
-  CreditLimitIncreasedPayload,
-} from '@archie/api/credit-api/margin';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
-import { WebhookPaymentPayload } from '@archie/api/webhook-api/peach';
 import { QueueService } from '@archie/api/utils/queue';
-import { CreditLinePaymentReceivedPayload } from './borrower.dto';
 import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/constants';
 import {
   GetCollateralValuePayload,
   GetCollateralValueResponse,
 } from '@archie/api/credit-api/collateral';
 import { GET_COLLATERAL_VALUE_RPC } from '@archie/api/credit-api/constants';
+import {
+  CreditLimitDecreasedPayload,
+  CreditLimitIncreasedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
+import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
 
 @Injectable()
 export class PeachBorrowerService {

@@ -12,7 +12,7 @@ import { AssetList } from '@archie/api/collateral-api/asset-information';
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
-} from '@archie/api/credit-api/margin';
+} from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class CreditLimitService {

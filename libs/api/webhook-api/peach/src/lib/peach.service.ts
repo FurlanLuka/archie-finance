@@ -6,7 +6,7 @@ import { PeachEvent } from './peach_events.entity';
 import { EventsResponse, Payment } from './api/peach_api.interfaces';
 import { QueueService } from '@archie/api/utils/queue';
 import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
-import { WebhookPaymentPayload } from './peach.dto';
+import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 
 @Injectable()
 export class PeachWebhookService {

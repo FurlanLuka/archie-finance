@@ -15,11 +15,6 @@ import {
 } from '@archie/api/user-api/constants';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
-
-import {
-  CreditLimitDecreasedPayload,
-  CreditLimitIncreasedPayload,
-} from '@archie/api/credit-api/margin';
 import {
   INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
   INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
@@ -27,7 +22,11 @@ import {
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
 import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
-import { WebhookPaymentPayload } from '@archie/api/webhook-api/peach';
+import {
+  CreditLimitDecreasedPayload,
+  CreditLimitIncreasedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
+import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 
 @Controller()
 export class PeachBorrowerQueueController {

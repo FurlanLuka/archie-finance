@@ -11,7 +11,7 @@ import { CheckMarginMessage } from './margin.interfaces';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { LtvResponseDto } from './margin.dto';
-import { CreditLineUpdatedDto } from '../../../credit/src/lib/credit.dto';
+import { CreditLineUpdatedDto } from '@archie/api/credit-api/data-transfer-objects';
 
 @Controller()
 export class MarginQueueController {

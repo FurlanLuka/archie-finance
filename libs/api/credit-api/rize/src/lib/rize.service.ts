@@ -43,7 +43,7 @@ import {
   CardActivatedPayload,
   FundsLoadedPayload,
   TransactionUpdatedPayload,
-} from './rize.dto';
+} from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class RizeService {
