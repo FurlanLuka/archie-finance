@@ -1,4 +1,5 @@
 import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
@@ -10,6 +11,7 @@ import { ConnectedAccount } from './blocks/connected-account';
 import { ConnectedAccountsStyled } from './connected-accounts.styled';
 
 export const ConnectedAccounts: FC = () => {
+  const { t } = useTranslation();
   const getConnectedAccountsResponse = useGetConnectedAccounts();
   const [isAddAccountOpen, setIsAddAccountOpen] = useState(false);
 
@@ -26,10 +28,10 @@ export const ConnectedAccounts: FC = () => {
       return (
         <>
           <ParagraphM weight={800} className="title">
-            Your accounts
+            {t('dashboard_payment.connected_accounts.title')}
           </ParagraphM>
           <ButtonPrimary maxWidth="fit-content" onClick={() => setIsAddAccountOpen(true)} className="add-acount">
-            Add account
+            {t('dashboard_payment.connected_accounts.btn_add')}
           </ButtonPrimary>
           <div className="account-list">
             {getConnectedAccountsResponse.data.map((account) => (

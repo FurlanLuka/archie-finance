@@ -180,5 +180,25 @@
       "text": "Your collateral now includes {{collateral}}. Your credit limit is now ${{credit_value}}.",
       "btn": "Got it!"
     }
+  },
+  "dashboard_payment": {
+    "btn_pay": "Pay now!",
+    "connected_accounts": {
+      "title": "Your accounts",
+      "btn_add": "Add account",
+      "btn_disconnect": "Disconnect"
+    },
+    "account_select": {
+      "label": "Your accounts",
+      "empty": "Select account to connect",
+      "btn_connect": "Connect to Archie",
+      "balance_subtext": "Funds available"
+    },
+    "plaid_connect": {
+      "btn_connect": "Connect with Plaid"
+    },
+    "schedule_payment": {
+      "label": "Select account to pay with"
+    }
   }
 }

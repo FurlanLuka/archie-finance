@@ -1,4 +1,5 @@
 import { FC, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { usePlaidLink } from 'react-plaid-link';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
@@ -11,6 +12,7 @@ interface PlaidConnectProps {
 }
 
 export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken, onAccessTokenCreate }) => {
+  const { t } = useTranslation();
   const createAccessTokenMutation = useCreateAccessToken();
 
   function onSuccess(publicToken: string) {
@@ -29,9 +31,8 @@ export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken, onAccessTokenCr
     token: linkToken,
     onSuccess,
   };
-  console.log('tjoken!!!', linkToken);
 
-  const { open, ready } = usePlaidLink(config);
+  const { open } = usePlaidLink(config);
 
   return (
     <div>
@@ -43,7 +44,7 @@ export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken, onAccessTokenCr
             open();
           }}
         >
-          Connect with Plaid
+          {t('dashboard_payment.plaid_connect.btn_connect')}
         </ButtonPrimary>
       )}
     </div>

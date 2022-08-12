@@ -1,4 +1,5 @@
 import { FC, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/interfaces';
@@ -16,6 +17,7 @@ interface AccountSelectProps {
 }
 
 export const AccountSelect: FC<AccountSelectProps> = ({ itemId, onConnect }) => {
+  const { t } = useTranslation();
   const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
 
   const getLinkableAccountsResponse = useGetLinkableAccounts(itemId);
@@ -46,7 +48,7 @@ export const AccountSelect: FC<AccountSelectProps> = ({ itemId, onConnect }) => 
   const header = selectedAccount ? (
     <AccountItem account={selectedAccount} />
   ) : (
-    <ParagraphXS weight={700}>Select account to connect</ParagraphXS>
+    <ParagraphXS weight={700}>{t('dashboard_payment.account_select.empty')}</ParagraphXS>
   );
 
   const options = useMemo(() => {
@@ -66,7 +68,7 @@ export const AccountSelect: FC<AccountSelectProps> = ({ itemId, onConnect }) => 
         <>
           <Loader />
           <ButtonPrimary maxWidth="fit-content" isLoading>
-            Connect to Archie
+            {t('dashboard_payment.account_select.btn_connect')}
           </ButtonPrimary>
         </>
       );
@@ -84,7 +86,7 @@ export const AccountSelect: FC<AccountSelectProps> = ({ itemId, onConnect }) => 
             {options}
           </Select>
           <ButtonPrimary onClick={handleConfirmClick} maxWidth="fit-content" disabled={!selectedAccount}>
-            Connect to Archie
+            {t('dashboard_payment.account_select.btn_connect')}
           </ButtonPrimary>
         </>
       );
@@ -95,7 +97,7 @@ export const AccountSelect: FC<AccountSelectProps> = ({ itemId, onConnect }) => 
 
   return (
     <AccountSelectStyled>
-      <ParagraphXS>Select account to connect</ParagraphXS>
+      <ParagraphXS>{t('dashboard_payment.account_select.label')}</ParagraphXS>
       {getContent()}
     </AccountSelectStyled>
   );

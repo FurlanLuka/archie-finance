@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/interfaces';
@@ -13,6 +14,7 @@ interface ConnectedAccountProps {
 }
 
 export const ConnectedAccount: FC<ConnectedAccountProps> = ({ account }) => {
+  const { t } = useTranslation();
   const disconnectAccountMutation = useDisconnectAccount(account.id);
 
   const handleRemoveClick = () => {
@@ -33,7 +35,7 @@ export const ConnectedAccount: FC<ConnectedAccountProps> = ({ account }) => {
         onClick={handleRemoveClick}
         isLoading={disconnectAccountMutation.state === RequestState.LOADING}
       >
-        Remove
+        {t('dashboard_payment.connected_accounts.btn_disconnect')}
       </ButtonOutline>
     </ConnectedAccountStyled>
   );
