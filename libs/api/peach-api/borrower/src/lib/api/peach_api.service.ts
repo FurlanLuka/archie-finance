@@ -95,7 +95,7 @@ export class PeachApiService {
     borrower: Borrower,
     externalId: string,
   ): Promise<void> {
-    await this.peachClient.post(
+    await this.peachClient.put(
       `/people/${borrower.personId}/loans/${borrower.creditLineId}/transactions/ext-${externalId}`,
       {
         status: 'succeeded',
@@ -271,7 +271,7 @@ export class PeachApiService {
     const response = await this.peachClient.post(
       `/people/${personId}/loans/${loanId}/draws`,
       {
-        nickname: 'Draw nickname (CHANGE)',
+        nickname: 'Credit Card',
         status: 'originated',
         atOrigination: {
           // interestRates: [{ days: null, rate: 0.1 }],

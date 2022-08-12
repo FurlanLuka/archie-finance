@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PeachApiService } from './api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { PeachEvent } from './peach_events.entity';
 import { EventsResponse, Payment } from './api/peach_api.interfaces';
 import { QueueService } from '@archie/api/utils/queue';
@@ -17,13 +17,19 @@ export class PeachWebhookService {
     private queueService: QueueService,
   ) {}
 
+  public async publishPaymentConfirmedEvent(body: WebhookPaymentPayload) {
+    this.queueService.publish<WebhookPaymentPayload>(
+      WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC,
+      body,
+    );
+  }
+
   // This is just a temporary solution until Peach implements webhooks
   // Currently we just poll for new events
   public async handlePaymentConfirmedEvent() {
-    const peachEvent: PeachEvent | null =
-      await this.peachEventRepository.findOneBy({
-        lastFetchedPaymentConfirmedEventId: Not(null),
-      });
+    const peachEvent: PeachEvent | undefined = (
+      await this.peachEventRepository.find()
+    )[0];
 
     const paymentEvents: EventsResponse<Payment> =
       await this.peachApi.getPaymentConfirmedEvent(
