@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Navigate } from 'react-router-dom';
 
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
 import { useGetMaxWithdrawalAmount } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-max-withdrawal-amount';
@@ -36,7 +36,7 @@ export const WithdrawScreen: FC = () => {
       getMaxWithdrawalAmountResponse.state === RequestState.ERROR ||
       getCollateralValueReponse.state === RequestState.ERROR
     ) {
-      return <div>Something went wrong, try refreshing :( </div>;
+      return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
     }
 
     if (
@@ -45,7 +45,12 @@ export const WithdrawScreen: FC = () => {
     ) {
       const asset = getCollateralValueReponse.data.find((a) => a.asset === currentAsset);
       if (!asset) {
-        return <div>You do not have this asset collateralized</div>;
+        return (
+          <Navigate
+            to="/error"
+            state={{ prevPath: '/collateral', description: 'You do not have this asset collateralized' }}
+          />
+        );
       }
 
       return (

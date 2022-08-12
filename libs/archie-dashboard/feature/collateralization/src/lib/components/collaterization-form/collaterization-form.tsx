@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ReactTooltip from 'react-tooltip';
 
 import { MAX_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
+import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { InputRange, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
@@ -38,20 +39,6 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
     return `${value} ${assetInfo.short}`;
   };
 
-  const handleCopyToClipboard = (value?: string) => {
-    if (!value) {
-      return;
-    }
-
-    navigator.clipboard.writeText(value).then(() => {
-      document.getElementById('collateral')?.classList.add('copied');
-
-      setTimeout(() => {
-        document.getElementById('collateral')?.classList.remove('copied');
-      }, 1000);
-    });
-  };
-
   return (
     <CollaterizationFormStyled>
       <InputRange
@@ -69,7 +56,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
             <span
               className="clickable"
               data-tip="Click to copy"
-              onClick={() => handleCopyToClipboard(requiredCollateral.toString())}
+              onClick={() => copyToClipboard('collateral', requiredCollateral.toString())}
             >
               {getFormattedCollateral()}
             </span>

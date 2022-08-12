@@ -25,12 +25,16 @@ export const Card = styled.div<CardProps>`
   align-items: ${({ alignItems }) => alignItems};
   background-color: ${({ theme }) => theme.backgroundPrimary};
   background-image: ${({ backgroundImage }) => `url(${backgroundImage})`};
-  background-size: cover;
+  /* Temp, just for Rize */
+  background-size: 102%;
+  background-position: center;
+  /* Temp, just for Rize, should be "cover" instead */
+  /* background-size: cover; */
   box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.08);
   border-radius: 0.5rem;
   width: 100%;
-  max-width: ${({ maxWidth }) => maxWidth ?? '100%'};
-  min-height: ${({ minHeight }) => minHeight ?? '100%'};
+  max-width: ${({ maxWidth }) => maxWidth};
+  min-height: ${({ minHeight }) => minHeight};
   padding: ${({ padding }) => padding};
 
   @media (max-width: ${breakpoints.screenSM}) {
@@ -97,6 +101,16 @@ export const Card = styled.div<CardProps>`
 
   .card-text {
     letter-spacing: 0.02em;
+  }
+
+  .text-group {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.25rem;
+
+    p {
+      padding-bottom: 0.25rem;
+    }
   }
 
   .btn-group {

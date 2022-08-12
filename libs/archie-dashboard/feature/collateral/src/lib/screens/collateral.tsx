@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
 import { LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
 import { calculateCollateralTotalValue, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
@@ -8,7 +9,14 @@ import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/ap
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Loading, Card, Badge, SubtitleS, ParagraphM, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import {
+  LoaderFullScreen,
+  Card,
+  Badge,
+  SubtitleS,
+  ParagraphM,
+  ParagraphXS,
+} from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralInfo } from '../components/collateral-info/collateral-info';
@@ -23,11 +31,11 @@ export const CollateralScreen: FC = () => {
 
   function getContent() {
     if (getCollateralValueResponse.state === RequestState.LOADING || getLTVResponse.state === RequestState.LOADING) {
-      return <Loading />;
+      return <LoaderFullScreen />;
     }
 
     if (getCollateralValueResponse.state === RequestState.ERROR || getLTVResponse.state === RequestState.ERROR) {
-      return <div>Something went wrong :(</div>;
+      return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
     }
 
     if (getCollateralValueResponse.state === RequestState.SUCCESS && getLTVResponse.state === RequestState.SUCCESS) {

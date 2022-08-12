@@ -4,7 +4,7 @@ import { MutationFunction, QueryFunction, QueryKey } from 'react-query';
 import { SessionState } from '@archie-webapps/shared/data-access/session';
 
 import { ApiError, UnauthenticatedApiError } from './api-error';
-import { ApiErrorResponse } from './interface';
+import { ApiErrorResponse, PaginationParams } from './interface';
 
 export const mapErrorResponse = (apiErrorResponse: ApiErrorResponse, errorList: Map<string, string>): ApiError => {
   if (apiErrorResponse.statusCode === 401) {
@@ -92,6 +92,37 @@ export const sessionRefreshWrapper = <TQueryFnData>(
           setAccessToken(accessToken);
 
           return queryFn(accessToken);
+        } catch (error) {
+          setSessionState(SessionState.NOT_AUTHENTICATED);
+          throw new Error('TOKEN_REFRESH_FAILED');
+        }
+      }
+
+      throw error;
+    }
+  };
+
+  return wrapper;
+};
+
+export const sessionRefreshInfiniteWrapper = <TQueryFnData>(
+  queryFn: (accessToken: string, paginationParams: PaginationParams) => Promise<TQueryFnData>,
+  accessToken: string,
+  paginationParams: PaginationParams,
+  setAccessToken: React.Dispatch<React.SetStateAction<string | undefined>>,
+  setSessionState: React.Dispatch<React.SetStateAction<SessionState>>,
+  getAccessTokenSilently: () => Promise<string>,
+): QueryFunction<TQueryFnData, QueryKey> => {
+  const wrapper = async (): Promise<TQueryFnData> => {
+    try {
+      return await queryFn(accessToken, paginationParams);
+    } catch (error) {
+      if (error instanceof UnauthenticatedApiError) {
+        try {
+          const accessToken = await getAccessTokenSilently();
+          setAccessToken(accessToken);
+
+          return queryFn(accessToken, paginationParams);
         } catch (error) {
           setSessionState(SessionState.NOT_AUTHENTICATED);
           throw new Error('TOKEN_REFRESH_FAILED');

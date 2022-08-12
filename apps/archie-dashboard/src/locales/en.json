@@ -100,6 +100,11 @@
     "img_alt": "Your Archie Card is ready",
     "btn": "Go to my dashboard"
   },
+  "error_indicator": {
+    "title": "Something went wrong",
+    "error_image_alt": "Something went wrong",
+    "btn_reload": "Reload?"
+  },
   "email_verification_alert": {
     "title": "Please verify your email",
     "text_1": "Check your email for a verification link from Archie. If you did not receive a verification email, click",
@@ -139,7 +144,16 @@
   "dashboard_home": {
     "title": "Hi, {{name}}",
     "subtitle": "Member since {{date}}",
-    "reveal_card_modal": "Show card details?"
+    "reveal_card_modal": "Show card details?",
+    "archie_card": {},
+    "available_credit": {},
+    "collateral_value": {},
+    "next_payment": {},
+    "my_rewards": {},
+    "recent_transactions": {
+      "title": "Recent Transactions",
+      "btn": "View More"
+    }
   },
   "dashboard_collateral": {
     "title": "My Wallet"
@@ -202,5 +216,15 @@
     "schedule_payment": {
       "label": "Select account to pay with"
     }
+  },
+  "dashboard_rewards": {
+    "title": ""
+  },
+  "dashboard_history": {
+    "title": "Recent Transactions",
+    "btn_load_more": "Load more"
+  },
+  "dashboard_settings": {
+    "title": ""
   }
 }

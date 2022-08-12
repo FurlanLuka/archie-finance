@@ -1,7 +1,7 @@
 import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
 
-enum LtvStatus {
+export enum LtvStatus {
   good = 'good',
   ok = 'ok',
   warning = 'warning',

@@ -4,9 +4,10 @@ import ReactTooltip from 'react-tooltip';
 import QRCode from 'react-qr-code';
 
 import { CollateralAsset } from '@archie-webapps/shared/constants';
+import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { useGetDepositAddress } from '@archie-webapps/shared/data-access/archie-api/deposit_address/hooks/use-get-deposit-address';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { Skeleton, ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 
@@ -29,34 +30,14 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
     return undefined;
   };
 
-  const handleCopyToClipboard = (value?: string) => {
-    if (!value) {
-      return;
-    }
-
-    navigator.clipboard.writeText(value).then(() => {
-      document.getElementById('address')?.classList.add('copied');
-
-      setTimeout(() => {
-        document.getElementById('address')?.classList.remove('copied');
-      }, 1000);
-    });
-  };
-
   return (
     <DepositAddressStyled>
       <ParagraphXS weight={700}>
-        <Trans
-          values={{
-            required_collateral: assetAmount,
-          }}
-        >
-          collateralization_step.address.title
-        </Trans>
+        {t('collateralization_step.address.title', { required_collateral: assetAmount })}
       </ParagraphXS>
       <div className="address-copy">
         <ParagraphS id="address">
-          <span data-tip="Click to copy" onClick={() => handleCopyToClipboard(getDepositAddress())}>
+          <span data-tip="Click to copy" onClick={() => copyToClipboard('address', getDepositAddress())}>
             {getDepositAddress()}
           </span>
         </ParagraphS>
@@ -66,7 +47,7 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
           effect="solid"
           delayHide={1000}
         />
-        <button className="btn-copy" onClick={() => handleCopyToClipboard(getDepositAddress())}>
+        <button className="btn-copy" onClick={() => copyToClipboard('address', getDepositAddress())}>
           <Icon name="copy" />
         </button>
       </div>
@@ -128,7 +109,7 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
           </li>
         </ul>
       </div>
-      <div className={`overlay ${getDepositAddressResponse.state === RequestState.SUCCESS && 'fade-out'}`} />
+      {!(getDepositAddressResponse.state === RequestState.SUCCESS) && <Skeleton bgColor={theme.backgroundSecondary} />}
     </DepositAddressStyled>
   );
 };

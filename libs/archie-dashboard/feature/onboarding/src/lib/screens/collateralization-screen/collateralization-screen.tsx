@@ -5,6 +5,7 @@ import ReactTooltip from 'react-tooltip';
 
 import { CollateralAssetSelect } from '@archie-webapps/archie-dashboard/components';
 import { MAX_LINE_OF_CREDIT, MIN_LINE_OF_CREDIT, Step } from '@archie-webapps/archie-dashboard/constants';
+import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
@@ -14,6 +15,7 @@ import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/
 import {
   Container,
   Card,
+  Skeleton,
   InputRange,
   ParagraphS,
   ParagraphXS,
@@ -81,15 +83,6 @@ export const CollateralizationScreen: FC = () => {
     return `${value} ${selectedCollateralAsset?.short}`;
   };
 
-  const handleCopyToClipboard = (id: string, value?: string) =>
-    navigator.clipboard.writeText(value ?? '').then(() => {
-      document.getElementById(id)?.classList.add('copied');
-
-      setTimeout(() => {
-        document.getElementById(id)?.classList.remove('copied');
-      }, 1000);
-    });
-
   return (
     <Container column mobileColumn alignItems="center">
       <CollateralDepositAlerts />
@@ -120,7 +113,7 @@ export const CollateralizationScreen: FC = () => {
                 <span
                   className="clickable"
                   data-tip="Click to copy"
-                  onClick={() => handleCopyToClipboard('collateral', requiredCollateral as unknown as string)}
+                  onClick={() => copyToClipboard('collateral', requiredCollateral as unknown as string)}
                 >
                   {getFormattedCollateral()}
                 </span>
@@ -151,20 +144,14 @@ export const CollateralizationScreen: FC = () => {
 
           <div className="address">
             <ParagraphXS weight={700}>
-              <Trans
-                values={{
-                  required_collateral: getFormattedCollateral(),
-                }}
-              >
-                collateralization_step.address.title
-              </Trans>
+              {t('collateralization_step.address.title', { required_collateral: getFormattedCollateral() })}
             </ParagraphXS>
             <div className="address-copy">
               <ParagraphS id="address">
                 <span
                   className="clickable"
                   data-tip="Click to copy"
-                  onClick={() => handleCopyToClipboard('address', getDepositAddress())}
+                  onClick={() => copyToClipboard('address', getDepositAddress())}
                 >
                   {getDepositAddress()}
                 </span>
@@ -175,7 +162,7 @@ export const CollateralizationScreen: FC = () => {
                 effect="solid"
                 delayHide={1000}
               />
-              <button className="btn-copy" onClick={() => handleCopyToClipboard('address', getDepositAddress())}>
+              <button className="btn-copy" onClick={() => copyToClipboard('address', getDepositAddress())}>
                 <Icon name="copy" className="icon-copy" />
               </button>
             </div>
@@ -251,7 +238,7 @@ export const CollateralizationScreen: FC = () => {
                 </li>
               </ul>
             </div>
-            <div className={`overlay ${getDepositAddress() && 'fade-out'}`} />
+            {!getDepositAddress() && <Skeleton bgColor={theme.backgroundSecondary} />}
           </div>
         </Card>
       </CollateralizationScreenStyled>
