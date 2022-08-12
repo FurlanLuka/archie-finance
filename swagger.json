@@ -911,8 +911,29 @@
     },
     "/internal/webhook/peach/confirmed_payments": {
       "post": {
+        "operationId": "PeachWebhookController_paymentConfirmedHandler",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/internal/webhook/peach/test/confirmed_payments": {
+      "post": {
         "operationId": "PeachWebhookController_paymentAppliedHandler",
         "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookPaymentPayload"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""
@@ -1345,6 +1366,10 @@
           "waitlistRank",
           "referralCode"
         ]
+      },
+      "WebhookPaymentPayload": {
+        "type": "object",
+        "properties": {}
       }
     },
     "securitySchemes": {
