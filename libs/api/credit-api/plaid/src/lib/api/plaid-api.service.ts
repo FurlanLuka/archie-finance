@@ -30,7 +30,6 @@ export class PlaidApiService {
         headers: {
           'PLAID-CLIENT-ID': clientId,
           'PLAID-SECRET': secret,
-          'Plaid-Version': '2020-09-14',
         },
       },
     });
@@ -40,34 +39,19 @@ export class PlaidApiService {
   public async createLinkToken(
     userId: string,
   ): Promise<LinkTokenCreateResponse> {
-    try {
-      const configs: LinkTokenCreateRequest = {
-        user: {
-          client_user_id: userId,
-        },
-        client_name: 'Plaid Quickstart',
-        products: PLAID_PRODUCTS,
-        country_codes: PLAID_COUNTRY_CODES,
-        language: 'en',
-      };
+    const configs: LinkTokenCreateRequest = {
+      user: {
+        client_user_id: userId,
+      },
+      client_name: 'Archie',
+      products: PLAID_PRODUCTS,
+      country_codes: PLAID_COUNTRY_CODES,
+      language: 'en',
+    };
 
-      const redirectUri = this.configService.get(
-        ConfigVariables.PLAID_REDIRECT_URI,
-      );
+    const createTokenResponse = await this.plaidClient.linkTokenCreate(configs);
 
-      if (redirectUri !== '') {
-        // configs.redirect_uri = redirectUri;
-      }
-
-      const createTokenResponse = await this.plaidClient.linkTokenCreate(
-        configs,
-      );
-
-      return createTokenResponse.data;
-    } catch (err) {
-      console.error('bruh', err);
-      throw err;
-    }
+    return createTokenResponse.data;
   }
 
   public async exchangePublicToken(publicToken: string): Promise<{

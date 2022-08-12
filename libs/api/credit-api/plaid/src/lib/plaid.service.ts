@@ -12,7 +12,10 @@ import { CryptoService } from '@archie/api/utils/crypto';
 import { PlaidAccess } from './plaid.entity';
 import { IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PublicTokenExpiredException } from './plaid.errors';
+import {
+  AccessTokenUsedException,
+  PublicTokenExpiredException,
+} from './plaid.errors';
 import { AccountBase } from 'plaid';
 
 @Injectable()
@@ -24,7 +27,7 @@ export class PlaidService {
     private cryptoService: CryptoService,
   ) {}
 
-  public async getLinkToken(userId: string): Promise<GetLinkTokenResponse> {
+  public async createLinkToken(userId: string): Promise<GetLinkTokenResponse> {
     const token = await this.plaidApiService.createLinkToken(userId);
 
     return { token: token.link_token };
@@ -42,13 +45,12 @@ export class PlaidService {
         where: { userId, itemId },
       });
 
-      // should we throw custom error here?
       if (existingAccessItem) {
         Logger.error({
-          code: 'ACCESS_TOKEN_ALREADY_EXCHANGED',
+          code: 'ACCESS_TOKEN_USED',
         });
 
-        throw new BadRequestException();
+        throw new AccessTokenUsedException();
       }
 
       const encryptedAccessToken: string =

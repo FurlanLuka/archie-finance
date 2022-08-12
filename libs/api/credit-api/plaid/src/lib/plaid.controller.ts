@@ -30,13 +30,12 @@ export class PlaidController {
   @Post('link_tokens')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  public async getLinkToken(@Request() req): Promise<GetLinkTokenResponse> {
-    return this.plaidService.getLinkToken(req.user.sub);
+  public async createLinkToken(@Request() req): Promise<GetLinkTokenResponse> {
+    return this.plaidService.createLinkToken(req.user.sub);
   }
 
   @Post('access_tokens')
   @UseGuards(AuthGuard)
-  @HttpCode(201)
   @ApiBearerAuth()
   @ApiErrorResponse([PublicTokenExpiredException])
   public async setAccessToken(
@@ -75,7 +74,7 @@ export class PlaidController {
     return this.plaidService.connectAccount(req.user.sub, body);
   }
 
-  @Delete('accounts/:id')
+  @Delete('connected_accounts/:id')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   public async removeAccount(

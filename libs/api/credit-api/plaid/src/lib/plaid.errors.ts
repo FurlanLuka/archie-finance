@@ -5,3 +5,9 @@ export class PublicTokenExpiredException extends BadRequestException {
     super('PUBLIC_TOKEN_EXPIRED');
   }
 }
+
+export class AccessTokenUsedException extends BadRequestException {
+  constructor() {
+    super('ACCESS_TOKEN_USED');
+  }
+}
