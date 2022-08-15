@@ -31,7 +31,7 @@ export const CreateCreditLine: FC<CreateCreditLineProps> = ({ collateralText, cr
         })}
       </ParagraphXS>
       <ButtonLight small maxWidth="fit-content" onClick={handleClick}>
-        {t('collateral_credit_line_popup.button_text')}
+        {t('collateral_credit_line_popup.btn')}
       </ButtonLight>
     </CreateCreditLineStyled>
   );

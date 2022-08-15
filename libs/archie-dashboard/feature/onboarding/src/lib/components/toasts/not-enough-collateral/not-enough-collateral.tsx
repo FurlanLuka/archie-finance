@@ -17,7 +17,6 @@ export const NotEnoughCollateral: FC<NotEnoughCollateralProps> = ({ creditValue 
       <ParagraphXS weight={700}>
         {t('not_enough_collateral_popup.text', {
           creditValue: creditValue.toFixed(2),
-          minValue: MIN_LINE_OF_CREDIT,
           difference: (creditValue - MIN_LINE_OF_CREDIT).toFixed(2),
         })}
       </ParagraphXS>

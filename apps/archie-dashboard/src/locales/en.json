@@ -125,11 +125,11 @@
     "btn": "Add collateral"
   },
   "not_enough_collateral_popup": {
-    "text": "We've received your collateral, which is worth ${{creditValue}}. To receive an Archie card, you must provide at least ${{minValue}} in collateral value. Please add ${{difference}} more of collateralized assets."
+    "text": "We've received ${{creditValue}} worth of collateral. You must collateralize ${{difference}} more in crypto assets to receive an Archie card."
   },
   "collateral_credit_line_popup": {
-    "text": "You are collaterizing {{collateral}} for a credit line of ${{creditValue}}.",
-    "button_text": "Let's go!"
+    "text": "You have collateralized {{collateral}} and will have an initial credit line of ${{creditValue}}.",
+    "btn": "Continue"
   },
   "setup_2fa_banner": {
     "title": "Protect your funds with 2FA",
@@ -190,9 +190,8 @@
     "subtitle_asset": "You currently have {{collateral}} {{collateral_asset}} (~${{collateral_value}}).",
     "subtitle_credit": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it.",
     "collateral_received_modal": {
-      "title": "Collateral received",
-      "text": "Your collateral now includes {{collateral}}. Your credit limit is now ${{credit_value}}.",
-      "btn": "Got it!"
+      "title": "We received your collateral!",
+      "text": "Your collateral is now worth ${{collateralValue}}, giving you a credit line of up to ${{creditValue}}."
     }
   },
   "dashboard_rewards": {
