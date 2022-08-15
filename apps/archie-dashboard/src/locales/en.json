@@ -114,13 +114,13 @@
   },
   "collateral_received_modal": {
     "title": "We received your collateral!",
-    "text": "Your collateral is now worth ${{collateralValue}}, giving you a credit line of up to ${{creditValue}}. You may provide more collateral to increase your credit line. Click 'next' when you're ready to get your Archie Card.",
+    "text": "Your collateral is now worth ${{collateralValue}}, giving you an initial credit line of ${{creditValue}}. You may provide more collateral to increase your credit line. Click 'next' when you're ready to get your Archie Card.",
     "img_alt": "Collateral received",
     "btn": "Collateralize more"
   },
   "not_enough_collateral_modal": {
     "title": "Add more collateral for your Archie Card",
-    "text": "We've received your collateral, which is worth ${{creditValue}}. To receive an Archie card, you must provide at least ${{minValue}} in collateral value. Please add ${{difference}} more of collateralized assets.",
+    "text": "We've received your collateral, which is worth ${{creditValue}}. To receive an Archie card, you must provide at least ${{minValue}} in collateral value. Please add ${{difference}} of collateralized assets.",
     "img_alt": "Not enough collateral",
     "btn": "Add collateral"
   },
@@ -190,7 +190,7 @@
     "subtitle_credit": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it.",
     "collateral_received_modal": {
       "title": "We received your collateral!",
-      "text": "Your collateral is now worth ${{collateralValue}}, giving you a credit line of up to ${{creditValue}}."
+      "text": "Your collateral is now worth ${{collateralValue}}, giving you an initial credit line of ${{creditValue}}."
     }
   },
   "dashboard_rewards": {
