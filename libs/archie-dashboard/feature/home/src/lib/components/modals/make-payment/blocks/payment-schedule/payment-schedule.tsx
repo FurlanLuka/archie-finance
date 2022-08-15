@@ -1,17 +1,19 @@
 import { format } from 'date-fns';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
   ButtonPrimary,
+  InputRadio,
+  InputText,
   ParagraphM,
   ParagraphS,
   ParagraphXS,
   ParagraphXXS,
 } from '@archie-webapps/shared/ui/design-system';
-import { theme } from '@archie-webapps/shared/ui/theme';
+import { Icon } from '@archie-webapps/shared/ui/icons';
 
-import { PaymentScheduleModalStyled, InputRadio } from './payment-schedule.styled';
+import { PaymentScheduleModalStyled } from './payment-schedule.styled';
 
 interface PaymentScheduleModalProps {
   onConfirm: () => void;
@@ -19,6 +21,8 @@ interface PaymentScheduleModalProps {
 
 export const PaymentScheduleModal: FC<PaymentScheduleModalProps> = ({ onConfirm }) => {
   const { t } = useTranslation();
+
+  const [schedule, setSchedule] = useState(false);
 
   const handleConfirm = () => {
     onConfirm();
@@ -42,44 +46,57 @@ export const PaymentScheduleModal: FC<PaymentScheduleModalProps> = ({ onConfirm 
       <ParagraphXS>{t('dashboard_home.payment_schedule_modal.last_payment', { lastPayment, date })}</ParagraphXS>
       <ParagraphXS>{t('dashboard_home.payment_schedule_modal.interest_owed', { iterestOwed })}</ParagraphXS>
       <div className="divider" />
-      <ParagraphXS weight={800}>{t('dashboard_home.payment_schedule_modal.payment_date')}</ParagraphXS>
-      <ParagraphXS className="payment-date">
-        {format(new Date(), 'MMMM dd, yyyy')} |{' '}
-        <button className="btn-schedule">{t('dashboard_home.payment_schedule_modal.schedule')}</button>
+      <ParagraphXS weight={800} className="subtitle">
+        {t('dashboard_home.payment_schedule_modal.payment_date')}
       </ParagraphXS>
-      <ParagraphXXS color={theme.textSecondary} weight={700}>
-        <label className="radio-auto-payments">
-          <input type="radio" value="auto_payments" />
-          {t('dashboard_home.payment_schedule_modal.auto_payments')} {t('off')} {/* I guess temp */}
-        </label>
+      <ParagraphXS className="payment-date">
+        {format(new Date(), 'MMMM dd, yyyy')} |
+        {schedule ? (
+          <InputText small>
+            <input placeholder="mm/dd/yyyy" />
+          </InputText>
+        ) : (
+          <button className="btn-schedule" onClick={() => setSchedule(true)}>
+            {t('dashboard_home.payment_schedule_modal.schedule')} <Icon name="calendar" />
+          </button>
+        )}
+      </ParagraphXS>
+      <ParagraphXXS weight={700}>
+        <InputRadio small>
+          <input type="radio" value="auto_payments" checked disabled />
+          <ParagraphXXS>
+            {t('dashboard_home.payment_schedule_modal.auto_payments')} {t('off')} {/* I guess temp */}
+          </ParagraphXXS>
+        </InputRadio>
       </ParagraphXXS>
       <div className="divider" />
-      <ParagraphXS weight={800}>{t('dashboard_home.payment_schedule_modal.payment_options')}</ParagraphXS>
+      <ParagraphXS weight={800} className="subtitle">
+        {t('dashboard_home.payment_schedule_modal.payment_options')}
+      </ParagraphXS>
       <div className="radio-group">
-        <ParagraphS weight={500}>
-          <InputRadio>
-            <input type="radio" name="payment_option" value="balance_owed" />
-            {t('dashboard_home.payment_schedule_modal.balance_owed', { balanceOwed })}
-          </InputRadio>
-        </ParagraphS>
-        <ParagraphS weight={500}>
-          <InputRadio>
-            <input type="radio" name="payment_option" value="balance_with_interest" />
+        <InputRadio>
+          <input type="radio" name="payment_option" value="balance_owed" />
+          <ParagraphS>{t('dashboard_home.payment_schedule_modal.balance_owed', { balanceOwed })}</ParagraphS>
+        </InputRadio>
+        <InputRadio>
+          <input type="radio" name="payment_option" value="balance_with_interest" />
+          <ParagraphS>
             {t('dashboard_home.payment_schedule_modal.balance_with_interest', { balanceWithInterest })}
-          </InputRadio>
-        </ParagraphS>
-        <ParagraphS weight={500}>
-          <InputRadio>
-            <input type="radio" name="payment_option" value="full_balance" />
-            {t('dashboard_home.payment_schedule_modal.full_balance', { fullBalance })}
-          </InputRadio>
-        </ParagraphS>
-        <ParagraphS weight={500}>
+          </ParagraphS>
+        </InputRadio>
+        <InputRadio>
+          <input type="radio" name="payment_option" value="full_balance" />
+          <ParagraphS>{t('dashboard_home.payment_schedule_modal.full_balance', { fullBalance })}</ParagraphS>
+        </InputRadio>
+        <div className="input-group">
           <InputRadio>
             <input type="radio" name="payment_option" value="other_amount" />
-            {t('dashboard_home.payment_schedule_modal.other_amount')}
+            <ParagraphS>{t('dashboard_home.payment_schedule_modal.other_amount')}</ParagraphS>
           </InputRadio>
-        </ParagraphS>
+          <InputText small>
+            <input placeholder="$" />
+          </InputText>
+        </div>
       </div>
       <div className="btn-group">
         <ButtonPrimary maxWidth="250px" onClick={handleConfirm}>

@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 
-import { breakpoints } from '@archie-webapps/shared/ui/theme';
-
 export const PaymentScheduleModalStyled = styled.div`
   display: flex;
   flex-direction: column;
@@ -10,6 +8,10 @@ export const PaymentScheduleModalStyled = styled.div`
     border-bottom: 1px solid ${({ theme }) => theme.borderDark};
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
+  }
+
+  .subtitle {
+    margin-bottom: 0.5rem;
   }
 
   .divider {
@@ -23,58 +25,48 @@ export const PaymentScheduleModalStyled = styled.div`
     display: flex;
     align-items: center;
     gap: 0.25rem;
+    min-height: 28px;
+    max-width: 226px;
+    white-space: nowrap;
+    margin-bottom: 0.25rem;
+
+    label,
+    input {
+      margin: 0;
+    }
   }
 
   .btn-schedule {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
     font-size: 0.75rem;
     font-weight: 700;
     color: ${({ theme }) => theme.textHighlight};
     background-color: transparent;
     border: 0;
     padding: 0;
-  }
-
-  .radio-auto-payments {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-
-    input {
-      margin: 0;
-      border: 2px solid ${({ theme }) => theme.textSecondary};
-    }
+    cursor: pointer;
   }
 
   .radio-group {
     margin-top: 0.5rem;
   }
 
+  .input-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    max-width: 330px;
+
+    label,
+    input {
+      margin: 0;
+    }
+  }
+
   .btn-group {
     margin-top: 4rem;
   }
 `;
-
-// Move it to design system
-export const InputRadio = styled.label`
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding-left: 2rem;
-  margin-bottom: 0.75rem;
-  cursor: pointer;
-
-  input {
-    position: absolute;
-    left: 0;
-    height: 1.5rem;
-    width: 1.5rem;
-    /* opacity: 0; */
-    margin: 0;
-    cursor: pointer;
-
-    &:before {
-      position: ;
-    }
-  }
-`

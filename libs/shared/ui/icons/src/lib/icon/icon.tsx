@@ -7,6 +7,7 @@ export type IconName =
   | 'arrow-right'
   | 'bitcoin-outline'
   | 'bitcoin'
+  | 'calendar'
   | 'caret'
   | 'close'
   | 'copy'
