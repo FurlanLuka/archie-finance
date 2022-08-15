@@ -14,7 +14,7 @@ interface CollateralDepositProps {
 export const CollateralDeposit: FC<CollateralDepositProps> = ({ initialCollateral }) => {
   const navigate = useNavigate();
 
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const onCollateralAmountChange = () => {
     setIsModalOpen(true);
