@@ -18,7 +18,7 @@ export default {
   },
 } as Meta;
 
-export const Small: Story = () => (
+export const Default: Story = () => (
   <StoriesContainer bgColor={theme.backgroundSecondary}>
     <StoriesTitle title="Toast" subtitle="default" />
     <Toast>
