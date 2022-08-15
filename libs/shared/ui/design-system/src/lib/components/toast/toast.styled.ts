@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints, HEADER_HEIGHT } from '@archie-webapps/shared/ui/theme';
 
-export const CreateCreditLineStyled = styled.div`
+export const Toast = styled.div`
   position: fixed;
   top: calc(${HEADER_HEIGHT} + 1rem);
   right: 1rem;
@@ -22,7 +22,11 @@ export const CreateCreditLineStyled = styled.div`
     right: 2rem;
   }
 
-  .text {
-    margin-bottom: 0.5rem;
+  .btn-group {
+    margin-top: 0.5rem;
   }
+`;
+
+export const ToastList = styled.div`
+  
 `;
