@@ -53,7 +53,7 @@ export const PaymentScheduleModal: FC<PaymentScheduleModalProps> = ({ onConfirm 
         {format(new Date(), 'MMMM dd, yyyy')} |
         {schedule ? (
           <InputText small>
-            <input placeholder="mm/dd/yyyy" />
+            <input placeholder="mm/dd/yyyy" /> {/* Use the same validation as on KYC dateOfBirth */}
           </InputText>
         ) : (
           <button className="btn-schedule" onClick={() => setSchedule(true)}>
