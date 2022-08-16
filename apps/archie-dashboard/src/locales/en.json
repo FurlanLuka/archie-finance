@@ -128,8 +128,7 @@
     "text": "We've received ${{creditValue}} worth of collateral. You must collateralize ${{difference}} more in crypto assets to receive an Archie card."
   },
   "collateral_credit_line_popup": {
-    "text": "You have collateralized {{collateral}} and will have an initial credit line of ${{creditValue}}.",
-    "btn": "Continue"
+    "text": "You have collateralized {{collateral}} and will have an initial credit line of ${{creditValue}}."
   },
   "setup_2fa_banner": {
     "title": "Protect your funds with 2FA",
