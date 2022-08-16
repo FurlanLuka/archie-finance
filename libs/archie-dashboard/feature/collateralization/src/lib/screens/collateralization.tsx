@@ -21,7 +21,7 @@ export const CollateralizationScreen: FC = () => {
   const { asset } = useParams<CollateralizationRouteParams>();
 
   if (asset === undefined) {
-    return null;
+    return <Navigate to="/collateral" />;
   }
 
   const assetInfo = CollateralAssets[asset];
@@ -49,15 +49,6 @@ export const CollateralizationScreen: FC = () => {
       const collateralTotalValue = calculateCollateralTotalValue(initialCollateral);
       const currentAsset = initialCollateral.find((c) => c.asset === asset);
       const assetPrice = getAssetPriceResponse.data.find((p) => p.asset === assetInfo.id);
-
-      if (!asset) {
-        return (
-          <Navigate
-            to="/error"
-            state={{ prevPath: '/collateral', description: 'You do not have this asset collateralized' }}
-          />
-        );
-      }
 
       if (!assetPrice) {
         return <Navigate to="/error" state={{ prevPath: '/collateral', description: "Couldn't fetch price" }} />;

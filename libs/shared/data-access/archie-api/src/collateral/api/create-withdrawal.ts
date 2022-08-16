@@ -21,7 +21,7 @@ export interface WithdrawalResponse {
 
 const ERROR_LIST = new Map<string, string>([]);
 
-export const createWithdrawal = async ({ accessToken, ...body }: DefaultVariables): Promise<WithdrawalResponse> => {
+export const createWithdrawal = async ({ accessToken, ...body }: CreateWithdrawalBody): Promise<WithdrawalResponse> => {
   return postRequest(
     `${API_URL}/v1/collateral/withdraw`,
     body,

@@ -2,7 +2,7 @@ import { FC, useMemo, useState } from 'react';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 
 import { usePollCollateralDeposit } from '@archie-webapps/archie-dashboard/hooks';
-import { calculateCollateralCreditValue, formatEntireCollateral } from '@archie-webapps/archie-dashboard/utils';
+import { calculateCollateralCreditValue, calculateCollateralTotalValue } from '@archie-webapps/archie-dashboard/utils';
 
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { useNavigate } from 'react-router-dom';
@@ -25,8 +25,8 @@ export const CollateralDeposit: FC<CollateralDepositProps> = ({ initialCollatera
     initialCollateral,
   });
 
-  const collateralText = useMemo(() => formatEntireCollateral(currentCollateral), [currentCollateral]);
-  const collateralTotalValue = useMemo(() => calculateCollateralCreditValue(currentCollateral), [currentCollateral]);
+  const collateralCreditValue = useMemo(() => calculateCollateralCreditValue(currentCollateral), [currentCollateral]);
+  const collateralTotalValue = useMemo(() => calculateCollateralTotalValue(currentCollateral), [currentCollateral]);
 
   if (isModalOpen) {
     return (
@@ -35,8 +35,8 @@ export const CollateralDeposit: FC<CollateralDepositProps> = ({ initialCollatera
           setIsModalOpen(false);
           navigate('/collateral');
         }}
-        collateralText={collateralText}
-        creditValue={collateralTotalValue}
+        collateralValue={collateralTotalValue}
+        creditValue={collateralCreditValue}
       />
     );
   }

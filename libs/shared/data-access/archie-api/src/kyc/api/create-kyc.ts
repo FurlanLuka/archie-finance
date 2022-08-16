@@ -8,12 +8,12 @@ export interface CreateKycPayload extends DefaultVariables {
   addressStreet: string;
   addressStreetNumber: string;
   addressLocality: string;
+  addressCountry: string;
   addressRegion: string;
   addressPostalCode: string;
-  addressCountry: string;
-  phoneNumber: string;
   phoneNumberCountryCode: string;
-  ssnDigits: number;
+  phoneNumber: string;
+  ssn: string;
 }
 
 export type CreateKycResponse = CreateKycPayload;
