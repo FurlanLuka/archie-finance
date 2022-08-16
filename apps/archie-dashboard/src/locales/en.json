@@ -138,9 +138,14 @@
     "text": "Setup Multi-Factor Authentication using your authenticator app.",
     "img_alt": "Setup 2FA"
   },
+  "close_to_margin_call_alert": {
+    "title": "You are close to entering a margin call!",
+    "text": "The value of your ArchCredit collateral is nearing an LTV rate above 75%. We recommend taking action to prevent a margin call. To quickly remedy this issue, we recommend adding more collateral to your ArchCredit as  paying down your balance through your bank may take up to 3 business days.",
+    "btn": "Cure"
+  },
   "margin_call_alert": {
     "title": "You have reached margin call",
-    "text": "The value of your ArchCredit collateral has dropped and you have reached an LTV rate above 75%. Action is required to prevent liquidiating a portion of your collateral. We recommend sending more collateral to your ArchCredit; paying down your balance through your bank may take up to 3 days. Archie will automatically undergo a partial lidquidation if your LTV reaches 90%",
+    "text": "The value of your ArchCredit collateral has dropped and you have reached an LTV rate above 75%. Action is required to prevent liquidiating a portion of your collateral. We recommend sending more collateral to your ArchCredit; paying down your balance through your bank may take up to 3 days. Archie will automatically undergo a partial lidquidation if your LTV reaches 90%.",
     "btn": "Cure"
   },
   "dashboard_home": {

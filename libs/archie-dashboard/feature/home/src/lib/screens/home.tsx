@@ -9,6 +9,7 @@ import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hoo
 import { ParagraphXS, SubtitleS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
+import { CloseToMarginCallAlert } from '../components/alerts/close-to-margin-call/close-to-margin-call';
 import { MarginCallAlert } from '../components/alerts/margin-call/margin-call';
 import { ArchieCard } from '../components/archie-card/archie-card';
 import { AvailableCredit } from '../components/available-credit/available-credit';
@@ -50,6 +51,7 @@ export const HomeScreen: FC = () => {
   return (
     <HomeStyled>
       <MarginCallAlert />
+      <CloseToMarginCallAlert />
       <div className="section-title">{getTitle()}</div>
       <div className="section-cards">
         <ArchieCard />
