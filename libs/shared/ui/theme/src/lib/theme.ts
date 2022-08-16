@@ -122,7 +122,7 @@ export const theme: Theme = {
   textDisabled: colors.neutralgray_200,
   textSuccess: colors.green_500,
   textWarning: colors.orange_500,
-  textDanger: colors.red_600,
+  textDanger: colors.red_500,
   // button
   buttonPrimary: colors.coral_500,
   buttonOutline: colors.transparent,

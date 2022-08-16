@@ -41,7 +41,7 @@ export const LoanToValueChart: FC<LoanToValueChartProps> = ({ ltv, status }) => 
       />
       <div className="centered-metrics">
         <ParagraphXXS weight={700}>Loan-to-value</ParagraphXXS>
-        <SubtitleM weight={400} color={theme.loanToValueActive}>
+        <SubtitleM weight={400} color={LoanToValueColor[status]}>
           {ltv.toFixed(2)}%
         </SubtitleM>
         <Badge statusColor={LoanToValueColor[status]} className="status-label">
