@@ -31,6 +31,7 @@ interface SuccessQueryResponse<T = any> {
 
 interface IdleQueryResponse {
   state: RequestState.IDLE;
+  fetch: () => void;
 }
 
 export type QueryResponse<T> = LoadingQueryResponse | ErrorQueryResponse | SuccessQueryResponse<T> | IdleQueryResponse;

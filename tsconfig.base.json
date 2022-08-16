@@ -25,6 +25,7 @@
       "@archie-webapps/archie-dashboard/feature/history": ["libs/archie-dashboard/feature/history/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature/home": ["libs/archie-dashboard/feature/home/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature/onboarding": ["libs/archie-dashboard/feature/onboarding/src/index.ts"],
+      "@archie-webapps/archie-dashboard/feature/payments": ["libs/archie-dashboard/feature/payments/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature/rewards": ["libs/archie-dashboard/feature/rewards/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature/settings": ["libs/archie-dashboard/feature/settings/src/index.ts"],
       "@archie-webapps/archie-dashboard/feature/withdraw": ["libs/archie-dashboard/feature/withdraw/src/index.ts"],
