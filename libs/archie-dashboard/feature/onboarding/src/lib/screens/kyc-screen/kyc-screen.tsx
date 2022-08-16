@@ -67,7 +67,7 @@ export const KycScreen: FC = () => {
         lastName: data.lastName,
         dateOfBirth: parseDate(data.dateOfBirth).toISOString(),
         ...data.address,
-        aptUnit: data.aptUnit,
+        // aptUnit: data.aptUnit, TODO implement on BE
         phoneNumberCountryCode,
         phoneNumber: data.phoneNumber,
         ssn: data.ssn,
