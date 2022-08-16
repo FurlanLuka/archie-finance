@@ -24,7 +24,7 @@ import { MakePaymentModal } from '../modals/make-payment/make-payment';
 export const AvailableCredit: FC = () => {
   const { t } = useTranslation();
 
-  const [makePaymentModalOpen, setMakePaymentModalOpen] = useState(true);
+  const [makePaymentModalOpen, setMakePaymentModalOpen] = useState(false);
 
   const getCreditQueryResponse: QueryResponse<GetCreditResponse> = useGetCredit();
   const getLTVResponse: QueryResponse<LTV> = useGetLTV();
