@@ -1,7 +1,11 @@
 import { FC, useMemo, useState } from 'react';
 
 import { usePollCollateralDeposit } from '@archie-webapps/archie-dashboard/hooks';
-import { calculateCollateralCreditValue, formatEntireCollateral } from '@archie-webapps/archie-dashboard/utils';
+import {
+  calculateCollateralCreditValue,
+  calculateCollateralTotalValue,
+  formatEntireCollateral,
+} from '@archie-webapps/archie-dashboard/utils';
 
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';
@@ -23,9 +27,14 @@ export const CollateralDepositAlerts: FC = () => {
   });
 
   const collateralText = useMemo(() => formatEntireCollateral(currentCollateral), [currentCollateral]);
-  const collateralTotalValue = useMemo(() => calculateCollateralCreditValue(currentCollateral), [currentCollateral]);
+  const collateralCreditValue = useMemo(() => calculateCollateralCreditValue(currentCollateral), [currentCollateral]);
+  const collateralTotalValue = useMemo(() => calculateCollateralTotalValue(currentCollateral), [currentCollateral]);
 
-  const currentCollateralDepositState = getCollateralDepositState(isModalOpen, collateralTotalValue, currentCollateral);
+  const currentCollateralDepositState = getCollateralDepositState(
+    isModalOpen,
+    collateralCreditValue,
+    currentCollateral,
+  );
 
   if (currentCollateralDepositState === CollateralDepositState.COLLATERAL_RECEIVED_MODAL) {
     return (
@@ -37,8 +46,8 @@ export const CollateralDepositAlerts: FC = () => {
         onConfirm={() => {
           setIsModalOpen(false);
         }}
-        collateralText={collateralText}
-        creditValue={collateralTotalValue}
+        collateralValue={collateralTotalValue}
+        creditValue={collateralCreditValue}
       />
     );
   }
@@ -46,8 +55,7 @@ export const CollateralDepositAlerts: FC = () => {
   if (currentCollateralDepositState === CollateralDepositState.NOT_ENOUGH_COLLATERAL_MODAL) {
     return (
       <NotEnoughCollateralModal
-        collateralText={collateralText}
-        creditValue={collateralTotalValue}
+        creditValue={collateralCreditValue}
         onClose={() => {
           setIsModalOpen(false);
           startPolling();
@@ -57,11 +65,11 @@ export const CollateralDepositAlerts: FC = () => {
   }
 
   if (currentCollateralDepositState === CollateralDepositState.CREATE_CREDIT_LINE_TOAST) {
-    return <CreateCreditLine collateralText={collateralText} creditValue={collateralTotalValue} />;
+    return <CreateCreditLine collateralText={collateralText} creditValue={collateralCreditValue} />;
   }
 
   if (currentCollateralDepositState === CollateralDepositState.NOT_ENOUGH_COLLATERAL_TOAST) {
-    return <NotEnoughCollateral creditValue={collateralTotalValue} collateralText={collateralText} />;
+    return <NotEnoughCollateral creditValue={collateralCreditValue} />;
   }
 
   return <></>;
