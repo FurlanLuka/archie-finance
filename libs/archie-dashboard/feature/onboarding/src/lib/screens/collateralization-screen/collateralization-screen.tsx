@@ -22,6 +22,7 @@ import {
   SubtitleM,
 } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
+import { QR_CODE } from '@archie-webapps/shared/ui/theme';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralDepositAlerts } from '../../components/collateral-deposit-alerts/collateral-deposit-alerts';
@@ -168,7 +169,7 @@ export const CollateralizationScreen: FC = () => {
             </div>
             <div className="address-code">
               <div className="code">
-                <QRCode value={getDepositAddress() ?? ''} size={96} />
+                <QRCode value={getDepositAddress() ?? ''} size={QR_CODE} />
               </div>
               <div className="info">
                 <div className="info-group">

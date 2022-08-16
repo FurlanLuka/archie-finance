@@ -20,16 +20,12 @@ export const WithdrawScreen: FC = () => {
   const getMaxWithdrawalAmountResponse = useGetMaxWithdrawalAmount(currentAsset);
   const getCollateralValueReponse = useGetCollateralValue();
 
-  function getContent() {
+  const getContent = () => {
     if (
       getMaxWithdrawalAmountResponse.state === RequestState.LOADING ||
       getCollateralValueReponse.state === RequestState.LOADING
     ) {
-      return (
-        <div className="loader-container">
-          <Loader />
-        </div>
-      );
+      return <Loader />;
     }
 
     if (
@@ -44,6 +40,7 @@ export const WithdrawScreen: FC = () => {
       getCollateralValueReponse.state === RequestState.SUCCESS
     ) {
       const asset = getCollateralValueReponse.data.find((a) => a.asset === currentAsset);
+
       if (!asset) {
         return (
           <Navigate
@@ -55,6 +52,9 @@ export const WithdrawScreen: FC = () => {
 
       return (
         <>
+          <ParagraphM weight={800} className="title">
+            {t('dashboard_withdraw.title', { currentAsset })}
+          </ParagraphM>
           <ParagraphS className="subtitle">
             {t('dashboard_withdraw.subtitle', {
               asset: asset.asset,
@@ -71,16 +71,12 @@ export const WithdrawScreen: FC = () => {
       );
     }
 
-    console.error('Withdrawal unhandled request state');
     return null;
-  }
+  };
 
   return (
     <WithdrawScreenStyled>
-      <Card column alignItems="center" padding="2.5rem 1.5rem 3.5rem" minHeight="720px">
-        <ParagraphM weight={800} className="title">
-          {t('dashboard_withdraw.title', { currentAsset })}
-        </ParagraphM>
+      <Card column alignItems="center" justifyContent="center" padding="2.5rem 1.5rem 3.5rem" minHeight="750px">
         {getContent()}
       </Card>
     </WithdrawScreenStyled>
