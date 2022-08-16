@@ -5,8 +5,11 @@
   "btn_cancel": "Cancel",
   "btn_continue": "Continue",
   "btn_add": "Add",
+  "btn_back": "Back",
   "btn_claim": "Claim",
   "ltv": "LTV",
+  "on": "on",
+  "off": "off",
   "steps_indicator": {
     "first": "Sign up",
     "second": "Collateralize",
@@ -79,7 +82,7 @@
     },
     "address": {
       "title": "Send {{required_collateral}} to:",
-      "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address. Please select another asset above if you’d like to collateralize a different currency.",
+      "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address. Please select another asset above if you'd like to collateralize a different currency.",
       "info_text_2": "We will settle receipt of your collateral after <b>three</b> confirmations.",
       "info_link_1": "Follow along on",
       "info_link_2": "this blockchain explorer "
@@ -152,6 +155,35 @@
     "recent_transactions": {
       "title": "Recent Transactions",
       "btn": "View More"
+    },
+    "payment_schedule_modal": {
+      "title": "Schedule a payment",
+      "credit_for": "ArchCredit for {{name}}",
+      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
+      "interest_owed": "Interest owed: ${{iterestOwed}}",
+      "payment_date": "Payment Date",
+      "payment_options": "Payment Options",
+      "schedule": "Schedule",
+      "auto_payments": "auto payments:",
+      "balance_owed": "Pay balance owed: ${{balanceOwed}}",
+      "balance_with_interest": "Pay balance owed with interest: ${{balanceWithInterest}}",
+      "full_balance": "Pay full balance: ${{fullBalance}}",
+      "other_amount": "Pay other amount:"
+    },
+    "payment_confirm_modal": {
+      "title": "Confirm payment",
+      "credit_for": "ArchCredit for {{name}}",
+      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
+      "balance_note": "Pay balance owed:",
+      "time_note": "This Payment will be processed today and take 2-4 business days to settle."
+    },
+    "payment_scheduled_modal": {
+      "title": "Payment scheduled",
+      "credit_for": "ArchCredit for {{name}}",
+      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
+      "scheduled_note": "Your payment for ${{newPayment}} has been scheduled!",
+      "email_note": "You will receive an email notification.",
+      "time_note": "Your payment will take 2-4 business days to settle."
     }
   },
   "dashboard_collateral": {

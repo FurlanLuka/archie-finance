@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
-export const InputText = styled.label`
+export interface InputTextProps {
+  small?: boolean;
+}
+
+export const InputText = styled.label<InputTextProps>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -19,8 +23,8 @@ export const InputText = styled.label`
     font-family: ${({ theme }) => theme.fontPrimary};
     color: ${({ theme }) => theme.textPrimary};
     letter-spacing: 0.02em;
-    padding: 1rem 0.75rem;
-    border-radius: 0.5rem;
+    padding: ${({ small }) => (small ? '0.25rem 0.5rem' : '1rem 0.75rem')};
+    border-radius: ${({ small }) => (small ? '0.35rem' : '0.5rem')};
     border: 1px solid ${({ theme }) => theme.borderHighlight};
     background-color: transparent;
     max-height: 3rem;

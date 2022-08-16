@@ -10,13 +10,13 @@ export default {
   component: InputText,
   parameters: {
     layout: 'fullscreen',
-    options: { showPanel: false },
+    options: { showPanel: true },
   },
 } as Meta;
 
 export const Default: Story = () => (
   <StoriesContainer>
-    <StoriesTitle title="Input text" />
+    <StoriesTitle title="Input text" subtitle="default" />
     <div style={{ maxWidth: '30%' }}>
       <InputText>
         Join the Waitlist
@@ -25,3 +25,19 @@ export const Default: Story = () => (
     </div>
   </StoriesContainer>
 );
+
+export const Small: Story = (props) => (
+  <StoriesContainer>
+    <StoriesTitle title="Input text" subtitle="small" />
+    <div style={{ maxWidth: '30%' }}>
+      <InputText {...props}>
+        Join the Waitlist
+        <input placeholder="Email address" />
+      </InputText>
+    </div>
+  </StoriesContainer>
+);
+
+Small.args = {
+  small: true,
+};
