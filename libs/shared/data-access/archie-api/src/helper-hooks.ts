@@ -14,12 +14,8 @@ import {
 
 import { SessionState, useAuthenticatedSession } from '@archie-webapps/shared/data-access/session';
 
-import { ApiErrors, UnauthenticatedApiError } from './api-error';
-import {
-  DefaultVariables,
-  sessionRefreshWrapper,
-  sessionRefreshWrapperMutation,
-} from './helpers';
+import { ApiError, ApiErrors, UnauthenticatedApiError } from './api-error';
+import { DefaultVariables, sessionRefreshWrapper, sessionRefreshWrapperMutation } from './helpers';
 import {
   InfiniteQueryResponse,
   MutationQueryResponse,
@@ -171,16 +167,16 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
 
 export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
   mutationKey: MutationKey,
-  mutationFn: MutationFunction<TData, DefaultVariables>,
+  mutationFn: MutationFunction<TData, TVariables>,
   options?: Omit<UseMutationOptions<TData, ApiErrors, TVariables, unknown>, 'mutationKey' | 'mutationFn'>,
 ): MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData> => {
   const { setAccessToken, setSessionState, accessToken } = useAuthenticatedSession();
 
   const { getAccessTokenSilently } = useAuth0();
 
-  const request = useMutation(
+  const request = useMutation<TData, ApiError, TVariables>(
     mutationKey,
-    sessionRefreshWrapperMutation<TData, DefaultVariables>(
+    sessionRefreshWrapperMutation<TData, TVariables>(
       mutationFn,
       accessToken,
       setAccessToken,
