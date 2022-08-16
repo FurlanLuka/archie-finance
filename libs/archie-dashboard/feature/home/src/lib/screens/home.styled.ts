@@ -1,12 +1,6 @@
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/shared/ui/theme';
-
-const load = keyframes`
-  100% {
-    transform: translateX(100%);
-  }
-`;
 
 export const HomeStyled = styled.div`
   width: 100%;

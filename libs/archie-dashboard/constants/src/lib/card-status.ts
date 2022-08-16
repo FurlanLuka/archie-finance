@@ -7,14 +7,14 @@ export enum CardStatus {
   MARGIN_CALL = 'margin_call',
 }
 
-export const CardText = {
+export const CardStatusText = {
   [CardStatus.ACTIVE]: 'Active',
   [CardStatus.FROZEN]: 'Frozen',
   [CardStatus.WARING]: 'Warning',
   [CardStatus.MARGIN_CALL]: 'Margin Call',
 };
 
-export const CardColor = {
+export const CardStatusColor = {
   [CardStatus.ACTIVE]: theme.textSuccess,
   [CardStatus.FROZEN]: theme.textSecondary,
   [CardStatus.WARING]: theme.textWarning,
