@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { Step } from '@archie-webapps/archie-dashboard/constants';
+import { OnboardingStep } from '@archie-webapps/archie-dashboard/constants';
 import { TotalCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-total-value';
 import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-total-value';
 import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
@@ -75,7 +75,7 @@ export const CardScreen: FC = () => {
 
   return (
     <Container column mobileColumn alignItems="center">
-      <StepsIndicator currentStep={Step.CARD} />
+      <StepsIndicator currentStep={OnboardingStep.CARD} />
       <CardScreenStyled>
         <Card column alignItems="center" padding="2.5rem 10% 3.5rem" mobilePadding="2.5rem 1.5rem 3.5rem">
           <SubtitleM className="title">{getTitle()}</SubtitleM>

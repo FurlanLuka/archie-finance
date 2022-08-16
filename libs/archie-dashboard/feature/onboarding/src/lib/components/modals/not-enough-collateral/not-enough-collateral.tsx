@@ -10,15 +10,10 @@ import { NotEnoughCollateralModalStyled } from './not-enough-collateral.styled';
 
 interface NotEnoughCollateralModalProps {
   onClose: () => void;
-  collateralText: string;
   creditValue: number;
 }
 
-export const NotEnoughCollateralModal: FC<NotEnoughCollateralModalProps> = ({
-  onClose,
-  collateralText,
-  creditValue,
-}) => {
+export const NotEnoughCollateralModal: FC<NotEnoughCollateralModalProps> = ({ onClose, creditValue }) => {
   const { t } = useTranslation();
 
   return (
@@ -31,10 +26,9 @@ export const NotEnoughCollateralModal: FC<NotEnoughCollateralModalProps> = ({
           <ParagraphM weight={700}>{t('not_enough_collateral_modal.title')}</ParagraphM>
           <ParagraphXS>
             {t('not_enough_collateral_modal.text', {
-              collateral: collateralText,
-              credit_value: creditValue,
-              min_value: MIN_LINE_OF_CREDIT,
-              difference: MIN_LINE_OF_CREDIT - creditValue,
+              creditValue: creditValue.toFixed(2),
+              minValue: MIN_LINE_OF_CREDIT,
+              difference: (creditValue - MIN_LINE_OF_CREDIT).toFixed(2),
             })}
           </ParagraphXS>
           <ButtonPrimary onClick={onClose} maxWidth="fit-content">

@@ -1,6 +1,8 @@
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 import styled from 'styled-components';
 
+import { QR_CODE } from '@archie-webapps/shared/ui/theme';
+
 export const DepositAddressStyled = styled.div`
   position: relative;
   background-color: ${({ theme }) => theme.backgroundSecondary};
@@ -43,6 +45,10 @@ export const DepositAddressStyled = styled.div`
 
     @media (max-width: ${breakpoints.screenSM}) {
       flex-direction: column;
+    }
+
+    svg {
+      min-width: ${QR_CODE}px;
     }
   }
 

@@ -138,17 +138,16 @@ export const sessionRefreshInfiniteWrapper = <TQueryFnData>(
 
 export interface DefaultVariables {
   accessToken: string;
-  [key: string]: unknown;
 }
 
 export const sessionRefreshWrapperMutation = <TData, TVariables extends DefaultVariables>(
-  mutationFn: MutationFunction<TData, DefaultVariables>,
+  mutationFn: MutationFunction<TData, TVariables>,
   accessToken: string,
   setAccessToken: React.Dispatch<React.SetStateAction<string | undefined>>,
   setSessionState: React.Dispatch<React.SetStateAction<SessionState>>,
   getAccessTokenSilently: () => Promise<string>,
-): MutationFunction<TData, Omit<TVariables, 'accessToken'>> => {
-  const wrapper = async (payload: Omit<TVariables, 'accessToken'>): Promise<TData> => {
+): MutationFunction<TData, TVariables> => {
+  const wrapper = async (payload: TVariables): Promise<TData> => {
     try {
       return await mutationFn({
         ...payload,

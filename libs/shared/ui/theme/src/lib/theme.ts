@@ -71,9 +71,13 @@ export interface Theme {
   inputTextPlaceholder: string;
   inputRange: string;
   inputRangeFilled: string;
+  inputRadio: string;
+  inputRadioFilled: string;
+  inputRadioDisabled: string;
   // border
   borderPrimary: string;
   borderHighlight: string;
+  borderDark: string;
   // tooltip
   tooltipBackground: string;
   tooltipText: string;
@@ -130,9 +134,13 @@ export const theme: Theme = {
   inputTextPlaceholder: colors.neutralgray_300,
   inputRange: colors.coral_200,
   inputRangeFilled: colors.coral_500,
+  inputRadio: colors.neutralgray_200,
+  inputRadioFilled: colors.coral_500,
+  inputRadioDisabled: colors.neutralgray_300,
   // border
   borderPrimary: colors.neutralgray_200,
   borderHighlight: colors.coral_500,
+  borderDark: colors.black,
   // tooltip
   tooltipBackground: colors.coral_500,
   tooltipText: colors.white,

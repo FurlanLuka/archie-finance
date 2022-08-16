@@ -28,6 +28,7 @@ interface WithdrawalFormProps {
   collateral: CollateralValue[];
   maxAmount: number;
 }
+
 export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collateral, maxAmount }) => {
   const { t } = useTranslation();
 

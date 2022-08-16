@@ -12,15 +12,15 @@ import { CollateralReceivedModalStyled } from './collateral-received.styled';
 interface CollateralReceivedModalProps {
   onClose: () => void;
   onConfirm: () => void;
-  collateralText: string;
   creditValue: number;
+  collateralValue: number;
 }
 
 export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
   onClose,
   onConfirm,
-  collateralText,
   creditValue,
+  collateralValue,
 }) => {
   const { t } = useTranslation();
   const createCreditLine = useCreateCreditLine();
@@ -42,8 +42,8 @@ export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
           <ParagraphM weight={700}>{t('collateral_received_modal.title')}</ParagraphM>
           <ParagraphXS>
             {t('collateral_received_modal.text', {
-              collateral: collateralText,
-              credit_value: creditValue,
+              collateralValue: collateralValue.toFixed(2),
+              creditValue: creditValue.toFixed(2),
             })}
           </ParagraphXS>
           <div className="btn-group">

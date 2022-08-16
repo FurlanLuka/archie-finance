@@ -21,11 +21,11 @@ import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
 export const DashboardRoute: FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
 
+  const isMfaSetup = queryResponse.state === RequestState.SUCCESS && queryResponse.data.mfaEnrollmentStage;
+
   if (queryResponse.state === RequestState.LOADING) {
     return <LoaderFullScreen />;
   }
-
-  const isMfaSetup = queryResponse.state === RequestState.SUCCESS && queryResponse.data.mfaEnrollmentStage;
 
   if (queryResponse.state === RequestState.SUCCESS) {
     if (!queryResponse.data.completed) {

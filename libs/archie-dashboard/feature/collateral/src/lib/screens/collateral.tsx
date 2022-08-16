@@ -9,14 +9,7 @@ import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/ap
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import {
-  LoaderFullScreen,
-  Card,
-  Badge,
-  SubtitleS,
-  ParagraphM,
-  ParagraphXS,
-} from '@archie-webapps/shared/ui/design-system';
+import { Card, Loader, Badge, SubtitleS, ParagraphM, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralInfo } from '../components/collateral-info/collateral-info';
@@ -29,9 +22,9 @@ export const CollateralScreen: FC = () => {
   const getCollateralValueResponse: QueryResponse<CollateralValue[]> = useGetCollateralValue();
   const getLTVResponse: QueryResponse<LTV> = useGetLTV();
 
-  function getContent() {
+  const getContent = () => {
     if (getCollateralValueResponse.state === RequestState.LOADING || getLTVResponse.state === RequestState.LOADING) {
-      return <LoaderFullScreen />;
+      return <Loader />;
     }
 
     if (getCollateralValueResponse.state === RequestState.ERROR || getLTVResponse.state === RequestState.ERROR) {
@@ -44,13 +37,21 @@ export const CollateralScreen: FC = () => {
       return (
         <>
           <div className="title-group">
-            <div className="ltv-group">
-              <ParagraphXS weight={700} color={theme.textSecondary}>
-                {t('ltv')}:
-              </ParagraphXS>
-              <ParagraphM>{ltvData.ltv.toFixed(2)}%</ParagraphM>
+            <ParagraphM weight={800} className="title">
+              {t('dashboard_collateral.title')}
+            </ParagraphM>
+            <SubtitleS weight={400} className="total">
+              ${getFormattedValue(calculateCollateralTotalValue(getCollateralValueResponse.data))}
+            </SubtitleS>
+            <div className="ltv">
+              <div className="ltv-group">
+                <ParagraphXS weight={700} color={theme.textSecondary}>
+                  {t('ltv')}:
+                </ParagraphXS>
+                <ParagraphM>{ltvData.ltv.toFixed(2)}%</ParagraphM>
+              </div>
+              <Badge statusColor={LoanToValueColor[ltvData.status]}>{LoanToValueText[ltvData.status]}</Badge>
             </div>
-            <Badge statusColor={LoanToValueColor[ltvData.status]}>{LoanToValueText[ltvData.status]}</Badge>
           </div>
           <CollateralInfo collateral={getCollateralValueResponse.data} />
         </>
@@ -58,19 +59,11 @@ export const CollateralScreen: FC = () => {
     }
 
     return null;
-  }
+  };
 
   return (
     <CollateralStyled>
-      <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
-        <ParagraphM weight={800} className="title">
-          {t('dashboard_collateral.title')}
-        </ParagraphM>
-        {getCollateralValueResponse.state === RequestState.SUCCESS && (
-          <SubtitleS weight={400} className="total">
-            ${getFormattedValue(calculateCollateralTotalValue(getCollateralValueResponse.data))}
-          </SubtitleS>
-        )}
+      <Card column alignItems="center" justifyContent="center" padding="2rem 1.5rem 2.5rem" minHeight="560px">
         {getContent()}
       </Card>
     </CollateralStyled>

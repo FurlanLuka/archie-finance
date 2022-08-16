@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
@@ -19,9 +19,12 @@ import {
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { LoanToValueChart } from '../charts/loan-to-value/loan-to-value';
+import { MakePaymentModal } from '../modals/make-payment/make-payment';
 
 export const AvailableCredit: FC = () => {
   const { t } = useTranslation();
+
+  const [makePaymentModalOpen, setMakePaymentModalOpen] = useState(false);
 
   const getCreditQueryResponse: QueryResponse<GetCreditResponse> = useGetCredit();
   const getLTVResponse: QueryResponse<LTV> = useGetLTV();
@@ -43,37 +46,44 @@ export const AvailableCredit: FC = () => {
     const ltvData = getLTVResponse.data;
 
     return (
-      <Card justifyContent="space-between" columnReverse padding="1.5rem">
-        <div className="card-group">
-          <div className="card-group p-bottom">
-            <ParagraphXS weight={700} className="card-title">
-              ArchCredit Balance
-            </ParagraphXS>
-            <SubtitleS weight={400} className="card-info border-active">
-              ${getFormattedValue(creditData.totalCredit - creditData.availableCredit)}
-            </SubtitleS>
-            <div className="btn-group">
-              <ButtonOutline maxWidth="auto" small>
-                Pay now
-              </ButtonOutline>
+      <>
+        <Card justifyContent="space-between" columnReverse padding="1.5rem">
+          <div className="card-group">
+            <div className="card-group p-bottom">
+              <ParagraphXS weight={700} className="card-title">
+                ArchCredit Balance
+              </ParagraphXS>
+              <SubtitleS weight={400} className="card-info border-active">
+                ${getFormattedValue(creditData.totalCredit - creditData.availableCredit)}
+              </SubtitleS>
+              <div className="btn-group">
+                <ButtonOutline maxWidth="auto" small onClick={() => setMakePaymentModalOpen(true)}>
+                  Pay now
+                </ButtonOutline>
+              </div>
+            </div>
+            <div className="card-group">
+              <ParagraphXS weight={700} className="card-title">
+                Available Credit
+              </ParagraphXS>
+              <SubtitleS weight={400} className="card-info border-default">
+                ${getFormattedValue(creditData.availableCredit)}
+              </SubtitleS>
+              <ParagraphXXS color={theme.textSecondary} weight={500} className="card-text">
+                Line of Credit: ${getFormattedValue(creditData.totalCredit)}
+              </ParagraphXXS>
             </div>
           </div>
-          <div className="card-group">
-            <ParagraphXS weight={700} className="card-title">
-              Available Credit
-            </ParagraphXS>
-            <SubtitleS weight={400} className="card-info border-default">
-              ${getFormattedValue(creditData.availableCredit)}
-            </SubtitleS>
-            <ParagraphXXS color={theme.textSecondary} weight={500} className="card-text">
-              Line of Credit: ${getFormattedValue(creditData.totalCredit)}
-            </ParagraphXXS>
+          <div className="card-group p-bottom-sm">
+            <LoanToValueChart ltv={ltvData.ltv} status={ltvData.status} />
           </div>
-        </div>
-        <div className="card-group p-bottom-sm">
-          <LoanToValueChart ltv={ltvData.ltv} status={ltvData.status} />
-        </div>
-      </Card>
+        </Card>
+        <MakePaymentModal
+          isOpen={makePaymentModalOpen}
+          close={() => setMakePaymentModalOpen(false)}
+          onConfirm={() => console.log('confirmed')}
+        />
+      </>
     );
   }
 

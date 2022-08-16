@@ -5,8 +5,11 @@
   "btn_cancel": "Cancel",
   "btn_continue": "Continue",
   "btn_add": "Add",
+  "btn_back": "Back",
   "btn_claim": "Claim",
   "ltv": "LTV",
+  "on": "on",
+  "off": "off",
   "steps_indicator": {
     "first": "Sign up",
     "second": "Collateralize",
@@ -79,7 +82,7 @@
     },
     "address": {
       "title": "Send {{required_collateral}} to:",
-      "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address. Please select another asset above if you’d like to collateralize a different currency.",
+      "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address. Please select another asset above if you'd like to collateralize a different currency.",
       "info_text_2": "We will settle receipt of your collateral after <b>three</b> confirmations.",
       "info_link_1": "Follow along on",
       "info_link_2": "this blockchain explorer "
@@ -114,22 +117,21 @@
   },
   "collateral_received_modal": {
     "title": "We received your collateral!",
-    "text": "Your current collateral of {{collateral}} adds up to a ${{credit_value}} credit line.  Feel free to collateralize more assets. Note you can use  different cryptocurrencies as collateral! Click 'Next' when you're ready to get your Archie Card.",
+    "text": "Your collateral is now worth ${{collateralValue}}, giving you an initial credit line of ${{creditValue}}. You may provide more collateral to increase your credit line. Click 'next' when you're ready to get your Archie Card.",
     "img_alt": "Collateral received",
     "btn": "Collateralize more"
   },
   "not_enough_collateral_modal": {
-    "title": "We received your collateral, but...",
-    "text": "Your current collateral of {{collateral}} adds up to a ${{credit_value}} credit line. The minimum required value is ${{min_value}}. Please deposit at least {{difference}} worth of cryptocurrency more.",
+    "title": "Add more collateral for your Archie Card",
+    "text": "We've received your collateral, which is worth ${{creditValue}}. To receive an Archie card, you must provide at least ${{minValue}} in collateral value. Please add ${{difference}} of collateralized assets.",
     "img_alt": "Not enough collateral",
-    "btn": "Collateralize more"
+    "btn": "Add collateral"
   },
   "not_enough_collateral_popup": {
-    "text": "Your current collateral of {{collateral}} adds up to a ${{credit_value}} credit line. The minimum required value is ${{min_value}}. Please deposit at least {{difference}} worth of cryptocurrency more."
+    "text": "We've received ${{creditValue}} worth of collateral. You must collateralize ${{difference}} more in crypto assets to receive an Archie card."
   },
   "collateral_credit_line_popup": {
-    "text": "You are collaterizing {{collateral}} for a credit line of ${{credit_value}}.",
-    "button_text": "Let's go!"
+    "text": "You have collateralized {{collateral}} and will have an initial credit line of ${{creditValue}}."
   },
   "setup_2fa_banner": {
     "title": "Protect your funds with 2FA",
@@ -153,6 +155,35 @@
     "recent_transactions": {
       "title": "Recent Transactions",
       "btn": "View More"
+    },
+    "payment_schedule_modal": {
+      "title": "Schedule a payment",
+      "credit_for": "ArchCredit for {{name}}",
+      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
+      "interest_owed": "Interest owed: ${{iterestOwed}}",
+      "payment_date": "Payment Date",
+      "payment_options": "Payment Options",
+      "schedule": "Schedule",
+      "auto_payments": "auto payments:",
+      "balance_owed": "Pay balance owed: ${{balanceOwed}}",
+      "balance_with_interest": "Pay balance owed with interest: ${{balanceWithInterest}}",
+      "full_balance": "Pay full balance: ${{fullBalance}}",
+      "other_amount": "Pay other amount:"
+    },
+    "payment_confirm_modal": {
+      "title": "Confirm payment",
+      "credit_for": "ArchCredit for {{name}}",
+      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
+      "balance_note": "Pay balance owed:",
+      "time_note": "This Payment will be processed today and take 2-4 business days to settle."
+    },
+    "payment_scheduled_modal": {
+      "title": "Payment scheduled",
+      "credit_for": "ArchCredit for {{name}}",
+      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
+      "scheduled_note": "Your payment for ${{newPayment}} has been scheduled!",
+      "email_note": "You will receive an email notification.",
+      "time_note": "Your payment will take 2-4 business days to settle."
     }
   },
   "dashboard_collateral": {
@@ -186,13 +217,11 @@
   },
   "dashboard_collateralization": {
     "title": "Send {{asset}} to your Collateral Wallet",
-    "subtitle_loading": "With ArchCredit, your Crypto is your credit.",
-    "subtitle_asset": "You currently have {{collateral}} {{collateral_asset}} (~${{collateral_value}}).",
+    "subtitle_asset": "You currently have {{collateral}} {{collateralAsset}} (~${{collateralValue}}).",
     "subtitle_credit": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it.",
     "collateral_received_modal": {
-      "title": "Collateral received",
-      "text": "Your collateral now includes {{collateral}}. Your credit limit is now ${{credit_value}}.",
-      "btn": "Got it!"
+      "title": "We received your collateral!",
+      "text": "Your collateral is now worth ${{collateralValue}}, giving you an initial credit line of ${{creditValue}}."
     }
   },
   "dashboard_payment": {

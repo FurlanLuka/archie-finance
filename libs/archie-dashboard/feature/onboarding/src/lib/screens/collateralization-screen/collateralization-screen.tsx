@@ -4,7 +4,7 @@ import QRCode from 'react-qr-code';
 import ReactTooltip from 'react-tooltip';
 
 import { CollateralAssetSelect } from '@archie-webapps/archie-dashboard/components';
-import { MAX_LINE_OF_CREDIT, MIN_LINE_OF_CREDIT, Step } from '@archie-webapps/archie-dashboard/constants';
+import { MAX_LINE_OF_CREDIT, MIN_LINE_OF_CREDIT, OnboardingStep } from '@archie-webapps/archie-dashboard/constants';
 import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
@@ -22,6 +22,7 @@ import {
   SubtitleM,
 } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
+import { QR_CODE } from '@archie-webapps/shared/ui/theme';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralDepositAlerts } from '../../components/collateral-deposit-alerts/collateral-deposit-alerts';
@@ -86,7 +87,7 @@ export const CollateralizationScreen: FC = () => {
   return (
     <Container column mobileColumn alignItems="center">
       <CollateralDepositAlerts />
-      <StepsIndicator currentStep={Step.COLLATERALIZE} />
+      <StepsIndicator currentStep={OnboardingStep.COLLATERALIZE} />
       <CollateralizationScreenStyled>
         <Card column alignItems="center" padding="2.5rem 10% 3.5rem" mobilePadding="2.5rem 1.5rem 3.5rem">
           <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
@@ -168,7 +169,7 @@ export const CollateralizationScreen: FC = () => {
             </div>
             <div className="address-code">
               <div className="code">
-                <QRCode value={getDepositAddress() ?? ''} size={96} />
+                <QRCode value={getDepositAddress() ?? ''} size={QR_CODE} />
               </div>
               <div className="info">
                 <div className="info-group">

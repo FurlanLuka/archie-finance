@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 
-import { breakpoints } from '@archie-webapps/shared/ui/theme';
+import { breakpoints, QR_CODE } from '@archie-webapps/shared/ui/theme';
 
 const fadeOut = keyframes`
   0% {
@@ -142,6 +142,10 @@ export const CollateralizationScreenStyled = styled.div`
 
     @media (max-width: ${breakpoints.screenSM}) {
       flex-direction: column;
+    }
+
+    svg {
+      min-width: ${QR_CODE}px;
     }
   }
 

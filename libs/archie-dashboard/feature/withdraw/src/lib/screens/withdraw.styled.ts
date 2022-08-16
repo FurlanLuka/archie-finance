@@ -27,11 +27,4 @@ export const WithdrawScreenStyled = styled.div`
   .subtitle {
     margin-bottom: 3rem;
   }
-
-  .loader-container {
-    display: flex;
-    flex: 1;
-    align-items: center;
-    justify-content: center;
-  }
 `;
