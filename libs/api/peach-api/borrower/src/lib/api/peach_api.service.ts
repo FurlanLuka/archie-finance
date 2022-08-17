@@ -16,6 +16,8 @@ import {
   PeachTransactionType,
   Person,
   PersonStatus,
+  Obligation,
+  ObligationsResponse,
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
@@ -380,5 +382,16 @@ export class PeachApiService {
       creditLimitAmount: responseBody.creditLimitAmount,
       calculatedAt: responseBody.calculatedAt,
     };
+  }
+
+  public async getLoanObligations(
+    personId: string,
+    loanId: string,
+  ): Promise<ObligationsResponse> {
+    const response = await this.peachClient.get(
+      `people/${personId}/loans/${loanId}/obligations`,
+    );
+
+    return response.data.data;
   }
 }

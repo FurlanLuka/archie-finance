@@ -5,6 +5,8 @@ import {
   Credit,
   Draw,
   HomeAddress,
+  Obligation,
+  ObligationsResponse,
   PaymentInstrument,
   Person,
 } from './api/peach_api.interfaces';
@@ -28,6 +30,7 @@ import {
 } from '@archie/api/credit-api/data-transfer-objects';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { ObligationsResponseDto } from './api/borrower.dto';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -301,5 +304,35 @@ export class PeachBorrowerService {
         userId: payment.personExternalId,
       },
     );
+  }
+
+  public async getObligations(userId: string): Promise<ObligationsResponseDto> {
+    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+      userId,
+    });
+
+    const obligations: ObligationsResponse =
+      await this.peachApiService.getLoanObligations(
+        borrower.personId,
+        borrower.creditLineId,
+      );
+
+    return {
+      daysOverdue: obligations.daysOverdue,
+      isOverdue: obligations.isOverdue,
+      overdueAmount: obligations.overdueAmount,
+      obligations: obligations.obligations.map((obligation: Obligation) => ({
+        capitalizedAmount: obligation.capitalizedAmount,
+        dueDate: obligation.dueDate,
+        fulfilledAmount: obligation.fulfilledAmount,
+        gracePeriod: obligation.gracePeriod,
+        isFulfilled: obligation.isFulfilled,
+        isOpen: obligation.isOpen,
+        isOverdue: obligation.isOverdue,
+        obligationAmount: obligation.obligationAmount,
+        overpaymentsAmount: obligation.overpaymentsAmount,
+        remainingAmount: obligation.remainingAmount,
+      })),
+    };
   }
 }

@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   CARD_ACTIVATED_TOPIC,
@@ -27,6 +27,9 @@ import {
   CreditLimitIncreasedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { AuthGuard } from '@archie/api/utils/auth0';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { ObligationsResponseDto } from './api/borrower.dto';
 
 @Controller()
 export class PeachBorrowerQueueController {
@@ -122,5 +125,17 @@ export class PeachBorrowerQueueController {
     payload: WebhookPaymentPayload,
   ): Promise<void> {
     await this.peachService.handlePaymentConfirmedEvent(payload);
+  }
+}
+
+@Controller('v1/loans/obligations')
+export class PeachBorrowerController {
+  constructor(private peachService: PeachBorrowerService) {}
+
+  @Get()
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getCreditObligations(@Req() request): Promise<ObligationsResponseDto> {
+    return this.peachService.getObligations(request.user.sub);
   }
 }

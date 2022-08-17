@@ -41,6 +41,32 @@ export interface CreditLimit extends PeachResponse {
   creditLimitAmount: number;
 }
 
+export interface Obligation extends PeachResponse {
+  capitalizedAmount: number;
+  createdAt: string;
+  deletedAt: string | null;
+  dueDate: string;
+  fulfilledAmount: number;
+  gracePeriod: string | null;
+  id: string;
+  isFulfilled: boolean;
+  isOpen: boolean;
+  isOverdue: boolean;
+  obligationAmount: number;
+  overpaymentsAmount: number;
+  periodId: string;
+  remainingAmount: number;
+  updatedAt: string | null;
+}
+
+export interface ObligationsResponse {
+  daysOverdue: number;
+  isLocked: boolean;
+  isOverdue: boolean;
+  overdueAmount: number;
+  obligations: Obligation[];
+}
+
 export interface Credit {
   availableCreditAmount: number;
   creditLimitAmount: number;
