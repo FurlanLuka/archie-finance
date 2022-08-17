@@ -68,4 +68,9 @@ export const CollateralizationScreenStyled = styled.div`
     height: 10%;
     width: 100%;
   }
+
+  .skeleton {
+    width: 100%;
+    height: 470px;
+  }
 `;
