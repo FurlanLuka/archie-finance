@@ -66,6 +66,7 @@ export const useExtendedQuery = <TQueryFnData>(
 
   return {
     state: RequestState.IDLE,
+    fetch: request.refetch,
   };
 };
 
@@ -124,6 +125,10 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
     }
   };
 
+  const fetch = async (): Promise<void> => {
+    await request.refetch();
+  };
+
   if (isFetchingNextPageError) {
     return {
       state: RequestState.ERROR_NEXT_PAGE,
@@ -162,6 +167,7 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
 
   return {
     state: RequestState.IDLE,
+    fetch,
   };
 };
 

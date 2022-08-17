@@ -1,48 +1,43 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CollateralAsset, CollateralAssets } from '@archie-webapps/shared/constants';
-import { CollateralCurrency, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
-import { Icon } from '@archie-webapps/shared/ui/icons';
+import { CollateralCurrency, ParagraphXS, Select, SelectOption } from '@archie-webapps/shared/ui/design-system';
 
-import { CollateralCurrencySelect, CollateralDeposit } from './collateral-asset-select.styled';
+import { CollateralAssetStyled } from './collateral-asset-select.styled';
 
 interface InputSelectProps {
   selectedAsset?: CollateralAsset;
   setSelectedAsset: (asset: CollateralAsset) => void;
 }
 
-// TODO create an ordinary select with children instead of proprietary one
 export const CollateralAssetSelect: FC<InputSelectProps> = ({ selectedAsset, setSelectedAsset }) => {
   const { t } = useTranslation();
 
-  const [selectOpen, setSelectOpen] = useState(false);
-
   const handleSelect = (asset: CollateralAsset) => {
     setSelectedAsset(asset);
-    setSelectOpen(false);
   };
 
+  const header = selectedAsset ? (
+    <CollateralCurrency icon={selectedAsset.icon} name={selectedAsset.name} short={selectedAsset.short} />
+  ) : (
+    <CollateralCurrency name="Select your collateral currency" short="BTC, ETH, SOL, or USDC" />
+  );
+
+  const options = Object.values(CollateralAssets).map((asset) => (
+    <SelectOption className="collateral-deposit" key={asset.id} value={asset}>
+      <CollateralCurrency icon={asset.icon} name={asset.name} short={asset.short} />
+    </SelectOption>
+  ));
+
   return (
-    <CollateralCurrencySelect>
-      <ParagraphXS weight={700}>{t('collateralization_step.inputs.input_select_label')}</ParagraphXS>
-      <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
-        {selectedAsset ? (
-          <CollateralCurrency icon={selectedAsset.icon} name={selectedAsset.name} short={selectedAsset.short} />
-        ) : (
-          <CollateralCurrency name="Select your collateral currency" short="BTC, ETH, SOL, or USDC" />
-        )}
-        <Icon name="caret" className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
-      </div>
-      {selectOpen && (
-        <div className="select-list">
-          {Object.values(CollateralAssets).map((asset) => (
-            <CollateralDeposit key={asset.id} onClick={() => handleSelect(asset)}>
-              <CollateralCurrency icon={asset.icon} name={asset.name} short={asset.short} />
-            </CollateralDeposit>
-          ))}
-        </div>
-      )}
-    </CollateralCurrencySelect>
+    <CollateralAssetStyled>
+      <ParagraphXS className="select-label" weight={700}>
+        {t('collateralization_step.inputs.input_select_label')}
+      </ParagraphXS>
+      <Select id="collateral-asset" header={header} onChange={handleSelect}>
+        {options}
+      </Select>
+    </CollateralAssetStyled>
   );
 };

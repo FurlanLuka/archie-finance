@@ -14,3 +14,5 @@ export * from './lib/components/skeleton/skeleton.styled';
 export * from './lib/components/table/table';
 export * from './lib/components/toast/toast.styled';
 export * from './lib/components/typography/typography.styled';
+export * from './lib/components/select-option/select-option';
+export * from './lib/components/select/select';

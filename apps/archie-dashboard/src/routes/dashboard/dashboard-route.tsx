@@ -7,6 +7,7 @@ import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature/colla
 import { CollateralizationScreen } from '@archie-webapps/archie-dashboard/feature/collateralization';
 import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature/history';
 import { HomeScreen } from '@archie-webapps/archie-dashboard/feature/home';
+import { PaymentScreen } from '@archie-webapps/archie-dashboard/feature/payments';
 import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature/rewards';
 import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature/settings';
 import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature/withdraw';
@@ -47,6 +48,7 @@ export const DashboardRoute: FC = () => {
               <Route path="/collateral/withdraw/*" element={<WithdrawScreen />} />
               <Route path="/collateral/add/:asset" element={<CollateralizationScreen />} />
               <Route path="/rewards" element={<RewardsScreen />} />
+              <Route path="/payment" element={<PaymentScreen />} />
               <Route path="/history" element={<HistoryScreen />} />
               <Route path="/settings" element={<SettingsScreen />} />
               <Route path="/error" element={<ErrorScreen />} />
