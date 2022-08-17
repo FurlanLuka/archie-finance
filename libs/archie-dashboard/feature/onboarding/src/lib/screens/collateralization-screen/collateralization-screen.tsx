@@ -10,15 +10,7 @@ import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import {
-  Container,
-  Card,
-  InputRange,
-  ParagraphXS,
-  SubtitleM,
-  Skeleton,
-  Loader,
-} from '@archie-webapps/shared/ui/design-system';
+import { Container, Card, InputRange, ParagraphXS, SubtitleM, Loader } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralDepositAlerts } from '../../components/collateral-deposit-alerts/collateral-deposit-alerts';
@@ -61,7 +53,7 @@ export const CollateralizationScreen: FC = () => {
 
   function getContent() {
     if (getAssetPriceResponse.state === RequestState.LOADING) {
-      return <Loader />;
+      return <Loader className="loader" />;
     }
 
     if (getAssetPriceResponse.state === RequestState.ERROR) {
@@ -72,74 +64,72 @@ export const CollateralizationScreen: FC = () => {
       return (
         <>
           <CollateralDepositAlerts />
-          <Card column alignItems="center" padding="2.5rem 10% 3.5rem" mobilePadding="2.5rem 1.5rem 3.5rem">
-            <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
-            <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
+          <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
+          <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
 
-            <div className="inputs">
-              <CollateralAssetSelect
-                selectedAsset={selectedCollateralAsset}
-                setSelectedAsset={setSelectedCollateralAsset}
-              />
-              <InputRange
-                label={t('collateralization_step.inputs.input_range_label')}
-                min={MIN_LINE_OF_CREDIT}
-                max={MAX_LINE_OF_CREDIT}
-                value={lineOfCredit}
-                onChange={setLineOfCredit}
+          <div className="inputs">
+            <CollateralAssetSelect
+              selectedAsset={selectedCollateralAsset}
+              setSelectedAsset={setSelectedCollateralAsset}
+            />
+            <InputRange
+              label={t('collateralization_step.inputs.input_range_label')}
+              min={MIN_LINE_OF_CREDIT}
+              max={MAX_LINE_OF_CREDIT}
+              value={lineOfCredit}
+              onChange={setLineOfCredit}
+            />
+          </div>
+
+          <div className="result">
+            <div className="result-item">
+              <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
+              <SubtitleM weight={400} id="collateral" className="text">
+                {selectedCollateralAsset ? (
+                  <span
+                    className="clickable"
+                    data-tip="Click to copy"
+                    onClick={() => copyToClipboard('collateral', requiredCollateral.toString())}
+                  >
+                    {getFormattedCollateral()}
+                  </span>
+                ) : (
+                  <span className="placeholder">0</span>
+                )}
+              </SubtitleM>
+              <ReactTooltip
+                textColor={theme.tooltipText}
+                backgroundColor={theme.tooltipBackground}
+                effect="solid"
+                delayHide={1000}
               />
             </div>
-
-            <div className="result">
-              <div className="result-item">
-                <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
-                <SubtitleM weight={400} id="collateral" className="text">
-                  {selectedCollateralAsset ? (
-                    <span
-                      className="clickable"
-                      data-tip="Click to copy"
-                      onClick={() => copyToClipboard('collateral', requiredCollateral.toString())}
-                    >
-                      {getFormattedCollateral()}
-                    </span>
-                  ) : (
-                    <span className="placeholder">0</span>
-                  )}
-                </SubtitleM>
-                <ReactTooltip
-                  textColor={theme.tooltipText}
-                  backgroundColor={theme.tooltipBackground}
-                  effect="solid"
-                  delayHide={1000}
-                />
-              </div>
-              <div className="result-item">
-                <ParagraphXS weight={700}>{t('collateralization_step.result.second')}</ParagraphXS>
-                <SubtitleM weight={400} className="text">
-                  {selectedCollateralAsset ? (
-                    `${selectedCollateralAsset.loan_to_value}%`
-                  ) : (
-                    <span className="placeholder">0%</span>
-                  )}
-                </SubtitleM>
-              </div>
-              <div className="result-item">
-                <ParagraphXS weight={700}>{t('collateralization_step.result.third')}</ParagraphXS>
-                <SubtitleM weight={400} className="text">
-                  {selectedCollateralAsset ? (
-                    `${selectedCollateralAsset.interest_rate}%`
-                  ) : (
-                    <span className="placeholder">0%</span>
-                  )}
-                </SubtitleM>
-              </div>
+            <div className="result-item">
+              <ParagraphXS weight={700}>{t('collateralization_step.result.second')}</ParagraphXS>
+              <SubtitleM weight={400} className="text">
+                {selectedCollateralAsset ? (
+                  `${selectedCollateralAsset.loan_to_value}%`
+                ) : (
+                  <span className="placeholder">0%</span>
+                )}
+              </SubtitleM>
             </div>
-            {selectedCollateralAsset ? (
-              <DepositAddress assetInfo={selectedCollateralAsset} assetAmount={requiredCollateral} />
-            ) : (
-              <Skeleton className="skeleton" bgColor={theme.backgroundSecondary} />
-            )}
-          </Card>
+            <div className="result-item">
+              <ParagraphXS weight={700}>{t('collateralization_step.result.third')}</ParagraphXS>
+              <SubtitleM weight={400} className="text">
+                {selectedCollateralAsset ? (
+                  `${selectedCollateralAsset.interest_rate}%`
+                ) : (
+                  <span className="placeholder">0%</span>
+                )}
+              </SubtitleM>
+            </div>
+          </div>
+          {selectedCollateralAsset ? (
+            <DepositAddress assetInfo={selectedCollateralAsset} assetAmount={requiredCollateral} />
+          ) : (
+            <div className="address-placeholder" />
+          )}
         </>
       );
     }
@@ -150,7 +140,17 @@ export const CollateralizationScreen: FC = () => {
   return (
     <Container column mobileColumn alignItems="center">
       <StepsIndicator currentStep={OnboardingStep.COLLATERALIZE} />
-      <CollateralizationScreenStyled>{getContent()}</CollateralizationScreenStyled>
+      <CollateralizationScreenStyled>
+        <Card
+          column
+          alignItems="center"
+          padding="2.5rem 10% 3.5rem"
+          mobilePadding="2.5rem 1.5rem 3.5rem"
+          minHeight="945px"
+        >
+          {getContent()}
+        </Card>
+      </CollateralizationScreenStyled>
     </Container>
   );
 };
