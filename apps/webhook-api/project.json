@@ -51,9 +51,6 @@
         "command": "npm run build webhook-api && node dist/apps/webhook-api/main generate-migration"
       }
     },
-    "build-docker": {
-      "executor": "@archie/plugin/deployment:docker-build"
-    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/webhook-api"],
@@ -61,6 +58,12 @@
         "jestConfig": "apps/webhook-api/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
     }
   },
   "tags": []
