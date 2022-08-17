@@ -34,7 +34,6 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral }) => {
   const totalValue = calculateCollateralTotalValue(collateral);
   const columns = useMemo(() => tableColumns, []);
 
-  // TODO we probably won't need the isHolding check here if we fix the BE bug which leaves collateral in the DB after withdrawing it
   const assetMap: AssetMap = useMemo(() => {
     return collateral.reduce(
       (map, item) => ({
@@ -49,7 +48,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral }) => {
           allocation: (item.price / totalValue) * 100,
           actions: {
             collateral_asset: item.asset,
-            isHolding: item.assetAmount > 0,
+            isHolding: true,
           },
         },
       }),
