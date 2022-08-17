@@ -30,7 +30,7 @@ import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-obj
 
 @Controller()
 export class PeachBorrowerQueueController {
-  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-peach`;
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-borrower`;
 
   constructor(private peachService: PeachBorrowerService) {}
 
