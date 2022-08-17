@@ -1,4 +1,4 @@
-export const SERVICE_NAME = 'peach-api';
+export const SERVICE_NAME = 'credit-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
 export enum ConfigVariables {
