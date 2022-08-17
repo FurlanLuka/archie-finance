@@ -36,7 +36,7 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
       {getDepositAddressResponse.state === RequestState.SUCCESS ? (
         <>
           <ParagraphXS weight={700}>
-            {t('collateralization_step.address.title', { required_collateral: assetAmount })}
+            {t('collateralization_step.address.title', { required_collateral: `${assetAmount} ${assetInfo.short}` })}
           </ParagraphXS>
           <div className="address-copy">
             <ParagraphS id="address">
