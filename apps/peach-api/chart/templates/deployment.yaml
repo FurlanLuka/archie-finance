@@ -91,52 +91,52 @@ spec:
             - name: TYPEORM_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: credit-api-secrets
+                  name: peach-api-secrets
                   key: db-username
             - name: TYPEORM_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: credit-api-secrets
+                  name: peach-api-secrets
                   key: db-password
             - name: TYPEORM_HOST
               valueFrom:
                 secretKeyRef:
-                  name: credit-api-secrets
+                  name: peach-api-secrets
                   key: db-hostname
             - name: TYPEORM_PORT
               valueFrom:
                 secretKeyRef:
-                  name: credit-api-secrets
+                  name: peach-api-secrets
                   key: db-port
             - name: TYPEORM_DATABASE
               valueFrom:
                 secretKeyRef:
-                  name: credit-api-secrets
+                  name: peach-api-secrets
                   key: db-database
             - name: PEACH_API_KEY
               valueFrom:
                 secretKeyRef:
-                  name: credit-api-secrets
+                  name: peach-api-secrets
                   key: peach-api-key
             - name: PEACH_BASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: credit-api-secrets
+                  name: peach-api-secrets
                   key: peach-base-url
             - name: PEACH_COMPANY_ID
               valueFrom:
                 secretKeyRef:
-                  name: credit-api-secrets
+                  name: peach-api-secrets
                   key: peach-company-id
             - name: PEACH_BORROWER_ROLE_ID
               valueFrom:
                 secretKeyRef:
-                  name: credit-api-secrets
+                  name: peach-api-secrets
                   key: peach-borrower-role-id
             - name: PEACH_LOAN_ID
               valueFrom:
                 secretKeyRef:
-                  name: credit-api-secrets
+                  name: peach-api-secrets
                   key: peach-loan-id
             - name: QUEUE_URL
               valueFrom:
@@ -146,7 +146,7 @@ spec:
             - name: ENCRYPTION_KEY
               valueFrom:
                 secretKeyRef:
-                  name: mail-api-secrets
+                  name: peach-api-secrets
                   key: encryption-key
           {{- end }}
       imagePullSecrets:
