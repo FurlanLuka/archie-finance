@@ -134,7 +134,7 @@ export const CardScreen: FC = () => {
           alignItems="center"
           padding="2.5rem 10% 3.5rem"
           mobilePadding="2.5rem 1.5rem 3.5rem"
-          minHeight="500px"
+          minHeight="506px"
         >
           {getContent()}
         </Card>
