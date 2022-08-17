@@ -1,6 +1,6 @@
-import { breakpoints } from '@archie-webapps/shared/ui/theme';
 import styled from 'styled-components';
 
+import { breakpoints } from '@archie-webapps/shared/ui/theme';
 import { QR_CODE } from '@archie-webapps/shared/ui/theme';
 
 export const DepositAddressStyled = styled.div`

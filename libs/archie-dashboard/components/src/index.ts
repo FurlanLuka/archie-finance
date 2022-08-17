@@ -3,3 +3,4 @@ export * from './lib/error-screen/error-screen';
 export * from './lib/header/header';
 export * from './lib/navigation/navigation';
 export * from './lib/transactions-table/transactions-table';
+export * from './lib/deposit-address/deposit-address';

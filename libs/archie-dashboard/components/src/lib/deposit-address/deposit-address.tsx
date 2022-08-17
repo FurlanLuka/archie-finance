@@ -1,16 +1,16 @@
 import { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import ReactTooltip from 'react-tooltip';
 import QRCode from 'react-qr-code';
+import ReactTooltip from 'react-tooltip';
 
-import { CollateralAsset } from '@archie-webapps/shared/constants';
-import { QR_CODE } from '@archie-webapps/shared/ui/theme';
 import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
+import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { useGetDepositAddress } from '@archie-webapps/shared/data-access/archie-api/deposit_address/hooks/use-get-deposit-address';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { Skeleton, ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
-import { theme } from '@archie-webapps/shared/ui/theme';
 import { Icon } from '@archie-webapps/shared/ui/icons';
+import { QR_CODE } from '@archie-webapps/shared/ui/theme';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { DepositAddressStyled } from './deposit-address.styled';
 
