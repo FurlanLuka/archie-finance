@@ -19,6 +19,7 @@
     "api-credit-api-credit": "libs/api/credit-api/credit",
     "api-credit-api-data-transfer-objects": "libs/api/credit-api/data-transfer-objects",
     "api-credit-api-margin": "libs/api/credit-api/margin",
+    "api-credit-api-plaid": "libs/api/credit-api/plaid",
     "api-credit-api-rize": "libs/api/credit-api/rize",
     "api-mail-api-constants": "libs/api/mail-api/constants",
     "api-mail-api-contact": "libs/api/mail-api/contact",
