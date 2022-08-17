@@ -1089,6 +1089,22 @@
           }
         }
       }
+    },
+    "/v1/loans/obligations": {
+      "get": {
+        "operationId": "PeachBorrowerController_getCreditObligations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
