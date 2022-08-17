@@ -9,7 +9,7 @@ import {
   SetAccessTokenResponse,
 } from './plaid.interfaces';
 import { CryptoService } from '@archie/api/utils/crypto';
-import { PlaidAccess } from './plaid.entity';
+import { PlaidAccess } from './plaid_access.entity';
 import { IsNull, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
