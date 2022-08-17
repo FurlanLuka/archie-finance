@@ -1096,7 +1096,14 @@
         "parameters": [],
         "responses": {
           "200": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObligationsResponseDto"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1534,7 +1541,228 @@
       },
       "WebhookPaymentPayload": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "accrualDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "amount": {
+            "type": "number"
+          },
+          "caseExternalId": {
+            "type": "string",
+            "nullable": true
+          },
+          "caseId": {
+            "type": "string",
+            "nullable": true
+          },
+          "caseTypeId": {
+            "type": "string",
+            "nullable": true
+          },
+          "companyId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "creatingMessageId": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "deletedAt": {
+            "type": "string",
+            "nullable": true
+          },
+          "discriminator": {
+            "type": "string"
+          },
+          "effectiveAt": {
+            "type": "string"
+          },
+          "eventClass": {
+            "type": "string"
+          },
+          "eventType": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "interactionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "isExternal": {
+            "type": "boolean"
+          },
+          "loanExternalId": {
+            "type": "string",
+            "nullable": true
+          },
+          "loanId": {
+            "type": "string"
+          },
+          "loanTypeId": {
+            "type": "string"
+          },
+          "maintenanceDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "object": {
+            "type": "string"
+          },
+          "parentId": {
+            "type": "string"
+          },
+          "paymentInstrumentExternalId": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentInstrumentId": {
+            "type": "string"
+          },
+          "paymentInstrumentType": {
+            "type": "string"
+          },
+          "personExternalId": {
+            "type": "string"
+          },
+          "personId": {
+            "type": "string"
+          },
+          "requestId": {
+            "type": "string"
+          },
+          "sessionId": {
+            "type": "string",
+            "nullable": true
+          },
+          "transactionExternalId": {
+            "type": "string",
+            "nullable": true
+          },
+          "transactionId": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "accrualDate",
+          "amount",
+          "caseExternalId",
+          "caseId",
+          "caseTypeId",
+          "companyId",
+          "createdAt",
+          "creatingMessageId",
+          "currency",
+          "deletedAt",
+          "discriminator",
+          "effectiveAt",
+          "eventClass",
+          "eventType",
+          "id",
+          "interactionId",
+          "isExternal",
+          "loanExternalId",
+          "loanId",
+          "loanTypeId",
+          "maintenanceDate",
+          "object",
+          "parentId",
+          "paymentInstrumentExternalId",
+          "paymentInstrumentId",
+          "paymentInstrumentType",
+          "personExternalId",
+          "personId",
+          "requestId",
+          "sessionId",
+          "transactionExternalId",
+          "transactionId",
+          "updatedAt"
+        ]
+      },
+      "Obligation": {
+        "type": "object",
+        "properties": {
+          "capitalizedAmount": {
+            "type": "number"
+          },
+          "dueDate": {
+            "type": "string"
+          },
+          "fulfilledAmount": {
+            "type": "number"
+          },
+          "gracePeriod": {
+            "type": "string",
+            "nullable": true
+          },
+          "isFulfilled": {
+            "type": "boolean"
+          },
+          "isOpen": {
+            "type": "boolean"
+          },
+          "isOverdue": {
+            "type": "boolean"
+          },
+          "obligationAmount": {
+            "type": "number"
+          },
+          "overpaymentsAmount": {
+            "type": "number"
+          },
+          "remainingAmount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "capitalizedAmount",
+          "dueDate",
+          "fulfilledAmount",
+          "gracePeriod",
+          "isFulfilled",
+          "isOpen",
+          "isOverdue",
+          "obligationAmount",
+          "overpaymentsAmount",
+          "remainingAmount"
+        ]
+      },
+      "ObligationsResponseDto": {
+        "type": "object",
+        "properties": {
+          "daysOverdue": {
+            "type": "number"
+          },
+          "isOverdue": {
+            "type": "boolean"
+          },
+          "overdueAmount": {
+            "type": "number"
+          },
+          "obligations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Obligation"
+            }
+          }
+        },
+        "required": [
+          "daysOverdue",
+          "isOverdue",
+          "overdueAmount",
+          "obligations"
+        ]
       }
     },
     "securitySchemes": {

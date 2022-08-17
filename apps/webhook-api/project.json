@@ -10,7 +10,8 @@
         "outputPath": "dist/apps/webhook-api",
         "main": "apps/webhook-api/src/main.ts",
         "tsConfig": "apps/webhook-api/tsconfig.app.json",
-        "assets": ["apps/webhook-api/src/assets"]
+        "assets": ["apps/webhook-api/src/assets"],
+        "tsPlugins": ["@nestjs/swagger/plugin"]
       },
       "configurations": {
         "production": {

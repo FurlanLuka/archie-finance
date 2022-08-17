@@ -29,7 +29,7 @@ import {
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ObligationsResponseDto } from './api/borrower.dto';
+import { ObligationsResponseDto } from './borrower.dto';
 
 @Controller()
 export class PeachBorrowerQueueController {

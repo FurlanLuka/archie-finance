@@ -30,7 +30,7 @@ import {
 } from '@archie/api/credit-api/data-transfer-objects';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { ObligationsResponseDto } from './api/borrower.dto';
+import { ObligationsResponseDto } from './borrower.dto';
 
 @Injectable()
 export class PeachBorrowerService {

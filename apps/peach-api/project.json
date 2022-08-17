@@ -10,7 +10,8 @@
         "outputPath": "dist/apps/peach-api",
         "main": "apps/peach-api/src/main.ts",
         "tsConfig": "apps/peach-api/tsconfig.app.json",
-        "assets": ["apps/peach-api/src/assets"]
+        "assets": ["apps/peach-api/src/assets"],
+        "tsPlugins": ["@nestjs/swagger/plugin"]
       },
       "configurations": {
         "production": {
