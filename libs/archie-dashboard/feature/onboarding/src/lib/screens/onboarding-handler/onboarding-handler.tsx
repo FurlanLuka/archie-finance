@@ -1,11 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 
-import { Header } from '@archie-webapps/archie-dashboard/components';
 import { OnboardingStep } from '@archie-webapps/archie-dashboard/constants';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
-import { LoaderFullScreen, Page } from '@archie-webapps/shared/ui/design-system';
+import { LoaderFullScreen } from '@archie-webapps/shared/ui/design-system';
 
 import { CardScreen } from '../card-screen/card-screen';
 import { CollateralizationScreen } from '../collateralization-screen/collateralization-screen';
@@ -49,14 +48,9 @@ export const OnboardingHandler: FC = () => {
   }, [queryResponse]);
 
   return (
-    <>
-      <Header />
-      <Page>
-        <OnboardingStyled>
-          {currentStep === undefined && <LoaderFullScreen />}
-          {currentStep !== undefined && getCurrentStep(currentStep)}
-        </OnboardingStyled>
-      </Page>
-    </>
+    <OnboardingStyled>
+      {currentStep === undefined && <LoaderFullScreen />}
+      {currentStep !== undefined && getCurrentStep(currentStep)}
+    </OnboardingStyled>
   );
 };

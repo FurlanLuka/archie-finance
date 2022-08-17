@@ -1,5 +1,6 @@
 import { FC, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { EmailVerificationResponse } from '@archie-webapps/shared/data-access/archie-api/user/api/get-email-verification';
@@ -25,14 +26,6 @@ export const VerifyEmailScreen: FC = () => {
   const getEmailVerificationResponse: QueryResponse<EmailVerificationResponse> = useGetEmailVerification();
   const mutationResponse = useResendEmailVerification();
   usePollEmailVerification();
-
-  const getEmailVerification = () => {
-    if (getEmailVerificationResponse.state === RequestState.SUCCESS) {
-      return getEmailVerificationResponse.data.email;
-    }
-
-    return '';
-  };
 
   useEffect(() => {
     return () => {
@@ -70,32 +63,48 @@ export const VerifyEmailScreen: FC = () => {
     }, 30000);
   };
 
-  if (getEmailVerificationResponse.state === RequestState.LOADING) {
-    return <LoaderFullScreen />;
+  function getContent() {
+    if (getEmailVerificationResponse.state === RequestState.LOADING) {
+      return <LoaderFullScreen />;
+    }
+
+    if (getEmailVerificationResponse.state === RequestState.ERROR) {
+      return <Navigate to="/onboarding/error" state={{ prevPath: '/onboarding' }} />;
+    }
+
+    if (getEmailVerificationResponse.state === RequestState.SUCCESS) {
+      return (
+        <>
+          <SubtitleM className="title">{t('verify_email_step.title')}</SubtitleM>
+          <ParagraphXS className="subtitle">
+            {t('verify_email_step.subtitle', { email: getEmailVerificationResponse.data.email })}
+          </ParagraphXS>
+          <ParagraphXS className="text">{t('verify_email_step.text_1')}</ParagraphXS>
+          <div className="link">
+            <ParagraphXS>{t('verify_email_step.text_2')}</ParagraphXS>
+            <button className="logout-btn" onClick={logout}>
+              <ParagraphXS weight={700} color={theme.textPositive}>
+                {t('verify_email_step.logout_btn')}
+              </ParagraphXS>
+            </button>
+          </div>
+          <hr className="divider" />
+          <ButtonPrimary className="resend-btn" type="submit" isDisabled={btnDisabled} onClick={handleResend}>
+            {btnDisabled
+              ? t('verify_email_step.resend_btn_disabled', { counter: `00:${counter}` })
+              : t('verify_email_step.resend_btn')}
+          </ButtonPrimary>
+        </>
+      );
+    }
+
+    return <></>;
   }
 
   return (
     <VerifyEmailScreenStyled>
       <Card column alignItems="center" padding="1.5rem">
-        <SubtitleM className="title">{t('verify_email_step.title')}</SubtitleM>
-        <ParagraphXS className="subtitle">
-          {t('verify_email_step.subtitle', { email: getEmailVerification() })}
-        </ParagraphXS>
-        <ParagraphXS className="text">{t('verify_email_step.text_1')}</ParagraphXS>
-        <div className="link">
-          <ParagraphXS>{t('verify_email_step.text_2')}</ParagraphXS>
-          <button className="logout-btn" onClick={logout}>
-            <ParagraphXS weight={700} color={theme.textPositive}>
-              {t('verify_email_step.logout_btn')}
-            </ParagraphXS>
-          </button>
-        </div>
-        <hr className="divider" />
-        <ButtonPrimary className="resend-btn" type="submit" isDisabled={btnDisabled} onClick={handleResend}>
-          {btnDisabled
-            ? t('verify_email_step.resend_btn_disabled', { counter: `00:${counter}` })
-            : t('verify_email_step.resend_btn')}
-        </ButtonPrimary>
+        {getContent()}
       </Card>
     </VerifyEmailScreenStyled>
   );
