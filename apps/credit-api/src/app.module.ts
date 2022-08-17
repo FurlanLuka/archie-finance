@@ -10,6 +10,7 @@ import { HealthModule } from '@archie/api/utils/health';
 import { CreditModule } from '@archie/api/credit-api/credit';
 import { CollateralModule } from '@archie/api/credit-api/collateral';
 import { RizeModule } from '@archie/api/credit-api/rize';
+import { PlaidModule } from '@archie/api/credit-api/plaid';
 import { MarginModule } from '@archie/api/credit-api/margin';
 import { AptoModule } from '@archie/api/credit-api/apto';
 import { CollateralWithdrawalModule } from '@archie/api/credit-api/collateral-withdrawal';
@@ -65,14 +66,6 @@ import { CryptoModule } from '@archie/api/utils/crypto';
       }),
       inject: [ConfigService],
     }),
-    HealthModule,
-    CreditModule,
-    AptoModule,
-    MarginModule,
-    RizeModule,
-    CollateralModule,
-    CollateralWithdrawalModule,
-    QueueModule.register(),
     CryptoModule.register({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -80,6 +73,15 @@ import { CryptoModule } from '@archie/api/utils/crypto';
         encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
       }),
     }),
+    HealthModule,
+    CreditModule,
+    AptoModule,
+    MarginModule,
+    RizeModule,
+    PlaidModule,
+    CollateralModule,
+    CollateralWithdrawalModule,
+    QueueModule.register(),
   ],
   controllers: [],
   providers: [],
