@@ -10,6 +10,8 @@ import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-obj
 
 @Injectable()
 export class PeachWebhookService {
+  PAYMENT_CONFIRMED_EVENT_UUID = 'ab4012cc-8042-4911-90d4-85cb32b665e5';
+
   constructor(
     @InjectRepository(PeachEvent)
     private peachEventRepository: Repository<PeachEvent>,
@@ -27,9 +29,10 @@ export class PeachWebhookService {
   // This is just a temporary solution until Peach implements webhooks
   // Currently we just poll for new events
   public async handlePaymentConfirmedEvent() {
-    const peachEvent: PeachEvent | undefined = (
-      await this.peachEventRepository.find()
-    )[0];
+    const peachEvent: PeachEvent | null =
+      await this.peachEventRepository.findOneBy({
+        uuid: this.PAYMENT_CONFIRMED_EVENT_UUID,
+      });
 
     const paymentEvents: EventsResponse<Payment> =
       await this.peachApi.getPaymentConfirmedEvent(
@@ -52,7 +55,7 @@ export class PeachWebhookService {
 
       await this.peachEventRepository.upsert(
         {
-          uuid: peachEvent?.uuid,
+          uuid: this.PAYMENT_CONFIRMED_EVENT_UUID,
           lastFetchedPaymentConfirmedEventId: lastEvent.id,
         },
         {
