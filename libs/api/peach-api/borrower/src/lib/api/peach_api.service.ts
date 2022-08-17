@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
-import { ConfigVariables } from '@archie/api/credit-api/constants';
+import { ConfigVariables } from '@archie/api/peach-api/constants';
 import {
   CreditLimit,
   CreditLine,
