@@ -4,9 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ButtonLight, ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { CloseToMarginCallAlertStyled } from './close-to-margin-call.styled';
-
-export const CloseToMarginCallAlert: FC = () => {
+export const Warning: FC = () => {
   const { t } = useTranslation();
 
   const handleClick = () => {
@@ -14,7 +12,7 @@ export const CloseToMarginCallAlert: FC = () => {
   };
 
   return (
-    <CloseToMarginCallAlertStyled>
+    <>
       <ParagraphS weight={800} color={theme.textLight}>
         {t('close_to_margin_call_alert.title')}
       </ParagraphS>
@@ -22,6 +20,6 @@ export const CloseToMarginCallAlert: FC = () => {
       <ButtonLight maxWidth="fit-content" color={theme.textWarning} onClick={handleClick}>
         {t('close_to_margin_call_alert.btn')}
       </ButtonLight>
-    </CloseToMarginCallAlertStyled>
+    </>
   );
 };

@@ -40,12 +40,12 @@ Ok.args = {
 export const Warning: Story<BadgeProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Badge" subtitle="warning" />
-    <Badge {...props}>{LoanToValueText[LoanToValueStatus.WARING]}</Badge>
+    <Badge {...props}>{LoanToValueText[LoanToValueStatus.WARNING]}</Badge>
   </StoriesContainer>
 );
 
 Warning.args = {
-  statusColor: LoanToValueColor[LoanToValueStatus.WARING],
+  statusColor: LoanToValueColor[LoanToValueStatus.WARNING],
 };
 
 export const MarginCall: Story<BadgeProps> = (props) => (
