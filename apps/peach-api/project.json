@@ -51,6 +51,9 @@
         "command": "npm run build peach-api && node dist/apps/peach-api/main generate-migration"
       }
     },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/peach-api"],
