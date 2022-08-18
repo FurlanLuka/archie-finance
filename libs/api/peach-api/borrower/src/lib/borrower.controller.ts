@@ -148,6 +148,7 @@ export class PeachBorrowerController {
   @Get('obligations')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
+  @ApiErrorResponse([BorrowerNotFoundError])
   async getCreditObligations(@Req() request): Promise<ObligationsResponseDto> {
     return this.peachService.getObligations(request.user.sub);
   }

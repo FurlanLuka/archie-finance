@@ -1104,6 +1104,9 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "BORROWER_NOT_FOUND_ERROR"
           }
         },
         "security": [
