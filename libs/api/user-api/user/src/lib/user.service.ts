@@ -6,6 +6,7 @@ import {
 import { Enrollment, SendEnrollmentTicketResponse, User } from 'auth0';
 import { Auth0Service } from '@archie/api/user-api/auth0';
 import {
+  EmailVerifiedPayload,
   GetEmailVerificationResponse,
   GetMfaEnrollmentResponse,
 } from './user.interfaces';
@@ -29,7 +30,7 @@ export class UserService {
     });
 
     if (user.email_verified) {
-      this.queueService.publish(EMAIL_VERIFIED_TOPIC, {
+      this.queueService.publish<EmailVerifiedPayload>(EMAIL_VERIFIED_TOPIC, {
         userId,
         email: user.email,
       });

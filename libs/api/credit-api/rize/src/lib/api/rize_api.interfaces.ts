@@ -76,25 +76,27 @@ export enum TransactionType {
 
 export interface TransactionEvent {
   data: {
-    details: {
-      asset_breakdown: any[];
-      customer_external_uid: string;
-      customer_uid: string;
-      debit_card_uid: string | null;
-      denial_reason: string | null;
-      description: string | null;
-      destination_synthetic_account_uid: string;
-      new_status: TransactionStatus;
-      settled_index: null | number;
-      source_synthetic_account_uid: string;
-      transaction_uid: string;
-      type: TransactionType;
-      us_dollar_amount: string;
-    };
+    details: TransactionEventDetails;
     event_type: string;
   };
   sequence: number;
   timestamp: string;
+}
+
+export interface TransactionEventDetails {
+  asset_breakdown: any[];
+  customer_external_uid: string;
+  customer_uid: string;
+  debit_card_uid: string | null;
+  denial_reason: string | null;
+  description: string | null;
+  destination_synthetic_account_uid: string;
+  new_status: TransactionStatus;
+  settled_index: null | number;
+  source_synthetic_account_uid: string;
+  transaction_uid: string;
+  type: TransactionType;
+  us_dollar_amount: string;
 }
 
 export type CustomerStatus =

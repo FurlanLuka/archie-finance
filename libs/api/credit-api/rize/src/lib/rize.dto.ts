@@ -7,6 +7,7 @@ import { IsNumber, Max } from 'class-validator';
 import { Type } from 'class-transformer';
 import {
   NetAsset,
+  RizeTransaction,
   TransactionStatus,
   TransactionType,
 } from './api/rize_api.interfaces';

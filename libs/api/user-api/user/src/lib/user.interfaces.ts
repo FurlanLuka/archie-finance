@@ -37,3 +37,8 @@ export class GetMfaEnrollmentResponse {
 export class GetEmailAddressPayload {
   userId: string;
 }
+
+export class EmailVerifiedPayload {
+  userId: string;
+  email: string;
+}

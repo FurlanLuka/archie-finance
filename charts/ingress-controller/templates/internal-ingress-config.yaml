@@ -87,3 +87,11 @@ spec:
                 name: archie-user-api-service
                 port:
                   number: 80
+          ## Webhook api service
+          - path: /internal/webhook
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-webhook-api-service
+                port:
+                  number: 80

@@ -2,7 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Kyc } from './kyc.entity';
-import { CreateKycResponse, GetKycResponse } from './kyc.interfaces';
+import {
+  CreateKycResponse,
+  GetKycResponse,
+  KycSubmittedPayload,
+} from './kyc.interfaces';
 import { KycDto } from './kyc.interfaces';
 import { DateTime } from 'luxon';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
@@ -99,9 +103,9 @@ export class KycService {
       ssn: encryptedData[11],
     });
 
-    this.queueService.publish(KYC_SUBMITTED_TOPIC, {
+    this.queueService.publish<KycSubmittedPayload>(KYC_SUBMITTED_TOPIC, {
       userId,
-      firstName: payload.firstName,
+      ...payload,
     });
 
     return {

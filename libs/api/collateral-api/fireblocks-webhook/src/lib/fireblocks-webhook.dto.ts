@@ -14,3 +14,8 @@ export class FireblocksWebhookDto {
   // eslint-disable-next-line
   data: any;
 }
+
+export class InternalCollateralTransactionCompletedPayload {
+  transactionId: string;
+  userId: string;
+}

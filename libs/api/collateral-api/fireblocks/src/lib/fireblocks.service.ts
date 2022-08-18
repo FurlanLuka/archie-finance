@@ -13,13 +13,17 @@ import {
   VaultAccountResponse,
   VaultAssetResponse,
 } from 'fireblocks-sdk';
-import { ConfigVariables } from '@archie/api/collateral-api/constants';
+import {
+  ConfigVariables,
+  INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
+} from '@archie/api/collateral-api/constants';
 import { ConfigService } from '@archie/api/utils/config';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { AssetList } from '@archie/api/collateral-api/asset-information';
 import {
   CollateralWithdrawInitializedDto,
   LiquidateAssetsDto,
+  InternalCollateralTransactionCreatedPayload,
 } from './fireblocks.dto';
 import { COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC } from '@archie/api/credit-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
@@ -168,7 +172,7 @@ export class FireblocksService {
     );
 
     await Promise.all(
-      liquidation.map(async ({ asset, amount }) => {
+      liquidation.map(async ({ asset, amount, price }) => {
         const fireblocksAsset = assetList[asset];
 
         if (!fireblocksAsset) {
@@ -198,6 +202,17 @@ export class FireblocksService {
           asset,
           transaction,
         });
+
+        this.queueService.publish<InternalCollateralTransactionCreatedPayload>(
+          INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
+          {
+            userId,
+            id: transaction.id,
+            network: fireblocksAsset.network,
+            amount,
+            price,
+          },
+        );
       }),
     );
   }

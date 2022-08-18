@@ -97,7 +97,7 @@ export class MarginService {
     };
   }
 
-  public async checkMargin(userIds: string[]): Promise<void> {
+  private async getUsersLtvs(userIds: string[]): Promise<UsersLtv[]> {
     const collaterals: Collateral[] = await this.collateralRepository.find({
       where: {
         userId: In(userIds),
@@ -108,12 +108,7 @@ export class MarginService {
         userId: In(userIds),
       },
     });
-    const activeMarginCalls: MarginCall[] =
-      await this.marginCallsRepository.find({
-        where: {
-          userId: In(userIds),
-        },
-      });
+
     const liquidationLogs: LiquidationLog[] =
       await this.liquidationLogsRepository.find({
         where: {
@@ -124,7 +119,7 @@ export class MarginService {
     const assetPrices: GetAssetPriceResponse[] =
       await this.queueService.request(GET_ASSET_PRICES_RPC);
 
-    const userLtvs: UsersLtv[] = userIds.map((userId: string) =>
+    return userIds.map((userId: string) =>
       this.marginLtvService.calculateUsersLtv(
         userId,
         credits,
@@ -133,6 +128,63 @@ export class MarginService {
         assetPrices,
       ),
     );
+  }
+
+  private async checkForMarginCall(
+    userLtvs: UsersLtv[],
+    activeMarginCalls: MarginCall[],
+  ): Promise<void> {
+    await Promise.all(
+      userLtvs.map(async (usersLtv: UsersLtv) => {
+        const alreadyActiveMarginCall: MarginCall | undefined =
+          activeMarginCalls.find(
+            (marginCall) => marginCall.userId === usersLtv.userId,
+          );
+
+        if (usersLtv.ltv < this.LTV_LIMIT) {
+          if (alreadyActiveMarginCall !== undefined) {
+            await this.marginCallsService.completeMarginCallWithoutLiquidation(
+              usersLtv,
+            );
+          } else {
+            await this.marginLtvService.checkIfApproachingLtvLimits(usersLtv);
+          }
+        } else {
+          await this.marginCallsService.handleMarginCall(
+            alreadyActiveMarginCall,
+            usersLtv,
+          );
+        }
+      }),
+    );
+
+    await this.marginCollateralCheckService.updateMarginChecks(userLtvs);
+    this.queueService.publish(CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC, {
+      userIds: userLtvs.map((user) => user.userId),
+    });
+  }
+
+  public async handleCreditLineUpdatedEvent(userId: string) {
+    const userLtvs: UsersLtv[] = await this.getUsersLtvs([userId]);
+    const activeMarginCalls: MarginCall[] =
+      await this.marginCallsRepository.find({
+        where: {
+          userId: userId,
+        },
+      });
+
+    await this.checkForMarginCall(userLtvs, activeMarginCalls);
+  }
+
+  public async checkMargin(userIds: string[]): Promise<void> {
+    const userLtvs: UsersLtv[] = await this.getUsersLtvs(userIds);
+
+    const activeMarginCalls: MarginCall[] =
+      await this.marginCallsRepository.find({
+        where: {
+          userId: In(userIds),
+        },
+      });
 
     const filteredUsersByValueChange: UsersLtv[] =
       await this.marginCollateralCheckService.filterUsersByCollateralValueChange(
@@ -157,36 +209,10 @@ export class MarginService {
       return;
     }
 
-    await Promise.all(
-      uniqueFilteredApplicableUsers.map(async (usersLtv: UsersLtv) => {
-        const alreadyActiveMarginCall: MarginCall | undefined =
-          activeMarginCalls.find(
-            (marginCall) => marginCall.userId === usersLtv.userId,
-          );
-
-        if (usersLtv.ltv < this.LTV_LIMIT) {
-          if (alreadyActiveMarginCall !== undefined) {
-            await this.marginCallsService.completeMarginCallWithoutLiquidation(
-              usersLtv,
-            );
-          } else {
-            await this.marginLtvService.checkIfApproachingLtvLimits(usersLtv);
-          }
-        } else {
-          await this.marginCallsService.handleMarginCall(
-            alreadyActiveMarginCall,
-            usersLtv,
-          );
-        }
-      }),
-    );
-
-    await this.marginCollateralCheckService.updateMarginChecks(
+    await this.checkForMarginCall(
       uniqueFilteredApplicableUsers,
+      activeMarginCalls,
     );
-    this.queueService.publish(CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC, {
-      userIds: uniqueFilteredApplicableUsers.map((user) => user.userId),
-    });
   }
 
   public async checkCreditLimit(userIds: string[]) {

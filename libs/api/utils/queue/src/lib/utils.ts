@@ -19,16 +19,22 @@ export function Subscribe(
   requeueOnError = true,
   exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
 ) {
+  const queueSpecificRoutingKey = `${queueName}-${routingKey}`;
+
   const baseQueueOptions = {
     createQueueIfNotExists: true,
     queue: `${queueName}-${exchange}_${routingKey}`,
-    errorHandler: createErrorHandler(routingKey, requeueOnError, exchange),
+    errorHandler: createErrorHandler(
+      queueSpecificRoutingKey,
+      requeueOnError,
+      exchange,
+    ),
     queueOptions: {
       durable: true,
       arguments: {
         'x-dead-letter-exchange':
           QueueUtilService.getDeadLetterExchangeName(exchange),
-        'x-dead-letter-routing-key': routingKey,
+        'x-dead-letter-routing-key': queueSpecificRoutingKey,
       },
     },
   };
@@ -42,7 +48,7 @@ export function Subscribe(
     requeueOnError
       ? SetMetadata(RABBIT_RETRY_HANDLER, {
           type: 'subscribe',
-          routingKey: routingKey,
+          routingKey: queueSpecificRoutingKey,
           exchange: QueueUtilService.getRetryExchangeName(exchange),
           ...baseQueueOptions,
         })
@@ -73,7 +79,7 @@ export function RequestHandler(
 }
 
 function createErrorHandler(
-  routingKey: string,
+  queueSpecificRoutingKey: string,
   requeueOnError: boolean,
   exchange: string,
 ) {
@@ -82,7 +88,7 @@ function createErrorHandler(
     const retryAttempt: number = headers['x-retry'] ?? 0;
 
     Logger.error({
-      message: `Event handling failed for routing key "${routingKey}"`,
+      message: `Event handling failed for routing key "${queueSpecificRoutingKey}"`,
       payload: msg.content.toString(),
       error,
       requeue: requeueOnError,
@@ -95,7 +101,7 @@ function createErrorHandler(
       if (retryAttempt < MAX_RETRIES) {
         channel.publish(
           QueueUtilService.getRetryExchangeName(exchange),
-          routingKey,
+          queueSpecificRoutingKey,
           msg.content,
           {
             headers: {

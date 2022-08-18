@@ -6,13 +6,19 @@ import {
   TransactionStatus,
 } from 'fireblocks-sdk';
 import { DepositAddressService } from '@archie/api/collateral-api/deposit-address';
-import { FireblocksWebhookDto } from './fireblocks-webhook.dto';
+import {
+  FireblocksWebhookDto,
+  InternalCollateralTransactionCompletedPayload,
+} from './fireblocks-webhook.dto';
 import {
   EventType,
   FireblocksWebhookPayload,
 } from './fireblocks-webhook.interfaces';
 import { ConfigService } from '@archie/api/utils/config';
-import { ConfigVariables } from '@archie/api/collateral-api/constants';
+import {
+  ConfigVariables,
+  INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
+} from '@archie/api/collateral-api/constants';
 import { AssetList } from '@archie/api/collateral-api/asset-information';
 import { UserVaultAccount } from '@archie/api/collateral-api/user-vault-account';
 import { Repository } from 'typeorm';
@@ -51,14 +57,54 @@ export class FireblocksWebhookService {
   private async handleTransactionWebhook(
     payload: FireblocksWebhookPayload,
   ): Promise<void> {
-    // if withdrawal
-    if (payload.data.source.type === PeerType.VAULT_ACCOUNT) {
+    if (
+      payload.data.source.type === PeerType.VAULT_ACCOUNT &&
+      payload.data.destination.id ===
+        this.configService.get(ConfigVariables.FIREBLOCKS_VAULT_ACCOUNT_ID)
+    ) {
+      await this.handleInternalCollateralTransaction(payload.data);
+    } else if (payload.data.source.type === PeerType.VAULT_ACCOUNT) {
       await this.handleCollateralWithdraw(payload.data);
     } else {
       // TODO when fireblocks access is a go, make the conditions better
       await this.handleCollateralDeposit(payload.data);
     }
   }
+
+  private async handleInternalCollateralTransaction(
+    transaction: TransactionResponse,
+  ): Promise<void> {
+    Logger.log({
+      code: 'INTERNAL_COLLATERAL_TRANSACTION',
+      transaction: transaction,
+    });
+
+    if (transaction.status !== TransactionStatus.COMPLETED) {
+      return;
+    }
+
+    const userVaultAccount: UserVaultAccount | null =
+      await this.userVaultAccountRepository.findOneBy({
+        vaultAccountId: transaction.source.id,
+      });
+
+    if (userVaultAccount === null) {
+      Logger.error({
+        code: 'FIREBLOCKS_WEBHOOK_INTERNAL_TRANSACTION_NO_VAULT_ACCOUNT',
+      });
+
+      throw new NotFoundException();
+    }
+
+    this.queueService.publish<InternalCollateralTransactionCompletedPayload>(
+      INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
+      {
+        transactionId: transaction.id,
+        userId: userVaultAccount.userId,
+      },
+    );
+  }
+
   private async handleCollateralDeposit(
     transaction: TransactionResponse,
   ): Promise<void> {
@@ -190,6 +236,7 @@ export class FireblocksWebhookService {
           userId: userVaultAccount.userId,
         },
       });
+
       this.queueService.publish(COLLATERAL_WITHDRAW_COMPLETED_TOPIC, {
         asset: assetId,
         transactionId: transaction.id,

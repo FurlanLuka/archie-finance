@@ -20,7 +20,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/GetAssetPriceResponseDto"
+                    "$ref": "#/components/schemas/GetAssetPriceResponse"
                   }
                 }
               }
@@ -51,34 +51,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetAssetPriceResponseDto"
+                  "$ref": "#/components/schemas/GetAssetPriceResponse"
                 }
               }
             }
           },
           "404": {
             "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/internal/asset_price": {
-      "get": {
-        "operationId": "InternalAssetPriceController_getAssetPrices",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GetAssetPriceResponseDto"
-                  }
-                }
-              }
-            }
           }
         }
       }
@@ -90,36 +69,6 @@
         "responses": {
           "200": {
             "description": ""
-          }
-        }
-      }
-    },
-    "/internal/asset_price/{asset}": {
-      "get": {
-        "operationId": "InternalAssetPriceController_getAssetPrice",
-        "parameters": [
-          {
-            "name": "asset",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetAssetPriceResponseDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       }
@@ -169,54 +118,6 @@
           },
           "500": {
             "description": "FIREBLOCKS_WEBHOOK_ERROR"
-          }
-        }
-      }
-    },
-    "/internal/asset_information": {
-      "get": {
-        "operationId": "InternalAssetInformationController_getAssetList",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetAssetListResponseDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/internal/asset_information/{asset}": {
-      "get": {
-        "operationId": "InternalAssetInformationController_getAssetInformation",
-        "parameters": [
-          {
-            "name": "asset",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetAssetInformationResponseDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       }
@@ -585,7 +486,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CollateralDto"
+                    "$ref": "#/components/schemas/GetCollateralResponse"
                   }
                 }
               }
@@ -611,7 +512,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CollateralValueDto"
+                    "$ref": "#/components/schemas/GetCollateralValueResponse"
                   }
                 }
               }
@@ -635,7 +536,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetTotalCollateralValueResponseDto"
+                  "$ref": "#/components/schemas/GetTotalCollateralValueResponse"
                 }
               }
             }
@@ -646,66 +547,6 @@
             "bearer": []
           }
         ]
-      }
-    },
-    "/internal/collateral/{userId}": {
-      "get": {
-        "operationId": "InternalCollateralController_getCollateral",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CollateralDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/internal/collateral/value/{userId}": {
-      "get": {
-        "operationId": "InternalCollateralController_getUserCollateralValue",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/CollateralValueDto"
-                  }
-                }
-              }
-            }
-          }
-        }
       }
     },
     "/v1/collateral/withdraw": {
@@ -728,7 +569,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/GetCollateralWithdrawalResponse"
                 }
               }
             }
@@ -751,7 +592,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/GetCollateralWithdrawalResponse"
                   }
                 }
               }
@@ -784,7 +625,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/GetUserMaxWithdrawalAmountResponse"
                 }
               }
             }
@@ -830,7 +671,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetKycResponseDto"
+                  "$ref": "#/components/schemas/GetKycResponse"
                 }
               }
             }
@@ -864,7 +705,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateKycResponseDto"
+                  "$ref": "#/components/schemas/CreateKycResponse"
                 }
               }
             }
@@ -880,36 +721,6 @@
         ]
       }
     },
-    "/internal/kyc/{userId}": {
-      "get": {
-        "operationId": "InternalKycController_getKyc",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetKycResponseDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "KYC_NOT_FOUND"
-          }
-        }
-      }
-    },
     "/v1/user/email-verification": {
       "get": {
         "operationId": "UserController_checkEmailVerification",
@@ -920,7 +731,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetEmailVerificationResponseDto"
+                  "$ref": "#/components/schemas/GetEmailVerificationResponse"
                 }
               }
             }
@@ -962,7 +773,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetSendEnrollmentTicketResponseDto"
+                  "$ref": "#/components/schemas/GetSendEnrollmentTicketResponse"
                 }
               }
             }
@@ -987,7 +798,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/EnrollmentDto"
+                    "$ref": "#/components/schemas/GetEnrollmentResponse"
                   }
                 }
               }
@@ -1011,7 +822,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/GetMfaEnrollmentResponse"
                 }
               }
             }
@@ -1022,36 +833,6 @@
             "bearer": []
           }
         ]
-      }
-    },
-    "/internal/user/email-address/{userId}": {
-      "get": {
-        "operationId": "InternalUserController_getEmailAddress",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetEmailAddressResponseDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
       }
     },
     "/v1/waitlist": {
@@ -1127,32 +908,45 @@
           }
         }
       }
+    },
+    "/internal/webhook/peach/confirmed_payments": {
+      "post": {
+        "operationId": "PeachWebhookController_paymentConfirmedHandler",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/internal/webhook/peach/test/confirmed_payments": {
+      "post": {
+        "operationId": "PeachWebhookController_paymentAppliedHandler",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WebhookPaymentPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
-      "GetAssetPriceResponseDto": {
+      "GetAssetPriceResponse": {
         "type": "object",
-        "properties": {
-          "asset": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number"
-          },
-          "dailyChange": {
-            "type": "number"
-          },
-          "currency": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "asset",
-          "price",
-          "dailyChange",
-          "currency"
-        ]
+        "properties": {}
       },
       "GetDepositAddressResponseDto": {
         "type": "object",
@@ -1163,46 +957,6 @@
         },
         "required": [
           "address"
-        ]
-      },
-      "GetAssetListResponseDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "GetAssetInformationResponseDto": {
-        "type": "object",
-        "properties": {
-          "fireblocks_id": {
-            "type": "string"
-          },
-          "coinapi_id": {
-            "type": "string"
-          },
-          "network": {
-            "type": "string",
-            "enum": [
-              "ERC20",
-              "SOL",
-              "BTC"
-            ]
-          },
-          "ltv": {
-            "type": "number"
-          },
-          "interest": {
-            "type": "number"
-          },
-          "liquidation_wallet": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "fireblocks_id",
-          "coinapi_id",
-          "network",
-          "ltv",
-          "interest",
-          "liquidation_wallet"
         ]
       },
       "GetCreditResponseDto": {
@@ -1493,69 +1247,29 @@
           "data"
         ]
       },
-      "CollateralDto": {
+      "GetCollateralResponse": {
         "type": "object",
-        "properties": {
-          "asset": {
-            "type": "string"
-          },
-          "amount": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "asset",
-          "amount"
-        ]
+        "properties": {}
       },
-      "CollateralValueDto": {
+      "GetCollateralValueResponse": {
         "type": "object",
-        "properties": {
-          "asset": {
-            "type": "string"
-          },
-          "assetAmount": {
-            "type": "number"
-          },
-          "price": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "asset",
-          "assetAmount",
-          "price"
-        ]
+        "properties": {}
       },
-      "GetTotalCollateralValueResponseDto": {
+      "GetTotalCollateralValueResponse": {
         "type": "object",
-        "properties": {
-          "value": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "value"
-        ]
+        "properties": {}
       },
       "CollateralWithdrawCreateDto": {
         "type": "object",
-        "properties": {
-          "asset": {
-            "type": "string"
-          },
-          "withdrawalAmount": {
-            "type": "number"
-          },
-          "destinationAddress": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "asset",
-          "withdrawalAmount",
-          "destinationAddress"
-        ]
+        "properties": {}
+      },
+      "GetCollateralWithdrawalResponse": {
+        "type": "object",
+        "properties": {}
+      },
+      "GetUserMaxWithdrawalAmountResponse": {
+        "type": "object",
+        "properties": {}
       },
       "GetOnboardingResponseDto": {
         "type": "object",
@@ -1588,245 +1302,33 @@
           "completed"
         ]
       },
-      "GetKycResponseDto": {
+      "GetKycResponse": {
         "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "dateOfBirth": {
-            "type": "string"
-          },
-          "addressStreet": {
-            "type": "string"
-          },
-          "addressStreetNumber": {
-            "type": "string"
-          },
-          "addressLocality": {
-            "type": "string"
-          },
-          "addressCountry": {
-            "type": "string"
-          },
-          "addressRegion": {
-            "type": "string"
-          },
-          "addressPostalCode": {
-            "type": "string"
-          },
-          "phoneNumberCountryCode": {
-            "type": "string"
-          },
-          "phoneNumber": {
-            "type": "string"
-          },
-          "ssn": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "firstName",
-          "lastName",
-          "dateOfBirth",
-          "addressStreet",
-          "addressStreetNumber",
-          "addressLocality",
-          "addressCountry",
-          "addressRegion",
-          "addressPostalCode",
-          "phoneNumberCountryCode",
-          "phoneNumber",
-          "ssn"
-        ]
+        "properties": {}
       },
       "KycDto": {
         "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "dateOfBirth": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "addressStreet": {
-            "type": "string"
-          },
-          "addressStreetNumber": {
-            "type": "string"
-          },
-          "addressLocality": {
-            "type": "string"
-          },
-          "addressRegion": {
-            "type": "string"
-          },
-          "addressPostalCode": {
-            "type": "string"
-          },
-          "addressCountry": {
-            "type": "string"
-          },
-          "phoneNumber": {
-            "type": "string"
-          },
-          "phoneNumberCountryCode": {
-            "type": "string"
-          },
-          "ssn": {
-            "type": "string",
-            "minLength": 9,
-            "maxLength": 9
-          }
-        },
-        "required": [
-          "firstName",
-          "lastName",
-          "dateOfBirth",
-          "addressStreet",
-          "addressStreetNumber",
-          "addressLocality",
-          "addressRegion",
-          "addressPostalCode",
-          "addressCountry",
-          "phoneNumber",
-          "phoneNumberCountryCode",
-          "ssn"
-        ]
+        "properties": {}
       },
-      "CreateKycResponseDto": {
+      "CreateKycResponse": {
         "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "dateOfBirth": {
-            "type": "string"
-          },
-          "addressStreet": {
-            "type": "string"
-          },
-          "addressStreetNumber": {
-            "type": "string"
-          },
-          "addressLocality": {
-            "type": "string"
-          },
-          "addressCountry": {
-            "type": "string"
-          },
-          "addressRegion": {
-            "type": "string"
-          },
-          "addressPostalCode": {
-            "type": "string"
-          },
-          "phoneNumberCountryCode": {
-            "type": "string"
-          },
-          "phoneNumber": {
-            "type": "string"
-          },
-          "ssn": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "firstName",
-          "lastName",
-          "dateOfBirth",
-          "addressStreet",
-          "addressStreetNumber",
-          "addressLocality",
-          "addressCountry",
-          "addressRegion",
-          "addressPostalCode",
-          "phoneNumberCountryCode",
-          "phoneNumber",
-          "ssn"
-        ]
+        "properties": {}
       },
-      "GetEmailVerificationResponseDto": {
+      "GetEmailVerificationResponse": {
         "type": "object",
-        "properties": {
-          "isVerified": {
-            "type": "boolean"
-          },
-          "email": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "isVerified",
-          "email"
-        ]
+        "properties": {}
       },
-      "GetSendEnrollmentTicketResponseDto": {
+      "GetSendEnrollmentTicketResponse": {
         "type": "object",
-        "properties": {
-          "ticket_id": {
-            "type": "string"
-          },
-          "ticket_url": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "ticket_id",
-          "ticket_url"
-        ]
+        "properties": {}
       },
-      "EnrollmentDto": {
+      "GetEnrollmentResponse": {
         "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "status": {
-            "type": "object"
-          },
-          "enrolled_at": {
-            "type": "string"
-          },
-          "last_auth": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "auth_method": {
-            "type": "object"
-          }
-        },
-        "required": [
-          "id",
-          "status",
-          "enrolled_at",
-          "last_auth",
-          "type",
-          "auth_method"
-        ]
+        "properties": {}
       },
-      "GetEmailAddressResponseDto": {
+      "GetMfaEnrollmentResponse": {
         "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "email"
-        ]
+        "properties": {}
       },
       "CreateDto": {
         "type": "object",
@@ -1864,6 +1366,10 @@
           "waitlistRank",
           "referralCode"
         ]
+      },
+      "WebhookPaymentPayload": {
+        "type": "object",
+        "properties": {}
       }
     },
     "securitySchemes": {

@@ -95,7 +95,6 @@ export class RizeApiService {
       | 'customer'
       | 'debit_card'
       | 'synthetic_account'
-      | 'synthetic_account'
       | 'transfer'
       | 'transaction',
     listener: (err: Error, msg, ack, nack) => void,

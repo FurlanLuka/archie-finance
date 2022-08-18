@@ -14,6 +14,8 @@
     "build:onboarding-api": "nx run onboarding-api:build",
     "build:referral-system-api": "nx run referral-system-api:build",
     "build:mail-api": "nx run mail-api:build",
+    "build:peach-api": "nx run peach-api:build",
+    "build:webhook-api": "nx run webhook-api:build",
     "test": "nx test",
     "local-deploy": "node ./deploy-localhost.js",
     "nx": "nx"
