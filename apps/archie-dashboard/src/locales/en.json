@@ -192,9 +192,12 @@
   "dashboard_withdraw": {
     "title": "Withdraw {{currentAsset}}",
     "subtitle": "You currently have {{assetAmount}} {{asset}} (~${{assetValue}}).",
+    "subtitle_empty": "You do not have {{asset}} collateralized. ",
+    "subtitle_empty_link": "Feel free to add it!",
     "address_title": "What address would you like to send your {{currentAsset}} to?",
     "form": {
       "amount_label": "How much {{currentAsset}} would you like to withdraw? Max is {{maxAmount}}",
+      "amount_label_empty": "You cannot withdraw any {{currentAsset}}.",
       "address_label": "Send {{currentAsset}} to:",
       "amount_placeholder": "max: {{maxWithdrawAmount}} {{currentAsset}}",
       "address_placeholder": "Enter your address",

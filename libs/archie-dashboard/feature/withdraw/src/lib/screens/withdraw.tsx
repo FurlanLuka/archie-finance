@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, Navigate } from 'react-router-dom';
+import { useLocation, Navigate, Link } from 'react-router-dom';
 
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
 import { useGetMaxWithdrawalAmount } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-max-withdrawal-amount';
@@ -25,7 +25,7 @@ export const WithdrawScreen: FC = () => {
       getMaxWithdrawalAmountResponse.state === RequestState.LOADING ||
       getCollateralValueReponse.state === RequestState.LOADING
     ) {
-      return <Loader />;
+      return <Loader className="loader" />;
     }
 
     if (
@@ -41,26 +41,28 @@ export const WithdrawScreen: FC = () => {
     ) {
       const asset = getCollateralValueReponse.data.find((a) => a.asset === currentAsset);
 
-      if (!asset) {
-        return (
-          <Navigate
-            to="/error"
-            state={{ prevPath: '/collateral', description: 'You do not have this asset collateralized' }}
-          />
-        );
-      }
-
       return (
         <>
           <ParagraphM weight={800} className="title">
             {t('dashboard_withdraw.title', { currentAsset })}
           </ParagraphM>
           <ParagraphS className="subtitle">
-            {t('dashboard_withdraw.subtitle', {
-              asset: asset.asset,
-              assetAmount: asset.assetAmount,
-              assetValue: asset.price.toFixed(2),
-            })}
+            {asset ? (
+              t('dashboard_withdraw.subtitle', {
+                asset: asset.asset,
+                assetAmount: asset.assetAmount,
+                assetValue: asset.price.toFixed(2),
+              })
+            ) : (
+              <>
+                {t('dashboard_withdraw.subtitle_empty', {
+                  asset: currentAsset,
+                })}
+                <Link to={`/collateral/add/${currentAsset}`} className="link">
+                  {t('dashboard_withdraw.subtitle_empty_link')}
+                </Link>
+              </>
+            )}
           </ParagraphS>
           <WithdrawalForm
             currentAsset={currentAsset}
@@ -76,7 +78,7 @@ export const WithdrawScreen: FC = () => {
 
   return (
     <WithdrawScreenStyled>
-      <Card column alignItems="center" justifyContent="center" padding="2.5rem 1.5rem 3.5rem" minHeight="750px">
+      <Card column alignItems="center" padding="2.5rem 1.5rem 3.5rem" minHeight="750px">
         {getContent()}
       </Card>
     </WithdrawScreenStyled>
