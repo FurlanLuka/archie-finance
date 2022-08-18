@@ -353,13 +353,11 @@ export class PeachBorrowerService {
     if (borrower === null) {
       throw new BorrowerNotFoundError();
     }
-    if (borrower.plaidPaymentInstrumentId === null) {
-      throw new PlaidPaymentInstrumentNotFoundError();
-    }
 
     await this.peachApiService.createOneTimeTransaction(
       borrower,
       transaction.amount,
+      transaction.paymentInstrumentId,
       transaction.scheduledDate,
     );
   }

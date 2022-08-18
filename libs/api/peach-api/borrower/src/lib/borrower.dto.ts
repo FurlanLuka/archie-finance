@@ -1,4 +1,10 @@
-import { IsDateString, IsNumber, IsOptional, Min } from 'class-validator';
+import {
+  IsDateString,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator';
 
 class Obligation {
   capitalizedAmount: number;
@@ -28,4 +34,7 @@ export class ScheduleTransactionDto {
   @IsDateString()
   @IsOptional()
   scheduledDate?: string | null;
+
+  @IsString()
+  paymentInstrumentId: string;
 }
