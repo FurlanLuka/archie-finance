@@ -94,6 +94,7 @@ export class MarginService {
     return {
       ltv: ltv.ltv,
       status: ltvStatus,
+      loanedBalance: ltv.loanedBalance,
     };
   }
 
