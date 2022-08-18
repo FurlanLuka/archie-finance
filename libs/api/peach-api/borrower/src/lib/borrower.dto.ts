@@ -2,7 +2,7 @@ import {
   IsDateString,
   IsNumber,
   IsOptional,
-  IsString,
+  Matches,
   Min,
 } from 'class-validator';
 
@@ -26,6 +26,8 @@ export class ObligationsResponseDto {
   obligations: Obligation[];
 }
 
+const PEACH_ID_REGEX = /^ext-|^[A-Z]{2}-[A-Z0-9]+-[A-Z0-9]+|^\d+$/;
+
 export class ScheduleTransactionDto {
   @IsNumber()
   @Min(0.01)
@@ -35,6 +37,6 @@ export class ScheduleTransactionDto {
   @IsOptional()
   scheduledDate?: string | null;
 
-  @IsString()
+  @Matches(PEACH_ID_REGEX)
   paymentInstrumentId: string;
 }

@@ -39,7 +39,11 @@ import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ObligationsResponseDto, ScheduleTransactionDto } from './borrower.dto';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
-import { BorrowerNotFoundError } from './borrower.errors';
+import {
+  AmountExceedsOutstandingBalanceError,
+  BorrowerNotFoundError,
+  PaymentInstrumentNotFoundError,
+} from './borrower.errors';
 
 @Controller()
 export class PeachBorrowerQueueController {
@@ -154,7 +158,11 @@ export class PeachBorrowerController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @HttpCode(202)
-  @ApiErrorResponse([BorrowerNotFoundError])
+  @ApiErrorResponse([
+    BorrowerNotFoundError,
+    PaymentInstrumentNotFoundError,
+    AmountExceedsOutstandingBalanceError,
+  ])
   async scheduleTransaction(
     @Req() request,
     @Body() body: ScheduleTransactionDto,

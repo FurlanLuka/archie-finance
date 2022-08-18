@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
@@ -21,6 +21,10 @@ import {
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
+import {
+  PaymentInstrumentNotFoundError,
+  AmountExceedsOutstandingBalanceError,
+} from '../borrower.errors';
 
 @Injectable()
 export class PeachApiService {
@@ -401,15 +405,26 @@ export class PeachApiService {
     paymentInstrumentId: string,
     scheduledDate?: string | null,
   ): Promise<void> {
-    await this.peachClient.post(
-      `people/${borrower.personId}/loans/${borrower.creditLineId}/transactions`,
-      {
-        type: 'oneTime',
-        drawId: borrower.drawId,
-        paymentInstrumentId: paymentInstrumentId,
-        amount,
-        scheduledDate: scheduledDate ?? undefined,
-      },
-    );
+    try {
+      await this.peachClient.post(
+        `people/${borrower.personId}/loans/${borrower.creditLineId}/transactions`,
+        {
+          type: 'oneTime',
+          drawId: borrower.drawId,
+          paymentInstrumentId: paymentInstrumentId,
+          amount,
+          scheduledDate: scheduledDate ?? undefined,
+        },
+      );
+    } catch (error) {
+      if (error.status === 404) {
+        throw new PaymentInstrumentNotFoundError();
+      }
+      if (error.status === 400) {
+        throw new AmountExceedsOutstandingBalanceError();
+      }
+
+      throw error;
+    }
   }
 }

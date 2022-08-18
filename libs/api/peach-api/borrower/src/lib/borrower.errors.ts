@@ -5,3 +5,15 @@ export class BorrowerNotFoundError extends NotFoundException {
     super('BORROWER_NOT_FOUND_ERROR');
   }
 }
+
+export class PaymentInstrumentNotFoundError extends NotFoundException {
+  constructor() {
+    super('PAYMENT_INSTRUMENT_NOT_FOUND');
+  }
+}
+
+export class AmountExceedsOutstandingBalanceError extends NotFoundException {
+  constructor() {
+    super('AMOUNT_EXCEEDS_OUTSTANDING_BALANCE');
+  }
+}
