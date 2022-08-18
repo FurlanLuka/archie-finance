@@ -40,7 +40,7 @@ export class MarginController {
   @Get('ltv')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async checkMarginHandler(@Req() request): Promise<LtvResponseDto> {
+  async getCurrentLtv(@Req() request): Promise<LtvResponseDto> {
     return this.marginService.getCurrentLtv(request.user.sub);
   }
 }
