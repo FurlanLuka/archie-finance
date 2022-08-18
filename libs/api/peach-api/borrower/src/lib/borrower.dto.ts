@@ -1,3 +1,5 @@
+import { IsDateString, IsOptional, IsString } from 'class-validator';
+
 class Obligation {
   capitalizedAmount: number;
   dueDate: string;
@@ -16,4 +18,13 @@ export class ObligationsResponseDto {
   isOverdue: boolean;
   overdueAmount: number;
   obligations: Obligation[];
+}
+
+export class ScheduleTransactionDto {
+  @IsString()
+  amount: number;
+
+  @IsDateString()
+  @IsOptional()
+  scheduledDate?: string | null;
 }

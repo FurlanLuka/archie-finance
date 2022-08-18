@@ -1,4 +1,12 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   CARD_ACTIVATED_TOPIC,
@@ -29,7 +37,7 @@ import {
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ObligationsResponseDto } from './borrower.dto';
+import { ObligationsResponseDto, ScheduleTransactionDto } from './borrower.dto';
 
 @Controller()
 export class PeachBorrowerQueueController {
@@ -128,14 +136,25 @@ export class PeachBorrowerQueueController {
   }
 }
 
-@Controller('v1/loans/obligations')
+@Controller('v1/loans')
 export class PeachBorrowerController {
   constructor(private peachService: PeachBorrowerService) {}
 
-  @Get()
+  @Get('obligations')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   async getCreditObligations(@Req() request): Promise<ObligationsResponseDto> {
     return this.peachService.getObligations(request.user.sub);
+  }
+
+  @Post('scheduled_transactions')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(202)
+  async scheduleTransaction(
+    @Req() request,
+    @Body() body: ScheduleTransactionDto,
+  ): Promise<void> {
+    return this.peachService.scheduleTransaction(request.user.sub, body);
   }
 }

@@ -30,7 +30,8 @@ import {
 } from '@archie/api/credit-api/data-transfer-objects';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { ObligationsResponseDto } from './borrower.dto';
+import { ObligationsResponseDto, ScheduleTransactionDto } from './borrower.dto';
+import { BorrowerNotFoundError } from './borrower.errors';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -307,9 +308,12 @@ export class PeachBorrowerService {
   }
 
   public async getObligations(userId: string): Promise<ObligationsResponseDto> {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
+    if (borrower === null) {
+      throw new BorrowerNotFoundError();
+    }
 
     const obligations: ObligationsResponse =
       await this.peachApiService.getLoanObligations(
@@ -334,5 +338,23 @@ export class PeachBorrowerService {
         remainingAmount: obligation.remainingAmount,
       })),
     };
+  }
+
+  public async scheduleTransaction(
+    userId: string,
+    transaction: ScheduleTransactionDto,
+  ): Promise<void> {
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
+      userId,
+    });
+    if (borrower === null) {
+      throw new BorrowerNotFoundError();
+    }
+
+    await this.peachApiService.createOneTimeTransaction(
+      borrower,
+      transaction.amount,
+      transaction.scheduledDate,
+    );
   }
 }

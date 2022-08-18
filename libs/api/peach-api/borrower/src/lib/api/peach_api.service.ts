@@ -394,4 +394,21 @@ export class PeachApiService {
 
     return response.data.data;
   }
+
+  public async createOneTimeTransaction(
+    borrower: Borrower,
+    amount: number,
+    scheduledDate?: string,
+  ): Promise<void> {
+    await this.peachClient.post(
+      `people/${borrower.personId}/loans/${borrower.creditLineId}/transactions`,
+      {
+        type: 'oneTime',
+        drawId: borrower.drawId,
+        paymentInstrumentId: borrower.plaidPaymentInstrumentId,
+        amount,
+        scheduledDate,
+      },
+    );
+  }
 }
