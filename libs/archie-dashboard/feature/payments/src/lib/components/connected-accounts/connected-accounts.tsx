@@ -1,9 +1,18 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
-import { ButtonPrimary, Loader, Modal, ParagraphM } from '@archie-webapps/shared/ui/design-system';
+import {
+  ButtonPrimary,
+  Card,
+  Skeleton,
+  Modal,
+  ParagraphM,
+  ParagraphXS,
+  ButtonOutline,
+} from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectAccount } from '../connect-account/connect-acount';
 
@@ -13,44 +22,60 @@ import { ConnectedAccountsStyled } from './connected-accounts.styled';
 export const ConnectedAccounts: FC = () => {
   const { t } = useTranslation();
   const getConnectedAccountsResponse = useGetConnectedAccounts();
+
   const [isAddAccountOpen, setIsAddAccountOpen] = useState(false);
 
-  function getContent() {
-    if (getConnectedAccountsResponse.state === RequestState.LOADING) {
-      return <Loader className="loader" />;
-    }
-
-    if (getConnectedAccountsResponse.state === RequestState.ERROR) {
-      return <div>Something went wrong :(</div>;
-    }
-
-    if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
-      return (
-        <div className="account-list">
-          {getConnectedAccountsResponse.data.map((account) => (
-            <ConnectedAccount key={account.id} account={account} />
-          ))}
-        </div>
-      );
-    }
-
-    return null;
+  if (getConnectedAccountsResponse.state === RequestState.LOADING) {
+    return (
+      <Card minHeight="220px">
+        <Skeleton />
+      </Card>
+    );
   }
 
-  return (
-    <ConnectedAccountsStyled>
-      <ParagraphM weight={800} className="title">
-        {t('dashboard_payment.connected_accounts.title')}
-      </ParagraphM>
-      <ButtonPrimary className="add-account" maxWidth="fit-content" onClick={() => setIsAddAccountOpen(true)}>
-        {t('dashboard_payment.connected_accounts.btn_add')}
-      </ButtonPrimary>
-      {getContent()}
-      {isAddAccountOpen && (
-        <Modal isOpen close={() => setIsAddAccountOpen(false)} maxWidth="800px">
-          <ConnectAccount onAccountConnect={() => setIsAddAccountOpen(false)} />
-        </Modal>
-      )}
-    </ConnectedAccountsStyled>
-  );
+  if (getConnectedAccountsResponse.state === RequestState.ERROR) {
+    return <Navigate to="/error" state={{ prevPath: '/payment' }} />;
+  }
+
+  if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
+    const getAccountsList = () => {
+      if (getConnectedAccountsResponse.data.length === 0) {
+        return (
+          <ParagraphXS>
+            No accounts have been added yet. Connect to your Plaid account to start making payments.
+          </ParagraphXS>
+        );
+      }
+
+      return getConnectedAccountsResponse.data.map((account) => (
+        <ConnectedAccount key={account.id} account={account} />
+      ));
+    };
+
+    return (
+      <ConnectedAccountsStyled>
+        <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
+          <ParagraphM weight={800} className="title">
+            {t('dashboard_payment.connected_accounts.title')}
+          </ParagraphM>
+          <div className="account-list">{getAccountsList()}</div>
+          <ButtonOutline
+            small
+            maxWidth="fit-content"
+            className="btn-add-account"
+            onClick={() => setIsAddAccountOpen(true)}
+          >
+            {t('dashboard_payment.connected_accounts.btn_add')}
+          </ButtonOutline>
+        </Card>
+        {isAddAccountOpen && ( // unclear
+          <Modal maxWidth="800px" isOpen close={() => setIsAddAccountOpen(false)}>
+            <ConnectAccount onAccountConnect={() => setIsAddAccountOpen(false)} />
+          </Modal>
+        )}
+      </ConnectedAccountsStyled>
+    );
+  }
+
+  return <></>;
 };

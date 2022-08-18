@@ -12,7 +12,7 @@ export const PlaidConnectLoading: FC = () => {
 
   return (
     <PlaidConnectStyled>
-      <ButtonPrimary isLoading={true} disabled={true}>
+      <ButtonPrimary isLoading={true} isDisabled>
         {t('dashboard_payment.plaid_connect.btn_connect')}
       </ButtonPrimary>
       <div className="plaid-logo">

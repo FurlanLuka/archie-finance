@@ -19,11 +19,11 @@ export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken, onAccessTokenCr
   const { t } = useTranslation();
   const createAccessTokenMutation = useCreateAccessToken();
 
-  function onSuccess(publicToken: string) {
+  const onSuccess = (publicToken: string) => {
     if (createAccessTokenMutation.state === RequestState.IDLE) {
       createAccessTokenMutation.mutate({ publicToken });
     }
-  }
+  };
 
   useEffect(() => {
     if (createAccessTokenMutation.state === RequestState.SUCCESS) {
