@@ -86,7 +86,9 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
       <Styled.WithdrawalForm onSubmit={onSubmit}>
         <InputText>
           <label htmlFor="withdrawAmount">
-            {t('dashboard_withdraw.form.amount_label', { currentAsset, maxAmount })}
+            {maxAmount > 0
+              ? t('dashboard_withdraw.form.amount_label', { currentAsset, maxAmount })
+              : t('dashboard_withdraw.form.amount_label_empty', { currentAsset })}
           </label>
           <input
             id="withdrawAmount"
@@ -98,11 +100,12 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
             step="any"
             min={0}
             max={maxAmount}
-            {...register('withdrawAmount')}
+            disabled={maxAmount <= 0}
+            {...register('withdrawAmount', { valueAsNumber: true })}
           />
           {errors.withdrawAmount?.message && (
             <ParagraphXS className="error" color={theme.textDanger}>
-              {t(errors.withdrawAmount.message)}
+              {t(errors.withdrawAmount.message, { maxAmount })}
             </ParagraphXS>
           )}
           {withdrawalAmount > 0 && withdrawalAmount <= maxAmount && (
@@ -127,6 +130,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
             <input
               id="withdrawAddress"
               placeholder={t('dashboard_withdraw.form.address_placeholder')}
+              disabled={maxAmount <= 0}
               {...register('withdrawAddress')}
             />
             {errors.withdrawAddress?.message && (
