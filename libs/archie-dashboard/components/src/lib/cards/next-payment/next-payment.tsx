@@ -1,11 +1,14 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { NextPaymentChart } from '@archie-webapps/archie-dashboard/components';
 import { ButtonOutline, Card, ParagraphXS, SubtitleS } from '@archie-webapps/shared/ui/design-system';
 
-import { NextPaymentChart } from '../charts/next-payment/next-payment';
+interface NextPaymentProps {
+  withBtn?: boolean;
+}
 
-export const NextPayment: FC = () => {
+export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
   const { t } = useTranslation();
 
   return (
@@ -17,11 +20,13 @@ export const NextPayment: FC = () => {
         June 3
       </SubtitleS>
       <NextPaymentChart />
-      <div className="btn-group">
-        <ButtonOutline maxWidth="auto" small>
-          Pay now
-        </ButtonOutline>
-      </div>
+      {withBtn && (
+        <div className="btn-group">
+          <ButtonOutline maxWidth="auto" small>
+            Pay now
+          </ButtonOutline>
+        </div>
+      )}
     </Card>
   );
 };

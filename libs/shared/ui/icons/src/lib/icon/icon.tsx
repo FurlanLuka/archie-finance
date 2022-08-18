@@ -11,6 +11,7 @@ export type IconName =
   | 'caret'
   | 'close'
   | 'copy'
+  | 'credit-card'
   | 'ethereum'
   | 'external-link'
   | 'home'

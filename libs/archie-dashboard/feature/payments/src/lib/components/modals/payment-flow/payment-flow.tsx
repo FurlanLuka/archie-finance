@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
@@ -10,18 +11,17 @@ import { SchedulePayment } from '../../schedule-payment/schedule-payment';
 interface PaymentFlowModalProps {
   close: VoidFunction;
 }
-// If we don't have any accounts connected, we need to trigger the flow of connecting first
+
 export const PaymentFlowModal: FC<PaymentFlowModalProps> = ({ close }) => {
   const getConnectedAccountsResponse = useGetConnectedAccounts();
 
-  function getContent() {
+  const getContent = () => {
     if (getConnectedAccountsResponse.state === RequestState.LOADING) {
       return <Loader />;
     }
 
     if (getConnectedAccountsResponse.state === RequestState.ERROR) {
-      // TODO error handling
-      return <div>Something went wrong :(</div>;
+      return <Navigate to="/error" state={{ prevPath: '/payment' }} />;
     }
 
     if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
@@ -33,9 +33,10 @@ export const PaymentFlowModal: FC<PaymentFlowModalProps> = ({ close }) => {
     }
 
     return null;
-  }
+  };
+
   return (
-    <Modal isOpen close={close} maxWidth="800px">
+    <Modal isOpen close={close} maxWidth="760px">
       {getContent()}
     </Modal>
   );

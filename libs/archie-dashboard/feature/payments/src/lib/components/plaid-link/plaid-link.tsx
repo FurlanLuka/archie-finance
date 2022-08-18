@@ -1,11 +1,10 @@
 import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useCreateLinkToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
-import { ButtonPrimary, ParagraphM, ParagraphS } from '@archie-webapps/shared/ui/design-system';
-
-import plaidLogo from '../../../assets/plaid_logo.png';
+import { ParagraphM, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 
 import { PlaidConnect } from './blocks/plaid-connect/plaid-connect';
 import { PlaidConnectLoading } from './blocks/plaid-connect/plaid-connect.loading';
@@ -26,9 +25,9 @@ export const PlaidLink: FC<PlaidLinkProps> = ({ onAccessTokenCreate }) => {
     }
   }, [createLinkTokenMutation]);
 
-  function getContent() {
+  const getContent = () => {
     if (createLinkTokenMutation.state === RequestState.ERROR) {
-      return <div>Something went wrong :(</div>;
+      return <Navigate to="/error" state={{ prevPath: '/payment' }} />;
     }
 
     if (createLinkTokenMutation.state === RequestState.LOADING) {
@@ -40,12 +39,12 @@ export const PlaidLink: FC<PlaidLinkProps> = ({ onAccessTokenCreate }) => {
     }
 
     return <></>;
-  }
+  };
 
   return (
     <PlaidLinkStyled>
       <ParagraphM weight={800}>{t('dashboard_payment.plaid_connect.title')}</ParagraphM>
-      <ParagraphS className="text">{t('dashboard_payment.plaid_connect.text')}</ParagraphS>
+      <ParagraphXS className="text">{t('dashboard_payment.plaid_connect.text')}</ParagraphXS>
       {getContent()}
     </PlaidLinkStyled>
   );

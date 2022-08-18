@@ -2,12 +2,6 @@ import styled, { keyframes } from 'styled-components';
 
 import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/shared/ui/theme';
 
-const load = keyframes`
-  100% {
-    transform: translateX(100%);
-  }
-`;
-
 export const HomeStyled = styled.div`
   width: 100%;
   max-width: calc(1000px + 4rem);
@@ -34,7 +28,7 @@ export const HomeStyled = styled.div`
     margin-bottom: 1.5rem;
 
     @media (max-width: ${breakpoints.screenSM}) {
-        min-height: 58px;
+      min-height: 58px;
     }
   }
 

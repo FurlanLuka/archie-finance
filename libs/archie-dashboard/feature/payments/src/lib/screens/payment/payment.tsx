@@ -1,7 +1,8 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
+import { AvailableCredit, NextPayment, InterestRate } from '@archie-webapps/archie-dashboard/components';
+import { ButtonPrimary, InputRadio, SubtitleS, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectedAccounts } from '../../components/connected-accounts/connected-accounts';
 import { PaymentFlowModal } from '../../components/modals/payment-flow/payment-flow';
@@ -9,25 +10,33 @@ import { PaymentFlowModal } from '../../components/modals/payment-flow/payment-f
 import { PaymentScreenStyled } from './payment.styled';
 
 export const PaymentScreen: FC = () => {
-  const [showModal, setShowModal] = useState(false);
   const { t } = useTranslation();
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <PaymentScreenStyled>
-      <ButtonPrimary
-        className="payment"
-        onClick={() => {
-          setShowModal((show) => !show);
-        }}
-      >
-        {t('dashboard_payment.btn_pay')}
-      </ButtonPrimary>
+      <SubtitleS className="title">{t('dashboard_payment.title')}</SubtitleS>
+      <div className="section-cards">
+        <AvailableCredit />
+        <div className="cards-group">
+          <NextPayment />
+          <InterestRate />
+        </div>
+      </div>
+      <div className="section-actions">
+        <ButtonPrimary maxWidth="fit-content" onClick={() => setShowModal(true)}>
+          {t('dashboard_payment.btn_pay')}
+        </ButtonPrimary>
+        <InputRadio small>
+          <input type="radio" value="auto_payments" checked />
+          <ParagraphXXS>
+            {t('dashboard_home.payment_schedule_modal.auto_payments')} {t('on')} {/* TBD */}
+          </ParagraphXXS>
+        </InputRadio>
+      </div>
       <ConnectedAccounts />
-      {showModal && <PaymentFlowModal close={closeModal} />}
+      {showModal && <PaymentFlowModal close={() => setShowModal(false)} />}
     </PaymentScreenStyled>
   );
 };

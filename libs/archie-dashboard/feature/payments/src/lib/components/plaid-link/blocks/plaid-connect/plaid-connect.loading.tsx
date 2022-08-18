@@ -12,10 +12,12 @@ export const PlaidConnectLoading: FC = () => {
 
   return (
     <PlaidConnectStyled>
-      <ButtonPrimary className="connect" isLoading={true} disabled={true}>
+      <ButtonPrimary isLoading={true} disabled={true}>
         {t('dashboard_payment.plaid_connect.btn_connect')}
       </ButtonPrimary>
-      <img src={plaidLogo} alt="Plaid" />
+      <div className="plaid-logo">
+        <img src={plaidLogo} alt="Plaid" />
+      </div>
     </PlaidConnectStyled>
   );
 };

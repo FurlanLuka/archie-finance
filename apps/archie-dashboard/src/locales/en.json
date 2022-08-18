@@ -228,7 +228,8 @@
     }
   },
   "dashboard_payment": {
-    "btn_pay": "Pay now!",
+    "title": "Payments",
+    "btn_pay": "Make a Payment",
     "connected_accounts": {
       "title": "Your accounts",
       "btn_add": "Add account",

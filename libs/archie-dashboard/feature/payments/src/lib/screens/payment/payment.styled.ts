@@ -23,10 +23,49 @@ export const PaymentScreenStyled = styled.div`
   }
 
   .title {
-    margin-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
   }
 
-  .payment {
-    margin: 1rem 0;
+  .section-cards {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+
+    @media (max-width: ${breakpoints.screenMD}) {
+      flex-wrap: wrap;
+      max-width: 70%;
+    }
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      max-width: 100%;
+    }
+  }
+
+  .cards-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 350px;
+
+    @media (max-width: ${breakpoints.screenMD}) {
+      max-width: 70%;
+    }
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      max-width: 100%;
+    }
+
+    .card-title, 
+    .card-info {
+      margin-bottom: 0;
+    }
+  }
+
+  .section-actions {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
   }
 `;
