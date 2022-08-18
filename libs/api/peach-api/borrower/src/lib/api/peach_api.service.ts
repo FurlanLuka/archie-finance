@@ -398,7 +398,7 @@ export class PeachApiService {
   public async createOneTimeTransaction(
     borrower: Borrower,
     amount: number,
-    scheduledDate?: string,
+    scheduledDate?: string | null,
   ): Promise<void> {
     await this.peachClient.post(
       `people/${borrower.personId}/loans/${borrower.creditLineId}/transactions`,
@@ -407,7 +407,7 @@ export class PeachApiService {
         drawId: borrower.drawId,
         paymentInstrumentId: borrower.plaidPaymentInstrumentId,
         amount,
-        scheduledDate,
+        scheduledDate: scheduledDate ?? undefined,
       },
     );
   }

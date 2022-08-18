@@ -31,7 +31,10 @@ import {
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import { ObligationsResponseDto, ScheduleTransactionDto } from './borrower.dto';
-import { BorrowerNotFoundError } from './borrower.errors';
+import {
+  BorrowerNotFoundError,
+  PlaidPaymentInstrumentNotFoundError,
+} from './borrower.errors';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -349,6 +352,9 @@ export class PeachBorrowerService {
     });
     if (borrower === null) {
       throw new BorrowerNotFoundError();
+    }
+    if (borrower.plaidPaymentInstrumentId === null) {
+      throw new PlaidPaymentInstrumentNotFoundError();
     }
 
     await this.peachApiService.createOneTimeTransaction(
