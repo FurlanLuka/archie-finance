@@ -389,7 +389,7 @@
     },
     "/v1/margins/ltv": {
       "get": {
-        "operationId": "MarginController_checkMarginHandler",
+        "operationId": "MarginController_getCurrentLtv",
         "parameters": [],
         "responses": {
           "200": {
@@ -465,6 +465,155 @@
           },
           "404": {
             "description": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/plaid/link_tokens": {
+      "post": {
+        "operationId": "PlaidController_createLinkToken",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/plaid/access_tokens": {
+      "post": {
+        "operationId": "PlaidController_setAccessToken",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "PUBLIC_TOKEN_EXPIRED"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/plaid/linkable_accounts/{itemId}": {
+      "get": {
+        "operationId": "PlaidController_getLinkableAccounts",
+        "parameters": [
+          {
+            "name": "itemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/plaid/connected_accounts": {
+      "get": {
+        "operationId": "PlaidController_getConnectedAccounts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "PlaidController_connectAccount",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/plaid/connected_accounts/{id}": {
+      "delete": {
+        "operationId": "PlaidController_removeAccount",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
           }
         },
         "security": [
@@ -1112,11 +1261,15 @@
               "warning",
               "margin_call"
             ]
+          },
+          "loanedBalance": {
+            "type": "number"
           }
         },
         "required": [
           "ltv",
-          "status"
+          "status",
+          "loanedBalance"
         ]
       },
       "PaginationMetaDto": {
