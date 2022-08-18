@@ -10,9 +10,6 @@ export async function generateMigration(
 ): Promise<void> {
   const app = await NestFactory.create(
     MigrationGeneratorModule.register(appModule),
-    // {
-    //   logger: false,
-    // },
   );
 
   const migrationGeneratorService = app.get(MigrationGeneratorService);

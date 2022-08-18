@@ -389,7 +389,7 @@
     },
     "/v1/margins/ltv": {
       "get": {
-        "operationId": "MarginController_checkMarginHandler",
+        "operationId": "MarginController_getCurrentLtv",
         "parameters": [],
         "responses": {
           "200": {
@@ -1284,11 +1284,15 @@
               "warning",
               "margin_call"
             ]
+          },
+          "loanedBalance": {
+            "type": "number"
           }
         },
         "required": [
           "ltv",
-          "status"
+          "status",
+          "loanedBalance"
         ]
       },
       "PaginationMetaDto": {

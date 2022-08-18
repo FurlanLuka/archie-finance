@@ -23,6 +23,7 @@ export interface UsersLtv {
 export interface LtvResponse {
   ltv: number;
   status: LtvStatus;
+  loanedBalance: number;
 }
 
 export enum LtvStatus {
