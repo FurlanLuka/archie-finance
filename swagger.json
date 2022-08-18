@@ -1135,7 +1135,7 @@
             "description": ""
           },
           "404": {
-            "description": "PLAID_PAYMENT_INSTRUMENT_NOT_FOUND"
+            "description": "BORROWER_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -1810,10 +1810,14 @@
           "scheduledDate": {
             "type": "string",
             "nullable": true
+          },
+          "paymentInstrumentId": {
+            "type": "string"
           }
         },
         "required": [
-          "amount"
+          "amount",
+          "paymentInstrumentId"
         ]
       }
     },
