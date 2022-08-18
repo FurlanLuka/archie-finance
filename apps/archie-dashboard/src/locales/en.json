@@ -232,6 +232,7 @@
     "btn_pay": "Make a Payment",
     "connected_accounts": {
       "title": "Your accounts",
+      "no_accounts": "No accounts have been added yet. Connect to your Plaid account to start making payments.",
       "btn_add": "Add account",
       "btn_disconnect": "Disconnect"
     },

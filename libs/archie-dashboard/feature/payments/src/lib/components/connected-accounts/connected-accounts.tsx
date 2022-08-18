@@ -40,11 +40,7 @@ export const ConnectedAccounts: FC = () => {
   if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
     const getAccountsList = () => {
       if (getConnectedAccountsResponse.data.length === 0) {
-        return (
-          <ParagraphXS>
-            No accounts have been added yet. Connect to your Plaid account to start making payments.
-          </ParagraphXS>
-        );
+        return <ParagraphXS>{t('dashboard_payment.connected_accounts.no_accounts')}</ParagraphXS>;
       }
 
       return getConnectedAccountsResponse.data.map((account) => (
@@ -59,12 +55,7 @@ export const ConnectedAccounts: FC = () => {
             {t('dashboard_payment.connected_accounts.title')}
           </ParagraphM>
           <div className="account-list">{getAccountsList()}</div>
-          <ButtonOutline
-            small
-            maxWidth="fit-content"
-            className="btn-add-account"
-            onClick={() => setIsAddAccountOpen(true)}
-          >
+          <ButtonOutline small maxWidth="fit-content" onClick={() => setIsAddAccountOpen(true)}>
             {t('dashboard_payment.connected_accounts.btn_add')}
           </ButtonOutline>
         </Card>
