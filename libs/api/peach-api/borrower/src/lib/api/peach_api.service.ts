@@ -482,4 +482,16 @@ export class PeachApiService {
 
     return response.data.data;
   }
+
+  public async getRefreshedBalance(
+    personId: string,
+    paymentInstrumentId: string,
+  ): Promise<PaymentInstrumentBalance> {
+    const response = await this.peachClient.post(
+      `/people/${personId}/payment-instruments/${paymentInstrumentId}/balance`,
+      {},
+    );
+
+    return response.data.data;
+  }
 }

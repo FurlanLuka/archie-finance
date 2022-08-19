@@ -17,3 +17,9 @@ export class AmountExceedsOutstandingBalanceError extends NotFoundException {
     super('AMOUNT_EXCEEDS_OUTSTANDING_BALANCE');
   }
 }
+
+export class AmountExceedsAvailableBalanceError extends NotFoundException {
+  constructor() {
+    super('AMOUNT_EXCEEDS_AVAILABLE_BALANCE');
+  }
+}

@@ -497,132 +497,6 @@
         ]
       }
     },
-    "/v1/plaid/access_tokens": {
-      "post": {
-        "operationId": "PlaidController_setAccessToken",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "PUBLIC_TOKEN_EXPIRED"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/plaid/linkable_accounts/{itemId}": {
-      "get": {
-        "operationId": "PlaidController_getLinkableAccounts",
-        "parameters": [
-          {
-            "name": "itemId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/plaid/connected_accounts": {
-      "get": {
-        "operationId": "PlaidController_getConnectedAccounts",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      },
-      "post": {
-        "operationId": "PlaidController_connectAccount",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/plaid/connected_accounts/{id}": {
-      "delete": {
-        "operationId": "PlaidController_removeAccount",
-        "parameters": [
-          {
-            "name": "id",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
     "/v1/collateral": {
       "get": {
         "operationId": "CollateralController_getCollateral",
@@ -1136,6 +1010,59 @@
           },
           "404": {
             "description": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/payment_instruments": {
+      "get": {
+        "operationId": "PeachPaymentInstrumentsController_getCreditObligations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PaymentInstrumentDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "BORROWER_NOT_FOUND_ERROR"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "PeachPaymentInstrumentsController_connectAccount",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectAccountDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
           }
         },
         "security": [
@@ -1819,6 +1746,52 @@
         "required": [
           "amount",
           "paymentInstrumentId"
+        ]
+      },
+      "PaymentInstrumentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "mask": {
+            "type": "string"
+          },
+          "availableBalance": {
+            "type": "number"
+          },
+          "currencyISO": {
+            "type": "string"
+          },
+          "subType": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "mask",
+          "availableBalance",
+          "currencyISO",
+          "subType"
+        ]
+      },
+      "ConnectAccountDto": {
+        "type": "object",
+        "properties": {
+          "accountId": {
+            "type": "string"
+          },
+          "publicToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "accountId",
+          "publicToken"
         ]
       }
     },

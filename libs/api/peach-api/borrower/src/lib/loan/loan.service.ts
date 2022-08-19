@@ -8,6 +8,7 @@ import {
   Obligation,
   ObligationsResponse,
   PaymentInstrument,
+  PaymentInstrumentBalance,
   Person,
 } from '../api/peach_api.interfaces';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
@@ -31,7 +32,10 @@ import {
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import { ObligationsResponseDto, ScheduleTransactionDto } from './loan.dto';
-import { BorrowerNotFoundError } from '../borrower.errors';
+import {
+  AmountExceedsAvailableBalanceError,
+  BorrowerNotFoundError,
+} from '../borrower.errors';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -350,6 +354,17 @@ export class PeachBorrowerService {
     if (borrower === null) {
       throw new BorrowerNotFoundError();
     }
+
+    // TODO: uncomment once we get response from peach
+    // const balance: PaymentInstrumentBalance =
+    //   await this.peachApiService.getRefreshedBalance(
+    //     borrower.personId,
+    //     transaction.paymentInstrumentId,
+    //   );
+    //
+    // if (transaction.amount > balance.availableBalanceAmount) {
+    //   throw new AmountExceedsAvailableBalanceError();
+    // }
 
     await this.peachApiService.createOneTimeTransaction(
       borrower,

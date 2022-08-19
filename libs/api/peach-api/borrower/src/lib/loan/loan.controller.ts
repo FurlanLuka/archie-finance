@@ -40,6 +40,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { ObligationsResponseDto, ScheduleTransactionDto } from './loan.dto';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import {
+  AmountExceedsAvailableBalanceError,
   AmountExceedsOutstandingBalanceError,
   BorrowerNotFoundError,
   PaymentInstrumentNotFoundError,
@@ -162,6 +163,7 @@ export class PeachBorrowerController {
     BorrowerNotFoundError,
     PaymentInstrumentNotFoundError,
     AmountExceedsOutstandingBalanceError,
+    AmountExceedsAvailableBalanceError,
   ])
   async scheduleTransaction(
     @Req() request,
