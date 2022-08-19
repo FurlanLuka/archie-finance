@@ -6,6 +6,7 @@ import { StoriesTitle } from '../../utils/stories-title/stories-title';
 import { ParagraphXS } from '../typography/typography.styled';
 
 import { Select } from './select';
+import { SelectOption } from './select-option';
 
 export default {
   title: 'Components/Select',
@@ -28,11 +29,9 @@ export const Default: Story = () => {
   );
 
   const options = selectOptions.map((item, index) => (
-    <div style={{ padding: '0.5rem 1rem' }}>
-      <ParagraphXS weight={500} key={index}>
-        {item}
-      </ParagraphXS>
-    </div>
+    <SelectOption key={index} value={item}>
+      <ParagraphXS weight={500}>{item}</ParagraphXS>
+    </SelectOption>
   ));
 
   return (
