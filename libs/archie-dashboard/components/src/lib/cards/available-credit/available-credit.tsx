@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { LoanToValueChart } from '@archie-webapps/archie-dashboard/components';
+import { LoanToValueChart, MakePaymentModal } from '@archie-webapps/archie-dashboard/components';
 import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
@@ -18,8 +18,6 @@ import {
   SubtitleS,
 } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
-
-import { MakePaymentModal } from '../../modals/make-payment/make-payment';
 
 export const AvailableCredit: FC = () => {
   const { t } = useTranslation();

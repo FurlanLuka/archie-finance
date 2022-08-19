@@ -7,5 +7,6 @@ export * from './lib/charts/next-payment/next-payment';
 export * from './lib/collateral-asset-select/collateral-asset-select';
 export * from './lib/error-screen/error-screen';
 export * from './lib/header/header';
+export * from './lib/modals/make-payment/make-payment';
 export * from './lib/navigation/navigation';
 export * from './lib/transactions-table/transactions-table';
