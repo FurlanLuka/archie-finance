@@ -246,9 +246,6 @@
       "title": "Setup payment method",
       "text": "Let's connect your bank account so you can make payments.",
       "btn_connect": "Connect with Plaid"
-    },
-    "schedule_payment": {
-      "label": "Select account to pay with"
     }
   },
   "dashboard_rewards": {

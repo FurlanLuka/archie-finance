@@ -39,5 +39,10 @@ export const ConnectAccount: FC<ConnectAccountProps> = ({ onAccountConnect }) =>
     return <PlaidLink onLinkSuccess={onLinkSuccess} />;
   };
 
-  return getContent();
+  // TODO
+  return (
+    // <Modal maxWidth="760px" isOpen close={close}>
+    getContent()
+    // </Modal>
+  );
 };

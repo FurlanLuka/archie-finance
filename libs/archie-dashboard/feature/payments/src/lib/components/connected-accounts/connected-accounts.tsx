@@ -51,6 +51,8 @@ export const ConnectedAccounts: FC = () => {
             {t('dashboard_payment.connected_accounts.btn_add')}
           </ButtonOutline>
         </Card>
+
+        {/* Probably rework this too while working on payment-flow.tsx */}
         {isAddAccountModalOpen && (
           <Modal maxWidth="760px" isOpen close={() => setIsAddAccountModalOpen(false)}>
             <ConnectAccount onAccountConnect={() => setIsAddAccountModalOpen(false)} />

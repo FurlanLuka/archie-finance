@@ -1,7 +1,15 @@
+const nxWebpack = require('@nrwl/react/plugins/webpack');
 const { merge } = require('webpack-merge');
 
 module.exports = (config, context) => {
-  return merge(config, {
+  const newConfig = nxWebpack(config, context);
+
+  newConfig.module.rules = newConfig.module.rules.filter((rule) => {
+    // remove svg rules, so we can add our own config
+    return !rule.test.toString().includes('.svg');
+  });
+
+  return merge(newConfig, {
     module: {
       rules: [
         {
