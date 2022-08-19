@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
+  Param,
   Post,
   Req,
   UseGuards,
@@ -43,7 +45,7 @@ import {
   AmountExceedsOutstandingBalanceError,
   BorrowerNotFoundError,
   PaymentInstrumentNotFoundError,
-} from './borrower.errors';
+} from '../borrower.errors';
 
 @Controller()
 export class PeachBorrowerQueueController {

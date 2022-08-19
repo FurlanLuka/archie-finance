@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
@@ -16,7 +16,6 @@ import {
   PeachTransactionType,
   Person,
   PersonStatus,
-  Obligation,
   ObligationsResponse,
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
@@ -426,5 +425,15 @@ export class PeachApiService {
 
       throw error;
     }
+  }
+
+  public async getPaymentInstruments(
+    personId: string,
+  ): Promise<PaymentInstrument[]> {
+    const response = await this.peachClient.get(
+      `/people/${personId}/payment-instruments`,
+    );
+
+    return response.data.data;
   }
 }

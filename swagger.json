@@ -1135,7 +1135,7 @@
             "description": ""
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR"
+            "description": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE"
           }
         },
         "security": [
@@ -1812,7 +1812,8 @@
             "nullable": true
           },
           "paymentInstrumentId": {
-            "type": "string"
+            "type": "string",
+            "pattern": {}
           }
         },
         "required": [

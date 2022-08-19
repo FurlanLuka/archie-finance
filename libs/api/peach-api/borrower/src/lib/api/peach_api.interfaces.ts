@@ -23,6 +23,9 @@ export interface Person extends PeachResponse {
 
 export interface PaymentInstrument extends PeachResponse {
   id: string;
+  nickname: string;
+  accountNumberLastFour: string;
+  accountType: string;
 }
 
 export interface HomeAddress extends PeachResponse {

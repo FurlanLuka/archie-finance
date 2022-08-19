@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
-import { PeachApiService } from './api/peach_api.service';
+import { PeachApiService } from '../api/peach_api.service';
 import {
   Credit,
   Draw,
@@ -9,11 +9,11 @@ import {
   ObligationsResponse,
   PaymentInstrument,
   Person,
-} from './api/peach_api.interfaces';
+} from '../api/peach_api.interfaces';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Borrower } from './borrower.entity';
+import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
@@ -31,7 +31,7 @@ import {
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import { ObligationsResponseDto, ScheduleTransactionDto } from './borrower.dto';
-import { BorrowerNotFoundError } from './borrower.errors';
+import { BorrowerNotFoundError } from '../borrower.errors';
 
 @Injectable()
 export class PeachBorrowerService {
