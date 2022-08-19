@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Request,
   Get,
   HttpCode,
   Param,
@@ -39,7 +40,7 @@ import {
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ObligationsResponseDto, ScheduleTransactionDto } from './borrower.dto';
+import { ConnectAccountDto, ObligationsResponseDto, ScheduleTransactionDto } from './borrower.dto';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import {
   AmountExceedsOutstandingBalanceError,
@@ -171,4 +172,26 @@ export class PeachBorrowerController {
   ): Promise<void> {
     return this.peachService.scheduleTransaction(request.user.sub, body);
   }
+
+  @Post('connected_accounts')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  public async connectAccount(
+    @Request() req,
+    @Body() body: ConnectAccountDto,
+  ): Promise<void> {
+    return this.peachService.connectAccount(req.user.sub, body);
+  }
+
+  /*
+  @Delete('connected_accounts/:id')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  public async removeAccount(
+    @Request() req,
+    @Param('id') id: string,
+  ): Promise<void> {
+    return this.plaidService.removeAccount(req.user.sub, id);
+  }
+  */
 }

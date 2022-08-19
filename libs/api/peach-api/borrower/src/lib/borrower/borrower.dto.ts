@@ -2,6 +2,7 @@ import {
   IsDateString,
   IsNumber,
   IsOptional,
+  IsString,
   Matches,
   Min,
 } from 'class-validator';
@@ -39,4 +40,12 @@ export class ScheduleTransactionDto {
 
   @Matches(PEACH_ID_REGEX)
   paymentInstrumentId: string;
+}
+
+export class ConnectAccountDto {
+  @IsString()
+  accountId: string;
+  
+  @IsString()
+  publicToken: string;
 }
