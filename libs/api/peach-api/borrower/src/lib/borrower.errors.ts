@@ -23,3 +23,9 @@ export class AmountExceedsAvailableBalanceError extends NotFoundException {
     super('AMOUNT_EXCEEDS_AVAILABLE_BALANCE');
   }
 }
+
+export class PaymentInstrumentNotFound extends NotFoundException {
+  constructor() {
+    super('PAYMENT_INSTRUMENT_NOT_FOUND');
+  }
+}

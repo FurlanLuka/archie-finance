@@ -18,13 +18,16 @@ import {
   PersonStatus,
   ObligationsResponse,
   PaymentInstrumentBalance,
+  Document,
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
 import {
   PaymentInstrumentNotFoundError,
   AmountExceedsOutstandingBalanceError,
+  PaymentInstrumentNotFound,
 } from '../borrower.errors';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class PeachApiService {
@@ -458,6 +461,22 @@ export class PeachApiService {
 
     return response.data.data;
   }
+  public async getPaymentInstrument(
+    personId: string,
+    paymentInstrumentId: string,
+  ): Promise<PaymentInstrument> {
+    try {
+      const response = await this.peachClient.get(
+        `/people/${personId}/payment-instruments/${paymentInstrumentId}`,
+      );
+
+      return response.data.data;
+    } catch (error) {
+      if (error.status === 404) {
+        throw new PaymentInstrumentNotFound();
+      }
+    }
+  }
 
   public async getCachedBalance(
     personId: string,
@@ -493,5 +512,44 @@ export class PeachApiService {
     );
 
     return response.data.data;
+  }
+
+  public async createAutopayAgreementDocument(
+    personId: string,
+    loanId: string,
+  ): Promise<Document> {
+    const response = await this.peachClient.post(
+      `/people/${personId}/documents`,
+      {
+        type: 'loanAutopayAgreement',
+        loanId,
+        status: 'draft',
+      },
+    );
+
+    return response.data;
+  }
+
+  public async getAutopayAgreementHtml(
+    personId: string,
+    loanId: string,
+    paymentMethodLastFour: string,
+  ): Promise<string> {
+    const response = await this.peachClient.post(`/communicator/render`, {
+      subject: 'autopayAgreement',
+      channel: 'gui',
+      personId,
+      loanId,
+      context: {
+        lenderName: 'Archie (Lender name - Change)',
+        paymentMethod: 'bankAccount',
+        paymentMethodLastFour: paymentMethodLastFour,
+        supportPhone: '888-888-8888 - Change',
+        supportEmail: 'support@peach.finance - Change',
+        dateSigned: DateTime.now().toLocaleString(DateTime.DATE_MED),
+      },
+    });
+
+    return response.data;
   }
 }

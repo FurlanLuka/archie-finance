@@ -37,6 +37,10 @@ export interface PaymentInstrumentBalance extends PeachResponse {
   };
 }
 
+export interface Document extends PeachResponse {
+  id: string;
+}
+
 export interface HomeAddress extends PeachResponse {
   id: string;
 }

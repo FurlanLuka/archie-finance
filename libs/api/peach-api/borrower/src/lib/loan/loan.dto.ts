@@ -2,10 +2,10 @@ import {
   IsDateString,
   IsNumber,
   IsOptional,
-  IsString,
+  IsPositive,
   Matches,
-  Min,
 } from 'class-validator';
+import { PEACH_ID_REGEX } from '../utils/validation';
 
 class Obligation {
   capitalizedAmount: number;
@@ -27,11 +27,9 @@ export class ObligationsResponseDto {
   obligations: Obligation[];
 }
 
-const PEACH_ID_REGEX = /^ext-|^[A-Z]{2}-[A-Z0-9]+-[A-Z0-9]+|^\d+$/;
-
 export class ScheduleTransactionDto {
   @IsNumber()
-  @Min(0.01)
+  @IsPositive()
   amount: number;
 
   @IsDateString()
