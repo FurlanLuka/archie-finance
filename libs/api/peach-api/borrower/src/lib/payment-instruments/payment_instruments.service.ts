@@ -8,7 +8,10 @@ import {
   PaymentInstrument,
   PaymentInstrumentBalance,
 } from '../api/peach_api.interfaces';
-import { PaymentInstrumentDto } from './payment_instruments.dto';
+import {
+  ConnectAccountDto,
+  PaymentInstrumentDto,
+} from './payment_instruments.dto';
 
 @Injectable()
 export class PeachPaymentInstrumentsService {
@@ -50,5 +53,20 @@ export class PeachPaymentInstrumentsService {
         };
       }),
     );
+  }
+
+  public async connectAccount(
+    userId: string,
+    accountInfo: ConnectAccountDto,
+  ): Promise<void> {
+    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+      userId,
+    });
+
+    await this.peachApiService.createPlaidPaymentInstrument({
+      publicToken: accountInfo.publicToken,
+      accountId: accountInfo.accountId,
+      personId: borrower.personId,
+    });
   }
 }

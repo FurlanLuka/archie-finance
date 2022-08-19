@@ -77,6 +77,27 @@ export class PeachApiService {
     return response.data.data[0];
   }
 
+  public async createPlaidPaymentInstrument({
+    publicToken,
+    accountId,
+    personId,
+  }: {
+    personId: string;
+    accountId: string;
+    publicToken: string;
+  }): Promise<PaymentInstrument> {
+    const response = await this.peachClient.post(
+      `/people/${personId}/payment-instruments`,
+      {
+        instrumentType: 'plaid',
+        accessToken: publicToken,
+        accountIds: [accountId],
+      },
+    );
+
+    return response.data.data[0];
+  }
+
   public async createPendingOneTimePaymentTransaction(
     borrower: Borrower,
     paymentInstrumentId: string,
