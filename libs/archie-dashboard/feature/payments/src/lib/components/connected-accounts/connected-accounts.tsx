@@ -23,7 +23,7 @@ export const ConnectedAccounts: FC = () => {
   const { t } = useTranslation();
   const getConnectedAccountsResponse = useGetConnectedAccounts();
 
-  const [isAddAccountOpen, setIsAddAccountOpen] = useState(false);
+  const [isAddAccountModalOpen, setIsAddAccountModalOpen] = useState(false);
 
   if (getConnectedAccountsResponse.state === RequestState.LOADING) {
     return (
@@ -55,13 +55,13 @@ export const ConnectedAccounts: FC = () => {
             {t('dashboard_payment.connected_accounts.title')}
           </ParagraphM>
           <div className="account-list">{getAccountsList()}</div>
-          <ButtonOutline small maxWidth="fit-content" onClick={() => setIsAddAccountOpen(true)}>
+          <ButtonOutline small maxWidth="fit-content" onClick={() => setIsAddAccountModalOpen(true)}>
             {t('dashboard_payment.connected_accounts.btn_add')}
           </ButtonOutline>
         </Card>
-        {isAddAccountOpen && ( // unclear
-          <Modal maxWidth="800px" isOpen close={() => setIsAddAccountOpen(false)}>
-            <ConnectAccount onAccountConnect={() => setIsAddAccountOpen(false)} />
+        {isAddAccountModalOpen && (
+          <Modal maxWidth="760px" isOpen close={() => setIsAddAccountModalOpen(false)}>
+            <ConnectAccount onAccountConnect={() => setIsAddAccountModalOpen(false)} />
           </Modal>
         )}
       </ConnectedAccountsStyled>

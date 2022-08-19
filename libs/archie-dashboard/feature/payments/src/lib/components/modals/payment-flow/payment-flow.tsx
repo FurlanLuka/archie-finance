@@ -32,11 +32,11 @@ export const PaymentFlowModal: FC<PaymentFlowModalProps> = ({ close }) => {
       return <SchedulePayment connectedAccounts={getConnectedAccountsResponse.data} />;
     }
 
-    return null;
+    return <></>;
   };
 
   return (
-    <Modal isOpen close={close} maxWidth="760px">
+    <Modal maxWidth="760px" isOpen close={close}>
       {getContent()}
     </Modal>
   );
