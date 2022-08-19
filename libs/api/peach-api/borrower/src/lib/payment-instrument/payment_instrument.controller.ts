@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
-import { PeachPaymentInstrumentsService } from './payment_instruments.service';
+import { PeachPaymentInstrumentsService } from './payment_instrument.service';
 import { BorrowerNotFoundError } from '../borrower.errors';
 import {
   ConnectAccountDto,
@@ -13,7 +13,7 @@ import {
 export class PeachPaymentInstrumentsController {
   constructor(private peachService: PeachPaymentInstrumentsService) {}
 
-  @Get('')
+  @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([BorrowerNotFoundError])

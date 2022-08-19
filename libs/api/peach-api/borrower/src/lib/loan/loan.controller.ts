@@ -16,7 +16,7 @@ import {
   SERVICE_QUEUE_NAME,
   TRANSACTION_UPDATED_TOPIC,
 } from '@archie/api/credit-api/constants';
-import { PeachBorrowerService } from './borrower.service';
+import { PeachBorrowerService } from './loan.service';
 import {
   EMAIL_VERIFIED_TOPIC,
   KYC_SUBMITTED_TOPIC,
@@ -37,7 +37,7 @@ import {
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ObligationsResponseDto, ScheduleTransactionDto } from './borrower.dto';
+import { ObligationsResponseDto, ScheduleTransactionDto } from './loan.dto';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import {
   AmountExceedsOutstandingBalanceError,
