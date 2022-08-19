@@ -17,6 +17,7 @@ import {
   Person,
   PersonStatus,
   ObligationsResponse,
+  PaymentInstrumentBalance,
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
@@ -433,6 +434,30 @@ export class PeachApiService {
     const response = await this.peachClient.get(
       `/people/${personId}/payment-instruments`,
     );
+
+    return response.data.data;
+  }
+
+  public async getCachedBalance(
+    personId: string,
+    paymentInstrumentId: string,
+  ): Promise<PaymentInstrumentBalance> {
+    let response;
+
+    try {
+      response = await this.peachClient.get(
+        `/people/${personId}/payment-instruments/${paymentInstrumentId}/balance`,
+      );
+    } catch (error) {
+      if (error.status === 404) {
+        response = await this.peachClient.post(
+          `/people/${personId}/payment-instruments/${paymentInstrumentId}/balance`,
+          {},
+        );
+      } else {
+        throw error;
+      }
+    }
 
     return response.data.data;
   }

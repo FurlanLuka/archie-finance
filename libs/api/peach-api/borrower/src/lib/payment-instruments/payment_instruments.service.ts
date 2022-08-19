@@ -4,7 +4,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Borrower } from '../borrower.entity';
 import { Repository } from 'typeorm';
 import { BorrowerNotFoundError } from '../borrower.errors';
-import { PaymentInstrument } from '../api/peach_api.interfaces';
+import {
+  PaymentInstrument,
+  PaymentInstrumentBalance,
+} from '../api/peach_api.interfaces';
 import { PaymentInstrumentDto } from './payment_instruments.dto';
 
 @Injectable()
@@ -26,15 +29,26 @@ export class PeachPaymentInstrumentsService {
     }
 
     const paymentInstruments: PaymentInstrument[] =
-      await this.peachApiService.getPaymentInstruments(userId);
+      await this.peachApiService.getPaymentInstruments(borrower.personId);
 
-    return paymentInstruments.map((paymentInstrument) => ({
-      id: paymentInstrument.id,
-      name: paymentInstrument.nickname,
-      mask: paymentInstrument.accountNumberLastFour,
-      subType: paymentInstrument.accountType,
-      availableBalance: 100,
-      currencyISO: 'USD',
-    }));
+    return Promise.all(
+      paymentInstruments.map(async (paymentInstrument: PaymentInstrument) => {
+        const balance: PaymentInstrumentBalance =
+          await this.peachApiService.getCachedBalance(
+            borrower.personId,
+            paymentInstrument.id,
+          );
+
+        return {
+          id: paymentInstrument.id,
+          name: paymentInstrument.nickname,
+          mask: paymentInstrument.accountNumberLastFour,
+          subType: paymentInstrument.accountType,
+          availableBalance:
+            balance.lastSuccessfulBalance.availableBalanceAmount,
+          currencyISO: balance.lastSuccessfulBalance.currency,
+        };
+      }),
+    );
   }
 }

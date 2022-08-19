@@ -148,3 +148,11 @@ spec:
                 name: archie-peach-api-service
                 port:
                   number: 80
+          ## Peach api service
+          - path: /v1/payment-instruments
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-peach-api-service
+                port:
+                  number: 80

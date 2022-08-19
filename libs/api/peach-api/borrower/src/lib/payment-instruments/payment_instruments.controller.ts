@@ -6,15 +6,15 @@ import { PeachPaymentInstrumentsService } from './payment_instruments.service';
 import { BorrowerNotFoundError } from '../borrower.errors';
 import { PaymentInstrumentDto } from './payment_instruments.dto';
 
-@Controller('v1/loans/payment_instruments')
+@Controller('v1/payment_instruments')
 export class PeachPaymentInstrumentsController {
   constructor(private peachService: PeachPaymentInstrumentsService) {}
 
-  @Get()
-  @UseGuards(AuthGuard)
+  @Get('')
+  // @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([BorrowerNotFoundError])
   async getCreditObligations(@Req() request): Promise<PaymentInstrumentDto[]> {
-    return this.peachService.listPaymentInstruments(request.user.sub);
+    return this.peachService.listPaymentInstruments('aaa');
   }
 }

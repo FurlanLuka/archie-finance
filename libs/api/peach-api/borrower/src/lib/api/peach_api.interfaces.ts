@@ -28,6 +28,14 @@ export interface PaymentInstrument extends PeachResponse {
   accountType: string;
 }
 
+export interface PaymentInstrumentBalance extends PeachResponse {
+  id: string;
+  lastSuccessfulBalance: {
+    availableBalanceAmount: number;
+    currency: string;
+  };
+}
+
 export interface HomeAddress extends PeachResponse {
   id: string;
 }

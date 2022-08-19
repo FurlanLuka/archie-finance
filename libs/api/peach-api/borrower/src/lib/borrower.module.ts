@@ -31,6 +31,6 @@ import { PeachPaymentInstrumentsController } from './payment-instruments/payment
     }),
   ],
   providers: [PeachBorrowerService, PeachPaymentInstrumentsService],
-  exports: [PeachBorrowerService],
+  exports: [PeachBorrowerService, PeachPaymentInstrumentsService],
 })
 export class PeachBorrowerModule {}
