@@ -83,4 +83,15 @@ export class PeachPaymentInstrumentsService {
       personId: borrower.personId,
     });
   }
+
+  public async removePaymentInstrument(
+    userId: string,
+    id: string,
+  ): Promise<void> {
+    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+      userId,
+    });
+
+    await this.peachApiService.deletePaymentInstrument(borrower.personId, id);
+  }
 }

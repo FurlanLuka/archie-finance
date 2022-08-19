@@ -98,6 +98,15 @@ export class PeachApiService {
     return response.data.data[0];
   }
 
+  public async deletePaymentInstrument(
+    personId: string,
+    paymentInstrumentId: string,
+  ): Promise<void> {
+    await this.peachClient.delete(
+      `/people/${personId}/payment-instruments/${paymentInstrumentId}`,
+    );
+  }
+
   public async createPendingOneTimePaymentTransaction(
     borrower: Borrower,
     paymentInstrumentId: string,
