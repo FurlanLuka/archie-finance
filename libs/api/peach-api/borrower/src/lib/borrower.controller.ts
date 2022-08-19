@@ -1,4 +1,12 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   CARD_ACTIVATED_TOPIC,
@@ -27,6 +35,15 @@ import {
   CreditLimitIncreasedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { AuthGuard } from '@archie/api/utils/auth0';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { ObligationsResponseDto, ScheduleTransactionDto } from './borrower.dto';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
+import {
+  AmountExceedsOutstandingBalanceError,
+  BorrowerNotFoundError,
+  PaymentInstrumentNotFoundError,
+} from './borrower.errors';
 
 @Controller()
 export class PeachBorrowerQueueController {
@@ -122,5 +139,34 @@ export class PeachBorrowerQueueController {
     payload: WebhookPaymentPayload,
   ): Promise<void> {
     await this.peachService.handlePaymentConfirmedEvent(payload);
+  }
+}
+
+@Controller('v1/loans')
+export class PeachBorrowerController {
+  constructor(private peachService: PeachBorrowerService) {}
+
+  @Get('obligations')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiErrorResponse([BorrowerNotFoundError])
+  async getCreditObligations(@Req() request): Promise<ObligationsResponseDto> {
+    return this.peachService.getObligations(request.user.sub);
+  }
+
+  @Post('scheduled_transactions')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(202)
+  @ApiErrorResponse([
+    BorrowerNotFoundError,
+    PaymentInstrumentNotFoundError,
+    AmountExceedsOutstandingBalanceError,
+  ])
+  async scheduleTransaction(
+    @Req() request,
+    @Body() body: ScheduleTransactionDto,
+  ): Promise<void> {
+    return this.peachService.scheduleTransaction(request.user.sub, body);
   }
 }
