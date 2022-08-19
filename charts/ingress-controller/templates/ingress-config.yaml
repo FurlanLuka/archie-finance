@@ -140,8 +140,8 @@ spec:
                 name: archie-referral-system-api-service
                 port:
                   number: 80
-          ## Peach service
-          - path: /v1/peach
+          ## Peach api service
+          - path: /v1/loans
             pathType: Prefix
             backend:
               service:

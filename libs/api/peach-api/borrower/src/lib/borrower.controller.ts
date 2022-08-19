@@ -3,8 +3,11 @@ import {
   Controller,
   Delete,
   Param,
-  Post,
   Request,
+  Get,
+  HttpCode,
+  Post,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
@@ -37,34 +40,13 @@ import {
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ConnectAccountBody } from './borrower.interfaces';
-
-@Controller('v1/peach')
-export class PeachController {
-  constructor(private peachService: PeachBorrowerService) {}
-
-  @Post('connected_accounts')
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  public async connectAccount(
-    @Request() req,
-    @Body() body: ConnectAccountBody,
-  ): Promise<void> {
-    return this.peachService.connectAccount(req.user.sub, body);
-  }
-
-  /*
-  @Delete('connected_accounts/:id')
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  public async removeAccount(
-    @Request() req,
-    @Param('id') id: string,
-  ): Promise<void> {
-    return this.plaidService.removeAccount(req.user.sub, id);
-  }
-  */
-}
+import { ConnectAccountDto, ObligationsResponseDto, ScheduleTransactionDto } from './borrower.dto';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
+import {
+  AmountExceedsOutstandingBalanceError,
+  BorrowerNotFoundError,
+  PaymentInstrumentNotFoundError,
+} from './borrower.errors';
 
 @Controller()
 export class PeachBorrowerQueueController {
@@ -161,4 +143,55 @@ export class PeachBorrowerQueueController {
   ): Promise<void> {
     await this.peachService.handlePaymentConfirmedEvent(payload);
   }
+}
+
+@Controller('v1/loans')
+export class PeachBorrowerController {
+  constructor(private peachService: PeachBorrowerService) {}
+
+  @Get('obligations')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiErrorResponse([BorrowerNotFoundError])
+  async getCreditObligations(@Req() request): Promise<ObligationsResponseDto> {
+    return this.peachService.getObligations(request.user.sub);
+  }
+
+  @Post('scheduled_transactions')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(202)
+  @ApiErrorResponse([
+    BorrowerNotFoundError,
+    PaymentInstrumentNotFoundError,
+    AmountExceedsOutstandingBalanceError,
+  ])
+  async scheduleTransaction(
+    @Req() request,
+    @Body() body: ScheduleTransactionDto,
+  ): Promise<void> {
+    return this.peachService.scheduleTransaction(request.user.sub, body);
+  }
+
+  @Post('connected_accounts')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  public async connectAccount(
+    @Request() req,
+    @Body() body: ConnectAccountDto,
+  ): Promise<void> {
+    return this.peachService.connectAccount(req.user.sub, body);
+  }
+
+  /*
+  @Delete('connected_accounts/:id')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  public async removeAccount(
+    @Request() req,
+    @Param('id') id: string,
+  ): Promise<void> {
+    return this.plaidService.removeAccount(req.user.sub, id);
+  }
+  */
 }
