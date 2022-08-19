@@ -30,8 +30,11 @@ import {
 } from '@archie/api/credit-api/data-transfer-objects';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { ConnectAccountBody } from './borrower.interfaces';
-import { ConnectAccountDto, ObligationsResponseDto, ScheduleTransactionDto } from './borrower.dto';
+import {
+  ConnectAccountDto,
+  ObligationsResponseDto,
+  ScheduleTransactionDto,
+} from './borrower.dto';
 import { BorrowerNotFoundError } from './borrower.errors';
 
 @Injectable()
