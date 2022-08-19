@@ -14,11 +14,11 @@ export class PeachPaymentInstrumentsController {
   constructor(private peachService: PeachPaymentInstrumentsService) {}
 
   @Get('')
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([BorrowerNotFoundError])
   async getCreditObligations(@Req() request): Promise<PaymentInstrumentDto[]> {
-    return this.peachService.listPaymentInstruments('aaa');
+    return this.peachService.listPaymentInstruments(request.user.sub);
   }
 
   @Post()
