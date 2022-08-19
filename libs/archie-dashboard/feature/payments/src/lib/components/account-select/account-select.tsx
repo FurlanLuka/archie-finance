@@ -9,7 +9,7 @@ import { useGetLinkableAccounts } from '@archie-webapps/shared/data-access/archi
 import {
   ButtonPrimary,
   Loader,
-  ParagraphS,
+  ParagraphM,
   ParagraphXS,
   Select,
   SelectOption,
@@ -79,10 +79,14 @@ export const AccountSelect: FC<AccountSelectProps> = ({ itemId, onConnect }) => 
     if (getLinkableAccountsResponse.state === RequestState.SUCCESS) {
       return (
         <>
-          <ParagraphS weight={700}>{t('dashboard_payment.account_select.label')}</ParagraphS>
-          <Select id="accounts" header={header} onChange={(account: AccountResponse) => setSelectedAccount(account)}>
-            {options}
-          </Select>
+          <ParagraphM weight={800} className="modal-title">
+            {t('dashboard_payment.account_select.label')}
+          </ParagraphM>
+          <div className="modal-select">
+            <Select id="accounts" header={header} onChange={(account: AccountResponse) => setSelectedAccount(account)}>
+              {options}
+            </Select>
+          </div>
           <ButtonPrimary
             onClick={handleConfirmClick}
             maxWidth="fit-content"

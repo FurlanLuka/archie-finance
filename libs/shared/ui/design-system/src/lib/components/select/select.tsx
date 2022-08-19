@@ -2,8 +2,7 @@ import { ReactElement, useState } from 'react';
 
 import { Icon } from '@archie-webapps/shared/ui/icons';
 
-import { SelectOptionProps } from '../select-option/select-option';
-
+import { SelectOptionProps } from './select-option';
 import { SelectStyled } from './select.styled';
 
 interface SelectProps<T> {

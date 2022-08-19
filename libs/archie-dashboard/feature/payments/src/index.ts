@@ -1,1 +1,1 @@
-export * from './lib/screens/payment/payment';
+export * from './lib/screens/payment';

@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { AvailableCredit, NextPayment, InterestRate } from '@archie-webapps/archie-dashboard/components';
 import { ButtonPrimary, InputRadio, SubtitleS, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectedAccounts } from '../../components/connected-accounts/connected-accounts';
-import { PaymentFlowModal } from '../../components/modals/payment-flow/payment-flow';
+import { ConnectedAccounts } from '../components/connected-accounts/connected-accounts';
+import { PaymentFlowModal } from '../components/modals/payment-flow/payment-flow';
 
 import { PaymentScreenStyled } from './payment.styled';
 

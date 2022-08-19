@@ -43,8 +43,10 @@ export const PlaidLink: FC<PlaidLinkProps> = ({ onAccessTokenCreate }) => {
 
   return (
     <PlaidLinkStyled>
-      <ParagraphM weight={800}>{t('dashboard_payment.plaid_connect.title')}</ParagraphM>
-      <ParagraphXS className="text">{t('dashboard_payment.plaid_connect.text')}</ParagraphXS>
+      <ParagraphM weight={800} className="modal-title">
+        {t('dashboard_payment.plaid_connect.title')}
+      </ParagraphM>
+      <ParagraphXS className="modal-text">{t('dashboard_payment.plaid_connect.text')}</ParagraphXS>
       {getContent()}
     </PlaidLinkStyled>
   );

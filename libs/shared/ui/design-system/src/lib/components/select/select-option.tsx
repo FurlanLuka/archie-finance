@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 
-import { SelectOptionStyled } from './select-option.styled';
+import { SelectOptionStyled } from './select.styled';
 
 export type SelectOptionProps<T> = PropsWithChildren<{
   className?: string;

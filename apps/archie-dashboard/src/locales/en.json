@@ -238,7 +238,7 @@
     },
     "account_select": {
       "label": "Your accounts",
-      "empty": "Select account to connect",
+      "empty": "Select an account to connect",
       "btn_connect": "Connect to Archie",
       "balance_subtext": "Funds available"
     },

@@ -4,15 +4,7 @@ import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
-import {
-  ButtonPrimary,
-  Card,
-  Skeleton,
-  Modal,
-  ParagraphM,
-  ParagraphXS,
-  ButtonOutline,
-} from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton, Modal, ParagraphM, ParagraphXS, ButtonOutline } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectAccount } from '../connect-account/connect-acount';
 

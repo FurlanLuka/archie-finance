@@ -5,7 +5,11 @@ export const PlaidLinkStyled = styled.div`
   flex-direction: column;
   align-items: flex-start;
 
-  .text {
-    margin: 1rem 0 2rem;
+  .modal-title {
+    margin-bottom: 1rem;
+  }
+
+  .modal-text {
+    margin-bottom: 2rem;
   }
 `;
