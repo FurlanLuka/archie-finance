@@ -7,9 +7,9 @@ import { SelectStyled } from './select.styled';
 
 interface SelectProps<T> {
   id: string;
+  header: ReactElement;
   onChange: (value: T) => void;
   children: ReactElement<SelectOptionProps<T>>[];
-  header: ReactElement;
 }
 
 export function Select<T>({ id, header, onChange, children }: SelectProps<T>) {
