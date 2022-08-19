@@ -1,13 +1,13 @@
 import { FC, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
+import { RevealCardModal } from '@archie-webapps/archie-dashboard/components';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { CardsImage } from '@archie-webapps/shared/data-access/archie-api/rize/api/get-cards-image';
 import { useGetCardsImage } from '@archie-webapps/shared/data-access/archie-api/rize/hooks/use-cards-image';
 import { Card, Skeleton } from '@archie-webapps/shared/ui/design-system';
 
 import imgCard from '../../assets/card-placeholder.png';
-import { RevealCardModal } from '../modals/reveal-card/reveal-card';
 
 import { ArchieCardStyled } from './archie-card.styled';
 
