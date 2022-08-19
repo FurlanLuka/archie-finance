@@ -42,7 +42,7 @@ ReactDOM.render(
                   }
                 />
                 <Route
-                  path="/onboarding"
+                  path="/onboarding/*"
                   element={
                     <ProtectedRoute>
                       <OnboardingRoute />

@@ -10,7 +10,7 @@ import { InputRange, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/de
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollaterizationFormStyled } from './collaterization-form.styled';
-import { DepositAddress } from './blocks/deposit-address/deposit-address';
+import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 
 interface CollateralizationFormProps {
   assetInfo: CollateralAsset;
