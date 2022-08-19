@@ -30,13 +30,18 @@ export const ConnectAccount: FC<ConnectAccountProps> = ({ onAccountConnect }) =>
     onAccountConnect?.();
   };
 
-  function getContent() {
+  const getContent = () => {
     if (itemId) {
       return <AccountSelect itemId={itemId} onConnect={onConnect} />;
     }
 
     return <PlaidLink onAccessTokenCreate={onAccessTokenCreate} />;
-  }
+  };
 
-  return getContent();
+  // TODO
+  return (
+    // <Modal maxWidth="760px" isOpen close={close}>
+    getContent()
+    // </Modal>
+  );
 };

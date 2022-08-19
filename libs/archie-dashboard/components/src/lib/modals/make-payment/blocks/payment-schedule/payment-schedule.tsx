@@ -61,14 +61,12 @@ export const PaymentScheduleModal: FC<PaymentScheduleModalProps> = ({ onConfirm 
           </button>
         )}
       </ParagraphXS>
-      <ParagraphXXS weight={700}>
-        <InputRadio small>
-          <input type="radio" value="auto_payments" checked disabled />
-          <ParagraphXXS>
-            {t('dashboard_home.payment_schedule_modal.auto_payments')} {t('off')} {/* I guess temp */}
-          </ParagraphXXS>
-        </InputRadio>
-      </ParagraphXXS>
+      <InputRadio small>
+        <input type="radio" value="auto_payments" checked disabled />
+        <ParagraphXXS>
+          {t('dashboard_home.payment_schedule_modal.auto_payments')} {t('off')} {/* I guess temp */}
+        </ParagraphXXS>
+      </InputRadio>
       <div className="divider" />
       <ParagraphXS weight={800} className="subtitle">
         {t('dashboard_home.payment_schedule_modal.payment_options')}
