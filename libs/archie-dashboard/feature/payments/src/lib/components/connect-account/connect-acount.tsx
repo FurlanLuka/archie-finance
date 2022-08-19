@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 
 import { AccountSelect } from '../account-select/account-select';
+import { ConnectableAccount } from '../interfaces';
 import { PlaidLink } from '../plaid-link/plaid-link';
 
 const LAST_ITEM_LS = 'last_itemId';
@@ -10,6 +11,7 @@ interface ConnectAccountProps {
 }
 
 export const ConnectAccount: FC<ConnectAccountProps> = ({ onAccountConnect }) => {
+  const [availableAccounts, setAvailableAccounts] = useState();
   const [itemId, setItemId] = useState<string | null>(() => {
     const lsItem = localStorage.getItem(LAST_ITEM_LS);
 
@@ -20,8 +22,7 @@ export const ConnectAccount: FC<ConnectAccountProps> = ({ onAccountConnect }) =>
     return null;
   });
 
-  const onAccessTokenCreate = (itemId: string) => {
-    localStorage.setItem(LAST_ITEM_LS, itemId);
+  const onLinkSuccess = (publicToken: string, availableAccounts: ConnectableAccount[]) => {
     setItemId(itemId);
   };
 
@@ -35,7 +36,7 @@ export const ConnectAccount: FC<ConnectAccountProps> = ({ onAccountConnect }) =>
       return <AccountSelect itemId={itemId} onConnect={onConnect} />;
     }
 
-    return <PlaidLink onAccessTokenCreate={onAccessTokenCreate} />;
+    return <PlaidLink onLinkSuccess={onLinkSuccess} />;
   };
 
   return getContent();

@@ -6,16 +6,18 @@ import { RequestState } from '@archie-webapps/shared/data-access/archie-api/inte
 import { useCreateLinkToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
 import { ParagraphM, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 
+import { ConnectableAccount } from '../interfaces';
+
 import { PlaidConnect } from './blocks/plaid-connect/plaid-connect';
 import { PlaidConnectLoading } from './blocks/plaid-connect/plaid-connect.loading';
 import { PlaidLinkStyled } from './plaid-link.styled';
 
 // TODO 2 layer prop passing isn't optimal, rework if the flow becomes more complex
 interface PlaidLinkProps {
-  onAccessTokenCreate: (itemId: string) => void;
+  onLinkSuccess?: (publicToken: string, availableAccounts: ConnectableAccount[]) => void;
 }
 
-export const PlaidLink: FC<PlaidLinkProps> = ({ onAccessTokenCreate }) => {
+export const PlaidLink: FC<PlaidLinkProps> = ({ onLinkSuccess }) => {
   const { t } = useTranslation();
   const createLinkTokenMutation = useCreateLinkToken();
 
@@ -35,7 +37,7 @@ export const PlaidLink: FC<PlaidLinkProps> = ({ onAccessTokenCreate }) => {
     }
 
     if (createLinkTokenMutation.state === RequestState.SUCCESS) {
-      return <PlaidConnect onAccessTokenCreate={onAccessTokenCreate} linkToken={createLinkTokenMutation.data.token} />;
+      return <PlaidConnect onLinkSuccess={onLinkSuccess} linkToken={createLinkTokenMutation.data.token} />;
     }
 
     return <></>;
