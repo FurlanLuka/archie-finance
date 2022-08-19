@@ -28,6 +28,7 @@ import {
 } from '@archie/api/credit-api/data-transfer-objects';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { ConnectAccountBody } from './borrower.interfaces';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -99,6 +100,21 @@ export class PeachBorrowerService {
     );
 
     await this.createActiveDraw(borrower, creditLineId);
+  }
+
+  public async connectAccount(
+    userId: string,
+    accountInfo: ConnectAccountBody,
+  ): Promise<void> {
+    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+      userId,
+    });
+
+    await this.peachApiService.createPlaidPaymentInstrument({
+      publicToken: accountInfo.publicToken,
+      accountId: accountInfo.accountId,
+      personId: borrower.personId,
+    });
   }
 
   private async createActiveCreditLine(

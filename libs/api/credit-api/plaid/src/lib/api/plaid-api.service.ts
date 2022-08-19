@@ -9,7 +9,6 @@ import {
   PlaidEnvironments,
   Products,
   LinkTokenCreateRequest,
-  AccountBase,
 } from 'plaid';
 
 const PLAID_PRODUCTS: Products[] = [Products.Auth];
@@ -52,31 +51,5 @@ export class PlaidApiService {
     const createTokenResponse = await this.plaidClient.linkTokenCreate(configs);
 
     return createTokenResponse.data;
-  }
-
-  public async exchangePublicToken(publicToken: string): Promise<{
-    accessToken: string;
-    itemId: string;
-  }> {
-    const accessTokenData = await this.plaidClient.itemPublicTokenExchange({
-      public_token: publicToken,
-    });
-
-    return {
-      accessToken: accessTokenData.data.access_token,
-      itemId: accessTokenData.data.item_id,
-    };
-  }
-
-  public async getAccountsForItem(accessToken: string): Promise<AccountBase[]> {
-    const accountsData = await this.plaidClient.accountsGet({
-      access_token: accessToken,
-    });
-
-    return accountsData.data.accounts;
-  }
-
-  public async unlinkAccount(accessToken: string): Promise<void> {
-    await this.plaidClient.itemRemove({ access_token: accessToken });
   }
 }

@@ -1,4 +1,12 @@
-import { Controller } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Param,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   CARD_ACTIVATED_TOPIC,
@@ -27,6 +35,36 @@ import {
   CreditLimitIncreasedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { AuthGuard } from '@archie/api/utils/auth0';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { ConnectAccountBody } from './borrower.interfaces';
+
+@Controller('v1/peach')
+export class PeachController {
+  constructor(private peachService: PeachBorrowerService) {}
+
+  @Post('connected_accounts')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  public async connectAccount(
+    @Request() req,
+    @Body() body: ConnectAccountBody,
+  ): Promise<void> {
+    return this.peachService.connectAccount(req.user.sub, body);
+  }
+
+  /*
+  @Delete('connected_accounts/:id')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  public async removeAccount(
+    @Request() req,
+    @Param('id') id: string,
+  ): Promise<void> {
+    return this.plaidService.removeAccount(req.user.sub, id);
+  }
+  */
+}
 
 @Controller()
 export class PeachBorrowerQueueController {
