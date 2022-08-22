@@ -208,7 +208,7 @@ export class RizeService {
     const image: string = await this.rizeApiService.getVirtualCardImage(
       debitCardAccessToken,
     );
-    debitCard.status;
+
     return {
       image,
       status:
