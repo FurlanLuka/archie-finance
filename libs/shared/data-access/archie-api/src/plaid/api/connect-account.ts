@@ -2,15 +2,15 @@ import { API_URL } from '../../constants';
 import { DefaultVariables, postRequest } from '../../helpers';
 
 export interface ConnectAccountBody extends DefaultVariables {
-  itemId: string;
+  publicToken: string;
   accountId: string;
 }
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const connectAccount = async ({ accessToken, ...body }: DefaultVariables): Promise<void> => {
+export const connectAccount = async ({ accessToken, ...body }: ConnectAccountBody): Promise<void> => {
   return postRequest(
-    `${API_URL}/v1/plaid/connected_accounts`,
+    `${API_URL}/v1/payment_instruments`,
     body,
     {
       headers: {

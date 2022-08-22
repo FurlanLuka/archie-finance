@@ -4,16 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/interfaces';
 import { ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 
-import { AccountItemStyled } from './account-item.styled';
+import { ConnectedAccountItemStyled } from './connected-account-item.styled';
 
-interface AccountItemProps {
+interface ConnectedAccountItemProps {
   account: AccountResponse;
 }
-export const AccountItem: FC<AccountItemProps> = ({ account }) => {
+export const ConnectedAccountItem: FC<ConnectedAccountItemProps> = ({ account }) => {
   const { t } = useTranslation();
 
   return (
-    <AccountItemStyled>
+    <ConnectedAccountItemStyled>
       <div className="circle" />
       <div className="account-info">
         <ParagraphXS weight={700}>{account.name}</ParagraphXS>
@@ -26,6 +26,6 @@ export const AccountItem: FC<AccountItemProps> = ({ account }) => {
         <ParagraphXS weight={700}>${account.availableBalance}</ParagraphXS>
         <ParagraphXS className="subtitle">{t('dashboard_payment.account_select.balance_subtext')}</ParagraphXS>
       </div>
-    </AccountItemStyled>
+    </ConnectedAccountItemStyled>
   );
 };

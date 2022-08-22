@@ -2,8 +2,6 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlaidAccount, PlaidLinkOnSuccessMetadata, usePlaidLink } from 'react-plaid-link';
 
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useCreateAccessToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-create-access-token';
 import { ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
 
 import plaidLogo from '../../../../../assets/plaid_logo.png';
@@ -29,7 +27,6 @@ interface PlaidConnectProps {
 
 export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken, onLinkSuccess }) => {
   const { t } = useTranslation();
-  const createAccessTokenMutation = useCreateAccessToken();
 
   const onSuccess = (publicToken: string, metadata: PlaidLinkOnSuccessMetadata) => {
     onLinkSuccess(publicToken, transformAccounts(metadata.accounts));
@@ -45,8 +42,6 @@ export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken, onLinkSuccess }
   return (
     <PlaidConnectStyled>
       <ButtonPrimary
-        isLoading={createAccessTokenMutation.state === RequestState.LOADING}
-        disabled={createAccessTokenMutation.state === RequestState.LOADING}
         onClick={() => {
           open();
         }}

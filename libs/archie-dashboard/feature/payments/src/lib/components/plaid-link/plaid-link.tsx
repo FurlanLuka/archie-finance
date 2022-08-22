@@ -14,7 +14,7 @@ import { PlaidLinkStyled } from './plaid-link.styled';
 
 // TODO 2 layer prop passing isn't optimal, rework if the flow becomes more complex
 interface PlaidLinkProps {
-  onLinkSuccess?: (publicToken: string, availableAccounts: ConnectableAccount[]) => void;
+  onLinkSuccess: (publicToken: string, availableAccounts: ConnectableAccount[]) => void;
 }
 
 export const PlaidLink: FC<PlaidLinkProps> = ({ onLinkSuccess }) => {

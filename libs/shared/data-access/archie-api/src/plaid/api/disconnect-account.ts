@@ -5,7 +5,7 @@ export const ERROR_LIST = new Map<string, string>([]);
 
 export const disconnectAccount = async (accessToken: string, accountId: string): Promise<void> => {
   return deleteRequest<void>(
-    `${API_URL}/v1/plaid/connected_accounts/${accountId}`,
+    `${API_URL}/v1/payment_instruments/${accountId}`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
