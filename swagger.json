@@ -1009,7 +1009,7 @@
             "description": ""
           },
           "404": {
-            "description": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE"
+            "description": "AMOUNT_EXCEEDS_AVAILABLE_BALANCE"
           }
         },
         "security": [
@@ -1063,6 +1063,112 @@
         "responses": {
           "201": {
             "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/loans/autopay": {
+      "post": {
+        "operationId": "AutopayController_setupAutopay",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAutopayDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "PAYMENT_INSTRUMENT_NOT_FOUND"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "AutopayController_cancelAutopay",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "AUTOPAY_NOT_CONFIGURED"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "AutopayController_getAutopayConfig",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutopayDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "PAYMENT_INSTRUMENT_NOT_FOUND"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/loans/autopay/documents": {
+      "post": {
+        "operationId": "AutopayDocumentsController_createAutopayAgreement",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAutopayDocumentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutopayAgreementDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "PAYMENT_INSTRUMENT_NOT_FOUND"
           }
         },
         "security": [
@@ -1732,7 +1838,7 @@
         "properties": {
           "amount": {
             "type": "number",
-            "minimum": 0.01
+            "minimum": 1
           },
           "scheduledDate": {
             "type": "string",
@@ -1792,6 +1898,157 @@
         "required": [
           "accountId",
           "publicToken"
+        ]
+      },
+      "CreateAutopayDto": {
+        "type": "object",
+        "properties": {
+          "amountType": {
+            "type": "string",
+            "enum": [
+              "statementMinimumAmount",
+              "statementMinimumAmountPlusExtra",
+              "statementBalanceAmount"
+            ]
+          },
+          "extraAmount": {
+            "type": "number",
+            "nullable": true,
+            "minimum": 1
+          },
+          "paymentInstrumentId": {
+            "type": "string",
+            "pattern": {}
+          },
+          "isAlignedToDueDates": {
+            "type": "boolean"
+          },
+          "offsetFromDueDate": {
+            "nullable": true,
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "agreementDocumentId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "amountType",
+          "paymentInstrumentId",
+          "isAlignedToDueDates",
+          "agreementDocumentId"
+        ]
+      },
+      "AutopaySchedule": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "paymentType": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          },
+          "originalAmount": {
+            "type": "number"
+          },
+          "principalAmount": {
+            "type": "number"
+          },
+          "interestAmount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "date",
+          "paymentType",
+          "status",
+          "amount",
+          "originalAmount",
+          "principalAmount",
+          "interestAmount"
+        ]
+      },
+      "AutopayDto": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "statementMinimumAmount",
+              "statementMinimumAmountPlusExtra",
+              "statementBalanceAmount"
+            ]
+          },
+          "extraAmount": {
+            "type": "number"
+          },
+          "isAlignedToDueDates": {
+            "type": "boolean"
+          },
+          "paymentFrequency": {
+            "type": "string",
+            "enum": [
+              "twiceMonthly",
+              "everyTwoWeeks",
+              "monthly"
+            ]
+          },
+          "paymentInstrumentId": {
+            "type": "string"
+          },
+          "cancelReason": {
+            "type": "string"
+          },
+          "schedule": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AutopaySchedule"
+            }
+          }
+        },
+        "required": [
+          "type",
+          "extraAmount",
+          "isAlignedToDueDates",
+          "paymentFrequency",
+          "paymentInstrumentId",
+          "cancelReason",
+          "schedule"
+        ]
+      },
+      "CreateAutopayDocumentDto": {
+        "type": "object",
+        "properties": {
+          "paymentInstrumentId": {
+            "type": "string",
+            "pattern": {}
+          }
+        },
+        "required": [
+          "paymentInstrumentId"
+        ]
+      },
+      "AutopayAgreementDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "document": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "document"
         ]
       }
     },

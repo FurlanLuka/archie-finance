@@ -1,15 +1,4 @@
 import { AxiosRequestConfig } from 'axios';
-import {
-  IsBoolean,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsString,
-  Matches,
-} from 'class-validator';
-import { PEACH_ID_REGEX } from '../utils/validation';
-import { AmountType } from '../autopay/autopay.dto';
 
 export enum PersonStatus {
   active = 'active',
@@ -132,6 +121,12 @@ export enum PeachTransactionStatus {
   failed = 'canceled',
 }
 
+export enum AmountType {
+  statementMinimumAmount = 'statementMinimumAmount',
+  statementMinimumAmountPlusExtra = 'statementMinimumAmountPlusExtra',
+  statementBalanceAmount = 'statementBalanceAmount',
+}
+
 export interface AutopayOptions {
   amountType: AmountType;
   extraAmount?: number | null;
@@ -141,6 +136,40 @@ export interface AutopayOptions {
   agreementDocumentId: string;
 }
 
+export enum PaymentFrequency {
+  twiceMonthly = 'twiceMonthly',
+  everyTwoWeeks = 'everyTwoWeeks',
+  monthly = 'monthly',
+}
+
+export enum AutopayScheduleStatus {
+  booked = 'booked',
+  modified = 'modified',
+  canceled = 'canceled',
+  processed = 'processed',
+}
+
 export interface Autopay extends PeachResponse {
   agreementDocumentId: string;
+  type: AmountType;
+  extraAmount: number;
+  isAlignedToDueDates: boolean;
+  paymentFrequency: PaymentFrequency;
+  specificDays: number[];
+  paymentInstrumentId: string;
+  cancelReason: string;
+  schedule: AutopaySchedule[];
+}
+
+export interface AutopaySchedule {
+  date: string;
+  periodId: string;
+  paymentType: string;
+  status: string;
+  amount: number;
+  originalAmount: number;
+  principalAmount: number;
+  interestAmount: number;
+  interestBeforeDiscountAmount: number;
+  isDeferred: boolean;
 }

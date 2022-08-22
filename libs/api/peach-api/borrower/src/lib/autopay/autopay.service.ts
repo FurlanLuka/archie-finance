@@ -5,12 +5,16 @@ import { Repository } from 'typeorm';
 import { BorrowerNotFoundError } from '../borrower.errors';
 import {
   AutopayAgreementDto,
+  AutopayDto,
   CreateAutopayDocumentDto,
   CreateAutopayDto,
 } from './autopay.dto';
 import {
+  AmountType,
   Autopay,
+  AutopaySchedule,
   Document,
+  PaymentFrequency,
   PaymentInstrument,
 } from '../api/peach_api.interfaces';
 
@@ -56,7 +60,7 @@ export class AutopayService {
     );
   }
 
-  public async deactivateAutopay(userId: string): Promise<void> {
+  public async cancelAutopay(userId: string): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
@@ -78,7 +82,37 @@ export class AutopayService {
     );
   }
 
-  public async getConfiguredAutopay(userId: string) {}
+  public async getConfiguredAutopay(userId: string): Promise<AutopayDto> {
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
+      userId,
+    });
+    if (borrower === null) {
+      throw new BorrowerNotFoundError();
+    }
+
+    const autopay: Autopay = await this.peachApiService.getAutopay(
+      borrower.personId,
+      borrower.creditLineId,
+    );
+
+    return {
+      type: autopay.type,
+      extraAmount: autopay.extraAmount,
+      isAlignedToDueDates: autopay.isAlignedToDueDates,
+      paymentFrequency: autopay.paymentFrequency,
+      paymentInstrumentId: autopay.paymentInstrumentId,
+      cancelReason: autopay.cancelReason,
+      schedule: autopay.schedule.map((autopaySchedule) => ({
+        date: autopaySchedule.date,
+        paymentType: autopaySchedule.paymentType,
+        status: autopaySchedule.status,
+        amount: autopaySchedule.amount,
+        originalAmount: autopaySchedule.originalAmount,
+        principalAmount: autopaySchedule.principalAmount,
+        interestAmount: autopaySchedule.interestAmount,
+      })),
+    };
+  }
 
   public async createAutopayAgreement(
     userId: string,

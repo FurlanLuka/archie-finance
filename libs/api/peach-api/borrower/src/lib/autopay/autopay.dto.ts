@@ -8,13 +8,12 @@ import {
   Matches,
 } from 'class-validator';
 import { PEACH_ID_REGEX } from '../utils/validation';
-import { AutopayOptions } from '../api/peach_api.interfaces';
-
-export enum AmountType {
-  statementMinimumAmount = 'statementMinimumAmount',
-  statementMinimumAmountPlusExtra = 'statementMinimumAmountPlusExtra',
-  statementBalanceAmount = 'statementBalanceAmount',
-}
+import {
+  AmountType,
+  AutopayOptions,
+  PaymentFrequency,
+  PeachResponse,
+} from '../api/peach_api.interfaces';
 
 export class CreateAutopayDto implements AutopayOptions {
   @IsEnum(AmountType)
@@ -47,4 +46,24 @@ export class CreateAutopayDocumentDto {
 export class AutopayAgreementDto {
   id: string;
   document: string;
+}
+
+export class AutopayDto {
+  type: AmountType;
+  extraAmount: number;
+  isAlignedToDueDates: boolean;
+  paymentFrequency: PaymentFrequency;
+  paymentInstrumentId: string;
+  cancelReason: string;
+  schedule: AutopaySchedule[];
+}
+
+export class AutopaySchedule {
+  date: string;
+  paymentType: string;
+  status: string;
+  amount: number;
+  originalAmount: number;
+  principalAmount: number;
+  interestAmount: number;
 }
