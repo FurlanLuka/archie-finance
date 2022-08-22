@@ -42,7 +42,10 @@ export const ArchieCardStyled = styled.div`
 
   .card-status {
     position: absolute;
-    bottom: 1.25rem;
+    /* Temp, just for Rize */
+    top: 36px;
+    /* Temp, just for Rize, it should take bottom instead */
+    /* bottom: 1.25rem; */
     left: 0;
     transform: translateY(-10%);
     letter-spacing: 0.02em;
@@ -51,6 +54,15 @@ export const ArchieCardStyled = styled.div`
     border-top-right-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
     padding: 0.5rem 1.5rem;
+
+    /* Temp, just for Rize */
+    @media (max-width: ${breakpoints.screenSM}) {
+      top: 28px;
+    }  
+
+    p {
+      color: ${({ theme }) => theme.textLight};
+    }
   }
 
   /* Temp, just for Rize */

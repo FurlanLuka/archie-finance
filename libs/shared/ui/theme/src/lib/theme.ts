@@ -92,7 +92,6 @@ export interface Theme {
   tableBorderInner: string;
   // chars
   loanToValueDefault: string;
-  loanToValueActive: string;
   nextPaymentDefault: string;
   nextPaymentActive: string;
   collateralValue: string;
@@ -122,7 +121,7 @@ export const theme: Theme = {
   textDisabled: colors.neutralgray_200,
   textSuccess: colors.green_500,
   textWarning: colors.orange_500,
-  textDanger: colors.red_600,
+  textDanger: colors.red_500,
   // button
   buttonPrimary: colors.coral_500,
   buttonOutline: colors.transparent,
@@ -155,7 +154,6 @@ export const theme: Theme = {
   tableBorderInner: colors.neutralgray_200,
   // chars
   loanToValueDefault: colors.teal_200,
-  loanToValueActive: colors.green_500,
   nextPaymentDefault: colors.neutralgray_200,
   nextPaymentActive: colors.teal_500,
   collateralValue: colors.green_500,
