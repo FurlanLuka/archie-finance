@@ -429,13 +429,20 @@
         ]
       }
     },
-    "/v1/rize/users/cards/image": {
+    "/v1/rize/users/cards/credit": {
       "get": {
         "operationId": "RizeController_getVirtualCard",
         "parameters": [],
         "responses": {
           "200": {
-            "description": "Debit card image"
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CardResponseDto"
+                }
+              }
+            }
           },
           "404": {
             "description": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
@@ -1135,7 +1142,7 @@
             "description": ""
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR"
+            "description": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE"
           }
         },
         "security": [
@@ -1325,6 +1332,30 @@
           "ltv",
           "status",
           "loanedBalance"
+        ]
+      },
+      "CardResponseDto": {
+        "type": "object",
+        "properties": {
+          "image": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "frozen"
+            ]
+          },
+          "freezeReason": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "required": [
+          "image",
+          "status",
+          "freezeReason"
         ]
       },
       "PaginationMetaDto": {
@@ -1812,7 +1843,8 @@
             "nullable": true
           },
           "paymentInstrumentId": {
-            "type": "string"
+            "type": "string",
+            "pattern": {}
           }
         },
         "required": [
