@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
-import { LoanToValueColor } from '@archie-webapps/archie-dashboard/constants';
-import { LTV, LtvStatus } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
+import { LoanToValueStatus, LoanToValueColor } from '@archie-webapps/shared/constants';
+import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 
@@ -16,7 +16,7 @@ export const MarginCallAlert: FC = () => {
     if (getLTVResponse.state === RequestState.SUCCESS) {
       const ltvData = getLTVResponse.data;
 
-      if (ltvData.status === LtvStatus.warning) {
+      if (ltvData.status === LoanToValueStatus.WARNING) {
         return (
           <MarginCallAlertStyled bgColor={LoanToValueColor[ltvData.status]}>
             <Warning />
@@ -24,7 +24,7 @@ export const MarginCallAlert: FC = () => {
         );
       }
 
-      if (ltvData.status === LtvStatus.margin_call) {
+      if (ltvData.status === LoanToValueStatus.MARGIN_CALL) {
         return (
           <MarginCallAlertStyled bgColor={LoanToValueColor[ltvData.status]}>
             <Danger />

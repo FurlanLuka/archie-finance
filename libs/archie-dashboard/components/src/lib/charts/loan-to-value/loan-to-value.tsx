@@ -1,8 +1,7 @@
 import { ResponsivePie } from '@nivo/pie';
 import { FC } from 'react';
 
-import { LoanToValueStatus, LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
-import { LtvStatus } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
+import { LoanToValueStatus, LoanToValueColor, LoanToValueText } from '@archie-webapps/shared/constants';
 import { Badge, SubtitleM, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -10,7 +9,7 @@ import { LoanToValueChartStyled } from './loan-to-value.styled';
 
 interface LoanToValueChartProps {
   ltv: number;
-  status: LtvStatus;
+  status: LoanToValueStatus;
 }
 
 export const LoanToValueChart: FC<LoanToValueChartProps> = ({ ltv, status }) => {

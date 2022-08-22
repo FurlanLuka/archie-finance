@@ -45,12 +45,7 @@ export const AvailableCredit: FC = () => {
 
     return (
       <>
-        <Card
-          justifyContent="space-between"
-          columnReverse
-          padding="1.5rem"
-          // status={ltvData.status} rethink this
-        >
+        <Card justifyContent="space-between" columnReverse padding="1.5rem" status={ltvData.status}>
           <div className="card-group">
             <div className="card-group p-bottom">
               <ParagraphXS weight={700} className="card-title">

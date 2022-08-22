@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { LoanToValueStatus, LoanToValueColor } from '@archie-webapps/archie-dashboard/constants';
+import { LoanToValueStatus, LoanToValueColor } from '@archie-webapps/shared/constants';
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
 export interface CardProps {
