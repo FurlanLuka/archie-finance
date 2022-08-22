@@ -44,6 +44,7 @@ import {
   FundsLoadedPayload,
   TransactionUpdatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
+import { CardResponseDto, CardStatus } from './rize.dto';
 
 @Injectable()
 export class RizeService {
@@ -190,7 +191,7 @@ export class RizeService {
       .execute();
   }
 
-  public async getVirtualCard(userId: string): Promise<string> {
+  public async getVirtualCard(userId: string): Promise<CardResponseDto> {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
@@ -204,7 +205,16 @@ export class RizeService {
     const debitCardAccessToken: DebitCardAccessToken =
       await this.rizeApiService.getDebitCardAccessToken(debitCard.uid);
 
-    return this.rizeApiService.getVirtualCardImage(debitCardAccessToken);
+    const image: string = await this.rizeApiService.getVirtualCardImage(
+      debitCardAccessToken,
+    );
+
+    return {
+      image,
+      status:
+        debitCard.locked_at !== null ? CardStatus.frozen : CardStatus.active,
+      freezeReason: debitCard.lock_reason,
+    };
   }
 
   public async getTransactions(
