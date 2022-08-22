@@ -149,7 +149,7 @@ spec:
                 port:
                   number: 80
           ## Peach api service
-          - path: /v1/payment-instruments
+          - path: /v1/payment_instruments
             pathType: Prefix
             backend:
               service:
