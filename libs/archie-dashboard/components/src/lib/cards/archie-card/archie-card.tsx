@@ -1,11 +1,12 @@
 import { FC, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
+import { CardStatusColor, CardStatusText } from '@archie-webapps/archie-dashboard/constants';
 import { RevealCardModal } from '@archie-webapps/archie-dashboard/components';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { CardsImage } from '@archie-webapps/shared/data-access/archie-api/rize/api/get-cards-image';
 import { useGetCardsImage } from '@archie-webapps/shared/data-access/archie-api/rize/hooks/use-cards-image';
-import { Card, Skeleton } from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
 
 import imgCard from '../../assets/card-placeholder.png';
 
@@ -49,7 +50,12 @@ export const ArchieCard: FC = () => {
               <div className="cvv-overlay">•••</div>
             </>
           )}
+          {/* TBD: Does it make sense to make this a generic component? Decide in PROD-120 */}
+          <div className="card-status" style={{ backgroundColor: CardStatusColor['active'] }}>
+            <ParagraphXXS weight={800}>{CardStatusText['active']}</ParagraphXXS>
+          </div>
           {/* Temp, just for Rize, use card-data and card-status instead  */}
+
           {/* <div className="card-data">
             <ParagraphS weight={500}>{revealCardData ? '3443 6546 6457 8021' : '•••• •••• •••• 8021'}</ParagraphS>
             <div className="card-data-group">

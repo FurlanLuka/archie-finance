@@ -11,6 +11,7 @@ export const Badge = styled.div<BadgeProps>`
   color: ${({ statusColor }) => statusColor};
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  white-space: nowrap;
   border: 1px solid ${({ statusColor }) => statusColor};
   border-radius: 0.5rem;
   max-width: fit-content;

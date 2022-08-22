@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { LoanToValueColor, LoanToValueText } from '@archie-webapps/archie-dashboard/constants';
 import { calculateCollateralTotalValue, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
+import { LTVText, LTVColor } from '@archie-webapps/shared/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
@@ -50,7 +50,7 @@ export const CollateralScreen: FC = () => {
                 </ParagraphXS>
                 <ParagraphM>{ltvData.ltv.toFixed(2)}%</ParagraphM>
               </div>
-              <Badge statusColor={LoanToValueColor[ltvData.status]}>{LoanToValueText[ltvData.status]}</Badge>
+              <Badge statusColor={LTVColor[ltvData.status]}>{LTVText[ltvData.status]}</Badge>
             </div>
           </div>
           <CollateralInfo collateral={getCollateralValueResponse.data} />
