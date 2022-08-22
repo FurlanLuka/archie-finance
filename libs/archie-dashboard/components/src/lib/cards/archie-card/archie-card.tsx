@@ -50,7 +50,7 @@ export const ArchieCard: FC = () => {
               <div className="cvv-overlay">•••</div>
             </>
           )}
-          {/* TBD: Does it make sense to make this a generic component? */}
+          {/* TBD: Does it make sense to make this a generic component? Decide in PROD-120 */}
           <div className="card-status" style={{ backgroundColor: CardStatusColor['active'] }}>
             <ParagraphXXS weight={800}>{CardStatusText['active']}</ParagraphXXS>
           </div>

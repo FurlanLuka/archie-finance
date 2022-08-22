@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { LoanToValueStatus, LoanToValueColor } from '@archie-webapps/shared/constants';
+import { LTVStatus, LTVColor } from '@archie-webapps/shared/constants';
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
 export interface CardProps {
@@ -16,7 +16,7 @@ export interface CardProps {
   mobileAlignItems?: string;
   mobilePadding?: string;
   backgroundImage?: string;
-  status?: LoanToValueStatus;
+  status?: LTVStatus;
 }
 
 export const Card = styled.div<CardProps>`
@@ -96,7 +96,7 @@ export const Card = styled.div<CardProps>`
 
       :before {
         display: block;
-        background-color: ${({ theme, status }) => status ? LoanToValueColor[status] : theme.loanToValueDefault};
+        background-color: ${({ theme, status }) => status ? LTVColor[status] : theme.loanToValueDefault};
       }
     }
   }

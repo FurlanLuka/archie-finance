@@ -1,11 +1,11 @@
-import { LoanToValueStatus } from '@archie-webapps/shared/constants';
+import { LTVStatus } from '@archie-webapps/shared/constants';
 
 import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
 
 export interface LTV {
   ltv: number;
-  status: LoanToValueStatus;
+  status: LTVStatus;
 }
 
 export const ERROR_LIST = new Map<string, string>([]);

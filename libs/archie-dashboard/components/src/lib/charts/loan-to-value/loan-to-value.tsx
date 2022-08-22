@@ -1,7 +1,7 @@
 import { ResponsivePie } from '@nivo/pie';
 import { FC } from 'react';
 
-import { LoanToValueStatus, LoanToValueColor, LoanToValueText } from '@archie-webapps/shared/constants';
+import { LTVStatus, LTVText, LTVColor } from '@archie-webapps/shared/constants';
 import { Badge, SubtitleM, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -9,15 +9,15 @@ import { LoanToValueChartStyled } from './loan-to-value.styled';
 
 interface LoanToValueChartProps {
   ltv: number;
-  status: LoanToValueStatus;
+  status: LTVStatus;
 }
 
 export const LoanToValueChart: FC<LoanToValueChartProps> = ({ ltv, status }) => {
   const data = [
     {
-      id: LoanToValueStatus.GOOD,
+      id: LTVStatus.GOOD,
       value: ltv.toFixed(2),
-      color: LoanToValueColor[status],
+      color: LTVColor[status],
     },
     {
       id: 'until_margin_call',
@@ -40,11 +40,11 @@ export const LoanToValueChart: FC<LoanToValueChartProps> = ({ ltv, status }) => 
       />
       <div className="centered-metrics">
         <ParagraphXXS weight={700}>Loan-to-value</ParagraphXXS>
-        <SubtitleM weight={400} color={LoanToValueColor[status]}>
+        <SubtitleM weight={400} color={LTVColor[status]}>
           {ltv.toFixed(2)}%
         </SubtitleM>
-        <Badge statusColor={LoanToValueColor[status]} className="status-label">
-          {LoanToValueText[status]}
+        <Badge statusColor={LTVColor[status]} className="status-label">
+          {LTVText[status]}
         </Badge>
       </div>
     </LoanToValueChartStyled>

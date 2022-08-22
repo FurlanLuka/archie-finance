@@ -2,6 +2,7 @@ import { linearGradientDef } from '@nivo/core';
 import { ResponsiveStream } from '@nivo/stream';
 import { FC } from 'react';
 
+import { LTVStatus, LTVColor } from '@archie-webapps/shared/constants';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralValueChartStyled } from './collateral-value.styled';
@@ -41,7 +42,7 @@ export const CollateralValueChart: FC = () => (
       enableGridY={false}
       curve="linear"
       offsetType="diverging"
-      colors={theme.loanToValueActive}
+      colors={LTVColor[LTVStatus.GOOD]}
       fillOpacity={0.5}
       borderWidth={2}
       borderColor={theme.collateralValue}

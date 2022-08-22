@@ -1,6 +1,6 @@
 import { Story, Meta } from '@storybook/react';
 
-import { LoanToValueStatus, LoanToValueColor, LoanToValueText } from '@archie-webapps/shared/constants';
+import { LTVStatus, LTVText, LTVColor } from '@archie-webapps/shared/constants';
 
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
@@ -18,43 +18,43 @@ export default {
 export const Good: Story<BadgeProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Badge" subtitle="good" />
-    <Badge {...props}>{LoanToValueText[LoanToValueStatus.GOOD]}</Badge>
+    <Badge {...props}>{LTVText[LTVStatus.GOOD]}</Badge>
   </StoriesContainer>
 );
 
 Good.args = {
-  statusColor: LoanToValueColor[LoanToValueStatus.GOOD],
+  statusColor: LTVColor[LTVStatus.GOOD],
 };
 
 export const Ok: Story<BadgeProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Badge" subtitle="ok" />
-    <Badge {...props}>{LoanToValueText[LoanToValueStatus.OK]}</Badge>
+    <Badge {...props}>{LTVText[LTVStatus.OK]}</Badge>
   </StoriesContainer>
 );
 
 Ok.args = {
-  statusColor: LoanToValueColor[LoanToValueStatus.OK],
+  statusColor: LTVColor[LTVStatus.OK],
 };
 
 export const Warning: Story<BadgeProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Badge" subtitle="warning" />
-    <Badge {...props}>{LoanToValueText[LoanToValueStatus.WARNING]}</Badge>
+    <Badge {...props}>{LTVText[LTVStatus.WARNING]}</Badge>
   </StoriesContainer>
 );
 
 Warning.args = {
-  statusColor: LoanToValueColor[LoanToValueStatus.WARNING],
+  statusColor: LTVColor[LTVStatus.WARNING],
 };
 
 export const MarginCall: Story<BadgeProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Badge" subtitle="margin call" />
-    <Badge {...props}>{LoanToValueText[LoanToValueStatus.MARGIN_CALL]}</Badge>
+    <Badge {...props}>{LTVText[LTVStatus.MARGIN_CALL]}</Badge>
   </StoriesContainer>
 );
 
 MarginCall.args = {
-  statusColor: LoanToValueColor[LoanToValueStatus.MARGIN_CALL],
+  statusColor: LTVColor[LTVStatus.MARGIN_CALL],
 };
