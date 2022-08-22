@@ -37,6 +37,72 @@ export interface PaymentInstrumentBalance extends PeachResponse {
   };
 }
 
+export enum PaymentStatus {
+  scheduled = 'scheduled',
+  initiated = 'initiated',
+  pending = 'pending',
+  succeeded = 'succeeded',
+  failed = 'failed',
+  inDispute = 'inDispute',
+  canceled = 'canceled',
+  chargeback = 'chargeback',
+}
+
+export enum TransactionType {
+  payment = 'payment',
+  serviceCredit = 'serviceCredit',
+}
+
+export enum PaymentType {
+  ach = 'ach',
+  debitCard = 'debitCard',
+  creditCard = 'creditCard',
+  check = 'check',
+  cash = 'cash',
+  payroll = 'payroll',
+  paymentNetwork = 'paymentNetwork',
+}
+
+export enum PaymentReason {
+  autoPay = 'autoPay',
+  oneTimePay = 'oneTimePay',
+  settlement = 'settlement',
+  reversal = 'reversal',
+  reimbursement = 'reimbursement',
+}
+
+export interface QueryParams {
+  startingAfter: string;
+  endingBefore: string;
+  limit: number;
+}
+
+export interface Payments extends PeachResponse {
+  total: number;
+  count: number;
+  nextUrl: string;
+  previousUrl: string;
+  data: {
+    id: string;
+    created_at: string;
+    isExternal: boolean;
+    isVirtual: boolean;
+    status: PaymentStatus;
+    transactionType: TransactionType;
+    paymentDetails: {
+      type: PaymentType;
+      reason: PaymentReason;
+      fromInstrumentId: string;
+    };
+    actualAmount: number;
+    currency: string;
+    failureDescriptionShort?: string;
+    failureDescriptionLong?: string;
+    autopayPlanId?: string;
+    cancelReason?: string;
+  }[];
+}
+
 export interface HomeAddress extends PeachResponse {
   id: string;
 }

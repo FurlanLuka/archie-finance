@@ -18,6 +18,8 @@ import {
   PersonStatus,
   ObligationsResponse,
   PaymentInstrumentBalance,
+  Payments,
+  QueryParams,
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
@@ -25,6 +27,7 @@ import {
   PaymentInstrumentNotFoundError,
   AmountExceedsOutstandingBalanceError,
 } from '../borrower.errors';
+import { Payment } from '../../../../../webhook-api/peach/src/lib/api/peach_api.interfaces';
 
 @Injectable()
 export class PeachApiService {
@@ -502,5 +505,20 @@ export class PeachApiService {
     );
 
     return response.data.data;
+  }
+
+  public async getPayments(
+    personId: string,
+    loanId: string,
+    query: QueryParams,
+  ): Promise<Payments> {
+    const response = await this.peachClient.get(
+      `/people/${personId}/loans/${loanId}/transactions`,
+      {
+        params: query,
+      },
+    );
+
+    return response.data;
   }
 }
