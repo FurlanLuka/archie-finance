@@ -13,4 +13,6 @@ export class GetPaymentsQueryDto {
   @IsNumber()
   @Type(() => Number)
   limit = 100;
+
+  // TODO: add filters by date
 }
