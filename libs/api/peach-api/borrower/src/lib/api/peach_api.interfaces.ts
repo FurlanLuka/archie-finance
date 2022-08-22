@@ -1,4 +1,15 @@
 import { AxiosRequestConfig } from 'axios';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  Matches,
+} from 'class-validator';
+import { PEACH_ID_REGEX } from '../utils/validation';
+import { AmountType } from '../autopay/autopay.dto';
 
 export enum PersonStatus {
   active = 'active',
@@ -119,4 +130,17 @@ export enum PeachTransactionStatus {
   pending = 'pending',
   settled = 'settled',
   failed = 'canceled',
+}
+
+export interface AutopayOptions {
+  amountType: AmountType;
+  extraAmount?: number | null;
+  paymentInstrumentId: string;
+  isAlignedToDueDates: boolean;
+  offsetFromDueDate?: number[] | null;
+  agreementDocumentId: string;
+}
+
+export interface Autopay extends PeachResponse {
+  agreementDocumentId: string;
 }

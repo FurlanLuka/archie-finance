@@ -8,6 +8,7 @@ import {
   Matches,
 } from 'class-validator';
 import { PEACH_ID_REGEX } from '../utils/validation';
+import { AutopayOptions } from '../api/peach_api.interfaces';
 
 export enum AmountType {
   statementMinimumAmount = 'statementMinimumAmount',
@@ -15,7 +16,7 @@ export enum AmountType {
   statementBalanceAmount = 'statementBalanceAmount',
 }
 
-export class CreateAutopayDto {
+export class CreateAutopayDto implements AutopayOptions {
   @IsEnum(AmountType)
   amountType: AmountType;
 

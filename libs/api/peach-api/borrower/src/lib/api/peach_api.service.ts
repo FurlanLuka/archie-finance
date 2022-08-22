@@ -19,6 +19,8 @@ import {
   ObligationsResponse,
   PaymentInstrumentBalance,
   Document,
+  AutopayOptions,
+  Autopay,
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
@@ -26,6 +28,7 @@ import {
   PaymentInstrumentNotFoundError,
   AmountExceedsOutstandingBalanceError,
   PaymentInstrumentNotFound,
+  AutopayNotConfiguredError,
 } from '../borrower.errors';
 import { DateTime } from 'luxon';
 
@@ -530,6 +533,34 @@ export class PeachApiService {
     return response.data;
   }
 
+  public async acceptAutopayAgreementDocument(
+    personId: string,
+    documentId: string,
+  ): Promise<Document> {
+    const response = await this.peachClient.put(
+      `/people/${personId}/documents/${documentId}`,
+      {
+        status: 'accepted',
+      },
+    );
+
+    return response.data;
+  }
+
+  public async archiveAutopayAgreementDocument(
+    personId: string,
+    documentId: string,
+  ): Promise<Document> {
+    const response = await this.peachClient.put(
+      `/people/${personId}/documents/${documentId}`,
+      {
+        archived: true,
+      },
+    );
+
+    return response.data;
+  }
+
   public async getAutopayAgreementHtml(
     personId: string,
     loanId: string,
@@ -540,16 +571,79 @@ export class PeachApiService {
       channel: 'gui',
       personId,
       loanId,
-      context: {
-        lenderName: 'Archie (Lender name - Change)',
-        paymentMethod: 'bankAccount',
-        paymentMethodLastFour: paymentMethodLastFour,
-        supportPhone: '888-888-8888 - Change',
-        supportEmail: 'support@peach.finance - Change',
-        dateSigned: DateTime.now().toLocaleString(DateTime.DATE_MED),
-      },
+      context: this.createDocumentContext(paymentMethodLastFour),
     });
 
     return response.data;
+  }
+
+  public async convertAutopayAgreementToDocument(
+    personId: string,
+    loanId: string,
+    paymentMethodLastFour: string,
+    documentAgreementId: string,
+  ): Promise<void> {
+    await this.peachClient.post(
+      `/communicator/render-to-document`,
+      {
+        subject: 'autopayAgreement',
+        channel: 'document',
+        personId,
+        documentId: documentAgreementId,
+        loanId,
+        context: this.createDocumentContext(paymentMethodLastFour),
+      },
+      {
+        params: {
+          fmt: 'pdf',
+        },
+      },
+    );
+  }
+
+  private createDocumentContext(paymentMethodLastFour: string) {
+    return {
+      lenderName: 'Archie (Lender name - Change)',
+      paymentMethod: 'bankAccount',
+      paymentMethodLastFour,
+      supportPhone: '888-888-8888 - Change',
+      supportEmail: 'support@peach.finance - Change',
+      dateSigned: DateTime.now().toLocaleString(DateTime.DATE_MED),
+    };
+  }
+
+  public async createAutopay(
+    personId: string,
+    loanId: string,
+    config: AutopayOptions,
+  ): Promise<void> {
+    await this.peachClient.post(`/people/${personId}/loans/${loanId}/autopay`, {
+      amountType: config.amountType,
+      extraAmount: config.extraAmount ?? undefined,
+      isAlignedToDueDates: config.isAlignedToDueDates,
+      offsetFromDueDate: config.offsetFromDueDate ?? undefined,
+      paymentInstrumentId: config.paymentInstrumentId,
+      agreementDocumentId: config.agreementDocumentId,
+    });
+  }
+
+  public async cancelAutopay(personId: string, loanId: string): Promise<void> {
+    await this.peachClient.delete(
+      `/people/${personId}/loans/${loanId}/autopay`,
+    );
+  }
+
+  public async getAutopay(personId: string, loanId: string): Promise<Autopay> {
+    try {
+      const response = await this.peachClient.get(
+        `/people/${personId}/loans/${loanId}/autopay`,
+      );
+
+      return response.data.data;
+    } catch (error) {
+      if (error.status === 404) {
+        throw new AutopayNotConfiguredError();
+      }
+    }
   }
 }

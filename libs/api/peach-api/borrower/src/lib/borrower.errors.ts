@@ -29,3 +29,9 @@ export class PaymentInstrumentNotFound extends NotFoundException {
     super('PAYMENT_INSTRUMENT_NOT_FOUND');
   }
 }
+
+export class AutopayNotConfiguredError extends NotFoundException {
+  constructor() {
+    super('AUTOPAY_NOT_CONFIGURED');
+  }
+}

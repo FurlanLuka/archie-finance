@@ -1,4 +1,12 @@
-import { Body, Controller, Header, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Header,
+  HttpCode,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
@@ -21,11 +29,12 @@ export class AutopayController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([BorrowerNotFoundError])
+  @HttpCode(204)
   async setupAutopay(
     @Req() request,
     @Body() body: CreateAutopayDto,
-  ): Promise<any> {
-    return this.autopayService.setupAutopay(request.user.sub);
+  ): Promise<void> {
+    return this.autopayService.setupAutopay(request.user.sub, body);
   }
 }
 
