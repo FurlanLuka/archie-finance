@@ -70,6 +70,13 @@ export class CreditLimitDto {
   amount: number;
 }
 
-export class CardImageResponseDto {
+export enum CardStatus {
+  active = 'active',
+  frozen = 'frozen',
+}
+
+export class CardResponseDto {
   image: string;
+  status: CardStatus;
+  freezeReason: string | null;
 }
