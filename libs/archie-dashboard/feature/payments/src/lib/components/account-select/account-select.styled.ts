@@ -3,10 +3,17 @@ import styled from 'styled-components';
 export const AccountSelectStyled = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 2rem;
+  min-height: 176px;
 
   .loader {
-    margin: 0.5rem auto 1rem;
+    margin: auto;
+  }
+
+  .modal-title {
+    margin-bottom: 1rem;
+  }
+
+  .modal-select {
+    margin-bottom: 2rem;
   }
 `;

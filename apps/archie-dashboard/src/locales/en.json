@@ -197,9 +197,12 @@
   "dashboard_withdraw": {
     "title": "Withdraw {{currentAsset}}",
     "subtitle": "You currently have {{assetAmount}} {{asset}} (~${{assetValue}}).",
+    "subtitle_empty": "You do not have {{asset}} collateralized. ",
+    "subtitle_empty_link": "Feel free to add it!",
     "address_title": "What address would you like to send your {{currentAsset}} to?",
     "form": {
       "amount_label": "How much {{currentAsset}} would you like to withdraw? Max is {{maxAmount}}",
+      "amount_label_empty": "You cannot withdraw any {{currentAsset}}.",
       "address_label": "Send {{currentAsset}} to:",
       "amount_placeholder": "max: {{maxWithdrawAmount}} {{currentAsset}}",
       "address_placeholder": "Enter your address",
@@ -230,15 +233,17 @@
     }
   },
   "dashboard_payment": {
-    "btn_pay": "Pay now!",
+    "title": "Payments",
+    "btn_pay": "Make a Payment",
     "connected_accounts": {
       "title": "Your accounts",
+      "no_accounts": "No accounts have been added yet. Connect to your Plaid account to start making payments.",
       "btn_add": "Add account",
       "btn_disconnect": "Disconnect"
     },
     "account_select": {
       "label": "Your accounts",
-      "empty": "Select account to connect",
+      "empty": "Select an account to connect",
       "btn_connect": "Connect to Archie",
       "balance_subtext": "Funds available"
     },
@@ -246,9 +251,6 @@
       "title": "Setup payment method",
       "text": "Let's connect your bank account so you can make payments.",
       "btn_connect": "Connect with Plaid"
-    },
-    "schedule_payment": {
-      "label": "Select account to pay with"
     }
   },
   "dashboard_rewards": {

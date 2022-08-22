@@ -12,6 +12,10 @@ export const InputRadio = styled.label<InputRadioProps>`
   padding-left: ${({ small }) => (small ? '1.5rem' : '2.5rem')};
   margin-bottom: 0.75rem;
 
+  :last-child {
+    margin-bottom: 0;
+  }
+
   input {
     position: absolute;
     left: 0;

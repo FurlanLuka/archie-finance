@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 import { OnboardingStep } from '@archie-webapps/archie-dashboard/constants';
 import { TotalCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-total-value';
@@ -13,7 +13,14 @@ import {
   QueryResponse,
   RequestState,
 } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { ButtonPrimary, Container, Card, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
+import {
+  ButtonPrimary,
+  Container,
+  Card,
+  ParagraphXS,
+  SubtitleM,
+  Loader,
+} from '@archie-webapps/shared/ui/design-system';
 
 import imgCardReady from '../../../assets/img-card-ready.png';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
@@ -73,11 +80,27 @@ export const CardScreen: FC = () => {
     return 0;
   };
 
-  return (
-    <Container column mobileColumn alignItems="center">
-      <StepsIndicator currentStep={OnboardingStep.CARD} />
-      <CardScreenStyled>
-        <Card column alignItems="center" padding="2.5rem 10% 3.5rem" mobilePadding="2.5rem 1.5rem 3.5rem">
+  function getContent() {
+    if (
+      getCreditQueryResponse.state === RequestState.LOADING ||
+      getCollateralTotalValueResponse.state === RequestState.LOADING
+    ) {
+      return <Loader className="loader" />;
+    }
+
+    if (
+      getCreditQueryResponse.state === RequestState.ERROR ||
+      getCollateralTotalValueResponse.state === RequestState.ERROR
+    ) {
+      return <Navigate to="/onboarding/error" state={{ prevPath: '/onboarding' }} />;
+    }
+
+    if (
+      getCreditQueryResponse.state === RequestState.SUCCESS &&
+      getCollateralTotalValueResponse.state === RequestState.SUCCESS
+    ) {
+      return (
+        <>
           <SubtitleM className="title">{getTitle()}</SubtitleM>
           <ParagraphXS className="subtitle">
             {stage === Stage.COMPLETE && (
@@ -92,14 +115,28 @@ export const CardScreen: FC = () => {
           <div className="image">
             <img src={imgCardReady} alt={t('card_step.img_alt')} />
           </div>
-          <ButtonPrimary
-            maxWidth="20rem"
-            isLoading={getCollateralTotalValueResponse.state === RequestState.LOADING}
-            isDisabled={!(getCreditQueryResponse.state === RequestState.SUCCESS && stage === Stage.COMPLETE)}
-            onClick={() => navigate('/collateral')}
-          >
+          <ButtonPrimary maxWidth="20rem" isDisabled={stage !== Stage.COMPLETE} onClick={() => navigate('/collateral')}>
             {t('card_step.btn')}
           </ButtonPrimary>
+        </>
+      );
+    }
+
+    return <></>;
+  }
+
+  return (
+    <Container column mobileColumn alignItems="center">
+      <StepsIndicator currentStep={OnboardingStep.CARD} />
+      <CardScreenStyled>
+        <Card
+          column
+          alignItems="center"
+          padding="2.5rem 10% 3.5rem"
+          mobilePadding="2.5rem 1.5rem 3.5rem"
+          minHeight="506px"
+        >
+          {getContent()}
         </Card>
       </CardScreenStyled>
     </Container>

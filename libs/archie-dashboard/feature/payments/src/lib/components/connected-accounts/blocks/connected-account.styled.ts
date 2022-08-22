@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 
 export const ConnectedAccountStyled = styled.div`
-  width: 100%;
   display: flex;
   align-items: center;
-  padding: 1rem 0.5rem;
   border-bottom: 1px solid ${({ theme }) => theme.borderPrimary};
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+  width: 100%;
 
   .remove-account {
     margin-left: auto;

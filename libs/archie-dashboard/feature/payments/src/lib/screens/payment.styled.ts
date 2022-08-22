@@ -2,9 +2,11 @@ import styled from 'styled-components';
 
 import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/shared/ui/theme';
 
-export const HomeStyled = styled.div`
+export const PaymentScreenStyled = styled.div`
   width: 100%;
   max-width: calc(1000px + 4rem);
+  display: flex;
+  flex-direction: column;
   margin-left: ${NAV_WIDTH};
   padding: 3rem 2rem;
 
@@ -20,26 +22,14 @@ export const HomeStyled = styled.div`
     padding: 1.5rem 1rem;
   }
 
-  .section-title {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    min-height: 68px;
+  .title {
     margin-bottom: 1.5rem;
-
-    @media (max-width: ${breakpoints.screenSM}) {
-      min-height: 58px;
-    }
-  }
-
-  .subtitle {
-    letter-spacing: 0.02em;
   }
 
   .section-cards {
     display: flex;
     gap: 2rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 
     @media (max-width: ${breakpoints.screenMD}) {
       flex-wrap: wrap;
@@ -49,5 +39,33 @@ export const HomeStyled = styled.div`
     @media (max-width: ${breakpoints.screenSM}) {
       max-width: 100%;
     }
+  }
+
+  .cards-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+    max-width: 350px;
+
+    @media (max-width: ${breakpoints.screenMD}) {
+      max-width: 70%;
+    }
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      max-width: 100%;
+    }
+
+    .card-title, 
+    .card-info {
+      margin-bottom: 0;
+    }
+  }
+
+  .section-actions {
+    display: flex;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
   }
 `;

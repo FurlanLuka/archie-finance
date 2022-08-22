@@ -51,15 +51,25 @@ export const SelectStyled = styled.div`
     flex-direction: column;
     align-items: flex-start;
     background-color: ${({ theme }) => theme.backgroundPrimary};
-    box-shadow: 8px 8px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.12);
     border-radius: 0.5rem;
     z-index: 1;
   }
 
   .select-option {
     width: 100%;
+    cursor: pointer;
+
     :hover {
       background: ${({ theme }) => theme.backgroundSecondary};
     }
+  }
+`;
+
+export const SelectOptionStyled = styled.div`
+  padding: 0.5rem 1rem;
+
+  @media (max-width: ${breakpoints.screenSM}) {
+    padding: 0.5rem;
   }
 `;

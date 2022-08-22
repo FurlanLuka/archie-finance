@@ -2,15 +2,14 @@ import { ReactElement, useState } from 'react';
 
 import { Icon } from '@archie-webapps/shared/ui/icons';
 
-import { SelectOptionProps } from '../select-option/select-option';
-
+import { SelectOptionProps } from './select-option';
 import { SelectStyled } from './select.styled';
 
 interface SelectProps<T> {
   id: string;
+  header: ReactElement;
   onChange: (value: T) => void;
   children: ReactElement<SelectOptionProps<T>>[];
-  header: ReactElement;
 }
 
 export function Select<T>({ id, header, onChange, children }: SelectProps<T>) {

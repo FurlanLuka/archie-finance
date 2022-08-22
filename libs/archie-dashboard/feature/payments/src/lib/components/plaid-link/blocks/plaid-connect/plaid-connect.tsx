@@ -19,11 +19,11 @@ export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken, onAccessTokenCr
   const { t } = useTranslation();
   const createAccessTokenMutation = useCreateAccessToken();
 
-  function onSuccess(publicToken: string) {
+  const onSuccess = (publicToken: string) => {
     if (createAccessTokenMutation.state === RequestState.IDLE) {
       createAccessTokenMutation.mutate({ publicToken });
     }
-  }
+  };
 
   useEffect(() => {
     if (createAccessTokenMutation.state === RequestState.SUCCESS) {
@@ -41,7 +41,6 @@ export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken, onAccessTokenCr
   return (
     <PlaidConnectStyled>
       <ButtonPrimary
-        className="connect"
         isLoading={createAccessTokenMutation.state === RequestState.LOADING}
         disabled={createAccessTokenMutation.state === RequestState.LOADING}
         onClick={() => {
@@ -50,7 +49,9 @@ export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken, onAccessTokenCr
       >
         {t('dashboard_payment.plaid_connect.btn_connect')}
       </ButtonPrimary>
-      <img src={plaidLogo} alt="Plaid" />
+      <div className="plaid-logo">
+        <img src={plaidLogo} alt="Plaid" />
+      </div>
     </PlaidConnectStyled>
   );
 };
