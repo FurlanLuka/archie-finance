@@ -2,13 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { PeachApiService } from '../api/peach_api.service';
 import {
-  Credit,
   Draw,
   HomeAddress,
   Obligation,
   ObligationsResponse,
-  PaymentInstrument,
-  PaymentInstrumentBalance,
   Person,
 } from '../api/peach_api.interfaces';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
@@ -16,10 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
-import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
-import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
 import { QueueService } from '@archie/api/utils/queue';
-import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/constants';
 import {
   GetCollateralValuePayload,
   GetCollateralValueResponse,
@@ -29,13 +23,8 @@ import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
-import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
-import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { ObligationsResponseDto, ScheduleTransactionDto } from './loan.dto';
-import {
-  AmountExceedsAvailableBalanceError,
-  BorrowerNotFoundError,
-} from '../borrower.errors';
+import { ObligationsResponseDto } from './loan.dto';
+import { BorrowerNotFoundError } from '../borrower.errors';
 
 @Injectable()
 export class PeachBorrowerService {
