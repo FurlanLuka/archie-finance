@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const AccountSelectStyled = styled.div`
+export const ConnectableAccountSelectStyled = styled.div`
   display: flex;
   flex-direction: column;
   min-height: 176px;

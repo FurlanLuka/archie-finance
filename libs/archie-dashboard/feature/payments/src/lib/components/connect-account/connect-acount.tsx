@@ -1,41 +1,31 @@
 import { FC, useState } from 'react';
 
-import { AccountSelect } from '../account-select/account-select';
+import { ConnectableAccount } from '../interfaces';
 import { PlaidLink } from '../plaid-link/plaid-link';
 
-const LAST_ITEM_LS = 'last_itemId';
+import { ConnectableAccountSelect } from './blocks/connectable-account-select/connectable-account-select';
 
 interface ConnectAccountProps {
   onAccountConnect?: VoidFunction;
 }
 
 export const ConnectAccount: FC<ConnectAccountProps> = ({ onAccountConnect }) => {
-  const [itemId, setItemId] = useState<string | null>(() => {
-    const lsItem = localStorage.getItem(LAST_ITEM_LS);
+  const [availableAccounts, setAvailableAccounts] = useState<ConnectableAccount[]>([]);
+  const [publicToken, setPublicToken] = useState<string | null>(null);
 
-    if (lsItem !== null && lsItem.length > 0) {
-      return lsItem;
-    }
-
-    return null;
-  });
-
-  const onAccessTokenCreate = (itemId: string) => {
-    localStorage.setItem(LAST_ITEM_LS, itemId);
-    setItemId(itemId);
-  };
-
-  const onConnect = () => {
-    localStorage.removeItem(LAST_ITEM_LS);
-    onAccountConnect?.();
+  const onLinkSuccess = (publicToken: string, availableAccounts: ConnectableAccount[]) => {
+    setAvailableAccounts(availableAccounts);
+    setPublicToken(publicToken);
   };
 
   const getContent = () => {
-    if (itemId) {
-      return <AccountSelect itemId={itemId} onConnect={onConnect} />;
+    if (publicToken && availableAccounts.length > 0) {
+      return (
+        <ConnectableAccountSelect accounts={availableAccounts} publicToken={publicToken} onConnect={onAccountConnect} />
+      );
     }
 
-    return <PlaidLink onAccessTokenCreate={onAccessTokenCreate} />;
+    return <PlaidLink onLinkSuccess={onLinkSuccess} />;
   };
 
   // TODO

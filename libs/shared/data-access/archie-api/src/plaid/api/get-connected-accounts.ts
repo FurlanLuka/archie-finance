@@ -9,7 +9,7 @@ export const ERROR_LIST = new Map<string, string>([]);
 
 export const getConnectedAccounts = async (accessToken: string): Promise<GetConnectedAccountsResponse> => {
   return getRequest<GetConnectedAccountsResponse>(
-    `${API_URL}/v1/plaid/connected_accounts`,
+    `${API_URL}/v1/payment_instruments`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
