@@ -4,10 +4,15 @@ import { Borrower } from '../borrower.entity';
 import { PeachApiModule } from '../api/peach_api.module';
 import { PaymentsService } from './payments.service';
 import { PaymentsController } from './payments.controller';
+import { PaymentsUtilModule } from './utils/payments_utils.module';
 
 @Module({
   controllers: [PaymentsController],
-  imports: [TypeOrmModule.forFeature([Borrower]), PeachApiModule],
+  imports: [
+    TypeOrmModule.forFeature([Borrower]),
+    PeachApiModule,
+    PaymentsUtilModule,
+  ],
   providers: [PaymentsService],
   exports: [PaymentsService],
 })

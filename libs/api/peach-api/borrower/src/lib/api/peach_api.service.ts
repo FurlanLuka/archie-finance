@@ -27,7 +27,7 @@ import {
   PaymentInstrumentNotFoundError,
   AmountExceedsOutstandingBalanceError,
 } from '../borrower.errors';
-import { Payment } from '../../../../../webhook-api/peach/src/lib/api/peach_api.interfaces';
+import * as _ from 'lodash';
 
 @Injectable()
 export class PeachApiService {
@@ -515,7 +515,7 @@ export class PeachApiService {
     const response = await this.peachClient.get(
       `/people/${personId}/loans/${loanId}/transactions`,
       {
-        params: query,
+        params: _.omitBy(query, _.isNil),
       },
     );
 

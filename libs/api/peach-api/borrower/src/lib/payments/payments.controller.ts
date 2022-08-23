@@ -4,7 +4,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { PaymentsService } from './payments.service';
 import { BorrowerNotFoundError } from '../borrower.errors';
-import { GetPaymentsQueryDto } from './payments.dto';
+import { GetPaymentsQueryDto, PaymentsResponseDto } from './payments.dto';
 
 @Controller('v1/loan_payments')
 export class PaymentsController {
@@ -17,7 +17,7 @@ export class PaymentsController {
   async getPayments(
     @Req() request,
     @Query() query: GetPaymentsQueryDto,
-  ): Promise<any> {
+  ): Promise<PaymentsResponseDto> {
     return this.transactionsService.getPayments(request.user.sub, query);
   }
 }

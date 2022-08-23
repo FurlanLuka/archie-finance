@@ -72,9 +72,11 @@ export enum PaymentReason {
 }
 
 export interface QueryParams {
-  startingAfter: string;
-  endingBefore: string;
+  startingAfter?: string | null;
+  endingBefore?: string | null;
   limit: number;
+  fromEffectiveDate?: string | null;
+  toEffectiveDate?: string | null;
 }
 
 export interface Payments extends PeachResponse {
