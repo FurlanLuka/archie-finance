@@ -1,4 +1,3 @@
-export * from './lib/card-status';
 export * from './lib/collateral';
 export * from './lib/dashboard-nav-items';
 export * from './lib/onboarding-steps';

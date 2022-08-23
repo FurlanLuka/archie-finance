@@ -1,24 +1,25 @@
 import { FC, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { CardStatusColor, CardStatusText } from '@archie-webapps/archie-dashboard/constants';
+import { CardStatusColor, CardStatusText } from '@archie-webapps/shared/constants';
 import { RevealCardModal } from '@archie-webapps/archie-dashboard/components';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { CardsImage } from '@archie-webapps/shared/data-access/archie-api/rize/api/get-cards-image';
-import { useGetCardsImage } from '@archie-webapps/shared/data-access/archie-api/rize/hooks/use-cards-image';
-import { Card, Skeleton, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
+import { CardsCredit } from '@archie-webapps/shared/data-access/archie-api/rize/api/get-cards-credit';
+import { useGetCardsCredit } from '@archie-webapps/shared/data-access/archie-api/rize/hooks/use-cards-credit';
+import { Card, Skeleton } from '@archie-webapps/shared/ui/design-system';
 
 import imgCard from '../../assets/card-placeholder.png';
 
+import { StatusBadge } from './blocks/status-badge/status-badge';
 import { ArchieCardStyled } from './archie-card.styled';
 
 export const ArchieCard: FC = () => {
   const [revealCardModalOpen, setRevealCardModalOpen] = useState(false);
   const [revealCardData, setRevealCardData] = useState(false);
 
-  const getCardsImageResponse: QueryResponse<CardsImage> = useGetCardsImage();
+  const getCardsCreditResponse: QueryResponse<CardsCredit> = useGetCardsCredit();
 
-  if (getCardsImageResponse.state === RequestState.LOADING) {
+  if (getCardsCreditResponse.state === RequestState.LOADING) {
     return (
       <ArchieCardStyled>
         <Card className="archie-card">
@@ -28,17 +29,17 @@ export const ArchieCard: FC = () => {
     );
   }
 
-  if (getCardsImageResponse.state === RequestState.ERROR) {
+  if (getCardsCreditResponse.state === RequestState.ERROR) {
     return <Navigate to="/error" state={{ prevPath: '/home' }} />;
   }
 
-  if (getCardsImageResponse.state === RequestState.SUCCESS) {
-    const cardsImageData = getCardsImageResponse.data;
+  if (getCardsCreditResponse.state === RequestState.SUCCESS) {
+    const cardsCreditData = getCardsCreditResponse.data;
 
     return (
       <ArchieCardStyled>
         <Card
-          backgroundImage={`data:image/jpeg;base64,${cardsImageData.image}`}
+          backgroundImage={`data:image/jpeg;base64,${cardsCreditData.image}`}
           className="archie-card clickable"
           onClick={() => (revealCardData ? setRevealCardModalOpen(false) : setRevealCardModalOpen(true))}
         >
@@ -50,12 +51,7 @@ export const ArchieCard: FC = () => {
               <div className="cvv-overlay">•••</div>
             </>
           )}
-          {/* TBD: Does it make sense to make this a generic component? Decide in PROD-120 */}
-          <div className="card-status" style={{ backgroundColor: CardStatusColor['active'] }}>
-            <ParagraphXXS weight={800}>{CardStatusText['active']}</ParagraphXXS>
-          </div>
-          {/* Temp, just for Rize, use card-data and card-status instead  */}
-
+          <StatusBadge status={cardsCreditData.status} />
           {/* <div className="card-data">
             <ParagraphS weight={500}>{revealCardData ? '3443 6546 6457 8021' : '•••• •••• •••• 8021'}</ParagraphS>
             <div className="card-data-group">
