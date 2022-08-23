@@ -24,7 +24,7 @@ export const ConnectedAccountItem: FC<ConnectedAccountItemProps> = ({ account })
       <div className="account-balance">
         {/* Handle currency */}
         <ParagraphXS weight={700}>${account.availableBalance}</ParagraphXS>
-        <ParagraphXS className="subtitle">{t('dashboard_payment.account_select.balance_subtext')}</ParagraphXS>
+        <ParagraphXS className="subtitle">{t('payment_modal.account_select.balance_subtext')}</ParagraphXS>
       </div>
     </ConnectedAccountItemStyled>
   );

@@ -40,14 +40,14 @@ export const PaymentScheduleModal: FC<PaymentScheduleModalProps> = ({ onConfirm 
   return (
     <PaymentScheduleModalStyled>
       <ParagraphM weight={800} className="title">
-        {t('dashboard_home.payment_schedule_modal.title')}
+        {t('payment_modal.payment_schedule.title')}
       </ParagraphM>
-      <ParagraphS weight={600}>{t('dashboard_home.payment_schedule_modal.credit_for', { name })}</ParagraphS>
-      <ParagraphXS>{t('dashboard_home.payment_schedule_modal.last_payment', { lastPayment, date })}</ParagraphXS>
-      <ParagraphXS>{t('dashboard_home.payment_schedule_modal.interest_owed', { iterestOwed })}</ParagraphXS>
+      <ParagraphS weight={600}>{t('payment_modal.payment_schedule.credit_for', { name })}</ParagraphS>
+      <ParagraphXS>{t('payment_modal.payment_schedule.last_payment', { lastPayment, date })}</ParagraphXS>
+      <ParagraphXS>{t('payment_modal.payment_schedule.interest_owed', { iterestOwed })}</ParagraphXS>
       <div className="divider" />
       <ParagraphXS weight={800} className="subtitle">
-        {t('dashboard_home.payment_schedule_modal.payment_date')}
+        {t('payment_modal.payment_schedule.payment_date')}
       </ParagraphXS>
       <ParagraphXS className="payment-date">
         {format(new Date(), 'MMMM dd, yyyy')} |
@@ -57,39 +57,37 @@ export const PaymentScheduleModal: FC<PaymentScheduleModalProps> = ({ onConfirm 
           </InputText>
         ) : (
           <button className="btn-schedule" onClick={() => setSchedule(true)}>
-            {t('dashboard_home.payment_schedule_modal.schedule')} <Icon name="calendar" />
+            {t('payment_modal.payment_schedule.schedule')} <Icon name="calendar" />
           </button>
         )}
       </ParagraphXS>
       <InputRadio small>
         <input type="radio" value="auto_payments" checked disabled />
         <ParagraphXXS>
-          {t('dashboard_home.payment_schedule_modal.auto_payments')} {t('off')} {/* I guess temp */}
+          {t('payment_modal.payment_schedule.auto_payments')} {t('off')} {/* I guess temp */}
         </ParagraphXXS>
       </InputRadio>
       <div className="divider" />
       <ParagraphXS weight={800} className="subtitle">
-        {t('dashboard_home.payment_schedule_modal.payment_options')}
+        {t('payment_modal.payment_schedule.payment_options')}
       </ParagraphXS>
       <div className="radio-group">
         <InputRadio>
           <input type="radio" name="payment_option" value="balance_owed" />
-          <ParagraphS>{t('dashboard_home.payment_schedule_modal.balance_owed', { balanceOwed })}</ParagraphS>
+          <ParagraphS>{t('payment_modal.payment_schedule.balance_owed', { balanceOwed })}</ParagraphS>
         </InputRadio>
         <InputRadio>
           <input type="radio" name="payment_option" value="balance_with_interest" />
-          <ParagraphS>
-            {t('dashboard_home.payment_schedule_modal.balance_with_interest', { balanceWithInterest })}
-          </ParagraphS>
+          <ParagraphS>{t('payment_modal.payment_schedule.balance_with_interest', { balanceWithInterest })}</ParagraphS>
         </InputRadio>
         <InputRadio>
           <input type="radio" name="payment_option" value="full_balance" />
-          <ParagraphS>{t('dashboard_home.payment_schedule_modal.full_balance', { fullBalance })}</ParagraphS>
+          <ParagraphS>{t('payment_modal.payment_schedule.full_balance', { fullBalance })}</ParagraphS>
         </InputRadio>
         <div className="input-group">
           <InputRadio>
             <input type="radio" name="payment_option" value="other_amount" />
-            <ParagraphS>{t('dashboard_home.payment_schedule_modal.other_amount')}</ParagraphS>
+            <ParagraphS>{t('payment_modal.payment_schedule.other_amount')}</ParagraphS>
           </InputRadio>
           <InputText small>
             <input placeholder="$" />

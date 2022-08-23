@@ -37,18 +37,18 @@ export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({ onConfirm, o
   return (
     <PaymentConfirmModalStyled>
       <ParagraphM weight={800} className="title">
-        {t('dashboard_home.payment_confirm_modal.title')}
+        {t('payment_modal.payment_confirm.title')}
       </ParagraphM>
-      <ParagraphS weight={600}>{t('dashboard_home.payment_confirm_modal.credit_for', { name })}</ParagraphS>
-      <ParagraphXS>{t('dashboard_home.payment_confirm_modal.last_payment', { lastPayment, date })}</ParagraphXS>
+      <ParagraphS weight={600}>{t('payment_modal.payment_confirm.credit_for', { name })}</ParagraphS>
+      <ParagraphXS>{t('payment_modal.payment_confirm.last_payment', { lastPayment, date })}</ParagraphXS>
       <div className="divider" />
       <ParagraphXS weight={800} className="balance-note">
-        {t('dashboard_home.payment_confirm_modal.balance_note')}
+        {t('payment_modal.payment_confirm.balance_note')}
       </ParagraphXS>
       <SubtitleS weight={400} className="balance-value">
         ${newPayment}
       </SubtitleS>
-      <ParagraphS>{t('dashboard_home.payment_confirm_modal.time_note')}</ParagraphS>
+      <ParagraphS>{t('payment_modal.payment_confirm.time_note')}</ParagraphS>
       <div className="btn-group">
         <ButtonPrimary onClick={handleConfirm}>{t('btn_next')}</ButtonPrimary>
         <ButtonOutline onClick={handleBack}>{t('btn_back')}</ButtonOutline>

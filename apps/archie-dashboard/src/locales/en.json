@@ -160,35 +160,6 @@
     "recent_transactions": {
       "title": "Recent Transactions",
       "btn": "View More"
-    },
-    "payment_schedule_modal": {
-      "title": "Schedule a payment",
-      "credit_for": "ArchCredit for {{name}}",
-      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
-      "interest_owed": "Interest owed: ${{iterestOwed}}",
-      "payment_date": "Payment Date",
-      "payment_options": "Payment Options",
-      "schedule": "Schedule",
-      "auto_payments": "auto payments:",
-      "balance_owed": "Pay balance owed: ${{balanceOwed}}",
-      "balance_with_interest": "Pay balance owed with interest: ${{balanceWithInterest}}",
-      "full_balance": "Pay full balance: ${{fullBalance}}",
-      "other_amount": "Pay other amount:"
-    },
-    "payment_confirm_modal": {
-      "title": "Confirm payment",
-      "credit_for": "ArchCredit for {{name}}",
-      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
-      "balance_note": "Pay balance owed:",
-      "time_note": "This Payment will be processed today and take 2-4 business days to settle."
-    },
-    "payment_scheduled_modal": {
-      "title": "Payment scheduled",
-      "credit_for": "ArchCredit for {{name}}",
-      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
-      "scheduled_note": "Your payment for ${{newPayment}} has been scheduled!",
-      "email_note": "You will receive an email notification.",
-      "time_note": "Your payment will take 2-4 business days to settle."
     }
   },
   "dashboard_collateral": {
@@ -244,8 +215,7 @@
     "account_select": {
       "label": "Your accounts",
       "empty": "Select an account to connect",
-      "btn_connect": "Connect to Archie",
-      "balance_subtext": "Funds available"
+      "btn_connect": "Connect to Archie"
     },
     "plaid_connect": {
       "title": "Setup payment method",
@@ -262,5 +232,42 @@
   },
   "dashboard_settings": {
     "title": ""
+  },
+  "payment_modal": {
+    "select_account": {
+      "label": "Your accounts",
+      "empty": "Select account to pay with",
+      "balance_subtext": "Funds available",
+      "btn_confirm": "Confirm"
+    },
+    "payment_schedule": {
+      "title": "Schedule a payment",
+      "credit_for": "ArchCredit for {{name}}",
+      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
+      "interest_owed": "Interest owed: ${{iterestOwed}}",
+      "payment_date": "Payment Date",
+      "payment_options": "Payment Options",
+      "schedule": "Schedule",
+      "auto_payments": "auto payments:",
+      "balance_owed": "Pay balance owed: ${{balanceOwed}}",
+      "balance_with_interest": "Pay balance owed with interest: ${{balanceWithInterest}}",
+      "full_balance": "Pay full balance: ${{fullBalance}}",
+      "other_amount": "Pay other amount:"
+    },
+    "payment_confirm": {
+      "title": "Confirm payment",
+      "credit_for": "ArchCredit for {{name}}",
+      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
+      "balance_note": "Pay balance owed:",
+      "time_note": "This Payment will be processed today and take 2-4 business days to settle."
+    },
+    "payment_scheduled": {
+      "title": "Payment scheduled",
+      "credit_for": "ArchCredit for {{name}}",
+      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
+      "scheduled_note": "Your payment for ${{newPayment}} has been scheduled!",
+      "email_note": "You will receive an email notification.",
+      "time_note": "Your payment will take 2-4 business days to settle."
+    }
   }
 }
