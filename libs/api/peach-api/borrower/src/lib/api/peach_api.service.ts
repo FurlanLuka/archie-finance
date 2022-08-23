@@ -257,7 +257,6 @@ export class PeachApiService {
         // TODO: check if ok
         originatingCreditorName: 'Bank of Mars',
         creditLimitAmount: creditLimit,
-        // TODO: should we define down payment? - Collateral value
         downPaymentAmount,
         personAddressId: addressContactId,
       },
@@ -314,14 +313,9 @@ export class PeachApiService {
         nickname: 'Credit Card',
         status: 'originated',
         atOrigination: {
-          // interestRates: [{ days: null, rate: 0.1 }],
           minPaymentCalculation: {
             percentageOfPrincipal: 0.1,
             minAmount: 0,
-          },
-          autoAmortization: {
-            amortizationLogic: 'amortizeAfterEachPurchase',
-            duration: 1,
           },
         },
       },
