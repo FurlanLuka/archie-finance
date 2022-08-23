@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Purchases } from '../api/peach_api.interfaces';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import { PurchasesResponseFactory } from './utils/purchases_response.factory';
+import { GetPurchasesQueryDto } from './purchases.dto';
 
 export class PurchasesService {
   constructor(
@@ -15,18 +16,21 @@ export class PurchasesService {
     private purchasesResponseFactory: PurchasesResponseFactory,
   ) {}
 
-  public async getPurchases(userId: string): Promise<any> {
+  public async getPurchases(
+    userId: string,
+    query: GetPurchasesQueryDto,
+  ): Promise<any> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
     this.borrowerValidation.isBorrowerDrawDefined(borrower);
 
-    const purchases: Purchases = this.peachApiService.getPurchases(
+    const purchases: Purchases = await this.peachApiService.getPurchases(
       borrower,
-      {},
+      query,
     );
 
-    return this.purchasesResponseFactory.create(purchases);
+    return this.purchasesResponseFactory.create(purchases, query.limit);
   }
 
   public async handleTransactionsEvent(transaction) {

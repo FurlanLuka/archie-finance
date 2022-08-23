@@ -533,7 +533,7 @@ export class PeachApiService {
     const response = await this.peachClient.get(
       `/people/${borrower.personId}/loans/${borrower.creditLineId}/draws/${borrower.drawId}/purchases`,
       {
-        params: _.omitBy(query, _.isNil),
+        params: omitBy(query, isNil),
       },
     );
 

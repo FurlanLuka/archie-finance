@@ -139,7 +139,7 @@ export enum PurchaseStatus {
   disputed = 'disputed',
 }
 
-export enum TransactionType {
+export enum PurchaseTransactionType {
   atm_withdrawal = 'atm_withdrawal',
   card_purchase = 'card_purchase',
   card_refund = 'card_refund',
@@ -176,8 +176,8 @@ export interface Purchases extends PeachResponse {
       merchantName: string;
       merchantState: string | null;
       metadata: {
-        transactionType: TransactionType;
-      };
+        transactionType: PurchaseTransactionType;
+      } | null;
       originalCurrencyAmount: number | null;
       originalCurrencyCode: string | null;
       pointOfSaleType: string | null;

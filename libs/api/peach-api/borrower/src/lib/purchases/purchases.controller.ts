@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   SERVICE_QUEUE_NAME,
@@ -13,6 +13,7 @@ import {
   CreditLineNotFoundError,
   DrawNotFoundError,
 } from '../borrower.errors';
+import { GetPurchasesQueryDto, PurchasesResponseDto } from './purchases.dto';
 
 @Controller('v1/card_purchases')
 export class PurchasesController {
@@ -26,8 +27,11 @@ export class PurchasesController {
     CreditLineNotFoundError,
     DrawNotFoundError,
   ])
-  async getPurchases(@Req() request): Promise<any> {
-    return this.purchasesController.getPurchases(request.user.sub);
+  async getPurchases(
+    @Req() request,
+    @Query() query: GetPurchasesQueryDto,
+  ): Promise<PurchasesResponseDto> {
+    return this.purchasesController.getPurchases(request.user.sub, query);
   }
 }
 
