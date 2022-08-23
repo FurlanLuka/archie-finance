@@ -1,8 +1,10 @@
 import { Purchases } from '../../api/peach_api.interfaces';
 import { PurchasesResponseDto } from '../purchases.dto';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
-import { ConfigService } from '@nestjs/config';
+import { ConfigService } from '@archie/api/utils/config';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class PurchasesResponseFactory {
   constructor(private configService: ConfigService) {}
 

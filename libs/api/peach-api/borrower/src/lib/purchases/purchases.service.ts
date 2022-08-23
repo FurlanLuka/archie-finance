@@ -5,8 +5,10 @@ import { Repository } from 'typeorm';
 import { Purchases } from '../api/peach_api.interfaces';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import { PurchasesResponseFactory } from './utils/purchases_response.factory';
-import { GetPurchasesQueryDto } from './purchases.dto';
+import { GetPurchasesQueryDto, PurchasesResponseDto } from './purchases.dto';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class PurchasesService {
   constructor(
     private peachApiService: PeachApiService,
@@ -19,7 +21,7 @@ export class PurchasesService {
   public async getPurchases(
     userId: string,
     query: GetPurchasesQueryDto,
-  ): Promise<any> {
+  ): Promise<PurchasesResponseDto> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });

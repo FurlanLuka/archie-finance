@@ -20,7 +20,9 @@ import { QueueService } from '@archie/api/utils/queue';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
 import { BorrowerValidation } from '../utils/borrower.validation';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class PaymentsService {
   constructor(
     @InjectRepository(Borrower)
