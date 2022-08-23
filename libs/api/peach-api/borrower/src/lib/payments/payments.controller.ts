@@ -1,14 +1,42 @@
-import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { PaymentsService } from './payments.service';
-import { BorrowerNotFoundError } from '../borrower.errors';
-import { GetPaymentsQueryDto, PaymentsResponseDto } from './payments.dto';
+import {
+  AmountExceedsAvailableBalanceError,
+  AmountExceedsOutstandingBalanceError,
+  BorrowerNotFoundError,
+  PaymentInstrumentNotFoundError,
+} from '../borrower.errors';
+import {
+  GetPaymentsQueryDto,
+  PaymentsResponseDto,
+  ScheduleTransactionDto,
+} from './payments.dto';
+import { Subscribe } from '@archie/api/utils/queue';
+import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
+import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
+import {
+  INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
+  INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
+} from '@archie/api/collateral-api/constants';
+import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
+import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
 
 @Controller('v1/loan_payments')
 export class PaymentsController {
-  constructor(private transactionsService: PaymentsService) {}
+  constructor(private paymentsService: PaymentsService) {}
 
   @Get()
   @UseGuards(AuthGuard)
@@ -18,6 +46,60 @@ export class PaymentsController {
     @Req() request,
     @Query() query: GetPaymentsQueryDto,
   ): Promise<PaymentsResponseDto> {
-    return this.transactionsService.getPayments(request.user.sub, query);
+    return this.paymentsService.getPayments(request.user.sub, query);
+  }
+
+  @Post()
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @HttpCode(202)
+  @ApiErrorResponse([
+    BorrowerNotFoundError,
+    PaymentInstrumentNotFoundError,
+    AmountExceedsOutstandingBalanceError,
+    AmountExceedsAvailableBalanceError,
+  ])
+  async scheduleTransaction(
+    @Req() request,
+    @Body() body: ScheduleTransactionDto,
+  ): Promise<void> {
+    return this.paymentsService.scheduleTransaction(request.user.sub, body);
+  }
+}
+
+@Controller()
+export class PaymentsQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-borrower-payments`;
+
+  constructor(private paymentsService: PaymentsService) {}
+
+  @Subscribe(
+    WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC,
+    PaymentsQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async peachWebhookPaymentConfirmedHandler(
+    payload: WebhookPaymentPayload,
+  ): Promise<void> {
+    await this.paymentsService.handlePaymentConfirmedEvent(payload);
+  }
+
+  @Subscribe(
+    INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
+    PaymentsQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async internalTransactionCreatedHandler(
+    payload: InternalCollateralTransactionCreatedPayload,
+  ): Promise<void> {
+    await this.paymentsService.handleInternalTransactionCreatedEvent(payload);
+  }
+
+  @Subscribe(
+    INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
+    PaymentsQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async internalTransactionCompletedHandler(
+    payload: InternalCollateralTransactionCompletedPayload,
+  ): Promise<void> {
+    await this.paymentsService.handleInternalTransactionCompletedEvent(payload);
   }
 }

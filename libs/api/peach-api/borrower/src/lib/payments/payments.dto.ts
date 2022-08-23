@@ -1,4 +1,11 @@
-import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  Matches,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import {
   PaymentReason,
@@ -60,4 +67,19 @@ export class PaymentsResponseDto {
       chargebackAt: string | null;
     };
   }[];
+}
+
+const PEACH_ID_REGEX = /^ext-|^[A-Z]{2}-[A-Z0-9]+-[A-Z0-9]+|^\d+$/;
+
+export class ScheduleTransactionDto {
+  @IsNumber()
+  @IsPositive()
+  amount: number;
+
+  @IsDateString()
+  @IsOptional()
+  scheduledDate?: string | null;
+
+  @Matches(PEACH_ID_REGEX)
+  paymentInstrumentId: string;
 }
