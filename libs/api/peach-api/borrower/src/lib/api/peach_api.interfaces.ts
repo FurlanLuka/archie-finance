@@ -23,6 +23,18 @@ export interface Person extends PeachResponse {
 
 export interface PaymentInstrument extends PeachResponse {
   id: string;
+  nickname: string;
+  accountNumberLastFour: string;
+  accountType: string;
+}
+
+export interface PaymentInstrumentBalance extends PeachResponse {
+  id: string;
+  availableBalanceAmount: number;
+  lastSuccessfulBalance: {
+    availableBalanceAmount: number;
+    currency: string;
+  };
 }
 
 export interface HomeAddress extends PeachResponse {

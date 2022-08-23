@@ -1,30 +1,11 @@
 import { Module } from '@nestjs/common';
-import { PeachBorrowerService } from './borrower.service';
-import {
-  PeachBorrowerController,
-  PeachBorrowerQueueController,
-} from './borrower.controller';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Borrower } from './borrower.entity';
-import { PeachApiModule } from './api/peach_api.module';
-import { CryptoModule } from '@archie/api/utils/crypto';
-import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import { ConfigVariables } from '@archie/api/credit-api/constants';
+import { LoanModule } from './loan/loan.module';
+import { PaymentInstrumentModule } from './payment-instrument/payment_instrument.module';
 
 @Module({
-  controllers: [PeachBorrowerQueueController, PeachBorrowerController],
-  imports: [
-    TypeOrmModule.forFeature([Borrower]),
-    PeachApiModule,
-    CryptoModule.register({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
-      }),
-    }),
-  ],
-  providers: [PeachBorrowerService],
-  exports: [PeachBorrowerService],
+  controllers: [],
+  imports: [LoanModule, PaymentInstrumentModule],
+  providers: [],
+  exports: [],
 })
 export class PeachBorrowerModule {}

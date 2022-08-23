@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
-import { PeachApiService } from './api/peach_api.service';
+import { PeachApiService } from '../api/peach_api.service';
 import {
   Credit,
   Draw,
@@ -8,12 +8,13 @@ import {
   Obligation,
   ObligationsResponse,
   PaymentInstrument,
+  PaymentInstrumentBalance,
   Person,
-} from './api/peach_api.interfaces';
+} from '../api/peach_api.interfaces';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Borrower } from './borrower.entity';
+import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
@@ -30,8 +31,11 @@ import {
 } from '@archie/api/credit-api/data-transfer-objects';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { ObligationsResponseDto, ScheduleTransactionDto } from './borrower.dto';
-import { BorrowerNotFoundError } from './borrower.errors';
+import { ObligationsResponseDto, ScheduleTransactionDto } from './loan.dto';
+import {
+  AmountExceedsAvailableBalanceError,
+  BorrowerNotFoundError,
+} from '../borrower.errors';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -350,6 +354,17 @@ export class PeachBorrowerService {
     if (borrower === null) {
       throw new BorrowerNotFoundError();
     }
+
+    // TODO: uncomment once we get response from peach
+    // const balance: PaymentInstrumentBalance =
+    //   await this.peachApiService.getRefreshedBalance(
+    //     borrower.personId,
+    //     transaction.paymentInstrumentId,
+    //   );
+    //
+    // if (transaction.amount > balance.availableBalanceAmount) {
+    //   throw new AmountExceedsAvailableBalanceError();
+    // }
 
     await this.peachApiService.createOneTimeTransaction(
       borrower,
