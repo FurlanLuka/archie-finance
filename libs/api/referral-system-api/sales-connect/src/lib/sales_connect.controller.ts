@@ -8,7 +8,7 @@ import {
 } from './sales_connect.dto';
 import { SalesConnectService } from './sales_connect.service';
 
-@Controller('v1/sales-connect')
+@Controller('v1/sales_connect')
 export class SalesConnectController {
   constructor(private salesConnectService: SalesConnectService) {}
 
