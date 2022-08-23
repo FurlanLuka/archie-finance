@@ -82,14 +82,6 @@ export class PeachBorrowerQueueController {
   ): Promise<void> {
     await this.peachService.handleCreditLimitDecreased(payload);
   }
-
-  @Subscribe(
-    TRANSACTION_UPDATED_TOPIC,
-    PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async transactionUpdatedHandler(payload): Promise<void> {
-    await this.peachService.handleTransactionsEvent(payload);
-  }
 }
 
 @Controller('v1/loans')

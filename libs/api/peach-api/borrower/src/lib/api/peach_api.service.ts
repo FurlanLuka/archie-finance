@@ -20,6 +20,7 @@ import {
   PaymentInstrumentBalance,
   Payments,
   QueryParams,
+  Purchases,
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
@@ -394,6 +395,9 @@ export class PeachApiService {
         merchantCity: transaction.merchant_location ?? undefined,
         merchantId: transaction.merchant_number ?? undefined,
         merchantCategoryCode: transaction.mcc ?? undefined,
+        metadata: {
+          transactionType: transaction.type,
+        },
       },
       declineReason: {
         mainText: transaction.denial_reason ?? undefined,
@@ -514,6 +518,20 @@ export class PeachApiService {
   ): Promise<Payments> {
     const response = await this.peachClient.get(
       `/people/${personId}/loans/${loanId}/transactions`,
+      {
+        params: _.omitBy(query, _.isNil),
+      },
+    );
+
+    return response.data;
+  }
+
+  public async getPurchases(
+    borrower: Borrower,
+    query: QueryParams,
+  ): Promise<Purchases> {
+    const response = await this.peachClient.get(
+      `/people/${borrower.personId}/loans/${borrower.creditLineId}/draws/${borrower.drawId}/purchases`,
       {
         params: _.omitBy(query, _.isNil),
       },

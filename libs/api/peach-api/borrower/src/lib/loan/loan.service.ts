@@ -210,31 +210,6 @@ export class PeachBorrowerService {
     );
   }
 
-  public async handleTransactionsEvent(transaction) {
-    if (transaction.status === 'queued') {
-      return;
-    }
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
-      userId: transaction.userId,
-    });
-
-    if (transaction.status === 'pending') {
-      return this.peachApiService.createPurchase(
-        borrower.personId,
-        borrower.creditLineId,
-        borrower.drawId,
-        transaction,
-      );
-    }
-
-    return this.peachApiService.updatePurchase(
-      borrower.personId,
-      borrower.creditLineId,
-      borrower.drawId,
-      transaction,
-    );
-  }
-
   public async getObligations(userId: string): Promise<ObligationsResponseDto> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
