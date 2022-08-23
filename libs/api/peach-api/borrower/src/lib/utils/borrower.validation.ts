@@ -13,9 +13,7 @@ export class BorrowerValidation {
   }
 
   public isBorrowerCreditLineDefined(borrower: Borrower | null): void {
-    if (borrower === null || borrower?.personId === null) {
-      throw new BorrowerNotFoundError();
-    }
+    this.isBorrowerDefined(borrower);
 
     if (borrower.creditLineId === null) {
       throw new CreditLineNotFoundError();
@@ -23,13 +21,7 @@ export class BorrowerValidation {
   }
 
   public isBorrowerDrawDefined(borrower: Borrower | null): void {
-    if (borrower === null || borrower?.personId === null) {
-      throw new BorrowerNotFoundError();
-    }
-
-    if (borrower.creditLineId === null) {
-      throw new CreditLineNotFoundError();
-    }
+    this.isBorrowerCreditLineDefined(borrower);
 
     if (borrower.drawId === null) {
       throw new DrawNotFoundError();
