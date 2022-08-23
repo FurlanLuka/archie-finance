@@ -26,6 +26,7 @@ import { PeachBorrowerModule } from '@archie/api/peach-api/borrower';
         ConfigVariables.PEACH_API_KEY,
         ConfigVariables.PEACH_LOAN_ID,
         ConfigVariables.PEACH_BASE_URL,
+        ConfigVariables.API_BASE_URL,
       ],
       parse: (_configVariable, value) => value,
     }),

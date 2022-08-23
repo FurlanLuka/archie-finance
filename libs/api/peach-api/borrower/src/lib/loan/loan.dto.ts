@@ -1,11 +1,3 @@
-import {
-  IsDateString,
-  IsNumber,
-  IsOptional,
-  Matches,
-  Min,
-} from 'class-validator';
-
 class Obligation {
   capitalizedAmount: number;
   dueDate: string;
@@ -24,19 +16,4 @@ export class ObligationsResponseDto {
   isOverdue: boolean;
   overdueAmount: number;
   obligations: Obligation[];
-}
-
-const PEACH_ID_REGEX = /^ext-|^[A-Z]{2}-[A-Z0-9]+-[A-Z0-9]+|^\d+$/;
-
-export class ScheduleTransactionDto {
-  @IsNumber()
-  @Min(0.01)
-  amount: number;
-
-  @IsDateString()
-  @IsOptional()
-  scheduledDate?: string | null;
-
-  @Matches(PEACH_ID_REGEX)
-  paymentInstrumentId: string;
 }

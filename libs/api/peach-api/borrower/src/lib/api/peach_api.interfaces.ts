@@ -23,6 +23,106 @@ export interface Person extends PeachResponse {
 
 export interface PaymentInstrument extends PeachResponse {
   id: string;
+  nickname: string;
+  accountNumberLastFour: string;
+  accountType: string;
+}
+
+export interface PaymentInstrumentBalance extends PeachResponse {
+  id: string;
+  availableBalanceAmount: number;
+  lastSuccessfulBalance: {
+    availableBalanceAmount: number;
+    currency: string;
+  };
+}
+
+export enum PaymentStatus {
+  scheduled = 'scheduled',
+  initiated = 'initiated',
+  pending = 'pending',
+  succeeded = 'succeeded',
+  failed = 'failed',
+  inDispute = 'inDispute',
+  canceled = 'canceled',
+  chargeback = 'chargeback',
+}
+
+export enum TransactionType {
+  payment = 'payment',
+  serviceCredit = 'serviceCredit',
+}
+
+export enum PaymentType {
+  ach = 'ach',
+  debitCard = 'debitCard',
+  creditCard = 'creditCard',
+  check = 'check',
+  cash = 'cash',
+  payroll = 'payroll',
+  paymentNetwork = 'paymentNetwork',
+}
+
+export enum PaymentReason {
+  autoPay = 'autoPay',
+  oneTimePay = 'oneTimePay',
+  settlement = 'settlement',
+  reversal = 'reversal',
+  reimbursement = 'reimbursement',
+}
+
+export interface QueryParams {
+  startingAfter?: string | null;
+  endingBefore?: string | null;
+  limit: number;
+  fromEffectiveDate?: string | null;
+  toEffectiveDate?: string | null;
+}
+
+export interface Payments extends PeachResponse {
+  total: number;
+  count: number;
+  nextUrl: string | null;
+  previousUrl: string | null;
+  data: {
+    id: string;
+    timestamps: {
+      appliedAt: string;
+      canceledAt: string | null;
+      chargebackAt: string | null;
+      createdAt: string;
+      deletedAt: string | null;
+      displayDate: string;
+      effectiveDate: string;
+      failedAt: string | null;
+      inDisputeAt: string | null;
+      initiatedAt: string;
+      originalEffectiveDate: string;
+      pendingAt: string;
+      scheduledDate: string;
+      succeededAt: string | null;
+      updatedAt: string | null;
+    };
+    isExternal: boolean;
+    isVirtual: boolean;
+    status: PaymentStatus;
+    transactionType: TransactionType;
+    paymentDetails: {
+      type: PaymentType;
+      reason: PaymentReason;
+      fromInstrumentId: string;
+      fromInstrument: {
+        paymentNetworkName: string;
+        accountNumberLastFour?: string;
+      };
+    };
+    actualAmount: number;
+    currency: string;
+    failureDescriptionShort: string | null;
+    failureDescriptionLong: string | null;
+    autopayPlanId: string | null;
+    cancelReason: string | null;
+  }[];
 }
 
 export interface HomeAddress extends PeachResponse {

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
@@ -16,8 +16,10 @@ import {
   PeachTransactionType,
   Person,
   PersonStatus,
-  Obligation,
   ObligationsResponse,
+  PaymentInstrumentBalance,
+  Payments,
+  QueryParams,
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
@@ -25,6 +27,7 @@ import {
   PaymentInstrumentNotFoundError,
   AmountExceedsOutstandingBalanceError,
 } from '../borrower.errors';
+import { omitBy, isNil } from 'lodash';
 
 @Injectable()
 export class PeachApiService {
@@ -75,6 +78,32 @@ export class PeachApiService {
     );
 
     return response.data.data[0];
+  }
+
+  public async createPlaidPaymentInstrument(
+    personId: string,
+    accountId: string,
+    publicToken: string,
+  ): Promise<PaymentInstrument> {
+    const response = await this.peachClient.post(
+      `/people/${personId}/payment-instruments`,
+      {
+        instrumentType: 'plaid',
+        accessToken: publicToken,
+        accountIds: [accountId],
+      },
+    );
+
+    return response.data.data[0];
+  }
+
+  public async deletePaymentInstrument(
+    personId: string,
+    paymentInstrumentId: string,
+  ): Promise<void> {
+    await this.peachClient.delete(
+      `/people/${personId}/payment-instruments/${paymentInstrumentId}`,
+    );
   }
 
   public async createPendingOneTimePaymentTransaction(
@@ -426,5 +455,66 @@ export class PeachApiService {
 
       throw error;
     }
+  }
+
+  public async getPaymentInstruments(
+    personId: string,
+  ): Promise<PaymentInstrument[]> {
+    const response = await this.peachClient.get(
+      `/people/${personId}/payment-instruments`,
+    );
+
+    return response.data.data;
+  }
+
+  public async getCachedBalance(
+    personId: string,
+    paymentInstrumentId: string,
+  ): Promise<PaymentInstrumentBalance> {
+    let response;
+
+    try {
+      response = await this.peachClient.get(
+        `/people/${personId}/payment-instruments/${paymentInstrumentId}/balance`,
+      );
+    } catch (error) {
+      if (error.status === 404) {
+        response = await this.peachClient.post(
+          `/people/${personId}/payment-instruments/${paymentInstrumentId}/balance`,
+          {},
+        );
+      } else {
+        throw error;
+      }
+    }
+
+    return response.data.data;
+  }
+
+  public async getRefreshedBalance(
+    personId: string,
+    paymentInstrumentId: string,
+  ): Promise<PaymentInstrumentBalance> {
+    const response = await this.peachClient.post(
+      `/people/${personId}/payment-instruments/${paymentInstrumentId}/balance`,
+      {},
+    );
+
+    return response.data.data;
+  }
+
+  public async getPayments(
+    personId: string,
+    loanId: string,
+    query: QueryParams,
+  ): Promise<Payments> {
+    const response = await this.peachClient.get(
+      `/people/${personId}/loans/${loanId}/transactions`,
+      {
+        params: omitBy(query, isNil),
+      },
+    );
+
+    return response.data;
   }
 }
