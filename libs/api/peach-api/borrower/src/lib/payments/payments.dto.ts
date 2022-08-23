@@ -36,6 +36,31 @@ export class GetPaymentsQueryDto {
   toEffectiveDate?: string | null;
 }
 
+export class PaymentResponseDataDto {
+  id: string;
+  isExternal: boolean;
+  status: PaymentStatus;
+  transactionType: TransactionType;
+  paymentDetails: {
+    type: PaymentType;
+    reason: PaymentReason;
+    fromInstrumentId: string;
+  };
+  actualAmount: number;
+  currency: string;
+  failureDescriptionShort?: string;
+  failureDescriptionLong?: string;
+  autopayPlanId?: string;
+  cancelReason?: string;
+  timestamps: {
+    createdAt: string;
+    scheduledDate: string | null;
+    succeededAt: string | null;
+    failedAt: string | null;
+    chargebackAt: string | null;
+  };
+}
+
 export class PaymentsResponseDto {
   meta: {
     total: number;
@@ -43,30 +68,7 @@ export class PaymentsResponseDto {
     nextUrl: string | null;
     previousUrl: string | null;
   };
-  data: {
-    id: string;
-    isExternal: boolean;
-    status: PaymentStatus;
-    transactionType: TransactionType;
-    paymentDetails: {
-      type: PaymentType;
-      reason: PaymentReason;
-      fromInstrumentId: string;
-    };
-    actualAmount: number;
-    currency: string;
-    failureDescriptionShort?: string;
-    failureDescriptionLong?: string;
-    autopayPlanId?: string;
-    cancelReason?: string;
-    timestamps: {
-      createdAt: string;
-      scheduledDate: string | null;
-      succeededAt: string | null;
-      failedAt: string | null;
-      chargebackAt: string | null;
-    };
-  }[];
+  data: PaymentResponseDataDto[];
 }
 
 const PEACH_ID_REGEX = /^ext-|^[A-Z]{2}-[A-Z0-9]+-[A-Z0-9]+|^\d+$/;
