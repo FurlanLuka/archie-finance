@@ -22,7 +22,6 @@ import {
   RPCResponseType,
   Subscribe,
 } from '@archie/api/utils/queue';
-import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
 
 @Controller('v1/collateral')
 export class CollateralController {
@@ -65,7 +64,7 @@ export class CollateralQueueController {
 
   @RequestHandler(GET_COLLATERAL_RPC, SERVICE_QUEUE_NAME)
   async getCollateral(
-    @RabbitPayload() payload: GetCollateralPayload,
+    payload: GetCollateralPayload,
   ): Promise<RPCResponse<GetCollateralResponse[]>> {
     try {
       const data = await this.collateralService.getUserCollateral(
@@ -86,7 +85,7 @@ export class CollateralQueueController {
 
   @RequestHandler(GET_COLLATERAL_VALUE_RPC, SERVICE_QUEUE_NAME)
   async getCollateralValue(
-    @RabbitPayload() payload: GetCollateralValuePayload,
+    payload: GetCollateralValuePayload,
   ): Promise<RPCResponse<GetCollateralValueResponse[]>> {
     try {
       const data = await this.collateralService.getUserCollateralValue(
