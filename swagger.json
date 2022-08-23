@@ -1949,6 +1949,14 @@
               "fromInstrumentId": {
                 "required": true,
                 "type": "string"
+              },
+              "paymentNetworkName": {
+                "required": true,
+                "type": "string"
+              },
+              "accountNumberLastFour": {
+                "required": false,
+                "type": "string"
               }
             }
           },

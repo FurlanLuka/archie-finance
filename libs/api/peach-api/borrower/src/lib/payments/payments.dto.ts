@@ -45,6 +45,8 @@ export class PaymentResponseDataDto {
     type: PaymentType;
     reason: PaymentReason;
     fromInstrumentId: string;
+    paymentNetworkName: string;
+    accountNumberLastFour?: string;
   };
   actualAmount: number;
   currency: string;
