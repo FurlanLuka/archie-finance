@@ -86,7 +86,23 @@ export interface Payments extends PeachResponse {
   previousUrl: string | null;
   data: {
     id: string;
-    created_at: string;
+    timestamps: {
+      appliedAt: string;
+      canceledAt: string | null;
+      chargebackAt: string | null;
+      createdAt: string;
+      deletedAt: string | null;
+      displayDate: string;
+      effectiveDate: string;
+      failedAt: string | null;
+      inDisputeAt: string | null;
+      initiatedAt: string;
+      originalEffectiveDate: string;
+      pendingAt: string;
+      scheduledDate: string;
+      succeededAt: string | null;
+      updatedAt: string | null;
+    };
     isExternal: boolean;
     isVirtual: boolean;
     status: PaymentStatus;

@@ -30,7 +30,13 @@ export class PaymentsResponseFactory {
       },
       data: payments.data.map((payment) => ({
         id: payment.id,
-        created_at: payment.created_at,
+        timestamps: {
+          createdAt: payment.timestamps.createdAt,
+          scheduledDate: payment.timestamps.scheduledDate,
+          succeededAt: payment.timestamps.succeededAt,
+          failedAt: payment.timestamps.failedAt,
+          chargebackAt: payment.timestamps.chargebackAt,
+        },
         isExternal: payment.isExternal,
         status: payment.status,
         transactionType: payment.transactionType,

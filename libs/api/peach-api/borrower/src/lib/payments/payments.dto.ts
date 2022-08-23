@@ -38,7 +38,6 @@ export class PaymentsResponseDto {
   };
   data: {
     id: string;
-    created_at: string;
     isExternal: boolean;
     status: PaymentStatus;
     transactionType: TransactionType;
@@ -53,5 +52,12 @@ export class PaymentsResponseDto {
     failureDescriptionLong?: string;
     autopayPlanId?: string;
     cancelReason?: string;
+    timestamps: {
+      createdAt: string;
+      scheduledDate: string | null;
+      succeededAt: string | null;
+      failedAt: string | null;
+      chargebackAt: string | null;
+    };
   }[];
 }
