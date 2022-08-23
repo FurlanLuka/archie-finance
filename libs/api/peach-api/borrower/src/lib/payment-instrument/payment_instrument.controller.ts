@@ -26,7 +26,7 @@ export class PeachPaymentInstrumentsController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([BorrowerNotFoundError])
-  async getCreditObligations(@Req() request): Promise<PaymentInstrumentDto[]> {
+  async getPaymentInstruments(@Req() request): Promise<PaymentInstrumentDto[]> {
     return this.peachService.listPaymentInstruments(request.user.sub);
   }
 
