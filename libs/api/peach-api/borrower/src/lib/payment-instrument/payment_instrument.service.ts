@@ -73,24 +73,32 @@ export class PeachPaymentInstrumentsService {
     userId: string,
     accountInfo: ConnectAccountDto,
   ): Promise<void> {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
 
-    await this.peachApiService.createPlaidPaymentInstrument({
-      publicToken: accountInfo.publicToken,
-      accountId: accountInfo.accountId,
-      personId: borrower.personId,
-    });
+    if (borrower === null) {
+      throw new BorrowerNotFoundError();
+    }
+
+    await this.peachApiService.createPlaidPaymentInstrument(
+      accountInfo.publicToken,
+      accountInfo.accountId,
+      borrower.personId,
+    );
   }
 
   public async removePaymentInstrument(
     userId: string,
     id: string,
   ): Promise<void> {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
+
+    if (borrower === null) {
+      throw new BorrowerNotFoundError();
+    }
 
     await this.peachApiService.deletePaymentInstrument(borrower.personId, id);
   }
