@@ -1890,7 +1890,7 @@
           "publicToken"
         ]
       },
-      "PaymentResponseData": {
+      "PaymentResponseDataDto": {
         "type": "object",
         "properties": {
           "id": {
@@ -1959,16 +1959,20 @@
             "type": "string"
           },
           "failureDescriptionShort": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "failureDescriptionLong": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "autopayPlanId": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "cancelReason": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "timestamps": {
             "type": "object",
@@ -2008,6 +2012,10 @@
           "paymentDetails",
           "actualAmount",
           "currency",
+          "failureDescriptionShort",
+          "failureDescriptionLong",
+          "autopayPlanId",
+          "cancelReason",
           "timestamps"
         ]
       },
@@ -2040,7 +2048,7 @@
           "data": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/PaymentResponseData"
+              "$ref": "#/components/schemas/PaymentResponseDataDto"
             }
           }
         },

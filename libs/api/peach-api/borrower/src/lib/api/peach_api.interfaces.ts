@@ -114,10 +114,10 @@ export interface Payments extends PeachResponse {
     };
     actualAmount: number;
     currency: string;
-    failureDescriptionShort?: string;
-    failureDescriptionLong?: string;
-    autopayPlanId?: string;
-    cancelReason?: string;
+    failureDescriptionShort: string | null;
+    failureDescriptionLong: string | null;
+    autopayPlanId: string | null;
+    cancelReason: string | null;
   }[];
 }
 
