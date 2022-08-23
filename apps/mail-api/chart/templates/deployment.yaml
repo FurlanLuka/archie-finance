@@ -143,6 +143,11 @@ spec:
                 secretKeyRef:
                   name: mail-api-secrets
                   key: sendgrid-collateral-liquidated-template-id
+            - name: SENDGRID_CONNECT_SALES_TEMPLATE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: mail-api-secrets
+                  key: sendgrid-connect-sales-template-id
             - name: ARCHIE_MARKETING_WEBSITE_URL
               valueFrom:
                 secretKeyRef:

@@ -15,3 +15,5 @@ export enum ConfigVariables {
 export const APPLIED_TO_WAITLIST_TOPIC = 'waitlist.joined';
 
 export const JOINED_WAITLIST_TOPIC = 'waitlist.joined';
+
+export const SALES_CONNECT_TOPIC = 'sales.connect'
