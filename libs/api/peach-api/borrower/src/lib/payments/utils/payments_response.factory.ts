@@ -44,6 +44,10 @@ export class PaymentsResponseFactory {
           type: payment.paymentDetails.type,
           reason: payment.paymentDetails.reason,
           fromInstrumentId: payment.paymentDetails.fromInstrumentId,
+          paymentNetworkName:
+            payment.paymentDetails.fromInstrument.paymentNetworkName,
+          accountNumberLastFour:
+            payment.paymentDetails.fromInstrument.accountNumberLastFour,
         },
         actualAmount: payment.actualAmount,
         currency: payment.currency,

@@ -2,31 +2,31 @@ import { Borrower } from '../borrower.entity';
 import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BorrowerNotFoundError } from '../borrower.errors';
 import { Purchases } from '../api/peach_api.interfaces';
+import { BorrowerValidation } from '../utils/borrower.validation';
+import { PurchasesResponseFactory } from './utils/purchases_response.factory';
 
 export class PurchasesService {
   constructor(
     private peachApiService: PeachApiService,
     @InjectRepository(Borrower)
     private borrowerRepository: Repository<Borrower>,
+    private borrowerValidation: BorrowerValidation,
+    private purchasesResponseFactory: PurchasesResponseFactory,
   ) {}
 
   public async getPurchases(userId: string): Promise<any> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
-
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
+    this.borrowerValidation.isBorrowerDrawDefined(borrower);
 
     const purchases: Purchases = this.peachApiService.getPurchases(
-      borrower.personId,
-      borrower.creditLineId,
-      borrower.drawId,
+      borrower,
       {},
     );
+
+    return this.purchasesResponseFactory.create(purchases);
   }
 
   public async handleTransactionsEvent(transaction) {
@@ -36,6 +36,7 @@ export class PurchasesService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: transaction.userId,
     });
+    this.borrowerValidation.isBorrowerDrawDefined(borrower);
 
     if (transaction.status === 'pending') {
       return this.peachApiService.createPurchase(

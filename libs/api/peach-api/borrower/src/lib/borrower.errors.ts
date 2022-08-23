@@ -6,6 +6,18 @@ export class BorrowerNotFoundError extends NotFoundException {
   }
 }
 
+export class CreditLineNotFoundError extends NotFoundException {
+  constructor() {
+    super('CREDIT_LINE_NOT_FOUND_ERROR');
+  }
+}
+
+export class DrawNotFoundError extends NotFoundException {
+  constructor() {
+    super('CREDIT_LINE_DRAW_NOT_FOUND_ERROR');
+  }
+}
+
 export class PaymentInstrumentNotFoundError extends NotFoundException {
   constructor() {
     super('PAYMENT_INSTRUMENT_NOT_FOUND');

@@ -8,6 +8,7 @@ import {
   PaymentsQueueController,
 } from './payments.controller';
 import { PaymentsUtilModule } from './utils/payments_utils.module';
+import { BorrowerUtil } from '../utils/utils.module';
 
 @Module({
   controllers: [PaymentsController, PaymentsQueueController],
@@ -15,6 +16,7 @@ import { PaymentsUtilModule } from './utils/payments_utils.module';
     TypeOrmModule.forFeature([Borrower]),
     PeachApiModule,
     PaymentsUtilModule,
+    BorrowerUtil,
   ],
   providers: [PaymentsService],
   exports: [PaymentsService],

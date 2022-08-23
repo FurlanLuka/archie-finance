@@ -3,15 +3,12 @@ import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Borrower } from '../borrower.entity';
 import { Repository } from 'typeorm';
-import { BorrowerNotFoundError } from '../borrower.errors';
-import {
-  PaymentInstrument,
-  PaymentInstrumentBalance,
-} from '../api/peach_api.interfaces';
+import { PaymentInstrument } from '../api/peach_api.interfaces';
 import {
   ConnectAccountDto,
   PaymentInstrumentDto,
 } from './payment_instruments.dto';
+import { BorrowerValidation } from '../utils/borrower.validation';
 
 @Injectable()
 export class PeachPaymentInstrumentsService {
@@ -19,6 +16,7 @@ export class PeachPaymentInstrumentsService {
     private peachApiService: PeachApiService,
     @InjectRepository(Borrower)
     private borrowerRepository: Repository<Borrower>,
+    private borrowerValidation: BorrowerValidation,
   ) {}
 
   public async listPaymentInstruments(
@@ -27,9 +25,7 @@ export class PeachPaymentInstrumentsService {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
+    this.borrowerValidation.isBorrowerDefined(borrower);
 
     const paymentInstruments: PaymentInstrument[] =
       await this.peachApiService.getPaymentInstruments(borrower.personId);
@@ -76,6 +72,7 @@ export class PeachPaymentInstrumentsService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId,
     });
+    this.borrowerValidation.isBorrowerDefined(borrower);
 
     await this.peachApiService.createPlaidPaymentInstrument({
       publicToken: accountInfo.publicToken,
@@ -91,6 +88,7 @@ export class PeachPaymentInstrumentsService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId,
     });
+    this.borrowerValidation.isBorrowerDefined(borrower);
 
     await this.peachApiService.deletePaymentInstrument(borrower.personId, id);
   }

@@ -25,6 +25,7 @@ import {
 } from '@archie/api/credit-api/data-transfer-objects';
 import { ObligationsResponseDto } from './loan.dto';
 import { BorrowerNotFoundError } from '../borrower.errors';
+import { BorrowerValidation } from '../utils/borrower.validation';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -34,6 +35,7 @@ export class PeachBorrowerService {
     private borrowerRepository: Repository<Borrower>,
     private cryptoService: CryptoService,
     private queueService: QueueService,
+    private borrowerValidation: BorrowerValidation,
   ) {}
 
   public async handleKycSubmittedEvent(kyc: KycSubmittedPayload) {
@@ -63,7 +65,7 @@ export class PeachBorrowerService {
 
   public async handleEmailVerifiedEvent(email: EmailVerifiedPayload) {
     const encryptedEmail: string = this.cryptoService.encrypt(email.email);
-    const borrower: Borrower = await this.borrowerRepository
+    const borrower: Borrower | undefined = await this.borrowerRepository
       .createQueryBuilder()
       .update(Borrower, {
         encryptedEmail,
@@ -73,13 +75,19 @@ export class PeachBorrowerService {
       .execute()
       .then((response) => response.raw[0]);
 
+    if (borrower === undefined) {
+      throw new BorrowerNotFoundError();
+    }
+
     await this.peachApiService.addMailContact(borrower.personId, email.email);
   }
 
   public async handleCardActivatedEvent(activatedCard) {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: activatedCard.userId,
     });
+    this.borrowerValidation.isBorrowerDefined(borrower);
+
     const email: string = this.cryptoService.decrypt(borrower.encryptedEmail);
 
     await this.peachApiService.createUser(borrower.personId, email);
@@ -89,6 +97,7 @@ export class PeachBorrowerService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: founds.userId,
     });
+    this.borrowerValidation.isBorrowerDefined(borrower);
 
     const creditLineId = await this.createActiveCreditLine(
       borrower,
@@ -176,6 +185,8 @@ export class PeachBorrowerService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: creditLimitIncrease.userId,
     });
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
+
     const currentCreditLimit = await this.peachApiService.getCreditLimit(
       borrower.personId,
       borrower.creditLineId,
@@ -196,6 +207,8 @@ export class PeachBorrowerService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: creditLimitDecrease.userId,
     });
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
+
     const currentCreditLimit = await this.peachApiService.getCreditLimit(
       borrower.personId,
       borrower.creditLineId,
@@ -214,9 +227,7 @@ export class PeachBorrowerService {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
     const obligations: ObligationsResponse =
       await this.peachApiService.getLoanObligations(

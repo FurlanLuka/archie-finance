@@ -23,7 +23,10 @@ import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ObligationsResponseDto } from './loan.dto';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
-import { BorrowerNotFoundError } from '../borrower.errors';
+import {
+  BorrowerNotFoundError,
+  CreditLineNotFoundError,
+} from '../borrower.errors';
 
 @Controller()
 export class PeachBorrowerQueueController {
@@ -91,7 +94,7 @@ export class PeachBorrowerController {
   @Get('obligations')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([BorrowerNotFoundError])
+  @ApiErrorResponse([BorrowerNotFoundError, CreditLineNotFoundError])
   async getCreditObligations(@Req() request): Promise<ObligationsResponseDto> {
     return this.peachService.getObligations(request.user.sub);
   }

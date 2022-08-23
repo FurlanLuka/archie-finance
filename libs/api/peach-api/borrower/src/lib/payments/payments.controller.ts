@@ -16,6 +16,8 @@ import {
   AmountExceedsAvailableBalanceError,
   AmountExceedsOutstandingBalanceError,
   BorrowerNotFoundError,
+  CreditLineNotFoundError,
+  DrawNotFoundError,
   PaymentInstrumentNotFoundError,
 } from '../borrower.errors';
 import {
@@ -41,7 +43,7 @@ export class PaymentsController {
   @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([BorrowerNotFoundError])
+  @ApiErrorResponse([BorrowerNotFoundError, CreditLineNotFoundError])
   async getPayments(
     @Req() request,
     @Query() query: GetPaymentsQueryDto,
@@ -55,6 +57,8 @@ export class PaymentsController {
   @HttpCode(202)
   @ApiErrorResponse([
     BorrowerNotFoundError,
+    CreditLineNotFoundError,
+    DrawNotFoundError,
     PaymentInstrumentNotFoundError,
     AmountExceedsOutstandingBalanceError,
     AmountExceedsAvailableBalanceError,

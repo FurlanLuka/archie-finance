@@ -8,7 +8,11 @@ import { PurchasesService } from './purchases.service';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
-import { BorrowerNotFoundError } from '../borrower.errors';
+import {
+  BorrowerNotFoundError,
+  CreditLineNotFoundError,
+  DrawNotFoundError,
+} from '../borrower.errors';
 
 @Controller('v1/card_purchases')
 export class PurchasesController {
@@ -17,8 +21,12 @@ export class PurchasesController {
   @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([BorrowerNotFoundError])
-  async getDepositAddress(@Req() request): Promise<any> {
+  @ApiErrorResponse([
+    BorrowerNotFoundError,
+    CreditLineNotFoundError,
+    DrawNotFoundError,
+  ])
+  async getPurchases(@Req() request): Promise<any> {
     return this.purchasesController.getPurchases(request.user.sub);
   }
 }

@@ -111,6 +111,10 @@ export interface Payments extends PeachResponse {
       type: PaymentType;
       reason: PaymentReason;
       fromInstrumentId: string;
+      fromInstrument: {
+        paymentNetworkName: string;
+        accountNumberLastFour?: string;
+      };
     };
     actualAmount: number;
     currency: string;

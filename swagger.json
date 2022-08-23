@@ -987,7 +987,7 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR"
+            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -1128,7 +1128,7 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR"
+            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -1948,6 +1948,14 @@
               },
               "fromInstrumentId": {
                 "required": true,
+                "type": "string"
+              },
+              "paymentNetworkName": {
+                "required": true,
+                "type": "string"
+              },
+              "accountNumberLastFour": {
+                "required": false,
                 "type": "string"
               }
             }
