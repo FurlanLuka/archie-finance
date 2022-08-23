@@ -2,13 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { PeachApiService } from '../api/peach_api.service';
 import {
-  Credit,
   Draw,
   HomeAddress,
   Obligation,
   ObligationsResponse,
-  PaymentInstrument,
-  PaymentInstrumentBalance,
   Person,
 } from '../api/peach_api.interfaces';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
@@ -16,10 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
-import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
-import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
 import { QueueService } from '@archie/api/utils/queue';
-import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/constants';
 import {
   GetCollateralValuePayload,
   GetCollateralValueResponse,
@@ -29,13 +23,9 @@ import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
-import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
-import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { ObligationsResponseDto, ScheduleTransactionDto } from './loan.dto';
-import {
-  AmountExceedsAvailableBalanceError,
-  BorrowerNotFoundError,
-} from '../borrower.errors';
+import { ObligationsResponseDto } from './loan.dto';
+import { BorrowerNotFoundError } from '../borrower.errors';
+import { BorrowerValidation } from '../utils/borrower.validation';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -45,6 +35,7 @@ export class PeachBorrowerService {
     private borrowerRepository: Repository<Borrower>,
     private cryptoService: CryptoService,
     private queueService: QueueService,
+    private borrowerValidation: BorrowerValidation,
   ) {}
 
   public async handleKycSubmittedEvent(kyc: KycSubmittedPayload) {
@@ -74,7 +65,7 @@ export class PeachBorrowerService {
 
   public async handleEmailVerifiedEvent(email: EmailVerifiedPayload) {
     const encryptedEmail: string = this.cryptoService.encrypt(email.email);
-    const borrower: Borrower = await this.borrowerRepository
+    const borrower: Borrower | undefined = await this.borrowerRepository
       .createQueryBuilder()
       .update(Borrower, {
         encryptedEmail,
@@ -84,13 +75,19 @@ export class PeachBorrowerService {
       .execute()
       .then((response) => response.raw[0]);
 
+    if (borrower === undefined) {
+      throw new BorrowerNotFoundError();
+    }
+
     await this.peachApiService.addMailContact(borrower.personId, email.email);
   }
 
   public async handleCardActivatedEvent(activatedCard) {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: activatedCard.userId,
     });
+    this.borrowerValidation.isBorrowerDefined(borrower);
+
     const email: string = this.cryptoService.decrypt(borrower.encryptedEmail);
 
     await this.peachApiService.createUser(borrower.personId, email);
@@ -100,6 +97,7 @@ export class PeachBorrowerService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: founds.userId,
     });
+    this.borrowerValidation.isBorrowerDefined(borrower);
 
     const creditLineId = await this.createActiveCreditLine(
       borrower,
@@ -187,6 +185,8 @@ export class PeachBorrowerService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: creditLimitIncrease.userId,
     });
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
+
     const currentCreditLimit = await this.peachApiService.getCreditLimit(
       borrower.personId,
       borrower.creditLineId,
@@ -207,6 +207,8 @@ export class PeachBorrowerService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: creditLimitDecrease.userId,
     });
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
+
     const currentCreditLimit = await this.peachApiService.getCreditLimit(
       borrower.personId,
       borrower.creditLineId,
@@ -228,6 +230,7 @@ export class PeachBorrowerService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: transaction.userId,
     });
+    this.borrowerValidation.isBorrowerDrawDefined(borrower);
 
     if (transaction.status === 'pending') {
       return this.peachApiService.createPurchase(
@@ -246,78 +249,11 @@ export class PeachBorrowerService {
     );
   }
 
-  public async handleInternalTransactionCreatedEvent(
-    transaction: InternalCollateralTransactionCreatedPayload,
-  ): Promise<void> {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
-      userId: transaction.userId,
-    });
-
-    let liquidationInstrumentId: string | null =
-      borrower.liquidationInstrumentId;
-
-    if (liquidationInstrumentId === null) {
-      const paymentInstrument: PaymentInstrument =
-        await this.peachApiService.createLiquidationPaymentInstrument(
-          borrower.personId,
-        );
-      liquidationInstrumentId = paymentInstrument.id;
-
-      await this.borrowerRepository.update(
-        {
-          userId: transaction.userId,
-        },
-        {
-          liquidationInstrumentId,
-        },
-      );
-    }
-
-    await this.peachApiService.createPendingOneTimePaymentTransaction(
-      borrower,
-      liquidationInstrumentId,
-      transaction.price,
-      transaction.id,
-    );
-  }
-
-  public async handleInternalTransactionCompletedEvent(
-    transaction: InternalCollateralTransactionCompletedPayload,
-  ): Promise<void> {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
-      userId: transaction.userId,
-    });
-
-    await this.peachApiService.completeTransaction(
-      borrower,
-      transaction.transactionId,
-    );
-  }
-
-  public async handlePaymentConfirmedEvent(
-    payment: WebhookPaymentPayload,
-  ): Promise<void> {
-    const credit: Credit = await this.peachApiService.getCreditBalance(
-      payment.personId,
-      payment.loanId,
-    );
-
-    await this.queueService.publish<CreditLinePaymentReceivedPayload>(
-      CREDIT_LINE_PAYMENT_RECEIVED_TOPIC,
-      {
-        ...credit,
-        userId: payment.personExternalId,
-      },
-    );
-  }
-
   public async getObligations(userId: string): Promise<ObligationsResponseDto> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
     const obligations: ObligationsResponse =
       await this.peachApiService.getLoanObligations(
@@ -342,35 +278,5 @@ export class PeachBorrowerService {
         remainingAmount: obligation.remainingAmount,
       })),
     };
-  }
-
-  public async scheduleTransaction(
-    userId: string,
-    transaction: ScheduleTransactionDto,
-  ): Promise<void> {
-    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId,
-    });
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
-
-    // TODO: uncomment once we get response from peach
-    // const balance: PaymentInstrumentBalance =
-    //   await this.peachApiService.getRefreshedBalance(
-    //     borrower.personId,
-    //     transaction.paymentInstrumentId,
-    //   );
-    //
-    // if (transaction.amount > balance.availableBalanceAmount) {
-    //   throw new AmountExceedsAvailableBalanceError();
-    // }
-
-    await this.peachApiService.createOneTimeTransaction(
-      borrower,
-      transaction.amount,
-      transaction.paymentInstrumentId,
-      transaction.scheduledDate,
-    );
   }
 }

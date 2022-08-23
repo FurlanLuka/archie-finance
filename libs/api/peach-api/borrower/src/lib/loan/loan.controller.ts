@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   CARD_ACTIVATED_TOPIC,
@@ -24,31 +16,21 @@ import {
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
 import {
-  INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
-  INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
-} from '@archie/api/collateral-api/constants';
-import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
-import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
-import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
-import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
-import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { ObligationsResponseDto, ScheduleTransactionDto } from './loan.dto';
+import { ObligationsResponseDto } from './loan.dto';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import {
-  AmountExceedsAvailableBalanceError,
-  AmountExceedsOutstandingBalanceError,
   BorrowerNotFoundError,
-  PaymentInstrumentNotFoundError,
+  CreditLineNotFoundError,
 } from '../borrower.errors';
 
 @Controller()
 export class PeachBorrowerQueueController {
-  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-borrower`;
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-borrower-loan`;
 
   constructor(private peachService: PeachBorrowerService) {}
 
@@ -111,36 +93,6 @@ export class PeachBorrowerQueueController {
   async transactionUpdatedHandler(payload): Promise<void> {
     await this.peachService.handleTransactionsEvent(payload);
   }
-
-  @Subscribe(
-    INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
-    PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async internalTransactionCreatedHandler(
-    payload: InternalCollateralTransactionCreatedPayload,
-  ): Promise<void> {
-    await this.peachService.handleInternalTransactionCreatedEvent(payload);
-  }
-
-  @Subscribe(
-    INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
-    PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async internalTransactionCompletedHandler(
-    payload: InternalCollateralTransactionCompletedPayload,
-  ): Promise<void> {
-    await this.peachService.handleInternalTransactionCompletedEvent(payload);
-  }
-
-  @Subscribe(
-    WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC,
-    PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async peachWebhookPaymentConfirmedHandler(
-    payload: WebhookPaymentPayload,
-  ): Promise<void> {
-    await this.peachService.handlePaymentConfirmedEvent(payload);
-  }
 }
 
 @Controller('v1/loans')
@@ -150,25 +102,8 @@ export class PeachBorrowerController {
   @Get('obligations')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([BorrowerNotFoundError])
+  @ApiErrorResponse([BorrowerNotFoundError, CreditLineNotFoundError])
   async getCreditObligations(@Req() request): Promise<ObligationsResponseDto> {
     return this.peachService.getObligations(request.user.sub);
-  }
-
-  @Post('scheduled_transactions')
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  @HttpCode(202)
-  @ApiErrorResponse([
-    BorrowerNotFoundError,
-    PaymentInstrumentNotFoundError,
-    AmountExceedsOutstandingBalanceError,
-    AmountExceedsAvailableBalanceError,
-  ])
-  async scheduleTransaction(
-    @Req() request,
-    @Body() body: ScheduleTransactionDto,
-  ): Promise<void> {
-    return this.peachService.scheduleTransaction(request.user.sub, body);
   }
 }

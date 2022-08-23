@@ -77,6 +77,7 @@ jobs:
       PEACH_COMPANY_ID: 'CP-25K9-4GJ6'
       PEACH_BORROWER_ROLE_ID: 'RL-G2K6-NLK4'
       PEACH_LOAN_ID: 'LT-GDB3-WEBO'
+      API_BASE_URL: 'http://localhost'
     services:
       postgres:
         image: postgres:alpine

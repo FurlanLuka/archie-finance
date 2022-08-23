@@ -18,6 +18,8 @@ import {
   PersonStatus,
   ObligationsResponse,
   PaymentInstrumentBalance,
+  Payments,
+  QueryParams,
 } from './peach_api.interfaces';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
@@ -25,6 +27,7 @@ import {
   PaymentInstrumentNotFoundError,
   AmountExceedsOutstandingBalanceError,
 } from '../borrower.errors';
+import { omitBy, isNil } from 'lodash';
 
 @Injectable()
 export class PeachApiService {
@@ -498,5 +501,20 @@ export class PeachApiService {
     );
 
     return response.data.data;
+  }
+
+  public async getPayments(
+    personId: string,
+    loanId: string,
+    query: QueryParams,
+  ): Promise<Payments> {
+    const response = await this.peachClient.get(
+      `/people/${personId}/loans/${loanId}/transactions`,
+      {
+        params: omitBy(query, isNil),
+      },
+    );
+
+    return response.data;
   }
 }

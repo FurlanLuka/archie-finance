@@ -987,36 +987,7 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/loans/scheduled_transactions": {
-      "post": {
-        "operationId": "PeachBorrowerController_scheduleTransaction",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ScheduleTransactionDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "202": {
-            "description": ""
-          },
-          "404": {
-            "description": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE"
+            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -1070,6 +1041,121 @@
         "responses": {
           "201": {
             "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/payment_instruments/{id}": {
+      "delete": {
+        "operationId": "PeachPaymentInstrumentsController_removeAccount",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/loan_payments": {
+      "get": {
+        "operationId": "PaymentsController_getPayments",
+        "parameters": [
+          {
+            "name": "startingAfter",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "endingBefore",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "fromEffectiveDate",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "toEffectiveDate",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentsResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "PaymentsController_scheduleTransaction",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScheduleTransactionDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": ""
+          },
+          "404": {
+            "description": "AMOUNT_EXCEEDS_AVAILABLE_BALANCE"
           }
         },
         "security": [
@@ -1758,27 +1844,6 @@
           "obligations"
         ]
       },
-      "ScheduleTransactionDto": {
-        "type": "object",
-        "properties": {
-          "amount": {
-            "type": "number",
-            "minimum": 0.01
-          },
-          "scheduledDate": {
-            "type": "string",
-            "nullable": true
-          },
-          "paymentInstrumentId": {
-            "type": "string",
-            "pattern": {}
-          }
-        },
-        "required": [
-          "amount",
-          "paymentInstrumentId"
-        ]
-      },
       "PaymentInstrumentDto": {
         "type": "object",
         "properties": {
@@ -1823,6 +1888,202 @@
         "required": [
           "accountId",
           "publicToken"
+        ]
+      },
+      "PaymentResponseDataDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "isExternal": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "scheduled",
+              "initiated",
+              "pending",
+              "succeeded",
+              "failed",
+              "inDispute",
+              "canceled",
+              "chargeback"
+            ]
+          },
+          "transactionType": {
+            "type": "string",
+            "enum": [
+              "payment",
+              "serviceCredit"
+            ]
+          },
+          "paymentDetails": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "required": true,
+                "enum": [
+                  "ach",
+                  "debitCard",
+                  "creditCard",
+                  "check",
+                  "cash",
+                  "payroll",
+                  "paymentNetwork"
+                ],
+                "type": "string"
+              },
+              "reason": {
+                "required": true,
+                "enum": [
+                  "autoPay",
+                  "oneTimePay",
+                  "settlement",
+                  "reversal",
+                  "reimbursement"
+                ],
+                "type": "string"
+              },
+              "fromInstrumentId": {
+                "required": true,
+                "type": "string"
+              },
+              "paymentNetworkName": {
+                "required": true,
+                "type": "string"
+              },
+              "accountNumberLastFour": {
+                "required": false,
+                "type": "string"
+              }
+            }
+          },
+          "actualAmount": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "failureDescriptionShort": {
+            "type": "string",
+            "nullable": true
+          },
+          "failureDescriptionLong": {
+            "type": "string",
+            "nullable": true
+          },
+          "autopayPlanId": {
+            "type": "string",
+            "nullable": true
+          },
+          "cancelReason": {
+            "type": "string",
+            "nullable": true
+          },
+          "timestamps": {
+            "type": "object",
+            "properties": {
+              "createdAt": {
+                "required": true,
+                "type": "string"
+              },
+              "scheduledDate": {
+                "required": true,
+                "type": "string",
+                "nullable": true
+              },
+              "succeededAt": {
+                "required": true,
+                "type": "string",
+                "nullable": true
+              },
+              "failedAt": {
+                "required": true,
+                "type": "string",
+                "nullable": true
+              },
+              "chargebackAt": {
+                "required": true,
+                "type": "string",
+                "nullable": true
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "isExternal",
+          "status",
+          "transactionType",
+          "paymentDetails",
+          "actualAmount",
+          "currency",
+          "failureDescriptionShort",
+          "failureDescriptionLong",
+          "autopayPlanId",
+          "cancelReason",
+          "timestamps"
+        ]
+      },
+      "PaymentsResponseDto": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "required": true,
+                "type": "number"
+              },
+              "count": {
+                "required": true,
+                "type": "number"
+              },
+              "nextUrl": {
+                "required": true,
+                "type": "string",
+                "nullable": true
+              },
+              "previousUrl": {
+                "required": true,
+                "type": "string",
+                "nullable": true
+              }
+            }
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PaymentResponseDataDto"
+            }
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ]
+      },
+      "ScheduleTransactionDto": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "minimum": 1
+          },
+          "scheduledDate": {
+            "type": "string",
+            "nullable": true
+          },
+          "paymentInstrumentId": {
+            "type": "string",
+            "pattern": {}
+          }
+        },
+        "required": [
+          "amount",
+          "paymentInstrumentId"
         ]
       }
     },
