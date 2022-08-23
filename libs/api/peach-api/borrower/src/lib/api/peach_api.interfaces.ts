@@ -82,8 +82,8 @@ export interface QueryParams {
 export interface Payments extends PeachResponse {
   total: number;
   count: number;
-  nextUrl: string;
-  previousUrl: string;
+  nextUrl: string | null;
+  previousUrl: string | null;
   data: {
     id: string;
     created_at: string;

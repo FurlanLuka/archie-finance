@@ -7,8 +7,9 @@ export class PaymentsResponseFactory {
   constructor(private configService: ConfigService) {}
 
   public create(payments: Payments, limit: number): PaymentsResponseDto {
-    const lastPaymentId: string = payments.data[payments.data.length - 1].id;
-    const firstPaymentId: string = payments.data[0].id;
+    const lastPaymentId: string | undefined =
+      payments.data[payments.data.length - 1]?.id;
+    const firstPaymentId: string | undefined = payments.data[0]?.id;
 
     return {
       meta: {
