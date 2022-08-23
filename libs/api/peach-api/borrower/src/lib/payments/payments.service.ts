@@ -20,6 +20,7 @@ import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/consta
 import { QueueService } from '@archie/api/utils/queue';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
+import { BorrowerValidation } from '../utils/borrower.validation';
 
 export class PaymentsService {
   constructor(
@@ -28,6 +29,7 @@ export class PaymentsService {
     private peachApiService: PeachApiService,
     private paymentsResponseFactory: PaymentsResponseFactory,
     private queueService: QueueService,
+    private borrowerValidation: BorrowerValidation,
   ) {}
 
   public async getPayments(
@@ -37,9 +39,7 @@ export class PaymentsService {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
     const payments: Payments = await this.peachApiService.getPayments(
       borrower.personId,
@@ -60,6 +60,7 @@ export class PaymentsService {
     if (borrower === null) {
       throw new BorrowerNotFoundError();
     }
+    this.borrowerValidation.isBorrowerDrawDefined(borrower);
 
     // TODO: uncomment once we get response from peach
     // const balance: PaymentInstrumentBalance =
@@ -103,6 +104,7 @@ export class PaymentsService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: transaction.userId,
     });
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
     let liquidationInstrumentId: string | null =
       borrower.liquidationInstrumentId;
@@ -138,6 +140,7 @@ export class PaymentsService {
     const borrower: Borrower = await this.borrowerRepository.findOneBy({
       userId: transaction.userId,
     });
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
     await this.peachApiService.completeTransaction(
       borrower,
