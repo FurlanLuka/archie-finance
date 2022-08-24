@@ -55,14 +55,22 @@ export class CollateralController {
 
 @Controller()
 export class CollateralQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-collateral-user-vault`;
+
   constructor(private collateralService: CollateralService) {}
 
-  @Subscribe(COLLATERAL_DEPOSITED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    COLLATERAL_DEPOSITED_TOPIC,
+    CollateralQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async collateralDepositedHandler(payload: CreateDepositDto): Promise<void> {
     await this.collateralService.createDeposit(payload);
   }
 
-  @RequestHandler(GET_COLLATERAL_RPC, SERVICE_QUEUE_NAME)
+  @RequestHandler(
+    GET_COLLATERAL_RPC,
+    CollateralQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async getCollateral(
     payload: GetCollateralPayload,
   ): Promise<RPCResponse<GetCollateralResponse[]>> {
@@ -83,7 +91,10 @@ export class CollateralQueueController {
     }
   }
 
-  @RequestHandler(GET_COLLATERAL_VALUE_RPC, SERVICE_QUEUE_NAME)
+  @RequestHandler(
+    GET_COLLATERAL_VALUE_RPC,
+    CollateralQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async getCollateralValue(
     payload: GetCollateralValuePayload,
   ): Promise<RPCResponse<GetCollateralValueResponse[]>> {

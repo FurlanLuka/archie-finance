@@ -15,19 +15,30 @@ import { CreditLineUpdatedDto } from '@archie/api/credit-api/data-transfer-objec
 
 @Controller()
 export class MarginQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-margin`;
+
   constructor(private marginService: MarginService) {}
 
-  @Subscribe(MARGIN_CHECK_REQUESTED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    MARGIN_CHECK_REQUESTED_TOPIC,
+    MarginQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async checkMarginHandler(message: CheckMarginMessage): Promise<void> {
     return this.marginService.checkMargin(message.userIds);
   }
 
-  @Subscribe(CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC,
+    MarginQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async checkCreditLimitHandler(message: CheckMarginMessage): Promise<void> {
     return this.marginService.checkCreditLimit(message.userIds);
   }
 
-  @Subscribe(CREDIT_LINE_UPDATED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    CREDIT_LINE_UPDATED_TOPIC,
+    MarginQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async creditLineUpdatedHandler(message: CreditLineUpdatedDto): Promise<void> {
     return this.marginService.handleCreditLineUpdatedEvent(message.userId);
   }

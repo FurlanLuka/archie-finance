@@ -25,12 +25,17 @@ import {
 
 @Controller()
 export class SendgirdQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-sendgrid`;
+
   constructor(
     private sendgridService: SendgridService,
     private configService: ConfigService,
   ) {}
 
-  @Subscribe(APPLIED_TO_WAITLIST_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    APPLIED_TO_WAITLIST_TOPIC,
+    SendgirdQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async appliedToWaitlistEventHandler(
     payload: AppliedToWaitlistDto,
   ): Promise<void> {
@@ -45,24 +50,36 @@ export class SendgirdQueueController {
     );
   }
 
-  @Subscribe(JOINED_WAITLIST_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    JOINED_WAITLIST_TOPIC,
+    SendgirdQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async joinedWaitlistEventHandler(payload: JoinedWaitlistDto): Promise<void> {
     await this.sendgridService.addToWaitlist(payload.emailAddress);
   }
 
-  @Subscribe(MARGIN_CALL_COMPLETED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    MARGIN_CALL_COMPLETED_TOPIC,
+    SendgirdQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async marginCallCompletedHandler(
     payload: MarginCallCompletedDto,
   ): Promise<void> {
     await this.sendgridService.sendMarginCallCompletedMail(payload);
   }
 
-  @Subscribe(MARGIN_CALL_STARTED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    MARGIN_CALL_STARTED_TOPIC,
+    SendgirdQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async marginCallStartedHandler(payload: MarginCallStartedDto): Promise<void> {
     await this.sendgridService.sendMarginCallStartedMail(payload);
   }
 
-  @Subscribe(LTV_LIMIT_APPROACHING_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    LTV_LIMIT_APPROACHING_TOPIC,
+    SendgirdQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async LtvLimitApproachingHandler(
     payload: LtvLimitApproachingDto,
   ): Promise<void> {

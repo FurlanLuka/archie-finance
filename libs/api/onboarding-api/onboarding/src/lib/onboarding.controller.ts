@@ -32,9 +32,14 @@ export class OnboardingController {
 
 @Controller()
 export class OnboardingQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-onboarding`;
+
   constructor(private onboardingService: OnboardingService) {}
 
-  @Subscribe(KYC_SUBMITTED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    KYC_SUBMITTED_TOPIC,
+    OnboardingQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async kycSubmittedEventHandler(
     payload: CompleteOnboardingStageDto,
   ): Promise<void> {
@@ -44,7 +49,10 @@ export class OnboardingQueueController {
     );
   }
 
-  @Subscribe(EMAIL_VERIFIED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    EMAIL_VERIFIED_TOPIC,
+    OnboardingQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async emailVerifiedEventHandler(
     payload: CompleteOnboardingStageDto,
   ): Promise<void> {
@@ -54,7 +62,10 @@ export class OnboardingQueueController {
     );
   }
 
-  @Subscribe(MFA_ENROLLED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    MFA_ENROLLED_TOPIC,
+    OnboardingQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async mfaEnrollmentEventHandler(
     payload: CompleteOnboardingStageDto,
   ): Promise<void> {
@@ -64,7 +75,10 @@ export class OnboardingQueueController {
     );
   }
 
-  @Subscribe(COLLATERAL_RECEIVED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    COLLATERAL_RECEIVED_TOPIC,
+    OnboardingQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async collateralReceivedEventHandler(
     payload: CompleteOnboardingStageDto,
   ): Promise<void> {
@@ -74,7 +88,10 @@ export class OnboardingQueueController {
     );
   }
 
-  @Subscribe(CARD_ACTIVATED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    CARD_ACTIVATED_TOPIC,
+    OnboardingQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async cardActivatedEventHandler(
     payload: CompleteOnboardingStageDto,
   ): Promise<void> {

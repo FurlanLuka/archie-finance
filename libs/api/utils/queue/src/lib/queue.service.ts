@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import {
   AmqpConnection,
   RabbitHandlerConfig,
@@ -11,7 +11,7 @@ import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { RABBIT_RETRY_HANDLER } from './utils';
 
 @Injectable()
-export class QueueService implements OnModuleInit {
+export class QueueService implements OnApplicationBootstrap {
   constructor(
     private amqpConnection: AmqpConnection,
     private discover: DiscoveryService,
@@ -47,7 +47,8 @@ export class QueueService implements OnModuleInit {
     return response.data;
   }
 
-  async onModuleInit() {
+  async onApplicationBootstrap() {
+    Logger.log('Initializing retry and dead letter queues');
     const retryHandlers = [
       ...(await this.discover.providerMethodsWithMetaAtKey<RabbitHandlerConfig>(
         RABBIT_RETRY_HANDLER,
@@ -68,6 +69,7 @@ export class QueueService implements OnModuleInit {
       );
       this.createDeadLetterQueue(meta);
     });
+    Logger.log('Retry and dead letter queues initialized');
   }
 
   private createDeadLetterQueue(meta: RabbitHandlerConfig) {

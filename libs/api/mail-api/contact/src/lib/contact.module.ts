@@ -5,10 +5,10 @@ import { Contact } from './contact.entity';
 import { CryptoModule } from '@archie/api/utils/crypto';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
-import { ContactController } from './contact.controller';
+import { ContactQueueController } from './contact.controller';
 
 @Module({
-  controllers: [ContactController],
+  controllers: [ContactQueueController],
   imports: [
     TypeOrmModule.forFeature([Contact]),
     CryptoModule.register({

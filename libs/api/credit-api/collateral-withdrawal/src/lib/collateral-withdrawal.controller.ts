@@ -72,17 +72,25 @@ export class CollateralWithdrawalController {
 
 @Controller()
 export class CollateralWithdrawalQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-collateral-withdrawal`;
+
   constructor(
     private collateralWithdrawalService: CollateralWithdrawalService,
   ) {}
 
-  @Subscribe(COLLATERAL_WITHDRAW_COMPLETED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
+    CollateralWithdrawalQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async collateralWithdrawCompleteHandler(
     payload: CollateralWithdrawCompletedDto,
   ): Promise<void> {
     await this.collateralWithdrawalService.handleWithdrawalComplete(payload);
   }
-  @Subscribe(COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC,
+    CollateralWithdrawalQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async collateralWithdrawTransactionCreatedHandler(
     payload: CollateralWithdrawTransactionCreatedDto,
   ): Promise<void> {
