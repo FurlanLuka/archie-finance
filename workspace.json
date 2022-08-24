@@ -32,6 +32,7 @@
     "api-peach-api-data-transfer-objects": "libs/api/peach-api/data-transfer-objects",
     "api-referral-system-api-constants": "libs/api/referral-system-api/constants",
     "api-referral-system-api-waitlist": "libs/api/referral-system-api/waitlist",
+    "api-referral-system-api-sales-connect": "libs/api/referral-system-api/sales-connect",
     "api-test-integration": "libs/api/test/integration",
     "api-user-api-auth0": "libs/api/user-api/auth0",
     "api-user-api-constants": "libs/api/user-api/constants",

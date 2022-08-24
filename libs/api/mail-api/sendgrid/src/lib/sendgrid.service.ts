@@ -10,6 +10,7 @@ import {
 } from './sendgrid.interfaces';
 import { EmailDataFactoryService } from '@archie/api/mail-api/utils/email-data-factory';
 import { ContactService, DecryptedContact } from '@archie/api/mail-api/contact';
+import { SalesConnectDto } from '@archie/api/referral-system-api/sales-connect';
 
 @Injectable()
 export class SendgridService {
@@ -71,6 +72,16 @@ export class SendgridService {
         ConfigVariables.SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID,
       ),
       this.emailDataFactory.createInfoData(contact.firstName, marginCall),
+    );
+  }
+
+  public async sendSalesConnectEmail(payload: SalesConnectDto) {
+    await this.sendEmail(
+      'sales@archie.finance',
+      this.configService.get(
+        ConfigVariables.SENDGRID_CONNECT_SALES_TEMPLATE_ID,
+      ),
+      payload
     );
   }
 
