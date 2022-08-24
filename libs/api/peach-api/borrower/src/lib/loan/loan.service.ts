@@ -1,13 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { PeachApiService } from '../api/peach_api.service';
-import {
-  Draw,
-  HomeAddress,
-  Obligation,
-  ObligationsResponse,
-  Person,
-} from '../api/peach_api.interfaces';
+import { Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
 import { EmailVerifiedPayload } from '@archie/api/user-api/user';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -23,7 +17,6 @@ import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
-import { ObligationsResponseDto } from './loan.dto';
 import { BorrowerNotFoundError } from '../borrower.errors';
 import { BorrowerValidation } from '../utils/borrower.validation';
 
@@ -247,36 +240,5 @@ export class PeachBorrowerService {
       borrower.drawId,
       transaction,
     );
-  }
-
-  public async getObligations(userId: string): Promise<ObligationsResponseDto> {
-    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId,
-    });
-    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
-
-    const obligations: ObligationsResponse =
-      await this.peachApiService.getLoanObligations(
-        borrower.personId,
-        borrower.creditLineId,
-      );
-
-    return {
-      daysOverdue: obligations.daysOverdue,
-      isOverdue: obligations.isOverdue,
-      overdueAmount: obligations.overdueAmount,
-      obligations: obligations.obligations.map((obligation: Obligation) => ({
-        capitalizedAmount: obligation.capitalizedAmount,
-        dueDate: obligation.dueDate,
-        fulfilledAmount: obligation.fulfilledAmount,
-        gracePeriod: obligation.gracePeriod,
-        isFulfilled: obligation.isFulfilled,
-        isOpen: obligation.isOpen,
-        isOverdue: obligation.isOverdue,
-        obligationAmount: obligation.obligationAmount,
-        overpaymentsAmount: obligation.overpaymentsAmount,
-        remainingAmount: obligation.remainingAmount,
-      })),
-    };
   }
 }
