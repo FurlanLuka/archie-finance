@@ -14,10 +14,10 @@ export class ObligationsController {
   constructor(private obligationsService: ObligationsService) {}
 
   @Get()
-  // @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([BorrowerNotFoundError, CreditLineNotFoundError])
   async getCreditObligations(@Req() request): Promise<ObligationsResponseDto> {
-    return this.obligationsService.getObligations('aaa');
+    return this.obligationsService.getObligations(request.user.sub);
   }
 }
