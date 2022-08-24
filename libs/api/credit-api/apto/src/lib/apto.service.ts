@@ -51,6 +51,10 @@ import {
   GetEmailAddressPayload,
   GetEmailAddressResponse,
 } from '@archie/api/user-api/user';
+import {
+  CardActivatedPayload,
+  PhoneNumberVerifiedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class AptoService {
@@ -138,9 +142,12 @@ export class AptoService {
         secret,
       );
 
-    this.queueService.publish(PHONE_NUMBER_VERIFIED_TOPIC, {
-      userId,
-    });
+    this.queueService.publish<PhoneNumberVerifiedPayload>(
+      PHONE_NUMBER_VERIFIED_TOPIC,
+      {
+        userId,
+      },
+    );
 
     await this.aptoVerificationRepository.update(
       {

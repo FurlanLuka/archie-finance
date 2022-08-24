@@ -91,3 +91,15 @@ export class FundsLoadedPayload {
   userId: string;
   amount: number;
 }
+
+export class PhoneNumberVerifiedPayload {
+  userId: string;
+}
+
+export class CollateralWithdrawInitializedPayload {
+  asset: string;
+  withdrawalAmount: number;
+  userId: string;
+  destinationAddress: string;
+  withdrawalId: string;
+}

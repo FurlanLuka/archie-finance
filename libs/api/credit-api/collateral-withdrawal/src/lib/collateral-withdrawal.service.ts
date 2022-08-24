@@ -29,6 +29,7 @@ import {
 import { QueueService } from '@archie/api/utils/queue';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { CollateralWithdrawInitializedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 const MAX_LTV = 30;
 @Injectable()
@@ -259,13 +260,16 @@ export class CollateralWithdrawalService {
         });
       }
 
-      this.queueService.publish(COLLATERAL_WITHDRAW_INITIALIZED_TOPIC, {
-        asset,
-        withdrawalAmount,
-        userId,
-        destinationAddress,
-        withdrawalId: withdrawal.id,
-      });
+      this.queueService.publish<CollateralWithdrawInitializedPayload>(
+        COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
+        {
+          asset,
+          withdrawalAmount,
+          userId,
+          destinationAddress,
+          withdrawalId: withdrawal.id,
+        },
+      );
 
       return withdrawal;
     } catch (error) {

@@ -7,6 +7,7 @@
     "api-asset-price-api-constants": "libs/api/asset-price-api/constants",
     "api-collateral-api-asset-information": "libs/api/collateral-api/asset-information",
     "api-collateral-api-constants": "libs/api/collateral-api/constants",
+    "api-collateral-api-data-transfer-objects": "libs/api/collateral-api/data-transfer-objects",
     "api-collateral-api-deposit-address": "libs/api/collateral-api/deposit-address",
     "api-collateral-api-fireblocks": "libs/api/collateral-api/fireblocks",
     "api-collateral-api-fireblocks-webhook": "libs/api/collateral-api/fireblocks-webhook",
