@@ -21,13 +21,13 @@ import {
   Payments,
   QueryParams,
 } from './peach_api.interfaces';
-import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
 import {
   PaymentInstrumentNotFoundError,
   AmountExceedsOutstandingBalanceError,
 } from '../borrower.errors';
 import { omitBy, isNil } from 'lodash';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects';
 
 @Injectable()
 export class PeachApiService {

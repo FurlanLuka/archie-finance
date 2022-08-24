@@ -2,7 +2,6 @@ import { AuthGuard } from '@archie/api/utils/auth0';
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { CollateralService } from './collateral.service';
 import {
-  CreateDepositDto,
   GetCollateralPayload,
   GetCollateralResponse,
   GetCollateralValuePayload,
@@ -22,6 +21,7 @@ import {
   RPCResponseType,
   Subscribe,
 } from '@archie/api/utils/queue';
+import { CollateralDepositedPayload } from '@archie/api/collateral-api/data-transfer-objects';
 
 @Controller('v1/collateral')
 export class CollateralController {
@@ -63,7 +63,9 @@ export class CollateralQueueController {
     COLLATERAL_DEPOSITED_TOPIC,
     CollateralQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async collateralDepositedHandler(payload: CreateDepositDto): Promise<void> {
+  async collateralDepositedHandler(
+    payload: CollateralDepositedPayload,
+  ): Promise<void> {
     await this.collateralService.createDeposit(payload);
   }
 

@@ -6,7 +6,6 @@ import {
 import { Enrollment, SendEnrollmentTicketResponse, User } from 'auth0';
 import { Auth0Service } from '@archie/api/user-api/auth0';
 import {
-  EmailVerifiedPayload,
   GetEmailVerificationResponse,
   GetMfaEnrollmentResponse,
 } from './user.interfaces';
@@ -16,6 +15,10 @@ import {
   MFA_ENROLLED_TOPIC,
 } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
+import {
+  EmailVerifiedPayload,
+  MfaEnrolledPayload,
+} from '@archie/api/user-api/data-transfer-objects';
 
 @Injectable()
 export class UserService {
@@ -100,7 +103,7 @@ export class UserService {
     );
 
     if (hasEnrolledAuthenticator !== undefined) {
-      this.queueService.publish(MFA_ENROLLED_TOPIC, {
+      this.queueService.publish<MfaEnrolledPayload>(MFA_ENROLLED_TOPIC, {
         userId,
       });
     }

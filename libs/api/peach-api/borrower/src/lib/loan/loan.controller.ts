@@ -13,8 +13,6 @@ import {
   EMAIL_VERIFIED_TOPIC,
   KYC_SUBMITTED_TOPIC,
 } from '@archie/api/user-api/constants';
-import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
-import { EmailVerifiedPayload } from '@archie/api/user-api/user';
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
@@ -27,6 +25,10 @@ import {
   BorrowerNotFoundError,
   CreditLineNotFoundError,
 } from '../borrower.errors';
+import {
+  EmailVerifiedPayload,
+  KycSubmittedPayload,
+} from '@archie/api/user-api/data-transfer-objects';
 
 @Controller()
 export class PeachBorrowerQueueController {

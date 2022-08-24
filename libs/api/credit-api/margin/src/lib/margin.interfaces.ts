@@ -6,10 +6,6 @@ export interface LiquidatedCollateralAssets {
   liquidatedAssets: Partial<LiquidationLog>[];
 }
 
-export interface CheckMarginMessage {
-  userIds: string[];
-}
-
 export interface UsersLtv {
   userId: string;
   ltv: number;

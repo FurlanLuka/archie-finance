@@ -11,7 +11,6 @@ import { TransactionStatus } from 'fireblocks-sdk';
 import { Repository } from 'typeorm';
 import {
   CollateralWithdrawCompletedDto,
-  CollateralWithdrawTransactionCreatedDto,
   GetCollateralWithdrawalResponse,
   GetUserMaxWithdrawalAmountResponse,
 } from './collateral-withdrawal.interfaces';
@@ -30,6 +29,7 @@ import { QueueService } from '@archie/api/utils/queue';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { CollateralWithdrawInitializedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import { CollateralWithdrawTransactionCreatedPayload } from '@archie/api/collateral-api/data-transfer-objects';
 
 const MAX_LTV = 30;
 @Injectable()
@@ -49,7 +49,7 @@ export class CollateralWithdrawalService {
   public async handleWithdrawalTransactionCreated({
     withdrawalId,
     transactionId,
-  }: CollateralWithdrawTransactionCreatedDto): Promise<void> {
+  }: CollateralWithdrawTransactionCreatedPayload): Promise<void> {
     Logger.log({
       code: 'COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC',
       params: {

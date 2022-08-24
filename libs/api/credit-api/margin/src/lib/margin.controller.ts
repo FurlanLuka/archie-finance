@@ -7,11 +7,14 @@ import {
   MARGIN_CHECK_REQUESTED_TOPIC,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
-import { CheckMarginMessage } from './margin.interfaces';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { LtvResponseDto } from './margin.dto';
-import { CreditLineUpdatedDto } from '@archie/api/credit-api/data-transfer-objects';
+import {
+  CreditLimitAdjustRequestedPayload,
+  CreditLineUpdatedDto,
+  MarginCheckRequestedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 
 @Controller()
 export class MarginQueueController {
@@ -23,7 +26,9 @@ export class MarginQueueController {
     MARGIN_CHECK_REQUESTED_TOPIC,
     MarginQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async checkMarginHandler(message: CheckMarginMessage): Promise<void> {
+  async checkMarginHandler(
+    message: MarginCheckRequestedPayload,
+  ): Promise<void> {
     return this.marginService.checkMargin(message.userIds);
   }
 
@@ -31,7 +36,9 @@ export class MarginQueueController {
     CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC,
     MarginQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async checkCreditLimitHandler(message: CheckMarginMessage): Promise<void> {
+  async checkCreditLimitHandler(
+    message: CreditLimitAdjustRequestedPayload,
+  ): Promise<void> {
     return this.marginService.checkCreditLimit(message.userIds);
   }
 

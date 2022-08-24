@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { PeachApiService } from '../api/peach_api.service';
 import {
   Draw,
@@ -8,7 +7,6 @@ import {
   ObligationsResponse,
   Person,
 } from '../api/peach_api.interfaces';
-import { EmailVerifiedPayload } from '@archie/api/user-api/user';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Borrower } from '../borrower.entity';
@@ -26,6 +24,10 @@ import {
 import { ObligationsResponseDto } from './loan.dto';
 import { BorrowerNotFoundError } from '../borrower.errors';
 import { BorrowerValidation } from '../utils/borrower.validation';
+import {
+  EmailVerifiedPayload,
+  KycSubmittedPayload,
+} from '@archie/api/user-api/data-transfer-objects';
 
 @Injectable()
 export class PeachBorrowerService {
