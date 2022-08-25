@@ -12,7 +12,7 @@ export const InterestRate: FC = () => {
   return (
     <Card column alignItems="flex-start" padding="1.5rem">
       <ParagraphXS weight={700} className="card-title">
-        Interest Rate
+        {t('interest_rate_card.title')}
       </ParagraphXS>
       <SubtitleS weight={400} className="card-info">
         {interestRate}%
