@@ -74,10 +74,6 @@ export class PeachPaymentInstrumentsService {
     });
     this.borrowerValidation.isBorrowerDefined(borrower);
 
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
-
     await this.peachApiService.createPlaidPaymentInstrument(
       borrower.personId,
       accountInfo.accountId,
@@ -93,10 +89,6 @@ export class PeachPaymentInstrumentsService {
       userId,
     });
     this.borrowerValidation.isBorrowerDefined(borrower);
-
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
 
     await this.peachApiService.deletePaymentInstrument(borrower.personId, id);
   }
