@@ -245,7 +245,7 @@
       "title": "Schedule a payment",
       "credit_for": "ArchCredit for {{name}}",
       "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
-      "interest_owed": "Interest owed: ${{iterestOwed}}",
+      "interest_owed": "Interest owed: ${{interestOwed}}",
       "payment_date": "Payment Date",
       "payment_options": "Payment Options",
       "schedule": "Schedule",
@@ -258,6 +258,7 @@
         "not_valid_date": "Not a valid date",
         "max_date": "Cannot schedule past due date",
         "cannot_be_past": "Date cannot be in the past",
+        "amount_type_error": "Amount must be a number",
         "min_amount": "You must pay more than 0"
       }
     },

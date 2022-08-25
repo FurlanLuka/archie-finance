@@ -7,7 +7,7 @@ import { Modal } from '@archie-webapps/shared/ui/design-system';
 
 import { ChooseAccount } from './blocks/choose-account/choose-account';
 import { PaymentConfirmModal } from './blocks/payment-confirm/payment-confirm';
-import { PaymentScheduleModal } from './blocks/payment-schedule/payment-schedule';
+import { PaymentSchedule } from './blocks/payment-schedule/payment-schedule';
 import { PaymentScheduledModal } from './blocks/payment-scheduled/payment-scheduled';
 
 interface MakePaymentModalProps {
@@ -43,9 +43,10 @@ export const MakePaymentModal: FC<MakePaymentModalProps> = ({ isOpen, close, onC
         );
       case PaymentStep.SCHEDULE:
         return (
-          <PaymentScheduleModal
-            onConfirm={(desiredAmount) => {
+          <PaymentSchedule
+            onConfirm={(desiredAmount: number, desiredDate: string) => {
               setAmount(desiredAmount);
+              setScheduledDate(desiredDate);
               setCurrentStep(PaymentStep.CONFIRM);
             }}
           />
@@ -60,7 +61,8 @@ export const MakePaymentModal: FC<MakePaymentModalProps> = ({ isOpen, close, onC
       case PaymentStep.SCHEDULED:
         return <PaymentScheduledModal onConfirm={handleConfirm} />;
       default:
-        return <PaymentScheduleModal onConfirm={() => setCurrentStep(PaymentStep.CONFIRM)} />;
+        console.warn('Unhandled step state');
+        return null;
     }
   };
 
