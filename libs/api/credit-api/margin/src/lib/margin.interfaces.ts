@@ -1,5 +1,5 @@
 import { GetCollateralValueResponse } from '@archie/api/credit-api/collateral';
-import { MarginCall } from '@archie/api/credit-api/margin';
+import { MarginCall } from './margin_calls.entity';
 
 export interface LiquidatedCollateralAssets {
   loanRepaymentAmount: number;

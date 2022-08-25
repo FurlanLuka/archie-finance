@@ -1,7 +1,5 @@
-import { AxiosRequestConfig } from 'axios';
-
 export interface PeachErrorResponse {
-  config: AxiosRequestConfig;
+  config: object;
   status: number;
   errorResponse: PeachErrorData;
 }

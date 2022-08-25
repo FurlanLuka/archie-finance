@@ -34,9 +34,9 @@ export class OnboardingService {
       };
     }
 
-    delete onboardingRecord.userId;
+    const { userId: _, ...onboardingRecordWithoutUserId } = onboardingRecord;
 
-    return onboardingRecord;
+    return onboardingRecordWithoutUserId;
   }
 
   async completeOnboardingStage(
@@ -47,6 +47,9 @@ export class OnboardingService {
       await this.onboardingRepository.findOneBy({
         userId,
       });
+    if (onboardingRecord === null) {
+      throw new Error('ONBOARDING_RECORD_NOT_SETUP_YET');
+    }
 
     const updatedOnboardingRecord: Onboarding = {
       ...onboardingRecord,

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/webhook-api/constants';
 import {
@@ -33,8 +33,8 @@ export class PeachApiService {
           ...error.config,
           headers: null,
         },
-        status: error.response.status,
-        errorResponse: <PeachErrorData>error.response.data,
+        status: (<AxiosResponse>error.response).status,
+        errorResponse: <PeachErrorData>error.response?.data,
       };
 
       return Promise.reject(response);
@@ -44,7 +44,7 @@ export class PeachApiService {
   }
 
   public async getPaymentConfirmedEvent(
-    lastFetchedPaymentEventId: string | null,
+    lastFetchedPaymentEventId?: string | null,
   ): Promise<EventsResponse<Payment>> {
     const response = await this.peachClient.get(`events`, {
       params: {

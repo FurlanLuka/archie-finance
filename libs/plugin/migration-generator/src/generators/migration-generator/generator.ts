@@ -62,9 +62,9 @@ export default async function (
     .split(MIGRATION_START_OUTPUT)[1]
     .split(MIGRATION_END_OUTPUT)[0];
 
-  const migrationName: string = migrationCode.match(
-    /(?<=name = ').*?(?=')/gs,
-  )[0];
+  const migrationName: string = (<RegExpMatchArray>(
+    migrationCode.match(/(?<=name = ').*?(?=')/gs)
+  ))[0];
 
   const migrationsDirectory = `${normalizedOptions.serviceRoot}/src/migrations`;
 
