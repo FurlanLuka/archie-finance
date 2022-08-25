@@ -16,19 +16,20 @@ import {
   PeachTransactionType,
   Person,
   PersonStatus,
-  ObligationsResponse,
+  Obligations,
   PaymentInstrumentBalance,
   Payments,
   QueryParams,
   Purchases,
+  Balances,
 } from './peach_api.interfaces';
-import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
 import {
   PaymentInstrumentNotFoundError,
   AmountExceedsOutstandingBalanceError,
 } from '../borrower.errors';
 import { omitBy, isNil } from 'lodash';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects';
 
 @Injectable()
 export class PeachApiService {
@@ -81,15 +82,11 @@ export class PeachApiService {
     return response.data.data[0];
   }
 
-  public async createPlaidPaymentInstrument({
-    publicToken,
-    accountId,
-    personId,
-  }: {
-    personId: string;
-    accountId: string;
-    publicToken: string;
-  }): Promise<PaymentInstrument> {
+  public async createPlaidPaymentInstrument(
+    personId: string,
+    accountId: string,
+    publicToken: string,
+  ): Promise<PaymentInstrument> {
     const response = await this.peachClient.post(
       `/people/${personId}/payment-instruments`,
       {
@@ -422,9 +419,20 @@ export class PeachApiService {
   public async getLoanObligations(
     personId: string,
     loanId: string,
-  ): Promise<ObligationsResponse> {
+  ): Promise<Obligations> {
     const response = await this.peachClient.get(
       `people/${personId}/loans/${loanId}/obligations`,
+    );
+
+    return response.data.data;
+  }
+
+  public async getLoanBalances(
+    personId: string,
+    loanId: string,
+  ): Promise<Balances> {
+    const response = await this.peachClient.get(
+      `people/${personId}/loans/${loanId}/balances`,
     );
 
     return response.data.data;

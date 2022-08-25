@@ -30,6 +30,9 @@
       "@archie/api/collateral-api/constants": [
         "libs/api/collateral-api/constants/src/index.ts"
       ],
+      "@archie/api/collateral-api/data-transfer-objects": [
+        "libs/api/collateral-api/data-transfer-objects/src/index.ts"
+      ],
       "@archie/api/collateral-api/deposit-address": [
         "libs/api/collateral-api/deposit-address/src/index.ts"
       ],
@@ -64,10 +67,10 @@
       "@archie/api/credit-api/margin": [
         "libs/api/credit-api/margin/src/index.ts"
       ],
-      "@archie/api/credit-api/rize": ["libs/api/credit-api/rize/src/index.ts"],
       "@archie/api/credit-api/plaid": [
         "libs/api/credit-api/plaid/src/index.ts"
       ],
+      "@archie/api/credit-api/rize": ["libs/api/credit-api/rize/src/index.ts"],
       "@archie/api/mail-api/constants": [
         "libs/api/mail-api/constants/src/index.ts"
       ],
@@ -98,12 +101,21 @@
       "@archie/api/referral-system-api/constants": [
         "libs/api/referral-system-api/constants/src/index.ts"
       ],
+      "@archie/api/referral-system-api/data-transfer-objects": [
+        "libs/api/referral-system-api/data-transfer-objects/src/index.ts"
+      ],
       "@archie/api/referral-system-api/waitlist": [
         "libs/api/referral-system-api/waitlist/src/index.ts"
+      ],
+      "@archie/api/referral-system-api/sales-connect": [
+        "libs/api/referral-system-api/sales-connect/src/index.ts"
       ],
       "@archie/api/user-api/auth0": ["libs/api/user-api/auth0/src/index.ts"],
       "@archie/api/user-api/constants": [
         "libs/api/user-api/constants/src/index.ts"
+      ],
+      "@archie/api/user-api/data-transfer-objects": [
+        "libs/api/user-api/data-transfer-objects/src/index.ts"
       ],
       "@archie/api/user-api/kyc": ["libs/api/user-api/kyc/src/index.ts"],
       "@archie/api/user-api/user": ["libs/api/user-api/user/src/index.ts"],

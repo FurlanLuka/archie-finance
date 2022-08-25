@@ -43,9 +43,14 @@ export class InternalAssetPriceController {
 
 @Controller()
 export class AssetPriceQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-asset-price`;
+
   constructor(private assetPriceService: AssetPriceService) {}
 
-  @RequestHandler(GET_ASSET_PRICES_RPC, SERVICE_QUEUE_NAME)
+  @RequestHandler(
+    GET_ASSET_PRICES_RPC,
+    AssetPriceQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async getAssetPrices(): Promise<RPCResponse<GetAssetPriceResponse[]>> {
     try {
       const data = await this.assetPriceService.getAssetPrices();

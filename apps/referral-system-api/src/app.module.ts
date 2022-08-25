@@ -9,6 +9,7 @@ import { HealthModule } from '@archie/api/utils/health';
 import { WaitlistModule } from '@archie/api/referral-system-api/waitlist';
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
+import { SalesConnectModule } from '@archie/api/referral-system-api/sales-connect';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { QueueModule } from '@archie/api/utils/queue';
     }),
     HealthModule,
     WaitlistModule,
+    SalesConnectModule,
     QueueModule.register(),
   ],
   controllers: [],

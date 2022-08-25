@@ -3,13 +3,14 @@ import axios, { AxiosError } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/mail-api/constants';
 import { SendEmailInternalError } from './sendgrid.errors';
-import {
-  LtvLimitApproaching,
-  MarginCallCompleted,
-  MarginCallStarted,
-} from './sendgrid.interfaces';
 import { EmailDataFactoryService } from '@archie/api/mail-api/utils/email-data-factory';
 import { ContactService, DecryptedContact } from '@archie/api/mail-api/contact';
+import {
+  LtvLimitApproachingPayload,
+  MarginCallCompletedPayload,
+  MarginCallStartedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
+import { SalesConnectDto } from '@archie/api/referral-system-api/sales-connect';
 
 @Injectable()
 export class SendgridService {
@@ -19,7 +20,9 @@ export class SendgridService {
     private contactService: ContactService,
   ) {}
 
-  public async sendMarginCallCompletedMail(marginCall: MarginCallCompleted) {
+  public async sendMarginCallCompletedMail(
+    marginCall: MarginCallCompletedPayload,
+  ) {
     const contact: DecryptedContact = await this.contactService.getContact(
       marginCall.userId,
     );
@@ -46,7 +49,7 @@ export class SendgridService {
     }
   }
 
-  public async sendMarginCallStartedMail(marginCall: MarginCallStarted) {
+  public async sendMarginCallStartedMail(marginCall: MarginCallStartedPayload) {
     const contact: DecryptedContact = await this.contactService.getContact(
       marginCall.userId,
     );
@@ -60,7 +63,9 @@ export class SendgridService {
     );
   }
 
-  public async sendLtvLimitApproachingMail(marginCall: LtvLimitApproaching) {
+  public async sendLtvLimitApproachingMail(
+    marginCall: LtvLimitApproachingPayload,
+  ) {
     const contact: DecryptedContact = await this.contactService.getContact(
       marginCall.userId,
     );
@@ -71,6 +76,16 @@ export class SendgridService {
         ConfigVariables.SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID,
       ),
       this.emailDataFactory.createInfoData(contact.firstName, marginCall),
+    );
+  }
+
+  public async sendSalesConnectEmail(payload: SalesConnectDto) {
+    await this.sendEmail(
+      'sales@archie.finance',
+      this.configService.get(
+        ConfigVariables.SENDGRID_CONNECT_SALES_TEMPLATE_ID,
+      ),
+      payload,
     );
   }
 

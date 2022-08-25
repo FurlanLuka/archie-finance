@@ -18,10 +18,7 @@ import {
 } from './rize.errors';
 import {
   CardResponseDto,
-  CreditLimitDto,
   GetTransactionsQueryDto,
-  MarginCallCompletedDto,
-  MarginCallStartedDto,
   TransactionResponseDto,
 } from './rize.dto';
 import { Subscribe } from '@archie/api/utils/queue';
@@ -32,6 +29,12 @@ import {
   MARGIN_CALL_STARTED_TOPIC,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/credit-api/constants';
+import {
+  CreditLimitDecreasedPayload,
+  CreditLimitIncreasedPayload,
+  MarginCallCompletedPayload,
+  MarginCallStartedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 
 @Controller('v1/rize/users')
 export class RizeController {
@@ -75,27 +78,47 @@ export class RizeController {
 
 @Controller()
 export class RizeQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-rize`;
+
   constructor(private rizeService: RizeService) {}
 
-  @Subscribe(MARGIN_CALL_STARTED_TOPIC, SERVICE_QUEUE_NAME)
-  async marginCallStartedHandler(payload: MarginCallStartedDto): Promise<void> {
+  @Subscribe(
+    MARGIN_CALL_STARTED_TOPIC,
+    RizeQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async marginCallStartedHandler(
+    payload: MarginCallStartedPayload,
+  ): Promise<void> {
     await this.rizeService.lockCard(payload.userId);
   }
 
-  @Subscribe(MARGIN_CALL_COMPLETED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    MARGIN_CALL_COMPLETED_TOPIC,
+    RizeQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async marginCallCompletedHandler(
-    payload: MarginCallCompletedDto,
+    payload: MarginCallCompletedPayload,
   ): Promise<void> {
     await this.rizeService.unlockCard(payload.userId);
   }
 
-  @Subscribe(CREDIT_LIMIT_DECREASED_TOPIC, SERVICE_QUEUE_NAME)
-  async creditLimitDecreasedHandler(payload: CreditLimitDto): Promise<void> {
+  @Subscribe(
+    CREDIT_LIMIT_DECREASED_TOPIC,
+    RizeQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async creditLimitDecreasedHandler(
+    payload: CreditLimitDecreasedPayload,
+  ): Promise<void> {
     await this.rizeService.decreaseCreditLimit(payload.userId, payload.amount);
   }
 
-  @Subscribe(CREDIT_LIMIT_INCREASED_TOPIC, SERVICE_QUEUE_NAME)
-  async creditLimitIncreasedHandler(payload: CreditLimitDto): Promise<void> {
+  @Subscribe(
+    CREDIT_LIMIT_INCREASED_TOPIC,
+    RizeQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async creditLimitIncreasedHandler(
+    payload: CreditLimitIncreasedPayload,
+  ): Promise<void> {
     await this.rizeService.increaseCreditLimit(payload.userId, payload.amount);
   }
 }

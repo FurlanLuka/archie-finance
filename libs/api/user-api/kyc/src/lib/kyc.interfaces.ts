@@ -65,7 +65,3 @@ export class CreateKycResponse extends GetKycResponse {}
 export class GetKycPayload {
   userId: string;
 }
-
-export class KycSubmittedPayload extends KycDto {
-  userId: string;
-}
