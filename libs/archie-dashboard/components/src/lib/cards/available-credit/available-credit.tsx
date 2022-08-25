@@ -55,7 +55,7 @@ export const AvailableCredit: FC = () => {
                 ${getFormattedValue(creditData.totalCredit - creditData.availableCredit)}
               </SubtitleS>
               <div className="btn-group">
-                <ButtonOutline maxWidth="auto" small onClick={() => setMakePaymentModalOpen(true)}>
+                <ButtonOutline small onClick={() => setMakePaymentModalOpen(true)}>
                   Pay now
                 </ButtonOutline>
               </div>

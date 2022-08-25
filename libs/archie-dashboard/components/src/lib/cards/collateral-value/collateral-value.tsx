@@ -46,10 +46,10 @@ export const CollateralValue: FC = () => {
         </div>
         {/* <CollateralValueChart /> */}
         <div className="btn-group">
-          <ButtonOutline maxWidth="auto" small onClick={() => navigate('/collateral')}>
+          <ButtonOutline small onClick={() => navigate('/collateral')}>
             Add
           </ButtonOutline>
-          <ButtonOutline maxWidth="auto" small isDisabled>
+          <ButtonOutline small isDisabled>
             Redeem
           </ButtonOutline>
         </div>

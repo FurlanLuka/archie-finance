@@ -25,9 +25,7 @@ export const MyRewards: FC = () => {
         </ParagraphXXS>
       </div>
       <div className="btn-group">
-        <ButtonOutline maxWidth="auto" small>
-          Claim
-        </ButtonOutline>
+        <ButtonOutline small>Claim</ButtonOutline>
       </div>
     </Card>
   );

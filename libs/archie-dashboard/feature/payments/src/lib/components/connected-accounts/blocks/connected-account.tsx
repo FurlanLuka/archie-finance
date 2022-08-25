@@ -31,7 +31,6 @@ export const ConnectedAccount: FC<ConnectedAccountProps> = ({ account }) => {
         small
         color={theme.textPositive}
         className="remove-account"
-        maxWidth="fit-content"
         onClick={handleRemoveClick}
         isLoading={disconnectAccountMutation.state === RequestState.LOADING}
       >

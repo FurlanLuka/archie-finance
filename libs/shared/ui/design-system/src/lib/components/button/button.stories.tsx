@@ -25,7 +25,7 @@ export const Primary: Story<ButtonProps> = (props) => (
 Primary.args = {
   isLoading: false,
   isDisabled: false,
-  maxWidth: 'fit-content',
+  maxWidth: '',
   small: false,
   color: '',
 };
@@ -40,7 +40,7 @@ export const Outline: Story<ButtonProps> = (props) => (
 Outline.args = {
   isLoading: false,
   isDisabled: false,
-  maxWidth: 'fit-content',
+  maxWidth: '',
   small: false,
   color: '',
 };
@@ -55,7 +55,7 @@ export const Ghost: Story<ButtonProps> = (props) => (
 Ghost.args = {
   isLoading: false,
   isDisabled: false,
-  maxWidth: 'fit-content',
+  maxWidth: '',
   small: false,
   color: '',
 };
@@ -70,7 +70,7 @@ export const Light: Story<ButtonProps> = (props) => (
 Light.args = {
   isLoading: false,
   isDisabled: false,
-  maxWidth: 'fit-content',
+  maxWidth: '',
   small: false,
   color: theme.textDanger,
 };

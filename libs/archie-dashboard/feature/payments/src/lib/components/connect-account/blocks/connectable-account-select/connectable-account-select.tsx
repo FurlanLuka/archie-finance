@@ -67,7 +67,6 @@ export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({ ac
       </div>
       <ButtonPrimary
         onClick={handleConfirmClick}
-        maxWidth="fit-content"
         disabled={!selectedAccount}
         isLoading={connectAccountMutation.state === RequestState.LOADING}
       >

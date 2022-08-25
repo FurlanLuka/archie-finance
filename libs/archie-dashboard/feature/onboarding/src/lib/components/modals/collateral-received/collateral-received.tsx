@@ -47,12 +47,8 @@ export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
             })}
           </ParagraphXS>
           <div className="btn-group">
-            <ButtonPrimary onClick={onClose} maxWidth="fit-content">
-              {t('collateral_received_modal.btn')}
-            </ButtonPrimary>
-            <ButtonOutline onClick={handleConfirm} maxWidth="fit-content">
-              {t('btn_next')}
-            </ButtonOutline>
+            <ButtonPrimary onClick={onClose}>{t('collateral_received_modal.btn')}</ButtonPrimary>
+            <ButtonOutline onClick={handleConfirm}>{t('btn_next')}</ButtonOutline>
           </div>
         </div>
       </CollateralReceivedModalStyled>

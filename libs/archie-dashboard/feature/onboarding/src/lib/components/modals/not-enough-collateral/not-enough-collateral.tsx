@@ -31,9 +31,7 @@ export const NotEnoughCollateralModal: FC<NotEnoughCollateralModalProps> = ({ on
               difference: (creditValue - MIN_LINE_OF_CREDIT).toFixed(2),
             })}
           </ParagraphXS>
-          <ButtonPrimary onClick={onClose} maxWidth="fit-content">
-            {t('not_enough_collateral_modal.btn')}
-          </ButtonPrimary>
+          <ButtonPrimary onClick={onClose}>{t('not_enough_collateral_modal.btn')}</ButtonPrimary>
         </div>
       </NotEnoughCollateralModalStyled>
     </Modal>

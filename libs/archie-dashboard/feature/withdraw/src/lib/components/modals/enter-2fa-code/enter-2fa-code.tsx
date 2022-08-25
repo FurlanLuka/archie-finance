@@ -26,9 +26,7 @@ export const Enter2faCodeModal: FC<Enter2faCodeModalProps> = ({ isOpen, close, o
           {t('dashboard_withdraw.enter_2fa_code_modal.title')}
         </ParagraphM>
         <ParagraphS className="subtitle">{t('dashboard_withdraw.enter_2fa_code_modal.subtitle')}</ParagraphS>
-        <ButtonPrimary maxWidth="fit-content" onClick={handleConfirm}>
-          {t('btn_ok')}
-        </ButtonPrimary>
+        <ButtonPrimary onClick={handleConfirm}>{t('btn_ok')}</ButtonPrimary>
       </Enter2faCodeModalStyled>
     </Modal>
   );
