@@ -26,12 +26,12 @@ export const PaymentScheduleModalStyled = styled.div`
     align-items: center;
     gap: 0.25rem;
     min-height: 28px;
-    max-width: 226px;
     white-space: nowrap;
     margin-bottom: 0.25rem;
 
     label,
     input {
+      width: 120px;
       margin: 0;
     }
   }

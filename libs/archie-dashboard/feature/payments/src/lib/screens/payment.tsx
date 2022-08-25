@@ -31,7 +31,7 @@ export const PaymentScreen: FC = () => {
         <InputRadio small>
           <input type="radio" value="auto_payments" checked />
           <ParagraphXXS>
-            {t('dashboard_home.payment_schedule_modal.auto_payments')} {t('on')} {/* TBD */}
+            {t('dashboard_payment.auto_payments')} {t('on')} {/* TBD */}
           </ParagraphXXS>
         </InputRadio>
       </div>

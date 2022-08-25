@@ -21,6 +21,8 @@ export const MakePaymentModal: FC<MakePaymentModalProps> = ({ isOpen, close, onC
 
   const [currentStep, setCurrentStep] = useState<PaymentStep>(PaymentStep.ACCOUNT);
   const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
+  const [amount, setAmount] = useState<number>(0);
+  const [scheduledDate, setScheduledDate] = useState<string | null>(null);
 
   const handleConfirm = () => {
     onConfirm();
@@ -40,7 +42,14 @@ export const MakePaymentModal: FC<MakePaymentModalProps> = ({ isOpen, close, onC
           />
         );
       case PaymentStep.SCHEDULE:
-        return <PaymentScheduleModal onConfirm={() => setCurrentStep(PaymentStep.CONFIRM)} />;
+        return (
+          <PaymentScheduleModal
+            onConfirm={(desiredAmount) => {
+              setAmount(desiredAmount);
+              setCurrentStep(PaymentStep.CONFIRM);
+            }}
+          />
+        );
       case PaymentStep.CONFIRM:
         return (
           <PaymentConfirmModal

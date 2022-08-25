@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
@@ -35,6 +35,12 @@ export const ChooseAccount: FC<ChooseAccountProps> = ({ onConfirm }) => {
 
     onConfirm(selectedAccount);
   };
+
+  useEffect(() => {
+    if (getConnectedAccountsResponse.state === RequestState.SUCCESS && getConnectedAccountsResponse.data.length === 1) {
+      onConfirm(getConnectedAccountsResponse.data[0]);
+    }
+  }, [getConnectedAccountsResponse, onConfirm]);
 
   const header = selectedAccount ? (
     <ConnectedAccountItem account={selectedAccount} />

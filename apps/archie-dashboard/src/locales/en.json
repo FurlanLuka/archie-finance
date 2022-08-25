@@ -206,6 +206,7 @@
   "dashboard_payment": {
     "title": "Payments",
     "btn_pay": "Make a Payment",
+    "auto_payments": "auto payments:",
     "connected_accounts": {
       "title": "Your accounts",
       "no_accounts": "No accounts have been added yet. Connect to your Plaid account to start making payments.",
@@ -248,11 +249,17 @@
       "payment_date": "Payment Date",
       "payment_options": "Payment Options",
       "schedule": "Schedule",
-      "auto_payments": "auto payments:",
       "balance_owed": "Pay balance owed: ${{balanceOwed}}",
       "balance_with_interest": "Pay balance owed with interest: ${{balanceWithInterest}}",
       "full_balance": "Pay full balance: ${{fullBalance}}",
-      "other_amount": "Pay other amount:"
+      "other_amount": "Pay other amount:",
+      "error": {
+        "required_field": "This field is required",
+        "not_valid_date": "Not a valid date",
+        "max_date": "Cannot schedule past due date",
+        "cannot_be_past": "Date cannot be in the past",
+        "min_amount": "You must pay more than 0"
+      }
     },
     "payment_confirm": {
       "title": "Confirm payment",
