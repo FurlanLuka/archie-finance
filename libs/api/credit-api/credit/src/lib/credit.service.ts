@@ -23,7 +23,10 @@ import {
   GetCollateralValueResponse,
 } from '@archie/api/credit-api/collateral';
 import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { CreditLineUpdatedDto } from '@archie/api/credit-api/data-transfer-objects';
+import {
+  CollateralReceivedPayload,
+  CreditLineUpdatedDto,
+} from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class CreditService {
@@ -79,9 +82,12 @@ export class CreditService {
       totalCollateralValue = this.MAXIMUM_CREDIT;
     }
 
-    this.queueService.publish(COLLATERAL_RECEIVED_TOPIC, {
-      userId,
-    });
+    this.queueService.publish<CollateralReceivedPayload>(
+      COLLATERAL_RECEIVED_TOPIC,
+      {
+        userId,
+      },
+    );
 
     await this.creditRepository.save({
       userId,

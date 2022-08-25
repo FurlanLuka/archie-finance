@@ -50,26 +50,6 @@ export class GetTransactionsQueryDto {
   limit = 100;
 }
 
-export class MarginCallCompletedDto {
-  userId: string;
-  liquidation: LiquidationDto[];
-}
-
-export class LiquidationDto {
-  asset: string;
-  amount: number;
-  price: number;
-}
-
-export class MarginCallStartedDto {
-  userId: string;
-}
-
-export class CreditLimitDto {
-  userId: string;
-  amount: number;
-}
-
 export enum CardStatus {
   active = 'active',
   frozen = 'frozen',

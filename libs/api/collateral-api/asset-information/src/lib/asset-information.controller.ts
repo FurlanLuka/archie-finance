@@ -13,9 +13,14 @@ import {
 
 @Controller()
 export class AssetInformationQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-asset-information`;
+
   constructor(private assetInformationService: AssetInformationService) {}
 
-  @RequestHandler(GET_ASSET_INFORMATION_RPC, SERVICE_QUEUE_NAME)
+  @RequestHandler(
+    GET_ASSET_INFORMATION_RPC,
+    AssetInformationQueueController.CONTROLLER_QUEUE_NAME,
+  )
   getAssetList(): RPCResponse<AssetList> {
     try {
       const data = this.assetInformationService.getAssetList();

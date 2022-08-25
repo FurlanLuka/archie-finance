@@ -13,6 +13,7 @@ import {
 } from '@archie/api/credit-api/collateral';
 import { Credit } from '@archie/api/credit-api/credit';
 import { QueueService } from '@archie/api/utils/queue';
+import { LtvLimitApproachingPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class MarginLtvService {
@@ -129,13 +130,16 @@ export class MarginLtvService {
       ).some((alert: boolean) => alert);
 
       if (shouldSendNotification) {
-        this.queueService.publish(LTV_LIMIT_APPROACHING_TOPIC, {
-          userId,
-          ltv,
-          priceForMarginCall,
-          priceForPartialCollateralSale,
-          collateralBalance,
-        });
+        this.queueService.publish<LtvLimitApproachingPayload>(
+          LTV_LIMIT_APPROACHING_TOPIC,
+          {
+            userId,
+            ltv,
+            priceForMarginCall,
+            priceForPartialCollateralSale,
+            collateralBalance,
+          },
+        );
         await this.marginNotificationsRepository.upsert(
           {
             userId: userId,

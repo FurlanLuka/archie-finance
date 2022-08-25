@@ -28,7 +28,7 @@ export class CreditLineUpdatedDto {
   userId: string;
 }
 
-export class MarginCallCompleted {
+export class MarginCallCompletedPayload {
   userId: string;
   liquidation: {
     asset: string;
@@ -90,4 +90,44 @@ export class CardActivatedPayload {
 export class FundsLoadedPayload {
   userId: string;
   amount: number;
+}
+
+export class PhoneNumberVerifiedPayload {
+  userId: string;
+}
+
+export class CollateralWithdrawInitializedPayload {
+  asset: string;
+  withdrawalAmount: number;
+  userId: string;
+  destinationAddress: string;
+  withdrawalId: string;
+}
+
+export class CollateralReceivedPayload {
+  userId: string;
+}
+
+export class MarginCallStartedPayload {
+  userId: string;
+  ltv: number;
+  priceForMarginCall: number;
+  priceForPartialCollateralSale: number;
+  collateralBalance: number;
+}
+
+export class LtvLimitApproachingPayload {
+  userId: string;
+  ltv: number;
+  priceForMarginCall: number;
+  priceForPartialCollateralSale: number;
+  collateralBalance: number;
+}
+
+export class CreditLimitAdjustRequestedPayload {
+  userIds: string[];
+}
+
+export class MarginCheckRequestedPayload {
+  userIds: string[];
 }

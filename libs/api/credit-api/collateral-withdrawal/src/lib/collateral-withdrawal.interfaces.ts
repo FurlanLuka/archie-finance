@@ -19,13 +19,6 @@ export class CollateralWithdrawCompletedDto {
   asset: string;
 }
 
-export class CollateralWithdrawTransactionCreatedDto {
-  @IsString()
-  transactionId: string;
-  @IsString()
-  withdrawalId: string;
-}
-
 export class GetCollateralWithdrawalResponse {
   id: string;
   asset: string;

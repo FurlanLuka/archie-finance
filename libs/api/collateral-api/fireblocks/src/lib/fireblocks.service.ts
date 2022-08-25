@@ -27,6 +27,7 @@ import {
 } from './fireblocks.dto';
 import { COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC } from '@archie/api/credit-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
+import { CollateralWithdrawTransactionCreatedPayload } from '@archie/api/collateral-api/data-transfer-objects';
 
 @Injectable()
 export class FireblocksService {
@@ -137,10 +138,13 @@ export class FireblocksService {
       code: 'FIREBLOCKS_SERVICE_CREATED_TRANSACTION',
       transaction,
     });
-    this.queueService.publish(COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC, {
-      withdrawalId,
-      transactionId: transaction.id,
-    });
+    this.queueService.publish<CollateralWithdrawTransactionCreatedPayload>(
+      COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC,
+      {
+        withdrawalId,
+        transactionId: transaction.id,
+      },
+    );
 
     return transaction;
   }
