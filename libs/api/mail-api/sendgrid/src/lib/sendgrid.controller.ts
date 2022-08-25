@@ -3,6 +3,7 @@ import { Subscribe } from '@archie/api/utils/queue';
 import {
   APPLIED_TO_WAITLIST_TOPIC,
   JOINED_WAITLIST_TOPIC,
+  SALES_CONNECT_TOPIC,
 } from '@archie/api/referral-system-api/constants';
 import {
   SERVICE_QUEUE_NAME,
@@ -24,6 +25,7 @@ import {
   MarginCallCompletedPayload,
   MarginCallStartedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
+import { SalesConnectDto } from '@archie/api/referral-system-api/sales-connect';
 
 @Controller()
 export class SendgirdQueueController {
@@ -90,5 +92,10 @@ export class SendgirdQueueController {
     payload: LtvLimitApproachingPayload,
   ): Promise<void> {
     await this.sendgridService.sendLtvLimitApproachingMail(payload);
+  }
+
+  @Subscribe(SALES_CONNECT_TOPIC, SendgirdQueueController.CONTROLLER_QUEUE_NAME)
+  async salesConnectHandler(payload: SalesConnectDto): Promise<void> {
+    await this.sendgridService.sendSalesConnectEmail(payload);
   }
 }

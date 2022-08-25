@@ -107,6 +107,9 @@
       "@archie/api/referral-system-api/waitlist": [
         "libs/api/referral-system-api/waitlist/src/index.ts"
       ],
+      "@archie/api/referral-system-api/sales-connect": [
+        "libs/api/referral-system-api/sales-connect/src/index.ts"
+      ],
       "@archie/api/user-api/auth0": ["libs/api/user-api/auth0/src/index.ts"],
       "@archie/api/user-api/constants": [
         "libs/api/user-api/constants/src/index.ts"

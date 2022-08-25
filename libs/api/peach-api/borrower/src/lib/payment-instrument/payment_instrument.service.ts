@@ -80,9 +80,9 @@ export class PeachPaymentInstrumentsService {
     }
 
     await this.peachApiService.createPlaidPaymentInstrument(
-      accountInfo.publicToken,
-      accountInfo.accountId,
       borrower.personId,
+      accountInfo.accountId,
+      accountInfo.publicToken,
     );
   }
 
