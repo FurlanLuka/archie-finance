@@ -59,7 +59,7 @@ export class MarginLtvService {
       0,
     );
 
-    const creditBalance: Credit = credits.find(
+    const creditBalance: Credit | undefined = credits.find(
       (credit: Credit) => credit.userId === userId,
     );
 
@@ -73,7 +73,9 @@ export class MarginLtvService {
     );
 
     const spentBalance: number =
-      creditBalance.totalCredit - creditBalance.availableCredit;
+      creditBalance !== undefined
+        ? creditBalance.totalCredit - creditBalance.availableCredit
+        : 0;
     const loanedBalance: number = spentBalance - usersLiquidationLogsSum;
 
     return {
@@ -117,7 +119,8 @@ export class MarginLtvService {
         (limit: number, index: number): boolean => {
           const marginNotificationNotSentYet: boolean =
             marginNotifications === null ||
-            marginNotifications.active === false ||
+            !marginNotifications.active ||
+            marginNotifications.sentAtLtv === null ||
             marginNotifications.sentAtLtv < limit;
 
           return (

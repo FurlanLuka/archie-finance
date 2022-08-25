@@ -25,6 +25,8 @@ import {
   CollateralWithdrawCompletedPayload,
   CollateralWithdrawTransactionCreatedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
+import { CollateralNotFoundError } from './collateral-withdrawal.errors';
 
 @Controller('v1/collateral/withdraw')
 export class CollateralWithdrawalController {
@@ -35,6 +37,7 @@ export class CollateralWithdrawalController {
   @Post('')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
+  @ApiErrorResponse([CollateralNotFoundError])
   async withdrawUserCollateral(
     @Req() request,
     @Body() body: CollateralWithdrawCreateDto,

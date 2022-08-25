@@ -1,9 +1,17 @@
 import { GetCollateralValueResponse } from '@archie/api/credit-api/collateral';
-import { LiquidationLog } from './liquidation_logs.entity';
+import { MarginCall } from '@archie/api/credit-api/margin';
 
 export interface LiquidatedCollateralAssets {
   loanRepaymentAmount: number;
-  liquidatedAssets: Partial<LiquidationLog>[];
+  liquidatedAssets: LiquidatedAssets[];
+}
+
+export interface LiquidatedAssets {
+  asset: string;
+  amount: number;
+  userId: string;
+  marginCall: MarginCall;
+  price: number;
 }
 
 export interface UsersLtv {

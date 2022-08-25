@@ -31,17 +31,19 @@ export class UserService {
     const user: User = await this.auth0Service.getManagmentClient().getUser({
       id: userId,
     });
+    const emailVerified: boolean = <boolean>user.email_verified;
+    const email: string = <string>user.email;
 
-    if (user.email_verified) {
+    if (emailVerified) {
       this.queueService.publish<EmailVerifiedPayload>(EMAIL_VERIFIED_TOPIC, {
         userId,
-        email: user.email,
+        email,
       });
     }
 
     return {
-      isVerified: user.email_verified,
-      email: user.email,
+      isVerified: emailVerified,
+      email,
     };
   }
 
@@ -63,8 +65,9 @@ export class UserService {
     const user: User = await this.auth0Service.getManagmentClient().getUser({
       id: userId,
     });
+    const emailVerified: boolean = <boolean>user.email_verified;
 
-    if (user.email_verified) {
+    if (emailVerified) {
       throw new BadRequestException(
         'EMAIL_ALREADY_VERIFIED',
         'Your email has already been verified.',

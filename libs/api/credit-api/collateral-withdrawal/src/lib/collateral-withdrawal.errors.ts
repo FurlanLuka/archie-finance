@@ -17,3 +17,9 @@ export class WithdrawalInitializeInternalError extends InternalServerErrorExcept
     this.metadata = metadata;
   }
 }
+
+export class CollateralNotFoundError extends InternalServerErrorException {
+  constructor() {
+    super('COLLATERAL_NOT_FOUND');
+  }
+}
