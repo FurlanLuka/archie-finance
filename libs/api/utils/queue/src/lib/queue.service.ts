@@ -74,7 +74,14 @@ export class QueueService implements OnApplicationBootstrap {
     Logger.log('Retry and dead letter queues initialized');
   }
 
-  private createDeadLetterQueue(meta: RabbitHandlerConfig) {
+  private createDeadLetterQueue(meta: RabbitHandlerConfig): void {
+    if (meta.queue === undefined || meta.queueOptions === undefined) {
+      Logger.error(
+        'Invalid queue configuration. queue or queueOptions are not missing',
+      );
+      return;
+    }
+
     const { queue } = this.amqpConnection.channel.assertQueue(
       QueueUtilService.getDeadLetterQueueName(meta.queue),
       {

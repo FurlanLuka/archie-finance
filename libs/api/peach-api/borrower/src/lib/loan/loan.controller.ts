@@ -16,6 +16,7 @@ import {
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
+  TransactionUpdatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -92,7 +93,9 @@ export class PeachBorrowerQueueController {
     TRANSACTION_UPDATED_TOPIC,
     PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async transactionUpdatedHandler(payload): Promise<void> {
+  async transactionUpdatedHandler(
+    payload: TransactionUpdatedPayload,
+  ): Promise<void> {
     await this.peachService.handleTransactionsEvent(payload);
   }
 }

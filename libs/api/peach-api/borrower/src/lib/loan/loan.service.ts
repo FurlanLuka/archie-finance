@@ -20,17 +20,16 @@ import { GET_COLLATERAL_VALUE_RPC } from '@archie/api/credit-api/constants';
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
+  TransactionUpdatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
 import { ObligationsResponseDto } from './loan.dto';
-import {
-  BorrowerMailNotFoundError,
-  BorrowerNotFoundError,
-} from '../borrower.errors';
+import { BorrowerNotFoundError } from '../borrower.errors';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import {
   EmailVerifiedPayload,
   KycSubmittedPayload,
 } from '@archie/api/user-api/data-transfer-objects';
+import { BorrowerWithHomeAddress } from '../utils/borrower.validation.interfaces';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -106,21 +105,18 @@ export class PeachBorrowerService {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: founds.userId,
     });
-    const validatedBorrower: Borrower =
-      this.borrowerValidation.isBorrowerHomeAddressDefined(borrower);
+    this.borrowerValidation.isBorrowerHomeAddressDefined(borrower);
 
     const creditLineId = await this.createActiveCreditLine(
-      validatedBorrower,
-      validatedBorrower.homeAddressContactId,
+      borrower,
       founds.amount,
     );
 
-    await this.createActiveDraw(validatedBorrower, creditLineId);
+    await this.createActiveDraw(borrower, creditLineId);
   }
 
   private async createActiveCreditLine(
-    borrower: Borrower,
-    addressContactId: string,
+    borrower: BorrowerWithHomeAddress,
     amount: number,
   ): Promise<string> {
     let creditLineId: string | null = borrower.creditLineId;
@@ -142,7 +138,7 @@ export class PeachBorrowerService {
       const creditLine = await this.peachApiService.createCreditLine(
         borrower.personId,
         amount,
-        addressContactId,
+        borrower.homeAddressContactId,
         downPayment,
       );
       creditLineId = creditLine.id;
@@ -238,7 +234,9 @@ export class PeachBorrowerService {
     );
   }
 
-  public async handleTransactionsEvent(transaction): Promise<void> {
+  public async handleTransactionsEvent(
+    transaction: TransactionUpdatedPayload,
+  ): Promise<void> {
     if (transaction.status === 'queued') {
       return;
     }

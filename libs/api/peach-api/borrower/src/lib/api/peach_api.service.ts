@@ -28,6 +28,7 @@ import {
 } from '../borrower.errors';
 import { omitBy, isNil } from 'lodash';
 import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects';
+import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class PeachApiService {
@@ -345,7 +346,7 @@ export class PeachApiService {
     personId: string,
     loanId: string,
     drawId: string,
-    transaction,
+    transaction: TransactionUpdatedPayload,
   ): Promise<void> {
     await this.peachClient.post(
       `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases`,
@@ -362,7 +363,7 @@ export class PeachApiService {
     personId: string,
     loanId: string,
     drawId: string,
-    transaction,
+    transaction: TransactionUpdatedPayload,
   ): Promise<void> {
     await this.peachClient.put(
       `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases/ext-${String(
@@ -379,7 +380,9 @@ export class PeachApiService {
     );
   }
 
-  private createPurchaseDetails(transaction): object {
+  private createPurchaseDetails(
+    transaction: TransactionUpdatedPayload,
+  ): object {
     return {
       amount: Number(transaction.us_dollar_amount),
       purchaseDate: transaction.created_at,

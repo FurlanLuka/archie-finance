@@ -7,59 +7,58 @@ import {
   DrawNotFoundError,
 } from '../borrower.errors';
 import {
+  BorrowerWithCreditLine,
+  BorrowerWithDraw,
   BorrowerWithHomeAddress,
   BorrowerWithMail,
 } from './borrower.validation.interfaces';
 
 export class BorrowerValidation {
-  public isBorrowerDefined(borrower: Borrower | null): Borrower {
+  public isBorrowerDefined(
+    borrower: Borrower | null,
+  ): asserts borrower is Borrower {
     if (borrower === null || borrower?.personId === null) {
       throw new BorrowerNotFoundError();
     }
-
-    return borrower;
   }
 
   public isBorrowerHomeAddressDefined(
     borrower: Borrower | null,
-  ): BorrowerWithHomeAddress {
-    const definedBorrower: Borrower = this.isBorrowerDefined(borrower);
+  ): asserts borrower is BorrowerWithHomeAddress {
+    this.isBorrowerDefined(borrower);
 
-    if (definedBorrower.homeAddressContactId === null) {
+    if (borrower.homeAddressContactId === null) {
       throw new BorrowerHomeAddressNotFoundError();
     }
-
-    return <BorrowerWithHomeAddress>definedBorrower;
   }
 
   public isBorrowerMailDefined(
     borrower: Borrower | null,
   ): asserts borrower is BorrowerWithMail {
-    const definedBorrower: Borrower = this.isBorrowerDefined(borrower);
+    this.isBorrowerDefined(borrower);
 
-    if (definedBorrower.encryptedEmail === null) {
+    if (borrower.encryptedEmail === null) {
       throw new BorrowerMailNotFoundError();
     }
   }
 
-  public isBorrowerCreditLineDefined(borrower: Borrower | null): Borrower {
-    const definedBorrower: Borrower = this.isBorrowerDefined(borrower);
+  public isBorrowerCreditLineDefined(
+    borrower: Borrower | null,
+  ): asserts borrower is BorrowerWithCreditLine {
+    this.isBorrowerDefined(borrower);
 
-    if (definedBorrower.creditLineId === null) {
+    if (borrower.creditLineId === null) {
       throw new CreditLineNotFoundError();
     }
-
-    return definedBorrower;
   }
 
-  public isBorrowerDrawDefined(borrower: Borrower | null): Borrower {
-    const definedBorrower: Borrower =
-      this.isBorrowerCreditLineDefined(borrower);
+  public isBorrowerDrawDefined(
+    borrower: Borrower | null,
+  ): asserts borrower is BorrowerWithDraw {
+    this.isBorrowerCreditLineDefined(borrower);
 
-    if (definedBorrower.drawId === null) {
+    if (borrower.drawId === null) {
       throw new DrawNotFoundError();
     }
-
-    return definedBorrower;
   }
 }
