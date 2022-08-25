@@ -22,9 +22,6 @@ export const CollateralReceivedModalStyled = styled.div`
   }
 
   .content {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
     width: 86%;
 
     @media (max-width: ${breakpoints.screenSM}) {
@@ -43,5 +40,13 @@ export const CollateralReceivedModalStyled = styled.div`
         max-width: 100%;
       }
     }
+  }
+
+  .modal-title {
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-text {
+    margin-bottom: 1.5rem;
   }
 `;

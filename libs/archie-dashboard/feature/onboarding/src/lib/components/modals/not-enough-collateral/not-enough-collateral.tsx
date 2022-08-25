@@ -23,8 +23,10 @@ export const NotEnoughCollateralModal: FC<NotEnoughCollateralModalProps> = ({ on
           <img src={imgNotEnoughCollateral} alt={t('not_enough_collateral_modal.img_alt')} />
         </div>
         <div className="content">
-          <ParagraphM weight={700}>{t('not_enough_collateral_modal.title')}</ParagraphM>
-          <ParagraphXS>
+          <ParagraphM weight={700} className="modal-title">
+            {t('not_enough_collateral_modal.title')}
+          </ParagraphM>
+          <ParagraphXS className="modal-text">
             {t('not_enough_collateral_modal.text', {
               creditValue: creditValue.toFixed(2),
               minValue: MIN_LINE_OF_CREDIT,
