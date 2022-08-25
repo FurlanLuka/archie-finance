@@ -208,12 +208,13 @@ export class CollateralWithdrawalService {
           userId,
           asset,
         });
-      if (userCollateral === null) throw new CollateralNotFoundError();
 
       const { maxAmount } = await this.getUserMaxWithdrawalAmount(
         userId,
         asset,
       );
+
+      if (userCollateral === null) throw new CollateralNotFoundError();
 
       if (maxAmount < withdrawalAmount) {
         throw new BadRequestException({

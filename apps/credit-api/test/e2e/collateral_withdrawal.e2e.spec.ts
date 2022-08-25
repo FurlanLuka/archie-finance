@@ -41,6 +41,7 @@ import {
 import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
+import { CollateralNotFoundError } from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.errors';
 
 describe('CollateralWithdrawalController (e2e)', () => {
   let app: INestApplication;
@@ -193,7 +194,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         );
 
       expect(response.maxAmount).toEqual(
-        defaultUserCollateral.find((c) => c.asset === 'ETH').amount,
+        defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount,
       );
     });
 
@@ -214,7 +215,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         );
 
       expect(response.maxAmount).toEqual(
-        defaultUserCollateral.find((c) => c.asset === 'ETH').amount,
+        defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount,
       );
     });
 
@@ -267,7 +268,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
       }
     });
 
-    it('should return 400 if user tries to withdraw an asset which they have not collateralized', async () => {
+    it('should return 404 if user tries to withdraw an asset which they have not collateralized', async () => {
       const desiredAsset = 'ETH';
       await collateralRepository.delete({
         userId,
@@ -283,7 +284,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
           { asset: desiredAsset, destinationAddress, withdrawalAmount: 1 },
         );
       } catch (error) {
-        expect(error).toBeInstanceOf(BadRequestException);
+        expect(error).toBeInstanceOf(CollateralNotFoundError);
       }
     });
 
@@ -369,7 +370,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         userId,
         asset,
       });
-      expect(userCollateral.amount).toEqual(10 - withdrawalAmount);
+      expect(userCollateral?.amount).toEqual(10 - withdrawalAmount);
     });
   });
 
@@ -398,7 +399,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         select: ['id', 'transactionId'],
       });
 
-      expect(withdrawalResult.transactionId).toEqual(transactionId);
+      expect(withdrawalResult?.transactionId).toEqual(transactionId);
     });
   });
   describe('Withdrawal completed handler', () => {
@@ -428,7 +429,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         select: ['id', 'status'],
       });
 
-      expect(withdrawalResult.status).toEqual(TransactionStatus.COMPLETED);
+      expect(withdrawalResult?.status).toEqual(TransactionStatus.COMPLETED);
     });
 
     it('should throw not found if transaction id has not been synced yet', async () => {
