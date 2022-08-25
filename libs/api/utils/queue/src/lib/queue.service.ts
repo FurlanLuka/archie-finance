@@ -57,18 +57,20 @@ export class QueueService implements OnApplicationBootstrap {
         RABBIT_RETRY_HANDLER,
       )),
     ];
-    retryHandlers.forEach(({ discoveredMethod, meta }) => {
-      const handler = discoveredMethod.handler.bind(
-        discoveredMethod.parentClass.instance,
-      );
+    await Promise.all(
+      retryHandlers.map(async ({ discoveredMethod, meta }) => {
+        const handler = discoveredMethod.handler.bind(
+          discoveredMethod.parentClass.instance,
+        );
 
-      this.amqpConnection.createSubscriber(
-        handler,
-        meta,
-        discoveredMethod.methodName,
-      );
-      this.createDeadLetterQueue(meta);
-    });
+        await this.amqpConnection.createSubscriber(
+          handler,
+          meta,
+          discoveredMethod.methodName,
+        );
+        this.createDeadLetterQueue(meta);
+      }),
+    );
     Logger.log('Retry and dead letter queues initialized');
   }
 
