@@ -217,30 +217,4 @@ export class PeachBorrowerService {
       newCreditLimit,
     );
   }
-
-  public async handleTransactionsEvent(transaction) {
-    if (transaction.status === 'queued') {
-      return;
-    }
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
-      userId: transaction.userId,
-    });
-    this.borrowerValidation.isBorrowerDrawDefined(borrower);
-
-    if (transaction.status === 'pending') {
-      return this.peachApiService.createPurchase(
-        borrower.personId,
-        borrower.creditLineId,
-        borrower.drawId,
-        transaction,
-      );
-    }
-
-    return this.peachApiService.updatePurchase(
-      borrower.personId,
-      borrower.creditLineId,
-      borrower.drawId,
-      transaction,
-    );
-  }
 }

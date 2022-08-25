@@ -125,6 +125,73 @@ export interface Payments extends PeachResponse {
   }[];
 }
 
+export enum PurchaseType {
+  regular = 'regular',
+  refund = 'refund',
+  cashBack = 'cashBack',
+}
+
+export enum PurchaseStatus {
+  settled = 'settled',
+  pending = 'pending',
+  canceled = 'canceled',
+  declined = 'declined',
+  disputed = 'disputed',
+}
+
+export enum PurchaseTransactionType {
+  atm_withdrawal = 'atm_withdrawal',
+  card_purchase = 'card_purchase',
+  card_refund = 'card_refund',
+  dispute = 'dispute',
+  external_transfer = 'external_transfer',
+  fee = 'fee',
+  credit = 'credit',
+  internal_transfer = 'internal_transfer',
+  other = 'other',
+  reversed_transfer = 'reversed_transfer',
+  third_party_transfer = 'third_party_transfer',
+}
+
+export interface Purchases extends PeachResponse {
+  total: number;
+  count: number;
+  nextUrl: string | null;
+  previousUrl: string | null;
+  data: {
+    id: string;
+    amount: number;
+    declineReason: string | null;
+    purchaseDate: string;
+    purchaseDetails: {
+      categoryId: string | null;
+      conversionRate: number;
+      description: string;
+      externalCardId: string;
+      isValidMerchantId: boolean;
+      merchantCategoryCode: string;
+      merchantCity: string;
+      merchantCountry: string | null;
+      merchantId: string;
+      merchantName: string;
+      merchantState: string | null;
+      metadata: {
+        transactionType: PurchaseTransactionType;
+      } | null;
+      originalCurrencyAmount: number | null;
+      originalCurrencyCode: string | null;
+      pointOfSaleType: string | null;
+    };
+    status: PurchaseStatus;
+    timestamps: {
+      createdAt: string;
+      effectiveAt: string | null;
+      updatedAt: string | null;
+    };
+    type: PurchaseType;
+  }[];
+}
+
 export interface HomeAddress extends PeachResponse {
   id: string;
 }

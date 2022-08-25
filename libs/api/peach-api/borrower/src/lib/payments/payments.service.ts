@@ -1,6 +1,5 @@
 import { PeachApiService } from '../api/peach_api.service';
 import { Borrower } from '../borrower.entity';
-import { BorrowerNotFoundError } from '../borrower.errors';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
@@ -21,7 +20,9 @@ import { QueueService } from '@archie/api/utils/queue';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
 import { BorrowerValidation } from '../utils/borrower.validation';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class PaymentsService {
   constructor(
     @InjectRepository(Borrower)
@@ -57,9 +58,6 @@ export class PaymentsService {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
     this.borrowerValidation.isBorrowerDrawDefined(borrower);
 
     // TODO: uncomment once we get response from peach
