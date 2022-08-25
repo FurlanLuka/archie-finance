@@ -16,10 +16,11 @@ import {
   PeachTransactionType,
   Person,
   PersonStatus,
-  ObligationsResponse,
+  Obligations,
   PaymentInstrumentBalance,
   Payments,
   QueryParams,
+  Balances,
 } from './peach_api.interfaces';
 import { Borrower } from '../borrower.entity';
 import {
@@ -420,9 +421,20 @@ export class PeachApiService {
   public async getLoanObligations(
     personId: string,
     loanId: string,
-  ): Promise<ObligationsResponse> {
+  ): Promise<Obligations> {
     const response = await this.peachClient.get(
       `people/${personId}/loans/${loanId}/obligations`,
+    );
+
+    return response.data.data;
+  }
+
+  public async getLoanBalances(
+    personId: string,
+    loanId: string,
+  ): Promise<Balances> {
+    const response = await this.peachClient.get(
+      `people/${personId}/loans/${loanId}/balances`,
     );
 
     return response.data.data;

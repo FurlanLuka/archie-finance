@@ -159,12 +159,33 @@ export interface Obligation extends PeachResponse {
   updatedAt: string | null;
 }
 
-export interface ObligationsResponse {
+export interface Obligations {
   daysOverdue: number;
   isLocked: boolean;
   isOverdue: boolean;
   overdueAmount: number;
   obligations: Obligation[];
+}
+
+export interface Balances {
+  outstandingBalances: {
+    outstandingFeesAmount: number;
+    outstandingInterestAmount: number;
+    outstandingPrincipalAmount: number;
+    outstandingTotalAmount: number;
+  };
+  overdueBalances: {
+    overdueFeesAmount: number;
+    overdueInterestAmount: number;
+    overduePrincipalAmount: number;
+    overdueTotalAmount: number;
+  };
+  dueBalances: {
+    dueFeesAmount: number;
+    dueInterestAmount: number;
+    duePrincipalAmount: number;
+    dueTotalAmount: number;
+  };
 }
 
 export interface Credit {
