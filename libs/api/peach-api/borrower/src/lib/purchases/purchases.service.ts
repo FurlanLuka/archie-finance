@@ -42,7 +42,7 @@ export class PurchasesService {
     if (transaction.status === 'queued') {
       return;
     }
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: transaction.userId,
     });
     this.borrowerValidation.isBorrowerDrawDefined(borrower);

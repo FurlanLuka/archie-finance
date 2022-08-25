@@ -46,7 +46,8 @@ export class PurchasesResponseFactory {
           merchantLocation: purchase.purchaseDetails.merchantCity,
           merchantName: purchase.purchaseDetails.merchantName,
           merchantNumber: purchase.purchaseDetails.merchantId,
-          transactionType: purchase.purchaseDetails.metadata?.transactionType,
+          transactionType:
+            purchase.purchaseDetails.metadata?.transactionType ?? null,
         },
       })),
     };
