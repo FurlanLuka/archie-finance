@@ -8,7 +8,7 @@ import {
   Person,
 } from '../api/peach_api.interfaces';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { QueueService } from '@archie/api/utils/queue';
@@ -81,7 +81,7 @@ export class PeachBorrowerService {
       .where('userId = :userId', { userId: email.userId })
       .returning('*')
       .execute()
-      .then((response) => response.raw[0]);
+      .then((response: UpdateResult) => (<Borrower[]>response.raw)[0]);
 
     if (borrower === undefined) {
       throw new BorrowerNotFoundError();

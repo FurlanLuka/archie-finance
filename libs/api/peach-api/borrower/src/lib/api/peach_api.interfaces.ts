@@ -171,6 +171,10 @@ export interface Credit {
   calculatedAt: string;
 }
 
+export interface CreditBalanceResponse extends Credit {
+  isLocked: boolean;
+}
+
 export interface PeachErrorResponse {
   config: object;
   status: number;

@@ -20,6 +20,7 @@ import {
   PaymentInstrumentBalance,
   Payments,
   QueryParams,
+  CreditBalanceResponse,
 } from './peach_api.interfaces';
 import { Borrower } from '../borrower.entity';
 import {
@@ -387,7 +388,7 @@ export class PeachApiService {
       amount: Number(transaction.us_dollar_amount),
       purchaseDate: transaction.created_at,
       purchaseDetails: {
-        description: transaction.description ?? undefined,
+        description: transaction.description,
         merchantName: transaction.merchant_name ?? undefined,
         externalCardId: transaction.debit_card_uid ?? undefined,
         merchantCity: transaction.merchant_location ?? undefined,
@@ -407,7 +408,7 @@ export class PeachApiService {
     const response = await this.peachClient.get(
       `people/${personId}/loans/${loanId}/balances`,
     );
-    const responseBody = response.data.data;
+    const responseBody: CreditBalanceResponse = response.data.data;
 
     if (responseBody.isLocked) {
       throw new Error('Balance change is in progress, retry');

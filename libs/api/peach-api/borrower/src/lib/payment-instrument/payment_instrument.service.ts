@@ -3,7 +3,6 @@ import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Borrower } from '../borrower.entity';
 import { Repository } from 'typeorm';
-import { BorrowerNotFoundError } from '../borrower.errors';
 import { PaymentInstrument } from '../api/peach_api.interfaces';
 import {
   ConnectAccountDto,
@@ -75,10 +74,6 @@ export class PeachPaymentInstrumentsService {
     });
     this.borrowerValidation.isBorrowerDefined(borrower);
 
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
-
     await this.peachApiService.createPlaidPaymentInstrument(
       accountInfo.publicToken,
       accountInfo.accountId,
@@ -94,10 +89,6 @@ export class PeachPaymentInstrumentsService {
       userId,
     });
     this.borrowerValidation.isBorrowerDefined(borrower);
-
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
 
     await this.peachApiService.deletePaymentInstrument(borrower.personId, id);
   }

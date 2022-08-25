@@ -17,7 +17,7 @@ export class BorrowerValidation {
   public isBorrowerDefined(
     borrower: Borrower | null,
   ): asserts borrower is Borrower {
-    if (borrower === null || borrower?.personId === null) {
+    if (borrower === null) {
       throw new BorrowerNotFoundError();
     }
   }
