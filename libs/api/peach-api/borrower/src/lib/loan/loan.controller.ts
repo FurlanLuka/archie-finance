@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   CARD_ACTIVATED_TOPIC,
@@ -6,7 +6,6 @@ import {
   CREDIT_LIMIT_DECREASED_TOPIC,
   CREDIT_LIMIT_INCREASED_TOPIC,
   SERVICE_QUEUE_NAME,
-  TRANSACTION_UPDATED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import { PeachBorrowerService } from './loan.service';
 import {
@@ -16,16 +15,7 @@ import {
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
-  TransactionUpdatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
-import { AuthGuard } from '@archie/api/utils/auth0';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { ObligationsResponseDto } from './loan.dto';
-import { ApiErrorResponse } from '@archie/api/utils/openapi';
-import {
-  BorrowerNotFoundError,
-  CreditLineNotFoundError,
-} from '../borrower.errors';
 import {
   EmailVerifiedPayload,
   KycSubmittedPayload,
@@ -87,28 +77,5 @@ export class PeachBorrowerQueueController {
     payload: CreditLimitDecreasedPayload,
   ): Promise<void> {
     await this.peachService.handleCreditLimitDecreased(payload);
-  }
-
-  @Subscribe(
-    TRANSACTION_UPDATED_TOPIC,
-    PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async transactionUpdatedHandler(
-    payload: TransactionUpdatedPayload,
-  ): Promise<void> {
-    await this.peachService.handleTransactionsEvent(payload);
-  }
-}
-
-@Controller('v1/loans')
-export class PeachBorrowerController {
-  constructor(private peachService: PeachBorrowerService) {}
-
-  @Get('obligations')
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  @ApiErrorResponse([BorrowerNotFoundError, CreditLineNotFoundError])
-  async getCreditObligations(@Req() request): Promise<ObligationsResponseDto> {
-    return this.peachService.getObligations(request.user.sub);
   }
 }

@@ -75,9 +75,9 @@ export class PeachPaymentInstrumentsService {
     this.borrowerValidation.isBorrowerDefined(borrower);
 
     await this.peachApiService.createPlaidPaymentInstrument(
-      accountInfo.publicToken,
-      accountInfo.accountId,
       borrower.personId,
+      accountInfo.accountId,
+      accountInfo.publicToken,
     );
   }
 

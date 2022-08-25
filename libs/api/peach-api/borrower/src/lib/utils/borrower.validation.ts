@@ -12,7 +12,9 @@ import {
   BorrowerWithHomeAddress,
   BorrowerWithMail,
 } from './borrower.validation.interfaces';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class BorrowerValidation {
   public isBorrowerDefined(
     borrower: Borrower | null,

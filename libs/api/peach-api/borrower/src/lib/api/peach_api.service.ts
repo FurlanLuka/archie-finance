@@ -16,11 +16,12 @@ import {
   PeachTransactionType,
   Person,
   PersonStatus,
-  ObligationsResponse,
+  Obligations,
   PaymentInstrumentBalance,
   Payments,
   QueryParams,
-  CreditBalanceResponse,
+  Purchases,
+  Balances,
 } from './peach_api.interfaces';
 import { Borrower } from '../borrower.entity';
 import {
@@ -254,7 +255,6 @@ export class PeachApiService {
         // TODO: check if ok
         originatingCreditorName: 'Bank of Mars',
         creditLimitAmount: creditLimit,
-        // TODO: should we define down payment? - Collateral value
         downPaymentAmount,
         personAddressId: addressContactId,
       },
@@ -311,14 +311,9 @@ export class PeachApiService {
         nickname: 'Credit Card',
         status: 'originated',
         atOrigination: {
-          // interestRates: [{ days: null, rate: 0.1 }],
           minPaymentCalculation: {
             percentageOfPrincipal: 0.1,
             minAmount: 0,
-          },
-          autoAmortization: {
-            amortizationLogic: 'amortizeAfterEachPurchase',
-            duration: 1,
           },
         },
       },
@@ -394,6 +389,9 @@ export class PeachApiService {
         merchantCity: transaction.merchant_location ?? undefined,
         merchantId: transaction.merchant_number ?? undefined,
         merchantCategoryCode: transaction.mcc ?? undefined,
+        metadata: {
+          transactionType: transaction.type,
+        },
       },
       declineReason: {
         mainText: transaction.denial_reason ?? undefined,
@@ -408,7 +406,7 @@ export class PeachApiService {
     const response = await this.peachClient.get(
       `people/${personId}/loans/${loanId}/balances`,
     );
-    const responseBody: CreditBalanceResponse = response.data.data;
+    const responseBody: Balances = response.data.data;
 
     if (responseBody.isLocked) {
       throw new Error('Balance change is in progress, retry');
@@ -424,9 +422,20 @@ export class PeachApiService {
   public async getLoanObligations(
     personId: string,
     loanId: string,
-  ): Promise<ObligationsResponse> {
+  ): Promise<Obligations> {
     const response = await this.peachClient.get(
       `people/${personId}/loans/${loanId}/obligations`,
+    );
+
+    return response.data.data;
+  }
+
+  public async getLoanBalances(
+    personId: string,
+    loanId: string,
+  ): Promise<Balances> {
+    const response = await this.peachClient.get(
+      `people/${personId}/loans/${loanId}/balances`,
     );
 
     return response.data.data;
@@ -514,6 +523,20 @@ export class PeachApiService {
   ): Promise<Payments> {
     const response = await this.peachClient.get(
       `/people/${personId}/loans/${loanId}/transactions`,
+      {
+        params: omitBy(query, isNil),
+      },
+    );
+
+    return response.data;
+  }
+
+  public async getPurchases(
+    borrower: Borrower,
+    query: QueryParams,
+  ): Promise<Purchases> {
+    const response = await this.peachClient.get(
+      `/people/${borrower.personId}/loans/${borrower.creditLineId}/draws/${borrower.drawId}/purchases`,
       {
         params: omitBy(query, isNil),
       },

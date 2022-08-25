@@ -1,12 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { PeachApiService } from '../api/peach_api.service';
-import {
-  Draw,
-  HomeAddress,
-  Obligation,
-  ObligationsResponse,
-  Person,
-} from '../api/peach_api.interfaces';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { Borrower } from '../borrower.entity';
@@ -20,9 +13,7 @@ import { GET_COLLATERAL_VALUE_RPC } from '@archie/api/credit-api/constants';
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
-  TransactionUpdatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
-import { ObligationsResponseDto } from './loan.dto';
 import { BorrowerNotFoundError } from '../borrower.errors';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import {
@@ -30,6 +21,7 @@ import {
   KycSubmittedPayload,
 } from '@archie/api/user-api/data-transfer-objects';
 import { BorrowerWithHomeAddress } from '../utils/borrower.validation.interfaces';
+import { Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -232,64 +224,5 @@ export class PeachBorrowerService {
       borrower.creditLineId,
       newCreditLimit,
     );
-  }
-
-  public async handleTransactionsEvent(
-    transaction: TransactionUpdatedPayload,
-  ): Promise<void> {
-    if (transaction.status === 'queued') {
-      return;
-    }
-    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId: transaction.userId,
-    });
-    this.borrowerValidation.isBorrowerDrawDefined(borrower);
-
-    if (transaction.status === 'pending') {
-      return this.peachApiService.createPurchase(
-        borrower.personId,
-        borrower.creditLineId,
-        borrower.drawId,
-        transaction,
-      );
-    }
-
-    return this.peachApiService.updatePurchase(
-      borrower.personId,
-      borrower.creditLineId,
-      borrower.drawId,
-      transaction,
-    );
-  }
-
-  public async getObligations(userId: string): Promise<ObligationsResponseDto> {
-    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId,
-    });
-    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
-
-    const obligations: ObligationsResponse =
-      await this.peachApiService.getLoanObligations(
-        borrower.personId,
-        borrower.creditLineId,
-      );
-
-    return {
-      daysOverdue: obligations.daysOverdue,
-      isOverdue: obligations.isOverdue,
-      overdueAmount: obligations.overdueAmount,
-      obligations: obligations.obligations.map((obligation: Obligation) => ({
-        capitalizedAmount: obligation.capitalizedAmount,
-        dueDate: obligation.dueDate,
-        fulfilledAmount: obligation.fulfilledAmount,
-        gracePeriod: obligation.gracePeriod,
-        isFulfilled: obligation.isFulfilled,
-        isOpen: obligation.isOpen,
-        isOverdue: obligation.isOverdue,
-        obligationAmount: obligation.obligationAmount,
-        overpaymentsAmount: obligation.overpaymentsAmount,
-        remainingAmount: obligation.remainingAmount,
-      })),
-    };
   }
 }
