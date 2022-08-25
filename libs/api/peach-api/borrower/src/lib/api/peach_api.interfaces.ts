@@ -1,5 +1,3 @@
-import { AxiosRequestConfig } from 'axios';
-
 export enum PersonStatus {
   active = 'active',
   inactive = 'inactive',
@@ -174,7 +172,7 @@ export interface Credit {
 }
 
 export interface PeachErrorResponse {
-  config: AxiosRequestConfig;
+  config: object;
   status: number;
   errorResponse: PeachErrorData;
 }

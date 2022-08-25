@@ -14,6 +14,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "strictNullChecks": true,
     "paths": {
       "@archie/api/asset-price-api/asset-price": [
         "libs/api/asset-price-api/asset-price/src/index.ts"

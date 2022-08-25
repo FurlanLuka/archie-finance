@@ -74,7 +74,7 @@ export class UserVaultAccountService {
 
   public async withdrawAsset(
     collateralWithdrawInitialized: CollateralWithdrawInitializedDto,
-  ): Promise<CreateTransactionResponse> {
+  ): Promise<void> {
     const userVaultAccount: UserVaultAccount | null =
       await this.userVaultAccount.findOneBy({
         userId: collateralWithdrawInitialized.userId,

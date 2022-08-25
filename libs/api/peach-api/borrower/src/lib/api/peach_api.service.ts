@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
 import {
@@ -55,8 +55,8 @@ export class PeachApiService {
           ...error.config,
           headers: null,
         },
-        status: error.response.status,
-        errorResponse: <PeachErrorData>error.response.data,
+        status: (<AxiosResponse>error.response).status,
+        errorResponse: <PeachErrorData>error.response?.data,
       };
 
       return Promise.reject(response);
@@ -231,7 +231,7 @@ export class PeachApiService {
   }
 
   public async createCreditLine(
-    personId,
+    personId: string,
     creditLimit: number,
     addressContactId: string,
     downPaymentAmount: number,
@@ -379,7 +379,7 @@ export class PeachApiService {
     );
   }
 
-  private createPurchaseDetails(transaction) {
+  private createPurchaseDetails(transaction): object {
     return {
       amount: Number(transaction.us_dollar_amount),
       purchaseDate: transaction.created_at,

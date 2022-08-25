@@ -50,8 +50,8 @@ export class AssetPriceService {
     const prices: CoinPriceResponse =
       await this.coingeckoService.getCoinInformation(assets);
 
-    const assetPriceEntities = [];
-    const assetPriceHistoryEntities = [];
+    const assetPriceEntities: Partial<AssetPrice>[] = [];
+    const assetPriceHistoryEntities: Partial<AssetPriceHistory>[] = [];
 
     Object.keys(prices).forEach((key: string) => {
       try {

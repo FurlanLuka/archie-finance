@@ -22,7 +22,10 @@ import {
   CreditLimitIncreasedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
 import { ObligationsResponseDto } from './loan.dto';
-import { BorrowerNotFoundError } from '../borrower.errors';
+import {
+  BorrowerMailNotFoundError,
+  BorrowerNotFoundError,
+} from '../borrower.errors';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import {
   EmailVerifiedPayload,
@@ -40,7 +43,9 @@ export class PeachBorrowerService {
     private borrowerValidation: BorrowerValidation,
   ) {}
 
-  public async handleKycSubmittedEvent(kyc: KycSubmittedPayload) {
+  public async handleKycSubmittedEvent(
+    kyc: KycSubmittedPayload,
+  ): Promise<void> {
     let borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: kyc.userId,
     });
@@ -65,7 +70,9 @@ export class PeachBorrowerService {
     );
   }
 
-  public async handleEmailVerifiedEvent(email: EmailVerifiedPayload) {
+  public async handleEmailVerifiedEvent(
+    email: EmailVerifiedPayload,
+  ): Promise<void> {
     const encryptedEmail: string = this.cryptoService.encrypt(email.email);
     const borrower: Borrower | undefined = await this.borrowerRepository
       .createQueryBuilder()
@@ -84,33 +91,36 @@ export class PeachBorrowerService {
     await this.peachApiService.addMailContact(borrower.personId, email.email);
   }
 
-  public async handleCardActivatedEvent(activatedCard) {
+  public async handleCardActivatedEvent(activatedCard): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: activatedCard.userId,
     });
-    this.borrowerValidation.isBorrowerDefined(borrower);
+    this.borrowerValidation.isBorrowerMailDefined(borrower);
 
     const email: string = this.cryptoService.decrypt(borrower.encryptedEmail);
 
     await this.peachApiService.createUser(borrower.personId, email);
   }
 
-  public async handleFundsLoadedEvent(founds) {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+  public async handleFundsLoadedEvent(founds): Promise<void> {
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: founds.userId,
     });
-    this.borrowerValidation.isBorrowerDefined(borrower);
+    const validatedBorrower: Borrower =
+      this.borrowerValidation.isBorrowerHomeAddressDefined(borrower);
 
     const creditLineId = await this.createActiveCreditLine(
-      borrower,
+      validatedBorrower,
+      validatedBorrower.homeAddressContactId,
       founds.amount,
     );
 
-    await this.createActiveDraw(borrower, creditLineId);
+    await this.createActiveDraw(validatedBorrower, creditLineId);
   }
 
   private async createActiveCreditLine(
     borrower: Borrower,
+    addressContactId: string,
     amount: number,
   ): Promise<string> {
     let creditLineId: string | null = borrower.creditLineId;
@@ -132,7 +142,7 @@ export class PeachBorrowerService {
       const creditLine = await this.peachApiService.createCreditLine(
         borrower.personId,
         amount,
-        borrower.homeAddressContactId,
+        addressContactId,
         downPayment,
       );
       creditLineId = creditLine.id;
@@ -155,7 +165,10 @@ export class PeachBorrowerService {
     return creditLineId;
   }
 
-  private async createActiveDraw(borrower: Borrower, creditLineId: string) {
+  private async createActiveDraw(
+    borrower: Borrower,
+    creditLineId: string,
+  ): Promise<void> {
     let drawId: string | null = borrower.drawId;
 
     if (drawId === null) {
@@ -184,7 +197,7 @@ export class PeachBorrowerService {
   public async handleCreditLimitIncreased(
     creditLimitIncrease: CreditLimitIncreasedPayload,
   ): Promise<void> {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: creditLimitIncrease.userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
@@ -206,7 +219,7 @@ export class PeachBorrowerService {
   public async handleCreditLimitDecreased(
     creditLimitDecrease: CreditLimitDecreasedPayload,
   ): Promise<void> {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: creditLimitDecrease.userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
@@ -225,11 +238,11 @@ export class PeachBorrowerService {
     );
   }
 
-  public async handleTransactionsEvent(transaction) {
+  public async handleTransactionsEvent(transaction): Promise<void> {
     if (transaction.status === 'queued') {
       return;
     }
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: transaction.userId,
     });
     this.borrowerValidation.isBorrowerDrawDefined(borrower);
