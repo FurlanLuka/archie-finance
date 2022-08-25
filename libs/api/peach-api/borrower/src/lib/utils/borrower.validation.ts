@@ -4,7 +4,9 @@ import {
   CreditLineNotFoundError,
   DrawNotFoundError,
 } from '../borrower.errors';
+import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class BorrowerValidation {
   public isBorrowerDefined(borrower: Borrower | null): void {
     if (borrower === null || borrower?.personId === null) {

@@ -971,35 +971,9 @@
         }
       }
     },
-    "/v1/loans/obligations": {
-      "get": {
-        "operationId": "PeachBorrowerController_getCreditObligations",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ObligationsResponseDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
     "/v1/payment_instruments": {
       "get": {
-        "operationId": "PeachPaymentInstrumentsController_getCreditObligations",
+        "operationId": "PeachPaymentInstrumentsController_getPaymentInstruments",
         "parameters": [],
         "responses": {
           "200": {
@@ -1156,6 +1130,32 @@
           },
           "404": {
             "description": "AMOUNT_EXCEEDS_AVAILABLE_BALANCE"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/loan_obligations": {
+      "get": {
+        "operationId": "ObligationsController_getCreditObligations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ObligationsResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -1770,80 +1770,6 @@
           "updatedAt"
         ]
       },
-      "Obligation": {
-        "type": "object",
-        "properties": {
-          "capitalizedAmount": {
-            "type": "number"
-          },
-          "dueDate": {
-            "type": "string"
-          },
-          "fulfilledAmount": {
-            "type": "number"
-          },
-          "gracePeriod": {
-            "type": "string",
-            "nullable": true
-          },
-          "isFulfilled": {
-            "type": "boolean"
-          },
-          "isOpen": {
-            "type": "boolean"
-          },
-          "isOverdue": {
-            "type": "boolean"
-          },
-          "obligationAmount": {
-            "type": "number"
-          },
-          "overpaymentsAmount": {
-            "type": "number"
-          },
-          "remainingAmount": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "capitalizedAmount",
-          "dueDate",
-          "fulfilledAmount",
-          "gracePeriod",
-          "isFulfilled",
-          "isOpen",
-          "isOverdue",
-          "obligationAmount",
-          "overpaymentsAmount",
-          "remainingAmount"
-        ]
-      },
-      "ObligationsResponseDto": {
-        "type": "object",
-        "properties": {
-          "daysOverdue": {
-            "type": "number"
-          },
-          "isOverdue": {
-            "type": "boolean"
-          },
-          "overdueAmount": {
-            "type": "number"
-          },
-          "obligations": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/Obligation"
-            }
-          }
-        },
-        "required": [
-          "daysOverdue",
-          "isOverdue",
-          "overdueAmount",
-          "obligations"
-        ]
-      },
       "PaymentInstrumentDto": {
         "type": "object",
         "properties": {
@@ -2084,6 +2010,126 @@
         "required": [
           "amount",
           "paymentInstrumentId"
+        ]
+      },
+      "Obligation": {
+        "type": "object",
+        "properties": {
+          "capitalizedAmount": {
+            "type": "number"
+          },
+          "dueDate": {
+            "type": "string"
+          },
+          "fulfilledAmount": {
+            "type": "number"
+          },
+          "gracePeriod": {
+            "type": "string",
+            "nullable": true
+          },
+          "isOverdue": {
+            "type": "boolean"
+          },
+          "obligationAmount": {
+            "type": "number"
+          },
+          "overpaymentsAmount": {
+            "type": "number"
+          },
+          "remainingAmount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "capitalizedAmount",
+          "dueDate",
+          "fulfilledAmount",
+          "gracePeriod",
+          "isOverdue",
+          "obligationAmount",
+          "overpaymentsAmount",
+          "remainingAmount"
+        ]
+      },
+      "ObligationsResponseDto": {
+        "type": "object",
+        "properties": {
+          "outstandingBalances": {
+            "type": "object",
+            "properties": {
+              "outstandingFeesAmount": {
+                "required": true,
+                "type": "number"
+              },
+              "outstandingInterestAmount": {
+                "required": true,
+                "type": "number"
+              },
+              "outstandingPrincipalAmount": {
+                "required": true,
+                "type": "number"
+              },
+              "outstandingTotalAmount": {
+                "required": true,
+                "type": "number"
+              }
+            }
+          },
+          "overdueBalances": {
+            "type": "object",
+            "properties": {
+              "overdueFeesAmount": {
+                "required": true,
+                "type": "number"
+              },
+              "overdueInterestAmount": {
+                "required": true,
+                "type": "number"
+              },
+              "overduePrincipalAmount": {
+                "required": true,
+                "type": "number"
+              },
+              "overdueTotalAmount": {
+                "required": true,
+                "type": "number"
+              }
+            }
+          },
+          "dueBalances": {
+            "type": "object",
+            "properties": {
+              "dueFeesAmount": {
+                "required": true,
+                "type": "number"
+              },
+              "dueInterestAmount": {
+                "required": true,
+                "type": "number"
+              },
+              "duePrincipalAmount": {
+                "required": true,
+                "type": "number"
+              },
+              "dueTotalAmount": {
+                "required": true,
+                "type": "number"
+              }
+            }
+          },
+          "statementObligations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Obligation"
+            }
+          }
+        },
+        "required": [
+          "outstandingBalances",
+          "overdueBalances",
+          "dueBalances",
+          "statementObligations"
         ]
       }
     },
