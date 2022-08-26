@@ -65,14 +65,13 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ balances, on
       amount = fullBalance;
     }
 
-    onConfirm(amount, data.scheduledDate);
+    onConfirm(amount, format(parse(data.scheduledDate, 'MMddyyyy', new Date()), 'yyyy-MM-dd'));
   });
 
   useEffect(() => {
     // to validate the form initially, otherwise it's marked as invalid
     trigger();
   }, [trigger]);
-  console.log('errars', { isValid, errors });
 
   return (
     <PaymentScheduleFormStyled>
