@@ -17,18 +17,12 @@ import {
 } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 
+import { Balances } from '../../make-payment.interfaces';
+
 import { PaymentOption } from './payment-schedule-form.interfaces';
 import { PaymentScheduleFormData, getPaymentScheduleFormSchema } from './payment-schedule-form.schema';
 import { PaymentScheduleFormStyled } from './payment-schedule-form.styled';
 
-// TODO use actual balance response
-interface Balances {
-  dueDate: string;
-  balanceOwed: number;
-  balanceWithInterest: number;
-  fullBalance: number;
-  interestOwed: number;
-}
 interface PaymentScheduleFormProps {
   onConfirm: (amount: number, date: string) => void;
   balances: Balances;

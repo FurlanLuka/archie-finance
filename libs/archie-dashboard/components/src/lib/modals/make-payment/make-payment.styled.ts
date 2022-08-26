@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const PaymentScheduleStyled = styled.div`
+export const MakePaymentStyled = styled.div`
   display: flex;
   flex-direction: column;
 

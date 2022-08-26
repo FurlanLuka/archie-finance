@@ -31,11 +31,7 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
           </div>
         )}
       </Card>
-      <MakePaymentModal
-        isOpen={makePaymentModalOpen}
-        close={() => setMakePaymentModalOpen(false)}
-        onConfirm={() => console.log('confirmed')}
-      />
+      {makePaymentModalOpen && <MakePaymentModal close={() => setMakePaymentModalOpen(false)} />}
     </>
   );
 };

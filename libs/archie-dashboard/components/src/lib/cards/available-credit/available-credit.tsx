@@ -76,11 +76,7 @@ export const AvailableCredit: FC = () => {
             <LoanToValueChart ltv={ltvData.ltv} status={ltvData.status} />
           </div>
         </Card>
-        <MakePaymentModal
-          isOpen={makePaymentModalOpen}
-          close={() => setMakePaymentModalOpen(false)}
-          onConfirm={() => console.log('confirmed')}
-        />
+        {makePaymentModalOpen && <MakePaymentModal close={() => setMakePaymentModalOpen(false)} />}
       </>
     );
   }

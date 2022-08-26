@@ -1,74 +1,66 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
-import { PaymentStep } from '@archie-webapps/archie-dashboard/constants';
-import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/interfaces';
-import { Modal } from '@archie-webapps/shared/ui/design-system';
+import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
+import { Loader, Modal, ParagraphM, ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
 
-import { ChooseAccount } from './blocks/choose-account/choose-account';
-import { PaymentConfirmModal } from './blocks/payment-confirm/payment-confirm';
-import { PaymentSchedule } from './blocks/payment-schedule/payment-schedule';
-import { PaymentScheduledModal } from './blocks/payment-scheduled/payment-scheduled';
+import { PaymentSteps } from './blocks/payment-steps/payment-steps';
+import { MakePaymentStyled } from './make-payment.styled';
 
 interface MakePaymentModalProps {
-  isOpen: boolean;
   close: () => void;
-  onConfirm: () => void;
 }
 
-export const MakePaymentModal: FC<MakePaymentModalProps> = ({ isOpen, close, onConfirm }) => {
+const lastPayment = '6,640.54';
+const date = 'May 23, 2022';
+const mockBalances = {
+  dueDate: '2022-09-24',
+  balanceOwed: 1000,
+  balanceWithInterest: 1200,
+  fullBalance: 1237,
+  interestOwed: 200,
+};
+
+export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
   const { t } = useTranslation();
+  const getKycResponse = useGetKyc();
 
-  const [currentStep, setCurrentStep] = useState<PaymentStep>(PaymentStep.ACCOUNT);
-  const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
-  const [amount, setAmount] = useState<number>(0);
-  const [scheduledDate, setScheduledDate] = useState<string | null>(null);
-
-  const handleConfirm = () => {
-    onConfirm();
-    setCurrentStep(PaymentStep.SCHEDULE);
-    close();
-  };
-
-  const getContent = (step: PaymentStep) => {
-    switch (step) {
-      case PaymentStep.ACCOUNT:
-        return (
-          <ChooseAccount
-            onConfirm={(account) => {
-              setSelectedAccount(account);
-              setCurrentStep(PaymentStep.SCHEDULE);
-            }}
-          />
-        );
-      case PaymentStep.SCHEDULE:
-        return (
-          <PaymentSchedule
-            onConfirm={(desiredAmount: number, desiredDate: string) => {
-              setAmount(desiredAmount);
-              setScheduledDate(desiredDate);
-              setCurrentStep(PaymentStep.CONFIRM);
-            }}
-          />
-        );
-      case PaymentStep.CONFIRM:
-        return (
-          <PaymentConfirmModal
-            onConfirm={() => setCurrentStep(PaymentStep.SCHEDULED)}
-            onBack={() => setCurrentStep(PaymentStep.SCHEDULE)}
-          />
-        );
-      case PaymentStep.SCHEDULED:
-        return <PaymentScheduledModal onConfirm={handleConfirm} />;
-      default:
-        console.warn('Unhandled step state');
-        return null;
+  const getContent = () => {
+    if (getKycResponse.state === RequestState.LOADING) {
+      return <Loader className="loader" />;
     }
+
+    if (getKycResponse.state === RequestState.ERROR) {
+      return <Navigate to="/error" state={{ prevPath: '/payment' }} />;
+    }
+
+    if (getKycResponse.state === RequestState.SUCCESS) {
+      return (
+        <>
+          <ParagraphM weight={800} className="title">
+            {t('payment_modal.payment_schedule.title')}
+          </ParagraphM>
+          <ParagraphS weight={600}>
+            {t('payment_modal.payment_schedule.credit_for', { name: getKycResponse.data.firstName })}
+          </ParagraphS>
+          <ParagraphXS>{t('payment_modal.payment_schedule.last_payment', { lastPayment, date })}</ParagraphXS>
+          <ParagraphXS>
+            {t('payment_modal.payment_schedule.interest_owed', { interestOwed: mockBalances.interestOwed })}
+          </ParagraphXS>
+          <div className="divider" />
+          <PaymentSteps balances={mockBalances} close={close} />
+        </>
+      );
+    }
+
+    return <></>;
   };
 
   return (
-    <Modal isOpen={isOpen} close={close} maxWidth="780px">
-      {getContent(currentStep)}
+    <Modal isOpen close={close} maxWidth="780px">
+      <MakePaymentStyled>{getContent()}</MakePaymentStyled>
     </Modal>
   );
 };
