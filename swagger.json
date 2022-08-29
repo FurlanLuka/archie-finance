@@ -2125,7 +2125,7 @@
       "PurchaseDetailsDto": {
         "type": "object",
         "properties": {
-          "transactionType1": {
+          "transactionType": {
             "nullable": true,
             "type": "string",
             "enum": [
@@ -2156,7 +2156,7 @@
           }
         },
         "required": [
-          "transactionType1",
+          "transactionType",
           "mcc",
           "merchantLocation",
           "merchantName",
