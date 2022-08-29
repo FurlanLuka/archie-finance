@@ -39,20 +39,18 @@ export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
           <img src={imgCollateralReceived} alt={t('collateral_received_modal.img_alt')} />
         </div>
         <div className="content">
-          <ParagraphM weight={700}>{t('collateral_received_modal.title')}</ParagraphM>
-          <ParagraphXS>
+          <ParagraphM weight={700} className="modal-title">
+            {t('collateral_received_modal.title')}
+          </ParagraphM>
+          <ParagraphXS className="modal-text">
             {t('collateral_received_modal.text', {
               collateralValue: collateralValue.toFixed(2),
               creditValue: creditValue.toFixed(2),
             })}
           </ParagraphXS>
           <div className="btn-group">
-            <ButtonPrimary onClick={onClose} maxWidth="fit-content">
-              {t('collateral_received_modal.btn')}
-            </ButtonPrimary>
-            <ButtonOutline onClick={handleConfirm} maxWidth="fit-content">
-              {t('btn_next')}
-            </ButtonOutline>
+            <ButtonPrimary onClick={onClose}>{t('collateral_received_modal.btn')}</ButtonPrimary>
+            <ButtonOutline onClick={handleConfirm}>{t('btn_next')}</ButtonOutline>
           </div>
         </div>
       </CollateralReceivedModalStyled>

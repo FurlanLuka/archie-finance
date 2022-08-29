@@ -30,10 +30,8 @@ export const Small: Story<CardProps> = (props) => (
         <ParagraphM weight={700}>This is a small card</ParagraphM>
         <ParagraphXS>It is typically used in a dashboard grid</ParagraphXS>
         <div style={{ display: 'flex', gap: '0.5rem', marginTop: '2rem' }}>
-          <ButtonOutline maxWidth="fit-content" small>
-            View more
-          </ButtonOutline>
-          <ButtonOutline maxWidth="fit-content" small isDisabled>
+          <ButtonOutline small>View more</ButtonOutline>
+          <ButtonOutline small isDisabled>
             Redeem
           </ButtonOutline>
         </div>
@@ -63,10 +61,8 @@ export const FullWidth: Story<CardProps> = (props) => (
         <ParagraphM weight={700}>This is a full-width card</ParagraphM>
         <ParagraphXS>It wraps a table and some buttons</ParagraphXS>
         <div style={{ display: 'flex', gap: '0.5rem', margin: '0.5rem 0 2rem' }}>
-          <ButtonOutline maxWidth="fit-content" small>
-            View more
-          </ButtonOutline>
-          <ButtonOutline maxWidth="fit-content" small isDisabled>
+          <ButtonOutline small>View more</ButtonOutline>
+          <ButtonOutline small isDisabled>
             Redeem
           </ButtonOutline>
         </div>

@@ -17,7 +17,7 @@ export const Danger: FC = () => {
         {t('margin_call_alert.title')}
       </ParagraphS>
       <ParagraphXS color={theme.textLight}>{t('margin_call_alert.text')}</ParagraphXS>
-      <ButtonLight maxWidth="fit-content" color={theme.textDanger} onClick={handleClick}>
+      <ButtonLight color={theme.textDanger} onClick={handleClick}>
         {t('margin_call_alert.btn')}
       </ButtonLight>
     </>

@@ -24,9 +24,7 @@ export const Default: Story = () => (
     <Toast>
       <ParagraphXS weight={700}>This is a toast notification. You can wrap anything you want in it.</ParagraphXS>
       <div className="btn-group">
-        <ButtonLight small maxWidth="fit-content">
-          Ok
-        </ButtonLight>
+        <ButtonLight small>Ok</ButtonLight>
       </div>
     </Toast>
   </StoriesContainer>
@@ -42,20 +40,14 @@ export const InAToastList: Story = () => (
       <Toast>
         <ParagraphXS weight={700}>Here is a notification with a button.</ParagraphXS>
         <div className="btn-group">
-          <ButtonLight small maxWidth="fit-content">
-            Ok
-          </ButtonLight>
+          <ButtonLight small>Ok</ButtonLight>
         </div>
       </Toast>
       <Toast>
         <ParagraphXS weight={700}>This one is with two buttons.</ParagraphXS>
         <div className="btn-group">
-          <ButtonLight small maxWidth="fit-content">
-            Cool
-          </ButtonLight>
-          <ButtonGhost small maxWidth="fit-content">
-            Cancel
-          </ButtonGhost>
+          <ButtonLight small>Cool</ButtonLight>
+          <ButtonGhost small>Cancel</ButtonGhost>
         </div>
       </Toast>
     </ToastList>

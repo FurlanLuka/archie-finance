@@ -47,7 +47,7 @@ export const ConnectedAccounts: FC = () => {
             {t('dashboard_payment.connected_accounts.title')}
           </ParagraphM>
           <div className="account-list">{getAccountsList()}</div>
-          <ButtonOutline small maxWidth="fit-content" onClick={() => setIsAddAccountModalOpen(true)}>
+          <ButtonOutline small onClick={() => setIsAddAccountModalOpen(true)}>
             {t('dashboard_payment.connected_accounts.btn_add')}
           </ButtonOutline>
         </Card>

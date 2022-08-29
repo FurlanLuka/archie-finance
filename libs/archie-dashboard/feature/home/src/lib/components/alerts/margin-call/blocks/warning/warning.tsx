@@ -17,7 +17,7 @@ export const Warning: FC = () => {
         {t('close_to_margin_call_alert.title')}
       </ParagraphS>
       <ParagraphXS color={theme.textLight}>{t('close_to_margin_call_alert.text')}</ParagraphXS>
-      <ButtonLight maxWidth="fit-content" color={theme.textWarning} onClick={handleClick}>
+      <ButtonLight color={theme.textWarning} onClick={handleClick}>
         {t('close_to_margin_call_alert.btn')}
       </ButtonLight>
     </>

@@ -50,8 +50,12 @@ export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({ onConfirm, o
       </SubtitleS>
       <ParagraphS>{t('dashboard_home.payment_confirm_modal.time_note')}</ParagraphS>
       <div className="btn-group">
-        <ButtonPrimary onClick={handleConfirm}>{t('btn_next')}</ButtonPrimary>
-        <ButtonOutline onClick={handleBack}>{t('btn_back')}</ButtonOutline>
+        <ButtonPrimary maxWidth="100%" onClick={handleConfirm}>
+          {t('btn_next')}
+        </ButtonPrimary>
+        <ButtonOutline maxWidth="100%" onClick={handleBack}>
+          {t('btn_back')}
+        </ButtonOutline>
       </div>
     </PaymentConfirmModalStyled>
   );

@@ -28,18 +28,16 @@ export const Default: Story<ModalProps> = (props) => {
   return (
     <StoriesContainer>
       <StoriesTitle title="Modal" />
-      <ButtonPrimary maxWidth="fit-content" onClick={() => setModalOpen(true)}>
-        Open Modal
-      </ButtonPrimary>
+      <ButtonPrimary onClick={() => setModalOpen(true)}>Open Modal</ButtonPrimary>
       <Modal {...props} isOpen={modalOpen} close={() => setModalOpen(false)}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           <ParagraphM weight={700}>Show card details?</ParagraphM>
           <ParagraphXS>Are you sure you want to display your card details?</ParagraphXS>
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
-            <ButtonOutline maxWidth="fit-content" onClick={() => setModalOpen(false)}>
+            <ButtonOutline maxWidth="100%" onClick={() => setModalOpen(false)}>
               Close
             </ButtonOutline>
-            <ButtonPrimary maxWidth="fit-content" onClick={handleConfirm}>
+            <ButtonPrimary maxWidth="100%" onClick={handleConfirm}>
               Confirm
             </ButtonPrimary>
           </div>

@@ -25,9 +25,7 @@ export const MyRewards: FC = () => {
         </ParagraphXXS>
       </div>
       <div className="btn-group">
-        <ButtonOutline maxWidth="auto" small>
-          {t('btn_claim')}
-        </ButtonOutline>
+        <ButtonOutline small>{t('btn_claim')}</ButtonOutline>
       </div>
     </Card>
   );

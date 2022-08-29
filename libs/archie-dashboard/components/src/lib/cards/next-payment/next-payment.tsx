@@ -25,7 +25,7 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
         <NextPaymentChart />
         {withBtn && (
           <div className="btn-group">
-            <ButtonOutline small maxWidth="auto" onClick={() => setMakePaymentModalOpen(true)}>
+            <ButtonOutline small onClick={() => setMakePaymentModalOpen(true)}>
               {t('next_payment_card.btn')}
             </ButtonOutline>
           </div>
