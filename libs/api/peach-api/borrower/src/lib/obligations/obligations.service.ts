@@ -6,6 +6,7 @@ import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { BorrowerValidation } from '../utils/borrower.validation';
+import { ObligationsResponseFactory } from './utils/obligations_response.factory';
 
 @Injectable()
 export class ObligationsService {
@@ -14,6 +15,7 @@ export class ObligationsService {
     @InjectRepository(Borrower)
     private borrowerRepository: Repository<Borrower>,
     private borrowerValidation: BorrowerValidation,
+    private obligationsResponseFactory: ObligationsResponseFactory,
   ) {}
 
   public async getObligations(userId: string): Promise<ObligationsResponseDto> {
@@ -36,21 +38,14 @@ export class ObligationsService {
     const dueObligations: Obligation[] = obligations.obligations.filter(
       (obligation: Obligation) => !obligation.isOpen && !obligation.isFulfilled,
     );
+    const futureObligations: Obligation[] = obligations.obligations.filter(
+      (obligation: Obligation) => obligation.isOpen,
+    );
 
-    return {
-      outstandingBalances: balances.outstandingBalances,
-      overdueBalances: balances.overdueBalances,
-      dueBalances: balances.dueBalances,
-      statementObligations: dueObligations.map((obligation: Obligation) => ({
-        capitalizedAmount: obligation.capitalizedAmount,
-        dueDate: obligation.dueDate,
-        fulfilledAmount: obligation.fulfilledAmount,
-        gracePeriod: obligation.gracePeriod,
-        isOverdue: obligation.isOverdue,
-        obligationAmount: obligation.obligationAmount,
-        overpaymentsAmount: obligation.overpaymentsAmount,
-        remainingAmount: obligation.remainingAmount,
-      })),
-    };
+    return this.obligationsResponseFactory.create(
+      balances,
+      dueObligations,
+      futureObligations,
+    );
   }
 }

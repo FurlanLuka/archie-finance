@@ -939,6 +939,27 @@
         }
       }
     },
+    "/v1/sales_connect": {
+      "post": {
+        "operationId": "SalesConnectController_connect",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SalesConnectDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
     "/internal/webhook/peach/confirmed_payments": {
       "post": {
         "operationId": "PeachWebhookController_paymentConfirmedHandler",
@@ -1130,6 +1151,69 @@
           },
           "404": {
             "description": "AMOUNT_EXCEEDS_AVAILABLE_BALANCE"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/card_purchases": {
+      "get": {
+        "operationId": "PurchasesController_getPurchases",
+        "parameters": [
+          {
+            "name": "startingAfter",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "endingBefore",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "fromEffectiveDate",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            }
+          },
+          {
+            "name": "toEffectiveDate",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "nullable": true,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PurchasesResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CREDIT_LINE_DRAW_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -1619,6 +1703,25 @@
           "referralCode"
         ]
       },
+      "SalesConnectDto": {
+        "type": "object",
+        "properties": {
+          "emailAddress": {
+            "type": "string"
+          },
+          "fullName": {
+            "type": "string"
+          },
+          "company": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "emailAddress",
+          "fullName",
+          "company"
+        ]
+      },
       "WebhookPaymentPayload": {
         "type": "object",
         "properties": {
@@ -2012,6 +2115,142 @@
           "paymentInstrumentId"
         ]
       },
+      "PurchasesResponseDataDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "regular",
+              "refund",
+              "cashBack"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "settled",
+              "pending",
+              "canceled",
+              "declined",
+              "disputed"
+            ]
+          },
+          "amount": {
+            "type": "number"
+          },
+          "denialReason": {
+            "type": "string"
+          },
+          "timestamps": {
+            "type": "object",
+            "properties": {
+              "createdAt": {
+                "required": true,
+                "type": "string"
+              },
+              "settledAt": {
+                "required": true,
+                "type": "string",
+                "nullable": true
+              }
+            }
+          },
+          "purchaseDetails": {
+            "type": "object",
+            "properties": {
+              "mcc": {
+                "required": true,
+                "type": "string"
+              },
+              "merchantLocation": {
+                "required": true,
+                "type": "string"
+              },
+              "merchantName": {
+                "required": true,
+                "type": "string"
+              },
+              "merchantNumber": {
+                "required": true,
+                "type": "string"
+              },
+              "transactionType": {
+                "required": true,
+                "nullable": true,
+                "enum": [
+                  "atm_withdrawal",
+                  "card_purchase",
+                  "card_refund",
+                  "dispute",
+                  "external_transfer",
+                  "fee",
+                  "credit",
+                  "internal_transfer",
+                  "other",
+                  "reversed_transfer",
+                  "third_party_transfer"
+                ],
+                "type": "string"
+              }
+            }
+          }
+        },
+        "required": [
+          "id",
+          "description",
+          "type",
+          "status",
+          "amount",
+          "denialReason",
+          "timestamps",
+          "purchaseDetails"
+        ]
+      },
+      "PurchasesResponseDto": {
+        "type": "object",
+        "properties": {
+          "meta": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "required": true,
+                "type": "number"
+              },
+              "count": {
+                "required": true,
+                "type": "number"
+              },
+              "nextUrl": {
+                "required": true,
+                "type": "string",
+                "nullable": true
+              },
+              "previousUrl": {
+                "required": true,
+                "type": "string",
+                "nullable": true
+              }
+            }
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PurchasesResponseDataDto"
+            }
+          }
+        },
+        "required": [
+          "meta",
+          "data"
+        ]
+      },
       "Obligation": {
         "type": "object",
         "properties": {
@@ -2123,13 +2362,20 @@
             "items": {
               "$ref": "#/components/schemas/Obligation"
             }
+          },
+          "futureObligations": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Obligation"
+            }
           }
         },
         "required": [
           "outstandingBalances",
           "overdueBalances",
           "dueBalances",
-          "statementObligations"
+          "statementObligations",
+          "futureObligations"
         ]
       }
     },
