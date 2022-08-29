@@ -29,4 +29,5 @@ export class ObligationsResponseDto {
     dueTotalAmount: number;
   };
   statementObligations: Obligation[];
+  futureObligations: Obligation[];
 }
