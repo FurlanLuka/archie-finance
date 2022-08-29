@@ -69,6 +69,6 @@ export const getPaymentScheduleFormSchema = (dueDate: Date, maxAmount: number) =
           return false;
         }
 
-        return value < maxAmount;
+        return value <= maxAmount;
       }),
   });
