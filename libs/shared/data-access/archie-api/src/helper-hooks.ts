@@ -196,7 +196,8 @@ export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
     return {
       state: RequestState.ERROR,
       error: request.error,
-    };
+      mutate: request.mutate,
+    }as MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData>;
   }
 
   if (request.status === 'loading') {

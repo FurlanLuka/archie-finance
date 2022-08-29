@@ -40,9 +40,10 @@ interface LoadingMutationQueryResponse {
   state: RequestState.LOADING;
 }
 
-interface ErrorMutationQueryResponse {
+interface ErrorMutationQueryResponse<T> {
   state: RequestState.ERROR;
   error: ApiError;
+  mutate: (payload: Omit<T, 'accessToken'>) => void;
 }
 
 interface SuccessMutationQueryResponse<T = any> {
@@ -57,7 +58,7 @@ interface IdleMutationQueryResponse<T = any> {
 
 export type MutationQueryResponse<Payload = any, Response = any> =
   | LoadingMutationQueryResponse
-  | ErrorMutationQueryResponse
+  | ErrorMutationQueryResponse<Payload>
   | SuccessMutationQueryResponse<Response>
   | IdleMutationQueryResponse<Payload>;
 
