@@ -38,6 +38,7 @@ export const Card = styled.div<CardProps>`
   max-width: ${({ maxWidth }) => maxWidth};
   min-height: ${({ minHeight }) => minHeight};
   padding: ${({ padding }) => padding};
+  overflow: hidden;
 
   @media (max-width: ${breakpoints.screenSM}) {
     flex-direction: ${({ columnReverse, mobileRow }) =>

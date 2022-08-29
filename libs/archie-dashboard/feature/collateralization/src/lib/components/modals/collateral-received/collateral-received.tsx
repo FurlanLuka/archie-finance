@@ -34,9 +34,7 @@ export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
               creditValue: creditValue.toFixed(2),
             })}
           </ParagraphXS>
-          <ButtonPrimary onClick={onConfirm} maxWidth="fit-content">
-            {t('btn_ok')}
-          </ButtonPrimary>
+          <ButtonPrimary onClick={onConfirm}>{t('btn_ok')}</ButtonPrimary>
         </div>
       </CollateralReceivedModalStyled>
     </Modal>

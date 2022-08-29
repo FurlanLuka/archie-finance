@@ -115,7 +115,7 @@ export const CardScreen: FC = () => {
           <div className="image">
             <img src={imgCardReady} alt={t('card_step.img_alt')} />
           </div>
-          <ButtonPrimary maxWidth="20rem" isDisabled={stage !== Stage.COMPLETE} onClick={() => navigate('/collateral')}>
+          <ButtonPrimary maxWidth="250px" isDisabled={stage !== Stage.COMPLETE} onClick={() => navigate('/collateral')}>
             {t('card_step.btn')}
           </ButtonPrimary>
         </>

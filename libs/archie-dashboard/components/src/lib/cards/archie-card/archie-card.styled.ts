@@ -4,17 +4,13 @@ import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
 export const ArchieCardStyled = styled.div`
 
-  @media (max-width: ${breakpoints.screenSM}) {
-    width: 100%;
-  }  
-
   .archie-card {
     width: 420px;
+    height: 100%;
     min-height: 264px;
 
     @media (max-width: ${breakpoints.screenSM}) {
       width: 360px;
-      height: 220px;
       min-height: 220px;
     }
   }
@@ -37,31 +33,6 @@ export const ArchieCardStyled = styled.div`
     span {
       font-size: 0.75rem;
       margin-right: 0.25rem;
-    }
-  }
-
-  .card-status {
-    position: absolute;
-    /* Temp, just for Rize */
-    top: 36px;
-    /* Temp, just for Rize, it should take bottom instead */
-    /* bottom: 1.25rem; */
-    left: 0;
-    transform: translateY(-10%);
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
-    background-color: ${({ theme }) => theme.backgroundSuccess};
-    border-top-right-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
-    padding: 0.5rem 1.5rem;
-
-    /* Temp, just for Rize */
-    @media (max-width: ${breakpoints.screenSM}) {
-      top: 28px;
-    }  
-
-    p {
-      color: ${({ theme }) => theme.textLight};
     }
   }
 

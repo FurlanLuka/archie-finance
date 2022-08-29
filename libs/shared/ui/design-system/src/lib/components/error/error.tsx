@@ -25,7 +25,7 @@ export const Error: FC<ErrorProps> = ({ prevPath, description }) => {
       <div className="error-img">
         <img src={errorImg} alt={t('error_indicator.error_image_alt')} />
       </div>
-      <ButtonPrimary maxWidth="fit-content" onClick={() => (prevPath ? navigate(prevPath) : window.location.reload())}>
+      <ButtonPrimary onClick={() => (prevPath ? navigate(prevPath) : window.location.reload())}>
         {t('error_indicator.btn_reload')}
       </ButtonPrimary>
     </ErrorStyled>

@@ -16,19 +16,17 @@ export const SuccessfullWithdrawalModal: FC<SuccessfullWithdrawalModalProps> = (
   return (
     <Modal isOpen maxWidth="730px">
       <SuccessfullWithdrawalModalStyled>
-        <ParagraphM weight={800} className="title">
+        <ParagraphM weight={800} className="modal-title">
           {t('dashboard_withdraw.successfull_withdrawal_modal.title')}
         </ParagraphM>
-        <ParagraphS className="subtitle">
+        <ParagraphS className="modal-subtitle">
           {t('dashboard_withdraw.successfull_withdrawal_modal.subtitle')}
           <a href={addressLink} target="_blank" rel="noreferrer" className="link">
             {t('dashboard_withdraw.successfull_withdrawal_modal.link')}
           </a>
           .
         </ParagraphS>
-        <ButtonPrimary maxWidth="fit-content" onClick={onConfirm}>
-          {t('btn_ok')}
-        </ButtonPrimary>
+        <ButtonPrimary onClick={onConfirm}>{t('btn_ok')}</ButtonPrimary>
       </SuccessfullWithdrawalModalStyled>
     </Modal>
   );

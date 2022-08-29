@@ -25,8 +25,7 @@ const Button = styled.button<ButtonProps>`
   border: 1px solid;
   border-radius: ${({ small }) => (small ? '0.25rem' : '0.5rem')};
   max-height: 3rem;
-  max-width: ${({ maxWidth }) => maxWidth ?? '100%'};
-  width: 100%;
+  width: ${({ maxWidth }) => maxWidth};
   padding: ${({ small }) => (small ? '0.25rem 1rem' : '1rem 2rem')};
   pointer-events: ${({ isDisabled, isLoading }) => (isDisabled || isLoading ? 'none' : 'all')};
   cursor: pointer;
@@ -68,8 +67,8 @@ export const ButtonPrimary = styled(Button)`
 
 export const ButtonOutline = styled(Button)`
   background-color: ${({ theme }) => theme.buttonOutline};
-  color: ${({ theme, color, isDisabled }) => (isDisabled ? theme.buttonDisabled : color ?? theme.buttonPrimary)};
-  border-color: ${({ theme, color, isDisabled }) => (isDisabled ? theme.buttonDisabled : color ?? theme.buttonPrimary)};
+  color: ${({ theme, isDisabled, color }) => (isDisabled ? theme.buttonDisabled : (color || theme.buttonPrimary))};
+  border-color: ${({ theme, isDisabled, color }) => (isDisabled ? theme.buttonDisabled : (color || theme.buttonPrimary))};
 `;
 
 export const ButtonGhost = styled(Button)`

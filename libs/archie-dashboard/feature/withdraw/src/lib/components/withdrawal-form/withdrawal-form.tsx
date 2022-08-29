@@ -141,14 +141,8 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
           </div>
         </div>
         <div className="btn-group">
-          <ButtonOutline maxWidth="fit-content" onClick={() => navigate('/collateral')}>
-            {t('btn_cancel')}
-          </ButtonOutline>
-          <ButtonPrimary
-            maxWidth="fit-content"
-            isDisabled={!isValid}
-            isLoading={createWithdrawal.state === RequestState.LOADING}
-          >
+          <ButtonOutline onClick={() => navigate('/collateral')}>{t('btn_cancel')}</ButtonOutline>
+          <ButtonPrimary isDisabled={!isValid} isLoading={createWithdrawal.state === RequestState.LOADING}>
             {t('dashboard_withdraw.btn')}
           </ButtonPrimary>
         </div>

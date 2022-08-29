@@ -43,12 +43,7 @@ export const HistoryScreen: FC = () => {
           </ParagraphM>
           <TransactionsTable data={data} />
           {getTransactionsResponse.hasNextPage && (
-            <ButtonOutline
-              small
-              maxWidth="fit-content"
-              className="load-btn"
-              onClick={getTransactionsResponse.fetchNextPage}
-            >
+            <ButtonOutline small className="load-btn" onClick={getTransactionsResponse.fetchNextPage}>
               {t('dashboard_history.btn_load_more')}
             </ButtonOutline>
           )}
@@ -63,7 +58,7 @@ export const HistoryScreen: FC = () => {
             {t('dashboard_history.title')}
           </ParagraphM>
           <TransactionsTable data={data} />
-          <ButtonOutline small maxWidth="fit-content" isLoading className="load-btn">
+          <ButtonOutline small isLoading className="load-btn">
             {t('dashboard_history.btn_load_more')}
           </ButtonOutline>
         </>

@@ -89,7 +89,13 @@ export const VerifyEmailScreen: FC = () => {
             </button>
           </div>
           <hr className="divider" />
-          <ButtonPrimary className="resend-btn" type="submit" isDisabled={btnDisabled} onClick={handleResend}>
+          <ButtonPrimary
+            type="submit"
+            maxWidth="100%"
+            className="resend-btn"
+            isDisabled={btnDisabled}
+            onClick={handleResend}
+          >
             {btnDisabled
               ? t('verify_email_step.resend_btn_disabled', { counter: `00:${counter}` })
               : t('verify_email_step.resend_btn')}

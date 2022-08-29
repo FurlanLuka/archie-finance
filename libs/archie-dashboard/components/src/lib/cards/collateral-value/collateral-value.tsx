@@ -35,7 +35,7 @@ export const CollateralValue: FC = () => {
       <Card column alignItems="flex-start" justifyContent="space-between" padding="1.5rem">
         <div>
           <ParagraphXS weight={700} className="card-title">
-            Collateral Value
+            {t('collateral_value_card.title')}
           </ParagraphXS>
           <div className="text-group card-info">
             <SubtitleS weight={400}>${getFormattedValue(collateralTotalValue)}</SubtitleS>
@@ -46,11 +46,11 @@ export const CollateralValue: FC = () => {
         </div>
         {/* <CollateralValueChart /> */}
         <div className="btn-group">
-          <ButtonOutline maxWidth="auto" small onClick={() => navigate('/collateral')}>
-            Add
+          <ButtonOutline small onClick={() => navigate('/collateral')}>
+            {t('btn_add')}
           </ButtonOutline>
-          <ButtonOutline maxWidth="auto" small isDisabled>
-            Redeem
+          <ButtonOutline small isDisabled>
+            {t('btn_redeem')}
           </ButtonOutline>
         </div>
       </Card>

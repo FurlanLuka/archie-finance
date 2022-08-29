@@ -7,6 +7,7 @@
   "btn_add": "Add",
   "btn_back": "Back",
   "btn_claim": "Claim",
+  "btn_redeem": "Redeem",
   "ltv": "LTV",
   "on": "on",
   "off": "off",
@@ -147,6 +148,28 @@
     "title": "You have reached margin call",
     "text": "The value of your ArchCredit collateral has dropped and you have reached an LTV rate above 75%. Action is required to prevent liquidiating a portion of your collateral. We recommend sending more collateral to your ArchCredit; paying down your balance through your bank may take up to 3 days. Archie will automatically undergo a partial lidquidation if your LTV reaches 90%.",
     "btn": "Cure"
+  },
+  "available_credit_card": {
+    "title_1": "ArchCredit Balance",
+    "title_2": "Available Credit",
+    "btn": "Pay now",
+    "text": "Line of Credit: ${{lineOfCredit}}"
+  },
+  "collateral_value_card": {
+    "title": "Collateral Value"
+  },
+  "interest_rate_card": {
+    "title": "Interest Rate"
+  },
+  "my_rewards_card": {
+    "title": "My Rewards",
+    "note_1": "Points",
+    "note_2": "Projected Value"
+  },
+  "next_payment_card": {
+    "title": "Next Payment",
+    "btn": "Pay now",
+    "chart": "Due in {{days}} days"
   },
   "dashboard_home": {
     "title": "Hi, {{name}}",

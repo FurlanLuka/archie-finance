@@ -78,10 +78,10 @@ const ActionsCell: FC<ActionsCellProps> = ({ canClaim, id }) => {
 
   return (
     <ActionsCellStyled>
-      <ButtonOutline small color={theme.textPositive} onClick={() => navigate(`add/${id}`)}>
+      <ButtonOutline small maxWidth="100%" color={theme.textPositive} onClick={() => navigate(`add/${id}`)}>
         {t('btn_add')}
       </ButtonOutline>
-      <ButtonOutline isDisabled={!canClaim} small onClick={() => navigate(`withdraw/${id}`)}>
+      <ButtonOutline small maxWidth="100%" isDisabled={!canClaim} onClick={() => navigate(`withdraw/${id}`)}>
         {t('btn_claim')}
       </ButtonOutline>
     </ActionsCellStyled>

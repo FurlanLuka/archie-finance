@@ -30,7 +30,7 @@ export const CreateCreditLine: FC<CreateCreditLineProps> = ({ collateralText, cr
           })}
         </ParagraphXS>
         <div className="btn-group">
-          <ButtonLight small maxWidth="fit-content" onClick={handleClick}>
+          <ButtonLight small onClick={handleClick}>
             {t('btn_continue')}
           </ButtonLight>
         </div>

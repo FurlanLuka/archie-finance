@@ -25,9 +25,7 @@ export const PaymentScreen: FC = () => {
         </div>
       </div>
       <div className="section-actions">
-        <ButtonPrimary maxWidth="fit-content" onClick={() => setShowModal(true)}>
-          {t('dashboard_payment.btn_pay')}
-        </ButtonPrimary>
+        <ButtonPrimary onClick={() => setShowModal(true)}>{t('dashboard_payment.btn_pay')}</ButtonPrimary>
         <InputRadio small>
           <input type="radio" value="auto_payments" checked />
           <ParagraphXXS>
