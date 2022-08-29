@@ -5,17 +5,18 @@ import { DataSource, Repository } from 'typeorm';
 import { Collateral } from './collateral.entity';
 import { CollateralDeposit } from './collateral_deposit.entity';
 import {
+  GetCollateralResponse,
   GetCollateralValueResponse,
   GetTotalCollateralValueResponse,
-  GetCollateralResponse,
 } from './collateral.interfaces';
 import { DepositCreationInternalError } from './collateral.errors';
-import { CreateDepositDto } from './collateral.interfaces';
 import { CollateralValueService } from './collateral-value/collateral-value.service';
 import { QueueService } from '@archie/api/utils/queue';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { CollateralDepositedPayload } from '@archie/api/collateral-api/data-transfer-objects';
+import { COLLATERAL_DEPOSIT_COMPLETED_TOPIC } from '@archie/api/credit-api/constants';
+import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class CollateralService {
@@ -69,8 +70,7 @@ export class CollateralService {
       if (status === TransactionStatus.COMPLETED) {
         if (
           collateralDeposit === null ||
-          (collateralDeposit !== null &&
-            collateralDeposit.status !== TransactionStatus.COMPLETED)
+          collateralDeposit.status !== TransactionStatus.COMPLETED
         ) {
           const collateralRecord: Partial<Collateral> =
             await this.getNewCollateralRecord(userId, asset, amount);
@@ -78,7 +78,6 @@ export class CollateralService {
           await queryRunner.manager.save(Collateral, collateralRecord);
         }
       }
-
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
@@ -95,6 +94,17 @@ export class CollateralService {
     } finally {
       await queryRunner.release();
     }
+
+    if (status === TransactionStatus.COMPLETED) {
+      this.queueService.publish<CollateralDepositCompletedPayload>(
+        COLLATERAL_DEPOSIT_COMPLETED_TOPIC,
+        {
+          userId,
+          asset,
+          amount,
+        },
+      );
+    }
   }
 
   private async getNewCollateralRecord(
@@ -109,7 +119,7 @@ export class CollateralService {
       });
 
     const collateralAmount: number =
-      collateral === null ? amount : collateral.amount + amount;
+      collateral === null ? amount : collateral.amount + amount; // TODO: refactor- update to use 1 db txn
 
     return {
       ...collateral,
