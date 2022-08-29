@@ -6,6 +6,7 @@ import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
 import {
   ButtonPrimary,
   FormError,
@@ -17,19 +18,17 @@ import {
 } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 
-import { Balances } from '../../make-payment.interfaces';
-
 import { PaymentOption } from './payment-schedule-form.interfaces';
 import { PaymentScheduleFormData, getPaymentScheduleFormSchema } from './payment-schedule-form.schema';
 import { PaymentScheduleFormStyled } from './payment-schedule-form.styled';
 
 interface PaymentScheduleFormProps {
   onConfirm: (amount: number, date: string) => void;
-  balances: Balances;
+  obligations: UserObligations;
 }
 
-export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ balances, onConfirm }) => {
-  const { balanceOwed, balanceWithInterest, dueDate, fullBalance } = balances;
+export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations, onConfirm }) => {
+  const { balanceOwed, dueDate, fullBalance } = obligations;
   const { t } = useTranslation();
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const dueDateParsed = parse(dueDate, 'yyyy-MM-dd', new Date());
@@ -57,9 +56,6 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ balances, on
 
     if (data.paymentOption === PaymentOption.BALANCE_OWED) {
       amount = balanceOwed;
-    }
-    if (data.paymentOption === PaymentOption.BALANCE_WITH_INTEREST) {
-      amount = balanceWithInterest;
     }
     if (data.paymentOption === PaymentOption.FULL_BALANCE) {
       amount = fullBalance;
@@ -119,12 +115,6 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ balances, on
           <InputRadio>
             <input type="radio" value={PaymentOption.BALANCE_OWED} {...register('paymentOption')} />
             <ParagraphS>{t('payment_modal.payment_schedule.balance_owed', { balanceOwed })}</ParagraphS>
-          </InputRadio>
-          <InputRadio>
-            <input type="radio" value={PaymentOption.BALANCE_WITH_INTEREST} {...register('paymentOption')} />
-            <ParagraphS>
-              {t('payment_modal.payment_schedule.balance_with_interest', { balanceWithInterest })}
-            </ParagraphS>
           </InputRadio>
           <InputRadio>
             <input type="radio" value={PaymentOption.FULL_BALANCE} {...register('paymentOption')} />

@@ -2,8 +2,8 @@ import { FC, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PaymentStep } from '@archie-webapps/archie-dashboard/constants';
+import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
 
-import { Balances } from '../../make-payment.interfaces';
 import { ChooseAccount } from '../choose-account/choose-account';
 import { PaymentConfirmModal } from '../payment-confirm/payment-confirm';
 import { PaymentScheduleForm } from '../payment-schedule-form/payment-schedule-form';
@@ -12,11 +12,11 @@ import { PaymentScheduledModal } from '../payment-scheduled/payment-scheduled';
 import { initalPaymentStepsState, PaymentStepsActionType, paymentStepsReducer } from './payment-steps.reducer';
 
 interface PaymentStepsProps {
-  balances: Balances;
+  obligations: UserObligations;
   close: () => void;
 }
 
-export const PaymentSteps: FC<PaymentStepsProps> = ({ balances, close }) => {
+export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, close }) => {
   const { t } = useTranslation();
 
   const [stepsState, dispatch] = useReducer(paymentStepsReducer, initalPaymentStepsState);
@@ -43,7 +43,7 @@ export const PaymentSteps: FC<PaymentStepsProps> = ({ balances, close }) => {
       case PaymentStep.SCHEDULE:
         return (
           <PaymentScheduleForm
-            balances={balances}
+            obligations={obligations}
             onConfirm={(desiredAmount: number, desiredDate: string) => {
               dispatch({
                 type: PaymentStepsActionType.MOVE_TO_CONFIRM_STEP,
