@@ -7,6 +7,7 @@ import { BorrowerValidation } from '../utils/borrower.validation';
 import { PurchasesResponseFactory } from './utils/purchases_response.factory';
 import { GetPurchasesQueryDto, PurchasesResponseDto } from './purchases.dto';
 import { Injectable } from '@nestjs/common';
+import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class PurchasesService {
@@ -35,11 +36,13 @@ export class PurchasesService {
     return this.purchasesResponseFactory.create(purchases, query.limit);
   }
 
-  public async handleTransactionsEvent(transaction) {
+  public async handleTransactionsEvent(
+    transaction: TransactionUpdatedPayload,
+  ): Promise<void> {
     if (transaction.status === 'queued') {
       return;
     }
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: transaction.userId,
     });
     this.borrowerValidation.isBorrowerDrawDefined(borrower);

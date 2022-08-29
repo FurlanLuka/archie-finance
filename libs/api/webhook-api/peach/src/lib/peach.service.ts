@@ -28,7 +28,7 @@ export class PeachWebhookService {
 
   // This is just a temporary solution until Peach implements webhooks
   // Currently we just poll for new events
-  public async handlePaymentConfirmedEvent() {
+  public async handlePaymentConfirmedEvent(): Promise<void> {
     const peachEvent: PeachEvent | null =
       await this.peachEventRepository.findOneBy({
         uuid: this.PAYMENT_CONFIRMED_EVENT_UUID,

@@ -87,7 +87,7 @@ export class PaymentsService {
       payment.loanId,
     );
 
-    await this.queueService.publish<CreditLinePaymentReceivedPayload>(
+    this.queueService.publish<CreditLinePaymentReceivedPayload>(
       CREDIT_LINE_PAYMENT_RECEIVED_TOPIC,
       {
         ...credit,
@@ -99,7 +99,7 @@ export class PaymentsService {
   public async handleInternalTransactionCreatedEvent(
     transaction: InternalCollateralTransactionCreatedPayload,
   ): Promise<void> {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: transaction.userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
@@ -135,7 +135,7 @@ export class PaymentsService {
   public async handleInternalTransactionCompletedEvent(
     transaction: InternalCollateralTransactionCompletedPayload,
   ): Promise<void> {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: transaction.userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Injectable, Logger } from '@nestjs/common';
 import { GetKycPayload, GetKycResponse } from '@archie/api/user-api/kyc';
 import { RizeApiService } from './api/rize_api.service';
@@ -197,7 +199,7 @@ export class RizeService {
     );
     this.rizeValidatorService.validateCustomerExists(customer);
 
-    const debitCard: DebitCard = await this.rizeApiService.getDebitCard(
+    const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
       customer.uid,
     );
     this.rizeValidatorService.validateDebitCardExists(debitCard);
@@ -213,7 +215,7 @@ export class RizeService {
       image,
       status:
         debitCard.locked_at !== null ? CardStatus.frozen : CardStatus.active,
-      freezeReason: debitCard.lock_reason,
+      freezeReason: debitCard.lock_reason ?? null,
     };
   }
 
@@ -372,6 +374,7 @@ export class RizeService {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
+    this.rizeValidatorService.validateCustomerExists(customer);
 
     await this.rizeApiService.loadFunds(customer.uid, amount);
   }
@@ -383,6 +386,7 @@ export class RizeService {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
+    this.rizeValidatorService.validateCustomerExists(customer);
 
     await this.rizeApiService.decreaseCreditLimit(customer.uid, amount);
   }
@@ -391,6 +395,8 @@ export class RizeService {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
+    this.rizeValidatorService.validateCustomerExists(customer);
+
     const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
       customer.uid,
     );
@@ -404,6 +410,8 @@ export class RizeService {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
+    this.rizeValidatorService.validateCustomerExists(customer);
+
     const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
       customer.uid,
     );

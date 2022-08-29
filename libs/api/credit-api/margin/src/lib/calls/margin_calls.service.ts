@@ -77,9 +77,9 @@ export class MarginCallsService {
   }
 
   public async handleMarginCall(
-    alreadyActiveMarginCall: MarginCall,
+    alreadyActiveMarginCall: MarginCall | undefined,
     usersLtv: UsersLtv,
-  ) {
+  ): Promise<void> {
     const marginCall: MarginCall =
       alreadyActiveMarginCall ??
       (await this.marginCallsRepository.save({

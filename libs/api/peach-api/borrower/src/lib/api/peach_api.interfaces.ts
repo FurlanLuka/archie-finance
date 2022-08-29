@@ -1,5 +1,3 @@
-import { AxiosRequestConfig } from 'axios';
-
 export enum PersonStatus {
   active = 'active',
   inactive = 'inactive',
@@ -235,6 +233,10 @@ export interface Obligations {
 }
 
 export interface Balances {
+  isLocked: boolean;
+  availableCreditAmount: number;
+  creditLimitAmount: number;
+  calculatedAt: string;
   outstandingBalances: {
     outstandingFeesAmount: number;
     outstandingInterestAmount: number;
@@ -262,7 +264,7 @@ export interface Credit {
 }
 
 export interface PeachErrorResponse {
-  config: AxiosRequestConfig;
+  config: object;
   status: number;
   errorResponse: PeachErrorData;
 }

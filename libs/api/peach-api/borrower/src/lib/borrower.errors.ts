@@ -35,3 +35,15 @@ export class AmountExceedsAvailableBalanceError extends NotFoundException {
     super('AMOUNT_EXCEEDS_AVAILABLE_BALANCE');
   }
 }
+
+export class BorrowerMailNotFoundError extends NotFoundException {
+  constructor() {
+    super('BORROWER_MAIL_NOT_FOUND');
+  }
+}
+
+export class BorrowerHomeAddressNotFoundError extends NotFoundException {
+  constructor() {
+    super('BORROWER_HOME_ADDRESS_NOT_FOUND');
+  }
+}

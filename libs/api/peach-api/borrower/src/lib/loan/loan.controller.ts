@@ -6,7 +6,6 @@ import {
   CREDIT_LIMIT_DECREASED_TOPIC,
   CREDIT_LIMIT_INCREASED_TOPIC,
   SERVICE_QUEUE_NAME,
-  TRANSACTION_UPDATED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import { PeachBorrowerService } from './loan.service';
 import {

@@ -14,6 +14,7 @@ import {
   DrawNotFoundError,
 } from '../borrower.errors';
 import { GetPurchasesQueryDto, PurchasesResponseDto } from './purchases.dto';
+import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Controller('v1/card_purchases')
 export class PurchasesController {
@@ -45,7 +46,9 @@ export class PurchasesQueueController {
     TRANSACTION_UPDATED_TOPIC,
     PurchasesQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async transactionUpdatedHandler(payload): Promise<void> {
+  async transactionUpdatedHandler(
+    payload: TransactionUpdatedPayload,
+  ): Promise<void> {
     await this.purchasesController.handleTransactionsEvent(payload);
   }
 }

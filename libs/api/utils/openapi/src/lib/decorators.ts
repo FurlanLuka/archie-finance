@@ -6,10 +6,10 @@ export function ApiErrorResponse<T extends ClassConstructor<HttpException>>(
   errors: T[],
 ) {
   return (
-    target: unknown,
+    target: object,
     propertyKey: string,
     descriptor: PropertyDescriptor,
-  ) => {
+  ): void => {
     errors.forEach((Error: T) => {
       const initializedError: HttpException = new Error();
 

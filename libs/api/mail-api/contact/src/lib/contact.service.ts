@@ -41,9 +41,16 @@ export class ContactService {
   }
 
   public async getContact(userId: string): Promise<DecryptedContact> {
-    const contact: Contact = await this.contactRepository.findOneBy({
+    const contact: Contact | null = await this.contactRepository.findOneBy({
       userId,
     });
+
+    if (
+      contact === null ||
+      contact.encryptedEmail === null ||
+      contact.encryptedFirstName === null
+    )
+      throw new Error('INCOMPLETE_CONTACT_INFO');
 
     const [firstName, email] = this.cryptoService.decryptMultiple([
       contact.encryptedFirstName,

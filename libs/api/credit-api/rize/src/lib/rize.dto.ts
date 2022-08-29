@@ -29,7 +29,7 @@ class TransactionDto implements Transaction {
   type: TransactionType;
   status: TransactionStatus;
   us_dollar_amount: string;
-  settled_at: string;
+  settled_at: string | null;
   created_at: string;
   is_adjustment: boolean;
   mcc: string | null;

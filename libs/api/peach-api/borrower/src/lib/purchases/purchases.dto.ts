@@ -12,7 +12,7 @@ export class PurchasesResponseDataDto {
   type: PurchaseType;
   status: PurchaseStatus;
   amount: number;
-  denialReason: string;
+  denialReason: string | null;
   timestamps: {
     createdAt: string;
     settledAt: string | null;

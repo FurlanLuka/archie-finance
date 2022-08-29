@@ -28,7 +28,7 @@ export class RizeFactoryService {
         state: kyc.addressRegion,
         postal_code: kyc.addressPostalCode,
       },
-      business_name: null,
+      business_name: <string>(<unknown>null),
       dob: kyc.dateOfBirth,
       first_name: kyc.firstName,
       last_name: kyc.lastName,

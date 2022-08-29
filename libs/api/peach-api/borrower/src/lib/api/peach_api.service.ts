@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
 import {
@@ -30,6 +30,7 @@ import {
 } from '../borrower.errors';
 import { omitBy, isNil } from 'lodash';
 import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects';
+import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class PeachApiService {
@@ -57,8 +58,8 @@ export class PeachApiService {
           ...error.config,
           headers: null,
         },
-        status: error.response.status,
-        errorResponse: <PeachErrorData>error.response.data,
+        status: (<AxiosResponse>error.response).status,
+        errorResponse: <PeachErrorData>error.response?.data,
       };
 
       return Promise.reject(response);
@@ -233,7 +234,7 @@ export class PeachApiService {
   }
 
   public async createCreditLine(
-    personId,
+    personId: string,
     creditLimit: number,
     addressContactId: string,
     downPaymentAmount: number,
@@ -341,7 +342,7 @@ export class PeachApiService {
     personId: string,
     loanId: string,
     drawId: string,
-    transaction,
+    transaction: TransactionUpdatedPayload,
   ): Promise<void> {
     await this.peachClient.post(
       `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases`,
@@ -358,7 +359,7 @@ export class PeachApiService {
     personId: string,
     loanId: string,
     drawId: string,
-    transaction,
+    transaction: TransactionUpdatedPayload,
   ): Promise<void> {
     await this.peachClient.put(
       `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases/ext-${String(
@@ -375,12 +376,14 @@ export class PeachApiService {
     );
   }
 
-  private createPurchaseDetails(transaction) {
+  private createPurchaseDetails(
+    transaction: TransactionUpdatedPayload,
+  ): object {
     return {
       amount: Number(transaction.us_dollar_amount),
       purchaseDate: transaction.created_at,
       purchaseDetails: {
-        description: transaction.description ?? undefined,
+        description: transaction.description,
         merchantName: transaction.merchant_name ?? undefined,
         externalCardId: transaction.debit_card_uid ?? undefined,
         merchantCity: transaction.merchant_location ?? undefined,
@@ -403,7 +406,7 @@ export class PeachApiService {
     const response = await this.peachClient.get(
       `people/${personId}/loans/${loanId}/balances`,
     );
-    const responseBody = response.data.data;
+    const responseBody: Balances = response.data.data;
 
     if (responseBody.isLocked) {
       throw new Error('Balance change is in progress, retry');

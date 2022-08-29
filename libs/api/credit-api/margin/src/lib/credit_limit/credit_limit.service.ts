@@ -26,13 +26,13 @@ export class CreditLimitService {
     usersLtv: UsersLtv,
     assetList: AssetList,
     credits: Credit[],
-  ) {
+  ): Promise<void> {
     const creditLimit: number = this.creditService.getCreditLimit(
       usersLtv.collateralAllocation,
       assetList,
     );
-    const credit: Credit = credits.find(
-      (credit: Credit) => credit.userId === usersLtv.userId,
+    const credit: Credit | undefined = <Credit>(
+      credits.find((c: Credit) => c.userId === usersLtv.userId)
     );
 
     if (creditLimit > credit.totalCredit) {

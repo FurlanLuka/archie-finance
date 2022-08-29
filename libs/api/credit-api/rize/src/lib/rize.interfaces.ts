@@ -6,7 +6,7 @@ import {
 
 export interface Transaction {
   created_at: string;
-  settled_at: string;
+  settled_at: string | null;
   description: string;
   type: TransactionType;
   status: TransactionStatus;

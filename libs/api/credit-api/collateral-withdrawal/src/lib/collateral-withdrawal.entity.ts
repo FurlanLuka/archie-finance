@@ -20,7 +20,7 @@ export class CollateralWithdrawal {
   userId: string;
 
   @Column('varchar', { nullable: true, select: false })
-  transactionId: string;
+  transactionId: string | null;
 
   @Column('varchar', { nullable: false })
   asset: string;
