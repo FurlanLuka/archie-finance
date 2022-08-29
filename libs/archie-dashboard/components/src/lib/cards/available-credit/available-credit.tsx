@@ -49,26 +49,26 @@ export const AvailableCredit: FC = () => {
           <div className="card-group">
             <div className="card-group p-bottom">
               <ParagraphXS weight={700} className="card-title">
-                ArchCredit Balance
+                {t('available_credit_card.title_1')}
               </ParagraphXS>
               <SubtitleS weight={400} className="card-info border-active">
                 ${getFormattedValue(creditData.totalCredit - creditData.availableCredit)}
               </SubtitleS>
               <div className="btn-group">
                 <ButtonOutline maxWidth="auto" small onClick={() => setMakePaymentModalOpen(true)}>
-                  Pay now
+                  {t('available_credit_card.btn')}
                 </ButtonOutline>
               </div>
             </div>
             <div className="card-group">
               <ParagraphXS weight={700} className="card-title">
-                Available Credit
+                {t('available_credit_card.title_2')}
               </ParagraphXS>
               <SubtitleS weight={400} className="card-info border-default">
                 ${getFormattedValue(creditData.availableCredit)}
               </SubtitleS>
               <ParagraphXXS color={theme.textSecondary} weight={500} className="card-text">
-                Line of Credit: ${getFormattedValue(creditData.totalCredit)}
+                {t('available_credit_card.text', { lineOfCredit: getFormattedValue(creditData.totalCredit) })}
               </ParagraphXXS>
             </div>
           </div>
