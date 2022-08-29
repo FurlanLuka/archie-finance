@@ -17,7 +17,7 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
     <>
       <Card column alignItems="flex-start" padding="1.5rem">
         <ParagraphXS weight={700} className="card-title">
-          Next Payment
+          {t('next_payment_card.title')}
         </ParagraphXS>
         <SubtitleS weight={400} className="card-info">
           June 3
@@ -26,7 +26,7 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
         {withBtn && (
           <div className="btn-group">
             <ButtonOutline small onClick={() => setMakePaymentModalOpen(true)}>
-              Pay now
+              {t('next_payment_card.btn')}
             </ButtonOutline>
           </div>
         )}
