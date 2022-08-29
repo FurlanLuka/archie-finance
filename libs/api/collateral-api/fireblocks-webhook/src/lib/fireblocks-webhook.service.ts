@@ -132,7 +132,7 @@ export class FireblocksWebhookService {
       });
 
       const asset: string[] = Object.keys(assetList).flatMap((key) => {
-        if (assetList[key].fireblocks_id !== transaction.assetId) {
+        if (assetList[key]?.fireblocks_id !== transaction.assetId) {
           return [];
         }
 
@@ -217,7 +217,7 @@ export class FireblocksWebhookService {
       });
 
       const assets: string[] = Object.keys(assetList).flatMap((key) => {
-        if (assetList[key].fireblocks_id !== transaction.assetId) {
+        if (assetList[key]?.fireblocks_id !== transaction.assetId) {
           return [];
         }
 

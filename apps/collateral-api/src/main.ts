@@ -4,7 +4,7 @@ import { start } from '@archie/api/utils/microservice';
 import { SERVICE_NAME } from '@archie/api/collateral-api/constants';
 import { Logger } from '@nestjs/common';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   await start(SERVICE_NAME, AppModule);
 }
 

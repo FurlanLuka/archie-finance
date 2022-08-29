@@ -1,6 +1,5 @@
 import {
   Injectable,
-  InternalServerErrorException,
   Logger,
   NotFoundException,
 } from '@nestjs/common';
@@ -113,7 +112,7 @@ export class FireblocksService {
 
     const fireblocksAsset = assetList[asset];
 
-    if (!fireblocksAsset) {
+    if (fireblocksAsset === undefined) {
       throw new NotFoundException();
     }
 
@@ -160,17 +159,10 @@ export class FireblocksService {
         liquidation,
       },
     });
-    const internalVaultAccountId = this.configService.get(
+    const internalVaultAccountId: string = this.configService.get(
       ConfigVariables.FIREBLOCKS_VAULT_ACCOUNT_ID,
     );
-    if (!internalVaultAccountId) {
-      Logger.error({
-        code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
-        message: 'Missing FIREBLOCKS_VAULT_ACCOUNT_ID env variable',
-      });
-      throw new InternalServerErrorException();
-    }
-
+  
     const assetList: AssetList = this.configService.get(
       ConfigVariables.ASSET_LIST,
     );
@@ -179,7 +171,7 @@ export class FireblocksService {
       liquidation.map(async ({ asset, amount, price }) => {
         const fireblocksAsset = assetList[asset];
 
-        if (!fireblocksAsset) {
+        if (fireblocksAsset === undefined) {
           Logger.error({
             code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
             message: `Asset ${asset} not in assetList}`,

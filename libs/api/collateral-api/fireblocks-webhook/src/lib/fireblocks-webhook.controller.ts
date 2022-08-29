@@ -3,6 +3,7 @@ import { FireblocksWebhookService } from './fireblocks-webhook.service';
 import { FireblocksWebhookGuard } from './guard/fireblocks_webhook.guard';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { FireblocksWebhookError } from './fireblocks-webhook.errors';
+import { FireblocksWebhookDto } from './fireblocks-webhook.dto';
 
 @Controller('v1/fireblocks/webhook')
 export class FireblocksWebhookController {
@@ -11,7 +12,7 @@ export class FireblocksWebhookController {
   @Post('')
   @UseGuards(FireblocksWebhookGuard)
   @ApiErrorResponse([FireblocksWebhookError])
-  public async webhook(@Body() body) {
+  public async webhook(@Body() body: FireblocksWebhookDto): Promise<void> {
     return this.fireblocksWebhookService.webhookHandler(body);
   }
 }

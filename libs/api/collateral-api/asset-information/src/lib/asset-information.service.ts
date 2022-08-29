@@ -16,10 +16,12 @@ export class AssetInformationService {
       ConfigVariables.ASSET_LIST,
     );
 
-    if (assetList[asset] === undefined) {
+    const assetInformation = assetList[asset];
+
+    if (assetInformation === undefined) {
       throw new NotFoundException();
     }
 
-    return assetList[asset];
+    return assetInformation;
   }
 }

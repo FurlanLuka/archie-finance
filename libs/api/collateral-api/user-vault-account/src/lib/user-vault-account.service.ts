@@ -1,7 +1,6 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  CreateTransactionResponse,
   DepositAddressResponse,
   VaultAccountResponse,
 } from 'fireblocks-sdk';

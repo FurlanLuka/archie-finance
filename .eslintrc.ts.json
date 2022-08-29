@@ -82,7 +82,7 @@
         "no-redeclare": "off",
         "@typescript-eslint/no-redeclare": "error",
         "@typescript-eslint/no-require-imports": "error",
-        "@typescript-eslint/no-unnecessary-condition": "error",
+        "@typescript-eslint/no-unnecessary-condition": "warn",
         "@typescript-eslint/no-unnecessary-type-constraint": "error",
         "@typescript-eslint/no-unsafe-call": "error",
         "no-unused-expressions": "off",
