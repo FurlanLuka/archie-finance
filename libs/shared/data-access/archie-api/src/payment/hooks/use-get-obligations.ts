@@ -10,6 +10,7 @@ export const useGetObligations = (): QueryResponse<UserObligations> => {
   const queryResponse = useExtendedQuery(OBLIGATIONS_RECORD_QUERY_KEY, async (accessToken: string) => {
     const obligationsResponse = await getObligations(accessToken);
 
+    // TODO parse dueDate in the query hook
     return {
       dueDate: obligationsResponse.futureObligations[0]?.dueDate ?? MISSING_DATE,
       balanceOwed: obligationsResponse.statementObligations.reduce(

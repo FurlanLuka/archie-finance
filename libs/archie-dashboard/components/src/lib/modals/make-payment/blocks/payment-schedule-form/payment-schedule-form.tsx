@@ -6,6 +6,7 @@ import { FC, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { OBLIGATION_DATE_FORMAT } from '@archie-webapps/shared/data-access/archie-api/payment/payment.constants';
 import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
 import {
   ButtonPrimary,
@@ -31,7 +32,7 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
   const { balanceOwed, dueDate, fullBalance } = obligations;
   const { t } = useTranslation();
   const [scheduleOpen, setScheduleOpen] = useState(false);
-  const dueDateParsed = parse(dueDate, 'yyyy-MM-dd', new Date());
+  const dueDateParsed = parse(dueDate, OBLIGATION_DATE_FORMAT, new Date());
   const PaymentScheduleFormSchema = getPaymentScheduleFormSchema(dueDateParsed, fullBalance);
 
   const {
@@ -61,7 +62,7 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
       amount = fullBalance;
     }
 
-    onConfirm(amount, format(parse(data.scheduledDate, 'MMddyyyy', new Date()), 'yyyy-MM-dd'));
+    onConfirm(amount, format(parse(data.scheduledDate, 'MMddyyyy', new Date()), OBLIGATION_DATE_FORMAT));
   });
 
   useEffect(() => {

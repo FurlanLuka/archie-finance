@@ -1,5 +1,6 @@
 import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
+import { CREDIT_LINE_NOT_FOUND_ERROR } from '../payment.interfaces';
 
 export interface Obligation {
   capitalizedAmount: number;
@@ -35,7 +36,9 @@ export interface GetObligationsResponse {
   futureObligations: Obligation[];
 }
 
-export const ERROR_LIST = new Map<string, string>([]);
+export const ERROR_LIST = new Map<string, string>([
+  [CREDIT_LINE_NOT_FOUND_ERROR, 'obligation_api.credit_line_not_found'],
+]);
 
 export const getObligations = async (accessToken: string): Promise<GetObligationsResponse> => {
   return getRequest<GetObligationsResponse>(
