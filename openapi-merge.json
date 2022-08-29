@@ -23,6 +23,15 @@
     },
     {
       "inputFile": "./dist/apps/peach-api/target/generated/swagger.json"
+    },
+    {
+      "inputFile": "./dist/apps/credit-limit-api/target/generated/swagger.json"
+    },
+    {
+      "inputFile": "./dist/apps/ltv-api/target/generated/swagger.json"
+    },
+    {
+      "inputFile": "./dist/apps/margin-api/target/generated/swagger.json"
     }
   ],
   "output": "./swagger.json"

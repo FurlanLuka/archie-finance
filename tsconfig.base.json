@@ -72,6 +72,12 @@
         "libs/api/credit-api/plaid/src/index.ts"
       ],
       "@archie/api/credit-api/rize": ["libs/api/credit-api/rize/src/index.ts"],
+      "@archie/api/credit-limit-api/constants": [
+        "libs/api/credit-limit-api/constants/src/index.ts"
+      ],
+      "@archie/api/ltv-api/constants": [
+        "libs/api/ltv-api/constants/src/index.ts"
+      ],
       "@archie/api/mail-api/constants": [
         "libs/api/mail-api/constants/src/index.ts"
       ],
@@ -83,6 +89,9 @@
       ],
       "@archie/api/mail-api/utils/email-data-factory": [
         "libs/api/mail-api/utils/email-data-factory/src/index.ts"
+      ],
+      "@archie/api/margin-api/constants": [
+        "libs/api/margin-api/constants/src/index.ts"
       ],
       "@archie/api/onboarding-api/constants": [
         "libs/api/onboarding-api/constants/src/index.ts"
@@ -105,11 +114,11 @@
       "@archie/api/referral-system-api/data-transfer-objects": [
         "libs/api/referral-system-api/data-transfer-objects/src/index.ts"
       ],
-      "@archie/api/referral-system-api/waitlist": [
-        "libs/api/referral-system-api/waitlist/src/index.ts"
-      ],
       "@archie/api/referral-system-api/sales-connect": [
         "libs/api/referral-system-api/sales-connect/src/index.ts"
+      ],
+      "@archie/api/referral-system-api/waitlist": [
+        "libs/api/referral-system-api/waitlist/src/index.ts"
       ],
       "@archie/api/user-api/auth0": ["libs/api/user-api/auth0/src/index.ts"],
       "@archie/api/user-api/constants": [
