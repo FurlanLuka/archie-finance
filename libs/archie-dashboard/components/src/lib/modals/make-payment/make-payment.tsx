@@ -14,16 +14,6 @@ interface MakePaymentModalProps {
   close: () => void;
 }
 
-const lastPayment = '6,640.54';
-const date = 'May 23, 2022';
-const mockBalances = {
-  dueDate: '2022-09-24',
-  balanceOwed: 1000,
-  balanceWithInterest: 1200,
-  fullBalance: 1237,
-  interestOwed: 200,
-};
-
 export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
   const { t } = useTranslation();
   const getKycResponse = useGetKyc();

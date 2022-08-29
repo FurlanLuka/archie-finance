@@ -11,7 +11,7 @@ export interface PaymentScheduleFormData {
   amount: number;
 }
 
-export const getPaymentScheduleFormSchema = (dueDate: Date) =>
+export const getPaymentScheduleFormSchema = (dueDate: Date, maxAmount: number) =>
   yup.object({
     paymentOption: yup
       .string()
@@ -59,5 +59,16 @@ export const getPaymentScheduleFormSchema = (dueDate: Date) =>
         }
 
         return value > 0;
+      })
+      .test('max_amount_test', 'payment_modal.payment_schedule.error.max_amount', function (value) {
+        if (this.parent.paymentOption !== PaymentOption.CUSTOM) {
+          return true;
+        }
+
+        if (!value) {
+          return false;
+        }
+
+        return value < maxAmount;
       }),
   });

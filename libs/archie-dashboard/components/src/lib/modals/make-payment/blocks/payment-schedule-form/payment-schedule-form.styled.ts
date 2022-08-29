@@ -47,6 +47,10 @@ export const PaymentScheduleFormStyled = styled.div`
     margin-top: 0.5rem;
   }
 
+  .disabled {
+    color: ${({ theme }) => theme.textDisabled};
+  }
+
   .input-group {
     display: flex;
     align-items: center;

@@ -36,7 +36,10 @@ export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({
   }, [scheduleTransactionMutation.state, onConfirm]);
 
   const handleConfirm = () => {
-    if (scheduleTransactionMutation.state === RequestState.IDLE) {
+    if (
+      scheduleTransactionMutation.state === RequestState.IDLE ||
+      scheduleTransactionMutation.state === RequestState.ERROR
+    ) {
       scheduleTransactionMutation.mutate(scheduledTransactionParams);
     }
   };

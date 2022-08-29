@@ -259,7 +259,8 @@
         "max_date": "Cannot schedule past due date",
         "cannot_be_past": "Date cannot be in the past",
         "amount_type_error": "Amount must be a number",
-        "min_amount": "You must pay more than 0"
+        "min_amount": "You must pay more than 0",
+        "max_amount": "You cannot pay more than your owed balance"
       }
     },
     "payment_confirm": {

@@ -32,7 +32,7 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
   const { t } = useTranslation();
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const dueDateParsed = parse(dueDate, 'yyyy-MM-dd', new Date());
-  const PaymentScheduleFormSchema = getPaymentScheduleFormSchema(dueDateParsed);
+  const PaymentScheduleFormSchema = getPaymentScheduleFormSchema(dueDateParsed, fullBalance);
 
   const {
     control,
@@ -44,8 +44,8 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
     mode: 'all',
     reValidateMode: 'onBlur',
     defaultValues: {
-      amount: balanceOwed,
-      paymentOption: PaymentOption.BALANCE_OWED,
+      amount: balanceOwed > 0 ? balanceOwed : fullBalance,
+      paymentOption: balanceOwed > 0 ? PaymentOption.BALANCE_OWED : PaymentOption.FULL_BALANCE,
       scheduledDate: format(dueDateParsed, 'MMddyyyy'),
     },
     resolver: yupResolver(PaymentScheduleFormSchema),
@@ -113,8 +113,15 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
 
         <div className="radio-group">
           <InputRadio>
-            <input type="radio" value={PaymentOption.BALANCE_OWED} {...register('paymentOption')} />
-            <ParagraphS>{t('payment_modal.payment_schedule.balance_owed', { balanceOwed })}</ParagraphS>
+            <input
+              type="radio"
+              value={PaymentOption.BALANCE_OWED}
+              {...register('paymentOption')}
+              disabled={balanceOwed === 0}
+            />
+            <ParagraphS className={balanceOwed === 0 ? 'disabled' : ''}>
+              {t('payment_modal.payment_schedule.balance_owed', { balanceOwed })}
+            </ParagraphS>
           </InputRadio>
           <InputRadio>
             <input type="radio" value={PaymentOption.FULL_BALANCE} {...register('paymentOption')} />

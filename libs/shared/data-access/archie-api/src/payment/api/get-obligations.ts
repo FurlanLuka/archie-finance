@@ -39,7 +39,7 @@ export const ERROR_LIST = new Map<string, string>([]);
 
 export const getObligations = async (accessToken: string): Promise<GetObligationsResponse> => {
   return getRequest<GetObligationsResponse>(
-    `${API_URL}/v1/obligations`,
+    `${API_URL}/v1/loan_obligations`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
