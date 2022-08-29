@@ -6,6 +6,7 @@ export interface ScheduleTransactionParams {
   scheduledDate: string;
   paymentInstrumentId: string;
 }
+
 export interface ScheduleTransactionBody extends DefaultVariables, ScheduleTransactionParams {}
 
 export const ERROR_LIST = new Map<string, string>([]);
