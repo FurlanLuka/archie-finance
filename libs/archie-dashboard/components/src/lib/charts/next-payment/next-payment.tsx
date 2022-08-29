@@ -25,7 +25,7 @@ export const NextPaymentChart: FC<NextPaymentChartProps> = ({ dueDate }) => {
       <ParagraphXXS color={theme.textSecondary} weight={500}>
         {t('next_payment_card.chart', { days })}
       </ParagraphXXS>
-      <input type="range" min={min} max={max} value={days} readOnly />
+      <input type="range" min={min} max={max} value={max - days} readOnly />
     </NextPaymentChartStyled>
   );
 };

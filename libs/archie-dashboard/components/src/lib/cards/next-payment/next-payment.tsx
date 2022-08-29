@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { NextPaymentChart, MakePaymentModal } from '@archie-webapps/archie-dashboard/components';
-import { ButtonOutline, Card, Loader, ParagraphXS, SubtitleS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, Card, Loader, ParagraphXS, Skeleton, SubtitleS } from '@archie-webapps/shared/ui/design-system';
 import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 import {
   CREDIT_LINE_NOT_FOUND_ERROR,
@@ -25,7 +25,11 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
 
   function getContent() {
     if (getObligationsResponse.state === RequestState.LOADING) {
-      return <Loader className="loader" />;
+      return (
+        <Card>
+          <Skeleton />
+        </Card>
+      );
     }
 
     if (getObligationsResponse.state === RequestState.ERROR) {
@@ -34,9 +38,14 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
         getObligationsResponse.error.name === MISSING_PAYMENT_INFO_ERROR
       ) {
         return (
-          <SubtitleS weight={400} className="card-info">
-            {t('next_payment.no_payment_due')}
-          </SubtitleS>
+          <Card column alignItems="flex-start" padding="1.5rem">
+            <ParagraphXS weight={700} className="card-title">
+              {t('next_payment_card.title')}
+            </ParagraphXS>
+            <SubtitleS weight={400} className="card-info">
+              {t('next_payment.no_payment_due')}
+            </SubtitleS>
+          </Card>
         );
       }
 
@@ -47,7 +56,10 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
       const dueDateParsed = parse(getObligationsResponse.data.dueDate, OBLIGATION_DATE_FORMAT, new Date());
 
       return (
-        <>
+        <Card column alignItems="flex-start" padding="1.5rem">
+          <ParagraphXS weight={700} className="card-title">
+            {t('next_payment_card.title')}
+          </ParagraphXS>
           <SubtitleS weight={400} className="card-info">
             {format(dueDateParsed, 'MMMM do')}
           </SubtitleS>
@@ -59,7 +71,7 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
               </ButtonOutline>
             </div>
           )}
-        </>
+        </Card>
       );
     }
 
@@ -68,12 +80,7 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
 
   return (
     <>
-      <Card column alignItems="flex-start" padding="1.5rem">
-        <ParagraphXS weight={700} className="card-title">
-          {t('next_payment_card.title')}
-        </ParagraphXS>
-        {getContent()}
-      </Card>
+      {getContent()}
       {makePaymentModalOpen && <MakePaymentModal close={() => setMakePaymentModalOpen(false)} />}
     </>
   );
