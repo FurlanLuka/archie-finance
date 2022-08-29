@@ -12,7 +12,7 @@ export class CoingeckoService {
   public async getCoinInformation(
     coinIds: string[],
   ): Promise<CoinPriceResponse> {
-    const response = await axios.get(
+    const response = await axios.get<CoinPriceResponse>(
       `${this.configService.get(
         ConfigVariables.COINGECKO_API_URI,
       )}/v3/simple/price?ids=${coinIds.join(
