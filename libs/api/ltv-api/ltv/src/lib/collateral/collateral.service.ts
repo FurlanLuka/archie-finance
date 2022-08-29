@@ -10,6 +10,8 @@ import { Collateral } from '@archie/api/credit-api/collateral';
 
 @Injectable()
 export class CollateralService {
+  NONE = 0;
+
   constructor(
     @InjectRepository(LtvCollateral)
     private ltvCollateralRepository: Repository<LtvCollateral>,
@@ -48,7 +50,7 @@ export class CollateralService {
       .setParameter('amount', transaction.amount)
       .execute();
 
-    if (updateResult.affected === 0) {
+    if (updateResult.affected === this.NONE) {
       await this.ltvCollateralRepository.insert({
         userId: transaction.userId,
         amount: transaction.amount,
