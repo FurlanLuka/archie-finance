@@ -22,11 +22,9 @@ import { QueueModule } from '@archie/api/utils/queue';
       ],
       parse: (configVariable: ConfigVariables, value) => {
         if (configVariable === ConfigVariables.ASSET_LIST) {
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
           return JSON.parse(value);
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return value;
       },
     }),
