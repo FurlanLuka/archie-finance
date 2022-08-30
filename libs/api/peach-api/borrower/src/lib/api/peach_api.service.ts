@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
@@ -61,6 +61,7 @@ export class PeachApiService {
         status: (<AxiosResponse>error.response).status,
         errorResponse: <PeachErrorData>error.response?.data,
       };
+      Logger.error(JSON.stringify(response, null, 2));
 
       return Promise.reject(response);
     });
