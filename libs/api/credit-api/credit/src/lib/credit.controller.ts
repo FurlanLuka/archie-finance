@@ -16,9 +16,9 @@ import {
 } from './credit.errors';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { Subscribe } from '@archie/api/utils/queue';
-import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/constants';
+import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
-import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 
 @Controller('v1/credit')
 export class CreditController {
@@ -69,11 +69,11 @@ export class CreditQueueController {
   constructor(private creditService: CreditService) {}
 
   @Subscribe(
-    CREDIT_LINE_PAYMENT_RECEIVED_TOPIC,
+    CREDIT_BALANCE_UPDATED_TOPIC,
     CreditQueueController.CONTROLLER_QUEUE_NAME,
   )
   async creditLinePaymentReceivedHandler(
-    payload: CreditLinePaymentReceivedPayload,
+    payload: CreditBalanceUpdatedPayload,
   ): Promise<void> {
     await this.creditService.updateCredit(payload);
   }

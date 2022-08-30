@@ -115,18 +115,29 @@ export class PeachApiService {
     amount: number,
     externalId: string,
   ): Promise<void> {
-    await this.peachClient.post(
-      `/people/${borrower.personId}/loans/${borrower.creditLineId}/transactions`,
-      {
-        externalId,
-        type: 'oneTime',
-        drawId: borrower.drawId,
-        isExternal: true,
-        status: 'pending',
-        paymentInstrumentId,
-        amount,
-      },
-    );
+    try {
+      await this.peachClient.post(
+        `/people/${borrower.personId}/loans/${borrower.creditLineId}/transactions`,
+        {
+          externalId,
+          type: 'oneTime',
+          drawId: borrower.drawId,
+          isExternal: true,
+          status: 'pending',
+          paymentInstrumentId,
+          amount,
+        },
+      );
+    } catch (e) {
+      const error: PeachErrorResponse = e;
+
+      if (
+        error.status !== 409 &&
+        !error.errorResponse.message.startsWith('Duplicate external ID')
+      ) {
+        throw error;
+      }
+    }
   }
 
   public async completeTransaction(
@@ -415,6 +426,7 @@ export class PeachApiService {
     return {
       availableCreditAmount: responseBody.availableCreditAmount,
       creditLimitAmount: responseBody.creditLimitAmount,
+      utilizationAmount: responseBody.utilizationAmount,
       calculatedAt: responseBody.calculatedAt,
     };
   }
