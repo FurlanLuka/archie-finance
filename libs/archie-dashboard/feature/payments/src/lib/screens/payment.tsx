@@ -36,7 +36,8 @@ export const PaymentScreen: FC = () => {
         <ButtonPrimary
           onClick={() => setShowModal(true)}
           isDisabled={
-            getObligationsResponse.state !== RequestState.SUCCESS || canUserSchedulePayment(getObligationsResponse.data)
+            getObligationsResponse.state !== RequestState.SUCCESS ||
+            !canUserSchedulePayment(getObligationsResponse.data)
           }
         >
           {t('dashboard_payment.btn_pay')}
