@@ -30,7 +30,7 @@ export const Default: Story<TypographyProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Typography" />
     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-      <div style={{ width: '15%', paddingBottom: '0.6rem' }}>
+      <div style={{ width: '12%', paddingBottom: '0.6rem' }}>
         <BodyM weight={800}>(Headline L)</BodyM>
       </div>
       <HeadlineL {...props} weight={800}>
@@ -39,7 +39,7 @@ export const Default: Story<TypographyProps> = (props) => (
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-      <div style={{ width: '15%', paddingBottom: '0.5rem' }}>
+      <div style={{ width: '12%', paddingBottom: '0.5rem' }}>
         <BodyM weight={800}>(Headline M)</BodyM>
       </div>
       <HeadlineM {...props} weight={800}>
@@ -48,7 +48,7 @@ export const Default: Story<TypographyProps> = (props) => (
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-      <div style={{ width: '15%', paddingBottom: '0.25rem' }}>
+      <div style={{ width: '12%', paddingBottom: '0.25rem' }}>
         <BodyM weight={800}>(Headline S)</BodyM>
       </div>
       <HeadlineS {...props} weight={800}>
@@ -57,7 +57,7 @@ export const Default: Story<TypographyProps> = (props) => (
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-      <div style={{ width: '15%', paddingBottom: '0.25rem' }}>
+      <div style={{ width: '12%', paddingBottom: '0.25rem' }}>
         <BodyM weight={800}>(Title L)</BodyM>
       </div>
       <TitleL {...props} weight={800}>
@@ -66,7 +66,7 @@ export const Default: Story<TypographyProps> = (props) => (
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
-      <div style={{ width: '15%', paddingBottom: '0.2rem' }}>
+      <div style={{ width: '12%', paddingBottom: '0.2rem' }}>
         <BodyM weight={800}>(Title M)</BodyM>
       </div>
       <TitleM {...props} weight={800}>
@@ -75,7 +75,7 @@ export const Default: Story<TypographyProps> = (props) => (
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
-      <div style={{ width: '15%', paddingBottom: '0.15rem' }}>
+      <div style={{ width: '12%', paddingBottom: '0.15rem' }}>
         <BodyM weight={800}>(Title S)</BodyM>
       </div>
       <TitleS {...props} weight={800}>
@@ -84,21 +84,21 @@ export const Default: Story<TypographyProps> = (props) => (
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
-      <div style={{ width: '15%', paddingBottom: '0.1rem' }}>
+      <div style={{ width: '12%', paddingBottom: '0.1rem' }}>
         <BodyM weight={800}>(Body L)</BodyM>
       </div>
       <BodyL {...props}>Finally, a crypto collateralized credit card for everyday payments</BodyL>
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
-      <div style={{ width: '15%', paddingBottom: '0.1rem' }}>
+      <div style={{ width: '12%', paddingBottom: '0.1rem' }}>
         <BodyM weight={800}>(Body M)</BodyM>
       </div>
       <BodyM {...props}>Finally, a crypto collateralized credit card for everyday payments</BodyM>
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
-      <div style={{ width: '15%' }}>
+      <div style={{ width: '12%' }}>
         <BodyM weight={800}>(Body S)</BodyM>
       </div>
       <BodyS {...props}>Finally, a crypto collateralized credit card for everyday payments</BodyS>
