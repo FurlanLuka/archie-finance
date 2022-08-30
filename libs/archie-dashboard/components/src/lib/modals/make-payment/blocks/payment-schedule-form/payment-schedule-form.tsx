@@ -28,9 +28,10 @@ interface PaymentScheduleFormProps {
 }
 
 export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations, onConfirm }) => {
-  const { balanceOwed, dueDate, fullBalance } = obligations;
   const { t } = useTranslation();
   const [scheduleOpen, setScheduleOpen] = useState(false);
+
+  const { balanceOwed, dueDate, fullBalance } = obligations;
   const dueDateParsed = parse(dueDate, 'yyyy-MM-dd', new Date());
   const PaymentScheduleFormSchema = getPaymentScheduleFormSchema(dueDateParsed, fullBalance);
 
@@ -65,7 +66,9 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
   });
 
   useEffect(() => {
-    // to validate the form initially, otherwise it's marked as invalid
+    // react hook form has isValid=false initially
+    // and the first validation happens once a field is dirty onChange/Blur
+    // so here we validate the form on mount
     trigger();
   }, [trigger]);
 

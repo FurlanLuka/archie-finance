@@ -18,9 +18,9 @@ const canUserSchedulePayment = (obligations: UserObligations) => {
 
 export const PaymentScreen: FC = () => {
   const { t } = useTranslation();
+  const getObligationsResponse = useGetObligations();
 
   const [showModal, setShowModal] = useState(false);
-  const getObligationsResponse = useGetObligations();
 
   return (
     <PaymentScreenStyled>
