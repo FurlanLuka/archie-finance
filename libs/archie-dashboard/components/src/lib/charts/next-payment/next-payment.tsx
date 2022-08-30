@@ -18,14 +18,15 @@ export const NextPaymentChart: FC<NextPaymentChartProps> = ({ dueDate }) => {
   const { t } = useTranslation();
 
   const days = differenceInDays(dueDate, new Date());
-  const backgroundSize = ((days - min) * 100) / (max - min) + '% 100%';
+  const value = max - days;
+  const backgroundSize = ((value - min) * 100) / (max - min) + '% 100%';
 
   return (
     <NextPaymentChartStyled backgroundSize={backgroundSize}>
       <ParagraphXXS color={theme.textSecondary} weight={500}>
         {t('next_payment_card.chart', { days })}
       </ParagraphXXS>
-      <input type="range" min={min} max={max} value={max - days} readOnly />
+      <input type="range" min={min} max={max} value={value} readOnly />
     </NextPaymentChartStyled>
   );
 };
