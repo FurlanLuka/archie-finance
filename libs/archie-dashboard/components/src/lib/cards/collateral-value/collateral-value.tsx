@@ -7,7 +7,7 @@ import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { TotalCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-total-value';
 import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-total-value';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { ButtonOutline, Card, Skeleton, ParagraphXS, SubtitleS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, Card, Skeleton, TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 export const CollateralValue: FC = () => {
@@ -34,14 +34,14 @@ export const CollateralValue: FC = () => {
     return (
       <Card column alignItems="flex-start" justifyContent="space-between" padding="1.5rem">
         <div>
-          <ParagraphXS weight={700} className="card-title">
+          <BodyM weight={700} className="card-title">
             {t('collateral_value_card.title')}
-          </ParagraphXS>
+          </BodyM>
           <div className="text-group card-info">
-            <SubtitleS weight={400}>${getFormattedValue(collateralTotalValue)}</SubtitleS>
-            {/* <ParagraphXS weight={500} color={theme.textSuccess}>
+            <TitleM weight={400}>${getFormattedValue(collateralTotalValue)}</TitleM>
+            {/* <BodyM weight={500} color={theme.textSuccess}>
             ↑
-          </ParagraphXS> */}
+          </BodyM> */}
           </div>
         </div>
         {/* <CollateralValueChart /> */}

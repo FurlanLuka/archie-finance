@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonPrimary, Modal, ParagraphM, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, Modal, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import imgCollateralReceived from '../../../../assets/img-collateral-received.png';
 
@@ -27,13 +27,13 @@ export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
           <img src={imgCollateralReceived} alt={t('collateral_received_modal.img_alt')} />
         </div>
         <div className="content">
-          <ParagraphM weight={700}>{t('dashboard_collateralization.collateral_received_modal.title')}</ParagraphM>
-          <ParagraphXS>
+          <TitleS>{t('dashboard_collateralization.collateral_received_modal.title')}</TitleS>
+          <BodyM>
             {t('dashboard_collateralization.collateral_received_modal.text', {
               collateralValue: collateralValue.toFixed(2),
               creditValue: creditValue.toFixed(2),
             })}
-          </ParagraphXS>
+          </BodyM>
           <ButtonPrimary onClick={onConfirm}>{t('btn_ok')}</ButtonPrimary>
         </div>
       </CollateralReceivedModalStyled>

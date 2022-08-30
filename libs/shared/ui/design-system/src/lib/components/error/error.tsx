@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonPrimary, ParagraphM, SubtitleM } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, TitleL, TitleS } from '@archie-webapps/shared/ui/design-system';
 
 import errorImg from '../../../assets/bell-alert.png';
 
@@ -20,8 +20,12 @@ export const Error: FC<ErrorProps> = ({ prevPath, description }) => {
 
   return (
     <ErrorStyled>
-      <SubtitleM className="title">{t('error_indicator.title')}</SubtitleM>
-      {description && <ParagraphM className="subtitle">{description}</ParagraphM>}
+      <TitleL className="title">{t('error_indicator.title')}</TitleL>
+      {description && (
+        <TitleS weight={400} className="subtitle">
+          {description}
+        </TitleS>
+      )}
       <div className="error-img">
         <img src={errorImg} alt={t('error_indicator.error_image_alt')} />
       </div>

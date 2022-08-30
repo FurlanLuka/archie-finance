@@ -7,15 +7,15 @@ import { StoriesTitle } from '../../utils/stories-title/stories-title';
 
 import {
   TypographyProps,
-  Headline,
-  Title,
-  SubtitleL,
-  SubtitleM,
-  SubtitleS,
-  ParagraphM,
-  ParagraphS,
-  ParagraphXS,
-  ParagraphXXS,
+  HeadlineL,
+  HeadlineM,
+  HeadlineS,
+  TitleL,
+  TitleM,
+  TitleS,
+  BodyL,
+  BodyM,
+  BodyS,
 } from './typography.styled';
 
 export default {
@@ -30,76 +30,78 @@ export const Default: Story<TypographyProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Typography" />
     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-      <div style={{ width: '20%', paddingBottom: '0.6rem' }}>
-        <ParagraphXS>(Headline)</ParagraphXS>
+      <div style={{ width: '15%', paddingBottom: '0.6rem' }}>
+        <BodyM weight={800}>(Headline L)</BodyM>
       </div>
-      <Headline {...props} weight={800}>
+      <HeadlineL {...props} weight={800}>
         Archie Finance
-      </Headline>
+      </HeadlineL>
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-      <div style={{ width: '20%', paddingBottom: '0.5rem' }}>
-        <ParagraphXS>(Title)</ParagraphXS>
+      <div style={{ width: '15%', paddingBottom: '0.5rem' }}>
+        <BodyM weight={800}>(Headline M)</BodyM>
       </div>
-      <Title {...props} weight={800}>
+      <HeadlineM {...props} weight={800}>
         Archie Finance
-      </Title>
+      </HeadlineM>
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-      <div style={{ width: '20%', paddingBottom: '0.25rem' }}>
-        <ParagraphXS>(SubtitleL)</ParagraphXS>
+      <div style={{ width: '15%', paddingBottom: '0.25rem' }}>
+        <BodyM weight={800}>(Headline S)</BodyM>
       </div>
-      <SubtitleL {...props} weight={800}>
+      <HeadlineS {...props} weight={800}>
         Archie Finance
-      </SubtitleL>
+      </HeadlineS>
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-      <div style={{ width: '20%', paddingBottom: '0.25rem' }}>
-        <ParagraphXS>(SubtitleM)</ParagraphXS>
+      <div style={{ width: '15%', paddingBottom: '0.25rem' }}>
+        <BodyM weight={800}>(Title L)</BodyM>
       </div>
-      <SubtitleM {...props} weight={800}>
+      <TitleL {...props} weight={800}>
         Archie Finance
-      </SubtitleM>
+      </TitleL>
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
-      <div style={{ width: '20%', paddingBottom: '0.2rem' }}>
-        <ParagraphXS>(SubtitleS)</ParagraphXS>
+      <div style={{ width: '15%', paddingBottom: '0.2rem' }}>
+        <BodyM weight={800}>(Title M)</BodyM>
       </div>
-      <SubtitleS {...props} weight={800}>
+      <TitleM {...props} weight={800}>
         Archie Finance
-      </SubtitleS>
+      </TitleM>
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
-      <div style={{ width: '20%', paddingBottom: '0.15rem' }}>
-        <ParagraphXS>(ParagraphM)</ParagraphXS>
+      <div style={{ width: '15%', paddingBottom: '0.15rem' }}>
+        <BodyM weight={800}>(Title S)</BodyM>
       </div>
-      <ParagraphM {...props}>Finally, a crypto collateralized credit card for everyday payme</ParagraphM>
+      <TitleS {...props} weight={800}>
+        Archie Finance
+      </TitleS>
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
-      <div style={{ width: '20%', paddingBottom: '0.1rem' }}>
-        <ParagraphXS>(ParagraphS)</ParagraphXS>
+      <div style={{ width: '15%', paddingBottom: '0.1rem' }}>
+        <BodyM weight={800}>(Body L)</BodyM>
       </div>
-      <ParagraphS {...props}>Finally, a crypto collateralized credit card for everyday payme</ParagraphS>
+      <BodyL {...props}>Finally, a crypto collateralized credit card for everyday payments</BodyL>
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
-      <div style={{ width: '20%', paddingBottom: '0.1rem' }}>
-        <ParagraphXS>(ParagraphXS)</ParagraphXS>
+      <div style={{ width: '15%', paddingBottom: '0.1rem' }}>
+        <BodyM weight={800}>(Body M)</BodyM>
       </div>
-      <ParagraphXS {...props}>Finally, a crypto collateralized credit card for everyday payme</ParagraphXS>
+      <BodyM {...props}>Finally, a crypto collateralized credit card for everyday payments</BodyM>
     </div>
 
     <div style={{ display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
-      <div style={{ width: '20%' }}>
-        <ParagraphXS>(ParagraphXXS)</ParagraphXS>
+      <div style={{ width: '15%' }}>
+        <BodyM weight={800}>(Body S)</BodyM>
       </div>
-      <ParagraphXXS {...props}>Finally, a crypto collateralized credit card for everyday payme</ParagraphXXS>
+      <BodyS {...props}>Finally, a crypto collateralized credit card for everyday payments</BodyS>
     </div>
   </StoriesContainer>
 );

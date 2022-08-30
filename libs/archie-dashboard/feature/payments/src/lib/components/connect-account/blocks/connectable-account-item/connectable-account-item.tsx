@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectableAccount } from '../../../interfaces';
 
@@ -14,10 +14,10 @@ export const ConnectableAccountItem: FC<ConnectableAccountItemProps> = ({ accoun
     <ConnectableAccountItemStyled>
       <div className="circle" />
       <div className="account-info">
-        <ParagraphXS weight={700}>{account.name}</ParagraphXS>
-        <ParagraphXS className="subtitle">
+        <BodyM weight={700}>{account.name}</BodyM>
+        <BodyM className="subtitle">
           {account.name} ...{account.mask}
-        </ParagraphXS>
+        </BodyM>
       </div>
     </ConnectableAccountItemStyled>
   );

@@ -10,7 +10,7 @@ import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Container, Card, InputRange, ParagraphXS, SubtitleM, Loader } from '@archie-webapps/shared/ui/design-system';
+import { Container, Card, Loader, InputRange, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralDepositAlerts } from '../../components/collateral-deposit-alerts/collateral-deposit-alerts';
@@ -64,8 +64,8 @@ export const CollateralizationScreen: FC = () => {
       return (
         <>
           <CollateralDepositAlerts />
-          <SubtitleM className="title">{t('collateralization_step.title')}</SubtitleM>
-          <ParagraphXS className="subtitle">{t('collateralization_step.subtitle')}</ParagraphXS>
+          <TitleL className="title">{t('collateralization_step.title')}</TitleL>
+          <BodyM className="subtitle">{t('collateralization_step.subtitle')}</BodyM>
 
           <div className="inputs">
             <CollateralAssetSelect
@@ -83,8 +83,8 @@ export const CollateralizationScreen: FC = () => {
 
           <div className="result">
             <div className="result-item">
-              <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
-              <SubtitleM weight={400} id="collateral" className="text">
+              <BodyM weight={700}>{t('collateralization_step.result.first')}</BodyM>
+              <TitleL weight={400} id="collateral" className="text">
                 {selectedCollateralAsset ? (
                   <span
                     className="clickable"
@@ -96,7 +96,7 @@ export const CollateralizationScreen: FC = () => {
                 ) : (
                   <span className="placeholder">0</span>
                 )}
-              </SubtitleM>
+              </TitleL>
               <ReactTooltip
                 textColor={theme.tooltipText}
                 backgroundColor={theme.tooltipBackground}
@@ -105,24 +105,24 @@ export const CollateralizationScreen: FC = () => {
               />
             </div>
             <div className="result-item">
-              <ParagraphXS weight={700}>{t('collateralization_step.result.second')}</ParagraphXS>
-              <SubtitleM weight={400} className="text">
+              <BodyM weight={700}>{t('collateralization_step.result.second')}</BodyM>
+              <TitleL weight={400} className="text">
                 {selectedCollateralAsset ? (
                   `${selectedCollateralAsset.loan_to_value}%`
                 ) : (
                   <span className="placeholder">0%</span>
                 )}
-              </SubtitleM>
+              </TitleL>
             </div>
             <div className="result-item">
-              <ParagraphXS weight={700}>{t('collateralization_step.result.third')}</ParagraphXS>
-              <SubtitleM weight={400} className="text">
+              <BodyM weight={700}>{t('collateralization_step.result.third')}</BodyM>
+              <TitleL weight={400} className="text">
                 {selectedCollateralAsset ? (
                   `${selectedCollateralAsset.interest_rate}%`
                 ) : (
                   <span className="placeholder">0%</span>
                 )}
-              </SubtitleM>
+              </TitleL>
             </div>
           </div>
           {selectedCollateralAsset ? (

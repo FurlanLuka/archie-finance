@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonOutline, Card, ParagraphXS, ParagraphXXS, SubtitleS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, Card, TitleM, BodyM, BodyS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 export const MyRewards: FC = () => {
@@ -9,20 +9,20 @@ export const MyRewards: FC = () => {
 
   return (
     <Card column alignItems="flex-start" padding="1.5rem">
-      <ParagraphXS weight={700} className="card-title">
+      <BodyM weight={700} className="card-title">
         {t('my_rewards_card.title')}
-      </ParagraphXS>
+      </BodyM>
       <div className="text-group card-info">
-        <SubtitleS weight={400}>1,801</SubtitleS>
-        <ParagraphXS weight={500}>{t('my_rewards_card.note_1')}</ParagraphXS>
+        <TitleM weight={400}>1,801</TitleM>
+        <BodyM weight={500}>{t('my_rewards_card.note_1')}</BodyM>
       </div>
       <div className="text-group card-info">
-        <ParagraphXS color={theme.textSuccess} weight={500} className="card-text">
+        <BodyM color={theme.textSuccess} weight={500} className="card-text">
           +$1,400
-        </ParagraphXS>
-        <ParagraphXXS color={theme.textSecondary} weight={500} className="card-text">
+        </BodyM>
+        <BodyS color={theme.textSecondary} weight={500} className="card-text">
           {t('my_rewards_card.note_2')}
-        </ParagraphXXS>
+        </BodyS>
       </div>
       <div className="btn-group">
         <ButtonOutline small>{t('btn_claim')}</ButtonOutline>

@@ -6,10 +6,10 @@ import {
   ButtonPrimary,
   InputRadio,
   InputText,
-  ParagraphM,
-  ParagraphS,
-  ParagraphXS,
-  ParagraphXXS,
+  TitleS,
+  BodyL,
+  BodyM,
+  BodyS,
 } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 
@@ -39,17 +39,15 @@ export const PaymentScheduleModal: FC<PaymentScheduleModalProps> = ({ onConfirm 
 
   return (
     <PaymentScheduleModalStyled>
-      <ParagraphM weight={800} className="title">
-        {t('dashboard_home.payment_schedule_modal.title')}
-      </ParagraphM>
-      <ParagraphS weight={600}>{t('dashboard_home.payment_schedule_modal.credit_for', { name })}</ParagraphS>
-      <ParagraphXS>{t('dashboard_home.payment_schedule_modal.last_payment', { lastPayment, date })}</ParagraphXS>
-      <ParagraphXS>{t('dashboard_home.payment_schedule_modal.interest_owed', { iterestOwed })}</ParagraphXS>
+      <TitleS className="title">{t('dashboard_home.payment_schedule_modal.title')}</TitleS>
+      <BodyL weight={600}>{t('dashboard_home.payment_schedule_modal.credit_for', { name })}</BodyL>
+      <BodyM>{t('dashboard_home.payment_schedule_modal.last_payment', { lastPayment, date })}</BodyM>
+      <BodyM>{t('dashboard_home.payment_schedule_modal.interest_owed', { iterestOwed })}</BodyM>
       <div className="divider" />
-      <ParagraphXS weight={800} className="subtitle">
+      <BodyM weight={800} className="subtitle">
         {t('dashboard_home.payment_schedule_modal.payment_date')}
-      </ParagraphXS>
-      <ParagraphXS className="payment-date">
+      </BodyM>
+      <BodyM className="payment-date">
         {format(new Date(), 'MMMM dd, yyyy')} |
         {schedule ? (
           <InputText small>
@@ -60,36 +58,34 @@ export const PaymentScheduleModal: FC<PaymentScheduleModalProps> = ({ onConfirm 
             {t('dashboard_home.payment_schedule_modal.schedule')} <Icon name="calendar" />
           </button>
         )}
-      </ParagraphXS>
+      </BodyM>
       <InputRadio small>
         <input type="radio" value="auto_payments" checked disabled />
-        <ParagraphXXS>
+        <BodyS>
           {t('dashboard_home.payment_schedule_modal.auto_payments')} {t('off')} {/* I guess temp */}
-        </ParagraphXXS>
+        </BodyS>
       </InputRadio>
       <div className="divider" />
-      <ParagraphXS weight={800} className="subtitle">
+      <BodyM weight={800} className="subtitle">
         {t('dashboard_home.payment_schedule_modal.payment_options')}
-      </ParagraphXS>
+      </BodyM>
       <div className="radio-group">
         <InputRadio>
           <input type="radio" name="payment_option" value="balance_owed" />
-          <ParagraphS>{t('dashboard_home.payment_schedule_modal.balance_owed', { balanceOwed })}</ParagraphS>
+          <BodyL>{t('dashboard_home.payment_schedule_modal.balance_owed', { balanceOwed })}</BodyL>
         </InputRadio>
         <InputRadio>
           <input type="radio" name="payment_option" value="balance_with_interest" />
-          <ParagraphS>
-            {t('dashboard_home.payment_schedule_modal.balance_with_interest', { balanceWithInterest })}
-          </ParagraphS>
+          <BodyL>{t('dashboard_home.payment_schedule_modal.balance_with_interest', { balanceWithInterest })}</BodyL>
         </InputRadio>
         <InputRadio>
           <input type="radio" name="payment_option" value="full_balance" />
-          <ParagraphS>{t('dashboard_home.payment_schedule_modal.full_balance', { fullBalance })}</ParagraphS>
+          <BodyL>{t('dashboard_home.payment_schedule_modal.full_balance', { fullBalance })}</BodyL>
         </InputRadio>
         <div className="input-group">
           <InputRadio>
             <input type="radio" name="payment_option" value="other_amount" />
-            <ParagraphS>{t('dashboard_home.payment_schedule_modal.other_amount')}</ParagraphS>
+            <BodyL>{t('dashboard_home.payment_schedule_modal.other_amount')}</BodyL>
           </InputRadio>
           <InputText small>
             <input placeholder="$" />
