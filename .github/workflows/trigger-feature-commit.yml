@@ -15,7 +15,7 @@ jobs:
     uses: ./.github/workflows/reusable-ci.yaml
     with:
       NAME: 'Feature deployment'
-      IS_TAGGED: true
+      IS_TAGGED: false
       ENVIRONMENT: development
       ECR_REPOSITORY: archie-development-container-repository
       AWS_REGION: us-east-1
