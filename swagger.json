@@ -1254,6 +1254,32 @@
           }
         ]
       }
+    },
+    "/v1/loan_interests": {
+      "get": {
+        "operationId": "InterestsController_getInterests",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InterestsDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -2389,6 +2415,21 @@
           "dueBalances",
           "statementObligations",
           "futureObligations"
+        ]
+      },
+      "InterestsDto": {
+        "type": "object",
+        "properties": {
+          "aprNominal": {
+            "type": "number"
+          },
+          "aprEffective": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "aprNominal",
+          "aprEffective"
         ]
       }
     },

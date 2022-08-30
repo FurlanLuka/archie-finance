@@ -22,6 +22,7 @@ import {
   QueryParams,
   Purchases,
   Balances,
+  PeachResponseData,
 } from './peach_api.interfaces';
 import { Borrower } from '../borrower.entity';
 import {
@@ -37,6 +38,9 @@ export class PeachApiService {
   MAX_REQUEST_TIMEOUT = 10000;
   CONTACT_ALREADY_EXISTS_STATUS = 400;
   ALREADY_ACTIVATED_STATUS = 400;
+  NOMINAL_APR = 0;
+  EFFECTIVE_APR = 0.16;
+
   peachClient: AxiosInstance;
 
   constructor(private configService: ConfigService) {
@@ -248,18 +252,30 @@ export class PeachApiService {
       status: 'originated',
       newDrawsAllowed: true,
       atOrigination: {
-        // TODO: check if ok
-        interestRates: [{ days: null, rate: 15 }],
+        interestRates: [{ days: null, rate: 0 }],
         paymentFrequency: 'monthly',
         // TODO: check if ok
         originationLicense: 'nationalBank',
         // TODO: check if ok
         originatingCreditorName: 'Bank of Mars',
+        aprNominal: this.NOMINAL_APR,
+        aprEffective: this.EFFECTIVE_APR,
         creditLimitAmount: creditLimit,
         downPaymentAmount,
         personAddressId: addressContactId,
       },
     });
+
+    return response.data.data;
+  }
+
+  public async getCreditLine(
+    personId: string,
+    loanId: string,
+  ): Promise<CreditLine> {
+    const response = await this.peachClient.get<PeachResponseData<CreditLine>>(
+      `/people/${personId}/loans/${loanId}`,
+    );
 
     return response.data.data;
   }
