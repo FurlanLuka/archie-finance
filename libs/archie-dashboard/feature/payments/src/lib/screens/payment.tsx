@@ -14,9 +14,9 @@ import { PaymentScreenStyled } from './payment.styled';
 
 export const PaymentScreen: FC = () => {
   const { t } = useTranslation();
+  const getObligationsResponse = useGetObligations();
 
   const [showModal, setShowModal] = useState(false);
-  const getObligationsResponse = useGetObligations();
 
   return (
     <PaymentScreenStyled>
@@ -32,7 +32,8 @@ export const PaymentScreen: FC = () => {
         <ButtonPrimary
           onClick={() => setShowModal(true)}
           isDisabled={
-            getObligationsResponse.state !== RequestState.SUCCESS || canUserSchedulePayment(getObligationsResponse.data)
+            getObligationsResponse.state !== RequestState.SUCCESS ||
+            !canUserSchedulePayment(getObligationsResponse.data)
           }
         >
           {t('dashboard_payment.btn_pay')}

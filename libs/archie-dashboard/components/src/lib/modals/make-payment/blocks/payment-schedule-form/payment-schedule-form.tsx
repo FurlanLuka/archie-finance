@@ -1,8 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { format, parse } from 'date-fns';
-import { parseDigit, templateFormatter, templateParser } from 'input-format';
-import ReactInput from 'input-format/react';
-import { FC, useEffect, useState } from 'react';
+import { addDays, format, isValid, parse } from 'date-fns';
+import { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -17,7 +15,6 @@ import {
   ParagraphXS,
   ParagraphXXS,
 } from '@archie-webapps/shared/ui/design-system';
-import { Icon } from '@archie-webapps/shared/ui/icons';
 
 import { PaymentOption } from './payment-schedule-form.interfaces';
 import { PaymentScheduleFormData, getPaymentScheduleFormSchema } from './payment-schedule-form.schema';
@@ -27,19 +24,20 @@ interface PaymentScheduleFormProps {
   onConfirm: (amount: number, date: string) => void;
   obligations: UserObligations;
 }
+const DATEPICKER_FORMAT = 'yyyy-MM-dd';
 
 export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations, onConfirm }) => {
-  const { balanceOwed, dueDate, fullBalance } = obligations;
   const { t } = useTranslation();
-  const [scheduleOpen, setScheduleOpen] = useState(false);
-  const dueDateParsed = parse(dueDate, OBLIGATION_DATE_FORMAT, new Date());
-  const PaymentScheduleFormSchema = getPaymentScheduleFormSchema(dueDateParsed, fullBalance);
+  const today = new Date();
+
+  const { balanceOwed, dueDate, fullBalance } = obligations;
+  const PaymentScheduleFormSchema = getPaymentScheduleFormSchema(dueDate, fullBalance);
 
   const {
     control,
     handleSubmit,
     register,
-    formState: { errors, isValid },
+    formState: { errors, isValid: isFormValid },
     trigger,
   } = useForm<PaymentScheduleFormData>({
     mode: 'all',
@@ -47,7 +45,7 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
     defaultValues: {
       amount: balanceOwed > 0 ? balanceOwed : fullBalance,
       paymentOption: balanceOwed > 0 ? PaymentOption.BALANCE_OWED : PaymentOption.FULL_BALANCE,
-      scheduledDate: format(dueDateParsed, 'MMddyyyy'),
+      scheduledDate: dueDate,
     },
     resolver: yupResolver(PaymentScheduleFormSchema),
   });
@@ -62,11 +60,13 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
       amount = fullBalance;
     }
 
-    onConfirm(amount, format(parse(data.scheduledDate, 'MMddyyyy', new Date()), OBLIGATION_DATE_FORMAT));
+    onConfirm(amount, format(data.scheduledDate, OBLIGATION_DATE_FORMAT));
   });
 
   useEffect(() => {
-    // to validate the form initially, otherwise it's marked as invalid
+    // react hook form has isValid=false initially
+    // and the first validation happens once a field is dirty onChange/Blur
+    // so here we validate the form on mount
     trigger();
   }, [trigger]);
 
@@ -77,24 +77,29 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
       </ParagraphXS>
       <form onSubmit={onSubmit}>
         <div className="payment-date">
-          <ParagraphXS>{format(dueDateParsed, 'MMMM dd, yyyy')} |</ParagraphXS>
+          <ParagraphXS>
+            {t('payment_modal.payment_schedule.due_date', { date: format(dueDate, 'MMMM dd, yyyy') })}
+          </ParagraphXS>
           <InputText small>
             <Controller
               control={control}
               name="scheduledDate"
               render={({ field: { onChange, value } }) => {
-                return scheduleOpen ? (
-                  <ReactInput
-                    value={value}
-                    placeholder={t('kyc_step.placeholder.date_of_birth')}
-                    onChange={onChange}
-                    parse={templateParser('xx-xx-xxxx', parseDigit)}
-                    format={templateFormatter('xx-xx-xxxx')}
+                return (
+                  <input
+                    type="date"
+                    onChange={(e) => {
+                      const date = parse(e.target.value, DATEPICKER_FORMAT, new Date());
+
+                      if (isValid(date)) {
+                        onChange(date);
+                      }
+                    }}
+                    value={format(value, DATEPICKER_FORMAT)}
+                    min={format(addDays(today, 1), DATEPICKER_FORMAT)}
+                    max={format(dueDate, DATEPICKER_FORMAT)}
+                    required
                   />
-                ) : (
-                  <button className="btn-schedule" onClick={() => setScheduleOpen(true)}>
-                    {t('payment_modal.payment_schedule.schedule')} <Icon name="calendar" />
-                  </button>
                 );
               }}
             />
@@ -141,7 +146,7 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
           </div>
         </div>
         <div className="btn-group">
-          <ButtonPrimary type="submit" maxWidth="250px" isDisabled={!isValid}>
+          <ButtonPrimary type="submit" maxWidth="250px" isDisabled={!isFormValid}>
             {t('btn_next')}
           </ButtonPrimary>
         </div>

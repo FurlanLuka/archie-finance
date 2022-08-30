@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 
+import { ParagraphXS } from '../typography/typography.styled'
+
 export interface InputTextProps {
   small?: boolean;
 }
@@ -35,4 +37,9 @@ export const InputText = styled.label<InputTextProps>`
       color: ${({ theme }) => theme.inputTextPlaceholder};
     }
   }
+`;
+
+export const FormError = styled(ParagraphXS)`
+  color: ${({ theme }) => theme.textDanger};
+  margin: 0.25rem 0;
 `;

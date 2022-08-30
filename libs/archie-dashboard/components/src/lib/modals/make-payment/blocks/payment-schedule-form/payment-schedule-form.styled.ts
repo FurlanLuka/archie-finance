@@ -17,15 +17,15 @@ export const PaymentScheduleFormStyled = styled.div`
 
   .payment-date {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 0.25rem;
-    min-height: 28px;
     white-space: nowrap;
     margin-bottom: 0.25rem;
 
     label,
     input {
-      width: 120px;
+      width: fit-content;
       margin: 0;
     }
   }

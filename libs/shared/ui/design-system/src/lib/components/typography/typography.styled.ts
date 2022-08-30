@@ -107,7 +107,3 @@ export const ParagraphXXS = styled.p<TypographyProps>`
   font-weight: ${({ weight }) => weight ?? 400};
 `;
 
-export const FormError = styled(ParagraphXS)`
-  color: ${({ theme }) => theme.textDanger};
-  margin: 0.25rem 0;
-`;
