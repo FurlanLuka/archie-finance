@@ -13,7 +13,7 @@ jobs:
     name: Deploy ${{ matrix.environment }}
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      fail-fast: false
       matrix:
         environment: [development, production]
     steps:
