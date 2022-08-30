@@ -1,3 +1,5 @@
+import { parse } from 'date-fns';
+
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse, RequestState } from '../../interface';
 import { getObligations, Obligation } from '../api/get-obligations';
@@ -22,12 +24,22 @@ export const useGetObligations = (): QueryResponse<UserObligations> => {
   });
 
   // if no due date is present, something is wrong on Peach
-  if (queryResponse.state === RequestState.SUCCESS && queryResponse.data.dueDate === MISSING_DATE) {
+  if (queryResponse.state === RequestState.SUCCESS) {
+    if (queryResponse.data.dueDate === MISSING_DATE) {
+      return {
+        state: RequestState.ERROR,
+        error: {
+          name: MISSING_PAYMENT_INFO_ERROR,
+          message: 'No payment due date',
+        },
+      };
+    }
+
     return {
-      state: RequestState.ERROR,
-      error: {
-        name: MISSING_PAYMENT_INFO_ERROR,
-        message: 'No payment due date',
+      ...queryResponse,
+      data: {
+        ...queryResponse.data,
+        dueDate: parse(queryResponse.data.dueDate, 'yyyy-MM-dd', new Date()),
       },
     };
   }

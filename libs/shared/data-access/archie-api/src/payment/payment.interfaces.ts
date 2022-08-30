@@ -1,5 +1,5 @@
 export interface UserObligations {
-  dueDate: string;
+  dueDate: Date;
   balanceOwed: number;
   fullBalance: number;
   interestOwed: number;

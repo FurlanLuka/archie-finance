@@ -32,8 +32,7 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
   const [scheduleOpen, setScheduleOpen] = useState(false);
 
   const { balanceOwed, dueDate, fullBalance } = obligations;
-  const dueDateParsed = parse(dueDate, 'yyyy-MM-dd', new Date());
-  const PaymentScheduleFormSchema = getPaymentScheduleFormSchema(dueDateParsed, fullBalance);
+  const PaymentScheduleFormSchema = getPaymentScheduleFormSchema(dueDate, fullBalance);
 
   const {
     control,
@@ -47,7 +46,7 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
     defaultValues: {
       amount: balanceOwed > 0 ? balanceOwed : fullBalance,
       paymentOption: balanceOwed > 0 ? PaymentOption.BALANCE_OWED : PaymentOption.FULL_BALANCE,
-      scheduledDate: format(dueDateParsed, 'MMddyyyy'),
+      scheduledDate: format(dueDate, 'MMddyyyy'),
     },
     resolver: yupResolver(PaymentScheduleFormSchema),
   });
@@ -79,7 +78,7 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
       </ParagraphXS>
       <form onSubmit={onSubmit}>
         <div className="payment-date">
-          <ParagraphXS>{format(dueDateParsed, 'MMMM dd, yyyy')} |</ParagraphXS>
+          <ParagraphXS>{format(dueDate, 'MMMM dd, yyyy')} |</ParagraphXS>
           <InputText small>
             <Controller
               control={control}
