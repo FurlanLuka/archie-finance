@@ -2,12 +2,15 @@ import { Borrower } from '../borrower.entity';
 import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Purchases } from '../api/peach_api.interfaces';
+import { Credit, Purchases } from '../api/peach_api.interfaces';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import { PurchasesResponseFactory } from './utils/purchases_response.factory';
 import { GetPurchasesQueryDto, PurchasesResponseDto } from './purchases.dto';
 import { Injectable } from '@nestjs/common';
 import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class PurchasesService {
@@ -17,6 +20,7 @@ export class PurchasesService {
     private borrowerRepository: Repository<Borrower>,
     private borrowerValidation: BorrowerValidation,
     private purchasesResponseFactory: PurchasesResponseFactory,
+    private queueService: QueueService,
   ) {}
 
   public async getPurchases(
@@ -48,19 +52,31 @@ export class PurchasesService {
     this.borrowerValidation.isBorrowerDrawDefined(borrower);
 
     if (transaction.status === 'pending') {
-      return this.peachApiService.createPurchase(
+      await this.peachApiService.createPurchase(
+        borrower.personId,
+        borrower.creditLineId,
+        borrower.drawId,
+        transaction,
+      );
+
+      const credit: Credit = await this.peachApiService.getCreditBalance(
+        borrower.personId,
+        borrower.creditLineId,
+      );
+      this.queueService.publish<CreditBalanceUpdatedPayload>(
+        CREDIT_BALANCE_UPDATED_TOPIC,
+        {
+          ...credit,
+          userId: transaction.userId,
+        },
+      );
+    } else {
+      await this.peachApiService.updatePurchase(
         borrower.personId,
         borrower.creditLineId,
         borrower.drawId,
         transaction,
       );
     }
-
-    return this.peachApiService.updatePurchase(
-      borrower.personId,
-      borrower.creditLineId,
-      borrower.drawId,
-      transaction,
-    );
   }
 }

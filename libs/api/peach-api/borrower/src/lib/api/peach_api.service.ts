@@ -130,13 +130,7 @@ export class PeachApiService {
       );
     } catch (e) {
       const error: PeachErrorResponse = e;
-
-      if (
-        error.status !== 409 &&
-        !error.errorResponse.message.startsWith('Duplicate external ID')
-      ) {
-        throw error;
-      }
+      this.ignoreDuplicatedEntityError(error);
     }
   }
 
@@ -355,15 +349,20 @@ export class PeachApiService {
     drawId: string,
     transaction: TransactionUpdatedPayload,
   ): Promise<void> {
-    await this.peachClient.post(
-      `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases`,
-      {
-        externalId: String(transaction.id),
-        type: PeachTransactionType[transaction.type],
-        status: PeachTransactionStatus.pending,
-        ...this.createPurchaseDetails(transaction),
-      },
-    );
+    try {
+      await this.peachClient.post(
+        `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases`,
+        {
+          externalId: String(transaction.id),
+          type: PeachTransactionType[transaction.type],
+          status: PeachTransactionStatus.pending,
+          ...this.createPurchaseDetails(transaction),
+        },
+      );
+    } catch (e) {
+      const error: PeachErrorResponse = e;
+      this.ignoreDuplicatedEntityError(error);
+    }
   }
 
   public async updatePurchase(
@@ -555,5 +554,14 @@ export class PeachApiService {
     );
 
     return response.data;
+  }
+
+  private ignoreDuplicatedEntityError(error: PeachErrorResponse): void {
+    if (
+      error.status !== 409 &&
+      !error.errorResponse.message.startsWith('Duplicate external ID')
+    ) {
+      throw error;
+    }
   }
 }
