@@ -4,4 +4,8 @@ export class CreditBalanceUpdatedPayload {
   creditLimitAmount: number;
   utilizationAmount: number;
   calculatedAt: string;
+  paymentDetails: {
+    asset: string;
+    amount: number;
+  };
 }

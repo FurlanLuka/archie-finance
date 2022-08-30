@@ -92,6 +92,10 @@ export class PaymentsService {
       {
         ...credit,
         userId: payment.personExternalId,
+        paymentDetails: {
+          amount: payment.amount,
+          asset: payment.currency,
+        },
       },
     );
   }
@@ -140,6 +144,10 @@ export class PaymentsService {
       {
         ...credit,
         userId: transaction.userId,
+        paymentDetails: {
+          amount: transaction.amount,
+          asset: transaction.asset,
+        },
       },
     );
   }

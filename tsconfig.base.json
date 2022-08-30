@@ -78,6 +78,9 @@
       "@archie/api/ltv-api/constants": [
         "libs/api/ltv-api/constants/src/index.ts"
       ],
+      "@archie/api/ltv-api/data-transfer-objects": [
+        "libs/api/ltv-api/data-transfer-objects/src/index.ts"
+      ],
       "@archie/api/ltv-api/ltv": ["libs/api/ltv-api/ltv/src/index.ts"],
       "@archie/api/mail-api/constants": [
         "libs/api/mail-api/constants/src/index.ts"

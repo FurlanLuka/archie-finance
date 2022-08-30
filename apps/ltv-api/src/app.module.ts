@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { QueueModule } from '@archie/api/utils/queue';
 import { migrations } from './migrations';
 import { AuthModule } from '@archie/api/utils/auth0';
+import { LibModule } from '@archie/api/ltv-api/ltv';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { AuthModule } from '@archie/api/utils/auth0';
     }),
     HealthModule,
     QueueModule.register(),
+    LibModule,
   ],
   controllers: [],
   providers: [],

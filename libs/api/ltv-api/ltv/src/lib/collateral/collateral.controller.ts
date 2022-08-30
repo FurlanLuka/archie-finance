@@ -11,7 +11,7 @@ import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-t
 
 @Controller()
 export class CollateralQueueController {
-  CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-collateral`;
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-collateral`;
 
   constructor(private collateralService: CollateralService) {}
 

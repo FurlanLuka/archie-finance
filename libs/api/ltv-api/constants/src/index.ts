@@ -11,3 +11,5 @@ export enum ConfigVariables {
   TYPEORM_PORT = 'TYPEORM_PORT',
   QUEUE_URL = 'QUEUE_URL',
 }
+
+export const LTV_UPDATED_TOPIC = 'ltv.ltv.updated';

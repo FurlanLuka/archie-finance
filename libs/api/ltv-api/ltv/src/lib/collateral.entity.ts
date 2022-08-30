@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -9,11 +10,13 @@ import {
 @Entity({
   name: 'ltv_collateral',
 })
+@Index(['userId', 'asset'])
 export class LtvCollateral {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('varchar', { nullable: false, unique: true })
+  @Index()
+  @Column('varchar', { nullable: false })
   userId: string;
 
   @Column('varchar', { nullable: false })

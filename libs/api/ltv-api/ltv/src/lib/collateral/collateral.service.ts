@@ -6,7 +6,7 @@ import {
 import { LtvCollateral } from '../collateral.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
-import { Collateral } from '@archie/api/credit-api/collateral';
+import { LtvUpdatedUtilService } from '../utils/ltv_updated.service';
 
 @Injectable()
 export class CollateralService {
@@ -15,6 +15,7 @@ export class CollateralService {
   constructor(
     @InjectRepository(LtvCollateral)
     private ltvCollateralRepository: Repository<LtvCollateral>,
+    private ltvUpdatedUtilService: LtvUpdatedUtilService,
   ) {}
 
   public async handleCollateralWithdrawInitializedEvent(
@@ -22,7 +23,7 @@ export class CollateralService {
   ): Promise<void> {
     await this.ltvCollateralRepository
       .createQueryBuilder('LtvCollateral')
-      .update(Collateral)
+      .update(LtvCollateral)
       .where('userId =: userId AND asset =: asset', {
         userId: transaction.userId,
         asset: transaction.asset,
@@ -32,6 +33,8 @@ export class CollateralService {
       })
       .setParameter('amount', transaction.withdrawalAmount)
       .execute();
+
+    await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(transaction.userId);
   }
 
   public async handleCollateralDepositCompletedEvent(
@@ -39,7 +42,7 @@ export class CollateralService {
   ): Promise<void> {
     const updateResult: UpdateResult = await this.ltvCollateralRepository
       .createQueryBuilder('LtvCollateral')
-      .update(Collateral)
+      .update(LtvCollateral)
       .where('userId =: userId AND asset =: asset', {
         userId: transaction.userId,
         asset: transaction.asset,
@@ -57,5 +60,7 @@ export class CollateralService {
         asset: transaction.asset,
       });
     }
+
+    await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(transaction.userId);
   }
 }

@@ -1,61 +1,59 @@
 import { Injectable } from '@nestjs/common';
-import {
-  CollateralDepositCompletedPayload,
-  CollateralWithdrawInitializedPayload,
-} from '@archie/api/credit-api/data-transfer-objects';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
-import { Collateral } from '@archie/api/credit-api/collateral';
+import { LessThan, Repository } from 'typeorm';
 import { LtvCredit } from '../credit.entity';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { LtvCollateral } from '../collateral.entity';
+import { CardActivatedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import { DateTime } from 'luxon';
+import { LtvUpdatedUtilService } from '../utils/ltv_updated.service';
 
 @Injectable()
 export class CreditService {
-  NONE = 0;
-
   constructor(
     @InjectRepository(LtvCredit)
-    private ltvCollateralRepository: Repository<LtvCredit>,
+    private ltvCreditRepository: Repository<LtvCredit>,
+    @InjectRepository(LtvCredit)
+    private ltvCollateralRepository: Repository<LtvCollateral>,
+    private ltvUpdatedUtilService: LtvUpdatedUtilService,
   ) {}
 
-  public async handleCollateralWithdrawInitializedEvent(
-    transaction: CollateralWithdrawInitializedPayload,
+  public async handleCreditBalanceUpdatedEvent(
+    credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
+    await this.ltvCreditRepository.update(
+      {
+        userId: credit.userId,
+        calculatedAt: LessThan(credit.calculatedAt),
+      },
+      {
+        utilizationAmount: credit.utilizationAmount,
+        calculatedAt: credit.calculatedAt,
+      },
+    );
     await this.ltvCollateralRepository
       .createQueryBuilder('LtvCollateral')
-      .update(Collateral)
+      .update(LtvCollateral)
       .where('userId =: userId AND asset =: asset', {
-        userId: transaction.userId,
-        asset: transaction.asset,
+        userId: credit.userId,
+        asset: credit.paymentDetails.asset,
       })
       .set({
         amount: () => '"amount" -: amount',
       })
-      .setParameter('amount', transaction.withdrawalAmount)
+      .setParameter('amount', credit.paymentDetails.amount)
       .execute();
+
+    await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(credit.userId);
   }
 
-  public async handleCollateralDepositCompletedEvent(
-    transaction: CollateralDepositCompletedPayload,
+  public async handleCardActivatedEvent(
+    cardDetails: CardActivatedPayload,
   ): Promise<void> {
-    const updateResult: UpdateResult = await this.ltvCollateralRepository
-      .createQueryBuilder('LtvCollateral')
-      .update(Collateral)
-      .where('userId =: userId AND asset =: asset', {
-        userId: transaction.userId,
-        asset: transaction.asset,
-      })
-      .set({
-        amount: () => '"amount" +: amount',
-      })
-      .setParameter('amount', transaction.amount)
-      .execute();
-
-    if (updateResult.affected === this.NONE) {
-      await this.ltvCollateralRepository.insert({
-        userId: transaction.userId,
-        amount: transaction.amount,
-        asset: transaction.asset,
-      });
-    }
+    await this.ltvCreditRepository.insert({
+      userId: cardDetails.userId,
+      calculatedAt: DateTime.now().toISO(),
+      utilizationAmount: 0,
+    });
   }
 }

@@ -1,2 +1,2 @@
-export * from './lib/ltv.service';
-export * from './lib/ltv.module';
+export * from './lib/ltv/ltv.service';
+export * from './lib/lib.module';

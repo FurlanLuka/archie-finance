@@ -1,8 +1,10 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
-import { LtvResponseDto } from '@archie/api/credit-api/margin';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { LtvService } from './ltv.service';
+import { LtvDto } from './ltv.dto';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
+import { CreditNotSetUpError } from '../lib.errors';
 
 @Controller('v1/ltvs/current')
 export class LtvController {
@@ -11,7 +13,8 @@ export class LtvController {
   @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getCurrentLtv(@Req() request): Promise<LtvResponseDto> {
+  @ApiErrorResponse([CreditNotSetUpError])
+  async getCurrentLtv(@Req() request): Promise<LtvDto> {
     return this.ltvService.getCurrentLtv(request.user.sub);
   }
 }

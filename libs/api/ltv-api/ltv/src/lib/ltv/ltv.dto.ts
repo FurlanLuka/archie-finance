@@ -5,8 +5,7 @@ export enum LtvStatus {
   margin_call = 'margin_call',
 }
 
-export class LtvResponseDto {
+export class LtvDto {
   ltv: number;
   status: LtvStatus;
-  loanedBalance: number;
 }

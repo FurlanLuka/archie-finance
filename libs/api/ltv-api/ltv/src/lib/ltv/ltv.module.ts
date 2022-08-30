@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { LtvService } from './ltv.service';
 import { LtvController } from './ltv.controller';
-import { CollateralModule } from './collateral/collateral.module';
+import { LtvService } from './ltv.service';
+import { UtilsModule } from '../utils/utils.module';
 
 @Module({
-  imports: [CollateralModule],
+  imports: [UtilsModule],
   controllers: [LtvController],
   providers: [LtvService],
   exports: [LtvService],
