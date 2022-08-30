@@ -272,6 +272,7 @@
       "payment_date": "Payment Date",
       "payment_options": "Payment Options",
       "schedule": "Schedule",
+      "due_date": "Due date is {{date}}",
       "balance_owed": "Pay balance owed: ${{balanceOwed}}",
       "balance_with_interest": "Pay balance owed with interest: ${{balanceWithInterest}}",
       "full_balance": "Pay full balance: ${{fullBalance}}",

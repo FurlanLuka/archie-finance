@@ -1,13 +1,11 @@
-import { isValid, isPast, parse, isAfter } from 'date-fns';
+import { isValid, isPast, isAfter } from 'date-fns';
 import * as yup from 'yup';
 
 import { PaymentOption } from './payment-schedule-form.interfaces';
 
-const parseDate = (value: string) => parse(value, 'MMddyyyy', new Date());
-
 export interface PaymentScheduleFormData {
   paymentOption: PaymentOption;
-  scheduledDate: string;
+  scheduledDate: Date;
   amount: number;
 }
 
@@ -18,26 +16,26 @@ export const getPaymentScheduleFormSchema = (dueDate: Date, maxAmount: number) =
       .oneOf(Object.values(PaymentOption))
       .required('payment_modal.payment_schedule.error.required_field'),
     scheduledDate: yup
-      .string()
+      .date()
       .required('payment_modal.payment_schedule.error.required_field')
       .test('is_date_valid', 'payment_modal.payment_schedule.error.not_valid_date', (value) => {
         if (!value) {
           return false;
         }
 
-        return isValid(parseDate(value));
+        return isValid(value);
       })
       .test('past_date_test', 'payment_modal.payment_schedule.error.cannot_be_past', (value) => {
         if (!value) {
           return false;
         }
-        return !isPast(parseDate(value));
+        return !isPast(value);
       })
       .test('maximum_days_test', 'payment_modal.payment_schedule.error.max_date', (value) => {
         if (!value) {
           return false;
         }
-        return !isAfter(parseDate(value), dueDate);
+        return !isAfter(value, dueDate);
       }),
     amount: yup
       .number()
