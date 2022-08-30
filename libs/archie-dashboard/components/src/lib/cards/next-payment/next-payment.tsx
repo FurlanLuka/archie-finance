@@ -15,7 +15,7 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
 
   return (
     <>
-      <Card column alignItems="flex-start" padding="1.5rem">
+      <Card column alignItems="flex-start" justifyContent="space-between" padding="1.5rem">
         <ParagraphXS weight={700} className="card-title">
           {t('next_payment_card.title')}
         </ParagraphXS>
