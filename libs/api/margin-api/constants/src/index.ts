@@ -11,3 +11,8 @@ export enum ConfigVariables {
   TYPEORM_PORT = 'TYPEORM_PORT',
   QUEUE_URL = 'QUEUE_URL',
 }
+
+export const LTV_LIMIT_APPROACHING_TOPIC =
+  'margin.margin_call.ltv_limit_approaching';
+export const MARGIN_CALL_COMPLETED_TOPIC = 'margin.margin_call.completed';
+export const MARGIN_CALL_STARTED_TOPIC = 'margin.margin_call.started';

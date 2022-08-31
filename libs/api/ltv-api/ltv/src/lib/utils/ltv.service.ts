@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { LtvStatus } from '../ltv/ltv.dto';
-import { CollateralValueUtilService } from './collateral_value.service';
 import { CreditAssets } from './utils.interfaces';
 
 @Injectable()
@@ -9,15 +8,10 @@ export class LtvUtilService {
   LTV_WARNING_LIMIT = 65;
   LTV_MARGIN_CALL_LIMIT = 75;
 
-  constructor(private collateralValueUtilService: CollateralValueUtilService) {}
-
-  public calculateLtv(creditAssets: CreditAssets): number {
-    const collateralValue: number =
-      this.collateralValueUtilService.getCollateralValue(
-        creditAssets.collateral,
-        creditAssets.assetPrices,
-      );
-
+  public calculateLtv(
+    creditAssets: CreditAssets,
+    collateralValue: number,
+  ): number {
     return (creditAssets.credit.utilizationAmount / collateralValue) * 100;
   }
 

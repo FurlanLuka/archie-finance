@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { QueueModule } from '@archie/api/utils/queue';
 import { migrations } from './migrations';
 import { AuthModule } from '@archie/api/utils/auth0';
+import { MarginModule } from '@archie/api/margin-api/margin';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { AuthModule } from '@archie/api/utils/auth0';
     }),
     HealthModule,
     QueueModule.register(),
+    MarginModule,
   ],
   controllers: [],
   providers: [],
