@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
 import { ButtonOutline, ButtonPrimary } from '../button/button.styled';
-import { ParagraphM, ParagraphXS } from '../typography/typography.styled';
+import { TitleS, BodyM } from '../typography/typography.styled';
 
 import { ModalProps, Modal } from './modal';
 
@@ -31,8 +31,8 @@ export const Default: Story<ModalProps> = (props) => {
       <ButtonPrimary onClick={() => setModalOpen(true)}>Open Modal</ButtonPrimary>
       <Modal {...props} isOpen={modalOpen} close={() => setModalOpen(false)}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-          <ParagraphM weight={700}>Show card details?</ParagraphM>
-          <ParagraphXS>Are you sure you want to display your card details?</ParagraphXS>
+          <TitleS>Show card details?</TitleS>
+          <BodyM>Are you sure you want to display your card details?</BodyM>
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
             <ButtonOutline maxWidth="100%" onClick={() => setModalOpen(false)}>
               Close

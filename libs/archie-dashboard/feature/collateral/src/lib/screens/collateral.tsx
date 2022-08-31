@@ -9,7 +9,7 @@ import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/ap
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Card, Loader, Badge, SubtitleS, ParagraphM, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { Card, Loader, Badge, TitleM, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralInfo } from '../components/collateral-info/collateral-info';
@@ -37,18 +37,16 @@ export const CollateralScreen: FC = () => {
       return (
         <>
           <div className="title-group">
-            <ParagraphM weight={800} className="title">
-              {t('dashboard_collateral.title')}
-            </ParagraphM>
-            <SubtitleS weight={400} className="total">
+            <TitleS className="title">{t('dashboard_collateral.title')}</TitleS>
+            <TitleM weight={400} className="total">
               ${getFormattedValue(calculateCollateralTotalValue(getCollateralValueResponse.data))}
-            </SubtitleS>
+            </TitleM>
             <div className="ltv">
               <div className="ltv-group">
-                <ParagraphXS weight={700} color={theme.textSecondary}>
+                <BodyM weight={700} color={theme.textSecondary}>
                   {t('ltv')}:
-                </ParagraphXS>
-                <ParagraphM>{ltvData.ltv.toFixed(2)}%</ParagraphM>
+                </BodyM>
+                <TitleS weight={400}>{ltvData.ltv.toFixed(2)}%</TitleS>
               </div>
               <Badge statusColor={LTVColor[ltvData.status]}>{LTVText[ltvData.status]}</Badge>
             </div>

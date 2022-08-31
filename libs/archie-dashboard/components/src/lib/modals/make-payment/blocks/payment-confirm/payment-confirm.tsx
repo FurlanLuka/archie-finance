@@ -4,14 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { ScheduleTransactionParams } from '@archie-webapps/shared/data-access/archie-api/payment/api/schedule-transaction';
 import { useScheduleTransaction } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
-import {
-  ButtonOutline,
-  ButtonPrimary,
-  SubtitleS,
-  ParagraphS,
-  ParagraphXS,
-  FormError,
-} from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, ButtonPrimary, TitleM, BodyL, BodyM, FormError } from '@archie-webapps/shared/ui/design-system';
 
 import { PaymentConfirmModalStyled } from './payment-confirm.styled';
 
@@ -50,13 +43,13 @@ export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({
 
   return (
     <PaymentConfirmModalStyled>
-      <ParagraphXS weight={800} className="balance-note">
+      <BodyM weight={800} className="balance-note">
         {t('payment_modal.payment_confirm.balance_note')}
-      </ParagraphXS>
-      <SubtitleS weight={400} className="balance-value">
+      </BodyM>
+      <TitleM weight={400} className="balance-value">
         ${scheduledTransactionParams.amount}
-      </SubtitleS>
-      <ParagraphS>{t('payment_modal.payment_confirm.time_note')}</ParagraphS>
+      </TitleM>
+      <BodyL>{t('payment_modal.payment_confirm.time_note')}</BodyL>
       {scheduleTransactionMutation.state === RequestState.ERROR && (
         <FormError>{t('payment_modal.payment_confirm.error')}</FormError>
       )}
@@ -64,7 +57,11 @@ export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({
         <ButtonPrimary maxWidth="100%" onClick={handleConfirm}>
           {t('btn_next')}
         </ButtonPrimary>
-        <ButtonOutline maxWidth="100%" onClick={handleBack} isDisabled={scheduleTransactionMutation.state === RequestState.LOADING}>
+        <ButtonOutline
+          maxWidth="100%"
+          onClick={handleBack}
+          isDisabled={scheduleTransactionMutation.state === RequestState.LOADING}
+        >
           {t('btn_back')}
         </ButtonOutline>
       </div>

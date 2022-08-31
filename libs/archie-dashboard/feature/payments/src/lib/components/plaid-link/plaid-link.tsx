@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useCreateLinkToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
-import { ParagraphM, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectableAccount } from '../interfaces';
 
@@ -45,10 +45,8 @@ export const PlaidLink: FC<PlaidLinkProps> = ({ onLinkSuccess }) => {
 
   return (
     <PlaidLinkStyled>
-      <ParagraphM weight={800} className="modal-title">
-        {t('dashboard_payment.plaid_connect.title')}
-      </ParagraphM>
-      <ParagraphXS className="modal-text">{t('dashboard_payment.plaid_connect.text')}</ParagraphXS>
+      <TitleS className="modal-title">{t('dashboard_payment.plaid_connect.title')}</TitleS>
+      <BodyM className="modal-text">{t('dashboard_payment.plaid_connect.text')}</BodyM>
       {getContent()}
     </PlaidLinkStyled>
   );

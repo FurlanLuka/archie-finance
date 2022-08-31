@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/interfaces';
 import { useDisconnectAccount } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-disconnect-account';
-import { ButtonOutline, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { ConnectedAccountStyled } from './connected-account.styled';
@@ -25,8 +25,8 @@ export const ConnectedAccount: FC<ConnectedAccountProps> = ({ account }) => {
 
   return (
     <ConnectedAccountStyled>
-      <ParagraphXS weight={700}>{account.name}</ParagraphXS>
-      <ParagraphXS className="account-details">...{account.mask}</ParagraphXS>
+      <BodyM weight={700}>{account.name}</BodyM>
+      <BodyM className="account-details">...{account.mask}</BodyM>
       <ButtonOutline
         small
         color={theme.textPositive}

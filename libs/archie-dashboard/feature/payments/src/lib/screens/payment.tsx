@@ -5,7 +5,7 @@ import { AvailableCredit, NextPayment, InterestRate } from '@archie-webapps/arch
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
-import { ButtonPrimary, InputRadio, SubtitleS, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, InputRadio, TitleM, BodyS } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectedAccounts } from '../components/connected-accounts/connected-accounts';
 import { PaymentFlowModal } from '../components/modals/payment-flow/payment-flow';
@@ -24,7 +24,7 @@ export const PaymentScreen: FC = () => {
 
   return (
     <PaymentScreenStyled>
-      <SubtitleS className="title">{t('dashboard_payment.title')}</SubtitleS>
+      <TitleM className="title">{t('dashboard_payment.title')}</TitleM>
       <div className="section-cards">
         <AvailableCredit />
         <div className="cards-group">
@@ -44,9 +44,9 @@ export const PaymentScreen: FC = () => {
         </ButtonPrimary>
         <InputRadio small>
           <input type="radio" value="auto_payments" checked />
-          <ParagraphXXS>
+          <BodyS>
             {t('dashboard_payment.auto_payments')} {t('on')} {/* TBD */}
-          </ParagraphXXS>
+          </BodyS>
         </InputRadio>
       </div>
       <ConnectedAccounts />

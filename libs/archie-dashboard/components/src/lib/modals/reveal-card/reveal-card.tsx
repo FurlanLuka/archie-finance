@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonOutline, ButtonPrimary, Modal, ParagraphM } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, ButtonPrimary, Modal, TitleS } from '@archie-webapps/shared/ui/design-system';
 
 import { RevealCardModalStyled } from './reveal-card.styled';
 
@@ -22,7 +22,7 @@ export const RevealCardModal: FC<RevealCardModalProps> = ({ isOpen, close, onCon
   return (
     <Modal isOpen={isOpen} close={close} maxWidth="400px">
       <RevealCardModalStyled>
-        <ParagraphM weight={800}>{t('dashboard_home.reveal_card_modal')}</ParagraphM>
+        <TitleS>{t('dashboard_home.reveal_card_modal')}</TitleS>
         <div className="btn-group">
           <ButtonOutline maxWidth="100%" onClick={close}>
             {t('btn_cancel')}

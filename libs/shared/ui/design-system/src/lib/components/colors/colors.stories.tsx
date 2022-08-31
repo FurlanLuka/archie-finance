@@ -5,7 +5,7 @@ import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
-import { ParagraphXS, ParagraphXXS } from '../typography/typography.styled';
+import { BodyS } from '../typography/typography.styled';
 
 export default {
   title: 'Theme/Colors',
@@ -90,8 +90,8 @@ export const Default: Story = () => (
             }}
           />
           <div>
-            <ParagraphXXS weight={700}>{item.name}</ParagraphXXS>
-            <ParagraphXXS color={theme.textSecondary}>{item.value}</ParagraphXXS>
+            <BodyS weight={700}>{item.name}</BodyS>
+            <BodyS color={theme.textSecondary}>{item.value}</BodyS>
           </div>
         </div>
       ))}

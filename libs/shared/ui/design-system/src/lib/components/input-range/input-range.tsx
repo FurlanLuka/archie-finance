@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { ParagraphS, ParagraphXS } from '../typography/typography.styled';
+import { BodyL, BodyM } from '../typography/typography.styled';
 
 import { InputRangeStyled } from './input-range.styled';
 
@@ -19,8 +19,8 @@ export const InputRange: FC<InputRangeProps> = ({ className, label, min, max, va
   return (
     <InputRangeStyled backgroundSize={getBackgroundSize()} className={className}>
       <div className="label">
-        <ParagraphXS weight={700}>{label}</ParagraphXS>
-        <ParagraphS>${value}</ParagraphS>
+        <BodyM weight={700}>{label}</BodyM>
+        <BodyL>${value}</BodyL>
       </div>
       <input
         type="range"

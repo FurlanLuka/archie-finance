@@ -13,7 +13,7 @@ import {
   TransactionStatus,
   TransactionType,
 } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-transactions';
-import { ParagraphS, ParagraphXS, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
+import { BodyL, BodyM, BodyS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { getRowDescription } from './table-fixture.helpers';
@@ -22,9 +22,7 @@ interface DateCellProps {
   date: string;
 }
 
-const DateCell: FC<DateCellProps> = ({ date }) => (
-  <ParagraphXS weight={500}>{format(new Date(date), 'M/d')}</ParagraphXS>
-);
+const DateCell: FC<DateCellProps> = ({ date }) => <BodyM weight={500}>{format(new Date(date), 'M/d')}</BodyM>;
 
 interface DescriptionCellProps {
   title: string;
@@ -33,10 +31,10 @@ interface DescriptionCellProps {
 
 const DescriptionCell: FC<DescriptionCellProps> = ({ title, code }) => (
   <>
-    <ParagraphS weight={500}>{title}</ParagraphS>
-    <ParagraphXXS color={theme.textSecondary} weight={500}>
+    <BodyL weight={500}>{title}</BodyL>
+    <BodyS color={theme.textSecondary} weight={500}>
       {code}
-    </ParagraphXXS>
+    </BodyS>
   </>
 );
 
@@ -44,15 +42,15 @@ interface TypeCellProps {
   type: TransactionType;
 }
 
-const TypeCell: FC<TypeCellProps> = ({ type }) => <ParagraphXS weight={500}>{TransactionTypeText[type]}</ParagraphXS>;
+const TypeCell: FC<TypeCellProps> = ({ type }) => <BodyM weight={500}>{TransactionTypeText[type]}</BodyM>;
 interface StatusCellProps {
   status: TransactionStatus;
 }
 
 const StatusCell: FC<StatusCellProps> = ({ status }) => (
-  <ParagraphXS color={TransactionStatusColor[status]} weight={500}>
+  <BodyM color={TransactionStatusColor[status]} weight={500}>
     {TransactionStatusText[status]}
-  </ParagraphXS>
+  </BodyM>
 );
 
 interface AmountCellProps {
@@ -63,9 +61,9 @@ const AmountCell: FC<AmountCellProps> = ({ amount }) => {
   const isPositive = amount > 0;
 
   return (
-    <ParagraphXS color={isPositive ? theme.textSuccess : theme.textDanger} weight={500}>
+    <BodyM color={isPositive ? theme.textSuccess : theme.textDanger} weight={500}>
       {isPositive ? '-' : '+'}${Math.abs(amount)}
-    </ParagraphXS>
+    </BodyM>
   );
 };
 

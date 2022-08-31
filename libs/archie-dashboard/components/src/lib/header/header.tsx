@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { dashboardNavItems } from '@archie-webapps/archie-dashboard/constants';
 import { useAuthenticatedSession } from '@archie-webapps/shared/data-access/session';
-import { Container, ParagraphS } from '@archie-webapps/shared/ui/design-system';
+import { Container, BodyL } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 
 import { HeaderStyled, MobileNav } from './header.styled';
@@ -53,7 +53,7 @@ export const Header: FC<HeaderProps> = ({ maxWidth }) => {
               <div className="icon">
                 <Icon name={item.icon} />
               </div>
-              <ParagraphS weight={700}>{item.name}</ParagraphS>
+              <BodyL weight={700}>{item.name}</BodyL>
             </div>
           ))}
         </div>

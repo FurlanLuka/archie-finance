@@ -8,14 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useCreateKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-create-kyc';
-import {
-  ButtonPrimary,
-  Card,
-  InputText,
-  ParagraphS,
-  ParagraphXS,
-  SubtitleM,
-} from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, Card, InputText, TitleL, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -78,26 +71,26 @@ export const KycScreen: FC = () => {
   return (
     <KycScreenStyled>
       <Card column alignItems="center" padding="1.5rem">
-        <SubtitleM className="title">{t('kyc_step.title')}</SubtitleM>
-        <ParagraphXS className="subtitle">{t('kyc_step.subtitle')}</ParagraphXS>
+        <TitleL className="title">{t('kyc_step.title')}</TitleL>
+        <BodyM className="subtitle">{t('kyc_step.subtitle')}</BodyM>
         <form onSubmit={onSubmit}>
           <div className="input-group">
             <InputText>
               {t('kyc_step.label.first_name')}
               <input placeholder={t('kyc_step.placeholder.first_name')} {...register('firstName')} />
               {errors.firstName?.message && (
-                <ParagraphXS className="error" color={theme.textDanger}>
+                <BodyM className="error" color={theme.textDanger}>
                   {t(errors.firstName.message)}
-                </ParagraphXS>
+                </BodyM>
               )}
             </InputText>
             <InputText>
               {t('kyc_step.label.last_name')}
               <input placeholder={t('kyc_step.placeholder.last_name')} {...register('lastName')} />
               {errors.lastName?.message && (
-                <ParagraphXS className="error" color={theme.textDanger}>
+                <BodyM className="error" color={theme.textDanger}>
                   {t(errors.lastName.message)}
-                </ParagraphXS>
+                </BodyM>
               )}
             </InputText>
           </div>
@@ -117,9 +110,9 @@ export const KycScreen: FC = () => {
               )}
             />
             {errors.dateOfBirth?.message && (
-              <ParagraphXS className="error" color={theme.textDanger}>
+              <BodyM className="error" color={theme.textDanger}>
                 {t(errors.dateOfBirth.message)}
-              </ParagraphXS>
+              </BodyM>
             )}
           </InputText>
           <InputText>
@@ -139,9 +132,9 @@ export const KycScreen: FC = () => {
                     options={{ types: ['address'] }}
                   />
                   {errors.address && (
-                    <ParagraphXS className="error" color={theme.textDanger}>
+                    <BodyM className="error" color={theme.textDanger}>
                       {!value ? t('kyc_step.error.required_field') : t(getAddressError(errors.address))}
-                    </ParagraphXS>
+                    </BodyM>
                   )}
                 </>
               )}
@@ -151,15 +144,15 @@ export const KycScreen: FC = () => {
             {t('kyc_step.label.apt_unit')}
             <input placeholder={t('kyc_step.placeholder.apt_unit')} {...register('aptUnit')} />
             {errors.aptUnit?.message && (
-              <ParagraphXS className="error" color={theme.textDanger}>
+              <BodyM className="error" color={theme.textDanger}>
                 {t(errors.aptUnit.message)}
-              </ParagraphXS>
+              </BodyM>
             )}
           </InputText>
           <InputText>
             {t('kyc_step.label.phone_number')}
             <div className="phone-number">
-              <ParagraphS weight={700}>+1</ParagraphS>
+              <BodyL weight={700}>+1</BodyL>
               <Controller
                 control={control}
                 name="phoneNumber"
@@ -175,9 +168,9 @@ export const KycScreen: FC = () => {
               />
             </div>
             {errors.phoneNumber?.message && (
-              <ParagraphXS className="error" color={theme.textDanger}>
+              <BodyM className="error" color={theme.textDanger}>
                 {t(errors.phoneNumber.message)}
-              </ParagraphXS>
+              </BodyM>
             )}
           </InputText>
           <InputText>
@@ -196,9 +189,9 @@ export const KycScreen: FC = () => {
               )}
             />
             {errors.ssn?.message && (
-              <ParagraphXS className="error" color={theme.textDanger}>
+              <BodyM className="error" color={theme.textDanger}>
                 {t(errors.ssn.message)}
-              </ParagraphXS>
+              </BodyM>
             )}
           </InputText>
           <hr className="divider" />

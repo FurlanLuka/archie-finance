@@ -6,7 +6,7 @@ import { RevealCardModal } from '@archie-webapps/archie-dashboard/components';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { CardsCredit } from '@archie-webapps/shared/data-access/archie-api/rize/api/get-cards-credit';
 import { useGetCardsCredit } from '@archie-webapps/shared/data-access/archie-api/rize/hooks/use-cards-credit';
-import { Card, Skeleton } from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton, BodyL, BodyS } from '@archie-webapps/shared/ui/design-system';
 
 import imgCard from '../../assets/card-placeholder.png';
 
@@ -53,22 +53,22 @@ export const ArchieCard: FC = () => {
           )}
           <StatusBadge status={cardsCreditData.status} />
           {/* <div className="card-data">
-            <ParagraphS weight={500}>{revealCardData ? '3443 6546 6457 8021' : '•••• •••• •••• 8021'}</ParagraphS>
+            <BodyL weight={500}>{revealCardData ? '3443 6546 6457 8021' : '•••• •••• •••• 8021'}</BodyL>
             <div className="card-data-group">
-              <ParagraphS weight={500}>
+              <BodyL weight={500}>
                 <span>EXP</span>
                 {revealCardData ? '09/12' : '••/••'}
-              </ParagraphS>
-              <ParagraphS weight={500}>
+              </BodyL>
+              <BodyL weight={500}>
                 <span>CVV</span>
                 {revealCardData ? '675' : '•••'}
-              </ParagraphS>
+              </BodyL>
             </div>
           </div>
           <div className="card-status">
-            <ParagraphXXS weight={800} color={theme.textLight}>
+            <BodyS weight={800} color={theme.textLight}>
               Active
-            </ParagraphXXS>
+            </BodyS>
           </div> */}
         </Card>
         <RevealCardModal

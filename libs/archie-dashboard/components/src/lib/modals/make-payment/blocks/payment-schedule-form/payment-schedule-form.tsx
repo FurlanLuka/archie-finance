@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { addDays, format, isValid, parse } from 'date-fns';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -10,9 +10,9 @@ import {
   FormError,
   InputRadio,
   InputText,
-  ParagraphS,
-  ParagraphXS,
-  ParagraphXXS,
+  BodyL,
+  BodyM,
+  BodyS,
 } from '@archie-webapps/shared/ui/design-system';
 
 import { PaymentOption } from './payment-schedule-form.interfaces';
@@ -71,14 +71,12 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
 
   return (
     <PaymentScheduleFormStyled>
-      <ParagraphXS weight={800} className="subtitle">
+      <BodyM weight={800} className="subtitle">
         {t('payment_modal.payment_schedule.payment_date')}
-      </ParagraphXS>
+      </BodyM>
       <form onSubmit={onSubmit}>
         <div className="payment-date">
-          <ParagraphXS>
-            {t('payment_modal.payment_schedule.due_date', { date: format(dueDate, 'MMMM dd, yyyy') })}
-          </ParagraphXS>
+          <BodyM>{t('payment_modal.payment_schedule.due_date', { date: format(dueDate, 'MMMM dd, yyyy') })}</BodyM>
           <InputText small>
             <Controller
               control={control}
@@ -107,14 +105,14 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
         </div>
         <InputRadio small>
           <input type="radio" value="auto_payments" checked disabled />
-          <ParagraphXXS>
+          <BodyS>
             {t('dashboard_payment.auto_payments')} {t('off')} {/* I guess temp */}
-          </ParagraphXXS>
+          </BodyS>
         </InputRadio>
         <div className="divider" />
-        <ParagraphXS weight={800} className="subtitle">
+        <BodyM weight={800} className="subtitle">
           {t('payment_modal.payment_schedule.payment_options')}
-        </ParagraphXS>
+        </BodyM>
 
         <div className="radio-group">
           <InputRadio>
@@ -124,18 +122,18 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
               {...register('paymentOption')}
               disabled={balanceOwed === 0}
             />
-            <ParagraphS className={balanceOwed === 0 ? 'disabled' : ''}>
+            <BodyL className={balanceOwed === 0 ? 'disabled' : ''}>
               {t('payment_modal.payment_schedule.balance_owed', { balanceOwed })}
-            </ParagraphS>
+            </BodyL>
           </InputRadio>
           <InputRadio>
             <input type="radio" value={PaymentOption.FULL_BALANCE} {...register('paymentOption')} />
-            <ParagraphS>{t('payment_modal.payment_schedule.full_balance', { fullBalance })}</ParagraphS>
+            <BodyL>{t('payment_modal.payment_schedule.full_balance', { fullBalance })}</BodyL>
           </InputRadio>
           <div className="input-group">
             <InputRadio>
               <input type="radio" value={PaymentOption.CUSTOM} {...register('paymentOption')} />
-              <ParagraphS>{t('payment_modal.payment_schedule.other_amount')}</ParagraphS>
+              <BodyL>{t('payment_modal.payment_schedule.other_amount')}</BodyL>
             </InputRadio>
             $
             <InputText small>

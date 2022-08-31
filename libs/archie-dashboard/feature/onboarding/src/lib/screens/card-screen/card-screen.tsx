@@ -13,14 +13,7 @@ import {
   QueryResponse,
   RequestState,
 } from '@archie-webapps/shared/data-access/archie-api/interface';
-import {
-  ButtonPrimary,
-  Container,
-  Card,
-  ParagraphXS,
-  SubtitleM,
-  Loader,
-} from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, Container, Card, Loader, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import imgCardReady from '../../../assets/img-card-ready.png';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
@@ -101,8 +94,8 @@ export const CardScreen: FC = () => {
     ) {
       return (
         <>
-          <SubtitleM className="title">{getTitle()}</SubtitleM>
-          <ParagraphXS className="subtitle">
+          <TitleL className="title">{getTitle()}</TitleL>
+          <BodyM className="subtitle">
             {stage === Stage.COMPLETE && (
               <Trans
                 components={{ br: <br /> }}
@@ -111,7 +104,7 @@ export const CardScreen: FC = () => {
                 card_step.subtitle
               </Trans>
             )}
-          </ParagraphXS>
+          </BodyM>
           <div className="image">
             <img src={imgCardReady} alt={t('card_step.img_alt')} />
           </div>

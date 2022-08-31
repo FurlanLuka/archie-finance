@@ -6,7 +6,6 @@ interface NextPaymentChartStyledProps {
 
 export const NextPaymentChartStyled = styled.div<NextPaymentChartStyledProps>`
   width: 100%;
-  margin-bottom: 0.75rem;
 
   input {
     display: block;

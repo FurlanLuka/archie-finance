@@ -7,6 +7,7 @@ export * from './lib/cards/next-payment/next-payment'
 export * from './lib/charts/collateral-value/collateral-value'
 export * from './lib/charts/loan-to-value/loan-to-value';
 export * from './lib/charts/next-payment/next-payment';
+export * from './lib/charts/next-payment/next-payment.styled';
 export * from './lib/collateral-asset-select/collateral-asset-select';
 export * from './lib/error-screen/error-screen';
 export * from './lib/header/header';

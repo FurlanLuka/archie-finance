@@ -8,7 +8,7 @@ import { useGetEmailVerification } from '@archie-webapps/shared/data-access/arch
 import { usePollEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
 import { useResendEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
 import { useAuthenticatedSession } from '@archie-webapps/shared/data-access/session';
-import { ButtonPrimary, Card, SubtitleM, ParagraphXS, Loader } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, Card, Loader, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { VerifyEmailScreenStyled } from './verify-email-screen.styled';
@@ -75,17 +75,17 @@ export const VerifyEmailScreen: FC = () => {
     if (getEmailVerificationResponse.state === RequestState.SUCCESS) {
       return (
         <>
-          <SubtitleM className="title">{t('verify_email_step.title')}</SubtitleM>
-          <ParagraphXS className="subtitle">
+          <TitleL className="title">{t('verify_email_step.title')}</TitleL>
+          <BodyM className="subtitle">
             {t('verify_email_step.subtitle', { email: getEmailVerificationResponse.data.email })}
-          </ParagraphXS>
-          <ParagraphXS className="text">{t('verify_email_step.text_1')}</ParagraphXS>
+          </BodyM>
+          <BodyM className="text">{t('verify_email_step.text_1')}</BodyM>
           <div className="link">
-            <ParagraphXS>{t('verify_email_step.text_2')}</ParagraphXS>
+            <BodyM>{t('verify_email_step.text_2')}</BodyM>
             <button className="logout-btn" onClick={logout}>
-              <ParagraphXS weight={700} color={theme.textPositive}>
+              <BodyM weight={700} color={theme.textPositive}>
                 {t('verify_email_step.logout_btn')}
-              </ParagraphXS>
+              </BodyM>
             </button>
           </div>
           <hr className="divider" />

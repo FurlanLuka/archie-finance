@@ -6,7 +6,7 @@ import { TransactionsTable } from '@archie-webapps/archie-dashboard/components';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetTransactions } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-transactions';
 import { ButtonOutline } from '@archie-webapps/shared/ui/design-system';
-import { Card, Loader, ParagraphM } from '@archie-webapps/shared/ui/design-system';
+import { Card, Loader, TitleS } from '@archie-webapps/shared/ui/design-system';
 
 import { HistoryStyled } from './history.styled';
 
@@ -38,9 +38,7 @@ export const HistoryScreen: FC = () => {
     if (getTransactionsResponse.state === RequestState.SUCCESS) {
       return (
         <>
-          <ParagraphM weight={800} className="title">
-            {t('dashboard_history.title')}
-          </ParagraphM>
+          <TitleS className="title">{t('dashboard_history.title')}</TitleS>
           <TransactionsTable data={data} />
           {getTransactionsResponse.hasNextPage && (
             <ButtonOutline small className="load-btn" onClick={getTransactionsResponse.fetchNextPage}>
@@ -54,9 +52,7 @@ export const HistoryScreen: FC = () => {
     if (getTransactionsResponse.state === RequestState.LOADING_NEXT_PAGE) {
       return (
         <>
-          <ParagraphM weight={800} className="title">
-            {t('dashboard_history.title')}
-          </ParagraphM>
+          <TitleS className="title">{t('dashboard_history.title')}</TitleS>
           <TransactionsTable data={data} />
           <ButtonOutline small isLoading className="load-btn">
             {t('dashboard_history.btn_load_more')}

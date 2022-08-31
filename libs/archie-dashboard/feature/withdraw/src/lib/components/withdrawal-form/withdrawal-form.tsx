@@ -9,7 +9,7 @@ import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 import { useCreateWithdrawal } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-create-withdrawal';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { ButtonOutline, ButtonPrimary, InputText, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, ButtonPrimary, InputText, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/successfull-withdrawal';
@@ -104,28 +104,28 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
             {...register('withdrawAmount', { valueAsNumber: true })}
           />
           {errors.withdrawAmount?.message && (
-            <ParagraphXS className="error" color={theme.textDanger}>
+            <BodyM className="error" color={theme.textDanger}>
               {t(errors.withdrawAmount.message, { maxAmount })}
-            </ParagraphXS>
+            </BodyM>
           )}
           {withdrawalAmount > 0 && withdrawalAmount <= maxAmount && (
-            <ParagraphXS color={theme.textSecondary} weight={500} className="credit-limit">
+            <BodyM color={theme.textSecondary} weight={500} className="credit-limit">
               {t('dashboard_withdraw.form.credit_change', {
                 initialCollateralValue: initialCollateralValue.toFixed(2),
                 initialCreditValue: initialCreditValue.toFixed(2),
                 updatedCollateralValue: updatedCollateralValue.toFixed(2),
                 updatedCreditValue: updatedCreditValue.toFixed(2),
               })}
-            </ParagraphXS>
+            </BodyM>
           )}
         </InputText>
         <div className="address">
           <div className="address-title">
-            <ParagraphXS weight={700}>{t('dashboard_withdraw.address_title', { currentAsset })}</ParagraphXS>
+            <BodyM weight={700}>{t('dashboard_withdraw.address_title', { currentAsset })}</BodyM>
           </div>
           <div className="address-input">
             <label htmlFor="withdrawAddress">
-              <ParagraphXS weight={700}>{t('dashboard_withdraw.form.address_label', { currentAsset })}</ParagraphXS>
+              <BodyM weight={700}>{t('dashboard_withdraw.form.address_label', { currentAsset })}</BodyM>
             </label>
             <input
               id="withdrawAddress"
@@ -134,9 +134,9 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
               {...register('withdrawAddress')}
             />
             {errors.withdrawAddress?.message && (
-              <ParagraphXS className="error" color={theme.textDanger}>
+              <BodyM className="error" color={theme.textDanger}>
                 {t(errors.withdrawAddress.message)}
-              </ParagraphXS>
+              </BodyM>
             )}
           </div>
         </div>
