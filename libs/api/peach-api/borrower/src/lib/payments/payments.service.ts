@@ -14,7 +14,10 @@ import {
 } from './payments.dto';
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
-import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import {
+  CreditBalanceUpdatedPayload,
+  PaymentType,
+} from '@archie/api/peach-api/data-transfer-objects';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
@@ -93,6 +96,7 @@ export class PaymentsService {
         ...credit,
         userId: payment.personExternalId,
         paymentDetails: {
+          type: PaymentType.payment,
           amount: payment.amount,
           asset: payment.currency,
         },
@@ -145,6 +149,7 @@ export class PaymentsService {
         ...credit,
         userId: transaction.userId,
         paymentDetails: {
+          type: PaymentType.liquidation,
           amount: transaction.amount,
           asset: transaction.asset,
         },

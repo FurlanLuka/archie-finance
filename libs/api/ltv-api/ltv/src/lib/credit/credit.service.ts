@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LessThan, Repository } from 'typeorm';
 import { LtvCredit } from '../credit.entity';
-import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import {
+  CreditBalanceUpdatedPayload,
+  PaymentType,
+} from '@archie/api/peach-api/data-transfer-objects';
 import { LtvCollateral } from '../collateral.entity';
 import { CardActivatedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { DateTime } from 'luxon';
@@ -31,18 +34,21 @@ export class CreditService {
         calculatedAt: credit.calculatedAt,
       },
     );
-    await this.ltvCollateralRepository
-      .createQueryBuilder('LtvCollateral')
-      .update(LtvCollateral)
-      .where('userId =: userId AND asset =: asset', {
-        userId: credit.userId,
-        asset: credit.paymentDetails.asset,
-      })
-      .set({
-        amount: () => '"amount" -: amount',
-      })
-      .setParameter('amount', credit.paymentDetails.amount)
-      .execute();
+
+    if (credit.paymentDetails.type === PaymentType.liquidation) {
+      await this.ltvCollateralRepository
+        .createQueryBuilder('LtvCollateral')
+        .update(LtvCollateral)
+        .where('userId =: userId AND asset =: asset', {
+          userId: credit.userId,
+          asset: credit.paymentDetails.asset,
+        })
+        .set({
+          amount: () => '"amount" -: amount',
+        })
+        .setParameter('amount', credit.paymentDetails.amount)
+        .execute();
+    }
 
     await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(credit.userId);
   }

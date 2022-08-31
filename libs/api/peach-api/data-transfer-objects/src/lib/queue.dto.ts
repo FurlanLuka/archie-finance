@@ -1,3 +1,8 @@
+export enum PaymentType {
+  liquidation = 'liquidation',
+  payment = 'payment',
+}
+
 export class CreditBalanceUpdatedPayload {
   userId: string;
   availableCreditAmount: number;
@@ -5,6 +10,7 @@ export class CreditBalanceUpdatedPayload {
   utilizationAmount: number;
   calculatedAt: string;
   paymentDetails: {
+    type: PaymentType;
     asset: string;
     amount: number;
   };
