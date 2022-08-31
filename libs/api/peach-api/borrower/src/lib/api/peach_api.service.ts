@@ -92,6 +92,7 @@ export class PeachApiService {
     personId: string,
     accountId: string,
     publicToken: string,
+    name: string,
   ): Promise<PaymentInstrument> {
     const response = await this.peachClient.post(
       `/people/${personId}/payment-instruments`,
@@ -99,6 +100,8 @@ export class PeachApiService {
         instrumentType: 'plaid',
         accessToken: publicToken,
         accountIds: [accountId],
+        accountHolderType: 'personal',
+        accountHolderName: name,
       },
     );
 
