@@ -1,6 +1,7 @@
 export enum PaymentType {
   liquidation = 'liquidation',
   payment = 'payment',
+  purchase = 'purchase',
 }
 
 export class CreditBalanceUpdatedPayload {
