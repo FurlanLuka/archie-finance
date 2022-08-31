@@ -1,7 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { LtvCollateral } from '../collateral.entity';
-import { LtvCredit } from '../credit.entity';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { LtvStatus } from '../ltv/ltv.dto';
 import { CollateralValueUtilService } from './collateral_value.service';
 import { CreditAssets } from './utils.interfaces';
