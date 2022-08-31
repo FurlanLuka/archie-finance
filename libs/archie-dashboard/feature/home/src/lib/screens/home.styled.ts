@@ -47,7 +47,7 @@ export const HomeStyled = styled.div`
       grid-auto-rows: 264px;
 
       @media (max-width: ${breakpoints.screenMD}) {
-        grid-template-columns: repeat(auto-fill, 420px);
+        grid-template-columns: repeat(auto-fill, 70%);
       }  
 
       @media (max-width: ${breakpoints.screenSM}) {
@@ -59,23 +59,16 @@ export const HomeStyled = styled.div`
     &.two {
       grid-template-columns: repeat(3, 1fr);
       grid-auto-rows: 184px;
+
+      @media (max-width: ${breakpoints.screenMD}) {
+        grid-template-columns: repeat(auto-fill, 70%);
+      }  
+
+      @media (max-width: ${breakpoints.screenSM}) {
+        grid-template-columns: 100%;
+      }  
     }
   }
-
-  /* .section-cards {
-    display: flex;
-    gap: 2rem;
-    margin-bottom: 2rem;
-
-    @media (max-width: ${breakpoints.screenMD}) {
-      flex-wrap: wrap;
-      max-width: 70%;
-    }
-
-    @media (max-width: ${breakpoints.screenSM}) {
-      max-width: 100%;
-    }
-  } */
 
   ${NextPaymentChartStyled} {
     margin-bottom: 0.75rem;
