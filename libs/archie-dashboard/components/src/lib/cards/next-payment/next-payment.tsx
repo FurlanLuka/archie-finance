@@ -9,8 +9,9 @@ import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api
 import {
   CREDIT_LINE_NOT_FOUND_ERROR,
   MISSING_PAYMENT_INFO_ERROR,
+  UserObligations,
 } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { OBLIGATION_DATE_FORMAT } from '@archie-webapps/shared/data-access/archie-api/payment/payment.constants';
 
 interface NextPaymentProps {
@@ -19,9 +20,10 @@ interface NextPaymentProps {
 
 export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
   const { t } = useTranslation();
-  const getObligationsResponse = useGetObligations();
 
   const [makePaymentModalOpen, setMakePaymentModalOpen] = useState(false);
+
+  const getObligationsResponse: QueryResponse<UserObligations> = useGetObligations();
 
   const getContent = () => {
     if (getObligationsResponse.state === RequestState.LOADING) {
