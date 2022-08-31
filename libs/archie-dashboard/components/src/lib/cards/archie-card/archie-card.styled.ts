@@ -6,6 +6,10 @@ export const ArchieCardStyled = styled.div`
 
   .archie-card {
     height: 100%;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      width: 360px;
+    }  
   }
 
   .card-data {

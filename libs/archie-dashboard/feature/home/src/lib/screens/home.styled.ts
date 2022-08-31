@@ -45,6 +45,15 @@ export const HomeStyled = styled.div`
     &.one {
       grid-template-columns: 420px 1fr;
       grid-auto-rows: 264px;
+
+      @media (max-width: ${breakpoints.screenMD}) {
+        grid-template-columns: repeat(auto-fill, 420px);
+      }  
+
+      @media (max-width: ${breakpoints.screenSM}) {
+        grid-template-columns: 100%;
+        grid-auto-rows: 220px 448px;
+      }
     }
 
     &.two {
