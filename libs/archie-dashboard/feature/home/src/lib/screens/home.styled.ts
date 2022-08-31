@@ -38,6 +38,22 @@ export const HomeStyled = styled.div`
   }
 
   .section-cards {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 2rem;
+
+    &.one {
+      grid-template-columns: 420px 1fr;
+      grid-auto-rows: 264px;
+    }
+
+    &.two {
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 184px;
+    }
+  }
+
+  /* .section-cards {
     display: flex;
     gap: 2rem;
     margin-bottom: 2rem;
@@ -50,7 +66,7 @@ export const HomeStyled = styled.div`
     @media (max-width: ${breakpoints.screenSM}) {
       max-width: 100%;
     }
-  }
+  } */
 
   ${NextPaymentChartStyled} {
     margin-bottom: 0.75rem;

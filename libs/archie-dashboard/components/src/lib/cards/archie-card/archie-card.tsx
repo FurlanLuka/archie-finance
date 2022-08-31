@@ -39,8 +39,8 @@ export const ArchieCard: FC = () => {
     return (
       <ArchieCardStyled>
         <Card
-          backgroundImage={`data:image/jpeg;base64,${cardsCreditData.image}`}
           className="archie-card clickable"
+          backgroundImage={`data:image/jpeg;base64,${cardsCreditData.image}`}
           onClick={() => (revealCardData ? setRevealCardModalOpen(false) : setRevealCardModalOpen(true))}
         >
           {/* Temp, just for Rize */}
