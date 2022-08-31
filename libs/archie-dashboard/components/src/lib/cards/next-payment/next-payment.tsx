@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { format, parse } from 'date-fns';
+import { format } from 'date-fns';
 
 import { NextPaymentChart, MakePaymentModal } from '@archie-webapps/archie-dashboard/components';
 import { ButtonOutline, Card, Skeleton, TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
@@ -12,7 +12,6 @@ import {
   UserObligations,
 } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { OBLIGATION_DATE_FORMAT } from '@archie-webapps/shared/data-access/archie-api/payment/payment.constants';
 
 interface NextPaymentProps {
   withBtn?: boolean;
@@ -55,7 +54,7 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
     }
 
     if (getObligationsResponse.state === RequestState.SUCCESS) {
-      const dueDateParsed = parse(getObligationsResponse.data.dueDate, OBLIGATION_DATE_FORMAT, new Date());
+      const { dueDate } = getObligationsResponse.data;
 
       return (
         <Card column alignItems="flex-start" padding="1.5rem">
@@ -63,9 +62,9 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
             {t('next_payment_card.title')}
           </BodyM>
           <TitleM weight={400} className="card-info">
-            {format(dueDateParsed, 'MMMM do')}
+            {format(dueDate, 'MMM, do')}
           </TitleM>
-          <NextPaymentChart dueDate={dueDateParsed} />
+          <NextPaymentChart dueDate={dueDate} />
           {withBtn && (
             <div className="btn-group">
               <ButtonOutline small onClick={() => setMakePaymentModalOpen(true)}>
