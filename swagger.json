@@ -603,6 +603,9 @@
                 }
               }
             }
+          },
+          "500": {
+            "description": "COLLATERAL_NOT_FOUND"
           }
         },
         "security": [
@@ -1149,6 +1152,9 @@
           "202": {
             "description": ""
           },
+          "400": {
+            "description": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE"
+          },
           "404": {
             "description": "AMOUNT_EXCEEDS_AVAILABLE_BALANCE"
           }
@@ -1234,6 +1240,32 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ObligationsResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/loan_interests": {
+      "get": {
+        "operationId": "InterestsController_getInterests",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InterestsDto"
                 }
               }
             }
@@ -1513,7 +1545,8 @@
             "type": "string"
           },
           "settled_at": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "created_at": {
             "type": "string"
@@ -2115,6 +2148,47 @@
           "paymentInstrumentId"
         ]
       },
+      "PurchaseDetailsDto": {
+        "type": "object",
+        "properties": {
+          "transactionType": {
+            "nullable": true,
+            "type": "string",
+            "enum": [
+              "atm_withdrawal",
+              "card_purchase",
+              "card_refund",
+              "dispute",
+              "external_transfer",
+              "fee",
+              "credit",
+              "internal_transfer",
+              "other",
+              "reversed_transfer",
+              "third_party_transfer"
+            ]
+          },
+          "mcc": {
+            "type": "string"
+          },
+          "merchantLocation": {
+            "type": "string"
+          },
+          "merchantName": {
+            "type": "string"
+          },
+          "merchantNumber": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "transactionType",
+          "mcc",
+          "merchantLocation",
+          "merchantName",
+          "merchantNumber"
+        ]
+      },
       "PurchasesResponseDataDto": {
         "type": "object",
         "properties": {
@@ -2146,7 +2220,8 @@
             "type": "number"
           },
           "denialReason": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "timestamps": {
             "type": "object",
@@ -2163,43 +2238,7 @@
             }
           },
           "purchaseDetails": {
-            "type": "object",
-            "properties": {
-              "mcc": {
-                "required": true,
-                "type": "string"
-              },
-              "merchantLocation": {
-                "required": true,
-                "type": "string"
-              },
-              "merchantName": {
-                "required": true,
-                "type": "string"
-              },
-              "merchantNumber": {
-                "required": true,
-                "type": "string"
-              },
-              "transactionType": {
-                "required": true,
-                "nullable": true,
-                "enum": [
-                  "atm_withdrawal",
-                  "card_purchase",
-                  "card_refund",
-                  "dispute",
-                  "external_transfer",
-                  "fee",
-                  "credit",
-                  "internal_transfer",
-                  "other",
-                  "reversed_transfer",
-                  "third_party_transfer"
-                ],
-                "type": "string"
-              }
-            }
+            "$ref": "#/components/schemas/PurchaseDetailsDto"
           }
         },
         "required": [
@@ -2376,6 +2415,21 @@
           "dueBalances",
           "statementObligations",
           "futureObligations"
+        ]
+      },
+      "InterestsDto": {
+        "type": "object",
+        "properties": {
+          "aprNominal": {
+            "type": "number"
+          },
+          "aprEffective": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "aprNominal",
+          "aprEffective"
         ]
       }
     },

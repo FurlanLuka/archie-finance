@@ -4,6 +4,7 @@ import { PaymentInstrumentModule } from './payment-instrument/payment_instrument
 import { PaymentsModule } from './payments/payments.module';
 import { PurchasesModule } from './purchases/purchases.module';
 import { ObligationsModule } from './obligations/obligations.module';
+import { InterestsModule } from './interests/interests.module';
 
 @Module({
   controllers: [],
@@ -13,6 +14,7 @@ import { ObligationsModule } from './obligations/obligations.module';
     PaymentsModule,
     PurchasesModule,
     ObligationsModule,
+    InterestsModule,
   ],
   providers: [],
   exports: [],

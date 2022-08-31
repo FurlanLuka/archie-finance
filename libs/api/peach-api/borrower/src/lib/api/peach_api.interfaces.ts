@@ -12,6 +12,10 @@ export enum IdentityType {
   FEIN = 'FEIN',
 }
 
+export interface PeachResponseData<T> {
+  data: T;
+}
+
 export type PeachResponse = Record<string, unknown>;
 
 export interface Person extends PeachResponse {
@@ -196,6 +200,10 @@ export interface HomeAddress extends PeachResponse {
 
 export interface CreditLine extends PeachResponse {
   id: string;
+  atOrigination: {
+    aprEffective: number | null;
+    aprNominal: number | null;
+  };
 }
 
 export interface Draw extends PeachResponse {

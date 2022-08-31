@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 export class BorrowerNotFoundError extends NotFoundException {
   constructor() {
@@ -24,7 +24,7 @@ export class PaymentInstrumentNotFoundError extends NotFoundException {
   }
 }
 
-export class AmountExceedsOutstandingBalanceError extends NotFoundException {
+export class AmountExceedsOutstandingBalanceError extends BadRequestException {
   constructor() {
     super('AMOUNT_EXCEEDS_OUTSTANDING_BALANCE');
   }
