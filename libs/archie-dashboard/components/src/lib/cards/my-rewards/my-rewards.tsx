@@ -8,7 +8,7 @@ export const MyRewards: FC = () => {
   const { t } = useTranslation();
 
   return (
-    <Card column alignItems="flex-start" padding="1.5rem">
+    <Card column alignItems="flex-start" justifyContent="space-between" padding="1.5rem">
       <BodyM weight={700} className="card-title">
         {t('my_rewards_card.title')}
       </BodyM>
