@@ -1,10 +1,10 @@
 export class LtvUpdatedPayload {
   userId: string;
   ltv: number;
-  calculatedOn: LtvCalculationInfo;
+  calculatedOn: LtvCalculatedOn;
 }
 
-export class LtvCalculationInfo {
+export class LtvCalculatedOn {
   collateral: CollateralWithPrice[];
   collateralBalance: number;
   utilizedCreditAmount: number;
