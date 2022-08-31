@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { BodyM } from '@archie-webapps/shared/ui/design-system';
 import { Icon, IconName } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -16,10 +16,10 @@ export const CollateralCurrency: FC<CollateralCurrencyProps> = ({ icon, name, sh
   <CollateralCurrencyStyled>
     <div className="icon">{icon && <Icon name={icon} />}</div>
     <div className="name">
-      <ParagraphXS weight={700}>{name}</ParagraphXS>
-      <ParagraphXS weight={500} color={theme.textSecondary}>
+      <BodyM weight={700}>{name}</BodyM>
+      <BodyM weight={500} color={theme.textSecondary}>
         {short}
-      </ParagraphXS>
+      </BodyM>
     </div>
   </CollateralCurrencyStyled>
 );

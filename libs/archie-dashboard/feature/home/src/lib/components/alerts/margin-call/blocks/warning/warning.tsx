@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonLight, ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonLight, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 export const Warning: FC = () => {
@@ -13,10 +13,10 @@ export const Warning: FC = () => {
 
   return (
     <>
-      <ParagraphS weight={800} color={theme.textLight}>
+      <BodyL weight={800} color={theme.textLight}>
         {t('close_to_margin_call_alert.title')}
-      </ParagraphS>
-      <ParagraphXS color={theme.textLight}>{t('close_to_margin_call_alert.text')}</ParagraphXS>
+      </BodyL>
+      <BodyM color={theme.textLight}>{t('close_to_margin_call_alert.text')}</BodyM>
       <ButtonLight color={theme.textWarning} onClick={handleClick}>
         {t('close_to_margin_call_alert.btn')}
       </ButtonLight>

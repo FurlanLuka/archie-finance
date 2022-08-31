@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CollateralAsset, CollateralAssets } from '@archie-webapps/shared/constants';
-import { CollateralCurrency, ParagraphXS, Select, SelectOption } from '@archie-webapps/shared/ui/design-system';
+import { CollateralCurrency, Select, SelectOption, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import { CollateralAssetStyled } from './collateral-asset-select.styled';
 
@@ -32,9 +32,9 @@ export const CollateralAssetSelect: FC<InputSelectProps> = ({ selectedAsset, set
 
   return (
     <CollateralAssetStyled>
-      <ParagraphXS className="select-label" weight={700}>
+      <BodyM className="select-label" weight={700}>
         {t('collateralization_step.inputs.input_select_label')}
-      </ParagraphXS>
+      </BodyM>
       <Select id="collateral-asset" header={header} onChange={handleSelect}>
         {options}
       </Select>

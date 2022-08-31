@@ -13,7 +13,7 @@ import {
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { KycResponse } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
 import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
-import { ParagraphXS, SubtitleS } from '@archie-webapps/shared/ui/design-system';
+import { TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { MarginCallAlert } from '../components/alerts/margin-call/margin-call';
@@ -38,10 +38,10 @@ export const HomeScreen: FC = () => {
 
       return (
         <>
-          <SubtitleS className="title">{t('dashboard_home.title', { name: kycData.firstName })}</SubtitleS>
-          <ParagraphXS color={theme.textSecondary} className="subtitle">
+          <TitleM className="title">{t('dashboard_home.title', { name: kycData.firstName })}</TitleM>
+          <BodyM color={theme.textSecondary} className="subtitle">
             {t('dashboard_home.subtitle', { date: getDate() })}
-          </ParagraphXS>
+          </BodyM>
         </>
       );
     }

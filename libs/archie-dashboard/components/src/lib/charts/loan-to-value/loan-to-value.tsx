@@ -2,7 +2,7 @@ import { ResponsivePie } from '@nivo/pie';
 import { FC } from 'react';
 
 import { LTVStatus, LTVText, LTVColor } from '@archie-webapps/shared/constants';
-import { Badge, SubtitleM, ParagraphXXS } from '@archie-webapps/shared/ui/design-system';
+import { Badge, TitleL, BodyS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { LoanToValueChartStyled } from './loan-to-value.styled';
@@ -39,10 +39,10 @@ export const LoanToValueChart: FC<LoanToValueChartProps> = ({ ltv, status }) => 
         animate={true}
       />
       <div className="centered-metrics">
-        <ParagraphXXS weight={700}>Loan-to-value</ParagraphXXS>
-        <SubtitleM weight={400} color={LTVColor[status]}>
+        <BodyS weight={700}>Loan-to-value</BodyS>
+        <TitleL weight={400} color={LTVColor[status]}>
           {ltv.toFixed(2)}%
-        </SubtitleM>
+        </TitleL>
         <Badge statusColor={LTVColor[status]} className="status-label">
           {LTVText[status]}
         </Badge>

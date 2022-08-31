@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useConnectAccount } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-connect-account';
-import { ButtonPrimary, ParagraphM, ParagraphXS, Select, SelectOption } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, Select, SelectOption, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectableAccount } from '../../../interfaces';
 import { ConnectableAccountItem } from '../connectable-account-item/connectable-account-item';
@@ -44,7 +44,7 @@ export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({ ac
   const header = selectedAccount ? (
     <ConnectableAccountItem account={selectedAccount} />
   ) : (
-    <ParagraphXS weight={700}>{t('dashboard_payment.account_select.empty')}</ParagraphXS>
+    <BodyM weight={700}>{t('dashboard_payment.account_select.empty')}</BodyM>
   );
 
   const options = useMemo(() => {
@@ -57,9 +57,7 @@ export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({ ac
 
   return (
     <ConnectableAccountSelectStyled>
-      <ParagraphM weight={800} className="modal-title">
-        {t('dashboard_payment.account_select.label')}
-      </ParagraphM>
+      <TitleS className="modal-title">{t('dashboard_payment.account_select.label')}</TitleS>
       <div className="modal-select">
         <Select id="accounts" header={header} onChange={(account: ConnectableAccount) => setSelectedAccount(account)}>
           {options}

@@ -7,7 +7,7 @@ import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { useGetDepositAddress } from '@archie-webapps/shared/data-access/archie-api/deposit_address/hooks/use-get-deposit-address';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Skeleton, ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { Skeleton, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { QR_CODE } from '@archie-webapps/shared/ui/theme';
 import { theme } from '@archie-webapps/shared/ui/theme';
@@ -35,15 +35,15 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
     <DepositAddressStyled>
       {getDepositAddressResponse.state === RequestState.SUCCESS ? (
         <>
-          <ParagraphXS weight={700}>
+          <BodyM weight={700}>
             {t('collateralization_step.address.title', { required_collateral: `${assetAmount} ${assetInfo.short}` })}
-          </ParagraphXS>
+          </BodyM>
           <div className="address-copy">
-            <ParagraphS id="address">
+            <BodyL id="address">
               <span data-tip="Click to copy" onClick={() => copyToClipboard('address', getDepositAddress())}>
                 {getDepositAddress()}
               </span>
-            </ParagraphS>
+            </BodyL>
             <ReactTooltip
               textColor={theme.tooltipText}
               backgroundColor={theme.tooltipBackground}
@@ -58,19 +58,19 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
             <QRCode value={getDepositAddress() ?? ''} size={QR_CODE} />
             <div className="info">
               <div className="info-group">
-                <ParagraphXS>
+                <BodyM>
                   <Trans components={{ b: <b /> }} values={{ selected_collateral_asset: assetInfo.short }}>
                     collateralization_step.address.info_text_1
                   </Trans>
-                </ParagraphXS>
+                </BodyM>
               </div>
               <div className="info-group">
-                <ParagraphXS>
+                <BodyM>
                   <Trans components={{ b: <b /> }} values={{ selected_collateral_asset: assetInfo.short }}>
                     collateralization_step.address.info_text_2
                   </Trans>
-                </ParagraphXS>
-                <ParagraphXS className="info-link">
+                </BodyM>
+                <BodyM className="info-link">
                   {t('collateralization_step.address.info_link_1')}
                   <a
                     href={`${assetInfo.url}/${getDepositAddress()}`}
@@ -81,7 +81,7 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
                     {t('collateralization_step.address.info_link_2')}
                     <Icon name="external-link" fill={theme.textHighlight} className="info-link-icon" />
                   </a>
-                </ParagraphXS>
+                </BodyM>
               </div>
             </div>
           </div>
@@ -90,25 +90,25 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
 
           <div className="terms">
             <div className="terms-title">
-              <ParagraphXS weight={700}>{t('collateralization_step.terms.title')}</ParagraphXS>
+              <BodyM weight={700}>{t('collateralization_step.terms.title')}</BodyM>
             </div>
             <ul className="terms-list">
               <li className="terms-list-item">
-                <ParagraphXS>
+                <BodyM>
                   <Trans components={{ b: <b /> }} values={{ selected_collateral_asset: assetInfo.loan_to_value }}>
                     collateralization_step.terms.first
                   </Trans>
-                </ParagraphXS>
+                </BodyM>
               </li>
               <li className="terms-list-item">
-                <ParagraphXS>{t('collateralization_step.terms.second')}</ParagraphXS>
+                <BodyM>{t('collateralization_step.terms.second')}</BodyM>
               </li>
               <li className="terms-list-item">
-                <ParagraphXS>
+                <BodyM>
                   <Trans components={{ br: <br /> }} values={{ selected_collateral_asset: assetInfo.loan_to_value }}>
                     collateralization_step.terms.third
                   </Trans>
-                </ParagraphXS>
+                </BodyM>
               </li>
             </ul>
           </div>

@@ -1,14 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  ButtonOutline,
-  ButtonPrimary,
-  ParagraphM,
-  SubtitleS,
-  ParagraphS,
-  ParagraphXS,
-} from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, ButtonPrimary, TitleM, TitleS, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import { PaymentConfirmModalStyled } from './payment-confirm.styled';
 
@@ -36,19 +29,17 @@ export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({ onConfirm, o
 
   return (
     <PaymentConfirmModalStyled>
-      <ParagraphM weight={800} className="title">
-        {t('dashboard_home.payment_confirm_modal.title')}
-      </ParagraphM>
-      <ParagraphS weight={600}>{t('dashboard_home.payment_confirm_modal.credit_for', { name })}</ParagraphS>
-      <ParagraphXS>{t('dashboard_home.payment_confirm_modal.last_payment', { lastPayment, date })}</ParagraphXS>
+      <TitleS className="title">{t('dashboard_home.payment_confirm_modal.title')}</TitleS>
+      <BodyL weight={600}>{t('dashboard_home.payment_confirm_modal.credit_for', { name })}</BodyL>
+      <BodyM>{t('dashboard_home.payment_confirm_modal.last_payment', { lastPayment, date })}</BodyM>
       <div className="divider" />
-      <ParagraphXS weight={800} className="balance-note">
+      <BodyM weight={800} className="balance-note">
         {t('dashboard_home.payment_confirm_modal.balance_note')}
-      </ParagraphXS>
-      <SubtitleS weight={400} className="balance-value">
+      </BodyM>
+      <TitleM weight={400} className="balance-value">
         ${newPayment}
-      </SubtitleS>
-      <ParagraphS>{t('dashboard_home.payment_confirm_modal.time_note')}</ParagraphS>
+      </TitleM>
+      <BodyL>{t('dashboard_home.payment_confirm_modal.time_note')}</BodyL>
       <div className="btn-group">
         <ButtonPrimary maxWidth="100%" onClick={handleConfirm}>
           {t('btn_next')}

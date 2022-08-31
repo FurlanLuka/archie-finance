@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonPrimary, Modal, ParagraphM, ParagraphS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, Modal, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
 
 import { SuccessfullWithdrawalModalStyled } from './successfull-withdrawal.styled';
 
@@ -16,16 +16,14 @@ export const SuccessfullWithdrawalModal: FC<SuccessfullWithdrawalModalProps> = (
   return (
     <Modal isOpen maxWidth="730px">
       <SuccessfullWithdrawalModalStyled>
-        <ParagraphM weight={800} className="modal-title">
-          {t('dashboard_withdraw.successfull_withdrawal_modal.title')}
-        </ParagraphM>
-        <ParagraphS className="modal-subtitle">
+        <TitleS className="modal-title">{t('dashboard_withdraw.successfull_withdrawal_modal.title')}</TitleS>
+        <BodyL className="modal-subtitle">
           {t('dashboard_withdraw.successfull_withdrawal_modal.subtitle')}
           <a href={addressLink} target="_blank" rel="noreferrer" className="link">
             {t('dashboard_withdraw.successfull_withdrawal_modal.link')}
           </a>
           .
-        </ParagraphS>
+        </BodyL>
         <ButtonPrimary onClick={onConfirm}>{t('btn_ok')}</ButtonPrimary>
       </SuccessfullWithdrawalModalStyled>
     </Modal>

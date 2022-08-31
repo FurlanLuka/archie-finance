@@ -5,7 +5,7 @@ import { theme } from '@archie-webapps/shared/ui/theme';
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
 import { ButtonGhost, ButtonLight } from '../button/button.styled';
-import { ParagraphXS } from '../typography/typography.styled';
+import { BodyM } from '../typography/typography.styled';
 
 import { Toast, ToastList } from './toast.styled';
 
@@ -22,7 +22,7 @@ export const Default: Story = () => (
   <StoriesContainer bgColor={theme.backgroundSecondary}>
     <StoriesTitle title="Toast" subtitle="default" />
     <Toast>
-      <ParagraphXS weight={700}>This is a toast notification. You can wrap anything you want in it.</ParagraphXS>
+      <BodyM weight={700}>This is a toast notification. You can wrap anything you want in it.</BodyM>
       <div className="btn-group">
         <ButtonLight small>Ok</ButtonLight>
       </div>
@@ -35,16 +35,16 @@ export const InAToastList: Story = () => (
     <StoriesTitle title="Toast" subtitle="in a toast list" />
     <ToastList>
       <Toast>
-        <ParagraphXS weight={700}>This is a toast notification. You can wrap anything you want in it.</ParagraphXS>
+        <BodyM weight={700}>This is a toast notification. You can wrap anything you want in it.</BodyM>
       </Toast>
       <Toast>
-        <ParagraphXS weight={700}>Here is a notification with a button.</ParagraphXS>
+        <BodyM weight={700}>Here is a notification with a button.</BodyM>
         <div className="btn-group">
           <ButtonLight small>Ok</ButtonLight>
         </div>
       </Toast>
       <Toast>
-        <ParagraphXS weight={700}>This one is with two buttons.</ParagraphXS>
+        <BodyM weight={700}>This one is with two buttons.</BodyM>
         <div className="btn-group">
           <ButtonLight small>Cool</ButtonLight>
           <ButtonGhost small>Cancel</ButtonGhost>

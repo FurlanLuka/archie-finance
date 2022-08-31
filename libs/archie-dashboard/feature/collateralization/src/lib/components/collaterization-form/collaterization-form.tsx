@@ -6,7 +6,7 @@ import { MAX_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
 import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
-import { InputRange, ParagraphXS, SubtitleM } from '@archie-webapps/shared/ui/design-system';
+import { InputRange, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollaterizationFormStyled } from './collaterization-form.styled';
@@ -51,8 +51,8 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
       />
       <div className="result">
         <div className="result-item">
-          <ParagraphXS weight={700}>{t('collateralization_step.result.first')}</ParagraphXS>
-          <SubtitleM weight={400} id="collateral">
+          <BodyM weight={700}>{t('collateralization_step.result.first')}</BodyM>
+          <TitleL weight={400} id="collateral">
             <span
               className="clickable"
               data-tip="Click to copy"
@@ -60,7 +60,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
             >
               {getFormattedCollateral()}
             </span>
-          </SubtitleM>
+          </TitleL>
           <ReactTooltip
             textColor={theme.tooltipText}
             backgroundColor={theme.tooltipBackground}
@@ -69,12 +69,12 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
           />
         </div>
         <div className="result-item">
-          <ParagraphXS weight={700}>{t('collateralization_step.result.second')}</ParagraphXS>
-          <SubtitleM weight={400}>{assetInfo.loan_to_value}%</SubtitleM>
+          <BodyM weight={700}>{t('collateralization_step.result.second')}</BodyM>
+          <TitleL weight={400}>{assetInfo.loan_to_value}%</TitleL>
         </div>
         <div className="result-item">
-          <ParagraphXS weight={700}>{t('collateralization_step.result.third')}</ParagraphXS>
-          <SubtitleM weight={400}>{assetInfo.interest_rate}%</SubtitleM>
+          <BodyM weight={700}>{t('collateralization_step.result.third')}</BodyM>
+          <TitleL weight={400}>{assetInfo.interest_rate}%</TitleL>
         </div>
       </div>
       <DepositAddress assetInfo={assetInfo} assetAmount={requiredCollateral} />

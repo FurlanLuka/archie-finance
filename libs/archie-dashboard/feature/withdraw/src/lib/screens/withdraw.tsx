@@ -5,7 +5,7 @@ import { useLocation, Navigate, Link } from 'react-router-dom';
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
 import { useGetMaxWithdrawalAmount } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-max-withdrawal-amount';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Card, Loader, ParagraphM, ParagraphS } from '@archie-webapps/shared/ui/design-system';
+import { Card, Loader, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
 
 import { WithdrawalForm } from '../components/withdrawal-form/withdrawal-form';
 
@@ -43,10 +43,8 @@ export const WithdrawScreen: FC = () => {
 
       return (
         <>
-          <ParagraphM weight={800} className="title">
-            {t('dashboard_withdraw.title', { currentAsset })}
-          </ParagraphM>
-          <ParagraphS className="subtitle">
+          <TitleS className="title">{t('dashboard_withdraw.title', { currentAsset })}</TitleS>
+          <BodyL className="subtitle">
             {asset ? (
               t('dashboard_withdraw.subtitle', {
                 asset: asset.asset,
@@ -63,7 +61,7 @@ export const WithdrawScreen: FC = () => {
                 </Link>
               </>
             )}
-          </ParagraphS>
+          </BodyL>
           <WithdrawalForm
             currentAsset={currentAsset}
             maxAmount={getMaxWithdrawalAmountResponse.data.maxAmount}

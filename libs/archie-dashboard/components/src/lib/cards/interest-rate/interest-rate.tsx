@@ -5,7 +5,7 @@ import { Navigate } from 'react-router-dom';
 import { LoanInterests } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-loan-interests';
 import { useGetLoanInterests } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-loan-interests';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Card, Skeleton, ParagraphXS, SubtitleS } from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton, TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 export const InterestRate: FC = () => {
   const { t } = useTranslation();
@@ -29,12 +29,12 @@ export const InterestRate: FC = () => {
 
     return (
       <Card column alignItems="flex-start" justifyContent="space-between" padding="1.5rem">
-        <ParagraphXS weight={700} className="card-title">
+        <BodyM weight={700} className="card-title">
           {t('interest_rate_card.title')}
-        </ParagraphXS>
-        <SubtitleS weight={400} className="card-info">
+        </BodyM>
+        <TitleM weight={400} className="card-info">
           {loanInterestsData.aprEffective * 100}%
-        </SubtitleS>
+        </TitleM>
       </Card>
     );
   }
