@@ -28,4 +28,8 @@ export const HistoryStyled = styled.div`
   .load-btn {
     margin-top: 1.5rem;
   }
+
+  .loader {
+    margin: auto;
+  }
 `;
