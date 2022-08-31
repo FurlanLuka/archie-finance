@@ -44,7 +44,7 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
               {t('next_payment_card.title')}
             </BodyM>
             <TitleM weight={400} className="card-info">
-              {t('next_payment.no_payment_due')}
+              {t('next_payment_card.no_payment_due')}
             </TitleM>
           </Card>
         );
