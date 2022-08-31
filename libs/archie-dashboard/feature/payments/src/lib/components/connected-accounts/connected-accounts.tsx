@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
-import { Card, Skeleton, Modal, ParagraphM, ParagraphXS, ButtonOutline } from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton, Modal, ButtonOutline, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectAccount } from '../connect-account/connect-acount';
 
@@ -32,7 +32,7 @@ export const ConnectedAccounts: FC = () => {
   if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
     const getAccountsList = () => {
       if (getConnectedAccountsResponse.data.length === 0) {
-        return <ParagraphXS>{t('dashboard_payment.connected_accounts.no_accounts')}</ParagraphXS>;
+        return <BodyM>{t('dashboard_payment.connected_accounts.no_accounts')}</BodyM>;
       }
 
       return getConnectedAccountsResponse.data.map((account) => (
@@ -43,9 +43,7 @@ export const ConnectedAccounts: FC = () => {
     return (
       <ConnectedAccountsStyled>
         <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
-          <ParagraphM weight={800} className="title">
-            {t('dashboard_payment.connected_accounts.title')}
-          </ParagraphM>
+          <TitleS className="title">{t('dashboard_payment.connected_accounts.title')}</TitleS>
           <div className="account-list">{getAccountsList()}</div>
           <ButtonOutline small onClick={() => setIsAddAccountModalOpen(true)}>
             {t('dashboard_payment.connected_accounts.btn_add')}

@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
+import { NextPaymentChartStyled } from '@archie-webapps/archie-dashboard/components';
 import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/shared/ui/theme';
+
 
 export const PaymentScreenStyled = styled.div`
   width: 100%;
@@ -61,6 +63,10 @@ export const PaymentScreenStyled = styled.div`
     .card-info {
       margin-bottom: 0;
     }
+  }
+
+  ${NextPaymentChartStyled} {
+    margin-top: 0.75rem;
   }
 
   .section-actions {

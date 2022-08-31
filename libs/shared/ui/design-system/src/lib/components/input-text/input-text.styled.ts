@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { ParagraphXS } from '../typography/typography.styled'
+import { BodyM } from '../typography/typography.styled'
 
 export interface InputTextProps {
   small?: boolean;
@@ -39,7 +39,7 @@ export const InputText = styled.label<InputTextProps>`
   }
 `;
 
-export const FormError = styled(ParagraphXS)`
+export const FormError = styled(BodyM)`
   color: ${({ theme }) => theme.textDanger};
   margin: 0.25rem 0;
 `;

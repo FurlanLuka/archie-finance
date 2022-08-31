@@ -5,7 +5,7 @@ import { Navigate } from 'react-router-dom';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
 import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
-import { Loader, Modal, ParagraphM, ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { Loader, Modal, TitleS, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import { PaymentSteps } from './blocks/payment-steps/payment-steps';
 import { MakePaymentStyled } from './make-payment.styled';
@@ -31,18 +31,16 @@ export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
     if (getKycResponse.state === RequestState.SUCCESS && getObligationsResponse.state === RequestState.SUCCESS) {
       return (
         <>
-          <ParagraphM weight={800} className="title">
-            {t('payment_modal.payment_schedule.title')}
-          </ParagraphM>
-          <ParagraphS weight={600}>
+          <TitleS className="title">{t('payment_modal.payment_schedule.title')}</TitleS>
+          <BodyL weight={600}>
             {t('payment_modal.payment_schedule.credit_for', { name: getKycResponse.data.firstName })}
-          </ParagraphS>
-          {/*<ParagraphXS>{t('payment_modal.payment_schedule.last_payment', { lastPayment, date })}</ParagraphXS>*/}
-          <ParagraphXS>
+          </BodyL>
+          {/*<BodyM>{t('payment_modal.payment_schedule.last_payment', { lastPayment, date })}</BodyM>*/}
+          <BodyM>
             {t('payment_modal.payment_schedule.interest_owed', {
               interestOwed: getObligationsResponse.data.interestOwed,
             })}
-          </ParagraphXS>
+          </BodyM>
           <div className="divider" />
           <PaymentSteps obligations={getObligationsResponse.data} close={close} />
         </>

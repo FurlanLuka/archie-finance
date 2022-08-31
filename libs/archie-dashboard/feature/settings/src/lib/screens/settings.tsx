@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SubtitleS } from '@archie-webapps/shared/ui/design-system';
+import { TitleM } from '@archie-webapps/shared/ui/design-system';
 
 import { SettingsStyled } from './settings.styled';
 
@@ -10,7 +10,7 @@ export const SettingsScreen: FC = () => {
 
   return (
     <SettingsStyled>
-      <SubtitleS className="title">Settings</SubtitleS>
+      <TitleM className="title">Settings</TitleM>
     </SettingsStyled>
   );
 };

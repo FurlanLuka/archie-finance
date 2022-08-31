@@ -44,7 +44,7 @@ export const CollateralStyled = styled.div`
     align-items: flex-end;
     gap: 0.5rem;
 
-    p:nth-child(2) {
+    h6 {
       line-height: 1.16;
     }
   }

@@ -1,7 +1,7 @@
 import { Story, Meta } from '@storybook/react';
 
 import { Card } from '../card/card.styled';
-import { SubtitleM } from '../typography/typography.styled';
+import { TitleL } from '../typography/typography.styled';
 
 import { Page, Container } from './layout.styled';
 
@@ -19,7 +19,7 @@ export const Default: Story = () => (
     <Container justifyContent="center" alignItems="flex-start">
       <Card maxWidth="600px" padding="2rem">
         <div style={{ textAlign: 'center' }}>
-          <SubtitleM weight={700}>You can enter anything you want here</SubtitleM>
+          <TitleL weight={700}>You can enter anything you want here</TitleL>
         </div>
       </Card>
     </Container>

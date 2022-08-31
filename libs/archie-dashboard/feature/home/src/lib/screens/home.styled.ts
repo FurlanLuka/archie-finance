@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 
+import { NextPaymentChartStyled } from '@archie-webapps/archie-dashboard/components';
 import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/shared/ui/theme';
 
 export const HomeStyled = styled.div`
@@ -49,5 +50,9 @@ export const HomeStyled = styled.div`
     @media (max-width: ${breakpoints.screenSM}) {
       max-width: 100%;
     }
+  }
+
+  ${NextPaymentChartStyled} {
+    margin-bottom: 0.75rem;
   }
 `;

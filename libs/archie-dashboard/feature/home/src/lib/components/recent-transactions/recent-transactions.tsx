@@ -5,7 +5,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { TransactionsTable } from '@archie-webapps/archie-dashboard/components';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetRecentTransactions } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-recent-transactions';
-import { ButtonOutline, Card, Skeleton, ParagraphM } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, Card, Skeleton, TitleS } from '@archie-webapps/shared/ui/design-system';
 
 import { RecentTransactionsStyled } from './recent-transactions.styled';
 
@@ -38,9 +38,7 @@ export const RecentTransactions: FC = () => {
     return (
       <RecentTransactionsStyled>
         <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
-          <ParagraphM weight={800} className="title">
-            {t('dashboard_home.recent_transactions.title')}
-          </ParagraphM>
+          <TitleS className="title">{t('dashboard_home.recent_transactions.title')}</TitleS>
           <Link to="/history" className="history-link">
             <ButtonOutline small className="btn">
               {t('dashboard_home.recent_transactions.btn')}

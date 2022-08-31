@@ -8,7 +8,7 @@ import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
 import { calculateCollateralTotalValue, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
-import { Card, Loader, ButtonOutline, ParagraphM, ParagraphS } from '@archie-webapps/shared/ui/design-system';
+import { Card, Loader, ButtonOutline, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
 
 import { CollateralizationRouteParams } from '../interfaces/routing';
 import { CollateralizationForm } from '../components/collaterization-form/collaterization-form';
@@ -56,22 +56,20 @@ export const CollateralizationScreen: FC = () => {
 
       return (
         <>
-          <ParagraphM weight={800} className="title">
-            {t('dashboard_collateralization.title', { asset })}
-          </ParagraphM>
-          <ParagraphS className="subtitle-credit">
+          <TitleS className="title">{t('dashboard_collateralization.title', { asset })}</TitleS>
+          <BodyL className="subtitle-credit">
             {t('dashboard_collateralization.subtitle_credit', {
               collateralTotalValue: getFormattedValue(collateralTotalValue),
             })}
-          </ParagraphS>
+          </BodyL>
           {currentAsset && (
-            <ParagraphS className="subtitle-asset">
+            <BodyL className="subtitle-asset">
               {t('dashboard_collateralization.subtitle_asset', {
                 collateral: currentAsset.assetAmount,
                 collateralAsset: currentAsset.asset,
                 collateralValue: currentAsset.price.toFixed(2),
               })}
-            </ParagraphS>
+            </BodyL>
           )}
           <CollateralDeposit initialCollateral={initialCollateral} />
           <CollateralizationForm assetInfo={assetInfo} assetPrice={assetPrice} />

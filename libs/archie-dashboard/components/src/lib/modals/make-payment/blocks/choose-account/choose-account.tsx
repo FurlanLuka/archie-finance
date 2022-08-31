@@ -5,14 +5,7 @@ import { Navigate } from 'react-router-dom';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/interfaces';
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
-import {
-  ButtonPrimary,
-  Loader,
-  ParagraphM,
-  ParagraphXS,
-  Select,
-  SelectOption,
-} from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, Loader, TitleS, BodyM, Select, SelectOption } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectedAccountItem } from '../connected-account-item/connected-account-item';
 
@@ -45,7 +38,7 @@ export const ChooseAccount: FC<ChooseAccountProps> = ({ onConfirm }) => {
   const header = selectedAccount ? (
     <ConnectedAccountItem account={selectedAccount} />
   ) : (
-    <ParagraphXS weight={700}>{t('payment_modal.select_account.empty')}</ParagraphXS>
+    <BodyM weight={700}>{t('payment_modal.select_account.empty')}</BodyM>
   );
 
   const options = useMemo(() => {
@@ -71,9 +64,7 @@ export const ChooseAccount: FC<ChooseAccountProps> = ({ onConfirm }) => {
     if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
       return (
         <>
-          <ParagraphM weight={800} className="modal-title">
-            {t('payment_modal.select_account.label')}
-          </ParagraphM>
+          <TitleS className="modal-title">{t('payment_modal.select_account.label')}</TitleS>
           <div className="modal-select">
             <Select id="accounts" header={header} onChange={(account: AccountResponse) => setSelectedAccount(account)}>
               {options}

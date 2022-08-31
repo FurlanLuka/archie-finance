@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { MutationQueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { usePollMfaEnrollment } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-poll-mfa-enrollment';
 import { useStartMfaEnrollment } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-start-mfa-enrollment';
-import { ButtonGhost, ParagraphS, ParagraphXS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonGhost, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import img2fa from '../../../assets/images/img-2fa.png';
 
@@ -40,8 +40,8 @@ export const Setup2faBanner: FC = () => {
       </div>
       <div className="content">
         <div className="text">
-          <ParagraphS weight={800}>{t('setup_2fa_banner.title')}</ParagraphS>
-          <ParagraphXS>{t('setup_2fa_banner.text')}</ParagraphXS>
+          <BodyL weight={800}>{t('setup_2fa_banner.title')}</BodyL>
+          <BodyM>{t('setup_2fa_banner.text')}</BodyM>
         </div>
         <ButtonGhost onClick={handleClick} isDisabled={shouldPollMfaEnrollment}>
           {t('btn_continue')}

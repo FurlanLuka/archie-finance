@@ -1,17 +1,17 @@
 import { FC, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { format, parse } from 'date-fns';
 
 import { NextPaymentChart, MakePaymentModal } from '@archie-webapps/archie-dashboard/components';
-import { ButtonOutline, Card, Loader, ParagraphXS, Skeleton, SubtitleS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, Card, Skeleton, TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 import {
   CREDIT_LINE_NOT_FOUND_ERROR,
   MISSING_PAYMENT_INFO_ERROR,
 } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Navigate } from 'react-router-dom';
 import { OBLIGATION_DATE_FORMAT } from '@archie-webapps/shared/data-access/archie-api/payment/payment.constants';
-import { format, parse } from 'date-fns';
 
 interface NextPaymentProps {
   withBtn?: boolean;
@@ -19,11 +19,11 @@ interface NextPaymentProps {
 
 export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
   const { t } = useTranslation();
-
-  const [makePaymentModalOpen, setMakePaymentModalOpen] = useState(false);
   const getObligationsResponse = useGetObligations();
 
-  function getContent() {
+  const [makePaymentModalOpen, setMakePaymentModalOpen] = useState(false);
+
+  const getContent = () => {
     if (getObligationsResponse.state === RequestState.LOADING) {
       return (
         <Card>
@@ -39,12 +39,12 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
       ) {
         return (
           <Card column alignItems="flex-start" padding="1.5rem">
-            <ParagraphXS weight={700} className="card-title">
+            <BodyM weight={700} className="card-title">
               {t('next_payment_card.title')}
-            </ParagraphXS>
-            <SubtitleS weight={400} className="card-info">
+            </BodyM>
+            <TitleM weight={400} className="card-info">
               {t('next_payment.no_payment_due')}
-            </SubtitleS>
+            </TitleM>
           </Card>
         );
       }
@@ -57,12 +57,12 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
 
       return (
         <Card column alignItems="flex-start" padding="1.5rem">
-          <ParagraphXS weight={700} className="card-title">
+          <BodyM weight={700} className="card-title">
             {t('next_payment_card.title')}
-          </ParagraphXS>
-          <SubtitleS weight={400} className="card-info">
+          </BodyM>
+          <TitleM weight={400} className="card-info">
             {format(dueDateParsed, 'MMMM do')}
-          </SubtitleS>
+          </TitleM>
           <NextPaymentChart dueDate={dueDateParsed} />
           {withBtn && (
             <div className="btn-group">
@@ -76,7 +76,7 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
     }
 
     return <></>;
-  }
+  };
 
   return (
     <>

@@ -9,14 +9,7 @@ import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collate
 import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
 import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import {
-  ButtonOutline,
-  Card,
-  Skeleton,
-  ParagraphXS,
-  ParagraphXXS,
-  SubtitleS,
-} from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, Card, Skeleton, TitleM, BodyM, BodyS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 export const AvailableCredit: FC = () => {
@@ -48,12 +41,12 @@ export const AvailableCredit: FC = () => {
         <Card justifyContent="space-between" columnReverse padding="1.5rem" status={ltvData.status}>
           <div className="card-group">
             <div className="card-group p-bottom">
-              <ParagraphXS weight={700} className="card-title">
+              <BodyM weight={700} className="card-title">
                 {t('available_credit_card.title_1')}
-              </ParagraphXS>
-              <SubtitleS weight={400} className="card-info border-active">
+              </BodyM>
+              <TitleM weight={400} className="card-info border-active">
                 ${getFormattedValue(creditData.totalCredit - creditData.availableCredit)}
-              </SubtitleS>
+              </TitleM>
               <div className="btn-group">
                 <ButtonOutline small onClick={() => setMakePaymentModalOpen(true)}>
                   {t('available_credit_card.btn')}
@@ -61,15 +54,15 @@ export const AvailableCredit: FC = () => {
               </div>
             </div>
             <div className="card-group">
-              <ParagraphXS weight={700} className="card-title">
+              <BodyM weight={700} className="card-title">
                 {t('available_credit_card.title_2')}
-              </ParagraphXS>
-              <SubtitleS weight={400} className="card-info border-default">
+              </BodyM>
+              <TitleM weight={400} className="card-info border-default">
                 ${getFormattedValue(creditData.availableCredit)}
-              </SubtitleS>
-              <ParagraphXXS color={theme.textSecondary} weight={500} className="card-text">
+              </TitleM>
+              <BodyS color={theme.textSecondary} weight={500} className="card-text">
                 {t('available_credit_card.text', { lineOfCredit: getFormattedValue(creditData.totalCredit) })}
-              </ParagraphXXS>
+              </BodyS>
             </div>
           </div>
           <div className="card-group p-bottom-sm">
