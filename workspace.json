@@ -23,6 +23,7 @@
     "api-credit-api-plaid": "libs/api/credit-api/plaid",
     "api-credit-api-rize": "libs/api/credit-api/rize",
     "api-credit-limit-api-constants": "libs/api/credit-limit-api/constants",
+    "api-credit-limit-api-credit-limit": "libs/api/credit-limit-api/credit-limit",
     "api-ltv-api-constants": "libs/api/ltv-api/constants",
     "api-ltv-api-data-transfer-objects": "libs/api/ltv-api/data-transfer-objects",
     "api-ltv-api-ltv": "libs/api/ltv-api/ltv",
