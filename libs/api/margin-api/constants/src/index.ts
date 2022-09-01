@@ -12,6 +12,9 @@ export enum ConfigVariables {
   QUEUE_URL = 'QUEUE_URL',
 }
 
+export const COLLATERAL_SALE_LTV_LIMIT = 90;
+export const LTV_MARGIN_CALL_LIMIT = 75;
+
 export const LTV_LIMIT_APPROACHING_TOPIC =
   'margin.margin_call.ltv_limit_approaching';
 export const MARGIN_CALL_COMPLETED_TOPIC = 'margin.margin_call.completed';

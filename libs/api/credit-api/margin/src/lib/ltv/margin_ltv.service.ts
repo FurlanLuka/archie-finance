@@ -14,14 +14,16 @@ import {
 import { Credit } from '@archie/api/credit-api/credit';
 import { QueueService } from '@archie/api/utils/queue';
 import { LtvLimitApproachingPayload } from '@archie/api/credit-api/data-transfer-objects';
+import {
+  COLLATERAL_SALE_LTV_LIMIT,
+  LTV_MARGIN_CALL_LIMIT,
+} from '@archie/api/margin-api/constants';
 
 @Injectable()
 export class MarginLtvService {
   LTV_OK_LIMIT = 50;
   LTV_WARNING_LIMIT = 65;
   LTV_ALERT_LIMITS = [this.LTV_WARNING_LIMIT, 70, 73];
-  LTV_MARGIN_CALL_LIMIT = 75;
-  COLLATERAL_SALE_LTV_LIMIT = 90;
 
   constructor(
     @InjectRepository(MarginNotification)
@@ -33,7 +35,7 @@ export class MarginLtvService {
   public getLtvStatus(ltv: UsersLtv): LtvStatus {
     if (ltv.ltv < this.LTV_OK_LIMIT) return LtvStatus.good;
     else if (ltv.ltv < this.LTV_WARNING_LIMIT) return LtvStatus.ok;
-    else if (ltv.ltv < this.LTV_MARGIN_CALL_LIMIT) return LtvStatus.warning;
+    else if (ltv.ltv < LTV_MARGIN_CALL_LIMIT) return LtvStatus.warning;
     else return LtvStatus.margin_call;
   }
 
@@ -91,11 +93,11 @@ export class MarginLtvService {
   }
 
   public calculatePriceForMarginCall(loanedBalance: number): number {
-    return loanedBalance / (this.LTV_MARGIN_CALL_LIMIT / 100);
+    return loanedBalance / (LTV_MARGIN_CALL_LIMIT / 100);
   }
 
   public calculatePriceForCollateralSale(loanedBalance: number): number {
-    return loanedBalance / (this.COLLATERAL_SALE_LTV_LIMIT / 100);
+    return loanedBalance / (COLLATERAL_SALE_LTV_LIMIT / 100);
   }
 
   public async checkIfApproachingLtvLimits(usersLtv: UsersLtv) {
@@ -126,8 +128,7 @@ export class MarginLtvService {
           return (
             marginNotificationNotSentYet &&
             ltv >= limit &&
-            ltv <
-              (this.LTV_ALERT_LIMITS[index + 1] ?? this.LTV_MARGIN_CALL_LIMIT)
+            ltv < (this.LTV_ALERT_LIMITS[index + 1] ?? LTV_MARGIN_CALL_LIMIT)
           );
         },
       ).some((alert: boolean) => alert);
