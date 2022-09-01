@@ -29,35 +29,31 @@ export const PaymentScreenStyled = styled.div`
   }
 
   .section-cards {
-    display: flex;
+    display: grid;
     gap: 2rem;
+    grid-template-columns: 1.5fr 1fr;
+    grid-auto-rows: 264px;
     margin-bottom: 1.5rem;
 
     @media (max-width: ${breakpoints.screenMD}) {
-      flex-wrap: wrap;
-      max-width: 70%;
-    }
+      grid-template-columns: repeat(auto-fill, 70%);
+      grid-auto-rows: 264px 1fr;
+    }  
 
     @media (max-width: ${breakpoints.screenSM}) {
-      max-width: 100%;
+      grid-template-columns: 100%;
+      grid-auto-rows: 448px 1fr;
     }
   }
 
   .cards-group {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    display: grid;
     gap: 1rem;
-    width: 100%;
-    max-width: 350px;
+    grid-auto-rows: 140px 108px;
 
     @media (max-width: ${breakpoints.screenMD}) {
-      max-width: 70%;
-    }
-
-    @media (max-width: ${breakpoints.screenSM}) {
-      max-width: 100%;
-    }
+      gap: 2rem;
+    }  
 
     .card-title, 
     .card-info {
