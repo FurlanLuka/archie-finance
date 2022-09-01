@@ -9,6 +9,9 @@ import {
   PaymentInstrumentDto,
 } from './payment_instruments.dto';
 import { BorrowerValidation } from '../utils/borrower.validation';
+import { GetKycPayload, GetKycResponse } from '@archie/api/user-api/kyc';
+import { GET_USER_KYC_RPC } from '@archie/api/user-api/constants';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class PeachPaymentInstrumentsService {
@@ -17,6 +20,7 @@ export class PeachPaymentInstrumentsService {
     @InjectRepository(Borrower)
     private borrowerRepository: Repository<Borrower>,
     private borrowerValidation: BorrowerValidation,
+    private queueService: QueueService,
   ) {}
 
   public async listPaymentInstruments(
@@ -74,10 +78,19 @@ export class PeachPaymentInstrumentsService {
     });
     this.borrowerValidation.isBorrowerDefined(borrower);
 
+    const kyc: GetKycResponse = await this.queueService.request<
+      GetKycResponse,
+      GetKycPayload
+    >(GET_USER_KYC_RPC, {
+      userId: `${userId}`,
+    });
+
     await this.peachApiService.createPlaidPaymentInstrument(
       borrower.personId,
       accountInfo.accountId,
       accountInfo.publicToken,
+      // TODO check what would happen if user enters wrong info on kyc
+      `${kyc.firstName} ${kyc.lastName}`,
     );
   }
 
