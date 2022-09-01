@@ -7,3 +7,14 @@ export interface CreditAssets {
   collateral: LtvCollateral[];
   assetPrices: GetAssetPriceResponse[];
 }
+
+export interface CollateralValue {
+  collateral: CollateralWithPrice[];
+  collateralBalance: number;
+}
+
+export interface CollateralWithPrice {
+  asset: string;
+  amount: number;
+  price: number;
+}

@@ -1280,6 +1280,32 @@
           }
         ]
       }
+    },
+    "/v1/ltvs/current": {
+      "get": {
+        "operationId": "LtvController_getCurrentLtv",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LtvDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CREDIT_NOT_SET_UP"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -2430,6 +2456,27 @@
         "required": [
           "aprNominal",
           "aprEffective"
+        ]
+      },
+      "LtvDto": {
+        "type": "object",
+        "properties": {
+          "ltv": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "good",
+              "ok",
+              "warning",
+              "margin_call"
+            ]
+          }
+        },
+        "required": [
+          "ltv",
+          "status"
         ]
       }
     },
