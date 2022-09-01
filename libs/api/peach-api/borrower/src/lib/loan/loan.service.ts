@@ -204,11 +204,20 @@ export class PeachBorrowerService {
     );
   }
 
-  public async handleCreditLimitUpdated(): Promise<void> {
+  public async handleCreditLimitDecreased(
+    creditLimitDecrease: CreditLimitDecreasedPayload,
+  ): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: creditLimitDecrease.userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
+
+    const currentCreditLimit = await this.peachApiService.getCreditLimit(
+      borrower.personId,
+      borrower.creditLineId,
+    );
+    const newCreditLimit: number =
+      currentCreditLimit.creditLimitAmount - creditLimitDecrease.amount;
 
     await this.peachApiService.updateCreditLimit(
       borrower.personId,
