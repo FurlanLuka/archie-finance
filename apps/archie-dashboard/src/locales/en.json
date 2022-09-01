@@ -169,7 +169,8 @@
   "next_payment_card": {
     "title": "Next Payment",
     "btn": "Pay now",
-    "chart": "Due in {{days}} days"
+    "chart": "Due in {{days}} days",
+    "no_payment_due": "No payment due"
   },
   "dashboard_home": {
     "title": "Hi, {{name}}",
@@ -183,35 +184,6 @@
     "recent_transactions": {
       "title": "Recent Transactions",
       "btn": "View More"
-    },
-    "payment_schedule_modal": {
-      "title": "Schedule a payment",
-      "credit_for": "ArchCredit for {{name}}",
-      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
-      "interest_owed": "Interest owed: ${{iterestOwed}}",
-      "payment_date": "Payment Date",
-      "payment_options": "Payment Options",
-      "schedule": "Schedule",
-      "auto_payments": "auto payments:",
-      "balance_owed": "Pay balance owed: ${{balanceOwed}}",
-      "balance_with_interest": "Pay balance owed with interest: ${{balanceWithInterest}}",
-      "full_balance": "Pay full balance: ${{fullBalance}}",
-      "other_amount": "Pay other amount:"
-    },
-    "payment_confirm_modal": {
-      "title": "Confirm payment",
-      "credit_for": "ArchCredit for {{name}}",
-      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
-      "balance_note": "Pay balance owed:",
-      "time_note": "This Payment will be processed today and take 2-4 business days to settle."
-    },
-    "payment_scheduled_modal": {
-      "title": "Payment scheduled",
-      "credit_for": "ArchCredit for {{name}}",
-      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
-      "scheduled_note": "Your payment for ${{newPayment}} has been scheduled!",
-      "email_note": "You will receive an email notification.",
-      "time_note": "Your payment will take 2-4 business days to settle."
     }
   },
   "dashboard_collateral": {
@@ -258,6 +230,7 @@
   "dashboard_payment": {
     "title": "Payments",
     "btn_pay": "Make a Payment",
+    "auto_payments": "auto payments:",
     "connected_accounts": {
       "title": "Your accounts",
       "no_accounts": "No accounts have been added yet. Connect to your Plaid account to start making payments.",
@@ -267,8 +240,7 @@
     "account_select": {
       "label": "Your accounts",
       "empty": "Select an account to connect",
-      "btn_connect": "Connect to Archie",
-      "balance_subtext": "Funds available"
+      "btn_connect": "Connect to Archie"
     },
     "plaid_connect": {
       "title": "Setup payment method",
@@ -285,5 +257,52 @@
   },
   "dashboard_settings": {
     "title": ""
+  },
+  "payment_modal": {
+    "select_account": {
+      "label": "Your accounts",
+      "empty": "Select account to pay with",
+      "balance_subtext": "Funds available",
+      "btn_confirm": "Confirm"
+    },
+    "payment_schedule": {
+      "title": "Schedule a payment",
+      "credit_for": "ArchCredit for {{name}}",
+      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
+      "interest_owed": "Interest owed: ${{interestOwed}}",
+      "payment_date": "Payment Date",
+      "payment_options": "Payment Options",
+      "schedule": "Schedule",
+      "due_date": "Due date is {{date}}",
+      "balance_owed": "Pay balance owed: ${{balanceOwed}}",
+      "balance_with_interest": "Pay balance owed with interest: ${{balanceWithInterest}}",
+      "full_balance": "Pay full balance: ${{fullBalance}}",
+      "other_amount": "Pay other amount:",
+      "error": {
+        "required_field": "This field is required",
+        "not_valid_date": "Not a valid date",
+        "max_date": "Cannot schedule past due date",
+        "cannot_be_past": "Date cannot be in the past",
+        "amount_type_error": "Amount must be a number",
+        "min_amount": "You must pay more than 0",
+        "max_amount": "You cannot pay more than your owed balance"
+      }
+    },
+    "payment_confirm": {
+      "title": "Confirm payment",
+      "credit_for": "ArchCredit for {{name}}",
+      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
+      "balance_note": "Pay balance owed:",
+      "time_note": "This Payment will be processed today and take 2-4 business days to settle.",
+      "error": "Something went wrong, please try again"
+    },
+    "payment_scheduled": {
+      "title": "Payment scheduled",
+      "credit_for": "ArchCredit for {{name}}",
+      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
+      "scheduled_note": "Your payment for ${{newPayment}} has been scheduled for {{paymentDate}}!",
+      "email_note": "You will receive an email notification.",
+      "time_note": "Your payment will take 2-4 business days to settle."
+    }
   }
 }

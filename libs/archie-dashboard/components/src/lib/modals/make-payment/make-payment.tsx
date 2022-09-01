@@ -1,51 +1,58 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
-import { PaymentStep } from '@archie-webapps/archie-dashboard/constants';
-import { Modal } from '@archie-webapps/shared/ui/design-system';
+import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
+import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
+import { Loader, Modal, TitleS, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
 
-import { PaymentConfirmModal } from './blocks/payment-confirm/payment-confirm';
-import { PaymentScheduleModal } from './blocks/payment-schedule/payment-schedule';
-import { PaymentScheduledModal } from './blocks/payment-scheduled/payment-scheduled';
+import { PaymentSteps } from './blocks/payment-steps/payment-steps';
+import { MakePaymentStyled } from './make-payment.styled';
 
 interface MakePaymentModalProps {
-  isOpen: boolean;
   close: () => void;
-  onConfirm: () => void;
 }
 
-export const MakePaymentModal: FC<MakePaymentModalProps> = ({ isOpen, close, onConfirm }) => {
+export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
   const { t } = useTranslation();
+  const getKycResponse = useGetKyc();
+  const getObligationsResponse = useGetObligations();
 
-  const [currentStep, setCurrentStep] = useState<PaymentStep>(PaymentStep.SCHEDULE);
-
-  const handleConfirm = () => {
-    onConfirm();
-    setCurrentStep(PaymentStep.SCHEDULE);
-    close();
-  };
-
-  const getContent = (step: PaymentStep) => {
-    switch (step) {
-      case PaymentStep.SCHEDULE:
-        return <PaymentScheduleModal onConfirm={() => setCurrentStep(PaymentStep.CONFIRM)} />;
-      case PaymentStep.CONFIRM:
-        return (
-          <PaymentConfirmModal
-            onConfirm={() => setCurrentStep(PaymentStep.SCHEDULED)}
-            onBack={() => setCurrentStep(PaymentStep.SCHEDULE)}
-          />
-        );
-      case PaymentStep.SCHEDULED:
-        return <PaymentScheduledModal onConfirm={handleConfirm} />;
-      default:
-        return <PaymentScheduleModal onConfirm={() => setCurrentStep(PaymentStep.CONFIRM)} />;
+  const getContent = () => {
+    if (getKycResponse.state === RequestState.LOADING || getObligationsResponse.state === RequestState.LOADING) {
+      return <Loader className="loader" />;
     }
+
+    if (getKycResponse.state === RequestState.ERROR || getObligationsResponse.state === RequestState.ERROR) {
+      return <Navigate to="/error" state={{ prevPath: '/payment' }} />;
+    }
+
+    if (getKycResponse.state === RequestState.SUCCESS && getObligationsResponse.state === RequestState.SUCCESS) {
+      return (
+        <>
+          <TitleS className="title">{t('payment_modal.payment_schedule.title')}</TitleS>
+          <BodyL weight={600}>
+            {t('payment_modal.payment_schedule.credit_for', { name: getKycResponse.data.firstName })}
+          </BodyL>
+          {/*<BodyM>{t('payment_modal.payment_schedule.last_payment', { lastPayment, date })}</BodyM>*/}
+          <BodyM>
+            {t('payment_modal.payment_schedule.interest_owed', {
+              interestOwed: getObligationsResponse.data.interestOwed,
+            })}
+          </BodyM>
+          <div className="divider" />
+          <PaymentSteps obligations={getObligationsResponse.data} close={close} />
+        </>
+      );
+    }
+
+    return <></>;
   };
 
   return (
-    <Modal isOpen={isOpen} close={close} maxWidth="780px">
-      {getContent(currentStep)}
+    <Modal isOpen close={close} maxWidth="780px">
+      <MakePaymentStyled>{getContent()}</MakePaymentStyled>
     </Modal>
   );
 };

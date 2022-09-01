@@ -1,14 +1,8 @@
 import styled from 'styled-components';
 
-export const PaymentScheduleModalStyled = styled.div`
+export const PaymentScheduleFormStyled = styled.div`
   display: flex;
   flex-direction: column;
-
-  .title {
-    border-bottom: 1px solid ${({ theme }) => theme.borderDark};
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
-  }
 
   .subtitle {
     margin-bottom: 0.5rem;
@@ -23,15 +17,15 @@ export const PaymentScheduleModalStyled = styled.div`
 
   .payment-date {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 0.25rem;
-    min-height: 28px;
-    max-width: 226px;
     white-space: nowrap;
     margin-bottom: 0.25rem;
 
     label,
     input {
+      width: fit-content;
       margin: 0;
     }
   }
@@ -53,6 +47,10 @@ export const PaymentScheduleModalStyled = styled.div`
     margin-top: 0.5rem;
   }
 
+  .disabled {
+    color: ${({ theme }) => theme.textDisabled};
+  }
+
   .input-group {
     display: flex;
     align-items: center;
@@ -64,6 +62,10 @@ export const PaymentScheduleModalStyled = styled.div`
     input {
       margin: 0;
     }
+  }
+
+  .amount {
+    width: 120px;
   }
 
   .btn-group {

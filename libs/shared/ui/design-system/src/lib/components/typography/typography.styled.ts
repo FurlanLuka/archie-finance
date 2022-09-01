@@ -106,3 +106,4 @@ export const BodyS = styled.p<TypographyProps>`
   color: ${({ theme, color }) => color ?? theme.textPrimary};
   font-weight: ${({ weight }) => weight ?? 400};
 `;
+

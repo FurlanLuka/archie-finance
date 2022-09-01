@@ -34,7 +34,7 @@ export const PaymentFlowModal: FC<PaymentFlowModalProps> = ({ close }) => {
       );
     }
 
-    return <MakePaymentModal isOpen close={close} onConfirm={() => console.log('confirmed')} />;
+    return <MakePaymentModal close={close} />;
   }
 
   return <></>;
