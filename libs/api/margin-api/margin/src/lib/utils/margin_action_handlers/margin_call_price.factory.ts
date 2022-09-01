@@ -4,7 +4,7 @@ import { LtvBalances, MarginPrices } from './margin_action_handlers.interfaces';
 @Injectable()
 export class MarginCallPriceFactory {
   LTV_MARGIN_CALL_LIMIT = 75;
-  COLLATERAL_SALE_LTV_LIMIT = 85;
+  COLLATERAL_SALE_LTV_LIMIT = 90;
 
   public getMarginCallPrices(ltvCalculationInfo: LtvBalances): MarginPrices {
     return {

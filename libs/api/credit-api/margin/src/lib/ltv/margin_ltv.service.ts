@@ -21,7 +21,7 @@ export class MarginLtvService {
   LTV_WARNING_LIMIT = 65;
   LTV_ALERT_LIMITS = [this.LTV_WARNING_LIMIT, 70, 73];
   LTV_MARGIN_CALL_LIMIT = 75;
-  COLLATERAL_SALE_LTV_LIMIT = 85;
+  COLLATERAL_SALE_LTV_LIMIT = 90;
 
   constructor(
     @InjectRepository(MarginNotification)

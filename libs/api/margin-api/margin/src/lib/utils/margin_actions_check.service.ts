@@ -10,7 +10,7 @@ import { MarginNotification } from '../margin_notifications.entity';
 export class MarginActionsCheckUtilService {
   LTV_ALERT_LIMITS = [65, 70, 73];
   LTV_MARGIN_CALL_LIMIT = 75;
-  LTV_DIRECT_LIQUIDATION_LIMIT = 85;
+  LTV_DIRECT_LIQUIDATION_LIMIT = 90;
 
   MIN_COLLATERAL_VALUE_CHANGE = 10;
 
