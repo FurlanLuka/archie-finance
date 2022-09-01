@@ -22,6 +22,7 @@ import {
 } from '@archie/api/user-api/data-transfer-objects';
 import { BorrowerWithHomeAddress } from '../utils/borrower.validation.interfaces';
 import { Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
+import { GetCreditResponseDto } from './loan.dto';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -224,5 +225,22 @@ export class PeachBorrowerService {
       borrower.creditLineId,
       newCreditLimit,
     );
+  }
+
+  public async getCredit(userId: string): Promise<GetCreditResponseDto> {
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
+      userId,
+    });
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
+
+    const balance = await this.peachApiService.getCreditBalance(
+      borrower.personId,
+      borrower.creditLineId,
+    );
+
+    return {
+      availableCredit: balance.availableCreditAmount,
+      totalCredit: balance.creditLimitAmount,
+    };
   }
 }

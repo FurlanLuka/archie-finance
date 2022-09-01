@@ -190,3 +190,17 @@ spec:
                 name: archie-peach-api-service
                 port:
                   number: 80
+          - path: /v1/loans
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-peach-api-service
+                port:
+                  number: 80
+          - path: /v1/credit_limit
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-credit-limit-api-service
+                port:
+                  number: 80
