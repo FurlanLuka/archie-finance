@@ -53,6 +53,9 @@ export const CREDIT_LIMIT_INCREASED_TOPIC = 'credit.limit.increased';
 
 export const COLLATERAL_DEPOSITED_TOPIC = 'credit.collateral.deposited';
 
+export const COLLATERAL_DEPOSIT_COMPLETED_TOPIC =
+  'credit.collateral_deposit.completed';
+
 export const MARGIN_CALL_STARTED_TOPIC = 'credit.margin_call.started';
 
 export const COLLATERAL_WITHDRAW_INITIALIZED_TOPIC =

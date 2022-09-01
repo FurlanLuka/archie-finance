@@ -22,7 +22,7 @@ import {
   GetCollateralValuePayload,
   GetCollateralValueResponse,
 } from '@archie/api/credit-api/collateral';
-import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import {
   CollateralReceivedPayload,
   CreditLineUpdatedDto,
@@ -138,7 +138,7 @@ export class CreditService {
   }
 
   public async updateCredit(
-    credit: CreditLinePaymentReceivedPayload,
+    credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
     // TODO: this introduces a race condition.
     // option 1: If calculated at < updated at then return failed event

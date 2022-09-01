@@ -263,12 +263,14 @@ export interface Balances {
     duePrincipalAmount: number;
     dueTotalAmount: number;
   };
+  utilizationAmount: number;
 }
 
 export interface Credit {
   availableCreditAmount: number;
   creditLimitAmount: number;
   calculatedAt: string;
+  utilizationAmount: number;
 }
 
 export interface PeachErrorResponse {
