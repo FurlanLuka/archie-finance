@@ -78,6 +78,9 @@
       "@archie/api/credit-limit-api/credit-limit": [
         "libs/api/credit-limit-api/credit-limit/src/index.ts"
       ],
+      "@archie/api/credit-limit-api/data-transfer-objects": [
+        "libs/api/credit-limit-api/data-transfer-objects/src/index.ts"
+      ],
       "@archie/api/ltv-api/constants": [
         "libs/api/ltv-api/constants/src/index.ts"
       ],

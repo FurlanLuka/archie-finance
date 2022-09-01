@@ -21,6 +21,8 @@ export class CollateralService {
   public async handleCollateralWithdrawInitializedEvent(
     transaction: CollateralWithdrawInitializedPayload,
   ): Promise<void> {
+    // TODO: Store transaction ids - no duplicated events
+
     await this.ltvCollateralRepository
       .createQueryBuilder('LtvCollateral')
       .update(LtvCollateral)
@@ -40,6 +42,8 @@ export class CollateralService {
   public async handleCollateralDepositCompletedEvent(
     transaction: CollateralDepositCompletedPayload,
   ): Promise<void> {
+    // TODO: Store transaction ids - no duplicated events
+
     const updateResult: UpdateResult = await this.ltvCollateralRepository
       .createQueryBuilder('LtvCollateral')
       .update(LtvCollateral)
