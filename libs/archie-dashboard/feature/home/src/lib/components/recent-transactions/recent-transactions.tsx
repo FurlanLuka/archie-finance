@@ -38,9 +38,7 @@ export const RecentTransactions: FC = () => {
     return (
       <RecentTransactionsStyled>
         <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
-          <TitleS weight={800} className="title">
-            {t('dashboard_home.recent_transactions.title')}
-          </TitleS>
+          <TitleS className="title">{t('dashboard_home.recent_transactions.title')}</TitleS>
           <Link to="/history" className="history-link">
             <ButtonOutline small className="btn">
               {t('dashboard_home.recent_transactions.btn')}

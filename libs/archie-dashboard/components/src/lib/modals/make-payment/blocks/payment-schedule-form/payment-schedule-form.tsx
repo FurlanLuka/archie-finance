@@ -23,7 +23,6 @@ interface PaymentScheduleFormProps {
   onConfirm: (amount: number, date: string) => void;
   obligations: UserObligations;
 }
-const DATEPICKER_FORMAT = 'yyyy-MM-dd';
 
 export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations, onConfirm }) => {
   const { t } = useTranslation();
@@ -86,15 +85,15 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
                   <input
                     type="date"
                     onChange={(e) => {
-                      const date = parse(e.target.value, DATEPICKER_FORMAT, new Date());
+                      const date = parse(e.target.value, 'yyyy-MM-dd', new Date());
 
                       if (isValid(date)) {
                         onChange(date);
                       }
                     }}
-                    value={format(value, DATEPICKER_FORMAT)}
-                    min={format(addDays(today, 1), DATEPICKER_FORMAT)}
-                    max={format(dueDate, DATEPICKER_FORMAT)}
+                    value={format(value, 'yyyy-MM-dd')}
+                    min={format(addDays(today, 1), 'yyyy-MM-dd')}
+                    max={format(dueDate, 'yyyy-MM-dd')}
                     required
                   />
                 );

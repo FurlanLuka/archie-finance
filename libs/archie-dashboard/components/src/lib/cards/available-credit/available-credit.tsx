@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
 import { LoanToValueChart, MakePaymentModal } from '@archie-webapps/archie-dashboard/components';
-import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
+import { canUserSchedulePayment, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
@@ -11,6 +11,7 @@ import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/cred
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { ButtonOutline, Card, Skeleton, TitleM, BodyM, BodyS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
+import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 
 export const AvailableCredit: FC = () => {
   const { t } = useTranslation();
@@ -19,8 +20,13 @@ export const AvailableCredit: FC = () => {
 
   const getCreditQueryResponse: QueryResponse<GetCreditResponse> = useGetCredit();
   const getLTVResponse: QueryResponse<LTV> = useGetLTV();
+  const getObligationsResponse = useGetObligations();
 
-  if (getCreditQueryResponse.state === RequestState.LOADING || getLTVResponse.state === RequestState.LOADING) {
+  if (
+    getCreditQueryResponse.state === RequestState.LOADING ||
+    getLTVResponse.state === RequestState.LOADING ||
+    getObligationsResponse.state === RequestState.LOADING
+  ) {
     return (
       <Card>
         <Skeleton />
@@ -48,7 +54,15 @@ export const AvailableCredit: FC = () => {
                 ${getFormattedValue(creditData.totalCredit - creditData.availableCredit)}
               </TitleM>
               <div className="btn-group">
-                <ButtonOutline small onClick={() => setMakePaymentModalOpen(true)}>
+                <ButtonOutline
+                  small
+                  onClick={() => setMakePaymentModalOpen(true)}
+                  isDisabled={
+                    getObligationsResponse.state === RequestState.ERROR ||
+                    (getObligationsResponse.state === RequestState.SUCCESS &&
+                      !canUserSchedulePayment(getObligationsResponse.data))
+                  }
+                >
                   {t('available_credit_card.btn')}
                 </ButtonOutline>
               </div>

@@ -169,7 +169,8 @@
   "next_payment_card": {
     "title": "Next Payment",
     "btn": "Pay now",
-    "chart": "Due in {{days}} days"
+    "chart": "Due in {{days}} days",
+    "no_payment_due": "No payment due"
   },
   "dashboard_home": {
     "title": "Hi, {{name}}",
