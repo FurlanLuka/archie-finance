@@ -53,14 +53,14 @@ export const HomeScreen: FC = () => {
     <HomeStyled>
       <MarginCallAlert />
       <div className="section-title">{getTitle()}</div>
-      <div className="section-cards">
+      <div className="section-cards one">
         <ArchieCard />
         <AvailableCredit />
       </div>
-      <div className="section-cards">
+      <div className="section-cards two">
         <CollateralValue />
         <NextPayment withBtn />
-        <MyRewards />
+        {/* <MyRewards /> */}
       </div>
       <div className="section-table">
         <RecentTransactions />

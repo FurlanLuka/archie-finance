@@ -5,14 +5,15 @@ import { breakpoints } from '@archie-webapps/shared/ui/theme';
 export const ArchieCardStyled = styled.div`
 
   .archie-card {
-    width: 420px;
     height: 100%;
-    min-height: 264px;
+
+    @media (max-width: ${breakpoints.screenMD}) {
+      width: 420px;
+    }  
 
     @media (max-width: ${breakpoints.screenSM}) {
       width: 360px;
-      min-height: 220px;
-    }
+    }  
   }
 
   .card-data {

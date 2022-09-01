@@ -37,7 +37,7 @@ export const RecentTransactions: FC = () => {
   if (getRecentTransactionsResponse.state === RequestState.SUCCESS) {
     return (
       <RecentTransactionsStyled>
-        <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
+        <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem" minHeight="450px">
           <TitleS className="title">{t('dashboard_home.recent_transactions.title')}</TitleS>
           <Link to="/history" className="history-link">
             <ButtonOutline small className="btn">

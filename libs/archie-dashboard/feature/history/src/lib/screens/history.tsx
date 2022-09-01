@@ -28,7 +28,7 @@ export const HistoryScreen: FC = () => {
 
   const getContent = () => {
     if (getTransactionsResponse.state === RequestState.LOADING) {
-      return <Loader />;
+      return <Loader className="loader" />;
     }
 
     if (getTransactionsResponse.state === RequestState.ERROR) {
@@ -66,7 +66,7 @@ export const HistoryScreen: FC = () => {
 
   return (
     <HistoryStyled>
-      <Card column alignItems="center" justifyContent="center" padding="2rem 1.5rem 2.5rem" minHeight="450px">
+      <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem" minHeight="450px">
         {getContent()}
       </Card>
     </HistoryStyled>

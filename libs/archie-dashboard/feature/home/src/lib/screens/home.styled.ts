@@ -38,17 +38,35 @@ export const HomeStyled = styled.div`
   }
 
   .section-cards {
-    display: flex;
+    display: grid;
     gap: 2rem;
     margin-bottom: 2rem;
 
-    @media (max-width: ${breakpoints.screenMD}) {
-      flex-wrap: wrap;
-      max-width: 70%;
+    &.one {
+      grid-template-columns: 420px 1fr;
+      grid-auto-rows: 264px;
+
+      @media (max-width: ${breakpoints.screenMD}) {
+        grid-template-columns: repeat(auto-fill, 70%);
+      }  
+
+      @media (max-width: ${breakpoints.screenSM}) {
+        grid-template-columns: 100%;
+        grid-auto-rows: 220px 448px;
+      }
     }
 
-    @media (max-width: ${breakpoints.screenSM}) {
-      max-width: 100%;
+    &.two {
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 184px;
+
+      @media (max-width: ${breakpoints.screenMD}) {
+        grid-template-columns: repeat(auto-fill, 70%);
+      }  
+
+      @media (max-width: ${breakpoints.screenSM}) {
+        grid-template-columns: 100%;
+      }  
     }
   }
 
