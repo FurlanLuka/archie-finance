@@ -11,3 +11,7 @@ export class CreditLimitIncreasedPayload {
   creditLimit: number;
   calculatedAt: string;
 }
+
+export class CreditLimitPeriodicCheckRequestedPayload {
+  userIds: string[];
+}
