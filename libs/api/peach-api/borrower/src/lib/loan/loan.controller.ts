@@ -1,5 +1,4 @@
-import { AuthGuard } from '@archie/api/utils/auth0';
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   CARD_ACTIVATED_TOPIC,
@@ -21,20 +20,6 @@ import {
   EmailVerifiedPayload,
   KycSubmittedPayload,
 } from '@archie/api/user-api/data-transfer-objects';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { GetCreditResponseDto } from './loan.dto';
-
-@Controller('v1/loans')
-export class LoansController {
-  constructor(private peachService: PeachBorrowerService) {}
-
-  @Get()
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  async getCreditLine(@Req() req): Promise<GetCreditResponseDto> {
-    return this.peachService.getCredit(req.user.sub);
-  }
-}
 
 @Controller()
 export class PeachBorrowerQueueController {
