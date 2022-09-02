@@ -8,8 +8,12 @@ import {
 } from '@archie/api/credit-limit-api/constants';
 import { AssetInformation } from '@archie/api/collateral-api/asset-information';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { QueueService } from '@archie/api/utils/queue';
+import {
+  CreditLimitDecreasedPayload,
+  CreditLimitIncreasedPayload,
+} from '@archie/api/credit-limit-api/data-transfer-objects';
 
 @Injectable()
 export class CreditLimitAdjustmentService {
@@ -20,7 +24,7 @@ export class CreditLimitAdjustmentService {
   ) {}
 
   public async updateCreditLimit(
-    userid: string,
+    userId: string,
     collateralCalculatedAt: string,
     collateralValue: CollateralValue,
     assetPrices: GetAssetPriceResponse[],
@@ -30,23 +34,44 @@ export class CreditLimitAdjustmentService {
       assetPrices,
     );
 
-    const updatedCreditLimit: CreditLimit = await this.updateCreditLimitRecord(
-      userid,
-      collateralCalculatedAt,
-      newCreditLimit,
-      collateralValue.collateralBalance,
-    );
+    const updatedCreditLimit: CreditLimit | undefined =
+      await this.updateCreditLimitRecord(
+        userId,
+        collateralCalculatedAt,
+        newCreditLimit,
+        collateralValue.collateralBalance,
+      );
+
+    if (updatedCreditLimit === undefined) {
+      return;
+    }
 
     if (
       updatedCreditLimit.creditLimit > updatedCreditLimit.previousCreditLimit
     ) {
-      this.queueService.publish(CREDIT_LIMIT_INCREASED_TOPIC, {
-        newCreditLimit: newCreditLimit,
-      });
+      this.queueService.publish<CreditLimitIncreasedPayload>(
+        CREDIT_LIMIT_INCREASED_TOPIC,
+        {
+          userId,
+          creditLimit: newCreditLimit,
+          amount:
+            updatedCreditLimit.creditLimit -
+            updatedCreditLimit.previousCreditLimit,
+          calculatedAt: collateralCalculatedAt,
+        },
+      );
     } else {
-      this.queueService.publish(CREDIT_LIMIT_DECREASED_TOPIC, {
-        newCreditLimit: newCreditLimit,
-      });
+      this.queueService.publish<CreditLimitDecreasedPayload>(
+        CREDIT_LIMIT_DECREASED_TOPIC,
+        {
+          userId,
+          creditLimit: newCreditLimit,
+          amount:
+            updatedCreditLimit.previousCreditLimit -
+            updatedCreditLimit.creditLimit,
+          calculatedAt: collateralCalculatedAt,
+        },
+      );
     }
   }
 
@@ -74,7 +99,7 @@ export class CreditLimitAdjustmentService {
     collateralCalculatedAt: string,
     newCreditLimit: number,
     collateralBalance: number,
-  ): Promise<CreditLimit> {
+  ): Promise<CreditLimit | undefined> {
     return this.creditLimitRepository
       .createQueryBuilder('CreditLimit')
       .update(CreditLimit)
@@ -90,7 +115,7 @@ export class CreditLimitAdjustmentService {
       })
       .returning('*')
       .execute()
-      .then((response) => {
+      .then((response: UpdateResult) => {
         return (<CreditLimit[]>response.raw)[0];
       });
   }

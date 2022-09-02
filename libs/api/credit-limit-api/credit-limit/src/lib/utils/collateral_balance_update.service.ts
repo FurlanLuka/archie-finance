@@ -4,7 +4,6 @@ import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import {
   CollateralValue,
   CollateralWithCalculationDate,
-  CollateralWithPrice,
 } from './utils.interfaces';
 import { CreditLimit } from '../credit_limit.entity';
 import {
@@ -81,12 +80,14 @@ export class CollateralBalanceUpdateUtilService {
   private async getCollateralWithCalculationDate(
     userId: string,
   ): Promise<CollateralWithCalculationDate[]> {
-    return this.collateralRepository
-      .createQueryBuilder('Collateral')
-      .select('*, now() as "calculatedAt"')
-      .where('userId =: userId', {
-        userId: userId,
-      })
-      .execute();
+    return <Promise<CollateralWithCalculationDate[]>>(
+      await this.collateralRepository
+        .createQueryBuilder('Collateral')
+        .select('*, now() as "calculatedAt"')
+        .where('userId =: userId', {
+          userId: userId,
+        })
+        .execute()
+    );
   }
 }

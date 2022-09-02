@@ -23,7 +23,7 @@ export class CreditLimitService {
   public async handleCollateralWithdrawInitializedEvent(
     transaction: CollateralWithdrawInitializedDto,
   ): Promise<void> {
-    // TODO: Store transaction ids - no duplicated events (check all queue handlers -common issue)
+    // TODO: Store transaction ids - no duplicated events (check all queue handlers -common issue) / always publish whole state
 
     await this.collateralRepository
       .createQueryBuilder('Collateral')

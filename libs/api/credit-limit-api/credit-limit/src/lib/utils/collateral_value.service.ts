@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { Collateral } from '../collateral.entity';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
-import { CollateralValue, CollateralWithPrice } from './utils.interfaces';
+import {
+  CollateralValue,
+  CollateralWithCalculationDate,
+  CollateralWithPrice,
+} from './utils.interfaces';
 
 @Injectable()
 export class CollateralValueUtilService {
   public getCollateralValue(
-    collateral: Collateral[],
+    collateral: CollateralWithCalculationDate[],
     assetPrices: GetAssetPriceResponse[],
   ): CollateralValue {
     const collateralValuePerAsset: CollateralWithPrice[] = collateral.map(
-      (collateralAsset: Collateral) => {
+      (collateralAsset: CollateralWithCalculationDate) => {
         const assetPrice: GetAssetPriceResponse | undefined = assetPrices.find(
           (asset) => asset.asset === collateralAsset.asset,
         );

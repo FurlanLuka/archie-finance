@@ -5,7 +5,7 @@ export enum AssetType {
 }
 
 export class AssetList {
-  [key: string]: AssetInformation | undefined;
+  [key: string]: AssetInformation;
 }
 
 export class AssetInformation {
