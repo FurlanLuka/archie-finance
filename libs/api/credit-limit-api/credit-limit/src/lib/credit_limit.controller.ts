@@ -12,9 +12,6 @@ import {
 import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC } from '@archie/api/collateral-api/constants';
 import { CreditLimitService } from './credit_limit.service';
-import { PeachWebhookService } from '@archie/api/webhook-api/peach';
-import { CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED } from '@archie/api/credit-limit-api/constants';
-import { CreditLimitPeriodicCheckRequestedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 
 @Controller()
 export class CreditLimitQueueController {
@@ -56,27 +53,5 @@ export class CreditLimitQueueController {
     return this.creditLimitService.handleInternalTransactionCreatedEvent(
       payload,
     );
-  }
-
-  @Subscribe(
-    CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED,
-    CreditLimitQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async creditLimitPeriodicCheckHandler(
-    payload: CreditLimitPeriodicCheckRequestedPayload,
-  ): Promise<void> {
-    return this.creditLimitService.handlePeriodicCreditLimitCheck(
-      payload.userIds,
-    );
-  }
-}
-
-@Controller('internal/credit_limits/periodic_check')
-export class InternalCreditLimitController {
-  constructor(private creditLimitService: CreditLimitService) {}
-
-  @Post()
-  public async paymentConfirmedHandler(): Promise<void> {
-    await this.creditLimitService.triggerPeriodicCheck();
   }
 }

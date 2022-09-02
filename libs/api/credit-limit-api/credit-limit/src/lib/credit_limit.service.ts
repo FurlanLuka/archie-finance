@@ -92,33 +92,4 @@ export class CreditLimitService {
       transaction.userId,
     );
   }
-
-  public async handlePeriodicCreditLimitCheck(
-    userIds: string[],
-  ): Promise<void> {
-    await this.collateralBalanceUpdateUtilService.handlePeriodicCollateralBalanceUpdate(
-      userIds,
-    );
-  }
-
-  public async triggerPeriodicCheck(): Promise<void> {
-    const QUEUE_EVENTS_LIMIT = 5000;
-
-    const creditLimits: CreditLimit[] = await this.creditLimitRepository.find();
-
-    const userIds: string[] = creditLimits.map((credit) => credit.userId);
-
-    const chunkSize: number = Math.ceil(userIds.length / QUEUE_EVENTS_LIMIT);
-
-    for (let i = 0; i < userIds.length; i += chunkSize) {
-      const userIdChunk: string[] = userIds.slice(i, i + chunkSize);
-
-      this.queueService.publish<CreditLimitPeriodicCheckRequestedPayload>(
-        CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED,
-        {
-          userIds: userIdChunk,
-        },
-      );
-    }
-  }
 }
