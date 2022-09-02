@@ -1,5 +1,3 @@
-import { Collateral } from '../collateral.entity';
-
 export interface CollateralValue {
   collateral: CollateralWithPrice[];
   collateralBalance: number;
@@ -11,6 +9,10 @@ export interface CollateralWithPrice {
   price: number;
 }
 
-export class CollateralWithCalculationDate extends Collateral {
+export interface CollateralWithCalculationDate {
+  id: string;
+  userId: string;
+  asset: string;
+  amount: number;
   calculatedAt: string;
 }

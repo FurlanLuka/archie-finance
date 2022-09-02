@@ -5,12 +5,12 @@ import { DateTime, Interval } from 'luxon';
 import { MarginAction } from './utils.interfaces';
 import { MathUtilService } from './math.service';
 import { MarginNotification } from '../margin_notifications.entity';
+import { LTV_MARGIN_CALL_LIMIT } from '@archie/api/margin-api/constants';
 
 @Injectable()
 export class MarginActionsCheckUtilService {
   LTV_ALERT_LIMITS = [65, 70, 73];
-  LTV_MARGIN_CALL_LIMIT = 75;
-  LTV_DIRECT_LIQUIDATION_LIMIT = 85;
+  LTV_DIRECT_LIQUIDATION_LIMIT = 90;
 
   MIN_COLLATERAL_VALUE_CHANGE = 10;
 
@@ -48,13 +48,13 @@ export class MarginActionsCheckUtilService {
       ];
     }
 
-    if (activeMarginCall === null && ltv >= this.LTV_MARGIN_CALL_LIMIT) {
+    if (activeMarginCall === null && ltv >= LTV_MARGIN_CALL_LIMIT) {
       return [MarginAction.activate_margin_call];
     }
 
     if (
       activeMarginCall !== null &&
-      ltv >= this.LTV_MARGIN_CALL_LIMIT &&
+      ltv >= LTV_MARGIN_CALL_LIMIT &&
       ltv < this.LTV_DIRECT_LIQUIDATION_LIMIT
     ) {
       const hoursPassedSinceTheStartOfMarginCall: number =
@@ -73,7 +73,7 @@ export class MarginActionsCheckUtilService {
       return [];
     }
 
-    if (activeMarginCall !== null && ltv < this.LTV_MARGIN_CALL_LIMIT) {
+    if (activeMarginCall !== null && ltv < LTV_MARGIN_CALL_LIMIT) {
       return [MarginAction.deactivate_margin_call];
     }
 
@@ -96,8 +96,7 @@ export class MarginActionsCheckUtilService {
           return (
             marginNotificationNotSentYet &&
             ltv >= ltvAlertLimit &&
-            ltv <
-              (this.LTV_ALERT_LIMITS[index + 1] ?? this.LTV_MARGIN_CALL_LIMIT)
+            ltv < (this.LTV_ALERT_LIMITS[index + 1] ?? LTV_MARGIN_CALL_LIMIT)
           );
         },
       ).some((alert: boolean) => alert);

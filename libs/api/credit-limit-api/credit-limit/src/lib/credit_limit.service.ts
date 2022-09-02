@@ -1,50 +1,31 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   CollateralWithdrawInitializedDto,
   InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/fireblocks';
-import {
-  CollateralDepositCompletedPayload,
-  CollateralReceivedPayload,
-} from '@archie/api/credit-api/data-transfer-objects';
+import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { Collateral } from './collateral.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreditLimit } from './credit_limit.entity';
-import { CollateralValueUtilService } from './utils/collateral_value.service';
-import { MathUtilService } from './utils/math.service';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
-import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
-import { QueueService } from '@archie/api/utils/queue';
-import {
-  CollateralValue,
-  CollateralWithCalculationDate,
-  CollateralWithPrice,
-} from './utils/utils.interfaces';
-import { AssetInformation } from '@archie/api/collateral-api/asset-information';
-import { CREDIT_LIMIT_INCREASED_TOPIC } from '@archie/api/credit-limit-api/constants';
-import { CreateCreditMinimumCollateralError } from './credit_limit.errors';
-import { COLLATERAL_RECEIVED_TOPIC } from '@archie/api/credit-api/constants';
+import { CollateralBalanceUpdateUtilService } from './utils/collateral_balance_update.service';
+import { CreditLimitAdjustmentService } from './utils/credit_limit_adjustment.service';
+import { CollateralWithCalculationDate } from './utils/utils.interfaces';
 
 @Injectable()
 export class CreditLimitService {
-  private MINIMUM_CREDIT = 200;
-  private MAXIMUM_CREDIT = 2000;
-
   constructor(
     @InjectRepository(Collateral)
     private collateralRepository: Repository<Collateral>,
     @InjectRepository(CreditLimit)
-    private creditLimitRepository: Repository<CreditLimit>,
-    private collateralValueUtilService: CollateralValueUtilService,
-    private mathUtilService: MathUtilService,
-    private queueService: QueueService,
+    private collateralBalanceUpdateUtilService: CollateralBalanceUpdateUtilService,
+    private creditLimitAdjustmentService: CreditLimitAdjustmentService,
   ) {}
 
   public async handleCollateralWithdrawInitializedEvent(
     transaction: CollateralWithdrawInitializedDto,
   ): Promise<void> {
-    // TODO: Store transaction ids - no duplicated events
+    // TODO: Store transaction ids - no duplicated events (check all queue handlers -common issue) / always publish whole state
 
     await this.collateralRepository
       .createQueryBuilder('Collateral')
@@ -59,86 +40,9 @@ export class CreditLimitService {
       .setParameter('amount', transaction.withdrawalAmount)
       .execute();
 
-    const creditLimit: CreditLimit | null =
-      await this.creditLimitRepository.findOneBy({
-        userId: transaction.userId,
-      });
-
-    if (creditLimit === null) {
-      // Do nothing as initial funding was not completed yet
-    } else {
-      const assetPrices: GetAssetPriceResponse[] =
-        await this.queueService.request(GET_ASSET_PRICES_RPC);
-
-      // const collateral: Collateral[] = await this.collateralRepository.findBy({
-      //   userId: transaction.userId,
-      // });
-      const collateral: CollateralWithCalculationDate[] =
-        await this.collateralRepository
-          .createQueryBuilder('Collateral')
-          .select('*, now() as "calculatedAt"')
-          .where('userId =: userId', {
-            userId: transaction.userId,
-          })
-          .setParameter('amount', transaction.withdrawalAmount)
-          .execute();
-
-      const collateralValue: CollateralValue =
-        this.collateralValueUtilService.getCollateralValue(
-          collateral,
-          assetPrices,
-        );
-
-      const collateralValueChange: number = this.mathUtilService.getDifference(
-        collateralValue.collateralBalance,
-        creditLimit.calculatedOnCollateralBalance,
-      );
-
-      if (collateralValueChange >= 10) {
-        const newCreditLimit: number = this.calculateCreditLimit(
-          collateralValue.collateral,
-          assetPrices,
-        );
-
-        await this.creditLimitRepository
-          .createQueryBuilder('CreditLimit')
-          .update(CreditLimit)
-          .where('userId =: userId AND calculatedAt <=: calculatedAt ', {
-            userId: transaction.userId,
-            calculatedAt: collateral[0].calculatedAt,
-          })
-          .set({
-            previousCreditLimit: () => 'creditLimit',
-            creditLimit: () => ': newCreditLimit',
-          })
-          .setParameter('newCreditLimit', newCreditLimit)
-          .returning('*')
-          .execute();
-        // returning check if increased or decreased
-        this.queueService.publish(CREDIT_LIMIT_INCREASED_TOPIC, {
-          newCreditLimit: newCreditLimit,
-        });
-      }
-    }
-  }
-
-  public calculateCreditLimit(
-    collateralValue: CollateralWithPrice[],
-    assetList: GetAssetPriceResponse[],
-  ): number {
-    return collateralValue.reduce((sum: number, value: CollateralWithPrice) => {
-      const assetInformation: AssetInformation | undefined =
-        assetList[value.asset];
-
-      if (assetInformation === undefined) {
-        return sum;
-      }
-
-      const actualCollateralValue: number =
-        (value.price / 100) * assetInformation.ltv;
-
-      return sum + Math.floor(actualCollateralValue);
-    }, 0);
+    await this.collateralBalanceUpdateUtilService.handleCollateralBalanceUpdate(
+      transaction.userId,
+    );
   }
 
   public async handleCollateralDepositCompletedEvent(
@@ -159,7 +63,9 @@ export class CreditLimitService {
       .setParameter('amount', transaction.amount)
       .execute();
 
-    // Check if collateral value changed by 10 % - if yes publish credit limit updated event
+    await this.collateralBalanceUpdateUtilService.handleCollateralBalanceUpdate(
+      transaction.userId,
+    );
   }
 
   public async handleInternalTransactionCreatedEvent(
@@ -180,51 +86,24 @@ export class CreditLimitService {
       .setParameter('amount', transaction.amount)
       .execute();
 
-    // Check if collateral value changed by 10 % - if yes publish credit limit updated event}
+    await this.collateralBalanceUpdateUtilService.handleCollateralBalanceUpdate(
+      transaction.userId,
+    );
   }
 
   public async createCredit(userId: string): Promise<void> {
-    // TODO check if already exists
-    const assetPrices: GetAssetPriceResponse[] =
-      await this.queueService.request(GET_ASSET_PRICES_RPC);
+    const collateral: CollateralWithCalculationDate[] =
+      await this.collateralRepository
+        .createQueryBuilder('Collateral')
+        .select('*, now() as "calculatedAt"')
+        .where('userId =: userId', {
+          userId: userId,
+        })
+        .execute();
 
-    const collateral: Collateral[] = await this.collateralRepository.findBy({
+    return this.creditLimitAdjustmentService.createInitialCredit(
       userId,
-    });
-
-    const collateralValue: CollateralValue =
-      this.collateralValueUtilService.getCollateralValue(
-        collateral,
-        assetPrices,
-      );
-
-    let totalCollateralValue: number = this.calculateCreditLimit(
-      collateralValue.collateral,
-      assetPrices,
-    );
-
-    if (totalCollateralValue < this.MINIMUM_CREDIT) {
-      throw new CreateCreditMinimumCollateralError(this.MINIMUM_CREDIT);
-    }
-
-    if (totalCollateralValue > this.MAXIMUM_CREDIT) {
-      Logger.warn({
-        code: 'CREATE_CREDIT_MAXIMUM_COLLATERAL_VALUE_EXCEEDED',
-        metadata: {
-          userId,
-        },
-      });
-
-      totalCollateralValue = this.MAXIMUM_CREDIT;
-    }
-
-    // create limit entity and then publish
-
-    this.queueService.publish<CollateralReceivedPayload>(
-      COLLATERAL_RECEIVED_TOPIC,
-      {
-        userId,
-      },
+      collateral,
     );
   }
 }
