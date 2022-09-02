@@ -1,9 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  CollateralValue,
-  CollateralWithCalculationDate,
-  CollateralWithPrice,
-} from './utils.interfaces';
+import { CollateralValue, CollateralWithPrice } from './utils.interfaces';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { CreditLimit } from '../credit_limit.entity';
 import {
@@ -18,8 +14,6 @@ import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
 } from '@archie/api/credit-limit-api/data-transfer-objects';
-import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
-import { CollateralValueUtilService } from './collateral_value.service';
 import {
   CreateCreditAlreadyExistsError,
   CreateCreditMinimumCollateralError,
@@ -36,7 +30,6 @@ export class CreditLimitAdjustmentService {
     @InjectRepository(CreditLimit)
     private creditLimitRepository: Repository<CreditLimit>,
     private queueService: QueueService,
-    private collateralValueUtilService: CollateralValueUtilService,
   ) {}
 
   public async updateCreditLimit(
@@ -138,7 +131,8 @@ export class CreditLimitAdjustmentService {
 
   public async createInitialCredit(
     userId: string,
-    collateral: CollateralWithCalculationDate[],
+    collateralValue: CollateralValue,
+    assetPrices: GetAssetPriceResponse[],
   ): Promise<void> {
     const creditLimit: CreditLimit | null =
       await this.creditLimitRepository.findOneBy({
@@ -148,15 +142,6 @@ export class CreditLimitAdjustmentService {
     if (creditLimit !== null) {
       throw new CreateCreditAlreadyExistsError();
     }
-
-    const assetPrices: GetAssetPriceResponse[] =
-      await this.queueService.request(GET_ASSET_PRICES_RPC);
-
-    const collateralValue: CollateralValue =
-      this.collateralValueUtilService.getCollateralValue(
-        collateral,
-        assetPrices,
-      );
 
     let totalCreditValue: number = this.calculateCreditLimit(
       collateralValue.collateral,

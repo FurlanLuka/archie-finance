@@ -10,7 +10,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreditLimit } from './credit_limit.entity';
 import { CollateralBalanceUpdateUtilService } from './utils/collateral_balance_update.service';
 import { CreditLimitAdjustmentService } from './utils/credit_limit_adjustment.service';
-import { CollateralWithCalculationDate } from './utils/utils.interfaces';
+import { CollateralValue } from './utils/utils.interfaces';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
+import { QueueService } from '@archie/api/utils/queue';
+import { CollateralValueUtilService } from './utils/collateral_value.service';
 
 @Injectable()
 export class CreditLimitService {
@@ -20,6 +24,8 @@ export class CreditLimitService {
     @InjectRepository(CreditLimit)
     private collateralBalanceUpdateUtilService: CollateralBalanceUpdateUtilService,
     private creditLimitAdjustmentService: CreditLimitAdjustmentService,
+    private queueService: QueueService,
+    private collateralValueUtilService: CollateralValueUtilService,
   ) {}
 
   public async handleCollateralWithdrawInitializedEvent(
@@ -92,18 +98,23 @@ export class CreditLimitService {
   }
 
   public async createCredit(userId: string): Promise<void> {
-    const collateral: CollateralWithCalculationDate[] =
-      await this.collateralRepository
-        .createQueryBuilder('Collateral')
-        .select('*, now() as "calculatedAt"')
-        .where('userId =: userId', {
-          userId: userId,
-        })
-        .execute();
+    const collateral: Collateral[] = await this.collateralRepository.findBy({
+      userId,
+    });
+
+    const assetPrices: GetAssetPriceResponse[] =
+      await this.queueService.request(GET_ASSET_PRICES_RPC);
+
+    const collateralValue: CollateralValue =
+      this.collateralValueUtilService.getCollateralValue(
+        collateral,
+        assetPrices,
+      );
 
     return this.creditLimitAdjustmentService.createInitialCredit(
       userId,
-      collateral,
+      collateralValue,
+      assetPrices,
     );
   }
 }
