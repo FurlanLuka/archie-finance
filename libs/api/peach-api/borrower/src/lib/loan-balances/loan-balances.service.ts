@@ -29,10 +29,7 @@ export class LoanBalancesService {
     return {
       availableCredit: balance.availableCreditAmount,
       totalCredit: balance.creditLimitAmount,
-<<<<<<< HEAD
       utilizationAmount: balance.utilizationAmount,
-=======
->>>>>>> 46375604c0cd55c5fbc645ac6b5be0a0123cd4ca
     };
   }
 }
