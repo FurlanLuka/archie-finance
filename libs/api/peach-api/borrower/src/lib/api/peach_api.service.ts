@@ -108,6 +108,22 @@ export class PeachApiService {
     return response.data.data[0];
   }
 
+  public async createPaypalPaymentInstrument(
+    personId: string,
+  ): Promise<PaymentInstrument> {
+    const response = await this.peachClient.post(
+      `/people/${personId}/payment-instruments`,
+      {
+        instrumentType: 'paymentNetwork',
+        paymentNetworkName: 'PayPal',
+        isExternal: true,
+        status: 'active',
+      },
+    );
+
+    return response.data.data[0];
+  }
+
   public async deletePaymentInstrument(
     personId: string,
     paymentInstrumentId: string,
