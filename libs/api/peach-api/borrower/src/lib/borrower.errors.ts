@@ -46,13 +46,13 @@ export class PaymentInstrumentNotFound extends NotFoundException {
   }
 }
 
-export class AutopayNotConfiguredError extends ConflictException {
+export class AutopayNotConfiguredError extends NotFoundException {
   constructor() {
     super('AUTOPAY_NOT_CONFIGURED');
   }
 }
 
-export class AutopayAlreadyConfiguredError extends NotFoundException {
+export class AutopayAlreadyConfiguredError extends ConflictException {
   constructor() {
     super('AUTOPAY_ALREADY_CONFIGURED');
   }

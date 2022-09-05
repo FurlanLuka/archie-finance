@@ -49,10 +49,17 @@ export class AutopayService {
       autopayConfiguration.agreementDocumentId,
     );
 
+    const pdfDocument: Document =
+      await this.peachApiService.convertDocumentToPdf(
+        borrower.personId,
+        autopayConfiguration.agreementDocumentId,
+      );
+
     await this.peachApiService.createAutopay(
       borrower.personId,
       borrower.creditLineId,
       autopayConfiguration,
+      pdfDocument.id,
     );
   }
 
