@@ -23,6 +23,7 @@ export class CreditQueueController {
     await this.creditService.handleCreditBalanceUpdatedEvent(payload);
   }
 
+  // TODO migrate to CREDIT_LINE_CREATED_TOPIC?
   @Subscribe(CARD_ACTIVATED_TOPIC, CreditQueueController.CONTROLLER_QUEUE_NAME)
   async cardActivatedHandler(payload: CardActivatedPayload): Promise<void> {
     await this.creditService.handleCardActivatedEvent(payload);

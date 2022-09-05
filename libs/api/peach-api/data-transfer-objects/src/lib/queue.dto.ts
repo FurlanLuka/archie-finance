@@ -16,3 +16,14 @@ export class CreditBalanceUpdatedPayload {
     amount: number;
   };
 }
+
+export class GetLoanBalancesPayload {
+  userId: string;
+}
+
+// TODO do we unify with GetLoanBalancesDto or something?
+export interface GetLoanBalancesResponse {
+  totalCredit: number;
+  availableCredit: number;
+  utilizationAmount: number;
+}

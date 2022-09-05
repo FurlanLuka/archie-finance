@@ -1,8 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
-  CARD_ACTIVATED_TOPIC,
-  CREDIT_FUNDS_LOADED_TOPIC,
   CREDIT_LIMIT_DECREASED_TOPIC,
   CREDIT_LIMIT_INCREASED_TOPIC,
   SERVICE_QUEUE_NAME,
@@ -41,22 +39,6 @@ export class PeachBorrowerQueueController {
   )
   async emailVerifiedHandler(payload: EmailVerifiedPayload): Promise<void> {
     await this.peachService.handleEmailVerifiedEvent(payload);
-  }
-
-  @Subscribe(
-    CARD_ACTIVATED_TOPIC,
-    PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async cardActivatedHandler(payload): Promise<void> {
-    await this.peachService.handleCardActivatedEvent(payload);
-  }
-
-  @Subscribe(
-    CREDIT_FUNDS_LOADED_TOPIC,
-    PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async creditFundsLoadedHandler(payload): Promise<void> {
-    await this.peachService.handleFundsLoadedEvent(payload);
   }
 
   @Subscribe(

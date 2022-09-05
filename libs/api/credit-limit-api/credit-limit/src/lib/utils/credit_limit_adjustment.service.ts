@@ -5,6 +5,7 @@ import { CreditLimit } from '../credit_limit.entity';
 import {
   CREDIT_LIMIT_DECREASED_TOPIC,
   CREDIT_LIMIT_INCREASED_TOPIC,
+  CREDIT_LINE_CREATED_TOPIC,
 } from '@archie/api/credit-limit-api/constants';
 import { AssetInformation } from '@archie/api/collateral-api/asset-information';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,13 +14,12 @@ import { QueueService } from '@archie/api/utils/queue';
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
+  CreditLineCreatedPayload,
 } from '@archie/api/credit-limit-api/data-transfer-objects';
 import {
   CreateCreditAlreadyExistsError,
   CreateCreditMinimumCollateralError,
 } from '../credit_limit.errors';
-import { CollateralReceivedPayload } from '@archie/api/credit-api/data-transfer-objects';
-import { COLLATERAL_RECEIVED_TOPIC } from '@archie/api/credit-api/constants';
 
 @Injectable()
 export class CreditLimitAdjustmentService {
@@ -163,7 +163,6 @@ export class CreditLimitAdjustmentService {
       totalCreditValue = this.MAXIMUM_CREDIT;
     }
 
-    // create limit entity and then publish
     await this.creditLimitRepository.insert({
       userId,
       calculatedAt: new Date().toISOString(),
@@ -171,10 +170,11 @@ export class CreditLimitAdjustmentService {
       calculatedOnCollateralBalance: collateralValue.collateralBalance,
     });
 
-    this.queueService.publish<CollateralReceivedPayload>(
-      COLLATERAL_RECEIVED_TOPIC,
+    this.queueService.publish<CreditLineCreatedPayload>(
+      CREDIT_LINE_CREATED_TOPIC,
       {
         userId,
+        amount: totalCreditValue,
       },
     );
   }

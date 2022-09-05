@@ -47,6 +47,11 @@ import {
   TransactionUpdatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
 import { CardResponseDto, CardStatus } from './rize.dto';
+import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
+import {
+  GetLoanBalancesPayload,
+  GetLoanBalancesResponse,
+} from '@archie/api/peach-api/data-transfer-objects';
 
 @Injectable()
 export class RizeService {
@@ -355,16 +360,14 @@ export class RizeService {
   }
 
   public async loadFunds(userId: string, customerId: string): Promise<void> {
-    const credit: GetCreditResponse = await this.creditService.getCredit(
+    const credit = await this.queueService.request<
+      GetLoanBalancesResponse,
+      GetLoanBalancesPayload
+    >(GET_LOAN_BALANCES_RPC, {
       userId,
-    );
+    });
 
     await this.rizeApiService.loadFunds(customerId, credit.availableCredit);
-
-    this.queueService.publish<FundsLoadedPayload>(CREDIT_FUNDS_LOADED_TOPIC, {
-      userId,
-      amount: credit.availableCredit,
-    });
   }
 
   public async increaseCreditLimit(

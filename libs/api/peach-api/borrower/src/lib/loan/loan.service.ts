@@ -22,6 +22,7 @@ import {
 } from '@archie/api/user-api/data-transfer-objects';
 import { BorrowerWithHomeAddress } from '../utils/borrower.validation.interfaces';
 import { Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
+import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -82,6 +83,7 @@ export class PeachBorrowerService {
     await this.peachApiService.addMailContact(borrower.personId, email.email);
   }
 
+  // TODO remove
   public async handleCardActivatedEvent(activatedCard): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: activatedCard.userId,
@@ -93,6 +95,7 @@ export class PeachBorrowerService {
     await this.peachApiService.createUser(borrower.personId, email);
   }
 
+  // TODO remove
   public async handleFundsLoadedEvent(founds): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: founds.userId,
@@ -102,6 +105,27 @@ export class PeachBorrowerService {
     const creditLineId = await this.createActiveCreditLine(
       borrower,
       founds.amount,
+    );
+
+    await this.createActiveDraw(borrower, creditLineId);
+  }
+
+  public async handleCreditLineCreatedEvent(
+    payload: CreditLineCreatedPayload,
+  ): Promise<void> {
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
+      userId: payload.userId,
+    });
+    this.borrowerValidation.isBorrowerMailDefined(borrower);
+    this.borrowerValidation.isBorrowerHomeAddressDefined(borrower);
+
+    const email: string = this.cryptoService.decrypt(borrower.encryptedEmail);
+
+    await this.peachApiService.createUser(borrower.personId, email);
+
+    const creditLineId = await this.createActiveCreditLine(
+      borrower,
+      payload.amount,
     );
 
     await this.createActiveDraw(borrower, creditLineId);

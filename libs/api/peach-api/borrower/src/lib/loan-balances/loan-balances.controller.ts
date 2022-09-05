@@ -1,4 +1,17 @@
+import {
+  GET_LOAN_BALANCES_RPC,
+  SERVICE_QUEUE_NAME,
+} from '@archie/api/peach-api/constants';
+import {
+  GetLoanBalancesPayload,
+  GetLoanBalancesResponse,
+} from '@archie/api/peach-api/data-transfer-objects';
 import { AuthGuard } from '@archie/api/utils/auth0';
+import {
+  RequestHandler,
+  RPCResponse,
+  RPCResponseType,
+} from '@archie/api/utils/queue';
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { GetLoanBalancesDto } from './loan-balances.dto';
@@ -13,5 +26,36 @@ export class LoanBalancesController {
   @ApiBearerAuth()
   async getLoanBalances(@Req() req): Promise<GetLoanBalancesDto> {
     return this.loanBalancesService.getLoanBalances(req.user.sub);
+  }
+}
+
+@Controller()
+export class LoanBalancesQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-asset-price`;
+
+  constructor(private loanBalancesService: LoanBalancesService) {}
+
+  @RequestHandler(
+    GET_LOAN_BALANCES_RPC,
+    LoanBalancesQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async getLoanBalances(
+    payload: GetLoanBalancesPayload,
+  ): Promise<RPCResponse<GetLoanBalancesResponse>> {
+    try {
+      const data = await this.loanBalancesService.getLoanBalances(
+        payload.userId,
+      );
+
+      return {
+        type: RPCResponseType.SUCCESS,
+        data,
+      };
+    } catch (error) {
+      return {
+        type: RPCResponseType.ERROR,
+        message: error.message ?? 'INTERNAL_SERVER_EXCEPTION',
+      };
+    }
   }
 }
