@@ -9,7 +9,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreditLimit } from './credit_limit.entity';
 import { CollateralBalanceUpdateUtilService } from './utils/collateral_balance_update.service';
 import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
-import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class CreditLimitService {
@@ -19,7 +18,6 @@ export class CreditLimitService {
     @InjectRepository(CreditLimit)
     private creditLimitRepository: Repository<CreditLimit>,
     private collateralBalanceUpdateUtilService: CollateralBalanceUpdateUtilService,
-    private queueService: QueueService,
   ) {}
 
   public async handleCollateralWithdrawInitializedEvent(
