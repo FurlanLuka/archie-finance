@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { MarginCall } from './margin_calls.entity';
 import { MarginCheck } from './margin_check.entity';
 import { MathUtilService } from './utils/math.service';
@@ -60,5 +60,63 @@ export class MarginService {
         { conflictPaths: ['userId'] },
       );
     }
+  }
+
+  public async handleMultipleLtvsUpdatedEvent(
+    updatedLtvs: LtvUpdatedPayload[],
+  ): Promise<void> {
+    const userIds: string[] = updatedLtvs.map((ltv) => ltv.userId);
+
+    const activeMarginCalls: MarginCall[] =
+      await this.marginCallsRepository.findBy({
+        userId: In(userIds),
+      });
+    const lastMarginCheckss: MarginCheck[] =
+      await this.marginCheckRepository.findBy({
+        userId: In(userIds),
+      });
+    const marginNotifications: MarginNotification[] =
+      await this.marginNotificationRepository.findBy({
+        userId: In(userIds),
+      });
+
+    await Promise.all(
+      userIds.map(async (userId: string) => {
+        const activeMarginCall: MarginCall | undefined = activeMarginCalls.find(
+          (marginCall) => marginCall.userId === userId,
+        );
+        const lastMarginCheck: MarginCheck | undefined = lastMarginCheckss.find(
+          (marginCheck) => marginCheck.userId === userId,
+        );
+        const marginNotification: MarginNotification | undefined =
+          marginNotifications.find(
+            (marginNotif) => marginNotif.userId === userId,
+          );
+        const updatedLtv: LtvUpdatedPayload = <LtvUpdatedPayload>(
+          updatedLtvs.find((ltv) => ltv.userId === userId)
+        );
+
+        const actions: MarginAction[] = this.marginCheckUtilService.getActions(
+          activeMarginCall ?? null,
+          lastMarginCheck ?? null,
+          marginNotification ?? null,
+          updatedLtv.ltv,
+          updatedLtv.calculatedOn.collateralBalance,
+        );
+
+        await this.marginActionHandlersUtilService.handle(actions, updatedLtv);
+
+        if (actions.length > 0) {
+          await this.marginCheckRepository.upsert(
+            {
+              userId: updatedLtv.userId,
+              ltv: updatedLtv.ltv,
+              collateralBalance: updatedLtv.calculatedOn.collateralBalance,
+            },
+            { conflictPaths: ['userId'] },
+          );
+        }
+      }),
+    );
   }
 }

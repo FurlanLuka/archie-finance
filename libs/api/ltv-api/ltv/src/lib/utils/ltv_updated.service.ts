@@ -10,7 +10,7 @@ import {
 } from './utils.interfaces';
 import {
   LTV_UPDATED_TOPIC,
-  MULTIPLE_LTV_UPDATED_TOPIC,
+  MULTIPLE_LTVS_UPDATED_TOPIC,
 } from '@archie/api/ltv-api/constants';
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 import { CollateralValueUtilService } from './collateral_value.service';
@@ -88,7 +88,7 @@ export class LtvUpdatedUtilService {
       );
 
     this.queueService.publish<LtvUpdatedPayload[]>(
-      MULTIPLE_LTV_UPDATED_TOPIC,
+      MULTIPLE_LTVS_UPDATED_TOPIC,
       updatedLtvs,
     );
   }
