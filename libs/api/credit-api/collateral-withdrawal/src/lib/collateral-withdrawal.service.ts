@@ -1,4 +1,7 @@
-import { COLLATERAL_WITHDRAW_INITIALIZED_TOPIC } from '@archie/api/credit-api/constants';
+import {
+  COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
+  GET_COLLATERAL_VALUE_RPC,
+} from '@archie/api/credit-api/constants';
 import {
   BadRequestException,
   HttpException,
@@ -20,17 +23,22 @@ import {
   WithdrawalCreationInternalError,
   WithdrawalInitializeInternalError,
 } from './collateral-withdrawal.errors';
-import { Collateral } from '@archie/api/credit-api/collateral';
-import { Credit } from '@archie/api/credit-api/credit';
 import {
-  LiquidationLog,
-  MarginLtvService,
-} from '@archie/api/credit-api/margin';
+  Collateral,
+  GetCollateralValuePayload,
+  GetCollateralValueResponse,
+} from '@archie/api/credit-api/collateral';
 import { QueueService } from '@archie/api/utils/queue';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { CollateralWithdrawInitializedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { CollateralWithdrawTransactionCreatedPayload } from '@archie/api/collateral-api/data-transfer-objects';
+import { LtvService } from '@archie/api/ltv-api/ltv';
+import {
+  GetLoanBalancesPayload,
+  GetLoanBalancesResponse,
+} from '@archie/api/peach-api/data-transfer-objects';
+import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 
 const MAX_LTV = 30;
 @Injectable()
@@ -40,11 +48,8 @@ export class CollateralWithdrawalService {
     private collateralRepository: Repository<Collateral>,
     @InjectRepository(CollateralWithdrawal)
     private collateralWithdrawalRepository: Repository<CollateralWithdrawal>,
-    @InjectRepository(Credit) private creditRepository: Repository<Credit>,
-    @InjectRepository(LiquidationLog)
-    private liquidationLogsRepository: Repository<LiquidationLog>,
-    private marginLtvService: MarginLtvService,
     private queueService: QueueService,
+    private ltvService: LtvService,
   ) {}
 
   public async handleWithdrawalTransactionCreated({
@@ -123,6 +128,14 @@ export class CollateralWithdrawalService {
     const assetPrices: GetAssetPriceResponse[] =
       await this.queueService.request(GET_ASSET_PRICES_RPC);
 
+    const collateralValue: GetCollateralValueResponse[] =
+      await this.queueService.request<
+        GetCollateralValueResponse[],
+        GetCollateralValuePayload
+      >(GET_COLLATERAL_VALUE_RPC, {
+        userId,
+      });
+
     const assetPrice = assetPrices.find((a) => a.asset === asset);
 
     if (!assetPrice) {
@@ -135,47 +148,14 @@ export class CollateralWithdrawalService {
       throw new BadRequestException();
     }
 
-    const collaterals = await this.collateralRepository.findBy({
-      userId,
-    });
+    const desiredAsset = collateralValue.find((c) => c.asset === asset);
 
     // early break if user isn't hodling the desired asset at all
-    if (!collaterals.find((collateral) => collateral.asset === asset)) {
-      return { maxAmount: 0 };
-    }
-
-    const credit: Credit[] = await this.creditRepository.findBy({
-      userId,
-    });
-
-    const liquidationLogs = await this.liquidationLogsRepository.findBy({
-      userId,
-    });
-
-    const { collateralAllocation, collateralBalance, ltv, loanedBalance } =
-      this.marginLtvService.calculateUsersLtv(
-        userId,
-        credit,
-        liquidationLogs,
-        collaterals,
-        assetPrices,
-      );
-    Logger.log({
-      code: 'COLLATERAL_WITHDRAW_MAXIMUM_AMOUNT',
-      message: `Info for user ${userId}`,
-      collateralAllocation,
-      collateralBalance,
-      ltv,
-      loanedBalance,
-    });
-
-    // This isn't going to be undefined, since we did the check above, but it's a different variable here
-    const desiredAsset = collateralAllocation.find(
-      (collateral) => collateral.asset === asset,
-    );
     if (!desiredAsset) {
       return { maxAmount: 0 };
     }
+
+    const { ltv } = await this.ltvService.getCurrentLtv(userId);
 
     // user has loaned too much
     if (ltv > MAX_LTV) {
@@ -183,12 +163,25 @@ export class CollateralWithdrawalService {
     }
 
     // user hasn't loaned any money, they can withdraw everything
-    if (loanedBalance === 0 && ltv === 0) {
+    if (ltv === 0) {
       return { maxAmount: desiredAsset.assetAmount };
     }
 
-    const maxAmountForMaxLtv = loanedBalance / (MAX_LTV / 100); // ltv is multiplied by 100 initially
-    const maxAvailableAmount = collateralBalance - maxAmountForMaxLtv;
+    const credit = await this.queueService.request<
+      GetLoanBalancesResponse,
+      GetLoanBalancesPayload
+    >(GET_LOAN_BALANCES_RPC, {
+      userId,
+    });
+
+    const totalCollateralValue: number = collateralValue.reduce(
+      (value: number, collateralAsset: GetCollateralValueResponse) =>
+        value + collateralAsset.price,
+      0,
+    );
+
+    const maxAmountForMaxLtv = credit.utilizationAmount / (MAX_LTV / 100); // ltv is multiplied by 100 initially
+    const maxAvailableAmount = totalCollateralValue - maxAmountForMaxLtv;
 
     return {
       maxAmount:
@@ -259,7 +252,7 @@ export class CollateralWithdrawalService {
             return (<Collateral[]>response.raw)[0];
           });
 
-      if (updatedCollateral !== undefined && updatedCollateral?.amount == 0) {
+      if (updatedCollateral !== undefined && updatedCollateral.amount == 0) {
         await this.collateralRepository.delete({
           id: updatedCollateral.id,
           amount: 0,
