@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LtvCredit } from '../credit.entity';
 import { Repository } from 'typeorm';
-import { LtvCollateral } from '../collateral.entity';
 import { LtvUpdatedUtilService } from '../utils/ltv_updated.service';
 import { LtvPeriodicCheckRequestedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 import { QueueService } from '@archie/api/utils/queue';
