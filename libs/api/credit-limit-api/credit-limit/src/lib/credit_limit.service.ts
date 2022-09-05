@@ -17,6 +17,7 @@ import { CollateralValueUtilService } from './utils/collateral_value.service';
 import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { QueueService } from '@archie/api/utils/queue';
 // import { CreditLimitPeriodicCheckRequestedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
+import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class CreditLimitService {
