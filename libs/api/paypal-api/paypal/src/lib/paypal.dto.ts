@@ -1,3 +1,7 @@
-export class CreatePaymentIdentifierDto {
+import { IsNumber, IsPositive } from 'class-validator';
+
+export class CreatePaymentDto {
+  @IsNumber()
+  @IsPositive()
   paymentAmount: number;
 }

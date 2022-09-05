@@ -25,7 +25,7 @@ export class PaypalApiService {
 
     console.log('herere');
 
-    this.apiClient.interceptors.response.use(
+    this.apiClient.interceptors.request.use(
       undefined,
       async (error: AxiosError) => {
         if (error.response?.status === 401) {
@@ -47,6 +47,7 @@ export class PaypalApiService {
   }
 
   private async authenticate(): Promise<void> {
+    try {
     const authenticationResponse: AxiosResponse<AuthenticationResponse> =
       await this.apiClient.post(
         '/v1/oauth2/token',
@@ -64,7 +65,48 @@ export class PaypalApiService {
       );
 
     this.apiClient.defaults.headers.common['Authorization'] =
-      authenticationResponse.data.access_token;
+      `Bearer ${authenticationResponse.data.access_token}`;
+    } catch (error) { console.log(error) }
+  }
+
+  public async createPaymentOrder(
+    paymentIdentifier: string,
+    paymentAmount: number,
+  ): Promise<void> {
+    console.log('herererere');
+
+    try {
+    const createOrderResponse = await this.apiClient.post(
+      '/v2/checkout/orders',
+      {
+        intent: 'CAPTURE',
+        purchase_units: [
+          {
+            amount: {
+              currency_code: 'USD',
+              value: paymentAmount,
+            },
+            custom_id: paymentIdentifier,
+            description: 'Credit line payment',
+          },
+        ],
+        application_context: {
+          brand_name: 'Archie Finance',
+          payment_method: {
+            payee_preferred: 'IMMEDIATE_PAYMENT_REQUIRED',
+          },
+          shipping_preference: 'NO_SHIPPING',
+          landing_page: 'BILLING',
+          user_action: 'PAY_NOW',
+          return_url: 'https://google.com'
+        },
+      },
+    );
+
+    console.log(createOrderResponse.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   // private createApiClient(): AxiosInstance {

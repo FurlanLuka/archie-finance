@@ -8,6 +8,7 @@ import {
 import { QueueModule } from '@archie/api/utils/queue';
 import { HealthModule } from '@archie/api/utils/health';
 import { PaypalModule } from '@archie/api/paypal-api/paypal'
+import { migrations } from './migrations';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { PaypalModule } from '@archie/api/paypal-api/paypal'
         keepConnectionAlive: true,
         migrationsRun: true,
         migrationsTableName: `${SERVICE_NAME}-migrations`,
+        migrations: migrations
       }),
       inject: [ConfigService],
     }),

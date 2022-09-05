@@ -11,7 +11,7 @@ export class PaymentIdentifier {
   @Column('uuid')
   userId: string;
 
-  @Column('double')
+  @Column('int')
   paymentAmount: number;
 
 }
