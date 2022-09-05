@@ -90,6 +90,12 @@
       "@archie/api/onboarding-api/onboarding": [
         "libs/api/onboarding-api/onboarding/src/index.ts"
       ],
+      "@archie/api/paypal-api/constants": [
+        "libs/api/paypal-api/constants/src/index.ts"
+      ],
+      "@archie/api/paypal-api/paypal": [
+        "libs/api/paypal-api/paypal/src/index.ts"
+      ],
       "@archie/api/peach-api/borrower": [
         "libs/api/peach-api/borrower/src/index.ts"
       ],
@@ -105,11 +111,11 @@
       "@archie/api/referral-system-api/data-transfer-objects": [
         "libs/api/referral-system-api/data-transfer-objects/src/index.ts"
       ],
-      "@archie/api/referral-system-api/waitlist": [
-        "libs/api/referral-system-api/waitlist/src/index.ts"
-      ],
       "@archie/api/referral-system-api/sales-connect": [
         "libs/api/referral-system-api/sales-connect/src/index.ts"
+      ],
+      "@archie/api/referral-system-api/waitlist": [
+        "libs/api/referral-system-api/waitlist/src/index.ts"
       ],
       "@archie/api/user-api/auth0": ["libs/api/user-api/auth0/src/index.ts"],
       "@archie/api/user-api/constants": [
