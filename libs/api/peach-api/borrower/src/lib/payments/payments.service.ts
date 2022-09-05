@@ -14,8 +14,11 @@ import {
 } from './payments.dto';
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
-import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/constants';
+import {
+  CreditBalanceUpdatedPayload,
+  PaymentType,
+} from '@archie/api/peach-api/data-transfer-objects';
+import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
@@ -87,11 +90,16 @@ export class PaymentsService {
       payment.loanId,
     );
 
-    this.queueService.publish<CreditLinePaymentReceivedPayload>(
-      CREDIT_LINE_PAYMENT_RECEIVED_TOPIC,
+    this.queueService.publish<CreditBalanceUpdatedPayload>(
+      CREDIT_BALANCE_UPDATED_TOPIC,
       {
         ...credit,
         userId: payment.personExternalId,
+        paymentDetails: {
+          type: PaymentType.payment,
+          amount: payment.amount,
+          asset: payment.currency,
+        },
       },
     );
   }
@@ -130,6 +138,23 @@ export class PaymentsService {
       transaction.price,
       transaction.id,
     );
+
+    const credit: Credit = await this.peachApiService.getCreditBalance(
+      borrower.personId,
+      borrower.creditLineId,
+    );
+    this.queueService.publish<CreditBalanceUpdatedPayload>(
+      CREDIT_BALANCE_UPDATED_TOPIC,
+      {
+        ...credit,
+        userId: transaction.userId,
+        paymentDetails: {
+          type: PaymentType.liquidation,
+          amount: transaction.amount,
+          asset: transaction.asset,
+        },
+      },
+    );
   }
 
   public async handleInternalTransactionCompletedEvent(
@@ -145,4 +170,6 @@ export class PaymentsService {
       transaction.transactionId,
     );
   }
+
+  // TODO: Handle failed transaction
 }

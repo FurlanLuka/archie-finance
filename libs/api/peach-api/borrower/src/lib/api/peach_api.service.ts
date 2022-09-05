@@ -123,18 +123,23 @@ export class PeachApiService {
     amount: number,
     externalId: string,
   ): Promise<void> {
-    await this.peachClient.post(
-      `/people/${borrower.personId}/loans/${borrower.creditLineId}/transactions`,
-      {
-        externalId,
-        type: 'oneTime',
-        drawId: borrower.drawId,
-        isExternal: true,
-        status: 'pending',
-        paymentInstrumentId,
-        amount,
-      },
-    );
+    try {
+      await this.peachClient.post(
+        `/people/${borrower.personId}/loans/${borrower.creditLineId}/transactions`,
+        {
+          externalId,
+          type: 'oneTime',
+          drawId: borrower.drawId,
+          isExternal: true,
+          status: 'pending',
+          paymentInstrumentId,
+          amount,
+        },
+      );
+    } catch (e) {
+      const error: PeachErrorResponse = e;
+      this.ignoreDuplicatedEntityError(error);
+    }
   }
 
   public async completeTransaction(
@@ -364,15 +369,20 @@ export class PeachApiService {
     drawId: string,
     transaction: TransactionUpdatedPayload,
   ): Promise<void> {
-    await this.peachClient.post(
-      `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases`,
-      {
-        externalId: String(transaction.id),
-        type: PeachTransactionType[transaction.type],
-        status: PeachTransactionStatus.pending,
-        ...this.createPurchaseDetails(transaction),
-      },
-    );
+    try {
+      await this.peachClient.post(
+        `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases`,
+        {
+          externalId: String(transaction.id),
+          type: PeachTransactionType[transaction.type],
+          status: PeachTransactionStatus.pending,
+          ...this.createPurchaseDetails(transaction),
+        },
+      );
+    } catch (e) {
+      const error: PeachErrorResponse = e;
+      this.ignoreDuplicatedEntityError(error);
+    }
   }
 
   public async updatePurchase(
@@ -435,6 +445,7 @@ export class PeachApiService {
     return {
       availableCreditAmount: responseBody.availableCreditAmount,
       creditLimitAmount: responseBody.creditLimitAmount,
+      utilizationAmount: responseBody.utilizationAmount,
       calculatedAt: responseBody.calculatedAt,
     };
   }
@@ -563,5 +574,14 @@ export class PeachApiService {
     );
 
     return response.data;
+  }
+
+  private ignoreDuplicatedEntityError(error: PeachErrorResponse): void {
+    if (
+      error.status !== 409 &&
+      !error.errorResponse.message.startsWith('Duplicate external ID')
+    ) {
+      throw error;
+    }
   }
 }

@@ -1,0 +1,71 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/margin-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/margin-api",
+        "main": "apps/margin-api/src/main.ts",
+        "tsConfig": "apps/margin-api/tsconfig.app.json",
+        "tsPlugins": ["@nestjs/swagger/plugin"],
+        "assets": ["apps/margin-api/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/margin-api/src/environments/environment.ts",
+              "with": "apps/margin-api/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "margin-api:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/margin-api/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/margin-api"],
+      "options": {
+        "jestConfig": "apps/margin-api/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "build-openapi": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build margin-api && node dist/apps/margin-api/main build-swagger"
+      }
+    },
+    "generate-migration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build margin-api && node dist/apps/margin-api/main generate-migration"
+      }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
+    }
+  },
+  "tags": []
+}

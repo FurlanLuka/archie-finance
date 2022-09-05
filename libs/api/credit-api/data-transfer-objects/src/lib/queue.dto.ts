@@ -131,3 +131,9 @@ export class CreditLimitAdjustRequestedPayload {
 export class MarginCheckRequestedPayload {
   userIds: string[];
 }
+
+export class CollateralDepositCompletedPayload {
+  userId: string;
+  asset: string;
+  amount: number;
+}
