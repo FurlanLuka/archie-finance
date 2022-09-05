@@ -12,7 +12,6 @@ import {
   AmountType,
   AutopayOptions,
   PaymentFrequency,
-  PeachResponse,
 } from '../api/peach_api.interfaces';
 
 export class CreateAutopayDto implements AutopayOptions {
