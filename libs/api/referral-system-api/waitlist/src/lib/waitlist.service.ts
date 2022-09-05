@@ -16,6 +16,10 @@ import {
 import { v4 } from 'uuid';
 import { EmailVerificationInternalError } from './waitlist.errors';
 import { QueueService } from '@archie/api/utils/queue';
+import {
+  AppliedToWaitlistPayload,
+  JoinedToWaitlistPayload,
+} from '@archie/api/referral-system-api/data-transfer-objects';
 
 @Injectable({})
 export class WaitlistService {
@@ -42,12 +46,15 @@ export class WaitlistService {
 
     const id: string = v4();
 
-    this.queueService.publish(APPLIED_TO_WAITLIST_TOPIC, {
-      emailAddress,
-      verifyAddress: `${this.configService.get(
-        ConfigVariables.ARCHIE_MARKETING_WEBSITE_URL,
-      )}/verify?id=${id}`,
-    });
+    this.queueService.publish<AppliedToWaitlistPayload>(
+      APPLIED_TO_WAITLIST_TOPIC,
+      {
+        emailAddress,
+        verifyAddress: `${this.configService.get(
+          ConfigVariables.ARCHIE_MARKETING_WEBSITE_URL,
+        )}/verify?id=${id}`,
+      },
+    );
 
     await this.waitlist.insert({
       id,
@@ -127,11 +134,14 @@ export class WaitlistService {
         waitlistEntity.emailAddress,
       );
 
-      this.queueService.publish(JOINED_WAITLIST_TOPIC, {
-        emailAddress,
-      });
+      this.queueService.publish<JoinedToWaitlistPayload>(
+        JOINED_WAITLIST_TOPIC,
+        {
+          emailAddress,
+        },
+      );
 
-      this.waitlist.update(
+      await this.waitlist.update(
         {
           id: waitlistEntity.id,
         },

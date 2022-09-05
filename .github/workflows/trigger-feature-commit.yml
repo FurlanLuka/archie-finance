@@ -1,0 +1,26 @@
+name: Deploy feature
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+      - 'patch/*'
+ 
+env:
+  ECR_REPOSITORY: archie-development-container-repository
+  AWS_REGION: us-east-1
+
+jobs:
+  workflow:
+    uses: ./.github/workflows/reusable-ci.yaml
+    with:
+      NAME: 'Feature deployment'
+      IS_TAGGED: false
+      ENVIRONMENT: development
+      ECR_REPOSITORY: archie-development-container-repository
+      AWS_REGION: us-east-1
+      BASE_BRANCH_NAME: develop
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}

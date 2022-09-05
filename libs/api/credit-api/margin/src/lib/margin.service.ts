@@ -19,6 +19,10 @@ import { QueueService } from '@archie/api/utils/queue';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { AssetList } from '@archie/api/collateral-api/asset-information';
 import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
+import {
+  CreditLimitAdjustRequestedPayload,
+  MarginCheckRequestedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class MarginService {
@@ -55,9 +59,12 @@ export class MarginService {
     for (let i = 0; i < userIds.length; i += chunkSize) {
       const chunk: string[] = userIds.slice(i, i + chunkSize);
 
-      this.queueService.publish(MARGIN_CHECK_REQUESTED_TOPIC, {
-        userIds: chunk,
-      });
+      this.queueService.publish<MarginCheckRequestedPayload>(
+        MARGIN_CHECK_REQUESTED_TOPIC,
+        {
+          userIds: chunk,
+        },
+      );
     }
   }
 
@@ -160,9 +167,12 @@ export class MarginService {
     );
 
     await this.marginCollateralCheckService.updateMarginChecks(userLtvs);
-    this.queueService.publish(CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC, {
-      userIds: userLtvs.map((user) => user.userId),
-    });
+    this.queueService.publish<CreditLimitAdjustRequestedPayload>(
+      CREDIT_LIMIT_ADJUST_REQUESTED_TOPIC,
+      {
+        userIds: userLtvs.map((user) => user.userId),
+      },
+    );
   }
 
   public async handleCreditLineUpdatedEvent(userId: string) {

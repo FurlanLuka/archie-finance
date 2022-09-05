@@ -1,18 +1,16 @@
 import { Module } from '@nestjs/common';
 import { PeachBorrowerService } from './loan.service';
-import {
-  PeachBorrowerController,
-  PeachBorrowerQueueController,
-} from './loan.controller';
+import { PeachBorrowerQueueController } from './loan.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Borrower } from '../borrower.entity';
 import { PeachApiModule } from '../api/peach_api.module';
 import { CryptoModule } from '@archie/api/utils/crypto';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
+import { BorrowerUtil } from '../utils/utils.module';
 
 @Module({
-  controllers: [PeachBorrowerQueueController, PeachBorrowerController],
+  controllers: [PeachBorrowerQueueController],
   imports: [
     TypeOrmModule.forFeature([Borrower]),
     PeachApiModule,
@@ -23,6 +21,7 @@ import { ConfigVariables } from '@archie/api/peach-api/constants';
         encryptionKey: configService.get(ConfigVariables.ENCRYPTION_KEY),
       }),
     }),
+    BorrowerUtil,
   ],
   providers: [PeachBorrowerService],
   exports: [PeachBorrowerService],

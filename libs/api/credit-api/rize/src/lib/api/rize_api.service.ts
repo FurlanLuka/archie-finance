@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@archie/api/utils/config';
 import Rize from '@rizefinance/rize-js';
@@ -251,11 +253,12 @@ export class RizeApiService {
           Authorization: await this.getToken(),
         },
       });
-    const increaseCreditAdjustmentType: AdjustmentType =
+    const increaseCreditAdjustmentType: AdjustmentType = <AdjustmentType>(
       adjustmentTypesResponse.data.data.find(
         (adjustmentType: AdjustmentType) =>
           adjustmentType.name === 'credit_limit_update_increase',
-      );
+      )
+    );
 
     await this.rizeApiClient.post(
       `adjustments`,
@@ -282,11 +285,12 @@ export class RizeApiService {
           Authorization: await this.getToken(),
         },
       });
-    const increaseCreditAdjustmentType: AdjustmentType =
+    const increaseCreditAdjustmentType: AdjustmentType = <AdjustmentType>(
       adjustmentTypesResponse.data.data.find(
         (adjustmentType: AdjustmentType) =>
           adjustmentType.name === 'credit_limit_update_decrease',
-      );
+      )
+    );
 
     await this.rizeApiClient.post(
       `adjustments`,
@@ -312,7 +316,7 @@ export class RizeApiService {
     return axiosInstance;
   }
 
-  private async getToken() {
+  private async getToken(): Promise<string> {
     if (
       !this.tokenCache.data ||
       this.tokenCache.isExpired(this.DEFAULT_TOKEN_MAX_AGE)
@@ -342,12 +346,14 @@ export class RizeApiService {
           headers: { Authorization: sJwt },
         });
       } catch (err) {
-        return new Error();
+        throw new Error();
       }
 
       this.tokenCache.data = response.data.token;
+      // @ts-ignore
       this.tokenCache.timestamp = new Date();
     }
+    // @ts-ignore
     return this.tokenCache.data;
   }
 }

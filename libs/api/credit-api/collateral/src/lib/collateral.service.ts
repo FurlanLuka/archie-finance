@@ -15,6 +15,7 @@ import { CollateralValueService } from './collateral-value/collateral-value.serv
 import { QueueService } from '@archie/api/utils/queue';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
+import { CollateralDepositedPayload } from '@archie/api/collateral-api/data-transfer-objects';
 
 @Injectable()
 export class CollateralService {
@@ -33,15 +34,15 @@ export class CollateralService {
     userId,
     asset,
     amount,
-    destinationAddress,
+    destination,
     status,
-  }: CreateDepositDto): Promise<void> {
+  }: CollateralDepositedPayload): Promise<void> {
     Logger.log('COLLATERAL_SERVICE_CREATE_DEPOSIT', {
       transactionId,
       userId,
       asset,
       amount,
-      destinationAddress,
+      destination,
       status,
     });
 
@@ -60,7 +61,7 @@ export class CollateralService {
         transactionId,
         userId,
         asset,
-        destinationAddress,
+        destination,
         status,
         amount,
       });
@@ -86,7 +87,7 @@ export class CollateralService {
         asset,
         transactionId,
         amount,
-        destinationAddress,
+        destination,
         status,
         error: JSON.stringify(error),
         errorMessage: error.message,

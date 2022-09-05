@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  Header,
   HttpCode,
   Post,
   Req,
@@ -13,8 +12,10 @@ import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import {
+  AutopayAlreadyConfiguredError,
   AutopayNotConfiguredError,
   BorrowerNotFoundError,
+  CreditLineNotFoundError,
   PaymentInstrumentNotFound,
 } from '../borrower.errors';
 import { AutopayService } from './autopay.service';
@@ -25,59 +26,66 @@ import {
   CreateAutopayDto,
 } from './autopay.dto';
 
-@Controller('v1/loans/autopay')
+@Controller('v1/loan_autopay')
 export class AutopayController {
   constructor(private autopayService: AutopayService) {}
 
   @Post()
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([BorrowerNotFoundError, PaymentInstrumentNotFound])
+  @ApiErrorResponse([
+    BorrowerNotFoundError,
+    CreditLineNotFoundError,
+    PaymentInstrumentNotFound,
+    AutopayAlreadyConfiguredError,
+  ])
   @HttpCode(204)
   async setupAutopay(
     @Req() request,
     @Body() body: CreateAutopayDto,
   ): Promise<void> {
-    // return this.autopayService.setupAutopay(request.user.sub, body);
-    return this.autopayService.setupAutopay('aaa', body);
+    return this.autopayService.setupAutopay(request.user.sub, body);
   }
 
   @Delete()
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([
     BorrowerNotFoundError,
+    CreditLineNotFoundError,
     PaymentInstrumentNotFound,
     AutopayNotConfiguredError,
   ])
   async cancelAutopay(@Req() request): Promise<void> {
-    // return this.autopayService.cancelAutopay(request.user.sub);
-    return this.autopayService.cancelAutopay('aaa');
+    return this.autopayService.cancelAutopay(request.user.sub);
   }
 
   @Get()
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([BorrowerNotFoundError, PaymentInstrumentNotFound])
+  @ApiErrorResponse([
+    BorrowerNotFoundError,
+    CreditLineNotFoundError,
+    PaymentInstrumentNotFound,
+    AutopayNotConfiguredError,
+  ])
   async getAutopayConfig(@Req() request): Promise<AutopayDto> {
-    // return this.autopayService.getConfiguredAutopay(request.user.sub);
-    return this.autopayService.getConfiguredAutopay('aaa');
+    return this.autopayService.getConfiguredAutopay(request.user.sub);
   }
 }
 
-@Controller('v1/loans/autopay/documents')
+@Controller('v1/loan_autopay/documents')
 export class AutopayDocumentsController {
   constructor(private autopayService: AutopayService) {}
 
   @Post()
-  //@UseGuards(AuthGuard)
+  @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([BorrowerNotFoundError, PaymentInstrumentNotFound])
   async createAutopayAgreement(
     @Req() request,
     @Body() body: CreateAutopayDocumentDto,
   ): Promise<AutopayAgreementDto> {
-    //return this.autopayService.createAutopayAgreement(request.user.sub, body);
-    return this.autopayService.createAutopayAgreement('aaa', body);
+    return this.autopayService.createAutopayAgreement(request.user.sub, body);
   }
 }

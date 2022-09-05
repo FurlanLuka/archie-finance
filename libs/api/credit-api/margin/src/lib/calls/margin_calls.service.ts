@@ -12,7 +12,10 @@ import { MarginLiquidationService } from './liquidation/margin_liquidation.servi
 import { MarginNotification } from '../margin_notifications.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueueService } from '@archie/api/utils/queue';
-import { MarginCallCompleted } from '@archie/api/credit-api/data-transfer-objects';
+import {
+  MarginCallCompletedPayload,
+  MarginCallStartedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class MarginCallsService {
@@ -34,7 +37,7 @@ export class MarginCallsService {
     await this.marginCallsRepository.softDelete({
       userId: usersLtv.userId,
     });
-    this.queueService.publish<MarginCallCompleted>(
+    this.queueService.publish<MarginCallCompletedPayload>(
       MARGIN_CALL_COMPLETED_TOPIC,
       {
         userId: usersLtv.userId,
@@ -74,9 +77,9 @@ export class MarginCallsService {
   }
 
   public async handleMarginCall(
-    alreadyActiveMarginCall: MarginCall,
+    alreadyActiveMarginCall: MarginCall | undefined,
     usersLtv: UsersLtv,
-  ) {
+  ): Promise<void> {
     const marginCall: MarginCall =
       alreadyActiveMarginCall ??
       (await this.marginCallsRepository.save({
@@ -98,7 +101,7 @@ export class MarginCallsService {
       const loanedBalance: number =
         usersLtv.loanedBalance - liquidatedCollateralAssets.loanRepaymentAmount;
 
-      this.queueService.publish<MarginCallCompleted>(
+      this.queueService.publish<MarginCallCompletedPayload>(
         MARGIN_CALL_COMPLETED_TOPIC,
         {
           userId: usersLtv.userId,
@@ -123,13 +126,16 @@ export class MarginCallsService {
         },
       );
     } else if (alreadyActiveMarginCall === undefined) {
-      this.queueService.publish(MARGIN_CALL_STARTED_TOPIC, {
-        userId: usersLtv.userId,
-        ltv: usersLtv.ltv,
-        priceForMarginCall: usersLtv.priceForMarginCall,
-        priceForPartialCollateralSale: usersLtv.priceForPartialCollateralSale,
-        collateralBalance: usersLtv.collateralBalance,
-      });
+      this.queueService.publish<MarginCallStartedPayload>(
+        MARGIN_CALL_STARTED_TOPIC,
+        {
+          userId: usersLtv.userId,
+          ltv: usersLtv.ltv,
+          priceForMarginCall: usersLtv.priceForMarginCall,
+          priceForPartialCollateralSale: usersLtv.priceForPartialCollateralSale,
+          collateralBalance: usersLtv.collateralBalance,
+        },
+      );
     }
   }
 

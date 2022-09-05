@@ -140,6 +140,13 @@ spec:
                 name: archie-referral-system-api-service
                 port:
                   number: 80
+          - path: /v1/sales_connect
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-referral-system-api-service
+                port:
+                  number: 80
           ## Peach api service
           - path: /v1/loans
             pathType: Prefix
@@ -149,6 +156,41 @@ spec:
                 port:
                   number: 80
           - path: /v1/payment_instruments
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-peach-api-service
+                port:
+                  number: 80
+          - path: /v1/loan_payments
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-peach-api-service
+                port:
+                  number: 80
+          - path: /v1/card_purchases
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-peach-api-service
+                port:
+                  number: 80
+          - path: /v1/loan_obligations
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-peach-api-service
+                port:
+                  number: 80
+          - path: /v1/loan_interests
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-peach-api-service
+                port:
+                  number: 80
+          - path: /v1/loan_autopay
             pathType: Prefix
             backend:
               service:

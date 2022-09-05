@@ -157,16 +157,13 @@ describe('MarginQueueController (e2e)', () => {
           .get(MarginQueueController)
           .checkMarginHandler({ userIds: [userId] });
 
-        expect(queueStub.publish).toBeCalledWith(
-          LTV_LIMIT_APPROACHING_TOPIC,
-          {
-            userId,
-            ltv: ltv,
-            collateralBalance: defaultCollateralTotal,
-            priceForMarginCall: userLoan / MARGIN_CALL_START_LTV,
-            priceForPartialCollateralSale: userLoan / COLLATERAL_SALE_LTV,
-          },
-        );
+        expect(queueStub.publish).toBeCalledWith(LTV_LIMIT_APPROACHING_TOPIC, {
+          userId,
+          ltv: ltv,
+          collateralBalance: defaultCollateralTotal,
+          priceForMarginCall: userLoan / MARGIN_CALL_START_LTV,
+          priceForPartialCollateralSale: userLoan / COLLATERAL_SALE_LTV,
+        });
         expect(
           await marginNotificationsRepositiory.findOne({
             where: {
@@ -228,16 +225,13 @@ describe('MarginQueueController (e2e)', () => {
           .get(MarginQueueController)
           .checkMarginHandler({ userIds: [userId] });
 
-        expect(queueStub.publish).toBeCalledWith(
-          LTV_LIMIT_APPROACHING_TOPIC,
-          {
-            userId,
-            ltv: ltv,
-            collateralBalance: defaultCollateralTotal,
-            priceForMarginCall: userLoan / MARGIN_CALL_START_LTV,
-            priceForPartialCollateralSale: userLoan / COLLATERAL_SALE_LTV,
-          },
-        );
+        expect(queueStub.publish).toBeCalledWith(LTV_LIMIT_APPROACHING_TOPIC, {
+          userId,
+          ltv: ltv,
+          collateralBalance: defaultCollateralTotal,
+          priceForMarginCall: userLoan / MARGIN_CALL_START_LTV,
+          priceForPartialCollateralSale: userLoan / COLLATERAL_SALE_LTV,
+        });
         expect(
           await marginNotificationsRepositiory.findOne({
             where: {
@@ -278,16 +272,13 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
-      expect(queueStub.publish).toBeCalledWith(
-        MARGIN_CALL_STARTED_TOPIC,
-        {
-          userId,
-          ltv: ltv,
-          collateralBalance: defaultCollateralTotal,
-          priceForMarginCall: userLoan / MARGIN_CALL_START_LTV,
-          priceForPartialCollateralSale: userLoan / COLLATERAL_SALE_LTV,
-        },
-      );
+      expect(queueStub.publish).toBeCalledWith(MARGIN_CALL_STARTED_TOPIC, {
+        userId,
+        ltv: ltv,
+        collateralBalance: defaultCollateralTotal,
+        priceForMarginCall: userLoan / MARGIN_CALL_START_LTV,
+        priceForPartialCollateralSale: userLoan / COLLATERAL_SALE_LTV,
+      });
       expect(
         await marginCallRepository.findOne({
           where: {
@@ -346,24 +337,20 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
-      expect(queueStub.publish).toBeCalledWith(
-        MARGIN_CALL_COMPLETED_TOPIC,
-        {
-          userId,
-          liquidation: [],
-          collateralBalance: defaultCollateralTotal,
-          liquidationAmount: 0,
-          ltv: 0,
-          priceForMarginCall: 0,
-          priceForPartialCollateralSale: 0,
+      expect(queueStub.publish).toBeCalledWith(MARGIN_CALL_COMPLETED_TOPIC, {
+        userId,
+        liquidation: [],
+        collateralBalance: defaultCollateralTotal,
+        liquidationAmount: 0,
+        ltv: 0,
+        priceForMarginCall: 0,
+        priceForPartialCollateralSale: 0,
+      });
+      const marginCall: MarginCall | null = await marginCallRepository.findOne({
+        where: {
+          userId: userId,
         },
-      );
-      const marginCall: MarginCall | undefined =
-        await marginCallRepository.findOne({
-          where: {
-            userId: userId,
-          },
-        });
+      });
       expect(marginCall).toEqual(null);
       expect(
         await marginNotificationsRepositiory.findOne({
@@ -413,7 +400,7 @@ describe('MarginQueueController (e2e)', () => {
         .get(MarginQueueController)
         .checkMarginHandler({ userIds: [userId] });
 
-      const marginCall: MarginCall = await marginCallRepository.findOne({
+      const marginCall: MarginCall | null = await marginCallRepository.findOne({
         where: {
           userId: userId,
         },
@@ -436,13 +423,13 @@ describe('MarginQueueController (e2e)', () => {
         {
           uuid: expect.stringMatching(UUID_REGEX),
           userId,
-          marginCall: marginCall.uuid,
+          marginCall: marginCall?.uuid,
           ...expectedLiquidatedAssets[0],
         },
         {
           uuid: expect.stringMatching(UUID_REGEX),
           userId,
-          marginCall: marginCall.uuid,
+          marginCall: marginCall?.uuid,
           ...expectedLiquidatedAssets[1],
         },
       ]);
@@ -452,20 +439,17 @@ describe('MarginQueueController (e2e)', () => {
       );
       const newCollateralBalance: number =
         defaultCollateralTotal - liquidatedPrice;
-      expect(queueStub.publish).toBeCalledWith(
-        MARGIN_CALL_COMPLETED_TOPIC,
-        {
-          userId,
-          liquidation: expectedLiquidatedAssets,
-          ltv: MARGIN_CALL_END_LTV * 100,
-          liquidationAmount: liquidatedPrice,
-          collateralBalance: newCollateralBalance,
-          priceForMarginCall:
-            (userLoan - liquidatedPrice) / MARGIN_CALL_START_LTV,
-          priceForPartialCollateralSale:
-            (userLoan - liquidatedPrice) / COLLATERAL_SALE_LTV,
-        },
-      );
+      expect(queueStub.publish).toBeCalledWith(MARGIN_CALL_COMPLETED_TOPIC, {
+        userId,
+        liquidation: expectedLiquidatedAssets,
+        ltv: MARGIN_CALL_END_LTV * 100,
+        liquidationAmount: liquidatedPrice,
+        collateralBalance: newCollateralBalance,
+        priceForMarginCall:
+          (userLoan - liquidatedPrice) / MARGIN_CALL_START_LTV,
+        priceForPartialCollateralSale:
+          (userLoan - liquidatedPrice) / COLLATERAL_SALE_LTV,
+      });
       expect(
         await marginNotificationsRepositiory.findOne({
           where: {
@@ -483,7 +467,7 @@ describe('MarginQueueController (e2e)', () => {
           userId,
         },
       });
-      const btcCollateral: Collateral = collaterals.find(
+      const btcCollateral: Collateral | undefined = collaterals.find(
         (col) => col.asset === 'BTC',
       );
       expect(btcCollateral).toEqual({
@@ -492,7 +476,7 @@ describe('MarginQueueController (e2e)', () => {
         asset: 'BTC',
         amount: BTC_STARTING_AMOUNT - expectedLiquidatedAssets[1].amount,
       });
-      const solCollateral: Collateral = collaterals.find(
+      const solCollateral: Collateral | undefined = collaterals.find(
         (col) => col.asset === 'SOL',
       );
       expect(solCollateral).toEqual({
@@ -561,19 +545,19 @@ describe('MarginQueueController (e2e)', () => {
         {
           uuid: expect.stringMatching(UUID_REGEX),
           userId,
-          marginCall: marginCall.uuid,
+          marginCall: marginCall?.uuid,
           ...expectedLiquidatedAssets[0],
         },
         {
           uuid: expect.stringMatching(UUID_REGEX),
           userId,
-          marginCall: marginCall.uuid,
+          marginCall: marginCall?.uuid,
           ...expectedLiquidatedAssets[1],
         },
         {
           uuid: expect.stringMatching(UUID_REGEX),
           userId,
-          marginCall: marginCall.uuid,
+          marginCall: marginCall?.uuid,
           ...expectedLiquidatedAssets[2],
         },
       ]);
@@ -584,20 +568,17 @@ describe('MarginQueueController (e2e)', () => {
       );
       const newCollateralBalance: number =
         defaultCollateralTotal - liquidatedPrice;
-      expect(queueStub.publish).toBeCalledWith(
-        MARGIN_CALL_COMPLETED_TOPIC,
-        {
-          userId,
-          liquidation: expectedLiquidatedAssets,
-          ltv: MARGIN_CALL_END_LTV * 100,
-          liquidationAmount: liquidatedPrice,
-          collateralBalance: newCollateralBalance,
-          priceForMarginCall:
-            (userLoan - liquidatedPrice) / MARGIN_CALL_START_LTV,
-          priceForPartialCollateralSale:
-            (userLoan - liquidatedPrice) / COLLATERAL_SALE_LTV,
-        },
-      );
+      expect(queueStub.publish).toBeCalledWith(MARGIN_CALL_COMPLETED_TOPIC, {
+        userId,
+        liquidation: expectedLiquidatedAssets,
+        ltv: MARGIN_CALL_END_LTV * 100,
+        liquidationAmount: liquidatedPrice,
+        collateralBalance: newCollateralBalance,
+        priceForMarginCall:
+          (userLoan - liquidatedPrice) / MARGIN_CALL_START_LTV,
+        priceForPartialCollateralSale:
+          (userLoan - liquidatedPrice) / COLLATERAL_SALE_LTV,
+      });
       expect(
         await marginNotificationsRepositiory.findOne({
           where: {

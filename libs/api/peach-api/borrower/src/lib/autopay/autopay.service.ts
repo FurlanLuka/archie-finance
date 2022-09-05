@@ -2,7 +2,6 @@ import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Borrower } from '../borrower.entity';
 import { Repository } from 'typeorm';
-import { BorrowerNotFoundError } from '../borrower.errors';
 import {
   AutopayAgreementDto,
   AutopayDto,
@@ -10,19 +9,18 @@ import {
   CreateAutopayDto,
 } from './autopay.dto';
 import {
-  AmountType,
   Autopay,
-  AutopaySchedule,
   Document,
-  PaymentFrequency,
   PaymentInstrument,
 } from '../api/peach_api.interfaces';
+import { BorrowerValidation } from '../utils/borrower.validation';
 
 export class AutopayService {
   constructor(
     private peachApiService: PeachApiService,
     @InjectRepository(Borrower)
     private borrowerRepository: Repository<Borrower>,
+    private borrowerValidation: BorrowerValidation,
   ) {}
 
   public async setupAutopay(
@@ -32,9 +30,8 @@ export class AutopayService {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
+
     const paymentInstrument: PaymentInstrument =
       await this.peachApiService.getPaymentInstrument(
         borrower.personId,
@@ -52,7 +49,6 @@ export class AutopayService {
       autopayConfiguration.agreementDocumentId,
     );
 
-    // documents/DD-6JYZ-5Y9B/convert?format=pdf convert document. maybe optional??
     await this.peachApiService.createAutopay(
       borrower.personId,
       borrower.creditLineId,
@@ -64,9 +60,7 @@ export class AutopayService {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
     const autopay: Autopay = await this.peachApiService.getAutopay(
       borrower.personId,
@@ -86,9 +80,7 @@ export class AutopayService {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
     const autopay: Autopay = await this.peachApiService.getAutopay(
       borrower.personId,
@@ -121,9 +113,8 @@ export class AutopayService {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
+
     const paymentInstrument: PaymentInstrument =
       await this.peachApiService.getPaymentInstrument(
         borrower.personId,

@@ -1,10 +1,7 @@
 import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { OnboardingService } from './onboarding.service';
 import { AuthGuard } from '@archie/api/utils/auth0';
-import {
-  CompleteOnboardingStageDto,
-  GetOnboardingResponseDto,
-} from './onboarding.dto';
+import { GetOnboardingResponseDto } from './onboarding.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   KYC_SUBMITTED_TOPIC,
@@ -17,6 +14,15 @@ import {
 } from '@archie/api/credit-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
 import { Subscribe } from '@archie/api/utils/queue';
+import {
+  EmailVerifiedPayload,
+  KycSubmittedPayload,
+  MfaEnrolledPayload,
+} from '@archie/api/user-api/data-transfer-objects';
+import {
+  CardActivatedPayload,
+  CollateralReceivedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 
 @Controller('v1/onboarding')
 export class OnboardingController {
@@ -32,21 +38,27 @@ export class OnboardingController {
 
 @Controller()
 export class OnboardingQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-onboarding`;
+
   constructor(private onboardingService: OnboardingService) {}
 
-  @Subscribe(KYC_SUBMITTED_TOPIC, SERVICE_QUEUE_NAME)
-  async kycSubmittedEventHandler(
-    payload: CompleteOnboardingStageDto,
-  ): Promise<void> {
+  @Subscribe(
+    KYC_SUBMITTED_TOPIC,
+    OnboardingQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async kycSubmittedEventHandler(payload: KycSubmittedPayload): Promise<void> {
     await this.onboardingService.completeOnboardingStage(
       payload.userId,
       'kycStage',
     );
   }
 
-  @Subscribe(EMAIL_VERIFIED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    EMAIL_VERIFIED_TOPIC,
+    OnboardingQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async emailVerifiedEventHandler(
-    payload: CompleteOnboardingStageDto,
+    payload: EmailVerifiedPayload,
   ): Promise<void> {
     await this.onboardingService.completeOnboardingStage(
       payload.userId,
@@ -54,19 +66,23 @@ export class OnboardingQueueController {
     );
   }
 
-  @Subscribe(MFA_ENROLLED_TOPIC, SERVICE_QUEUE_NAME)
-  async mfaEnrollmentEventHandler(
-    payload: CompleteOnboardingStageDto,
-  ): Promise<void> {
+  @Subscribe(
+    MFA_ENROLLED_TOPIC,
+    OnboardingQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async mfaEnrollmentEventHandler(payload: MfaEnrolledPayload): Promise<void> {
     await this.onboardingService.completeOnboardingStage(
       payload.userId,
       'mfaEnrollmentStage',
     );
   }
 
-  @Subscribe(COLLATERAL_RECEIVED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    COLLATERAL_RECEIVED_TOPIC,
+    OnboardingQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async collateralReceivedEventHandler(
-    payload: CompleteOnboardingStageDto,
+    payload: CollateralReceivedPayload,
   ): Promise<void> {
     await this.onboardingService.completeOnboardingStage(
       payload.userId,
@@ -74,9 +90,12 @@ export class OnboardingQueueController {
     );
   }
 
-  @Subscribe(CARD_ACTIVATED_TOPIC, SERVICE_QUEUE_NAME)
+  @Subscribe(
+    CARD_ACTIVATED_TOPIC,
+    OnboardingQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async cardActivatedEventHandler(
-    payload: CompleteOnboardingStageDto,
+    payload: CardActivatedPayload,
   ): Promise<void> {
     await this.onboardingService.completeOnboardingStage(
       payload.userId,

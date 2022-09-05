@@ -1,7 +1,5 @@
 import { LiquidationLog } from '../../liquidation_logs.entity';
-import {
-  GetCollateralValueResponse,
-} from '@archie/api/credit-api/collateral';
+import { GetCollateralValueResponse } from '@archie/api/credit-api/collateral';
 import {
   Injectable,
   InternalServerErrorException,
@@ -11,6 +9,7 @@ import { DataSource, Repository, UpdateResult } from 'typeorm';
 import { MarginCall } from '../../margin_calls.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Collateral } from '@archie/api/credit-api/collateral';
+import { LiquidatedAssets } from '../../margin.interfaces';
 
 @Injectable()
 export class MarginLiquidationService {
@@ -83,7 +82,7 @@ export class MarginLiquidationService {
     amount: number,
     collateralAssets: GetCollateralValueResponse[],
     marginCall: MarginCall,
-  ): Promise<Partial<LiquidationLog>[]> {
+  ): Promise<LiquidatedAssets[]> {
     const sortedCollateralAssetsByAllocation: GetCollateralValueResponse[] =
       collateralAssets
         .slice()
@@ -94,7 +93,7 @@ export class MarginLiquidationService {
     let targetLiquidationAmount: number = amount;
 
     return sortedCollateralAssetsByAllocation
-      .map((collateralValue): Partial<LiquidationLog> => {
+      .map((collateralValue): LiquidatedAssets => {
         if (targetLiquidationAmount > 0) {
           let newCollateralAssetPrice: number =
             collateralValue.price - targetLiquidationAmount;

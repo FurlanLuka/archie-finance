@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import { Injectable, Logger } from '@nestjs/common';
+import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
 import {
@@ -16,27 +16,39 @@ import {
   PeachTransactionType,
   Person,
   PersonStatus,
-  ObligationsResponse,
+  Obligations,
   PaymentInstrumentBalance,
   Document,
   AutopayOptions,
   Autopay,
+  Payments,
+  QueryParams,
+  Purchases,
+  Balances,
+  PeachResponseData,
+  AutopayContext,
 } from './peach_api.interfaces';
-import { KycSubmittedPayload } from '@archie/api/user-api/kyc';
 import { Borrower } from '../borrower.entity';
 import {
   PaymentInstrumentNotFoundError,
   AmountExceedsOutstandingBalanceError,
   PaymentInstrumentNotFound,
   AutopayNotConfiguredError,
+  AutopayAlreadyConfiguredError,
 } from '../borrower.errors';
 import { DateTime } from 'luxon';
+import { omitBy, isNil } from 'lodash';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects';
+import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class PeachApiService {
   MAX_REQUEST_TIMEOUT = 10000;
   CONTACT_ALREADY_EXISTS_STATUS = 400;
   ALREADY_ACTIVATED_STATUS = 400;
+  NOMINAL_APR = 0;
+  EFFECTIVE_APR = 0.16;
+
   peachClient: AxiosInstance;
 
   constructor(private configService: ConfigService) {
@@ -58,9 +70,10 @@ export class PeachApiService {
           ...error.config,
           headers: null,
         },
-        status: error.response.status,
-        errorResponse: <PeachErrorData>error.response.data,
+        status: (<AxiosResponse>error.response).status,
+        errorResponse: <PeachErrorData>error.response?.data,
       };
+      Logger.error(JSON.stringify(response, null, 2));
 
       return Promise.reject(response);
     });
@@ -83,25 +96,33 @@ export class PeachApiService {
     return response.data.data[0];
   }
 
-  public async createPlaidPaymentInstrument({
-    publicToken,
-    accountId,
-    personId,
-  }: {
-    personId: string;
-    accountId: string;
-    publicToken: string;
-  }): Promise<PaymentInstrument> {
+  public async createPlaidPaymentInstrument(
+    personId: string,
+    accountId: string,
+    publicToken: string,
+    fullName: string,
+  ): Promise<PaymentInstrument> {
     const response = await this.peachClient.post(
       `/people/${personId}/payment-instruments`,
       {
         instrumentType: 'plaid',
         accessToken: publicToken,
         accountIds: [accountId],
+        accountHolderType: 'personal',
+        accountHolderName: fullName,
       },
     );
 
     return response.data.data[0];
+  }
+
+  public async deletePaymentInstrument(
+    personId: string,
+    paymentInstrumentId: string,
+  ): Promise<void> {
+    await this.peachClient.delete(
+      `/people/${personId}/payment-instruments/${paymentInstrumentId}`,
+    );
   }
 
   public async createPendingOneTimePaymentTransaction(
@@ -229,7 +250,7 @@ export class PeachApiService {
   }
 
   public async createCreditLine(
-    personId,
+    personId: string,
     creditLimit: number,
     addressContactId: string,
     downPaymentAmount: number,
@@ -242,19 +263,30 @@ export class PeachApiService {
       status: 'originated',
       newDrawsAllowed: true,
       atOrigination: {
-        // TODO: check if ok
-        interestRates: [{ days: null, rate: 15 }],
+        interestRates: [{ days: null, rate: 0 }],
         paymentFrequency: 'monthly',
         // TODO: check if ok
         originationLicense: 'nationalBank',
         // TODO: check if ok
         originatingCreditorName: 'Bank of Mars',
+        aprNominal: this.NOMINAL_APR,
+        aprEffective: this.EFFECTIVE_APR,
         creditLimitAmount: creditLimit,
-        // TODO: should we define down payment? - Collateral value
         downPaymentAmount,
         personAddressId: addressContactId,
       },
     });
+
+    return response.data.data;
+  }
+
+  public async getCreditLine(
+    personId: string,
+    loanId: string,
+  ): Promise<CreditLine> {
+    const response = await this.peachClient.get<PeachResponseData<CreditLine>>(
+      `/people/${personId}/loans/${loanId}`,
+    );
 
     return response.data.data;
   }
@@ -307,14 +339,9 @@ export class PeachApiService {
         nickname: 'Credit Card',
         status: 'originated',
         atOrigination: {
-          // interestRates: [{ days: null, rate: 0.1 }],
           minPaymentCalculation: {
             percentageOfPrincipal: 0.1,
             minAmount: 0,
-          },
-          autoAmortization: {
-            amortizationLogic: 'amortizeAfterEachPurchase',
-            duration: 1,
           },
         },
       },
@@ -343,7 +370,7 @@ export class PeachApiService {
     personId: string,
     loanId: string,
     drawId: string,
-    transaction,
+    transaction: TransactionUpdatedPayload,
   ): Promise<void> {
     await this.peachClient.post(
       `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases`,
@@ -360,7 +387,7 @@ export class PeachApiService {
     personId: string,
     loanId: string,
     drawId: string,
-    transaction,
+    transaction: TransactionUpdatedPayload,
   ): Promise<void> {
     await this.peachClient.put(
       `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases/ext-${String(
@@ -377,17 +404,22 @@ export class PeachApiService {
     );
   }
 
-  private createPurchaseDetails(transaction) {
+  private createPurchaseDetails(
+    transaction: TransactionUpdatedPayload,
+  ): object {
     return {
       amount: Number(transaction.us_dollar_amount),
       purchaseDate: transaction.created_at,
       purchaseDetails: {
-        description: transaction.description ?? undefined,
+        description: transaction.description,
         merchantName: transaction.merchant_name ?? undefined,
         externalCardId: transaction.debit_card_uid ?? undefined,
         merchantCity: transaction.merchant_location ?? undefined,
         merchantId: transaction.merchant_number ?? undefined,
         merchantCategoryCode: transaction.mcc ?? undefined,
+        metadata: {
+          transactionType: transaction.type,
+        },
       },
       declineReason: {
         mainText: transaction.denial_reason ?? undefined,
@@ -402,7 +434,7 @@ export class PeachApiService {
     const response = await this.peachClient.get(
       `people/${personId}/loans/${loanId}/balances`,
     );
-    const responseBody = response.data.data;
+    const responseBody: Balances = response.data.data;
 
     if (responseBody.isLocked) {
       throw new Error('Balance change is in progress, retry');
@@ -418,9 +450,20 @@ export class PeachApiService {
   public async getLoanObligations(
     personId: string,
     loanId: string,
-  ): Promise<ObligationsResponse> {
+  ): Promise<Obligations> {
     const response = await this.peachClient.get(
       `people/${personId}/loans/${loanId}/obligations`,
+    );
+
+    return response.data.data;
+  }
+
+  public async getLoanBalances(
+    personId: string,
+    loanId: string,
+  ): Promise<Balances> {
+    const response = await this.peachClient.get(
+      `people/${personId}/loans/${loanId}/balances`,
     );
 
     return response.data.data;
@@ -469,15 +512,17 @@ export class PeachApiService {
     paymentInstrumentId: string,
   ): Promise<PaymentInstrument> {
     try {
-      const response = await this.peachClient.get(
-        `/people/${personId}/payment-instruments/${paymentInstrumentId}`,
-      );
+      const response = await this.peachClient.get<
+        PeachResponseData<PaymentInstrument>
+      >(`/people/${personId}/payment-instruments/${paymentInstrumentId}`);
 
       return response.data.data;
     } catch (error) {
       if (error.status === 404) {
         throw new PaymentInstrumentNotFound();
       }
+
+      throw error;
     }
   }
 
@@ -527,6 +572,36 @@ export class PeachApiService {
         type: 'loanAutopayAgreement',
         loanId,
         status: 'draft',
+        fileName: `LoanAutopayAgreement-${loanId}.html`,
+      },
+    );
+
+    return response.data;
+  }
+
+  public async getPayments(
+    personId: string,
+    loanId: string,
+    query: QueryParams,
+  ): Promise<Payments> {
+    const response = await this.peachClient.get(
+      `/people/${personId}/loans/${loanId}/transactions`,
+      {
+        params: omitBy(query, isNil),
+      },
+    );
+
+    return response.data;
+  }
+
+  public async getPurchases(
+    borrower: Borrower,
+    query: QueryParams,
+  ): Promise<Purchases> {
+    const response = await this.peachClient.get(
+      `/people/${borrower.personId}/loans/${borrower.creditLineId}/draws/${borrower.drawId}/purchases`,
+      {
+        params: omitBy(query, isNil),
       },
     );
 
@@ -537,7 +612,7 @@ export class PeachApiService {
     personId: string,
     documentId: string,
   ): Promise<Document> {
-    const response = await this.peachClient.put(
+    const response = await this.peachClient.put<Document>(
       `/people/${personId}/documents/${documentId}`,
       {
         status: 'accepted',
@@ -551,7 +626,7 @@ export class PeachApiService {
     personId: string,
     documentId: string,
   ): Promise<Document> {
-    const response = await this.peachClient.put(
+    const response = await this.peachClient.put<Document>(
       `/people/${personId}/documents/${documentId}`,
       {
         archived: true,
@@ -566,13 +641,16 @@ export class PeachApiService {
     loanId: string,
     paymentMethodLastFour: string,
   ): Promise<string> {
-    const response = await this.peachClient.post(`/communicator/render`, {
-      subject: 'autopayAgreement',
-      channel: 'gui',
-      personId,
-      loanId,
-      context: this.createDocumentContext(paymentMethodLastFour),
-    });
+    const response = await this.peachClient.post<string>(
+      `/communicator/render`,
+      {
+        subject: 'autopayAgreement',
+        channel: 'gui',
+        personId,
+        loanId,
+        context: this.createDocumentContext(paymentMethodLastFour),
+      },
+    );
 
     return response.data;
   }
@@ -601,7 +679,7 @@ export class PeachApiService {
     );
   }
 
-  private createDocumentContext(paymentMethodLastFour: string) {
+  private createDocumentContext(paymentMethodLastFour: string): AutopayContext {
     return {
       lenderName: 'Archie (Lender name - Change)',
       paymentMethod: 'bankAccount',
@@ -617,14 +695,27 @@ export class PeachApiService {
     loanId: string,
     config: AutopayOptions,
   ): Promise<void> {
-    await this.peachClient.post(`/people/${personId}/loans/${loanId}/autopay`, {
-      amountType: config.amountType,
-      extraAmount: config.extraAmount ?? undefined,
-      isAlignedToDueDates: config.isAlignedToDueDates,
-      offsetFromDueDate: config.offsetFromDueDate ?? undefined,
-      paymentInstrumentId: config.paymentInstrumentId,
-      agreementDocumentId: config.agreementDocumentId,
-    });
+    try {
+      await this.peachClient.post(
+        `/people/${personId}/loans/${loanId}/autopay`,
+        {
+          amountType: config.amountType,
+          extraAmount: config.extraAmount ?? undefined,
+          isAlignedToDueDates: config.isAlignedToDueDates,
+          offsetFromDueDate: config.offsetFromDueDate ?? undefined,
+          paymentInstrumentId: config.paymentInstrumentId,
+          agreementDocumentId: config.agreementDocumentId,
+        },
+      );
+    } catch (e) {
+      const error: PeachErrorResponse = e;
+
+      if (error.status === 400) {
+        throw new AutopayAlreadyConfiguredError();
+      }
+
+      throw error;
+    }
   }
 
   public async cancelAutopay(personId: string, loanId: string): Promise<void> {
@@ -635,15 +726,19 @@ export class PeachApiService {
 
   public async getAutopay(personId: string, loanId: string): Promise<Autopay> {
     try {
-      const response = await this.peachClient.get(
+      const response = await this.peachClient.get<PeachResponseData<Autopay>>(
         `/people/${personId}/loans/${loanId}/autopay`,
       );
 
       return response.data.data;
-    } catch (error) {
+    } catch (e) {
+      const error: PeachErrorResponse = e;
+
       if (error.status === 404) {
         throw new AutopayNotConfiguredError();
       }
+
+      throw error;
     }
   }
 }

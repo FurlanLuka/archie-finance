@@ -6,7 +6,6 @@ import {
 import { Enrollment, SendEnrollmentTicketResponse, User } from 'auth0';
 import { Auth0Service } from '@archie/api/user-api/auth0';
 import {
-  EmailVerifiedPayload,
   GetEmailVerificationResponse,
   GetMfaEnrollmentResponse,
 } from './user.interfaces';
@@ -16,6 +15,10 @@ import {
   MFA_ENROLLED_TOPIC,
 } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
+import {
+  EmailVerifiedPayload,
+  MfaEnrolledPayload,
+} from '@archie/api/user-api/data-transfer-objects';
 
 @Injectable()
 export class UserService {
@@ -28,17 +31,19 @@ export class UserService {
     const user: User = await this.auth0Service.getManagmentClient().getUser({
       id: userId,
     });
+    const emailVerified: boolean = <boolean>user.email_verified;
+    const email: string = <string>user.email;
 
-    if (user.email_verified) {
+    if (emailVerified) {
       this.queueService.publish<EmailVerifiedPayload>(EMAIL_VERIFIED_TOPIC, {
         userId,
-        email: user.email,
+        email,
       });
     }
 
     return {
-      isVerified: user.email_verified,
-      email: user.email,
+      isVerified: emailVerified,
+      email,
     };
   }
 
@@ -60,8 +65,9 @@ export class UserService {
     const user: User = await this.auth0Service.getManagmentClient().getUser({
       id: userId,
     });
+    const emailVerified: boolean = <boolean>user.email_verified;
 
-    if (user.email_verified) {
+    if (emailVerified) {
       throw new BadRequestException(
         'EMAIL_ALREADY_VERIFIED',
         'Your email has already been verified.',
@@ -100,7 +106,7 @@ export class UserService {
     );
 
     if (hasEnrolledAuthenticator !== undefined) {
-      this.queueService.publish(MFA_ENROLLED_TOPIC, {
+      this.queueService.publish<MfaEnrolledPayload>(MFA_ENROLLED_TOPIC, {
         userId,
       });
     }

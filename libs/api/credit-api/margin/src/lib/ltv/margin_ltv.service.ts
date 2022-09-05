@@ -13,6 +13,7 @@ import {
 } from '@archie/api/credit-api/collateral';
 import { Credit } from '@archie/api/credit-api/credit';
 import { QueueService } from '@archie/api/utils/queue';
+import { LtvLimitApproachingPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class MarginLtvService {
@@ -58,7 +59,7 @@ export class MarginLtvService {
       0,
     );
 
-    const creditBalance: Credit = credits.find(
+    const creditBalance: Credit | undefined = credits.find(
       (credit: Credit) => credit.userId === userId,
     );
 
@@ -72,7 +73,9 @@ export class MarginLtvService {
     );
 
     const spentBalance: number =
-      creditBalance.totalCredit - creditBalance.availableCredit;
+      creditBalance !== undefined
+        ? creditBalance.totalCredit - creditBalance.availableCredit
+        : 0;
     const loanedBalance: number = spentBalance - usersLiquidationLogsSum;
 
     return {
@@ -116,7 +119,8 @@ export class MarginLtvService {
         (limit: number, index: number): boolean => {
           const marginNotificationNotSentYet: boolean =
             marginNotifications === null ||
-            marginNotifications.active === false ||
+            !marginNotifications.active ||
+            marginNotifications.sentAtLtv === null ||
             marginNotifications.sentAtLtv < limit;
 
           return (
@@ -129,13 +133,16 @@ export class MarginLtvService {
       ).some((alert: boolean) => alert);
 
       if (shouldSendNotification) {
-        this.queueService.publish(LTV_LIMIT_APPROACHING_TOPIC, {
-          userId,
-          ltv,
-          priceForMarginCall,
-          priceForPartialCollateralSale,
-          collateralBalance,
-        });
+        this.queueService.publish<LtvLimitApproachingPayload>(
+          LTV_LIMIT_APPROACHING_TOPIC,
+          {
+            userId,
+            ltv,
+            priceForMarginCall,
+            priceForPartialCollateralSale,
+            collateralBalance,
+          },
+        );
         await this.marginNotificationsRepository.upsert(
           {
             userId: userId,

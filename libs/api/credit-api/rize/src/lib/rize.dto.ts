@@ -29,7 +29,7 @@ class TransactionDto implements Transaction {
   type: TransactionType;
   status: TransactionStatus;
   us_dollar_amount: string;
-  settled_at: string;
+  settled_at: string | null;
   created_at: string;
   is_adjustment: boolean;
   mcc: string | null;
@@ -50,26 +50,13 @@ export class GetTransactionsQueryDto {
   limit = 100;
 }
 
-export class MarginCallCompletedDto {
-  userId: string;
-  liquidation: LiquidationDto[];
+export enum CardStatus {
+  active = 'active',
+  frozen = 'frozen',
 }
 
-export class LiquidationDto {
-  asset: string;
-  amount: number;
-  price: number;
-}
-
-export class MarginCallStartedDto {
-  userId: string;
-}
-
-export class CreditLimitDto {
-  userId: string;
-  amount: number;
-}
-
-export class CardImageResponseDto {
+export class CardResponseDto {
   image: string;
+  status: CardStatus;
+  freezeReason: string | null;
 }

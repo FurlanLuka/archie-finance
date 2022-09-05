@@ -2,7 +2,6 @@ import { AuthGuard } from '@archie/api/utils/auth0';
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { CollateralService } from './collateral.service';
 import {
-  CreateDepositDto,
   GetCollateralPayload,
   GetCollateralResponse,
   GetCollateralValuePayload,
@@ -22,7 +21,7 @@ import {
   RPCResponseType,
   Subscribe,
 } from '@archie/api/utils/queue';
-import { RabbitPayload } from '@golevelup/nestjs-rabbitmq';
+import { CollateralDepositedPayload } from '@archie/api/collateral-api/data-transfer-objects';
 
 @Controller('v1/collateral')
 export class CollateralController {
@@ -56,16 +55,26 @@ export class CollateralController {
 
 @Controller()
 export class CollateralQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-collateral-user-vault`;
+
   constructor(private collateralService: CollateralService) {}
 
-  @Subscribe(COLLATERAL_DEPOSITED_TOPIC, SERVICE_QUEUE_NAME)
-  async collateralDepositedHandler(payload: CreateDepositDto): Promise<void> {
+  @Subscribe(
+    COLLATERAL_DEPOSITED_TOPIC,
+    CollateralQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async collateralDepositedHandler(
+    payload: CollateralDepositedPayload,
+  ): Promise<void> {
     await this.collateralService.createDeposit(payload);
   }
 
-  @RequestHandler(GET_COLLATERAL_RPC, SERVICE_QUEUE_NAME)
+  @RequestHandler(
+    GET_COLLATERAL_RPC,
+    CollateralQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async getCollateral(
-    @RabbitPayload() payload: GetCollateralPayload,
+    payload: GetCollateralPayload,
   ): Promise<RPCResponse<GetCollateralResponse[]>> {
     try {
       const data = await this.collateralService.getUserCollateral(
@@ -84,9 +93,12 @@ export class CollateralQueueController {
     }
   }
 
-  @RequestHandler(GET_COLLATERAL_VALUE_RPC, SERVICE_QUEUE_NAME)
+  @RequestHandler(
+    GET_COLLATERAL_VALUE_RPC,
+    CollateralQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async getCollateralValue(
-    @RabbitPayload() payload: GetCollateralValuePayload,
+    payload: GetCollateralValuePayload,
   ): Promise<RPCResponse<GetCollateralValueResponse[]>> {
     try {
       const data = await this.collateralService.getUserCollateralValue(

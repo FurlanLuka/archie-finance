@@ -74,9 +74,14 @@ export class UserController {
 
 @Controller()
 export class UserQueueController {
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-user`;
+
   constructor(private userService: UserService) {}
 
-  @RequestHandler(GET_USER_EMAIL_ADDRESS_RPC, SERVICE_QUEUE_NAME)
+  @RequestHandler(
+    GET_USER_EMAIL_ADDRESS_RPC,
+    UserQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async getEmailAddress(
     payload: GetEmailAddressPayload,
   ): Promise<RPCResponse<GetEmailAddressResponse>> {

@@ -7,6 +7,13 @@ import {
 import { Channel, ConsumeMessage } from 'amqplib';
 import { QueueUtilService } from './queue-util.service';
 
+// eslint-disable-next-line @typescript-eslint/ban-types
+type AppliedDecorator = <TFunction extends Function, Y>(
+  target: object | TFunction,
+  propertyKey?: string | symbol,
+  descriptor?: TypedPropertyDescriptor<Y>,
+) => void;
+
 const INITIAL_DELAY = 20000;
 const MAX_RETRIES = 5;
 const RETRY_BACKOFF = 2;
@@ -18,7 +25,7 @@ export function Subscribe(
   queueName: string,
   requeueOnError = true,
   exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
-) {
+): AppliedDecorator {
   const queueSpecificRoutingKey = `${queueName}-${routingKey}`;
 
   const baseQueueOptions = {
@@ -39,7 +46,7 @@ export function Subscribe(
     },
   };
 
-  const decorators = [
+  const decorators: MethodDecorator[] = <MethodDecorator[]>[
     RabbitSubscribe({
       exchange: exchange,
       routingKey: routingKey,
@@ -62,7 +69,7 @@ export function RequestHandler(
   routingKey: string,
   queueName: string,
   exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
-) {
+): AppliedDecorator {
   const fullQueueName = `${queueName}-${exchange}_${routingKey}`;
 
   return applyDecorators(
@@ -82,7 +89,11 @@ function createErrorHandler(
   queueSpecificRoutingKey: string,
   requeueOnError: boolean,
   exchange: string,
-) {
+): (
+  channel: Channel,
+  msg: ConsumeMessage,
+  error: unknown,
+) => void | Promise<void> {
   return (channel: Channel, msg: ConsumeMessage, error) => {
     const headers = msg.properties.headers;
     const retryAttempt: number = headers['x-retry'] ?? 0;
@@ -119,6 +130,10 @@ function createErrorHandler(
   };
 }
 
-function pushToDeadLetterQueue(channel: Channel, msg: ConsumeMessage, error) {
+function pushToDeadLetterQueue(
+  channel: Channel,
+  msg: ConsumeMessage,
+  error,
+): void | Promise<void> {
   return defaultNackErrorHandler(channel, msg, error);
 }

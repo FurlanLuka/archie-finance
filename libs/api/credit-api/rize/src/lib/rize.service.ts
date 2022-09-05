@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Injectable, Logger } from '@nestjs/common';
 import { GetKycPayload, GetKycResponse } from '@archie/api/user-api/kyc';
 import { RizeApiService } from './api/rize_api.service';
@@ -44,6 +46,7 @@ import {
   FundsLoadedPayload,
   TransactionUpdatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
+import { CardResponseDto, CardStatus } from './rize.dto';
 
 @Injectable()
 export class RizeService {
@@ -190,13 +193,13 @@ export class RizeService {
       .execute();
   }
 
-  public async getVirtualCard(userId: string): Promise<string> {
+  public async getVirtualCard(userId: string): Promise<CardResponseDto> {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
     this.rizeValidatorService.validateCustomerExists(customer);
 
-    const debitCard: DebitCard = await this.rizeApiService.getDebitCard(
+    const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
       customer.uid,
     );
     this.rizeValidatorService.validateDebitCardExists(debitCard);
@@ -204,7 +207,16 @@ export class RizeService {
     const debitCardAccessToken: DebitCardAccessToken =
       await this.rizeApiService.getDebitCardAccessToken(debitCard.uid);
 
-    return this.rizeApiService.getVirtualCardImage(debitCardAccessToken);
+    const image: string = await this.rizeApiService.getVirtualCardImage(
+      debitCardAccessToken,
+    );
+
+    return {
+      image,
+      status:
+        debitCard.locked_at !== null ? CardStatus.frozen : CardStatus.active,
+      freezeReason: debitCard.lock_reason ?? null,
+    };
   }
 
   public async getTransactions(
@@ -362,6 +374,7 @@ export class RizeService {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
+    this.rizeValidatorService.validateCustomerExists(customer);
 
     await this.rizeApiService.loadFunds(customer.uid, amount);
   }
@@ -373,6 +386,7 @@ export class RizeService {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
+    this.rizeValidatorService.validateCustomerExists(customer);
 
     await this.rizeApiService.decreaseCreditLimit(customer.uid, amount);
   }
@@ -381,6 +395,8 @@ export class RizeService {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
+    this.rizeValidatorService.validateCustomerExists(customer);
+
     const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
       customer.uid,
     );
@@ -394,6 +410,8 @@ export class RizeService {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
+    this.rizeValidatorService.validateCustomerExists(customer);
+
     const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
       customer.uid,
     );

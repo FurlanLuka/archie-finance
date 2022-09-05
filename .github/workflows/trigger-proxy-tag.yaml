@@ -1,0 +1,52 @@
+name: Proxy deployment
+
+on:
+  push:
+    tags:
+      - proxy-v*
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  deploy:
+    name: Deploy ${{ matrix.environment }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [development, production]
+    steps:
+    - name: Poor mans manual deploy
+      if: ${{ github.run_attempt== 1}}
+      run: exit 1
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Configure AWS credentials for production
+      if: ${{ matrix.environment == 'production' }}
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+        aws-region: ${{ env.AWS_REGION }}
+    - name: Configure AWS credentials for development
+      if: ${{ matrix.environment == 'development' }}
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+    - name: Deploy production
+      if: ${{ matrix.environment == 'production' }}
+      uses: koslib/helm-eks-action@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_PRODUCTION }}
+      with:
+        command: helm upgrade --install ingress-proxy ./charts/ingress-controller --set environment="production"
+    - name: Deploy development
+      if: ${{ matrix.environment == 'development' }}
+      uses: koslib/helm-eks-action@master
+      env:
+        KUBE_CONFIG_DATA: ${{ secrets.KUBECONFIG_DEVELOPMENT }}
+      with:
+        command: helm upgrade --install ingress-proxy ./charts/ingress-controller

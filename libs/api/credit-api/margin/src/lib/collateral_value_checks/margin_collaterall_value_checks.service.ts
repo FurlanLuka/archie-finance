@@ -24,7 +24,7 @@ export class MarginCollateralValueCheckService {
       });
 
     return userLtvs.filter((usersLtv: UsersLtv) => {
-      const marginCollateralCheck: MarginCollateralCheck | null =
+      const marginCollateralCheck: MarginCollateralCheck | undefined =
         marginCollateralChecks.find(
           (marginCheck) => marginCheck.userId === usersLtv.userId,
         );

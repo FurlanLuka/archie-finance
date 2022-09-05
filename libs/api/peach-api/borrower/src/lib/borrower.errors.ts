@@ -1,8 +1,24 @@
-import { NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 
 export class BorrowerNotFoundError extends NotFoundException {
   constructor() {
     super('BORROWER_NOT_FOUND_ERROR');
+  }
+}
+
+export class CreditLineNotFoundError extends NotFoundException {
+  constructor() {
+    super('CREDIT_LINE_NOT_FOUND_ERROR');
+  }
+}
+
+export class DrawNotFoundError extends NotFoundException {
+  constructor() {
+    super('CREDIT_LINE_DRAW_NOT_FOUND_ERROR');
   }
 }
 
@@ -12,7 +28,7 @@ export class PaymentInstrumentNotFoundError extends NotFoundException {
   }
 }
 
-export class AmountExceedsOutstandingBalanceError extends NotFoundException {
+export class AmountExceedsOutstandingBalanceError extends BadRequestException {
   constructor() {
     super('AMOUNT_EXCEEDS_OUTSTANDING_BALANCE');
   }
@@ -30,8 +46,26 @@ export class PaymentInstrumentNotFound extends NotFoundException {
   }
 }
 
-export class AutopayNotConfiguredError extends NotFoundException {
+export class AutopayNotConfiguredError extends ConflictException {
   constructor() {
     super('AUTOPAY_NOT_CONFIGURED');
+  }
+}
+
+export class AutopayAlreadyConfiguredError extends NotFoundException {
+  constructor() {
+    super('AUTOPAY_ALREADY_CONFIGURED');
+  }
+}
+
+export class BorrowerMailNotFoundError extends NotFoundException {
+  constructor() {
+    super('BORROWER_MAIL_NOT_FOUND');
+  }
+}
+
+export class BorrowerHomeAddressNotFoundError extends NotFoundException {
+  constructor() {
+    super('BORROWER_HOME_ADDRESS_NOT_FOUND');
   }
 }

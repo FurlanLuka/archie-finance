@@ -3,12 +3,15 @@ import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Borrower } from '../borrower.entity';
 import { Repository } from 'typeorm';
-import { BorrowerNotFoundError } from '../borrower.errors';
 import { PaymentInstrument } from '../api/peach_api.interfaces';
 import {
   ConnectAccountDto,
   PaymentInstrumentDto,
 } from './payment_instruments.dto';
+import { BorrowerValidation } from '../utils/borrower.validation';
+import { GetKycPayload, GetKycResponse } from '@archie/api/user-api/kyc';
+import { GET_USER_KYC_RPC } from '@archie/api/user-api/constants';
+import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class PeachPaymentInstrumentsService {
@@ -16,6 +19,8 @@ export class PeachPaymentInstrumentsService {
     private peachApiService: PeachApiService,
     @InjectRepository(Borrower)
     private borrowerRepository: Repository<Borrower>,
+    private borrowerValidation: BorrowerValidation,
+    private queueService: QueueService,
   ) {}
 
   public async listPaymentInstruments(
@@ -24,9 +29,7 @@ export class PeachPaymentInstrumentsService {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
-    if (borrower === null) {
-      throw new BorrowerNotFoundError();
-    }
+    this.borrowerValidation.isBorrowerDefined(borrower);
 
     const paymentInstruments: PaymentInstrument[] =
       await this.peachApiService.getPaymentInstruments(borrower.personId);
@@ -70,14 +73,36 @@ export class PeachPaymentInstrumentsService {
     userId: string,
     accountInfo: ConnectAccountDto,
   ): Promise<void> {
-    const borrower: Borrower = await this.borrowerRepository.findOneBy({
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
+    this.borrowerValidation.isBorrowerDefined(borrower);
 
-    await this.peachApiService.createPlaidPaymentInstrument({
-      publicToken: accountInfo.publicToken,
-      accountId: accountInfo.accountId,
-      personId: borrower.personId,
+    const kyc: GetKycResponse = await this.queueService.request<
+      GetKycResponse,
+      GetKycPayload
+    >(GET_USER_KYC_RPC, {
+      userId: `${userId}`,
     });
+
+    await this.peachApiService.createPlaidPaymentInstrument(
+      borrower.personId,
+      accountInfo.accountId,
+      accountInfo.publicToken,
+      // TODO check what would happen if user enters wrong info on kyc
+      `${kyc.firstName} ${kyc.lastName}`,
+    );
+  }
+
+  public async removePaymentInstrument(
+    userId: string,
+    id: string,
+  ): Promise<void> {
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
+      userId,
+    });
+    this.borrowerValidation.isBorrowerDefined(borrower);
+
+    await this.peachApiService.deletePaymentInstrument(borrower.personId, id);
   }
 }

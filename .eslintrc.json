@@ -23,8 +23,80 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
-      "rules": {}
+      "extends": ["plugin:@nrwl/nx/typescript", "prettier"],
+      "parserOptions": {
+        "project": ["./tsconfig.eslint.json"]
+      },
+      "rules": {
+        "@typescript-eslint/no-floating-promises": "error",
+        "@typescript-eslint/await-thenable": "error",
+        "@typescript-eslint/no-explicit-any": "warn",
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": "warn",
+        "@typescript-eslint/consistent-type-definitions": "warn",
+        "@typescript-eslint/explicit-function-return-type": "warn",
+        "@typescript-eslint/no-unnecessary-type-assertion": "warn",
+        "@typescript-eslint/prefer-optional-chain": "warn",
+        "return-await": "off",
+        "@typescript-eslint/return-await": ["error", "in-try-catch"],
+        "@typescript-eslint/strict-boolean-expressions": ["warn"],
+        "@typescript-eslint/naming-convention": ["warn",
+          {
+            "selector": "default",
+            "format": ["camelCase", "UPPER_CASE"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "enumMember",
+            "format": ["camelCase", "snake_case", "UPPER_CASE"],
+            "leadingUnderscore": "allow"
+          },
+          {
+            "selector": "typeLike",
+            "format": ["PascalCase"]
+          },
+          {
+            "selector": [
+              "classProperty",
+              "objectLiteralProperty",
+              "typeProperty",
+              "classMethod",
+              "objectLiteralMethod",
+              "typeMethod",
+              "accessor",
+              "enumMember"
+            ],
+            "format": null,
+            "modifiers": ["requiresQuotes"]
+          }
+        ],
+        "@typescript-eslint/no-dynamic-delete": "warn",
+        "no-empty-function": "off",
+        "@typescript-eslint/no-empty-function": "warn",
+        "@typescript-eslint/no-extra-non-null-assertion": "warn",
+        "no-invalid-this": "off",
+        "@typescript-eslint/no-invalid-this": "warn",
+        "@typescript-eslint/no-invalid-void-type": "warn",
+        "no-magic-numbers": "off",
+        "@typescript-eslint/no-misused-promises": "warn",
+        "no-redeclare": "off",
+        "@typescript-eslint/no-redeclare": "warn",
+        "@typescript-eslint/no-require-imports": "warn",
+        "@typescript-eslint/no-unnecessary-condition": "warn",
+        "@typescript-eslint/no-unnecessary-type-constraint": "warn",
+        "@typescript-eslint/no-unsafe-call": "warn",
+        "no-unused-expressions": "off",
+        "@typescript-eslint/no-unused-expressions": "warn",
+        "no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "warn",
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": "warn",
+        "@typescript-eslint/prefer-enum-initializers": "warn",
+
+        "@typescript-eslint/no-unsafe-member-access": "warn",
+        "@typescript-eslint/no-unsafe-argument": "warn",
+        "@typescript-eslint/no-unsafe-return": "warn"
+      }
     },
     {
       "files": ["*.js", "*.jsx"],

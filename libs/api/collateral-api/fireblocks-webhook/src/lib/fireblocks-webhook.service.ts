@@ -28,6 +28,10 @@ import {
   COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
+import {
+  CollateralDepositedPayload,
+  CollateralWithdrawCompletedPayload,
+} from '@archie/api/collateral-api/data-transfer-objects';
 
 @Injectable()
 export class FireblocksWebhookService {
@@ -154,14 +158,17 @@ export class FireblocksWebhookService {
         },
       });
 
-      this.queueService.publish(COLLATERAL_DEPOSITED_TOPIC, {
-        transactionId: transaction.id,
-        userId,
-        asset: assetId,
-        amount: transaction.netAmount,
-        destination: transaction.destinationAddress,
-        status: transaction.status,
-      });
+      this.queueService.publish<CollateralDepositedPayload>(
+        COLLATERAL_DEPOSITED_TOPIC,
+        {
+          transactionId: transaction.id,
+          userId,
+          asset: assetId,
+          amount: transaction.netAmount,
+          destination: transaction.destinationAddress,
+          status: transaction.status,
+        },
+      );
     } catch (error) {
       throw new FireblocksWebhookError({
         transactionId: transaction.id,
@@ -237,11 +244,14 @@ export class FireblocksWebhookService {
         },
       });
 
-      this.queueService.publish(COLLATERAL_WITHDRAW_COMPLETED_TOPIC, {
-        asset: assetId,
-        transactionId: transaction.id,
-        userId: userVaultAccount.userId,
-      });
+      this.queueService.publish<CollateralWithdrawCompletedPayload>(
+        COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
+        {
+          asset: assetId,
+          transactionId: transaction.id,
+          userId: userVaultAccount.userId,
+        },
+      );
     } catch (error) {
       throw new FireblocksWebhookError({
         transactionId: transaction.id,
