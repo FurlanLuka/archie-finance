@@ -1,4 +1,4 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { SERVICE_QUEUE_NAME } from '@archie/api/ltv-api/constants';
 import { Subscribe } from '@archie/api/utils/queue';
 import {

@@ -8,10 +8,8 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreditLimit } from './credit_limit.entity';
 import { CollateralBalanceUpdateUtilService } from './utils/collateral_balance_update.service';
-import { CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED } from '@archie/api/credit-limit-api/constants';
 import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { QueueService } from '@archie/api/utils/queue';
-import { CreditLimitPeriodicCheckRequestedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 
 @Injectable()
 export class CreditLimitService {
