@@ -13,3 +13,6 @@ export enum ConfigVariables {
 }
 
 export const LTV_UPDATED_TOPIC = 'ltv.ltv.updated';
+export const MULTIPLE_LTV_UPDATED_TOPIC = 'ltv.ltv_multiple.updated';
+export const LTV_PERIODIC_CHECK_REQUESTED_TOPIC =
+  'ltv.ltv_periodic_check.requested';

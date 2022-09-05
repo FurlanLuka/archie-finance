@@ -9,10 +9,10 @@ export class LtvUtilService {
   LTV_MARGIN_CALL_LIMIT = 75;
 
   public calculateLtv(
-    creditAssets: CreditAssets,
+    creditUtilization: number,
     collateralValue: number,
   ): number {
-    return (creditAssets.credit.utilizationAmount / collateralValue) * 100;
+    return (creditUtilization / collateralValue) * 100;
   }
 
   public getLtvStatus(ltv: number): LtvStatus {

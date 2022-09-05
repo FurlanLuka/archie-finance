@@ -8,6 +8,16 @@ export interface CreditAssets {
   assetPrices: GetAssetPriceResponse[];
 }
 
+export interface MultipleCreditAssets {
+  creditPerUser: CreditPerUser[];
+  assetPrices: GetAssetPriceResponse[];
+}
+
+export interface CreditPerUser {
+  credit: LtvCredit;
+  collateral: LtvCollateral[];
+}
+
 export interface CollateralValue {
   collateral: CollateralWithPrice[];
   collateralBalance: number;
