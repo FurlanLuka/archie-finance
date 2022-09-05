@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { LtvStatus } from '../ltv/ltv.dto';
-import { CreditAssets } from './utils.interfaces';
 
 @Injectable()
 export class LtvUtilService {

@@ -26,6 +26,6 @@ export class MarginQueueController {
   async mutlipleltvsUpdatedHandler(
     message: LtvUpdatedPayload[],
   ): Promise<void> {
-    await this.marginService.handleLtvUpdatedEvent(message);
+    await this.marginService.handleMultipleLtvsUpdatedEvent(message);
   }
 }
