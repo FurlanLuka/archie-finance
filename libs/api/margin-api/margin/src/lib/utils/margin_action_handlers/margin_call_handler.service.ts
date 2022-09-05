@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { MarginCall } from '../../margin_calls.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
@@ -92,7 +92,8 @@ export class MarginCallHandlerService {
     }
 
     if (updateResult.affected === 0) {
-      throw new Error('Already deleted by other process. Retry');
+      Logger.log('Collateral was already liquidated by other process.', ltv);
+      return;
     }
 
     this.queueService.publish<MarginCallCompletedPayload>(

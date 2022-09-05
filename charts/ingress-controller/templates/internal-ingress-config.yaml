@@ -95,3 +95,11 @@ spec:
                 name: archie-webhook-api-service
                 port:
                   number: 80
+          ## Credit limit api service
+          - path: /internal/credit_limits/periodic_check
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-credit-limit-api-service
+                port:
+                  number: 80
