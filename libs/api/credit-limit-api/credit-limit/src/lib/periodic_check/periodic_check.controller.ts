@@ -29,7 +29,7 @@ export class InternalPeriodicCheckController {
   constructor(private creditLimitService: PeriodicCheckService) {}
 
   @Post()
-  public async paymentConfirmedHandler(): Promise<void> {
+  public async triggerCreditLimitPeriodicCheck(): Promise<void> {
     await this.creditLimitService.triggerPeriodicCheck();
   }
 }
