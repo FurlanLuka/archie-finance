@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CollateralValue, CollateralWithPrice } from './utils.interfaces';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { CreditLimit } from '../credit_limit.entity';
 import {
   CREDIT_LIMIT_DECREASED_TOPIC,
   CREDIT_LIMIT_INCREASED_TOPIC,
 } from '@archie/api/credit-limit-api/constants';
-import { AssetInformation } from '@archie/api/collateral-api/asset-information';
+import {
+  AssetInformation,
+  AssetList,
+} from '@archie/api/collateral-api/asset-information';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { QueueService } from '@archie/api/utils/queue';
@@ -27,11 +29,11 @@ export class CreditLimitAdjustmentService {
     userId: string,
     collateralCalculatedAt: string,
     collateralValue: CollateralValue,
-    assetPrices: GetAssetPriceResponse[],
+    assetList: AssetList,
   ): Promise<void> {
     const newCreditLimit: number = this.calculateCreditLimit(
       collateralValue.collateral,
-      assetPrices,
+      assetList,
     );
 
     const updatedCreditLimit: CreditLimit | undefined =
@@ -77,7 +79,7 @@ export class CreditLimitAdjustmentService {
 
   private calculateCreditLimit(
     collateralValue: CollateralWithPrice[],
-    assetList: GetAssetPriceResponse[],
+    assetList: AssetList,
   ): number {
     return collateralValue.reduce((sum: number, value: CollateralWithPrice) => {
       const assetInformation: AssetInformation | undefined =
@@ -103,12 +105,12 @@ export class CreditLimitAdjustmentService {
     return this.creditLimitRepository
       .createQueryBuilder('CreditLimit')
       .update(CreditLimit)
-      .where('userId =: userId AND calculatedAt <=: calculatedAt ', {
+      .where('userId = :userId AND calculatedAt <= :calculatedAt ', {
         userId: userId,
         calculatedAt: collateralCalculatedAt,
       })
       .set({
-        previousCreditLimit: () => 'creditLimit',
+        previousCreditLimit: () => '"creditLimit"',
         creditLimit: newCreditLimit,
         calculatedOnCollateralBalance: collateralBalance,
         calculatedAt: collateralCalculatedAt,
