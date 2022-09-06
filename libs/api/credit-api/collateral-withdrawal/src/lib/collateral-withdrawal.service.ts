@@ -1,7 +1,4 @@
-import {
-  COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
-  GET_COLLATERAL_VALUE_RPC,
-} from '@archie/api/credit-api/constants';
+import { COLLATERAL_WITHDRAW_INITIALIZED_TOPIC } from '@archie/api/credit-api/constants';
 import {
   BadRequestException,
   HttpException,
@@ -25,7 +22,7 @@ import {
 } from './collateral-withdrawal.errors';
 import {
   Collateral,
-  GetCollateralValuePayload,
+  CollateralValueService,
   GetCollateralValueResponse,
 } from '@archie/api/credit-api/collateral';
 import { QueueService } from '@archie/api/utils/queue';
@@ -33,7 +30,6 @@ import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { CollateralWithdrawInitializedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { CollateralWithdrawTransactionCreatedPayload } from '@archie/api/collateral-api/data-transfer-objects';
-import { LtvService } from '@archie/api/ltv-api/ltv';
 import {
   GetLoanBalancesPayload,
   GetLoanBalancesResponse,
@@ -48,8 +44,8 @@ export class CollateralWithdrawalService {
     private collateralRepository: Repository<Collateral>,
     @InjectRepository(CollateralWithdrawal)
     private collateralWithdrawalRepository: Repository<CollateralWithdrawal>,
+    private collateralValueService: CollateralValueService,
     private queueService: QueueService,
-    private ltvService: LtvService,
   ) {}
 
   public async handleWithdrawalTransactionCreated({
@@ -127,14 +123,7 @@ export class CollateralWithdrawalService {
   ): Promise<GetUserMaxWithdrawalAmountResponse> {
     const assetPrices: GetAssetPriceResponse[] =
       await this.queueService.request(GET_ASSET_PRICES_RPC);
-
-    const collateralValue: GetCollateralValueResponse[] =
-      await this.queueService.request<
-        GetCollateralValueResponse[],
-        GetCollateralValuePayload
-      >(GET_COLLATERAL_VALUE_RPC, {
-        userId,
-      });
+    console.log('ajej aseti priceti', assetPrices);
 
     const assetPrice = assetPrices.find((a) => a.asset === asset);
 
@@ -147,24 +136,18 @@ export class CollateralWithdrawalService {
 
       throw new BadRequestException();
     }
+    const userCollateral = await this.collateralRepository.findBy({ userId });
+    console.log('kole', userCollateral);
+    const collateralValue = this.collateralValueService.getUserCollateralValue(
+      userCollateral,
+      assetPrices,
+    );
 
     const desiredAsset = collateralValue.find((c) => c.asset === asset);
 
     // early break if user isn't hodling the desired asset at all
     if (!desiredAsset) {
       return { maxAmount: 0 };
-    }
-
-    const { ltv } = await this.ltvService.getCurrentLtv(userId);
-
-    // user has loaned too much
-    if (ltv > MAX_LTV) {
-      return { maxAmount: 0 };
-    }
-
-    // user hasn't loaned any money, they can withdraw everything
-    if (ltv === 0) {
-      return { maxAmount: desiredAsset.assetAmount };
     }
 
     const credit = await this.queueService.request<
