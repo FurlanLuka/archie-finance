@@ -4,8 +4,8 @@ import { SERVICE_QUEUE_NAME } from '@archie/api/ltv-api/constants';
 import { CreditService } from './credit.service';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { CARD_ACTIVATED_TOPIC } from '@archie/api/credit-api/constants';
-import { CardActivatedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
+import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-limit-api/constants';
 
 @Controller()
 export class CreditQueueController {
@@ -23,11 +23,15 @@ export class CreditQueueController {
     await this.creditService.handleCreditBalanceUpdatedEvent(payload);
   }
 
-  @Subscribe(CARD_ACTIVATED_TOPIC, CreditQueueController.CONTROLLER_QUEUE_NAME)
-  async cardActivatedHandler(payload: CardActivatedPayload): Promise<void> {
-    await this.creditService.handleCardActivatedEvent(payload);
+  @Subscribe(
+    CREDIT_LINE_CREATED_TOPIC,
+    CreditQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async creditLineCreatedHandler(
+    payload: CreditLineCreatedPayload,
+  ): Promise<void> {
+    await this.creditService.handleCreditLineCreatedEvent(payload);
   }
-
   // TODO: Add failed events
   // TODO: Migrate existing credit balances
 }

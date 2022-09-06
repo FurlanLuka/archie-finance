@@ -12,6 +12,7 @@ export enum ConfigVariables {
   QUEUE_URL = 'QUEUE_URL',
 }
 
+export const CREDIT_LINE_CREATED_TOPIC = 'credit_limit.credit_line.created';
 export const CREDIT_LIMIT_INCREASED_TOPIC =
   'credit_limit.credit_limit.increased';
 export const CREDIT_LIMIT_DECREASED_TOPIC =

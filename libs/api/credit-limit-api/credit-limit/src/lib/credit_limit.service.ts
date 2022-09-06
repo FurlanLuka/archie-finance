@@ -8,6 +8,12 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreditLimit } from './credit_limit.entity';
 import { CollateralBalanceUpdateUtilService } from './utils/collateral_balance_update.service';
+import { CreditLimitAdjustmentService } from './utils/credit_limit_adjustment.service';
+import { CollateralValue } from './utils/utils.interfaces';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
+import { CollateralValueUtilService } from './utils/collateral_value.service';
+import { QueueService } from '@archie/api/utils/queue';
 import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
@@ -16,8 +22,10 @@ export class CreditLimitService {
     @InjectRepository(Collateral)
     private collateralRepository: Repository<Collateral>,
     @InjectRepository(CreditLimit)
-    private creditLimitRepository: Repository<CreditLimit>,
     private collateralBalanceUpdateUtilService: CollateralBalanceUpdateUtilService,
+    private creditLimitAdjustmentService: CreditLimitAdjustmentService,
+    private queueService: QueueService,
+    private collateralValueUtilService: CollateralValueUtilService,
   ) {}
 
   public async handleCollateralWithdrawInitializedEvent(
@@ -74,6 +82,27 @@ export class CreditLimitService {
 
     await this.collateralBalanceUpdateUtilService.handleCollateralBalanceUpdate(
       transaction.userId,
+    );
+  }
+
+  public async createCredit(userId: string): Promise<void> {
+    const collateral: Collateral[] = await this.collateralRepository.findBy({
+      userId,
+    });
+
+    const assetPrices: GetAssetPriceResponse[] =
+      await this.queueService.request(GET_ASSET_PRICES_RPC);
+
+    const collateralValue: CollateralValue =
+      this.collateralValueUtilService.getCollateralValue(
+        collateral,
+        assetPrices,
+      );
+
+    return this.creditLimitAdjustmentService.createInitialCredit(
+      userId,
+      collateralValue,
+      assetPrices,
     );
   }
 }

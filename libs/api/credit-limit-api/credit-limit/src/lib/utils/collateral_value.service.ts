@@ -5,11 +5,12 @@ import {
   CollateralWithCalculationDate,
   CollateralWithPrice,
 } from './utils.interfaces';
+import { Collateral } from '../collateral.entity';
 
 @Injectable()
 export class CollateralValueUtilService {
   public getCollateralValue(
-    collateral: CollateralWithCalculationDate[],
+    collateral: Collateral[],
     assetPrices: GetAssetPriceResponse[],
   ): CollateralValue {
     const collateralValuePerAsset: CollateralWithPrice[] = collateral.map(

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { CreditLimitService } from './credit_limit.service';
-import { CreditLimitQueueController } from './credit_limit.controller';
+import { CreditLimitController, CreditLimitQueueController } from './credit_limit.controller';
 import { UtilsModule } from './utils/utils.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Collateral } from './collateral.entity';
@@ -13,7 +13,7 @@ import { PeriodicCheckModule } from './periodic_check/periodic_check.module';
     TypeOrmModule.forFeature([Collateral, CreditLimit]),
     PeriodicCheckModule,
   ],
-  controllers: [CreditLimitQueueController],
+  controllers: [CreditLimitController, CreditLimitQueueController],
   providers: [CreditLimitService],
   exports: [CreditLimitService],
 })

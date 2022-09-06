@@ -15,3 +15,8 @@ export class CreditLimitIncreasedPayload {
 export class CreditLimitPeriodicCheckRequestedPayload {
   userIds: string[];
 }
+
+export class CreditLineCreatedPayload {
+  userId: string;
+  amount: number;
+}

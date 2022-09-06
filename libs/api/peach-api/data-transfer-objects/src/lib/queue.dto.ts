@@ -16,3 +16,13 @@ export class CreditBalanceUpdatedPayload {
     amount: number;
   };
 }
+
+export class GetLoanBalancesPayload {
+  userId: string;
+}
+
+export interface GetLoanBalancesResponse {
+  totalCredit: number;
+  availableCredit: number;
+  utilizationAmount: number;
+}
