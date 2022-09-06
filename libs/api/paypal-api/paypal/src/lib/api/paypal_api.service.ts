@@ -4,7 +4,10 @@ import { ConfigService } from '@archie/api/utils/config';
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { ConfigVariables } from '@archie/api/paypal-api/constants';
 import { URLSearchParams } from 'url';
-import { CaptureOrderResponse, CreateOrderResponse } from './paypal_api.interfaces';
+import {
+  CaptureOrderResponse,
+  CreateOrderResponse,
+} from './paypal_api.interfaces';
 
 interface AuthenticationResponse {
   scope: string;
@@ -94,7 +97,7 @@ export class PaypalApiService {
           shipping_preference: 'NO_SHIPPING',
           landing_page: 'BILLING',
           user_action: 'PAY_NOW',
-          return_url: 'https://google.com',
+          return_url: this.configService.get(ConfigVariables.PAYPAL_RETURN_URL),
         },
       });
 
@@ -102,12 +105,9 @@ export class PaypalApiService {
   }
 
   public async captureOrder(orderId: string): Promise<CaptureOrderResponse> {
-    const captureOrderResponse: AxiosResponse<CaptureOrderResponse> = await this.apiClient.post(
-      `/v2/checkout/orders/${orderId}/capture`,
-      {},
-    );
+    const captureOrderResponse: AxiosResponse<CaptureOrderResponse> =
+      await this.apiClient.post(`/v2/checkout/orders/${orderId}/capture`, {});
 
-    return captureOrderResponse.data
+    return captureOrderResponse.data;
   }
-
 }
