@@ -36,20 +36,6 @@ export class CreditService {
     );
 
     if (credit.paymentDetails.type === PaymentType.liquidation) {
-<<<<<<< HEAD
-      await this.ltvCollateralRepository
-        .createQueryBuilder('LtvCollateral')
-        .update(LtvCollateral)
-        .where('userId = :userId AND asset = :asset', {
-          userId: credit.userId,
-          asset: credit.paymentDetails.asset,
-        })
-        .set({
-          amount: () => '"amount" - :amount',
-        })
-        .setParameter('amount', credit.paymentDetails.amount)
-        .execute();
-=======
       await this.ltvCollateralRepository.decrement(
         {
           userId: credit.userId,
@@ -58,7 +44,6 @@ export class CreditService {
         'amount',
         credit.paymentDetails.amount,
       );
->>>>>>> credit-limit-api
     }
 
     await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(credit.userId);
