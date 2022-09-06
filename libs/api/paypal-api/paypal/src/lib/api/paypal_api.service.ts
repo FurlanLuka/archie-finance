@@ -27,8 +27,6 @@ export class PaypalApiService {
       baseURL: configService.get(ConfigVariables.PAYPAL_API_URL),
     });
 
-    console.log('herere');
-
     this.apiClient.interceptors.request.use(
       undefined,
       async (error: AxiosError) => {

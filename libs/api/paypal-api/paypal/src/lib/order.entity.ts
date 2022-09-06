@@ -8,10 +8,10 @@ export class Order {
   @PrimaryColumn('uuid')
   id: string;
 
-  @Column('uuid')
+  @Column('varchar')
   userId: string;
 
-  @Column('int')
+  @Column('float')
   paymentAmount: number;
 
   @Column('varchar')
