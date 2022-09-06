@@ -36,18 +36,14 @@ export class CreditService {
     );
 
     if (credit.paymentDetails.type === PaymentType.liquidation) {
-      await this.ltvCollateralRepository
-        .createQueryBuilder('LtvCollateral')
-        .update(LtvCollateral)
-        .where('userId =: userId AND asset =: asset', {
+      await this.ltvCollateralRepository.decrement(
+        {
           userId: credit.userId,
           asset: credit.paymentDetails.asset,
-        })
-        .set({
-          amount: () => '"amount" -: amount',
-        })
-        .setParameter('amount', credit.paymentDetails.amount)
-        .execute();
+        },
+        'amount',
+        credit.paymentDetails.amount,
+      );
     }
 
     await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(credit.userId);

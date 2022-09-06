@@ -27,6 +27,10 @@ export class MarginService {
   public async handleLtvUpdatedEvent(
     updatedLtv: LtvUpdatedPayload,
   ): Promise<void> {
+    // TODO: Security improvements (very unlikely).
+    //  Add calculation date in payload and execute logic only in case calculation date is the latest (store calculation date in margin check table)
+    //   Create external ids for fireblocks txn. Reject(ignore) any updates that come before the txn is confirmed - add txn id to the ltv updated event
+
     const activeMarginCall: MarginCall | null =
       await this.marginCallsRepository.findOneBy({
         userId: updatedLtv.userId,
@@ -48,17 +52,18 @@ export class MarginService {
       updatedLtv.calculatedOn.collateralBalance,
     );
 
-    await this.marginActionHandlersUtilService.handle(actions, updatedLtv);
-
     if (actions.length > 0) {
       await this.marginCheckRepository.upsert(
         {
           userId: updatedLtv.userId,
           ltv: updatedLtv.ltv,
           collateralBalance: updatedLtv.calculatedOn.collateralBalance,
+          // TODO: compare calculation date
         },
         { conflictPaths: ['userId'] },
       );
+
+      await this.marginActionHandlersUtilService.handle(actions, updatedLtv);
     }
   }
 
