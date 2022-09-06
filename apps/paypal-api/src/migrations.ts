@@ -1,5 +1,5 @@
-import { PaypalApi1662372744954 } from './migrations/PaypalApi1662372744954';
+import { PaypalApi1662390332355 } from './migrations/PaypalApi1662390332355';
 
 export const migrations = [
-  PaypalApi1662372744954,
+  PaypalApi1662390332355,
   ]

@@ -22,6 +22,7 @@ import { migrations } from './migrations';
         ConfigVariables.PAYPAL_CLIENT_ID,
         ConfigVariables.PAYPAL_CLIENT_SECRET,
         ConfigVariables.PAYPAL_API_URL,
+        ConfigVariables.PAYPAL_RETURN_URL
       ],
     }),
     TypeOrmModule.forRootAsync({
@@ -42,7 +43,7 @@ import { migrations } from './migrations';
       }),
       inject: [ConfigService],
     }),
-    // QueueModule.register(),
+    QueueModule.register(),
     HealthModule,
     PaypalModule,
   ],

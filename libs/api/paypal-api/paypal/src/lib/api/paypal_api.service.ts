@@ -4,6 +4,7 @@ import { ConfigService } from '@archie/api/utils/config';
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
 import { ConfigVariables } from '@archie/api/paypal-api/constants';
 import { URLSearchParams } from 'url';
+import { CaptureOrderResponse, CreateOrderResponse } from './paypal_api.interfaces';
 
 interface AuthenticationResponse {
   scope: string;
@@ -47,7 +48,6 @@ export class PaypalApiService {
   }
 
   private async authenticate(): Promise<void> {
-    try {
     const authenticationResponse: AxiosResponse<AuthenticationResponse> =
       await this.apiClient.post(
         '/v1/oauth2/token',
@@ -64,21 +64,17 @@ export class PaypalApiService {
         },
       );
 
-    this.apiClient.defaults.headers.common['Authorization'] =
-      `Bearer ${authenticationResponse.data.access_token}`;
-    } catch (error) { console.log(error) }
+    this.apiClient.defaults.headers.common[
+      'Authorization'
+    ] = `Bearer ${authenticationResponse.data.access_token}`;
   }
 
   public async createPaymentOrder(
     paymentIdentifier: string,
     paymentAmount: number,
-  ): Promise<void> {
-    console.log('herererere');
-
-    try {
-    const createOrderResponse = await this.apiClient.post(
-      '/v2/checkout/orders',
-      {
+  ): Promise<CreateOrderResponse> {
+    const createOrderResponse: AxiosResponse<CreateOrderResponse> =
+      await this.apiClient.post('/v2/checkout/orders', {
         intent: 'CAPTURE',
         purchase_units: [
           {
@@ -98,40 +94,20 @@ export class PaypalApiService {
           shipping_preference: 'NO_SHIPPING',
           landing_page: 'BILLING',
           user_action: 'PAY_NOW',
-          return_url: 'https://google.com'
+          return_url: 'https://google.com',
         },
-      },
-    );
+      });
 
-    console.log(createOrderResponse.data);
-    } catch (error) {
-      console.log(error);
-    }
+    return createOrderResponse.data;
   }
 
-  // private createApiClient(): AxiosInstance {
-  //   const axiosInstance: AxiosInstance = axios.create({
-  //     baseURL: this.configService.get(ConfigVariables.PEACH_BASE_URL),
-  //     timeout: this.MAX_REQUEST_TIMEOUT,
-  //     headers: {
-  //       'X-API-KEY': this.configService.get(ConfigVariables.PEACH_API_KEY),
-  //     },
-  //   });
+  public async captureOrder(orderId: string): Promise<CaptureOrderResponse> {
+    const captureOrderResponse: AxiosResponse<CaptureOrderResponse> = await this.apiClient.post(
+      `/v2/checkout/orders/${orderId}/capture`,
+      {},
+    );
 
-  //   axiosInstance.interceptors.response.use(undefined, (error: AxiosError) => {
-  //     const response: PeachErrorResponse = {
-  //       config: {
-  //         ...error.config,
-  //         headers: null,
-  //       },
-  //       status: (<AxiosResponse>error.response).status,
-  //       errorResponse: <PeachErrorData>error.response?.data,
-  //     };
-  //     Logger.error(JSON.stringify(response, null, 2));
+    return captureOrderResponse.data
+  }
 
-  //     return Promise.reject(response);
-  //   });
-
-  //   return axiosInstance;
-  // }
 }
