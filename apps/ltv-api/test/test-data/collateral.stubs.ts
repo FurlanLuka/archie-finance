@@ -30,34 +30,3 @@ export const assetPriceResponse: GetAssetPriceResponse[] = [
     dailyChange: 0,
   },
 ];
-
-export const BTC_STARTING_AMOUNT = 1;
-export const ETH_STARTING_AMOUNT = 10;
-export const SOL_STARTING_AMOUNT = 100;
-
-export function createUserCollateral(userId: string) {
-  return [
-    {
-      userId,
-      asset: 'BTC',
-      amount: BTC_STARTING_AMOUNT,
-    },
-    {
-      userId,
-      asset: 'ETH',
-      amount: ETH_STARTING_AMOUNT,
-    },
-    {
-      userId,
-      asset: 'SOL',
-      amount: SOL_STARTING_AMOUNT,
-    },
-    {
-      userId,
-      asset: 'USDC',
-      amount: 22,
-    },
-  ];
-}
-export const defaultCollateralTotal =
-  BTC_STARTING_AMOUNT * BTC_PRICE + 10 * ETH_PRICE + 100 * SOL_PRICE + 22 * 1;

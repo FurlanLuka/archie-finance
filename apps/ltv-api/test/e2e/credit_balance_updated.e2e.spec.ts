@@ -1,34 +1,22 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { Test, TestingModule } from '@nestjs/testing';
-import {
-  ExecutionContext,
-  INestApplication,
-  ValidationPipe,
-} from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from '../../src/app.module';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ConfigService } from '@nestjs/config';
 import { LtvCollateral } from '../../../../libs/api/ltv-api/ltv/src/lib/collateral.entity';
-import { AuthGuard } from '@nestjs/passport';
-import {
-  clearDatabase,
-  queueStub,
-  verifyAccessToken,
-} from '../../../../libs/api/test/integration/src';
-import { QueueService } from '../../../../libs/api/utils/queue/src';
-import { RizeService } from '../../../../libs/api/credit-api/rize/src';
+import { clearDatabase, queueStub } from '@archie/test/integration';
+import { QueueService } from '@archie/api/utils/queue';
 import { when } from 'jest-when';
-import { GET_ASSET_PRICES_RPC } from '../../../../libs/api/asset-price-api/constants/src';
+import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { assetPriceResponse, ETH_PRICE } from '../test-data/collateral.stubs';
-import { CollateralQueueController } from '../../../../libs/api/ltv-api/ltv/src/lib/collateral/collateral.controller';
 import { LtvCredit } from '../../../../libs/api/ltv-api/ltv/src/lib/credit.entity';
-import { LTV_UPDATED_TOPIC } from '../../../../libs/api/ltv-api/constants/src';
+import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
 import { CreditQueueController } from '../../../../libs/api/ltv-api/ltv/src/lib/credit/credit.controller';
 import {
   CreditBalanceUpdatedPayload,
   PaymentType,
-} from '../../../../libs/api/peach-api/data-transfer-objects/src';
-import { DateTime } from 'luxon';
+} from '@archie/api/peach-api/data-transfer-objects';
 
 describe('CreditQueueController (e2e)', () => {
   let app: INestApplication;
@@ -37,8 +25,6 @@ describe('CreditQueueController (e2e)', () => {
   let ltvCollateralRepository: Repository<LtvCollateral>;
   let ltvCreditRepository: Repository<LtvCredit>;
 
-  let configService: ConfigService;
-
   const userId = 'userId';
   const asset = 'ETH';
 
@@ -46,23 +32,8 @@ describe('CreditQueueController (e2e)', () => {
     module = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideGuard(AuthGuard)
-      .useValue({
-        canActivate: (context: ExecutionContext) => {
-          const request = context.switchToHttp().getRequest();
-
-          const accessToken: string =
-            request.headers.authorization.split(' ')[1];
-
-          request.user = verifyAccessToken(accessToken);
-
-          return true;
-        },
-      })
       .overrideProvider(QueueService)
       .useValue(queueStub)
-      .overrideProvider(RizeService)
-      .useValue({})
       .compile();
 
     app = module.createNestApplication();
@@ -72,8 +43,6 @@ describe('CreditQueueController (e2e)', () => {
 
     ltvCollateralRepository = app.get(getRepositoryToken(LtvCollateral));
     ltvCreditRepository = app.get(getRepositoryToken(LtvCredit));
-
-    configService = app.get(ConfigService);
 
     when(queueStub.request)
       .calledWith(GET_ASSET_PRICES_RPC)
