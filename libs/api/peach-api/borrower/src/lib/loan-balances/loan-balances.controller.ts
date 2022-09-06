@@ -21,6 +21,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import {
+  BorrowerNotFoundError,
+  CreditLineNotFoundError,
+} from '../borrower.errors';
 import { GetLoanBalancesDto } from './loan-balances.dto';
 import { LoanBalancesService } from './loan-balances.service';
 
@@ -31,7 +35,11 @@ export class LoanBalancesController {
   @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([NotFoundException])
+  @ApiErrorResponse([
+    NotFoundException,
+    BorrowerNotFoundError,
+    CreditLineNotFoundError,
+  ])
   async getLoanBalances(@Req() req): Promise<GetLoanBalancesDto> {
     return this.loanBalancesService.getLoanBalances(req.user.sub);
   }

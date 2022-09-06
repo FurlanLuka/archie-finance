@@ -15,7 +15,10 @@ import { INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC } from '@archie/api/colla
 import { CreditLimitService } from './credit_limit.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
-import { CreateCreditMinimumCollateralError } from './credit_limit.errors';
+import {
+  CreateCreditMinimumCollateralError,
+  CreditAlreadyExistsError,
+} from './credit_limit.errors';
 
 @Controller('v1/credit_limit')
 export class CreditLimitController {
@@ -24,7 +27,10 @@ export class CreditLimitController {
   @Post()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([CreateCreditMinimumCollateralError])
+  @ApiErrorResponse([
+    CreateCreditMinimumCollateralError,
+    CreditAlreadyExistsError,
+  ])
   async createCreditLine(@Req() req): Promise<void> {
     return this.creditLimitService.createCredit(req.user.sub);
   }
