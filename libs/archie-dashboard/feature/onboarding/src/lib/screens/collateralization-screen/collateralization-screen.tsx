@@ -21,7 +21,7 @@ import { CollateralizationScreenStyled } from './collateralization-screen.styled
 export const CollateralizationScreen: FC = () => {
   const { t } = useTranslation();
 
-  const [lineOfCredit, setLineOfCredit] = useState(200);
+  const [lineOfCredit, setLineOfCredit] = useState(MIN_LINE_OF_CREDIT);
   const [selectedCollateralAsset, setSelectedCollateralAsset] = useState<CollateralAsset>();
   const [requiredCollateral, setRequiredCollateral] = useState(0);
 

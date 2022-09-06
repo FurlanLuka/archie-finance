@@ -5,7 +5,7 @@ import { AvailableCredit, NextPayment, InterestRate } from '@archie-webapps/arch
 import { canUserSchedulePayment } from '@archie-webapps/archie-dashboard/utils';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
-import { ButtonPrimary, InputRadio, TitleM, BodyS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, Status, StatusCircle, TitleM, BodyS } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectedAccounts } from '../components/connected-accounts/connected-accounts';
 import { PaymentFlowModal } from '../components/modals/payment-flow/payment-flow';
@@ -38,12 +38,12 @@ export const PaymentScreen: FC = () => {
         >
           {t('dashboard_payment.btn_pay')}
         </ButtonPrimary>
-        <InputRadio small>
-          <input type="radio" value="auto_payments" checked />
-          <BodyS>
+        <Status isOn>
+          <StatusCircle />
+          <BodyS weight={700}>
             {t('dashboard_payment.auto_payments')} {t('on')} {/* TBD */}
           </BodyS>
-        </InputRadio>
+        </Status>
       </div>
       <ConnectedAccounts />
       {showModal && <PaymentFlowModal close={() => setShowModal(false)} />}

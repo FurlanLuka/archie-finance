@@ -21,7 +21,7 @@ export const PaymentScheduleFormStyled = styled.div`
     align-items: flex-start;
     gap: 0.25rem;
     white-space: nowrap;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
 
     label,
     input {

@@ -62,7 +62,7 @@ const AmountCell: FC<AmountCellProps> = ({ amount }) => {
 
   return (
     <BodyM color={isPositive ? theme.textSuccess : theme.textDanger} weight={500}>
-      {isPositive ? '-' : '+'}${Math.abs(amount)}
+      {isPositive ? '+' : '-'}${Math.abs(amount)}
     </BodyM>
   );
 };

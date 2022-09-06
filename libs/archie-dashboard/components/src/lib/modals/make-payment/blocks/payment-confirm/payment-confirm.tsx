@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { ScheduleTransactionParams } from '@archie-webapps/shared/data-access/archie-api/payment/api/schedule-transaction';
 import { useScheduleTransaction } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
-import { ButtonOutline, ButtonPrimary, TitleM, BodyL, BodyM, FormError } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, ButtonPrimary, TitleM, BodyM, FormError } from '@archie-webapps/shared/ui/design-system';
 
 import { PaymentConfirmModalStyled } from './payment-confirm.styled';
 
@@ -49,7 +49,7 @@ export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({
       <TitleM weight={400} className="balance-value">
         ${scheduledTransactionParams.amount}
       </TitleM>
-      <BodyL>{t('payment_modal.payment_confirm.time_note')}</BodyL>
+      <BodyM>{t('payment_modal.payment_confirm.time_note')}</BodyM>
       {scheduleTransactionMutation.state === RequestState.ERROR && (
         <FormError>{t('payment_modal.payment_confirm.error')}</FormError>
       )}

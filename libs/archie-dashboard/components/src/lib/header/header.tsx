@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import { dashboardNavItems } from '@archie-webapps/archie-dashboard/constants';
 import { useAuthenticatedSession } from '@archie-webapps/shared/data-access/session';
@@ -14,7 +14,10 @@ export interface HeaderProps {
 
 export const Header: FC<HeaderProps> = ({ maxWidth }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { logout } = useAuthenticatedSession();
+
+  const isOnboarding = location.pathname === '/onboarding';
 
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
@@ -38,11 +41,13 @@ export const Header: FC<HeaderProps> = ({ maxWidth }) => {
       <HeaderStyled isOpen={mobileNavOpen}>
         <Container alignItems="center" justifyContent="space-between" maxWidth={maxWidth}>
           <Icon name="logo" className="logo" />
-          <button className="menu-button hide-lg" onClick={toggleMobileNav}>
-            <div className="line one"></div>
-            <div className="line two"></div>
-            <Icon name="close" className="close" />
-          </button>
+          {!isOnboarding && (
+            <button className="menu-button hide-lg" onClick={toggleMobileNav}>
+              <div className="line one"></div>
+              <div className="line two"></div>
+              <Icon name="close" className="close" />
+            </button>
+          )}
         </Container>
       </HeaderStyled>
 

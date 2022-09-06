@@ -293,14 +293,14 @@
       "credit_for": "ArchCredit for {{name}}",
       "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
       "balance_note": "Pay balance owed:",
-      "time_note": "This Payment will be processed today and take 2-4 business days to settle.",
+      "time_note": "This payment will be processed today and will take 2-4 business days to settle.",
       "error": "Something went wrong, please try again"
     },
     "payment_scheduled": {
       "title": "Payment scheduled",
       "credit_for": "ArchCredit for {{name}}",
       "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
-      "scheduled_note": "Your payment for ${{newPayment}} has been scheduled for {{paymentDate}}!",
+      "scheduled_note": "Your payment of ${{newPayment}} has been scheduled for {{paymentDate}}!",
       "email_note": "You will receive an email notification.",
       "time_note": "Your payment will take 2-4 business days to settle."
     }

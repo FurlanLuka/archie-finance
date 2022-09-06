@@ -80,7 +80,7 @@ export const MobileNav = styled.div<HeaderProps>`
   left: 0px;
   width: 100%;
   height: 100%;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
@@ -91,6 +91,10 @@ export const MobileNav = styled.div<HeaderProps>`
   transition: transform 0.3s linear;
   padding: 3.75rem 1rem;
   z-index: 1;
+
+  @media (max-width: ${breakpoints.screenMD}) {
+    display: flex;
+  }
 
   .links {
     display: flex;
