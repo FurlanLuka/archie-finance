@@ -23,18 +23,14 @@ export class CollateralService {
   ): Promise<void> {
     // TODO: Store transaction ids - no duplicated events
 
-    await this.ltvCollateralRepository
-      .createQueryBuilder('LtvCollateral')
-      .update(LtvCollateral)
-      .where('userId =: userId AND asset =: asset', {
+    await this.ltvCollateralRepository.decrement(
+      {
         userId: transaction.userId,
         asset: transaction.asset,
-      })
-      .set({
-        amount: () => '"amount" -: amount',
-      })
-      .setParameter('amount', transaction.withdrawalAmount)
-      .execute();
+      },
+      'amount',
+      transaction.withdrawalAmount,
+    );
 
     await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(transaction.userId);
   }
@@ -44,18 +40,14 @@ export class CollateralService {
   ): Promise<void> {
     // TODO: Store transaction ids - no duplicated events
 
-    const updateResult: UpdateResult = await this.ltvCollateralRepository
-      .createQueryBuilder('LtvCollateral')
-      .update(LtvCollateral)
-      .where('userId =: userId AND asset =: asset', {
+    await this.ltvCollateralRepository.increment(
+      {
         userId: transaction.userId,
         asset: transaction.asset,
-      })
-      .set({
-        amount: () => '"amount" +: amount',
-      })
-      .setParameter('amount', transaction.amount)
-      .execute();
+      },
+      'amount',
+      transaction.amount,
+    );
 
     if (updateResult.affected === this.NONE) {
       await this.ltvCollateralRepository.insert({
