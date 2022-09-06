@@ -21,6 +21,7 @@ export class CollateralService {
   public async handleCollateralWithdrawInitializedEvent(
     transaction: CollateralWithdrawInitializedPayload,
   ): Promise<void> {
+<<<<<<< HEAD
     await this.ltvCollateralRepository
       .createQueryBuilder('LtvCollateral')
       .update(LtvCollateral)
@@ -33,6 +34,18 @@ export class CollateralService {
       })
       .setParameter('amount', transaction.withdrawalAmount)
       .execute();
+=======
+    // TODO: Store transaction ids - no duplicated events
+
+    await this.ltvCollateralRepository.decrement(
+      {
+        userId: transaction.userId,
+        asset: transaction.asset,
+      },
+      'amount',
+      transaction.withdrawalAmount,
+    );
+>>>>>>> credit-limit-api
 
     await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(transaction.userId);
   }
@@ -40,6 +53,7 @@ export class CollateralService {
   public async handleCollateralDepositCompletedEvent(
     transaction: CollateralDepositCompletedPayload,
   ): Promise<void> {
+<<<<<<< HEAD
     const updateResult: UpdateResult = await this.ltvCollateralRepository
       .createQueryBuilder('LtvCollateral')
       .update(LtvCollateral)
@@ -52,6 +66,18 @@ export class CollateralService {
       })
       .setParameter('amount', transaction.amount)
       .execute();
+=======
+    // TODO: Store transaction ids - no duplicated events
+
+    await this.ltvCollateralRepository.increment(
+      {
+        userId: transaction.userId,
+        asset: transaction.asset,
+      },
+      'amount',
+      transaction.amount,
+    );
+>>>>>>> credit-limit-api
 
     if (updateResult.affected === this.NONE) {
       await this.ltvCollateralRepository.insert({

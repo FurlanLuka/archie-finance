@@ -11,3 +11,11 @@ export enum ConfigVariables {
   TYPEORM_PORT = 'TYPEORM_PORT',
   QUEUE_URL = 'QUEUE_URL',
 }
+
+export const CREDIT_LIMIT_INCREASED_TOPIC =
+  'credit_limit.credit_limit.increased';
+export const CREDIT_LIMIT_DECREASED_TOPIC =
+  'credit_limit.credit_limit.decreased';
+
+export const CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED =
+  'credit_limit.credit_limit_periodic_check.requested';

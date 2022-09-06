@@ -19,7 +19,7 @@ import {
 
 @Injectable()
 export class MarginCallsService {
-  CRITICAL_LTV_LIMIT = 85;
+  CRITICAL_LTV_LIMIT = 90;
   LIQUIDATE_TO_LTV = 60;
   MARGIN_CALL_TIME_LIMIT = 72;
 

@@ -9,6 +9,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { QueueModule } from '@archie/api/utils/queue';
 import { migrations } from './migrations';
 import { AuthModule } from '@archie/api/utils/auth0';
+import { CreditLimitModule } from '@archie/api/credit-limit-api/credit-limit';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { AuthModule } from '@archie/api/utils/auth0';
     }),
     HealthModule,
     QueueModule.register(),
+    CreditLimitModule,
   ],
   controllers: [],
   providers: [],
