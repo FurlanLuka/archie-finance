@@ -39,12 +39,12 @@ export class CreditService {
       await this.ltvCollateralRepository
         .createQueryBuilder('LtvCollateral')
         .update(LtvCollateral)
-        .where('userId =: userId AND asset =: asset', {
+        .where('userId = :userId AND asset = :asset', {
           userId: credit.userId,
           asset: credit.paymentDetails.asset,
         })
         .set({
-          amount: () => '"amount" -: amount',
+          amount: () => '"amount" - :amount',
         })
         .setParameter('amount', credit.paymentDetails.amount)
         .execute();

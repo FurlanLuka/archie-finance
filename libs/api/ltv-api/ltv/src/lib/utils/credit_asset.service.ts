@@ -18,7 +18,7 @@ export class CreditAssetUtilService {
   constructor(
     @InjectRepository(LtvCredit)
     private ltvCreditRepository: Repository<LtvCredit>,
-    @InjectRepository(LtvCredit)
+    @InjectRepository(LtvCollateral)
     private ltvCollateralRepository: Repository<LtvCollateral>,
     private queueService: QueueService,
   ) {}

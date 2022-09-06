@@ -24,12 +24,12 @@ export class CollateralService {
     await this.ltvCollateralRepository
       .createQueryBuilder('LtvCollateral')
       .update(LtvCollateral)
-      .where('userId =: userId AND asset =: asset', {
+      .where('userId = :userId AND asset = :asset', {
         userId: transaction.userId,
         asset: transaction.asset,
       })
       .set({
-        amount: () => '"amount" -: amount',
+        amount: () => '"amount" - :amount',
       })
       .setParameter('amount', transaction.withdrawalAmount)
       .execute();
@@ -43,12 +43,12 @@ export class CollateralService {
     const updateResult: UpdateResult = await this.ltvCollateralRepository
       .createQueryBuilder('LtvCollateral')
       .update(LtvCollateral)
-      .where('userId =: userId AND asset =: asset', {
+      .where('userId = :userId AND asset = :asset', {
         userId: transaction.userId,
         asset: transaction.asset,
       })
       .set({
-        amount: () => '"amount" +: amount',
+        amount: () => '"amount" + :amount',
       })
       .setParameter('amount', transaction.amount)
       .execute();
