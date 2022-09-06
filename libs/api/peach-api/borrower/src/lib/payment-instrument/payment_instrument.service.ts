@@ -107,13 +107,4 @@ export class PeachPaymentInstrumentsService {
     await this.peachApiService.deletePaymentInstrument(borrower.personId, id);
   }
 
-  public async createPaypalPaymentInstrument(userId: string): Promise<void> {
-    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId,
-    });
-
-    this.borrowerValidation.isBorrowerDefined(borrower);
-
-    await this.peachApiService.createPaypalPaymentInstrument(borrower.personId);
-  }
 }
