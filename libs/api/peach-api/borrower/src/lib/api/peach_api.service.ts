@@ -117,7 +117,6 @@ export class PeachApiService {
       {
         instrumentType: 'paymentNetwork',
         paymentNetworkName: 'PayPal',
-        isExternal: true,
         status: 'active',
       },
     );
