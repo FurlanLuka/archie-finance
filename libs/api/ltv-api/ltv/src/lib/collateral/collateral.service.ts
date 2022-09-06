@@ -39,6 +39,7 @@ export class CollateralService {
     transaction: CollateralDepositCompletedPayload,
   ): Promise<void> {
     // TODO: Store transaction ids - no duplicated events
+
     const updateResult: UpdateResult =
       await this.ltvCollateralRepository.increment(
         {
