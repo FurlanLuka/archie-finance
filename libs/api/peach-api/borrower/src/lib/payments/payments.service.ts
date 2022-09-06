@@ -6,6 +6,7 @@ import {
   Credit,
   PaymentInstrument,
   Payments,
+  PeachOneTimePaymentStatus,
 } from '../api/peach_api.interfaces';
 import {
   GetPaymentsQueryDto,
@@ -125,11 +126,12 @@ export class PaymentsService {
       );
     }
 
-    await this.peachApiService.createPendingOneTimePaymentTransaction(
+    await this.peachApiService.createOneTimePaymentTransaction(
       borrower,
       liquidationInstrumentId,
       transaction.price,
       transaction.id,
+      PeachOneTimePaymentStatus.pending,
     );
   }
 
@@ -176,11 +178,12 @@ export class PaymentsService {
       );
     }
 
-    await this.peachApiService.createPendingOneTimePaymentTransaction(
+    await this.peachApiService.createOneTimePaymentTransaction(
       borrower,
       paypalInstrumentId,
       payload.amount,
       payload.orderId,
+      PeachOneTimePaymentStatus.succeeded,
     );
   }
 }

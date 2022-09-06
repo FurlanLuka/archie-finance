@@ -23,6 +23,7 @@ import {
   Purchases,
   Balances,
   PeachResponseData,
+  PeachOneTimePaymentStatus,
 } from './peach_api.interfaces';
 import { Borrower } from '../borrower.entity';
 import {
@@ -133,11 +134,12 @@ export class PeachApiService {
     );
   }
 
-  public async createPendingOneTimePaymentTransaction(
+  public async createOneTimePaymentTransaction(
     borrower: Borrower,
     paymentInstrumentId: string,
     amount: number,
     externalId: string,
+    status: PeachOneTimePaymentStatus
   ): Promise<void> {
     await this.peachClient.post(
       `/people/${borrower.personId}/loans/${borrower.creditLineId}/transactions`,
@@ -146,7 +148,7 @@ export class PeachApiService {
         type: 'oneTime',
         drawId: borrower.drawId,
         isExternal: true,
-        status: 'pending',
+        status,
         paymentInstrumentId,
         amount,
       },
