@@ -93,7 +93,7 @@ describe('CreditLimitQueueController (e2e)', () => {
       const expectedNewCreditLimit =
         (ETH_PRICE *
           (startingEthAmount - withdrawalAmount) *
-          assetListResponse[asset].ltv) /
+          assetListResponse[asset]!.ltv) /
         100;
       expect(queueStub.publish).toBeCalledTimes(1);
       expect(queueStub.publish).toBeCalledWith(CREDIT_LIMIT_INCREASED_TOPIC, {

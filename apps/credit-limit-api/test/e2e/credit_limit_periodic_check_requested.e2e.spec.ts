@@ -86,7 +86,7 @@ describe('PeriodicCheckQueueController (e2e)', () => {
         });
 
       const expectedNewCreditLimit =
-        (ETH_PRICE * startingEthAmount * assetListResponse[asset].ltv) / 100;
+        (ETH_PRICE * startingEthAmount * assetListResponse[asset]!.ltv) / 100;
       expect(queueStub.publish).toBeCalledTimes(1);
       expect(queueStub.publish).toBeCalledWith(CREDIT_LIMIT_INCREASED_TOPIC, {
         amount: expectedNewCreditLimit - currentCreditLimit,
