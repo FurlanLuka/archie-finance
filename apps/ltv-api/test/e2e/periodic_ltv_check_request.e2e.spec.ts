@@ -10,7 +10,7 @@ import { LtvCredit } from '../../../../libs/api/ltv-api/ltv/src/lib/credit.entit
 import { LTV_PERIODIC_CHECK_REQUESTED_TOPIC } from '@archie/api/ltv-api/constants';
 import * as request from 'supertest';
 
-describe('CreditQueueController (e2e)', () => {
+describe('POST /internal/ltvs/periodic_check (e2e)', () => {
   let app: INestApplication;
   let module: TestingModule;
 
@@ -41,9 +41,9 @@ describe('CreditQueueController (e2e)', () => {
     await module.close();
   });
 
-  describe('CREDIT_BALANCE_UPDATED flow', () => {
-    it('Should publish ltv updated event if credit utilization amount changes', async () => {
-      const credits: Partial<LtvCredit>[] = [...new Array(9000)].map(() => ({
+  describe('Ltv periodic check api', () => {
+    it('Should publish LTV_PERIODIC_CHECK_REQUESTED events for all users divided in chunks', async () => {
+      const credits: Partial<LtvCredit>[] = [...new Array(8999)].map(() => ({
         userId: Math.random().toString(),
         calculatedAt: new Date().toISOString(),
         utilizationAmount: 10,
@@ -54,11 +54,25 @@ describe('CreditQueueController (e2e)', () => {
         .post(`/internal/ltvs/periodic_check`)
         .expect(201);
 
-      expect(queueStub.publish).toBeCalledTimes(4500);
-      expect(queueStub.publish).toBeCalledWith(
-        LTV_PERIODIC_CHECK_REQUESTED_TOPIC,
-        {
-          userIds: [expect.any(String), expect.any(String)],
+      const expectedCallTimes = 4500;
+      const expectedCallTimesWithoutLastCall = expectedCallTimes - 1;
+      expect(queueStub.publish).toBeCalledTimes(expectedCallTimes);
+      [...new Array(expectedCallTimesWithoutLastCall)].forEach(
+        (_, callNumber) => {
+          expect(queueStub.publish).nthCalledWith(
+            callNumber + 1,
+            LTV_PERIODIC_CHECK_REQUESTED_TOPIC,
+            {
+              userIds: [expect.any(String), expect.any(String)],
+            },
+          );
+          expect(queueStub.publish).nthCalledWith(
+            expectedCallTimes,
+            LTV_PERIODIC_CHECK_REQUESTED_TOPIC,
+            {
+              userIds: [expect.any(String)],
+            },
+          );
         },
       );
     });
