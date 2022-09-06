@@ -10,6 +10,10 @@ export class LtvCalculatedOn {
   utilizedCreditAmount: number;
 }
 
+export class LtvPeriodicCheckRequestedPayload {
+  userIds: string[];
+}
+
 export class CollateralWithPrice {
   asset: string;
   amount: number;

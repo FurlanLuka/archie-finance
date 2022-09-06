@@ -16,7 +16,7 @@ export class CreditService {
   constructor(
     @InjectRepository(LtvCredit)
     private ltvCreditRepository: Repository<LtvCredit>,
-    @InjectRepository(LtvCredit)
+    @InjectRepository(LtvCollateral)
     private ltvCollateralRepository: Repository<LtvCollateral>,
     private ltvUpdatedUtilService: LtvUpdatedUtilService,
   ) {}

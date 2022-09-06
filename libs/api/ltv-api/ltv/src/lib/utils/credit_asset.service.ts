@@ -5,8 +5,12 @@ import { LtvCredit } from '../credit.entity';
 import { CreditNotSetUpError } from '../lib.errors';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { CreditAssets } from './utils.interfaces';
+import { In, Repository } from 'typeorm';
+import {
+  CreditAssets,
+  CreditPerUser,
+  MultipleCreditAssets,
+} from './utils.interfaces';
 import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
@@ -38,6 +42,47 @@ export class CreditAssetUtilService {
     return {
       credit,
       collateral,
+      assetPrices,
+    };
+  }
+
+  public async getCreditForMultipleUsers(
+    userIds: string[],
+  ): Promise<MultipleCreditAssets> {
+    const credits: LtvCredit[] = await this.ltvCreditRepository.findBy({
+      userId: In(userIds),
+    });
+    const collateral: LtvCollateral[] =
+      await this.ltvCollateralRepository.findBy({
+        userId: In(userIds),
+      });
+
+    const foundUserIds: string[] = credits.map(
+      (credit: LtvCredit) => credit.userId,
+    );
+
+    const assetPrices: GetAssetPriceResponse[] =
+      await this.queueService.request(GET_ASSET_PRICES_RPC);
+
+    const creditPerUser: CreditPerUser[] = foundUserIds.map(
+      (userId: string) => {
+        const usersCredit: LtvCredit | undefined = credits.find(
+          (credit) => credit.userId === userId,
+        );
+
+        const usersCollateral: LtvCollateral[] = collateral.filter(
+          (c) => c.userId === userId,
+        );
+
+        return {
+          credit: <LtvCredit>usersCredit,
+          collateral: usersCollateral,
+        };
+      },
+    );
+
+    return {
+      creditPerUser: creditPerUser,
       assetPrices,
     };
   }
