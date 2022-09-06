@@ -40,14 +40,15 @@ export class CollateralService {
   ): Promise<void> {
     // TODO: Store transaction ids - no duplicated events
 
-    await this.ltvCollateralRepository.increment(
-      {
-        userId: transaction.userId,
-        asset: transaction.asset,
-      },
-      'amount',
-      transaction.amount,
-    );
+    const updateResult: UpdateResult =
+      await this.ltvCollateralRepository.increment(
+        {
+          userId: transaction.userId,
+          asset: transaction.asset,
+        },
+        'amount',
+        transaction.amount,
+      );
 
     if (updateResult.affected === this.NONE) {
       await this.ltvCollateralRepository.insert({
