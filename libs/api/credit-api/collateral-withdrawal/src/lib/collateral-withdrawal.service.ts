@@ -36,7 +36,7 @@ import {
 } from '@archie/api/peach-api/data-transfer-objects';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 
-const MAX_LTV = 30;
+const MAX_LTV = 0.3;
 @Injectable()
 export class CollateralWithdrawalService {
   constructor(
@@ -123,7 +123,6 @@ export class CollateralWithdrawalService {
   ): Promise<GetUserMaxWithdrawalAmountResponse> {
     const assetPrices: GetAssetPriceResponse[] =
       await this.queueService.request(GET_ASSET_PRICES_RPC);
-    console.log('ajej aseti priceti', assetPrices);
 
     const assetPrice = assetPrices.find((a) => a.asset === asset);
 
@@ -137,7 +136,7 @@ export class CollateralWithdrawalService {
       throw new BadRequestException();
     }
     const userCollateral = await this.collateralRepository.findBy({ userId });
-    console.log('kole', userCollateral);
+
     const collateralValue = this.collateralValueService.getUserCollateralValue(
       userCollateral,
       assetPrices,
@@ -163,8 +162,11 @@ export class CollateralWithdrawalService {
       0,
     );
 
-    const maxAmountForMaxLtv = credit.utilizationAmount / (MAX_LTV / 100); // ltv is multiplied by 100 initially
-    const maxAvailableAmount = totalCollateralValue - maxAmountForMaxLtv;
+    const maxAmountForMaxLtv = credit.utilizationAmount / MAX_LTV;
+    const maxAvailableAmount = Math.max(
+      totalCollateralValue - maxAmountForMaxLtv,
+      0,
+    );
 
     return {
       maxAmount:
