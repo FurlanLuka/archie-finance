@@ -49,11 +49,4 @@ export class PeachPaymentInstrumentsController {
   ): Promise<void> {
     return this.peachService.removePaymentInstrument(req.user.sub, id);
   }
-
-  @Post('/paypal')
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  public async createPaypalPaymentInstrument(@Req() req): Promise<void> {
-    return this.peachService.createPaypalPaymentInstrument(req.user.sub);
-  }
 }

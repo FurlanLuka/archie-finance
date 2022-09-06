@@ -108,6 +108,26 @@ spec:
                 secretKeyRef:
                   name: queue-shared-secrets
                   key: queue-url
+            - name: PAYPAL_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: paypal-api-secrets
+                  key: client-id
+            - name: PAYPAL_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: paypal-api-secrets
+                  key: client-secret
+            - name: PAYPAL_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: paypal-api-secrets
+                  key: api-url
+            - name: PAYPAL_RETURN_URL
+              valueFrom:
+                secretKeyRef:
+                  name: paypal-api-secrets
+                  key: return-url
           {{- end }}
       imagePullSecrets:
         - name: regcred
