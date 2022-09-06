@@ -21,18 +21,16 @@ export class CollateralService {
   public async handleCollateralWithdrawInitializedEvent(
     transaction: CollateralWithdrawInitializedPayload,
   ): Promise<void> {
-    await this.ltvCollateralRepository
-      .createQueryBuilder('LtvCollateral')
-      .update(LtvCollateral)
-      .where('userId =: userId AND asset =: asset', {
+    // TODO: Store transaction ids - no duplicated events
+
+    await this.ltvCollateralRepository.decrement(
+      {
         userId: transaction.userId,
         asset: transaction.asset,
-      })
-      .set({
-        amount: () => '"amount" -: amount',
-      })
-      .setParameter('amount', transaction.withdrawalAmount)
-      .execute();
+      },
+      'amount',
+      transaction.withdrawalAmount,
+    );
 
     await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(transaction.userId);
   }
@@ -40,18 +38,17 @@ export class CollateralService {
   public async handleCollateralDepositCompletedEvent(
     transaction: CollateralDepositCompletedPayload,
   ): Promise<void> {
-    const updateResult: UpdateResult = await this.ltvCollateralRepository
-      .createQueryBuilder('LtvCollateral')
-      .update(LtvCollateral)
-      .where('userId =: userId AND asset =: asset', {
-        userId: transaction.userId,
-        asset: transaction.asset,
-      })
-      .set({
-        amount: () => '"amount" +: amount',
-      })
-      .setParameter('amount', transaction.amount)
-      .execute();
+    // TODO: Store transaction ids - no duplicated events
+
+    const updateResult: UpdateResult =
+      await this.ltvCollateralRepository.increment(
+        {
+          userId: transaction.userId,
+          asset: transaction.asset,
+        },
+        'amount',
+        transaction.amount,
+      );
 
     if (updateResult.affected === this.NONE) {
       await this.ltvCollateralRepository.insert({
