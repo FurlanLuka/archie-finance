@@ -95,6 +95,14 @@ spec:
                 name: archie-webhook-api-service
                 port:
                   number: 80
+          # Ltv api
+          - path: /internal/ltvs/periodic_check
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-ltv-api-service
+                port:
+                  number: 80
           ## Credit limit api service
           - path: /internal/credit_limits/periodic_check
             pathType: Prefix
