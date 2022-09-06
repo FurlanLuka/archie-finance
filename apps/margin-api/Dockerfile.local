@@ -8,7 +8,7 @@ COPY . /service
 ENV NX_DAEMON=false
 
 RUN npm i
-RUN nx run margin-api:build --skip-nx-cache
+RUN npm run build:margin-api --skip-nx-cache
 RUN if [ "$LOCAL" != "" ] ; then cp apps/margin-api/.env dist/apps/margin-api ; fi
 RUN npm prune --production
 

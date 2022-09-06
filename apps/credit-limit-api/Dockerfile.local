@@ -8,7 +8,7 @@ COPY . /service
 ENV NX_DAEMON=false
 
 RUN npm i
-RUN nx run credit-limit-api:build --skip-nx-cache
+RUN npm run build:credit-limit-api --skip-nx-cache
 RUN if [ "$LOCAL" != "" ] ; then cp apps/credit-limit-api/.env dist/apps/credit-limit-api ; fi
 RUN npm prune --production
 

@@ -36,18 +36,14 @@ export class CreditLimitService {
   ): Promise<void> {
     // TODO: Store transaction ids - no duplicated events (check all queue handlers -common issue) / always publish whole state
 
-    await this.collateralRepository
-      .createQueryBuilder('Collateral')
-      .update(Collateral)
-      .where('userId =: userId AND asset =: asset', {
+    await this.collateralRepository.decrement(
+      {
         userId: transaction.userId,
         asset: transaction.asset,
-      })
-      .set({
-        amount: () => '"amount" -: amount',
-      })
-      .setParameter('amount', transaction.withdrawalAmount)
-      .execute();
+      },
+      'amount',
+      transaction.withdrawalAmount,
+    );
 
     await this.collateralBalanceUpdateUtilService.handleCollateralBalanceUpdate(
       transaction.userId,
@@ -59,18 +55,14 @@ export class CreditLimitService {
   ): Promise<void> {
     // TODO: Store transaction ids - no duplicated events
 
-    await this.collateralRepository
-      .createQueryBuilder('Collateral')
-      .update(Collateral)
-      .where('userId =: userId AND asset =: asset', {
+    await this.collateralRepository.increment(
+      {
         userId: transaction.userId,
         asset: transaction.asset,
-      })
-      .set({
-        amount: () => '"amount" +: amount',
-      })
-      .setParameter('amount', transaction.amount)
-      .execute();
+      },
+      'amount',
+      transaction.amount,
+    );
 
     await this.collateralBalanceUpdateUtilService.handleCollateralBalanceUpdate(
       transaction.userId,
@@ -82,18 +74,14 @@ export class CreditLimitService {
   ): Promise<void> {
     // TODO: Store transaction ids - no duplicated events
 
-    await this.collateralRepository
-      .createQueryBuilder('Collateral')
-      .update(Collateral)
-      .where('userId =: userId AND asset =: asset', {
+    await this.collateralRepository.decrement(
+      {
         userId: transaction.userId,
         asset: transaction.asset,
-      })
-      .set({
-        amount: () => '"amount" -: amount',
-      })
-      .setParameter('amount', transaction.amount)
-      .execute();
+      },
+      'amount',
+      transaction.amount,
+    );
 
     await this.collateralBalanceUpdateUtilService.handleCollateralBalanceUpdate(
       transaction.userId,
