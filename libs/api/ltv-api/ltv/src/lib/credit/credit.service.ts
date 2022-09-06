@@ -7,7 +7,7 @@ import {
   PaymentType,
 } from '@archie/api/peach-api/data-transfer-objects';
 import { LtvCollateral } from '../collateral.entity';
-import { CardActivatedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 import { DateTime } from 'luxon';
 import { LtvUpdatedUtilService } from '../utils/ltv_updated.service';
 
@@ -49,11 +49,11 @@ export class CreditService {
     await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(credit.userId);
   }
 
-  public async handleCardActivatedEvent(
-    cardDetails: CardActivatedPayload,
-  ): Promise<void> {
+  public async handleCreditLineCreatedEvent({
+    userId,
+  }: CreditLineCreatedPayload): Promise<void> {
     await this.ltvCreditRepository.insert({
-      userId: cardDetails.userId,
+      userId,
       calculatedAt: DateTime.now().toISO(),
       utilizationAmount: 0,
     });
