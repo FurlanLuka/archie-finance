@@ -78,6 +78,16 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
+            - name: AUTH0_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: auth0-shared-secrets
+                  key: domain
+            - name: AUTH0_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: auth0-shared-secrets
+                  key: audience
             - name: TYPEORM_USERNAME
               valueFrom:
                 secretKeyRef:

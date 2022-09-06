@@ -9,6 +9,7 @@ import { QueueModule } from '@archie/api/utils/queue';
 import { HealthModule } from '@archie/api/utils/health';
 import { PaypalModule } from '@archie/api/paypal-api/paypal'
 import { migrations } from './migrations';
+import { AuthModule } from '@archie/api/utils/auth0';
 
 @Module({
   imports: [
@@ -40,6 +41,14 @@ import { migrations } from './migrations';
         migrationsRun: true,
         migrationsTableName: `${SERVICE_NAME}-migrations`,
         migrations: migrations
+      }),
+      inject: [ConfigService],
+    }),
+    AuthModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        domain: configService.get(ConfigVariables.AUTH0_DOMAIN),
+        audience: configService.get(ConfigVariables.AUTH0_AUDIENCE),
       }),
       inject: [ConfigService],
     }),
