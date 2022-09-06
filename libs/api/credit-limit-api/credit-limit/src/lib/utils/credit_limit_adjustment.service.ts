@@ -17,7 +17,7 @@ import {
   CreditLineCreatedPayload,
 } from '@archie/api/credit-limit-api/data-transfer-objects';
 import {
-  CreateCreditAlreadyExistsError,
+  CreditAlreadyExistsError,
   CreateCreditMinimumCollateralError,
 } from '../credit_limit.errors';
 
@@ -140,7 +140,7 @@ export class CreditLimitAdjustmentService {
       });
 
     if (creditLimit !== null) {
-      throw new CreateCreditAlreadyExistsError();
+      throw new CreditAlreadyExistsError();
     }
 
     let totalCreditValue: number = this.calculateCreditLimit(

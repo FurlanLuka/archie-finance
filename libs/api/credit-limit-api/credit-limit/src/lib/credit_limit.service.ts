@@ -13,10 +13,7 @@ import { CollateralValue } from './utils/utils.interfaces';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { CollateralValueUtilService } from './utils/collateral_value.service';
-// import { CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED } from '@archie/api/credit-limit-api/constants';
-import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { QueueService } from '@archie/api/utils/queue';
-// import { CreditLimitPeriodicCheckRequestedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()

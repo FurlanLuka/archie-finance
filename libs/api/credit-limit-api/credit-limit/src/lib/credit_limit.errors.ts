@@ -9,8 +9,8 @@ export class CreateCreditMinimumCollateralError extends BadRequestException {
   }
 }
 
-export class CreateCreditAlreadyExistsError extends BadRequestException {
+export class CreditAlreadyExistsError extends BadRequestException {
   constructor() {
-    super('ERR_CREATE_CREDIT_ALREADY_EXISTS', 'Credit line already exists');
+    super('ERR_CREDIT_ALREADY_EXISTS', 'Credit line already exists');
   }
 }
