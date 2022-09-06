@@ -21,20 +21,6 @@ export class CollateralService {
   public async handleCollateralWithdrawInitializedEvent(
     transaction: CollateralWithdrawInitializedPayload,
   ): Promise<void> {
-<<<<<<< HEAD
-    await this.ltvCollateralRepository
-      .createQueryBuilder('LtvCollateral')
-      .update(LtvCollateral)
-      .where('userId = :userId AND asset = :asset', {
-        userId: transaction.userId,
-        asset: transaction.asset,
-      })
-      .set({
-        amount: () => '"amount" - :amount',
-      })
-      .setParameter('amount', transaction.withdrawalAmount)
-      .execute();
-=======
     // TODO: Store transaction ids - no duplicated events
 
     await this.ltvCollateralRepository.decrement(
@@ -45,7 +31,6 @@ export class CollateralService {
       'amount',
       transaction.withdrawalAmount,
     );
->>>>>>> credit-limit-api
 
     await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(transaction.userId);
   }
@@ -53,31 +38,16 @@ export class CollateralService {
   public async handleCollateralDepositCompletedEvent(
     transaction: CollateralDepositCompletedPayload,
   ): Promise<void> {
-<<<<<<< HEAD
-    const updateResult: UpdateResult = await this.ltvCollateralRepository
-      .createQueryBuilder('LtvCollateral')
-      .update(LtvCollateral)
-      .where('userId = :userId AND asset = :asset', {
-        userId: transaction.userId,
-        asset: transaction.asset,
-      })
-      .set({
-        amount: () => '"amount" + :amount',
-      })
-      .setParameter('amount', transaction.amount)
-      .execute();
-=======
     // TODO: Store transaction ids - no duplicated events
-
-    await this.ltvCollateralRepository.increment(
-      {
-        userId: transaction.userId,
-        asset: transaction.asset,
-      },
-      'amount',
-      transaction.amount,
-    );
->>>>>>> credit-limit-api
+    const updateResult: UpdateResult =
+      await this.ltvCollateralRepository.increment(
+        {
+          userId: transaction.userId,
+          asset: transaction.asset,
+        },
+        'amount',
+        transaction.amount,
+      );
 
     if (updateResult.affected === this.NONE) {
       await this.ltvCollateralRepository.insert({
