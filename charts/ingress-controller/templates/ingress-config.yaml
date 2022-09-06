@@ -190,3 +190,11 @@ spec:
                 name: archie-peach-api-service
                 port:
                   number: 80
+          # Ltv api
+          - path: /v1/ltvs/current
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-ltv-api-service
+                port:
+                  number: 80

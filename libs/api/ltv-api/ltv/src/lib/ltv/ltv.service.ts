@@ -25,7 +25,7 @@ export class LtvService {
         creditAssets.assetPrices,
       );
     const ltv: number = this.ltvUtilService.calculateLtv(
-      creditAssets,
+      creditAssets.credit.utilizationAmount,
       collateralValue.collateralBalance,
     );
     const ltvStatus: LtvStatus = this.ltvUtilService.getLtvStatus(ltv);

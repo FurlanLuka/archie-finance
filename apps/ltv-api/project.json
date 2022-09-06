@@ -45,7 +45,8 @@
       "outputs": ["coverage/apps/ltv-api"],
       "options": {
         "jestConfig": "apps/ltv-api/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "runInBand": true
       }
     },
     "build-openapi": {

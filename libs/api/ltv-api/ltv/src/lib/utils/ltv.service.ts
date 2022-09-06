@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { LtvStatus } from '../ltv/ltv.dto';
-import { CreditAssets } from './utils.interfaces';
 import { LTV_MARGIN_CALL_LIMIT } from '@archie/api/margin-api/constants';
 
 @Injectable()
@@ -9,10 +8,10 @@ export class LtvUtilService {
   LTV_WARNING_LIMIT = 65;
 
   public calculateLtv(
-    creditAssets: CreditAssets,
+    creditUtilization: number,
     collateralValue: number,
   ): number {
-    return (creditAssets.credit.utilizationAmount / collateralValue) * 100;
+    return (creditUtilization / collateralValue) * 100;
   }
 
   public getLtvStatus(ltv: number): LtvStatus {
