@@ -169,6 +169,7 @@ export class CreditLimitAdjustmentService {
       userId,
       calculatedAt: new Date().toISOString(),
       creditLimit: totalCreditValue,
+      previousCreditLimit: totalCreditValue,
       calculatedOnCollateralBalance: collateralValue.collateralBalance,
     });
 
