@@ -14,7 +14,6 @@ import {
   ScheduleTransactionDto,
 } from './payments.dto';
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
-import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
