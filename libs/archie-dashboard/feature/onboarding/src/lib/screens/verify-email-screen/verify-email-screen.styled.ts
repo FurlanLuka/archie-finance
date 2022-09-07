@@ -7,17 +7,7 @@ export const VerifyEmailScreenStyled = styled.div`
   max-width: 496px;
 
   .title {
-    margin-bottom: 0.5rem;
-  }
-
-  .subtitle {
-    width: 90%;
-    text-align: center;
-    margin-bottom: 3rem;
-
-    @media (max-width: ${breakpoints.screenSM}) {
-      width: 100%;
-    }
+    margin-bottom: 2rem;
   }
 
   .text {

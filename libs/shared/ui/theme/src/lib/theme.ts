@@ -66,6 +66,7 @@ export interface Theme {
   buttonGhost: string;
   buttonLight: string;
   buttonDisabled: string;
+  backgroundTransparent: string;
   // input
   inputText: string;
   inputTextPlaceholder: string;
@@ -112,6 +113,7 @@ export const theme: Theme = {
   backgroundAlert: colors.yellow_500,
   backgroundWarning: colors.orange_500,
   backgroundDanger: colors.red_500,
+  backgroundTransparent: colors.transparent,
   // text
   textPrimary: colors.black,
   textSecondary: colors.neutralgray_400,

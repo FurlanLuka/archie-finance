@@ -18,7 +18,7 @@ export const PaymentScheduledModalStyled = styled.div`
   }
 
   .scheduled-note {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .btn-group {

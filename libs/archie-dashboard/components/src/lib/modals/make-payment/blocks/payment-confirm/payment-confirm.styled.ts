@@ -24,7 +24,7 @@ export const PaymentConfirmModalStyled = styled.div`
   }
 
   .balance-value {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .btn-group {

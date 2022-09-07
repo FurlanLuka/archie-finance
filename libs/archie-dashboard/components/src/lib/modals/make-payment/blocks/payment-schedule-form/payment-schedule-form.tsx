@@ -10,6 +10,8 @@ import {
   FormError,
   InputRadio,
   InputText,
+  Status,
+  StatusCircle,
   BodyL,
   BodyM,
   BodyS,
@@ -102,12 +104,12 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
           </InputText>
           {errors.scheduledDate?.message && <FormError>{t(errors.scheduledDate.message)}</FormError>}
         </div>
-        <InputRadio small>
-          <input type="radio" value="auto_payments" checked disabled />
-          <BodyS>
-            {t('dashboard_payment.auto_payments')} {t('off')} {/* I guess temp */}
+        <Status>
+          <StatusCircle />
+          <BodyS weight={700}>
+            {t('dashboard_payment.auto_payments')} {t('off')} {/* TBD */}
           </BodyS>
-        </InputRadio>
+        </Status>
         <div className="divider" />
         <BodyM weight={800} className="subtitle">
           {t('payment_modal.payment_schedule.payment_options')}

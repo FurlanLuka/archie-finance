@@ -76,7 +76,7 @@ export const VerifyEmailScreen: FC = () => {
       return (
         <>
           <TitleL className="title">{t('verify_email_step.title')}</TitleL>
-          <BodyM className="subtitle">
+          <BodyM className="text">
             {t('verify_email_step.subtitle', { email: getEmailVerificationResponse.data.email })}
           </BodyM>
           <BodyM className="text">{t('verify_email_step.text_1')}</BodyM>
