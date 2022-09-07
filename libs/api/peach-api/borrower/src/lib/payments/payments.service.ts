@@ -82,18 +82,20 @@ export class PaymentsService {
   }
 
   public async handlePaymentConfirmedEvent(
-    payment: WebhookPaymentPayload,
+    userId: string,
+    personId: string,
+    loanId: string,
   ): Promise<void> {
     const credit: Credit = await this.peachApiService.getCreditBalance(
-      payment.personId,
-      payment.loanId,
+      personId,
+      loanId,
     );
 
     this.queueService.publish<CreditLinePaymentReceivedPayload>(
       CREDIT_LINE_PAYMENT_RECEIVED_TOPIC,
       {
         ...credit,
-        userId: payment.personExternalId,
+        userId,
       },
     );
   }
@@ -184,6 +186,12 @@ export class PaymentsService {
       payload.amount,
       payload.orderId,
       PeachOneTimePaymentStatus.succeeded,
+    );
+
+    await this.handlePaymentConfirmedEvent(
+      payload.userId,
+      borrower.personId,
+      borrower.creditLineId,
     );
   }
 }
