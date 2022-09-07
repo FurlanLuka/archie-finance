@@ -47,11 +47,6 @@ export class MarginCallHandlerService {
         userId: ltv.userId,
       });
 
-    if (updateResult.affected === undefined) {
-      // TODO: remove after testing
-      throw new Error('BUG. FIX!! - deactivation');
-    }
-
     if (updateResult.affected === 0) {
       throw new Error('Already deleted by other process. Retry');
     }
@@ -85,11 +80,6 @@ export class MarginCallHandlerService {
       await this.marginCallRepository.softDelete({
         userId: ltv.userId,
       });
-
-    if (updateResult.affected === undefined) {
-      // TODO: remove after testing
-      throw new Error('BUG. FIX!!');
-    }
 
     if (updateResult.affected === 0) {
       Logger.log('Collateral was already liquidated by other process.', ltv);
