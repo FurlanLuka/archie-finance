@@ -144,6 +144,7 @@ export class CollateralWithdrawalService {
 
     const desiredAsset = collateralValue.find((c) => c.asset === asset);
 
+    console.log('juzr kollat', { userCollateral, desiredAsset });
     // early break if user isn't hodling the desired asset at all
     if (!desiredAsset) {
       return { maxAmount: 0 };

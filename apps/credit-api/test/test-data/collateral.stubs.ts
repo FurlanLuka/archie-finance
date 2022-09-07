@@ -34,6 +34,7 @@ export const assetPriceResponse: GetAssetPriceResponse[] = [
 export const BTC_STARTING_AMOUNT = 1;
 export const ETH_STARTING_AMOUNT = 10;
 export const SOL_STARTING_AMOUNT = 100;
+export const USDC_STARTING_AMOUNT = 20;
 
 export function createUserCollateral(userId: string) {
   return [
@@ -55,9 +56,18 @@ export function createUserCollateral(userId: string) {
     {
       userId,
       asset: 'USDC',
-      amount: 22,
+      amount: USDC_STARTING_AMOUNT,
     },
   ];
 }
 export const defaultCollateralTotal =
-  BTC_STARTING_AMOUNT * BTC_PRICE + 10 * ETH_PRICE + 100 * SOL_PRICE + 22 * 1;
+  BTC_STARTING_AMOUNT * BTC_PRICE +
+  ETH_STARTING_AMOUNT * ETH_PRICE +
+  SOL_STARTING_AMOUNT * SOL_PRICE +
+  USDC_STARTING_AMOUNT * 1;
+
+export const mockGetLoanBalancesResponse = {
+  totalCredit: defaultCollateralTotal / 2,
+  availableCredit: (defaultCollateralTotal / 2) * 0.8,
+  utilizationAmount: (defaultCollateralTotal / 2) * 0.2,
+};
