@@ -24,6 +24,7 @@ export class CreditService {
   public async handleCreditBalanceUpdatedEvent(
     credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
+    // TODO: add txn
     await this.ltvCreditRepository.update(
       {
         userId: credit.userId,

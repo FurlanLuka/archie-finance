@@ -4,6 +4,7 @@ import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
 import {
   CREDIT_LIMIT_DECREASED_TOPIC,
   CREDIT_LIMIT_INCREASED_TOPIC,
+  CREDIT_LINE_CREATED_TOPIC,
 } from '@archie/api/credit-limit-api/constants';
 import { PeachBorrowerService } from './loan.service';
 import {
@@ -13,6 +14,7 @@ import {
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
+  CreditLineCreatedPayload,
 } from '@archie/api/credit-limit-api/data-transfer-objects';
 import {
   EmailVerifiedPayload,
@@ -39,6 +41,16 @@ export class PeachBorrowerQueueController {
   )
   async emailVerifiedHandler(payload: EmailVerifiedPayload): Promise<void> {
     await this.peachService.handleEmailVerifiedEvent(payload);
+  }
+
+  @Subscribe(
+    CREDIT_LINE_CREATED_TOPIC,
+    PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async creditLineCreatedHandler(
+    payload: CreditLineCreatedPayload,
+  ): Promise<void> {
+    await this.peachService.handleCreditLineCreatedEvent(payload);
   }
 
   @Subscribe(
