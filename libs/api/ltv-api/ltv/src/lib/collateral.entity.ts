@@ -10,7 +10,7 @@ import {
 @Entity({
   name: 'ltv_collateral',
 })
-@Index(['userId', 'asset'])
+@Index(['userId', 'asset'], { unique: true })
 export class LtvCollateral {
   @PrimaryGeneratedColumn('uuid')
   id: string;

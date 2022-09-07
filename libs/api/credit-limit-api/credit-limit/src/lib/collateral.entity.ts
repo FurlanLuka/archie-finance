@@ -10,7 +10,7 @@ import {
 @Entity({
   name: 'credit_limit_collateral',
 })
-@Index(['userId', 'asset'])
+@Index(['userId', 'asset'], { unique: true })
 export class Collateral {
   @PrimaryGeneratedColumn('uuid')
   id: string;
