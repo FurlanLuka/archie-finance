@@ -175,7 +175,7 @@ spec:
                 name: archie-peach-api-service
                 port:
                   number: 80
-          - path: /v1/credit_limit
+          - path: /v1/credit_limits
             pathType: Prefix
             backend:
               service:
