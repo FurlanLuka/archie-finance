@@ -22,19 +22,23 @@ import {
   TransactionResponseDto,
 } from './rize.dto';
 import { Subscribe } from '@archie/api/utils/queue';
+import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
+import {
+  MARGIN_CALL_COMPLETED_TOPIC,
+  MARGIN_CALL_STARTED_TOPIC,
+} from '@archie/api/margin-api/constants';
 import {
   CREDIT_LIMIT_DECREASED_TOPIC,
   CREDIT_LIMIT_INCREASED_TOPIC,
-  MARGIN_CALL_COMPLETED_TOPIC,
-  MARGIN_CALL_STARTED_TOPIC,
-  SERVICE_QUEUE_NAME,
-} from '@archie/api/credit-api/constants';
+} from '@archie/api/credit-limit-api/constants';
+import {
+  MarginCallCompletedPayload,
+  MarginCallStartedPayload,
+} from '@archie/api/margin-api/data-transfer-objects';
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
-  MarginCallCompletedPayload,
-  MarginCallStartedPayload,
-} from '@archie/api/credit-api/data-transfer-objects';
+} from '@archie/api/credit-limit-api/data-transfer-objects';
 
 @Controller('v1/rize/users')
 export class RizeController {

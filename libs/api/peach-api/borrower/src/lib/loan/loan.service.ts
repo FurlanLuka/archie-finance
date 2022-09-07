@@ -13,7 +13,7 @@ import { GET_COLLATERAL_VALUE_RPC } from '@archie/api/credit-api/constants';
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
-} from '@archie/api/credit-api/data-transfer-objects';
+} from '@archie/api/credit-limit-api/data-transfer-objects';
 import { BorrowerNotFoundError } from '../borrower.errors';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import {
