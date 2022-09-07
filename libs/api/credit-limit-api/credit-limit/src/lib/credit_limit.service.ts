@@ -4,7 +4,7 @@ import {
   InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/fireblocks';
 import { Collateral } from './collateral.entity';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CollateralBalanceUpdateUtilService } from './utils/collateral_balance_update.service';
 import { CreditLimitAdjustmentService } from './utils/credit_limit_adjustment.service';
@@ -19,6 +19,8 @@ import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants'
 
 @Injectable()
 export class CreditLimitService {
+  NONE = 0;
+
   constructor(
     @InjectRepository(Collateral)
     private collateralRepository: Repository<Collateral>,
@@ -52,14 +54,23 @@ export class CreditLimitService {
   ): Promise<void> {
     // TODO: Store transaction ids - no duplicated events
 
-    await this.collateralRepository.increment(
-      {
+    const updateResult: UpdateResult =
+      await this.collateralRepository.increment(
+        {
+          userId: transaction.userId,
+          asset: transaction.asset,
+        },
+        'amount',
+        transaction.amount,
+      );
+
+    if (updateResult.affected === this.NONE) {
+      await this.collateralRepository.insert({
         userId: transaction.userId,
+        amount: transaction.amount,
         asset: transaction.asset,
-      },
-      'amount',
-      transaction.amount,
-    );
+      });
+    }
 
     await this.collateralBalanceUpdateUtilService.handleCollateralBalanceUpdate(
       transaction.userId,
