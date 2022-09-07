@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { QueueService } from '@archie/api/utils/queue';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MarginNotification } from '@archie/api/credit-api/margin';
 import { Repository } from 'typeorm';
 import { LTV_LIMIT_APPROACHING_TOPIC } from '@archie/api/margin-api/constants';
 import { LtvLimitApproachingPayload } from '@archie/api/margin-api/data-transfer-objects';
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 import { MarginCallPriceFactory } from './margin_call_price.factory';
+import { MarginNotification } from '../../margin_notifications.entity';
 
 @Injectable()
 export class MarginCallInDangerHandlerService {
