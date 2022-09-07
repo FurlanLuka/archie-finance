@@ -3,7 +3,6 @@ import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
-  BadRequestException,
   ExecutionContext,
   INestApplication,
   Logger,
@@ -19,7 +18,7 @@ import {
   defaultCollateralTotal,
   ETH_PRICE,
   ETH_STARTING_AMOUNT,
-  mockGetLoanBalancesResponse,
+  getLoanBalancesResponse,
 } from '../test-data/collateral.stubs';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { Collateral } from '@archie/api/credit-api/collateral';
@@ -39,7 +38,6 @@ import {
 import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
-import { CollateralNotFoundError } from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.errors';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 
 describe('CollateralWithdrawalController (e2e)', () => {
@@ -97,7 +95,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
 
     when(queueStub.request)
       .calledWith(GET_LOAN_BALANCES_RPC, { userId })
-      .mockResolvedValue(mockGetLoanBalancesResponse);
+      .mockResolvedValue(getLoanBalancesResponse);
 
     await collateralRepository.save(defaultUserCollateral);
   });

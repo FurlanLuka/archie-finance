@@ -1,4 +1,5 @@
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects';
 
 export const SOL_PRICE = 0.28;
 export const BTC_PRICE = 26;
@@ -66,7 +67,7 @@ export const defaultCollateralTotal =
   SOL_STARTING_AMOUNT * SOL_PRICE +
   USDC_STARTING_AMOUNT * 1;
 
-export const mockGetLoanBalancesResponse = {
+export const getLoanBalancesResponse: GetLoanBalancesResponse = {
   totalCredit: defaultCollateralTotal / 2,
   availableCredit: (defaultCollateralTotal / 2) * 0.8,
   utilizationAmount: (defaultCollateralTotal / 2) * 0.2,
