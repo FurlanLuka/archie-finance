@@ -1019,7 +1019,7 @@
         ]
       }
     },
-    "/v1/credit_limit": {
+    "/v1/credit_limits": {
       "post": {
         "operationId": "CreditLimitController_createCreditLine",
         "parameters": [],
