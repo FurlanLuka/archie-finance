@@ -1,4 +1,7 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 
 export class WithdrawalCreationInternalError extends InternalServerErrorException {
   metadata: object;
@@ -18,7 +21,7 @@ export class WithdrawalInitializeInternalError extends InternalServerErrorExcept
   }
 }
 
-export class CollateralNotFoundError extends InternalServerErrorException {
+export class CollateralNotFoundError extends NotFoundException {
   constructor() {
     super('COLLATERAL_NOT_FOUND');
   }
