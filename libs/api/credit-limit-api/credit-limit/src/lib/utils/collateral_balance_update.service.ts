@@ -17,6 +17,8 @@ import { CollateralValueUtilService } from './collateral_value.service';
 import { MathUtilService } from './math.service';
 import { QueueService } from '@archie/api/utils/queue';
 import { CreditLimitAdjustmentService } from './credit_limit_adjustment.service';
+import { AssetList } from '@archie/api/collateral-api/asset-information';
+import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
 
 @Injectable()
 export class CollateralBalanceUpdateUtilService {
@@ -50,6 +52,9 @@ export class CollateralBalanceUpdateUtilService {
             collateral,
             assetPrices,
           );
+        const assetList: AssetList = await this.queueService.request(
+          GET_ASSET_INFORMATION_RPC,
+        );
 
         const collateralValueChange: number =
           this.mathUtilService.getDifference(
@@ -65,7 +70,7 @@ export class CollateralBalanceUpdateUtilService {
             userId,
             collateral[0].calculatedAt,
             collateralValue,
-            assetPrices,
+            assetList,
           );
         }
       }
@@ -89,6 +94,9 @@ export class CollateralBalanceUpdateUtilService {
       await this.queueService.request(GET_ASSET_PRICES_RPC);
     const collaterals: CollateralWithCalculationDate[] =
       await this.getCollateralWithCalculationDateForManyUsers(userIds);
+    const assetList: AssetList = await this.queueService.request(
+      GET_ASSET_INFORMATION_RPC,
+    );
 
     await Promise.all(
       userIds.map(async (userId: string) => {
@@ -122,7 +130,7 @@ export class CollateralBalanceUpdateUtilService {
             userId,
             collateral[0].calculatedAt,
             collateralValue,
-            assetPrices,
+            assetList,
           );
         }
       }),
@@ -135,7 +143,7 @@ export class CollateralBalanceUpdateUtilService {
     return this.collateralRepository
       .createQueryBuilder('Collateral')
       .select('*, now() as "calculatedAt"')
-      .where('userId =: userId', {
+      .where('Collateral.userId = :userId', {
         userId: userId,
       })
       .getRawMany();
@@ -147,8 +155,8 @@ export class CollateralBalanceUpdateUtilService {
     return this.collateralRepository
       .createQueryBuilder('Collateral')
       .select('*, now() as "calculatedAt"')
-      .where('userId IN( : userId )', {
-        userId: userIds,
+      .where('Collateral.userId IN(:...userIds)', {
+        userIds,
       })
       .getRawMany();
   }
