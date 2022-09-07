@@ -45,7 +45,8 @@
       "outputs": ["coverage/apps/margin-api"],
       "options": {
         "jestConfig": "apps/margin-api/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "runInBand": true
       }
     },
     "build-openapi": {

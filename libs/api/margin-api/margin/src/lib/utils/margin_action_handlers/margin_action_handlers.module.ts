@@ -19,11 +19,6 @@ import { MarginCheck } from '../../margin_check.entity';
     LiquidationUtilService,
     MarginCallPriceFactory,
   ],
-  exports: [
-    MarginCallInDangerHandlerService,
-    MarginCallHandlerService,
-    LiquidationUtilService,
-    MarginCallPriceFactory,
-  ],
+  exports: [MarginCallHandlerService, MarginCallInDangerHandlerService],
 })
 export class MarginActionHandlersModule {}

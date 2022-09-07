@@ -17,7 +17,7 @@ export class MarginService {
     private marginCallsRepository: Repository<MarginCall>,
     @InjectRepository(MarginCheck)
     private marginCheckRepository: Repository<MarginCheck>,
-    @InjectRepository(MarginCheck)
+    @InjectRepository(MarginNotification)
     private marginNotificationRepository: Repository<MarginNotification>,
     private mathUtilService: MathUtilService,
     private marginCheckUtilService: MarginActionsCheckUtilService,

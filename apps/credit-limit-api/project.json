@@ -45,7 +45,8 @@
       "outputs": ["coverage/apps/credit-limit-api"],
       "options": {
         "jestConfig": "apps/credit-limit-api/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "runInBand": true
       }
     },
     "build-openapi": {

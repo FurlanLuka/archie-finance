@@ -38,6 +38,7 @@ export class PeachApiService {
   MAX_REQUEST_TIMEOUT = 10000;
   CONTACT_ALREADY_EXISTS_STATUS = 400;
   ALREADY_ACTIVATED_STATUS = 400;
+  USER_ALREADY_EXISTS_STATUS = 409;
   NOMINAL_APR = 0;
   EFFECTIVE_APR = 0.16;
 
@@ -230,20 +231,28 @@ export class PeachApiService {
     });
   }
 
-  public async createUser(personId, email: string): Promise<void> {
-    await this.peachClient.post(
-      `/companies/${this.configService.get(
-        ConfigVariables.PEACH_COMPANY_ID,
-      )}/users`,
-      {
-        userType: 'borrower',
-        authType: {
-          email,
+  public async createUser(personId: string, email: string): Promise<void> {
+    try {
+      await this.peachClient.post(
+        `/companies/${this.configService.get(
+          ConfigVariables.PEACH_COMPANY_ID,
+        )}/users`,
+        {
+          userType: 'borrower',
+          authType: {
+            email,
+          },
+          roles: [
+            this.configService.get(ConfigVariables.PEACH_BORROWER_ROLE_ID),
+          ],
+          associatedPersonId: personId,
         },
-        roles: [this.configService.get(ConfigVariables.PEACH_BORROWER_ROLE_ID)],
-        associatedPersonId: personId,
-      },
-    );
+      );
+    } catch (error) {
+      const axiosError: PeachErrorResponse = error;
+
+      if (axiosError.status !== this.USER_ALREADY_EXISTS_STATUS) throw error;
+    }
   }
 
   public async createCreditLine(
