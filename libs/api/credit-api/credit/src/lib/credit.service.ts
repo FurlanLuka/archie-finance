@@ -111,7 +111,9 @@ export class CreditService {
           return sum;
         }
 
-        const assetInformation: AssetInformation = assetList[value.asset];
+        const assetInformation: AssetInformation = <AssetInformation>(
+          assetList[value.asset]
+        );
 
         const actualCollateralValue: number =
           (value.price / 100) * assetInformation.ltv;

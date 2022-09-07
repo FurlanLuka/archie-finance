@@ -62,7 +62,7 @@ describe('CreditLimitQueueController (e2e)', () => {
     await module.close();
   });
 
-  describe.skip('COLLATERAL_WITHDRAW_INITIALIZED flow', () => {
+  describe('COLLATERAL_WITHDRAW_INITIALIZED flow', () => {
     it('Should publish CREDIT_LIMIT_INCREASED in case the credit limit is increased and collateral value changes by at least 10%', async () => {
       const startingEthAmount = 1;
       const withdrawalAmount = 0.3;

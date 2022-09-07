@@ -51,7 +51,6 @@ export class MarginService {
       updatedLtv.ltv,
       updatedLtv.calculatedOn.collateralBalance,
     );
-    console.log(actions);
 
     if (actions.length > 0) {
       await this.marginCheckRepository.upsert(
