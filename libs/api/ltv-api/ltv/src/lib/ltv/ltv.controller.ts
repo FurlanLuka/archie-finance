@@ -6,7 +6,7 @@ import { LtvDto } from './ltv.dto';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { CreditNotSetUpError } from '../lib.errors';
 
-@Controller('v1/ltvs/current')
+@Controller('v1/ltv')
 export class LtvController {
   constructor(private ltvService: LtvService) {}
 

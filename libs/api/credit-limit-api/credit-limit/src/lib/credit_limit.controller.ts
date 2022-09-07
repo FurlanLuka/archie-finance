@@ -20,7 +20,7 @@ import {
   CreditAlreadyExistsError,
 } from './credit_limit.errors';
 
-@Controller('v1/credit_limit')
+@Controller('v1/credit_limits')
 export class CreditLimitController {
   constructor(private creditLimitService: CreditLimitService) {}
 

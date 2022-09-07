@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
+import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
 import {
   CREDIT_LIMIT_DECREASED_TOPIC,
   CREDIT_LIMIT_INCREASED_TOPIC,
-  SERVICE_QUEUE_NAME,
-} from '@archie/api/credit-api/constants';
+} from '@archie/api/credit-limit-api/constants';
 import { PeachBorrowerService } from './loan.service';
 import {
   EMAIL_VERIFIED_TOPIC,
@@ -13,7 +13,7 @@ import {
 import {
   CreditLimitDecreasedPayload,
   CreditLimitIncreasedPayload,
-} from '@archie/api/credit-api/data-transfer-objects';
+} from '@archie/api/credit-limit-api/data-transfer-objects';
 import {
   EmailVerifiedPayload,
   KycSubmittedPayload,

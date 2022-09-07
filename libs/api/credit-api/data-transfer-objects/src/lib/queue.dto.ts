@@ -24,34 +24,6 @@ export enum TransactionType {
   third_party_transfer = 'third_party_transfer',
 }
 
-export class CreditLineUpdatedDto {
-  userId: string;
-}
-
-export class MarginCallCompletedPayload {
-  userId: string;
-  liquidation: {
-    asset: string;
-    amount: number;
-    price: number;
-  }[];
-  liquidationAmount: number;
-  ltv: number;
-  priceForMarginCall: number;
-  priceForPartialCollateralSale: number;
-  collateralBalance: number;
-}
-
-export class CreditLimitIncreasedPayload {
-  userId: string;
-  amount: number;
-}
-
-export class CreditLimitDecreasedPayload {
-  userId: string;
-  amount: number;
-}
-
 export class RizeTransactionDto {
   adjustment_uid: string | null;
   created_at: string;
@@ -87,15 +59,6 @@ export class CardActivatedPayload {
   customerId: string;
 }
 
-export class FundsLoadedPayload {
-  userId: string;
-  amount: number;
-}
-
-export class PhoneNumberVerifiedPayload {
-  userId: string;
-}
-
 export class CollateralWithdrawInitializedPayload {
   asset: string;
   withdrawalAmount: number;
@@ -106,30 +69,6 @@ export class CollateralWithdrawInitializedPayload {
 
 export class CollateralReceivedPayload {
   userId: string;
-}
-
-export class MarginCallStartedPayload {
-  userId: string;
-  ltv: number;
-  priceForMarginCall: number;
-  priceForPartialCollateralSale: number;
-  collateralBalance: number;
-}
-
-export class LtvLimitApproachingPayload {
-  userId: string;
-  ltv: number;
-  priceForMarginCall: number;
-  priceForPartialCollateralSale: number;
-  collateralBalance: number;
-}
-
-export class CreditLimitAdjustRequestedPayload {
-  userIds: string[];
-}
-
-export class MarginCheckRequestedPayload {
-  userIds: string[];
 }
 
 export class CollateralDepositCompletedPayload {

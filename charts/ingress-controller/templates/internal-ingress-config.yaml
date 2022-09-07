@@ -42,13 +42,6 @@ spec:
                 port:
                   number: 80
           ## Credit api service
-          - path: /internal/credit
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-credit-api-service
-                port:
-                  number: 80
           - path: /internal/collateral
             pathType: Prefix
             backend:
