@@ -1003,7 +1003,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/GetLoanBalancesDto"
                 }
               }
             }
@@ -1049,7 +1049,7 @@
         }
       }
     },
-    "/v1/ltvs/current": {
+    "/v1/ltv": {
       "get": {
         "operationId": "LtvController_getCurrentLtv",
         "parameters": [],
@@ -2071,6 +2071,25 @@
         "required": [
           "aprNominal",
           "aprEffective"
+        ]
+      },
+      "GetLoanBalancesDto": {
+        "type": "object",
+        "properties": {
+          "totalCredit": {
+            "type": "number"
+          },
+          "availableCredit": {
+            "type": "number"
+          },
+          "utilizationAmount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "totalCredit",
+          "availableCredit",
+          "utilizationAmount"
         ]
       },
       "LtvDto": {

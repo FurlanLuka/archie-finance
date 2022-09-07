@@ -89,29 +89,7 @@ spec:
                 name: archie-onboarding-api-service
                 port:
                   number: 80
-          ## Credit api service
-          - path: /v1/credit
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-credit-api-service
-                port:
-                  number: 80
           - path: /v1/collateral
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-credit-api-service
-                port:
-                  number: 80
-          - path: /v1/margins
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-credit-api-service
-                port:
-                  number: 80
-          - path: /v1/apto
             pathType: Prefix
             backend:
               service:
@@ -205,7 +183,7 @@ spec:
                 port:
                   number: 80
           # Ltv api
-          - path: /v1/ltvs/current
+          - path: /v1/ltv
             pathType: Prefix
             backend:
               service:
