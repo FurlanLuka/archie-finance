@@ -134,7 +134,7 @@ export class CreditLimitAdjustmentService {
   public async createInitialCredit(
     userId: string,
     collateralValue: CollateralValue,
-    assetPrices: GetAssetPriceResponse[],
+    assetList: AssetList,
   ): Promise<void> {
     const creditLimit: CreditLimit | null =
       await this.creditLimitRepository.findOneBy({
@@ -147,7 +147,7 @@ export class CreditLimitAdjustmentService {
 
     let totalCreditValue: number = this.calculateCreditLimit(
       collateralValue.collateral,
-      assetPrices,
+      assetList,
     );
 
     if (totalCreditValue < this.MINIMUM_CREDIT) {

@@ -38,14 +38,14 @@ export class DepositAddressService {
       ConfigVariables.ASSET_LIST,
     );
 
-    if (Object.keys(assetList).includes(asset) === false) {
+    const assetInformation: AssetInformation | undefined = assetList[asset];
+
+    if (assetInformation === undefined) {
       throw new DepositAddressUnknownAssetError({
         asset,
         userId,
       });
     }
-
-    const assetInformation: AssetInformation | undefined = assetList[asset];
 
     const depositAddress: DepositAddress | null =
       await this.depositAddressRepository.findOneBy({
