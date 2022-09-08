@@ -40,6 +40,7 @@ import {
 import { CardResponseDto, CardStatus } from './rize.dto';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 import {
+  AvailableCreditBalanceUpdatedPayload,
   GetLoanBalancesPayload,
   GetLoanBalancesResponse,
 } from '@archie/api/peach-api/data-transfer-objects';
@@ -326,28 +327,28 @@ export class RizeService {
     await this.rizeApiService.loadFunds(customerId, credit.availableCredit);
   }
 
-  public async increaseCreditLimit(
-    userId: string,
-    amount: number,
+  public async updateAvailableCredit(
+    credit: AvailableCreditBalanceUpdatedPayload,
   ): Promise<void> {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
-      userId,
+      credit.userId,
     );
     this.rizeValidatorService.validateCustomerExists(customer);
+    const cardBalance: number = Number(customer.total_balance);
 
-    await this.rizeApiService.loadFunds(customer.uid, amount);
-  }
+    if (credit.availableCreditAmount > cardBalance) {
+      await this.rizeApiService.loadFunds(
+        customer.uid,
+        credit.availableCreditAmount - cardBalance,
+      );
+    }
 
-  public async decreaseCreditLimit(
-    userId: string,
-    amount: number,
-  ): Promise<void> {
-    const customer: Customer | null = await this.rizeApiService.searchCustomers(
-      userId,
-    );
-    this.rizeValidatorService.validateCustomerExists(customer);
-
-    await this.rizeApiService.decreaseCreditLimit(customer.uid, amount);
+    if (credit.availableCreditAmount < cardBalance) {
+      await this.rizeApiService.decreaseCreditLimit(
+        customer.uid,
+        cardBalance - credit.availableCreditAmount,
+      );
+    }
   }
 
   public async unlockCard(userId: string): Promise<void> {

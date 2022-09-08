@@ -27,9 +27,6 @@ export class CreditLimit {
   @Column('float')
   creditLimit: number;
 
-  @Column('float')
-  previousCreditLimit: number;
-
   @Column('timestamp')
   calculatedAt: string;
 

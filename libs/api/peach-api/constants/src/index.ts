@@ -20,4 +20,7 @@ export enum ConfigVariables {
 }
 
 export const CREDIT_BALANCE_UPDATED_TOPIC = 'peach.credit_balance.updated';
+export const AVAILABLE_CREDIT_LIMIT_BALANCE_UPDATED_TOPIC =
+  'peach.available_credit_limit_balance.updated';
+
 export const GET_LOAN_BALANCES_RPC = 'get.loan.balances.rpc';

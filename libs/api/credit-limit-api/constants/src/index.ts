@@ -13,10 +13,7 @@ export enum ConfigVariables {
 }
 
 export const CREDIT_LINE_CREATED_TOPIC = 'credit_limit.credit_line.created';
-export const CREDIT_LIMIT_INCREASED_TOPIC =
-  'credit_limit.credit_limit.increased';
-export const CREDIT_LIMIT_DECREASED_TOPIC =
-  'credit_limit.credit_limit.decreased';
+export const CREDIT_LIMIT_UPDATED_TOPIC = 'credit_limit.credit_limit.updated';
 
 export const CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED =
   'credit_limit.credit_limit_periodic_check.requested';
