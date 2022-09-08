@@ -12,7 +12,7 @@ export const ERROR_LIST = new Map<string, string>([]);
 
 export const getLTV = async (accessToken: string): Promise<LTV> => {
   return getRequest<LTV>(
-    `${API_URL}/v1/margins/ltv`,
+    `${API_URL}/v1/ltv`,
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
