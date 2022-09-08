@@ -22,12 +22,13 @@ import {
   PaypalPaymentReceivedPayload,
 } from './paypal.dto';
 import { QueueService } from '@archie/api/utils/queue';
-import { PAYPAL_PAYMENT_RECEIVED_TOPIC } from '@archie/api/paypal-api/constants';
+import {
+  PAYPAL_PAYMENT_CURRENCY,
+  PAYPAL_PAYMENT_RECEIVED_TOPIC,
+} from '@archie/api/paypal-api/constants';
 
 @Injectable()
 export class PaypalService {
-  static PAYPAL_PAYMENT_CURRENCY = 'USD';
-
   constructor(
     private paypalApiService: PaypalApiService,
     @InjectRepository(Order)
@@ -151,7 +152,7 @@ export class PaypalService {
         userId: order.userId,
         amount: order.paymentAmount,
         orderId: order.orderId,
-        currency: PaypalService.PAYPAL_PAYMENT_CURRENCY,
+        currency: PAYPAL_PAYMENT_CURRENCY,
       },
     );
   }

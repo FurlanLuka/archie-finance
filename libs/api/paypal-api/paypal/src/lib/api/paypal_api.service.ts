@@ -2,13 +2,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@archie/api/utils/config';
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { ConfigVariables } from '@archie/api/paypal-api/constants';
+import { ConfigVariables, PAYPAL_PAYMENT_CURRENCY } from '@archie/api/paypal-api/constants';
 import { URLSearchParams } from 'url';
 import {
   CaptureOrderResponse,
   CreateOrderResponse,
 } from './paypal_api.interfaces';
-import { PaypalService } from '../paypal.service';
 
 interface AuthenticationResponse {
   scope: string;
@@ -81,7 +80,7 @@ export class PaypalApiService {
         purchase_units: [
           {
             amount: {
-              currency_code: PaypalService.PAYPAL_PAYMENT_CURRENCY,
+              currency_code: PAYPAL_PAYMENT_CURRENCY,
               value: paymentAmount,
             },
             custom_id: paymentIdentifier,
