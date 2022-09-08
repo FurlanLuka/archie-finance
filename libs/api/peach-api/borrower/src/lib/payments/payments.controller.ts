@@ -83,16 +83,10 @@ export class PaymentsQueueController {
     WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC,
     PaymentsQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async peachWebhookPaymentConfirmedHandler({
-    personId,
-    loanId,
-    personExternalId,
-  }: WebhookPaymentPayload): Promise<void> {
-    await this.paymentsService.handlePaymentConfirmedEvent(
-      personExternalId,
-      personId,
-      loanId,
-    );
+  async peachWebhookPaymentConfirmedHandler(
+    payload: WebhookPaymentPayload,
+  ): Promise<void> {
+    await this.paymentsService.handlePaymentConfirmedEvent(payload);
   }
 
   @Subscribe(
