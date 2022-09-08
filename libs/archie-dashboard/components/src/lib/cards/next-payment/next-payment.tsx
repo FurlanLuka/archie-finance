@@ -5,13 +5,13 @@ import { format } from 'date-fns';
 
 import { MakePaymentModal } from '@archie-webapps/archie-dashboard/feature/make-payment';
 import { NextPaymentChart } from '@archie-webapps/archie-dashboard/components';
-import { ButtonOutline, Card, Skeleton, TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
-import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 import {
   CREDIT_LINE_NOT_FOUND_ERROR,
   MISSING_PAYMENT_INFO_ERROR,
   UserObligations,
-} from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
+} from '@archie-webapps/shared/data-access/archie-api/payment/api/get-obligations';
+import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
+import { ButtonOutline, Card, Skeleton, TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { canUserSchedulePayment } from '@archie-webapps/archie-dashboard/utils';
 
@@ -26,39 +26,39 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
 
   const getObligationsResponse: QueryResponse<UserObligations> = useGetObligations();
 
-  const getContent = () => {
-    if (getObligationsResponse.state === RequestState.LOADING) {
+  if (getObligationsResponse.state === RequestState.LOADING) {
+    return (
+      <Card>
+        <Skeleton />
+      </Card>
+    );
+  }
+
+  if (getObligationsResponse.state === RequestState.ERROR) {
+    if (
+      getObligationsResponse.error.name === CREDIT_LINE_NOT_FOUND_ERROR ||
+      getObligationsResponse.error.name === MISSING_PAYMENT_INFO_ERROR
+    ) {
       return (
-        <Card>
-          <Skeleton />
+        <Card column alignItems="flex-start" padding="1.5rem">
+          <BodyM weight={700} className="card-title">
+            {t('next_payment_card.title')}
+          </BodyM>
+          <TitleM weight={400} className="card-info">
+            {t('next_payment_card.no_payment_due')}
+          </TitleM>
         </Card>
       );
     }
 
-    if (getObligationsResponse.state === RequestState.ERROR) {
-      if (
-        getObligationsResponse.error.name === CREDIT_LINE_NOT_FOUND_ERROR ||
-        getObligationsResponse.error.name === MISSING_PAYMENT_INFO_ERROR
-      ) {
-        return (
-          <Card column alignItems="flex-start" padding="1.5rem">
-            <BodyM weight={700} className="card-title">
-              {t('next_payment_card.title')}
-            </BodyM>
-            <TitleM weight={400} className="card-info">
-              {t('next_payment_card.no_payment_due')}
-            </TitleM>
-          </Card>
-        );
-      }
+    return <Navigate to="/error" state={{ prevPath: '/' }} />;
+  }
 
-      return <Navigate to="/error" state={{ prevPath: '/' }} />;
-    }
+  if (getObligationsResponse.state === RequestState.SUCCESS) {
+    const { dueDate } = getObligationsResponse.data;
 
-    if (getObligationsResponse.state === RequestState.SUCCESS) {
-      const { dueDate } = getObligationsResponse.data;
-
-      return (
+    return (
+      <>
         <Card column alignItems="flex-start" padding="1.5rem">
           <BodyM weight={700} className="card-title">
             {t('next_payment_card.title')}
@@ -82,16 +82,10 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
             </div>
           )}
         </Card>
-      );
-    }
+        {makePaymentModalOpen && <MakePaymentModal close={() => setMakePaymentModalOpen(false)} />}
+      </>
+    );
+  }
 
-    return <></>;
-  };
-
-  return (
-    <>
-      {getContent()}
-      {makePaymentModalOpen && <MakePaymentModal close={() => setMakePaymentModalOpen(false)} />}
-    </>
-  );
+  return <></>;
 };

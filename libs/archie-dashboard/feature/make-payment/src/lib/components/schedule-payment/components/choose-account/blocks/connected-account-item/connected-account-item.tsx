@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/interfaces';
+import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectedAccountItemStyled } from './connected-account-item.styled';

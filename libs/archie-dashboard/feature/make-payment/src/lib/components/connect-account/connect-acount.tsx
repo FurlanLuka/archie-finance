@@ -1,9 +1,8 @@
 import { FC, useState } from 'react';
 
-import { ConnectableAccount } from '../interfaces';
-import { PlaidLink } from '../plaid-link/plaid-link';
-
-import { ConnectableAccountSelect } from './blocks/connectable-account-select/connectable-account-select';
+import { ConnectableAccount } from './connect-acount.interfaces';
+import { ConnectableAccountSelect } from './components/connectable-account-select/connectable-account-select';
+import { PlaidLink } from './components/plaid-link/plaid-link';
 
 interface ConnectAccountProps {
   onAccountConnect?: VoidFunction;

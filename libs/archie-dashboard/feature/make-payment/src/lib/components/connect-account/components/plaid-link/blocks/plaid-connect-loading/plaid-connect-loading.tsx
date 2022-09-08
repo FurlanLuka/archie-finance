@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
 
-import plaidLogo from '../../../../../assets/plaid_logo.png';
+import plaidLogo from '../../../../../../../assets/plaid_logo.png';
 
-import { PlaidConnectStyled } from './plaid-connect.styled';
+import { PlaidConnectStyled } from '../plaid-connect/plaid-connect.styled';
 
 export const PlaidConnectLoading: FC = () => {
   const { t } = useTranslation();

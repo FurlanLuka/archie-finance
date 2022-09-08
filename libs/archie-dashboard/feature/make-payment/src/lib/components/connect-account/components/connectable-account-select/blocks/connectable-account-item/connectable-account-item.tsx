@@ -2,13 +2,14 @@ import { FC } from 'react';
 
 import { BodyM } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectableAccount } from '../../../interfaces';
+import { ConnectableAccount } from '../../../../connect-acount.interfaces';
 
 import { ConnectableAccountItemStyled } from './connectable-account-item.styled';
 
 interface ConnectableAccountItemProps {
   account: ConnectableAccount;
 }
+
 export const ConnectableAccountItem: FC<ConnectableAccountItemProps> = ({ account }) => {
   return (
     <ConnectableAccountItemStyled>

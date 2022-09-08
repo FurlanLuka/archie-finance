@@ -1,7 +1,14 @@
 import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
 
-import { AccountResponse } from './interfaces';
+export interface AccountResponse {
+  id: string;
+  name: string;
+  mask: string;
+  availableBalance: number;
+  currencyISO: string;
+  subtype: string;
+}
 
 export type GetConnectedAccountsResponse = AccountResponse[];
 

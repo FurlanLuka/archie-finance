@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { PaymentStep } from '@archie-webapps/archie-dashboard/constants';
 import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
-import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
+import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-obligations';
 
 import { ChooseAccount } from '../choose-account/choose-account';
 import { PaymentConfirm } from '../payment-confirm/payment-confirm';

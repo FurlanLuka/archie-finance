@@ -1,24 +1,13 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { PlaidAccount, PlaidLinkOnSuccessMetadata, usePlaidLink } from 'react-plaid-link';
+import { PlaidLinkOnSuccessMetadata, usePlaidLink } from 'react-plaid-link';
 
 import { ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
 
-import plaidLogo from '../../../../../assets/plaid_logo.png';
-import { ConnectableAccount } from '../../../interfaces';
-
+import plaidLogo from '../../../../../../../assets/plaid_logo.png';
+import { ConnectableAccount } from '../../../../connect-acount.interfaces';
+import { transformAccounts } from './plaid-connect.helpers';
 import { PlaidConnectStyled } from './plaid-connect.styled';
-
-function transformAccounts(accountsBase: PlaidAccount[]): ConnectableAccount[] {
-  const accountsResponse: ConnectableAccount[] = accountsBase.map((account) => ({
-    id: account.id,
-    name: account.name,
-    mask: account.mask,
-    type: account.type,
-  }));
-
-  return accountsResponse;
-}
 
 interface PlaidConnectProps {
   linkToken: string;

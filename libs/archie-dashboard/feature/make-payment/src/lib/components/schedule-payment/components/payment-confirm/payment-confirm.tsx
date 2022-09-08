@@ -5,7 +5,7 @@ import { RequestState } from '@archie-webapps/shared/data-access/archie-api/inte
 import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
 import { ScheduleTransactionParams } from '@archie-webapps/shared/data-access/archie-api/payment/api/schedule-transaction';
 import { useScheduleTransaction } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
-import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
+import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-obligations';
 import {
   ButtonOutline,
   ButtonPrimary,

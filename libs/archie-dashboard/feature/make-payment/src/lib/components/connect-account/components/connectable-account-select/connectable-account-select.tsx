@@ -5,9 +5,8 @@ import { RequestState } from '@archie-webapps/shared/data-access/archie-api/inte
 import { useConnectAccount } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-connect-account';
 import { ButtonPrimary, Select, SelectOption, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectableAccount } from '../../../interfaces';
-import { ConnectableAccountItem } from '../connectable-account-item/connectable-account-item';
-
+import { ConnectableAccount } from '../../connect-acount.interfaces';
+import { ConnectableAccountItem } from './blocks/connectable-account-item/connectable-account-item';
 import { ConnectableAccountSelectStyled } from './connectable-account-select.styled';
 
 interface ConnectableAccountSelectProps {

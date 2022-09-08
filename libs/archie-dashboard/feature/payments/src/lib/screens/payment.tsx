@@ -16,7 +16,7 @@ export const PaymentScreen: FC = () => {
   const { t } = useTranslation();
   const getObligationsResponse = useGetObligations();
 
-  const [showModal, setShowModal] = useState(false);
+  const [makePaymentModalOpen, setMakePaymentModalOpen] = useState(false);
 
   return (
     <PaymentScreenStyled>
@@ -30,7 +30,7 @@ export const PaymentScreen: FC = () => {
       </div>
       <div className="section-actions">
         <ButtonPrimary
-          onClick={() => setShowModal(true)}
+          onClick={() => setMakePaymentModalOpen(true)}
           isDisabled={
             getObligationsResponse.state !== RequestState.SUCCESS ||
             !canUserSchedulePayment(getObligationsResponse.data)
@@ -46,7 +46,7 @@ export const PaymentScreen: FC = () => {
         </Status>
       </div>
       <ConnectedAccounts />
-      {showModal && <MakePaymentModal close={() => setShowModal(false)} />}
+      {makePaymentModalOpen && <MakePaymentModal close={() => setMakePaymentModalOpen(false)} />}
     </PaymentScreenStyled>
   );
 };

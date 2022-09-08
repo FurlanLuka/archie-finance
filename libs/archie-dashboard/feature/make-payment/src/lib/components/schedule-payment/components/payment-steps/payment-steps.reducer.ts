@@ -1,5 +1,5 @@
 import { PaymentStep } from '@archie-webapps/archie-dashboard/constants';
-import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/interfaces';
+import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 
 export enum PaymentStepsActionType {
   MOVE_TO_SCHEDULE_STEP = 'MOVE_TO_SCHEDULE_STEP',
