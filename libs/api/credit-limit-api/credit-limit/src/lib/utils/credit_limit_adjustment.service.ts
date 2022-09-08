@@ -2,8 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CollateralValue, CollateralWithPrice } from './utils.interfaces';
 import { CreditLimit } from '../credit_limit.entity';
 import {
-  CREDIT_LIMIT_DECREASED_TOPIC,
-  CREDIT_LIMIT_INCREASED_TOPIC,
+  CREDIT_LIMIT_UPDATED_TOPIC,
   CREDIT_LINE_CREATED_TOPIC,
 } from '@archie/api/credit-limit-api/constants';
 import {
@@ -14,8 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { QueueService } from '@archie/api/utils/queue';
 import {
-  CreditLimitDecreasedPayload,
-  CreditLimitIncreasedPayload,
+  CreditLimitUpdatedPayload,
   CreditLineCreatedPayload,
 } from '@archie/api/credit-limit-api/data-transfer-objects';
 import {
@@ -57,33 +55,14 @@ export class CreditLimitAdjustmentService {
       return;
     }
 
-    if (
-      updatedCreditLimit.creditLimit > updatedCreditLimit.previousCreditLimit
-    ) {
-      this.queueService.publish<CreditLimitIncreasedPayload>(
-        CREDIT_LIMIT_INCREASED_TOPIC,
-        {
-          userId,
-          creditLimit: newCreditLimit,
-          amount:
-            updatedCreditLimit.creditLimit -
-            updatedCreditLimit.previousCreditLimit,
-          calculatedAt: collateralCalculatedAt,
-        },
-      );
-    } else {
-      this.queueService.publish<CreditLimitDecreasedPayload>(
-        CREDIT_LIMIT_DECREASED_TOPIC,
-        {
-          userId,
-          creditLimit: newCreditLimit,
-          amount:
-            updatedCreditLimit.previousCreditLimit -
-            updatedCreditLimit.creditLimit,
-          calculatedAt: collateralCalculatedAt,
-        },
-      );
-    }
+    this.queueService.publish<CreditLimitUpdatedPayload>(
+      CREDIT_LIMIT_UPDATED_TOPIC,
+      {
+        userId,
+        creditLimit: newCreditLimit,
+        calculatedAt: collateralCalculatedAt,
+      },
+    );
   }
 
   private calculateCreditLimit(
@@ -119,7 +98,6 @@ export class CreditLimitAdjustmentService {
         calculatedAt: collateralCalculatedAt,
       })
       .set({
-        previousCreditLimit: () => '"creditLimit"',
         creditLimit: newCreditLimit,
         calculatedOnCollateralBalance: collateralBalance,
         calculatedAt: collateralCalculatedAt,
@@ -169,7 +147,6 @@ export class CreditLimitAdjustmentService {
       userId,
       calculatedAt: new Date().toISOString(),
       creditLimit: totalCreditValue,
-      previousCreditLimit: totalCreditValue,
       calculatedOnCollateralBalance: collateralValue.collateralBalance,
     });
 

@@ -10,10 +10,7 @@ import {
   GetCollateralValueResponse,
 } from '@archie/api/credit-api/collateral';
 import { GET_COLLATERAL_VALUE_RPC } from '@archie/api/credit-api/constants';
-import {
-  CreditLimitDecreasedPayload,
-  CreditLimitIncreasedPayload,
-} from '@archie/api/credit-limit-api/data-transfer-objects';
+import { CreditLimitUpdatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 import { BorrowerNotFoundError } from '../borrower.errors';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import {
@@ -21,8 +18,10 @@ import {
   KycSubmittedPayload,
 } from '@archie/api/user-api/data-transfer-objects';
 import { BorrowerWithHomeAddress } from '../utils/borrower.validation.interfaces';
-import { Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
+import { Credit, Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
 import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
+import { AvailableCreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { AVAILABLE_CREDIT_LIMIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -179,47 +178,31 @@ export class PeachBorrowerService {
     );
   }
 
-  public async handleCreditLimitIncreased(
-    creditLimitIncrease: CreditLimitIncreasedPayload,
+  public async handleCreditLimitUpdatedEvent(
+    creditLimit: CreditLimitUpdatedPayload,
   ): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId: creditLimitIncrease.userId,
+      userId: creditLimit.userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
-
-    const currentCreditLimit = await this.peachApiService.getCreditLimit(
-      borrower.personId,
-      borrower.creditLineId,
-    );
-    const newCreditLimit: number =
-      currentCreditLimit.creditLimitAmount + creditLimitIncrease.amount;
 
     await this.peachApiService.updateCreditLimit(
       borrower.personId,
       borrower.creditLineId,
-      newCreditLimit,
+      creditLimit.creditLimit,
     );
-  }
 
-  public async handleCreditLimitDecreased(
-    creditLimitDecrease: CreditLimitDecreasedPayload,
-  ): Promise<void> {
-    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId: creditLimitDecrease.userId,
-    });
-    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
-
-    const currentCreditLimit = await this.peachApiService.getCreditLimit(
+    const credit: Credit = await this.peachApiService.getCreditBalance(
       borrower.personId,
       borrower.creditLineId,
     );
-    const newCreditLimit: number =
-      currentCreditLimit.creditLimitAmount - creditLimitDecrease.amount;
 
-    await this.peachApiService.updateCreditLimit(
-      borrower.personId,
-      borrower.creditLineId,
-      newCreditLimit,
+    this.queueService.publish<AvailableCreditBalanceUpdatedPayload>(
+      AVAILABLE_CREDIT_LIMIT_BALANCE_UPDATED_TOPIC,
+      {
+        ...credit,
+        userId: creditLimit.userId,
+      },
     );
   }
 }

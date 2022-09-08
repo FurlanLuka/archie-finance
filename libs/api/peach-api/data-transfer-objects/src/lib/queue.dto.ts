@@ -17,6 +17,14 @@ export class CreditBalanceUpdatedPayload {
   };
 }
 
+export class AvailableCreditBalanceUpdatedPayload {
+  userId: string;
+  availableCreditAmount: number;
+  creditLimitAmount: number;
+  utilizationAmount: number;
+  calculatedAt: string;
+}
+
 export class GetLoanBalancesPayload {
   userId: string;
 }

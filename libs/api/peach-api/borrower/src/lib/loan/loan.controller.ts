@@ -2,8 +2,7 @@ import { Controller } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
 import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
 import {
-  CREDIT_LIMIT_DECREASED_TOPIC,
-  CREDIT_LIMIT_INCREASED_TOPIC,
+  CREDIT_LIMIT_UPDATED_TOPIC,
   CREDIT_LINE_CREATED_TOPIC,
 } from '@archie/api/credit-limit-api/constants';
 import { PeachBorrowerService } from './loan.service';
@@ -12,8 +11,7 @@ import {
   KYC_SUBMITTED_TOPIC,
 } from '@archie/api/user-api/constants';
 import {
-  CreditLimitDecreasedPayload,
-  CreditLimitIncreasedPayload,
+  CreditLimitUpdatedPayload,
   CreditLineCreatedPayload,
 } from '@archie/api/credit-limit-api/data-transfer-objects';
 import {
@@ -54,22 +52,12 @@ export class PeachBorrowerQueueController {
   }
 
   @Subscribe(
-    CREDIT_LIMIT_INCREASED_TOPIC,
+    CREDIT_LIMIT_UPDATED_TOPIC,
     PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
   )
   async creditLimitIncreasedHandler(
-    payload: CreditLimitIncreasedPayload,
+    payload: CreditLimitUpdatedPayload,
   ): Promise<void> {
-    await this.peachService.handleCreditLimitIncreased(payload);
-  }
-
-  @Subscribe(
-    CREDIT_LIMIT_DECREASED_TOPIC,
-    PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async creditLimitDecreasedHandler(
-    payload: CreditLimitDecreasedPayload,
-  ): Promise<void> {
-    await this.peachService.handleCreditLimitDecreased(payload);
+    await this.peachService.handleCreditLimitUpdatedEvent(payload);
   }
 }

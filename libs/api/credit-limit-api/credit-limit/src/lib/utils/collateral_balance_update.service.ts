@@ -6,10 +6,7 @@ import {
   CollateralWithCalculationDate,
 } from './utils.interfaces';
 import { CreditLimit } from '../credit_limit.entity';
-import {
-  CREDIT_LIMIT_DECREASED_TOPIC,
-  CREDIT_LIMIT_INCREASED_TOPIC,
-} from '@archie/api/credit-limit-api/constants';
+import { CREDIT_LIMIT_UPDATED_TOPIC } from '@archie/api/credit-limit-api/constants';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Collateral } from '../collateral.entity';
 import { In, Repository } from 'typeorm';
@@ -76,7 +73,7 @@ export class CollateralBalanceUpdateUtilService {
       }
     } catch (error) {
       Logger.error(
-        `Error publishing ${CREDIT_LIMIT_INCREASED_TOPIC} or ${CREDIT_LIMIT_DECREASED_TOPIC} event`,
+        `Error publishing ${CREDIT_LIMIT_UPDATED_TOPIC} event`,
         error,
       );
     }

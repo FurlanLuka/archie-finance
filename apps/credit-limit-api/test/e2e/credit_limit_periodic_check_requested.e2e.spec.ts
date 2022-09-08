@@ -15,7 +15,7 @@ import {
 } from '../test-data/collateral.stubs';
 import { Collateral } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral.entity';
 import { CreditLimit } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
-import { CREDIT_LIMIT_INCREASED_TOPIC } from '../../../../libs/api/credit-limit-api/constants/src';
+import { CREDIT_LIMIT_UPDATED_TOPIC } from '../../../../libs/api/credit-limit-api/constants/src';
 import { GET_ASSET_INFORMATION_RPC } from '../../../../libs/api/collateral-api/constants/src';
 import { PeriodicCheckQueueController } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/periodic_check/periodic_check.controller';
 
@@ -74,7 +74,6 @@ describe('PeriodicCheckQueueController (e2e)', () => {
       await creditLimitRepository.insert({
         userId,
         creditLimit: currentCreditLimit,
-        previousCreditLimit: currentCreditLimit,
         calculatedOnCollateralBalance: 0,
         calculatedAt: new Date().toISOString(),
       });
@@ -88,8 +87,7 @@ describe('PeriodicCheckQueueController (e2e)', () => {
       const expectedNewCreditLimit =
         (ETH_PRICE * startingEthAmount * assetListResponse[asset]!.ltv) / 100;
       expect(queueStub.publish).toBeCalledTimes(1);
-      expect(queueStub.publish).toBeCalledWith(CREDIT_LIMIT_INCREASED_TOPIC, {
-        amount: expectedNewCreditLimit - currentCreditLimit,
+      expect(queueStub.publish).toBeCalledWith(CREDIT_LIMIT_UPDATED_TOPIC, {
         calculatedAt: expect.any(Date),
         creditLimit: expectedNewCreditLimit,
         userId,
