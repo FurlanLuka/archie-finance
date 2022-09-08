@@ -17,3 +17,5 @@ export enum ConfigVariables {
 }
 
 export const PAYPAL_PAYMENT_RECEIVED_TOPIC = 'paypal.payment.received';
+
+export const PAYPAL_PAYMENT_CURRENCY = 'USD';
