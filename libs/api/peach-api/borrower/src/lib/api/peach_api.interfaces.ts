@@ -330,3 +330,7 @@ export interface Statements {
   previousUrl: string | null;
   data: Statement[];
 }
+
+export interface DocumentUrl {
+  url: string;
+}

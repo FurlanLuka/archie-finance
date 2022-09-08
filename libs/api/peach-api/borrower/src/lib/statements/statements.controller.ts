@@ -5,6 +5,7 @@ import {
   Controller,
   Get,
   NotFoundException,
+  Param,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import {
   CreditLineNotFoundError,
 } from '../borrower.errors';
 import { LoanStatementsService } from './statements.service';
+import { GetLoanDocumentDto } from './statements.dto';
 
 @Controller('v1/loan_statements')
 export class LoanStatementsController {
@@ -29,5 +31,24 @@ export class LoanStatementsController {
   ])
   async getLoanStatements(@Req() req): Promise<Statement[]> {
     return this.loanStatementsService.getLoanStatements(req.user.sub);
+  }
+
+  @Get('/:documentId')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiErrorResponse([
+    NotFoundException,
+    BorrowerNotFoundError,
+    CreditLineNotFoundError,
+  ])
+  async getLoanDocumentUrl(
+    @Req() req,
+    @Param('documentId') documentId: string,
+  ): Promise<GetLoanDocumentDto> {
+    console.log('omajgad!', documentId);
+    return this.loanStatementsService.getLoanDocumentUrl(
+      req.user.sub,
+      documentId,
+    );
   }
 }

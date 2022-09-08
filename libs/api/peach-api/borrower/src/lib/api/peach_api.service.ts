@@ -24,6 +24,7 @@ import {
   Balances,
   PeachResponseData,
   Statement,
+  DocumentUrl,
 } from './peach_api.interfaces';
 import { Borrower } from '../borrower.entity';
 import {
@@ -597,6 +598,19 @@ export class PeachApiService {
     );
 
     return response.data.data;
+  }
+
+  public async getDocumentUrl(
+    personId: string,
+    documentId: string,
+  ): Promise<DocumentUrl> {
+    console.log('hmmm', personId, documentId);
+    const response = await this.peachClient.get(
+      `/people/${personId}/documents/${documentId}/content`,
+      { params: { returnUrl: true } },
+    );
+
+    return response.data;
   }
 
   private ignoreDuplicatedEntityError(error: PeachErrorResponse): void {
