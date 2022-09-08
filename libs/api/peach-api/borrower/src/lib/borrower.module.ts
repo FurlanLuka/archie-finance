@@ -6,6 +6,7 @@ import { PurchasesModule } from './purchases/purchases.module';
 import { ObligationsModule } from './obligations/obligations.module';
 import { InterestsModule } from './interests/interests.module';
 import { LoanBalancesModule } from './loan-balances/loan-balances.module';
+import { LoanStatementsModule } from './statements/statements.module';
 
 @Module({
   controllers: [],
@@ -17,6 +18,7 @@ import { LoanBalancesModule } from './loan-balances/loan-balances.module';
     ObligationsModule,
     InterestsModule,
     LoanBalancesModule,
+    LoanStatementsModule,
   ],
   providers: [],
   exports: [],

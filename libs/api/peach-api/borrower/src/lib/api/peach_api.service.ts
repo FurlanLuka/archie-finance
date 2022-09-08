@@ -23,6 +23,7 @@ import {
   Purchases,
   Balances,
   PeachResponseData,
+  Statement,
 } from './peach_api.interfaces';
 import { Borrower } from '../borrower.entity';
 import {
@@ -583,6 +584,19 @@ export class PeachApiService {
     );
 
     return response.data;
+  }
+
+  public async getStatements(
+    personId: string,
+    loanId: string,
+  ): Promise<Statement[]> {
+    // TODO pagination?
+    const response = await this.peachClient.get(
+      `/people/${personId}/loans/${loanId}/statements`,
+      { params: { limit: 100 } },
+    );
+
+    return response.data.data;
   }
 
   private ignoreDuplicatedEntityError(error: PeachErrorResponse): void {

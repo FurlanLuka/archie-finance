@@ -304,3 +304,29 @@ export enum PeachTransactionStatus {
   settled = 'settled',
   failed = 'canceled',
 }
+
+export interface Statement {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  periodId: string;
+  version: number;
+  billingCycleStartDate: string;
+  billingCycleEndDate: string;
+  paymentDueDate: string;
+  documentDescriptorId: string;
+  statementDate: string;
+  minimumDueAmount: number;
+  overdueAmount: number;
+  newBalanceAmount: number;
+}
+
+// TODO use when/if statements pagination
+export interface Statements {
+  total: number;
+  count: number;
+  nextUrl: string | null;
+  previousUrl: string | null;
+  data: Statement[];
+}
