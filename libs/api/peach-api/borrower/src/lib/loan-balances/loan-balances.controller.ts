@@ -47,7 +47,7 @@ export class LoanBalancesController {
 
 @Controller()
 export class LoanBalancesQueueController {
-  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-asset-price`;
+  private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-loan-balances`;
 
   constructor(private loanBalancesService: LoanBalancesService) {}
 
