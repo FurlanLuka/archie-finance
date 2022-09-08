@@ -44,7 +44,7 @@ export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({ ac
   const header = selectedAccount ? (
     <ConnectableAccountItem account={selectedAccount} />
   ) : (
-    <BodyM weight={700}>{t('dashboard_payment.account_select.empty')}</BodyM>
+    <BodyM weight={500}>{t('dashboard_payment.account_select.empty')}</BodyM>
   );
 
   const options = useMemo(() => {

@@ -28,7 +28,7 @@ export const NotEnoughCollateralModal: FC<NotEnoughCollateralModalProps> = ({ on
             {t('not_enough_collateral_modal.text', {
               creditValue: creditValue.toFixed(2),
               minValue: MIN_LINE_OF_CREDIT,
-              difference: (creditValue - MIN_LINE_OF_CREDIT).toFixed(2),
+              difference: (MIN_LINE_OF_CREDIT - creditValue).toFixed(2),
             })}
           </BodyM>
           <ButtonPrimary onClick={onClose}>{t('not_enough_collateral_modal.btn')}</ButtonPrimary>

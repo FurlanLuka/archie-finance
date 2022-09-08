@@ -22,7 +22,7 @@ const selectOptions = ['Custom item 1', 'Custom item 2', 'Custom item 3'];
 export const Default: Story = () => {
   const [selectedItem, setSelectedItem] = useState<string | null>(null);
 
-  const header = selectedItem ? <BodyM>{selectedItem}</BodyM> : <BodyM weight={700}>Please select an item</BodyM>;
+  const header = selectedItem ? <BodyM>{selectedItem}</BodyM> : <BodyM weight={500}>Please select an item</BodyM>;
 
   const options = selectOptions.map((item, index) => (
     <SelectOption key={index} value={item}>

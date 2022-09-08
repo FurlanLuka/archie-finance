@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
-export const PaymentConfirmModalStyled = styled.div`
+export const PaymentConfirmStyled = styled.div`
   display: flex;
   flex-direction: column;
 

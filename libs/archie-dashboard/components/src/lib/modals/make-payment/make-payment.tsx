@@ -1,13 +1,12 @@
 import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
 import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
-import { Loader, Modal, TitleS, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
+import { Loader, Modal } from '@archie-webapps/shared/ui/design-system';
 
-import { PaymentSteps } from './blocks/payment-steps/payment-steps';
+import { PaymentSteps } from './components/payment-steps/payment-steps';
 import { MakePaymentStyled } from './make-payment.styled';
 
 interface MakePaymentModalProps {
@@ -15,7 +14,6 @@ interface MakePaymentModalProps {
 }
 
 export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
-  const { t } = useTranslation();
   const getKycResponse = useGetKyc();
   const getObligationsResponse = useGetObligations();
 
@@ -29,22 +27,7 @@ export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
     }
 
     if (getKycResponse.state === RequestState.SUCCESS && getObligationsResponse.state === RequestState.SUCCESS) {
-      return (
-        <>
-          <TitleS className="title">{t('payment_modal.payment_schedule.title')}</TitleS>
-          <BodyL weight={600}>
-            {t('payment_modal.payment_schedule.credit_for', { name: getKycResponse.data.firstName })}
-          </BodyL>
-          {/*<BodyM>{t('payment_modal.payment_schedule.last_payment', { lastPayment, date })}</BodyM>*/}
-          <BodyM>
-            {t('payment_modal.payment_schedule.interest_owed', {
-              interestOwed: getObligationsResponse.data.interestOwed,
-            })}
-          </BodyM>
-          <div className="divider" />
-          <PaymentSteps obligations={getObligationsResponse.data} close={close} />
-        </>
-      );
+      return <PaymentSteps obligations={getObligationsResponse.data} kycData={getKycResponse.data} close={close} />;
     }
 
     return <></>;

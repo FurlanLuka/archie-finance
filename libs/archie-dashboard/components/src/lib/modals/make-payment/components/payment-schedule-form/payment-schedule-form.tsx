@@ -5,6 +5,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
+import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
 import {
   ButtonPrimary,
   FormError,
@@ -12,6 +13,7 @@ import {
   InputText,
   Status,
   StatusCircle,
+  TitleS,
   BodyL,
   BodyM,
   BodyS,
@@ -24,10 +26,12 @@ import { PaymentScheduleFormStyled } from './payment-schedule-form.styled';
 interface PaymentScheduleFormProps {
   onConfirm: (amount: number, date: string) => void;
   obligations: UserObligations;
+  kycData: Kyc;
 }
 
-export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations, onConfirm }) => {
+export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations, kycData, onConfirm }) => {
   const { t } = useTranslation();
+
   const today = new Date();
 
   const { balanceOwed, dueDate, fullBalance } = obligations;
@@ -72,6 +76,14 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
 
   return (
     <PaymentScheduleFormStyled>
+      <TitleS className="title">{t('payment_modal.payment_schedule.title')}</TitleS>
+      <BodyL weight={600}>{t('payment_modal.credit_for', { name: kycData.firstName })}</BodyL>
+      <BodyM>
+        {t('payment_modal.interest_owed', {
+          interestOwed: obligations.interestOwed,
+        })}
+      </BodyM>
+      <div className="divider" />
       <BodyM weight={800} className="subtitle">
         {t('payment_modal.payment_schedule.payment_date')}
       </BodyM>

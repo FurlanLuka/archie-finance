@@ -4,20 +4,34 @@ import { useTranslation } from 'react-i18next';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { ScheduleTransactionParams } from '@archie-webapps/shared/data-access/archie-api/payment/api/schedule-transaction';
 import { useScheduleTransaction } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
-import { ButtonOutline, ButtonPrimary, TitleM, BodyM, FormError } from '@archie-webapps/shared/ui/design-system';
+import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
+import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
+import {
+  ButtonOutline,
+  ButtonPrimary,
+  TitleM,
+  TitleS,
+  BodyL,
+  BodyM,
+  FormError,
+} from '@archie-webapps/shared/ui/design-system';
 
-import { PaymentConfirmModalStyled } from './payment-confirm.styled';
+import { PaymentConfirmStyled } from './payment-confirm.styled';
 
-interface PaymentConfirmModalProps {
+interface PaymentConfirmProps {
   onConfirm: () => void;
   onBack: () => void;
+  obligations: UserObligations;
+  kycData: Kyc;
   scheduledTransactionParams: ScheduleTransactionParams;
 }
 
-export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({
+export const PaymentConfirm: FC<PaymentConfirmProps> = ({
   onConfirm,
-  scheduledTransactionParams,
   onBack,
+  obligations,
+  kycData,
+  scheduledTransactionParams,
 }) => {
   const { t } = useTranslation();
   const scheduleTransactionMutation = useScheduleTransaction();
@@ -42,7 +56,15 @@ export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({
   };
 
   return (
-    <PaymentConfirmModalStyled>
+    <PaymentConfirmStyled>
+      <TitleS className="title">{t('payment_modal.payment_confirm.title')}</TitleS>
+      <BodyL weight={600}>{t('payment_modal.credit_for', { name: kycData.firstName })}</BodyL>
+      <BodyM>
+        {t('payment_modal.interest_owed', {
+          interestOwed: obligations.interestOwed,
+        })}
+      </BodyM>
+      <div className="divider" />
       <BodyM weight={800} className="balance-note">
         {t('payment_modal.payment_confirm.balance_note')}
       </BodyM>
@@ -65,6 +87,6 @@ export const PaymentConfirmModal: FC<PaymentConfirmModalProps> = ({
           {t('btn_back')}
         </ButtonOutline>
       </div>
-    </PaymentConfirmModalStyled>
+    </PaymentConfirmStyled>
   );
 };

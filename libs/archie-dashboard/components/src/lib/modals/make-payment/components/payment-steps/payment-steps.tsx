@@ -3,20 +3,22 @@ import { useTranslation } from 'react-i18next';
 
 import { PaymentStep } from '@archie-webapps/archie-dashboard/constants';
 import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
+import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
 
 import { ChooseAccount } from '../choose-account/choose-account';
-import { PaymentConfirmModal } from '../payment-confirm/payment-confirm';
 import { PaymentScheduleForm } from '../payment-schedule-form/payment-schedule-form';
-import { PaymentScheduledModal } from '../payment-scheduled/payment-scheduled';
+import { PaymentConfirm } from '../payment-confirm/payment-confirm';
+import { PaymentScheduled } from '../payment-scheduled/payment-scheduled';
 
 import { initalPaymentStepsState, PaymentStepsActionType, paymentStepsReducer } from './payment-steps.reducer';
 
 interface PaymentStepsProps {
   obligations: UserObligations;
+  kycData: Kyc;
   close: () => void;
 }
 
-export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, close }) => {
+export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, kycData, close }) => {
   const { t } = useTranslation();
 
   const [stepsState, dispatch] = useReducer(paymentStepsReducer, initalPaymentStepsState);
@@ -44,6 +46,7 @@ export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, close }) => {
         return (
           <PaymentScheduleForm
             obligations={obligations}
+            kycData={kycData}
             onConfirm={(desiredAmount: number, desiredDate: string) => {
               dispatch({
                 type: PaymentStepsActionType.MOVE_TO_CONFIRM_STEP,
@@ -58,7 +61,9 @@ export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, close }) => {
         );
       case PaymentStep.CONFIRM:
         return (
-          <PaymentConfirmModal
+          <PaymentConfirm
+            obligations={obligations}
+            kycData={kycData}
             onConfirm={() => close()}
             onBack={() => {
               dispatch({
@@ -77,7 +82,9 @@ export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, close }) => {
         );
       case PaymentStep.SCHEDULED:
         return (
-          <PaymentScheduledModal
+          <PaymentScheduled
+            obligations={obligations}
+            kycData={kycData}
             onConfirm={handleConfirm}
             text={t('payment_modal.payment_scheduled.scheduled_note', {
               newPayment: stepsState.amount,

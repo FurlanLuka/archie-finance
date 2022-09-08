@@ -7,8 +7,7 @@ import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/p
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
 import { ButtonPrimary, Loader, TitleS, BodyM, Select, SelectOption } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectedAccountItem } from '../connected-account-item/connected-account-item';
-
+import { ConnectedAccountItem } from './blocks/connected-account-item/connected-account-item';
 import { ChooseAccountStyled } from './choose-account.styled';
 
 interface ChooseAccountProps {
@@ -38,7 +37,7 @@ export const ChooseAccount: FC<ChooseAccountProps> = ({ onConfirm }) => {
   const header = selectedAccount ? (
     <ConnectedAccountItem account={selectedAccount} />
   ) : (
-    <BodyM weight={700}>{t('payment_modal.select_account.empty')}</BodyM>
+    <BodyM weight={500}>{t('payment_modal.select_account.empty')}</BodyM>
   );
 
   const options = useMemo(() => {
