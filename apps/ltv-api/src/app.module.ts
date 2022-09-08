@@ -34,6 +34,7 @@ import { LibModule } from '@archie/api/ltv-api/ltv';
         migrationsRun: true,
         migrationsTableName: `${SERVICE_NAME}-migrations`,
         migrations: migrations,
+        logging: true,
       }),
       inject: [ConfigService],
     }),

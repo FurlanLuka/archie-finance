@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThan, Repository } from 'typeorm';
+import { DataSource, LessThan, Repository } from 'typeorm';
 import { LtvCredit } from '../credit.entity';
 import {
   CreditBalanceUpdatedPayload,
@@ -19,32 +19,53 @@ export class CreditService {
     @InjectRepository(LtvCollateral)
     private ltvCollateralRepository: Repository<LtvCollateral>,
     private ltvUpdatedUtilService: LtvUpdatedUtilService,
+    private dataSource: DataSource,
   ) {}
 
   public async handleCreditBalanceUpdatedEvent(
     credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
-    // TODO: add txn
-    await this.ltvCreditRepository.update(
-      {
-        userId: credit.userId,
-        calculatedAt: LessThan(credit.calculatedAt),
-      },
-      {
-        utilizationAmount: credit.utilizationAmount,
-        calculatedAt: credit.calculatedAt,
-      },
-    );
+    Logger.log('Credit balance updated event received', {
+      payload: credit,
+    });
 
-    if (credit.paymentDetails.type === PaymentType.liquidation) {
-      await this.ltvCollateralRepository.decrement(
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.update(
+        LtvCredit,
         {
           userId: credit.userId,
-          asset: credit.paymentDetails.asset,
+          calculatedAt: LessThan(credit.calculatedAt),
         },
-        'amount',
-        credit.paymentDetails.amount,
+        {
+          utilizationAmount: credit.utilizationAmount,
+          calculatedAt: credit.calculatedAt,
+        },
       );
+
+      if (credit.paymentDetails.type === PaymentType.liquidation) {
+        await queryRunner.manager.decrement(
+          LtvCollateral,
+          {
+            userId: credit.userId,
+            asset: credit.paymentDetails.asset,
+          },
+          'amount',
+          credit.paymentDetails.amount,
+        );
+      }
+
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+
+      throw error;
+    } finally {
+      await queryRunner.release();
     }
 
     await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(credit.userId);
