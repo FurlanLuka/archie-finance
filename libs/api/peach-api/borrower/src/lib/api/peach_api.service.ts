@@ -139,7 +139,7 @@ export class PeachApiService {
     paymentInstrumentId: string,
     amount: number,
     externalId: string,
-    status: PeachOneTimePaymentStatus
+    status: PeachOneTimePaymentStatus,
   ): Promise<void> {
     try {
       await this.peachClient.post(
@@ -404,6 +404,11 @@ export class PeachApiService {
           status: PeachTransactionStatus.pending,
           ...this.createPurchaseDetails(transaction),
         },
+        {
+          params: {
+            sync: true, // TODO: check if possible to refactor via Peach event
+          },
+        },
       );
     } catch (e) {
       const error: PeachErrorResponse = e;
@@ -513,6 +518,11 @@ export class PeachApiService {
           paymentInstrumentId: paymentInstrumentId,
           amount,
           scheduledDate: scheduledDate ?? undefined,
+        },
+        {
+          params: {
+            sync: true, // TODO: check if possible to refactor via Peach event
+          },
         },
       );
     } catch (error) {
