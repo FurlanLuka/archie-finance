@@ -38,7 +38,9 @@ export const HistoryScreen: FC = () => {
     if (getTransactionsResponse.state === RequestState.SUCCESS) {
       return (
         <>
-          <TitleS className="title">{t('dashboard_history.title')}</TitleS>
+          <div className="title-transactions">
+            <TitleS className="title">{t('dashboard_history.title')}</TitleS>
+          </div>
           <TransactionsTable data={data} />
           {getTransactionsResponse.hasNextPage && (
             <ButtonOutline small className="load-btn" onClick={getTransactionsResponse.fetchNextPage}>

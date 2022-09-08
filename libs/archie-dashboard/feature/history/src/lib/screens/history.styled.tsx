@@ -20,6 +20,12 @@ export const HistoryStyled = styled.div`
     padding: 1.5rem 1rem;
   }
 
+  .title-transactions {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
   .title {
     margin-right: auto;
     margin-bottom: 2rem;
