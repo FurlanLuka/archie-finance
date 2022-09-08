@@ -304,3 +304,8 @@ export enum PeachTransactionStatus {
   settled = 'settled',
   failed = 'canceled',
 }
+
+export enum PeachOneTimePaymentStatus {
+  succeeded = 'succeeded',
+  pending = 'pending'
+}

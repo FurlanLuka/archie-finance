@@ -190,3 +190,11 @@ spec:
                 name: archie-ltv-api-service
                 port:
                   number: 80
+          ## Paypal service
+          - path: /v1/paypal
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-paypal-api-service
+                port:
+                  number: 80

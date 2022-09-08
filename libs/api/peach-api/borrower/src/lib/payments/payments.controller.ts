@@ -35,6 +35,8 @@ import {
 } from '@archie/api/collateral-api/constants';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
+import { PAYPAL_PAYMENT_RECEIVED_TOPIC } from '@archie/api/paypal-api/constants';
+import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
 
 @Controller('v1/loan_payments')
 export class PaymentsController {
@@ -105,5 +107,15 @@ export class PaymentsQueueController {
     payload: InternalCollateralTransactionCompletedPayload,
   ): Promise<void> {
     await this.paymentsService.handleInternalTransactionCompletedEvent(payload);
+  }
+
+  @Subscribe(
+    PAYPAL_PAYMENT_RECEIVED_TOPIC,
+    PaymentsQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async paypalPaymentHandler(
+    payload: PaypalPaymentReceivedPayload,
+  ): Promise<void> {
+    await this.paymentsService.handlePaypalPaymentReceivedEvent(payload);
   }
 }

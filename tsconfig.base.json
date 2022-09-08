@@ -108,6 +108,12 @@
       "@archie/api/onboarding-api/onboarding": [
         "libs/api/onboarding-api/onboarding/src/index.ts"
       ],
+      "@archie/api/paypal-api/constants": [
+        "libs/api/paypal-api/constants/src/index.ts"
+      ],
+      "@archie/api/paypal-api/paypal": [
+        "libs/api/paypal-api/paypal/src/index.ts"
+      ],
       "@archie/api/peach-api/borrower": [
         "libs/api/peach-api/borrower/src/index.ts"
       ],
