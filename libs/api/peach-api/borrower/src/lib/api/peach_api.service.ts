@@ -153,6 +153,11 @@ export class PeachApiService {
           paymentInstrumentId,
           amount,
         },
+        {
+          params: {
+            sync: true,
+          },
+        },
       );
     } catch (e) {
       const error: PeachErrorResponse = e;
