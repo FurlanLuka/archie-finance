@@ -2,12 +2,12 @@ import { FC, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PaymentStep } from '@archie-webapps/archie-dashboard/constants';
-import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
 import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
+import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
 
 import { ChooseAccount } from '../choose-account/choose-account';
-import { PaymentScheduleForm } from '../payment-schedule-form/payment-schedule-form';
 import { PaymentConfirm } from '../payment-confirm/payment-confirm';
+import { PaymentScheduleForm } from '../payment-schedule-form/payment-schedule-form';
 import { PaymentScheduled } from '../payment-scheduled/payment-scheduled';
 
 import { initalPaymentStepsState, PaymentStepsActionType, paymentStepsReducer } from './payment-steps.reducer';

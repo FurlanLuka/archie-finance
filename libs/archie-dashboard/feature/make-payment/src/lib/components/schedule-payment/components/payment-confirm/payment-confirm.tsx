@@ -2,10 +2,10 @@ import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
 import { ScheduleTransactionParams } from '@archie-webapps/shared/data-access/archie-api/payment/api/schedule-transaction';
 import { useScheduleTransaction } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
 import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
-import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
 import {
   ButtonOutline,
   ButtonPrimary,

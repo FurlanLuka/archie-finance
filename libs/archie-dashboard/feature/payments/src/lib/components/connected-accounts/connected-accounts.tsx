@@ -2,11 +2,10 @@ import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
+import { ConnectAccount } from '@archie-webapps/archie-dashboard/feature/make-payment';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
 import { Card, Skeleton, Modal, ButtonOutline, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
-
-import { ConnectAccount } from '../connect-account/connect-acount';
 
 import { ConnectedAccount } from './blocks/connected-account';
 import { ConnectedAccountsStyled } from './connected-accounts.styled';

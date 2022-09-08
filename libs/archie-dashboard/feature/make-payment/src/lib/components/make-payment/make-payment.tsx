@@ -1,18 +1,18 @@
 import { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { MakePaymentModal } from '@archie-webapps/archie-dashboard/components';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
 import { Loader, Modal } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectAccount } from '../../connect-account/connect-acount';
+import { ConnectAccount } from '../connect-account/connect-acount';
+import { SchedulePaymentModal } from '../schedule-payment/schedule-payment';
 
-interface PaymentFlowModalProps {
+interface MakePaymentModalProps {
   close: VoidFunction;
 }
 
-export const PaymentFlowModal: FC<PaymentFlowModalProps> = ({ close }) => {
+export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
   const getConnectedAccountsResponse = useGetConnectedAccounts();
 
   if (getConnectedAccountsResponse.state === RequestState.LOADING) {
@@ -34,7 +34,7 @@ export const PaymentFlowModal: FC<PaymentFlowModalProps> = ({ close }) => {
       );
     }
 
-    return <MakePaymentModal close={close} />;
+    return <SchedulePaymentModal close={close} />;
   }
 
   return <></>;

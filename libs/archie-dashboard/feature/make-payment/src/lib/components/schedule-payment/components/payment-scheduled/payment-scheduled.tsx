@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
 import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
+import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
 import { ButtonPrimary, TitleS, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import { PaymentScheduledStyled } from './payment-scheduled.styled';

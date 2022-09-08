@@ -3,7 +3,8 @@ import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 
-import { NextPaymentChart, MakePaymentModal } from '@archie-webapps/archie-dashboard/components';
+import { MakePaymentModal } from '@archie-webapps/archie-dashboard/feature/make-payment';
+import { NextPaymentChart } from '@archie-webapps/archie-dashboard/components';
 import { ButtonOutline, Card, Skeleton, TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 import {
@@ -12,6 +13,7 @@ import {
   UserObligations,
 } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { canUserSchedulePayment } from '@archie-webapps/archie-dashboard/utils';
 
 interface NextPaymentProps {
   withBtn?: boolean;
@@ -67,7 +69,14 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
           <NextPaymentChart dueDate={dueDate} />
           {withBtn && (
             <div className="btn-group">
-              <ButtonOutline small onClick={() => setMakePaymentModalOpen(true)}>
+              <ButtonOutline
+                small
+                onClick={() => setMakePaymentModalOpen(true)}
+                isDisabled={
+                  getObligationsResponse.state === RequestState.SUCCESS &&
+                  !canUserSchedulePayment(getObligationsResponse.data)
+                }
+              >
                 {t('next_payment_card.btn')}
               </ButtonOutline>
             </div>

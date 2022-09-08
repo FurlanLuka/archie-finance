@@ -4,8 +4,8 @@ import { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
 import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
+import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/payment.interfaces';
 import {
   ButtonPrimary,
   FormError,

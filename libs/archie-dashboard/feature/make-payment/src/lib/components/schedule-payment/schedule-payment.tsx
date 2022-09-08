@@ -7,13 +7,13 @@ import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api
 import { Loader, Modal } from '@archie-webapps/shared/ui/design-system';
 
 import { PaymentSteps } from './components/payment-steps/payment-steps';
-import { MakePaymentStyled } from './make-payment.styled';
+import { SchedulePaymentStyled } from './schedule-payment.styled';
 
-interface MakePaymentModalProps {
+interface SchedulePaymentModalProps {
   close: () => void;
 }
 
-export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
+export const SchedulePaymentModal: FC<SchedulePaymentModalProps> = ({ close }) => {
   const getKycResponse = useGetKyc();
   const getObligationsResponse = useGetObligations();
 
@@ -35,7 +35,7 @@ export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
 
   return (
     <Modal isOpen close={close} maxWidth="780px">
-      <MakePaymentStyled>{getContent()}</MakePaymentStyled>
+      <SchedulePaymentStyled>{getContent()}</SchedulePaymentStyled>
     </Modal>
   );
 };
