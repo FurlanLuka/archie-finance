@@ -34,7 +34,7 @@ export const SchedulePaymentModal: FC<SchedulePaymentModalProps> = ({ close }) =
   };
 
   return (
-    <Modal isOpen close={close} maxWidth="780px">
+    <Modal maxWidth="780px" isOpen close={close}>
       <SchedulePaymentStyled>{getContent()}</SchedulePaymentStyled>
     </Modal>
   );

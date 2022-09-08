@@ -3,9 +3,9 @@ import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
-import { Loader, Modal } from '@archie-webapps/shared/ui/design-system';
+import { Loader } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectAccount } from '../connect-account/connect-acount';
+import { ConnectAccountModal } from '../connect-account/connect-acount';
 import { SchedulePaymentModal } from '../schedule-payment/schedule-payment';
 
 interface MakePaymentModalProps {
@@ -24,14 +24,8 @@ export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
   }
 
   if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
-    // Rework all of this
-
     if (getConnectedAccountsResponse.data.length === 0) {
-      return (
-        <Modal maxWidth="760px" isOpen close={close}>
-          <ConnectAccount />
-        </Modal>
-      );
+      return <ConnectAccountModal close={close} />;
     }
 
     return <SchedulePaymentModal close={close} />;
