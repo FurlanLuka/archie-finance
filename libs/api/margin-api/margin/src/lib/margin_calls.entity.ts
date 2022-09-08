@@ -12,7 +12,6 @@ import {
 @Entity({
   name: 'margin_margin_calls',
 })
-@Index(['userId', 'deletedAt'], { unique: true })
 export class MarginCall {
   @PrimaryColumn('uuid')
   @Generated('uuid')

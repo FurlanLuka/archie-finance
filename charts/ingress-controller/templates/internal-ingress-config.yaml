@@ -89,7 +89,7 @@ spec:
                 port:
                   number: 80
           # Ltv api
-          - path: /internal/ltvs/periodic_check
+          - path: /internal/ltv/periodic_check
             pathType: Prefix
             backend:
               service:

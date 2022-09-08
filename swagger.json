@@ -1139,7 +1139,7 @@
         ]
       }
     },
-    "/internal/ltvs/periodic_check": {
+    "/internal/ltv/periodic_check": {
       "post": {
         "operationId": "InternalPeriodicCheckController_startPeriodicCheck",
         "parameters": [],

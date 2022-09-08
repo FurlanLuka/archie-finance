@@ -101,8 +101,10 @@ export class PeachPaymentInstrumentsService {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
+
     this.borrowerValidation.isBorrowerDefined(borrower);
 
     await this.peachApiService.deletePaymentInstrument(borrower.personId, id);
   }
+
 }

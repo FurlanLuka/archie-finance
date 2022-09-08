@@ -148,19 +148,10 @@ jobs:
           else
             echo ::set-output name=IMAGE_TAG::$(git rev-parse HEAD)
           fi
-  proceed_to_deployment:
-    name: Start deployment
-    needs: check_and_build
-    if: ${{ needs.check_and_build.outputs.affectedProjects != '[]' && needs.check_and_build.outputs.affectedProjects != '' }}
-    runs-on: ubuntu-latest
-    steps:
-    - name: Poor mans manual trigger
-      if: ${{ github.run_attempt== 1}}
-      run: exit 1
   build_and_publish:
     name: Build ${{ matrix.project }} docker
     if: ${{ needs.check_and_build.outputs.affectedProjects != '[]' && needs.check_and_build.outputs.affectedProjects != '' }}
-    needs: [check_and_build, proceed_to_deployment]
+    needs: [check_and_build]
     runs-on: ubuntu-latest
     environment: ${{ inputs.ENVIRONMENT }}
     strategy:
@@ -168,6 +159,9 @@ jobs:
       matrix:
         project: ${{ fromJSON(needs.check_and_build.outputs.affectedProjects) }}
     steps:
+      - name: Poor mans manual trigger
+        if: ${{ github.run_attempt == 1}}
+        run: exit 1
       - uses: actions/checkout@v2
         name: Checkout
       - uses: ./.github/actions/install-dependencies

@@ -10,7 +10,7 @@ import { LtvCredit } from '../../../../libs/api/ltv-api/ltv/src/lib/credit.entit
 import { LTV_PERIODIC_CHECK_REQUESTED_TOPIC } from '@archie/api/ltv-api/constants';
 import * as request from 'supertest';
 
-describe('POST /internal/ltvs/periodic_check (e2e)', () => {
+describe('POST /internal/ltv/periodic_check (e2e)', () => {
   let app: INestApplication;
   let module: TestingModule;
 
@@ -51,7 +51,7 @@ describe('POST /internal/ltvs/periodic_check (e2e)', () => {
       await ltvCreditRepository.insert(credits);
 
       await request(app.getHttpServer())
-        .post(`/internal/ltvs/periodic_check`)
+        .post(`/internal/ltv/periodic_check`)
         .expect(201);
 
       const expectedCallTimes = 4500;

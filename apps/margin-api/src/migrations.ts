@@ -1,3 +1,7 @@
 import { MarginApi1662376879513 } from './migrations/MarginApi1662376879513';
+import { MarginApi1662640124100 } from './migrations/MarginApi1662640124100';
 
-export const migrations = [MarginApi1662376879513];
+export const migrations = [
+  MarginApi1662376879513,
+  MarginApi1662640124100,
+  ]

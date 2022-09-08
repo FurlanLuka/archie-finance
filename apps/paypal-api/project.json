@@ -1,0 +1,71 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/paypal-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/paypal-api",
+        "main": "apps/paypal-api/src/main.ts",
+        "tsConfig": "apps/paypal-api/tsconfig.app.json",
+        "assets": ["apps/paypal-api/src/assets"],
+        "tsPlugins": ["@nestjs/swagger/plugin"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/paypal-api/src/environments/environment.ts",
+              "with": "apps/paypal-api/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "paypal-api:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/paypal-api/**/*.ts"]
+      }
+    },
+    "build-openapi": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build paypal-api && node dist/apps/paypal-api/main build-swagger"
+      }
+    },
+    "generate-migration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build paypal-api && node dist/apps/paypal-api/main generate-migration"
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/paypal-api"],
+      "options": {
+        "jestConfig": "apps/paypal-api/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
+    }
+  },
+  "tags": []
+}

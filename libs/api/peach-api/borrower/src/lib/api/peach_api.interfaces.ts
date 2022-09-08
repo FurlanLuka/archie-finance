@@ -334,3 +334,7 @@ export interface Statements {
 export interface DocumentUrl {
   url: string;
 }
+export enum PeachOneTimePaymentStatus {
+  succeeded = 'succeeded',
+  pending = 'pending'
+}

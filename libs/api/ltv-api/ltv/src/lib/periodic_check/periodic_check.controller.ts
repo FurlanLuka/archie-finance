@@ -22,7 +22,7 @@ export class PeriodicCheckQueueController {
   }
 }
 
-@Controller('internal/ltvs/periodic_check')
+@Controller('internal/ltv/periodic_check')
 export class InternalPeriodicCheckController {
   constructor(private periodicCheckService: PeriodicCheckService) {}
 

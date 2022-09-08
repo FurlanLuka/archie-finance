@@ -25,6 +25,7 @@ import {
   PeachResponseData,
   Statement,
   DocumentUrl,
+  PeachOneTimePaymentStatus,
 } from './peach_api.interfaces';
 import { Borrower } from '../borrower.entity';
 import {
@@ -111,6 +112,21 @@ export class PeachApiService {
     return response.data.data[0];
   }
 
+  public async createPaypalPaymentInstrument(
+    personId: string,
+  ): Promise<PaymentInstrument> {
+    const response = await this.peachClient.post(
+      `/people/${personId}/payment-instruments`,
+      {
+        instrumentType: 'paymentNetwork',
+        paymentNetworkName: 'PayPal',
+        status: 'active',
+      },
+    );
+
+    return response.data.data[0];
+  }
+
   public async deletePaymentInstrument(
     personId: string,
     paymentInstrumentId: string,
@@ -120,11 +136,12 @@ export class PeachApiService {
     );
   }
 
-  public async createPendingOneTimePaymentTransaction(
+  public async createOneTimePaymentTransaction(
     borrower: Borrower,
     paymentInstrumentId: string,
     amount: number,
     externalId: string,
+    status: PeachOneTimePaymentStatus,
   ): Promise<void> {
     try {
       await this.peachClient.post(
@@ -134,9 +151,14 @@ export class PeachApiService {
           type: 'oneTime',
           drawId: borrower.drawId,
           isExternal: true,
-          status: 'pending',
+          status,
           paymentInstrumentId,
           amount,
+        },
+        {
+          params: {
+            sync: true,
+          },
         },
       );
     } catch (e) {
@@ -389,6 +411,11 @@ export class PeachApiService {
           status: PeachTransactionStatus.pending,
           ...this.createPurchaseDetails(transaction),
         },
+        {
+          params: {
+            sync: true, // TODO: check if possible to refactor via Peach event
+          },
+        },
       );
     } catch (e) {
       const error: PeachErrorResponse = e;
@@ -498,6 +525,11 @@ export class PeachApiService {
           paymentInstrumentId: paymentInstrumentId,
           amount,
           scheduledDate: scheduledDate ?? undefined,
+        },
+        {
+          params: {
+            sync: true, // TODO: check if possible to refactor via Peach event
+          },
         },
       );
     } catch (error) {

@@ -6,6 +6,7 @@ import {
   Credit,
   PaymentInstrument,
   Payments,
+  PeachOneTimePaymentStatus,
 } from '../api/peach_api.interfaces';
 import {
   GetPaymentsQueryDto,
@@ -24,6 +25,7 @@ import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collate
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import { Injectable } from '@nestjs/common';
+import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
 
 @Injectable()
 export class PaymentsService {
@@ -132,11 +134,12 @@ export class PaymentsService {
       );
     }
 
-    await this.peachApiService.createPendingOneTimePaymentTransaction(
+    await this.peachApiService.createOneTimePaymentTransaction(
       borrower,
       liquidationInstrumentId,
       transaction.price,
       transaction.id,
+      PeachOneTimePaymentStatus.pending,
     );
 
     const credit: Credit = await this.peachApiService.getCreditBalance(
@@ -168,6 +171,62 @@ export class PaymentsService {
     await this.peachApiService.completeTransaction(
       borrower,
       transaction.transactionId,
+    );
+  }
+
+  public async handlePaypalPaymentReceivedEvent(
+    payload: PaypalPaymentReceivedPayload,
+  ): Promise<void> {
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
+      userId: payload.userId,
+    });
+
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
+
+    let paypalInstrumentId: string | null = borrower.paypalInstrumentId;
+
+    if (paypalInstrumentId === null) {
+      const paymentInstrument: PaymentInstrument =
+        await this.peachApiService.createPaypalPaymentInstrument(
+          borrower.personId,
+        );
+
+      paypalInstrumentId = paymentInstrument.id;
+
+      await this.borrowerRepository.update(
+        {
+          userId: payload.userId,
+        },
+        {
+          paypalInstrumentId,
+        },
+      );
+    }
+
+    await this.peachApiService.createOneTimePaymentTransaction(
+      borrower,
+      paypalInstrumentId,
+      payload.amount,
+      payload.orderId,
+      PeachOneTimePaymentStatus.succeeded,
+    );
+
+    const credit: Credit = await this.peachApiService.getCreditBalance(
+      borrower.personId,
+      borrower.creditLineId,
+    );
+
+    this.queueService.publish<CreditBalanceUpdatedPayload>(
+      CREDIT_BALANCE_UPDATED_TOPIC,
+      {
+        ...credit,
+        userId: payload.userId,
+        paymentDetails: {
+          type: PaymentType.payment,
+          amount: payload.amount,
+          asset: payload.currency,
+        },
+      },
     );
   }
 
