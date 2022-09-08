@@ -6,19 +6,15 @@ import {
   CollateralWithdrawalController,
   CollateralWithdrawalQueueController,
 } from './collateral-withdrawal.controller';
-import { Credit } from '@archie/api/credit-api/credit';
-import { Collateral } from '@archie/api/credit-api/collateral';
-import { LiquidationLog, MarginLtvModule } from '@archie/api/credit-api/margin';
+import {
+  Collateral,
+  CollateralValueModule,
+} from '@archie/api/credit-api/collateral';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Collateral,
-      CollateralWithdrawal,
-      Credit,
-      LiquidationLog,
-    ]),
-    MarginLtvModule,
+    TypeOrmModule.forFeature([Collateral, CollateralWithdrawal]),
+    CollateralValueModule,
   ],
   exports: [CollateralWithdrawalService],
   providers: [CollateralWithdrawalService],

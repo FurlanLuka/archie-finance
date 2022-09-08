@@ -14,8 +14,12 @@ import {
   ScheduleTransactionDto,
 } from './payments.dto';
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
-import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/constants';
+import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import {
+  CreditBalanceUpdatedPayload,
+  PaymentType,
+} from '@archie/api/peach-api/data-transfer-objects';
+import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
@@ -81,20 +85,23 @@ export class PaymentsService {
   }
 
   public async handlePaymentConfirmedEvent(
-    userId: string,
-    personId: string,
-    loanId: string,
+    payment: WebhookPaymentPayload,
   ): Promise<void> {
     const credit: Credit = await this.peachApiService.getCreditBalance(
-      personId,
-      loanId,
+      payment.personId,
+      payment.loanId,
     );
 
-    this.queueService.publish<CreditLinePaymentReceivedPayload>(
-      CREDIT_LINE_PAYMENT_RECEIVED_TOPIC,
+    this.queueService.publish<CreditBalanceUpdatedPayload>(
+      CREDIT_BALANCE_UPDATED_TOPIC,
       {
         ...credit,
-        userId,
+        userId: payment.personExternalId,
+        paymentDetails: {
+          type: PaymentType.payment,
+          amount: payment.amount,
+          asset: payment.currency,
+        },
       },
     );
   }
@@ -133,6 +140,23 @@ export class PaymentsService {
       transaction.price,
       transaction.id,
       PeachOneTimePaymentStatus.pending,
+    );
+
+    const credit: Credit = await this.peachApiService.getCreditBalance(
+      borrower.personId,
+      borrower.creditLineId,
+    );
+    this.queueService.publish<CreditBalanceUpdatedPayload>(
+      CREDIT_BALANCE_UPDATED_TOPIC,
+      {
+        ...credit,
+        userId: transaction.userId,
+        paymentDetails: {
+          type: PaymentType.liquidation,
+          amount: transaction.amount,
+          asset: transaction.asset,
+        },
+      },
     );
   }
 
@@ -187,10 +211,24 @@ export class PaymentsService {
       PeachOneTimePaymentStatus.succeeded,
     );
 
-    await this.handlePaymentConfirmedEvent(
-      payload.userId,
+    const credit: Credit = await this.peachApiService.getCreditBalance(
       borrower.personId,
       borrower.creditLineId,
     );
+
+    this.queueService.publish<CreditBalanceUpdatedPayload>(
+      CREDIT_BALANCE_UPDATED_TOPIC,
+      {
+        ...credit,
+        userId: payload.userId,
+        paymentDetails: {
+          type: PaymentType.payment,
+          amount: payload.amount,
+          asset: payload.currency,
+        },
+      },
+    );
   }
+
+  // TODO: Handle failed transaction
 }

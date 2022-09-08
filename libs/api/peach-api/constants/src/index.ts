@@ -19,5 +19,5 @@ export enum ConfigVariables {
   API_BASE_URL = 'API_BASE_URL',
 }
 
-export const CREDIT_LINE_PAYMENT_RECEIVED_TOPIC =
-  'peach.credit_line_payment.received';
+export const CREDIT_BALANCE_UPDATED_TOPIC = 'peach.credit_balance.updated';
+export const GET_LOAN_BALANCES_RPC = 'get.loan.balances.rpc';

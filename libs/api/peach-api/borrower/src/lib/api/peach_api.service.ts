@@ -39,6 +39,7 @@ export class PeachApiService {
   MAX_REQUEST_TIMEOUT = 10000;
   CONTACT_ALREADY_EXISTS_STATUS = 400;
   ALREADY_ACTIVATED_STATUS = 400;
+  USER_ALREADY_EXISTS_STATUS = 409;
   NOMINAL_APR = 0;
   EFFECTIVE_APR = 0.16;
 
@@ -140,18 +141,23 @@ export class PeachApiService {
     externalId: string,
     status: PeachOneTimePaymentStatus
   ): Promise<void> {
-    await this.peachClient.post(
-      `/people/${borrower.personId}/loans/${borrower.creditLineId}/transactions`,
-      {
-        externalId,
-        type: 'oneTime',
-        drawId: borrower.drawId,
-        isExternal: true,
-        status,
-        paymentInstrumentId,
-        amount,
-      },
-    );
+    try {
+      await this.peachClient.post(
+        `/people/${borrower.personId}/loans/${borrower.creditLineId}/transactions`,
+        {
+          externalId,
+          type: 'oneTime',
+          drawId: borrower.drawId,
+          isExternal: true,
+          status,
+          paymentInstrumentId,
+          amount,
+        },
+      );
+    } catch (e) {
+      const error: PeachErrorResponse = e;
+      this.ignoreDuplicatedEntityError(error);
+    }
   }
 
   public async completeTransaction(
@@ -242,20 +248,28 @@ export class PeachApiService {
     });
   }
 
-  public async createUser(personId, email: string): Promise<void> {
-    await this.peachClient.post(
-      `/companies/${this.configService.get(
-        ConfigVariables.PEACH_COMPANY_ID,
-      )}/users`,
-      {
-        userType: 'borrower',
-        authType: {
-          email,
+  public async createUser(personId: string, email: string): Promise<void> {
+    try {
+      await this.peachClient.post(
+        `/companies/${this.configService.get(
+          ConfigVariables.PEACH_COMPANY_ID,
+        )}/users`,
+        {
+          userType: 'borrower',
+          authType: {
+            email,
+          },
+          roles: [
+            this.configService.get(ConfigVariables.PEACH_BORROWER_ROLE_ID),
+          ],
+          associatedPersonId: personId,
         },
-        roles: [this.configService.get(ConfigVariables.PEACH_BORROWER_ROLE_ID)],
-        associatedPersonId: personId,
-      },
-    );
+      );
+    } catch (error) {
+      const axiosError: PeachErrorResponse = error;
+
+      if (axiosError.status !== this.USER_ALREADY_EXISTS_STATUS) throw error;
+    }
   }
 
   public async createCreditLine(
@@ -381,15 +395,20 @@ export class PeachApiService {
     drawId: string,
     transaction: TransactionUpdatedPayload,
   ): Promise<void> {
-    await this.peachClient.post(
-      `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases`,
-      {
-        externalId: String(transaction.id),
-        type: PeachTransactionType[transaction.type],
-        status: PeachTransactionStatus.pending,
-        ...this.createPurchaseDetails(transaction),
-      },
-    );
+    try {
+      await this.peachClient.post(
+        `/people/${personId}/loans/${loanId}/draws/${drawId}/purchases`,
+        {
+          externalId: String(transaction.id),
+          type: PeachTransactionType[transaction.type],
+          status: PeachTransactionStatus.pending,
+          ...this.createPurchaseDetails(transaction),
+        },
+      );
+    } catch (e) {
+      const error: PeachErrorResponse = e;
+      this.ignoreDuplicatedEntityError(error);
+    }
   }
 
   public async updatePurchase(
@@ -452,6 +471,7 @@ export class PeachApiService {
     return {
       availableCreditAmount: responseBody.availableCreditAmount,
       creditLimitAmount: responseBody.creditLimitAmount,
+      utilizationAmount: responseBody.utilizationAmount,
       calculatedAt: responseBody.calculatedAt,
     };
   }
@@ -580,5 +600,14 @@ export class PeachApiService {
     );
 
     return response.data;
+  }
+
+  private ignoreDuplicatedEntityError(error: PeachErrorResponse): void {
+    if (
+      error.status !== 409 &&
+      !error.errorResponse.message.startsWith('Duplicate external ID')
+    ) {
+      throw error;
+    }
   }
 }

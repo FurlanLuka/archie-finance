@@ -8,6 +8,7 @@ import {
   CaptureOrderResponse,
   CreateOrderResponse,
 } from './paypal_api.interfaces';
+import { PaypalService } from '../paypal.service';
 
 interface AuthenticationResponse {
   scope: string;
@@ -80,7 +81,7 @@ export class PaypalApiService {
         purchase_units: [
           {
             amount: {
-              currency_code: 'USD',
+              currency_code: PaypalService.PAYPAL_PAYMENT_CURRENCY,
               value: paymentAmount,
             },
             custom_id: paymentIdentifier,

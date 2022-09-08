@@ -1,11 +1,11 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
+import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
-  BadRequestException,
   ExecutionContext,
   INestApplication,
+  Logger,
   NotFoundException,
   ValidationPipe,
 } from '@nestjs/common';
@@ -18,46 +18,41 @@ import {
   defaultCollateralTotal,
   ETH_PRICE,
   ETH_STARTING_AMOUNT,
+  getLoanBalancesResponse,
 } from '../test-data/collateral.stubs';
 import { TransactionStatus } from 'fireblocks-sdk';
-import { Credit } from '@archie/api/credit-api/credit';
-import {
-  LiquidationLog,
-  MarginNotification,
-} from '@archie/api/credit-api/margin';
 import { Collateral } from '@archie/api/credit-api/collateral';
 import {
   CollateralWithdrawal,
   CollateralWithdrawalController,
   CollateralWithdrawalQueueController,
 } from '@archie/api/credit-api/collateral-withdrawal';
-import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard } from '@archie/api/utils/auth0';
 import { RizeService } from '@archie/api/credit-api/rize';
 import {
   verifyAccessToken,
   clearDatabase,
   queueStub,
+  generateUserAccessToken,
 } from '@archie/test/integration';
 import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
-import { CollateralNotFoundError } from '../../../../libs/api/credit-api/collateral-withdrawal/src/lib/collateral-withdrawal.errors';
+import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 
 describe('CollateralWithdrawalController (e2e)', () => {
   let app: INestApplication;
   let module: TestingModule;
 
-  let creditRepository: Repository<Credit>;
-  let configService: ConfigService;
   let collateralRepository: Repository<Collateral>;
   let collateralWithdrawalRepository: Repository<CollateralWithdrawal>;
-  let marginNotificationsRepositiory: Repository<MarginNotification>;
-  let liquidationLogsRepository: Repository<LiquidationLog>;
 
   const userId = 'userId';
+  const user = { id: userId };
+  const accessToken = generateUserAccessToken(user);
 
   const defaultUserCollateral = createUserCollateral(userId);
-  const MAX_LTV = 30;
+  const MAX_LTV = 0.3;
   const destinationAddress = 'my_address';
 
   beforeEach(async () => {
@@ -85,15 +80,10 @@ describe('CollateralWithdrawalController (e2e)', () => {
 
     app = module.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    app.useLogger(new Logger());
 
     await app.init();
 
-    creditRepository = app.get(getRepositoryToken(Credit));
-    configService = app.get(ConfigService);
-    marginNotificationsRepositiory = app.get(
-      getRepositoryToken(MarginNotification),
-    );
-    liquidationLogsRepository = app.get(getRepositoryToken(LiquidationLog));
     collateralRepository = app.get(getRepositoryToken(Collateral));
     collateralWithdrawalRepository = app.get(
       getRepositoryToken(CollateralWithdrawal),
@@ -103,12 +93,11 @@ describe('CollateralWithdrawalController (e2e)', () => {
       .calledWith(GET_ASSET_PRICES_RPC)
       .mockResolvedValue(assetPriceResponse);
 
+    when(queueStub.request)
+      .calledWith(GET_LOAN_BALANCES_RPC, { userId })
+      .mockResolvedValue(getLoanBalancesResponse);
+
     await collateralRepository.save(defaultUserCollateral);
-    await creditRepository.save({
-      userId,
-      totalCredit: 60,
-      availableCredit: 60,
-    });
   });
 
   afterEach(async () => {
@@ -123,18 +112,10 @@ describe('CollateralWithdrawalController (e2e)', () => {
   describe('GET /:asset/max_amount', () => {
     // defaultCollateralTotal = 100
     it('should return 400 if unsupported asset', async () => {
-      try {
-        await app
-          .get(CollateralWithdrawalController)
-          .getUserMaxWithdrawalAmount(
-            {
-              user: { sub: userId },
-            },
-            'TEH',
-          );
-      } catch (error) {
-        expect(error).toBeInstanceOf(BadRequestException);
-      }
+      await request(app.getHttpServer())
+        .get(`/v1/collateral/withdraw/TEH/max_amount`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(400);
     });
 
     it('should return 0 if user has no collateral in the desired asset', async () => {
@@ -145,130 +126,116 @@ describe('CollateralWithdrawalController (e2e)', () => {
       await collateralRepository.save(
         defaultUserCollateral.filter((a) => a.asset !== desiredAsset),
       );
+      const response = await request(app.getHttpServer())
+        .get(`/v1/collateral/withdraw/${desiredAsset}/max_amount`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
 
-      const response = await app
-        .get(CollateralWithdrawalController)
-        .getUserMaxWithdrawalAmount(
-          {
-            user: { sub: userId },
-          },
-          desiredAsset,
-        );
-
-      expect(response.maxAmount).toEqual(0);
+      expect(response.body.maxAmount).toEqual(0);
     });
 
     it('should return 0 if user has an LTV of more than .3', async () => {
-      await creditRepository.save({
-        userId,
-        totalCredit: 60,
-        availableCredit: 20,
-      });
+      when(queueStub.request)
+        .calledWith(GET_LOAN_BALANCES_RPC, { userId })
+        .mockResolvedValue({
+          totalCredit: defaultCollateralTotal / 2,
+          availableCredit: (defaultCollateralTotal / 2) * 0.25,
+          utilizationAmount: (defaultCollateralTotal / 2) * 0.75,
+        });
 
-      const response = await app
-        .get(CollateralWithdrawalController)
-        .getUserMaxWithdrawalAmount(
-          {
-            user: { sub: userId },
-          },
-          'ETH',
-        );
+      const response = await request(app.getHttpServer())
+        .get(`/v1/collateral/withdraw/ETH/max_amount`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
 
-      expect(response.maxAmount).toEqual(0);
+      expect(response.body.maxAmount).toEqual(0);
     });
 
     it('should return maximum amount if user has not loaned any', async () => {
-      await creditRepository.save({
-        userId,
-        totalCredit: 60,
-        availableCredit: 60,
-      });
+      when(queueStub.request)
+        .calledWith(GET_LOAN_BALANCES_RPC, { userId })
+        .mockResolvedValue({
+          totalCredit: defaultCollateralTotal / 2,
+          availableCredit: defaultCollateralTotal / 2,
+          utilizationAmount: 0,
+        });
 
-      const response = await app
-        .get(CollateralWithdrawalController)
-        .getUserMaxWithdrawalAmount(
-          {
-            user: { sub: userId },
-          },
-          'ETH',
-        );
+      const response = await request(app.getHttpServer())
+        .get(`/v1/collateral/withdraw/ETH/max_amount`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
 
-      expect(response.maxAmount).toEqual(
+      expect(response.body.maxAmount).toEqual(
         defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount,
       );
     });
 
     it('should return entire asset amount if LTV is away from the limit', async () => {
-      await creditRepository.save({
-        userId,
-        totalCredit: 60,
-        availableCredit: 51,
-      });
+      when(queueStub.request)
+        .calledWith(GET_LOAN_BALANCES_RPC, { userId })
+        .mockResolvedValue({
+          totalCredit: defaultCollateralTotal / 2,
+          availableCredit: (defaultCollateralTotal / 2) * 0.9,
+          utilizationAmount: (defaultCollateralTotal / 2) * 0.1,
+        });
 
-      const response = await app
-        .get(CollateralWithdrawalController)
-        .getUserMaxWithdrawalAmount(
-          {
-            user: { sub: userId },
-          },
-          'ETH',
-        );
+      const response = await request(app.getHttpServer())
+        .get(`/v1/collateral/withdraw/ETH/max_amount`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
 
-      expect(response.maxAmount).toEqual(
+      expect(response.body.maxAmount).toEqual(
         defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount,
       );
     });
 
-    it('should return partial asset amount if LTV ', async () => {
-      const loanAmount = 25; // total is 100 so this makes the ltv equal to .25
-      await creditRepository.save({
-        userId,
-        totalCredit: 60,
-        availableCredit: 60 - loanAmount,
-      });
+    it('should return partial asset amount if LTV closer to the limit', async () => {
+      const loanAmount = (defaultCollateralTotal / 2) * 0.5;
 
-      const response = await app
-        .get(CollateralWithdrawalController)
-        .getUserMaxWithdrawalAmount(
-          {
-            user: { sub: userId },
-          },
-          'ETH',
-        );
+      when(queueStub.request)
+        .calledWith(GET_LOAN_BALANCES_RPC, { userId })
+        .mockResolvedValue({
+          totalCredit: defaultCollateralTotal / 2,
+          availableCredit: (defaultCollateralTotal / 2) * 0.5,
+          utilizationAmount: loanAmount,
+        });
 
-      expect(response.maxAmount).toEqual(
-        (defaultCollateralTotal - loanAmount / (MAX_LTV / 100)) / ETH_PRICE, // ltv from service is returned * 100
+      const response = await request(app.getHttpServer())
+        .get(`/v1/collateral/withdraw/ETH/max_amount`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body.maxAmount).toEqual(
+        (defaultCollateralTotal - loanAmount / MAX_LTV) / ETH_PRICE,
       );
     });
   });
   describe('POST /collateral/withdraw', () => {
     it('should return 400 bad request if trying to withdraw more than collateralized', async () => {
-      try {
-        await app.get(CollateralWithdrawalController).withdrawUserCollateral(
-          {
-            user: { sub: userId },
-          },
-          { asset: 'ETH', destinationAddress, withdrawalAmount: 1000 },
-        );
-      } catch (error) {
-        expect(error).toBeInstanceOf(BadRequestException);
-      }
+      await request(app.getHttpServer())
+        .post(`/v1/collateral/withdraw/`)
+        .send({
+          asset: 'ETH',
+          withdrawalAmount: 9999,
+          destinationAddress: 'address',
+        })
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(400);
     });
 
     it('should return 400 if user tries to withdraw a not supported asset', async () => {
-      try {
-        await app.get(CollateralWithdrawalController).withdrawUserCollateral(
-          {
-            user: { sub: userId },
-          },
-          { asset: 'ADA', destinationAddress, withdrawalAmount: 1000 },
-        );
-      } catch (error) {
-        expect(error).toBeInstanceOf(BadRequestException);
-      }
+      await request(app.getHttpServer())
+        .post(`/v1/collateral/withdraw/`)
+        .send({
+          asset: 'TEH',
+          withdrawalAmount: 9999,
+          destinationAddress: 'address',
+        })
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(400);
     });
 
-    it('should return 404 if user tries to withdraw an asset which they have not collateralized', async () => {
+    it('should throw 404 if user tries to withdraw an asset which they have not collateralized', async () => {
       const desiredAsset = 'ETH';
       await collateralRepository.delete({
         userId,
@@ -276,31 +243,32 @@ describe('CollateralWithdrawalController (e2e)', () => {
       await collateralRepository.save(
         defaultUserCollateral.filter((a) => a.asset !== desiredAsset),
       );
-      try {
-        await app.get(CollateralWithdrawalController).withdrawUserCollateral(
-          {
-            user: { sub: userId },
-          },
-          { asset: desiredAsset, destinationAddress, withdrawalAmount: 1 },
-        );
-      } catch (error) {
-        expect(error).toBeInstanceOf(CollateralNotFoundError);
-      }
+      await request(app.getHttpServer())
+        .post(`/v1/collateral/withdraw/`)
+        .send({
+          asset: 'ETH',
+          withdrawalAmount: 2,
+          destinationAddress: 'address',
+        })
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(404);
     });
 
     it('should remove collateral from the database if all of it was withdrawn', async () => {
       const asset = 'ETH';
       const withdrawalAmount = ETH_STARTING_AMOUNT;
 
-      const response = await app
-        .get(CollateralWithdrawalController)
-        .withdrawUserCollateral(
-          {
-            user: { sub: userId },
-          },
-          { asset, destinationAddress, withdrawalAmount },
-        );
-      expect(response).toEqual({
+      const response = await request(app.getHttpServer())
+        .post(`/v1/collateral/withdraw/`)
+        .send({
+          asset,
+          withdrawalAmount,
+          destinationAddress,
+        })
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(201);
+
+      expect(response.body).toEqual({
         userId,
         asset,
         withdrawalAmount,
@@ -309,8 +277,8 @@ describe('CollateralWithdrawalController (e2e)', () => {
         transactionId: null,
         status: TransactionStatus.SUBMITTED,
         id: expect.any(String),
-        createdAt: expect.any(Date),
-        updatedAt: expect.any(Date),
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
       });
 
       expect(queueStub.publish).toBeCalledTimes(1);
@@ -402,6 +370,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
       expect(withdrawalResult?.transactionId).toEqual(transactionId);
     });
   });
+
   describe('Withdrawal completed handler', () => {
     it('should update status to completed', async () => {
       const transactionId = 'transaction_id';

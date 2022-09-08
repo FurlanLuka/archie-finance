@@ -44,7 +44,7 @@ export class AssetPriceService {
     );
 
     const assets: string[] = Object.keys(assetList).map(
-      (asset: string) => assetList[asset].coingecko_id,
+      (asset: string) => assetList[asset]!.coingecko_id,
     );
 
     const prices: CoinPriceResponse =

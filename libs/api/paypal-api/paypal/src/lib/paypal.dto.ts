@@ -22,4 +22,5 @@ export interface PaypalPaymentReceivedPayload {
   userId: string;
   amount: number;
   orderId: string;
+  currency: string;
 }
