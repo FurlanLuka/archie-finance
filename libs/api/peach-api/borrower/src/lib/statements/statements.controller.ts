@@ -24,11 +24,7 @@ export class LoanStatementsController {
   @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([
-    NotFoundException,
-    BorrowerNotFoundError,
-    CreditLineNotFoundError,
-  ])
+  @ApiErrorResponse([BorrowerNotFoundError, CreditLineNotFoundError])
   async getLoanStatements(@Req() req): Promise<Statement[]> {
     return this.loanStatementsService.getLoanStatements(req.user.sub);
   }
@@ -36,16 +32,11 @@ export class LoanStatementsController {
   @Get('/:documentId')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([
-    NotFoundException,
-    BorrowerNotFoundError,
-    CreditLineNotFoundError,
-  ])
+  @ApiErrorResponse([BorrowerNotFoundError, CreditLineNotFoundError])
   async getLoanDocumentUrl(
     @Req() req,
     @Param('documentId') documentId: string,
   ): Promise<GetLoanDocumentDto> {
-    console.log('omajgad!', documentId);
     return this.loanStatementsService.getLoanDocumentUrl(
       req.user.sub,
       documentId,

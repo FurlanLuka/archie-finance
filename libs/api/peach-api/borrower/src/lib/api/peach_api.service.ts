@@ -604,7 +604,6 @@ export class PeachApiService {
     personId: string,
     documentId: string,
   ): Promise<DocumentUrl> {
-    console.log('hmmm', personId, documentId);
     const response = await this.peachClient.get(
       `/people/${personId}/documents/${documentId}/content`,
       { params: { returnUrl: true } },
