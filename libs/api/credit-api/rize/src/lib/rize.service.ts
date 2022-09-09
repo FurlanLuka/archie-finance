@@ -193,7 +193,12 @@ export class RizeService {
     this.rizeValidatorService.validateCustomerExists(customer);
 
     const rizeTransactions: RizeList<RizeTransaction> =
-      await this.rizeApiService.getTransactions(customer.uid, page, limit);
+      await this.rizeApiService.getTransactions(customer.uid, page, limit, [
+        'queued',
+        'pending',
+        'settled',
+        'failed',
+      ]);
 
     const transactions: Transaction[] = rizeTransactions.data.map(
       (txn: RizeTransaction) => ({
