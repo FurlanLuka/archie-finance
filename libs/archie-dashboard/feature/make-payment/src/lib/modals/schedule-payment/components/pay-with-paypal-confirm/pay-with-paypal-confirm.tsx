@@ -3,8 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
-import { ScheduleTransactionParams } from '@archie-webapps/shared/data-access/archie-api/payment/api/schedule-transaction';
-import { useScheduleTransaction } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
+import { usePayWithPaypal } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-pay-with-paypal';
 import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-obligations';
 import {
   ButtonOutline,
@@ -34,22 +33,17 @@ export const PayWithPaypalConfirm: FC<PayWithPaypalConfirmProps> = ({
   paymentAmount,
 }) => {
   const { t } = useTranslation();
-  const scheduleTransactionMutation = useScheduleTransaction();
+  const payWithPaypalMutation = usePayWithPaypal();
 
   useEffect(() => {
-    if (scheduleTransactionMutation.state === RequestState.SUCCESS) {
+    if (payWithPaypalMutation.state === RequestState.SUCCESS) {
       onConfirm();
     }
-  }, [scheduleTransactionMutation.state, onConfirm]);
+  }, [payWithPaypalMutation.state, onConfirm]);
 
   const handleConfirm = () => {
-    if (
-      scheduleTransactionMutation.state === RequestState.IDLE ||
-      scheduleTransactionMutation.state === RequestState.ERROR
-    ) {
-      // scheduleTransactionMutation.mutate(scheduledTransactionParams);
-
-      console.log(paymentAmount);
+    if (payWithPaypalMutation.state === RequestState.IDLE || payWithPaypalMutation.state === RequestState.ERROR) {
+      payWithPaypalMutation.mutate({ paymentAmount });
     }
   };
 
@@ -74,7 +68,7 @@ export const PayWithPaypalConfirm: FC<PayWithPaypalConfirmProps> = ({
         ${paymentAmount}
       </TitleM>
       <BodyM>{t('payment_modal.pay_with_paypal_form.time_note')}</BodyM>
-      {scheduleTransactionMutation.state === RequestState.ERROR && (
+      {payWithPaypalMutation.state === RequestState.ERROR && (
         <FormError>{t('payment_modal.payment_confirm.error')}</FormError>
       )}
       <div className="btn-group">
@@ -84,7 +78,7 @@ export const PayWithPaypalConfirm: FC<PayWithPaypalConfirmProps> = ({
         <ButtonOutline
           maxWidth="100%"
           onClick={handleBack}
-          isDisabled={scheduleTransactionMutation.state === RequestState.LOADING}
+          isDisabled={payWithPaypalMutation.state === RequestState.LOADING}
         >
           {t('btn_back')}
         </ButtonOutline>
