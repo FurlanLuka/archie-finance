@@ -28,7 +28,7 @@ export class CoingeckoService {
     coingeckoId: string,
   ): string {
     const assetId: string | undefined = Object.keys(assetList).find(
-      (key) => assetList[key].coingecko_id === coingeckoId,
+      (key) => assetList[key]!.coingecko_id === coingeckoId,
     );
 
     if (assetId === undefined) {

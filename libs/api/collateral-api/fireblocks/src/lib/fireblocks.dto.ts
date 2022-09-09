@@ -38,4 +38,5 @@ export class InternalCollateralTransactionCreatedPayload {
   amount: number;
   price: number;
   network: AssetType;
+  asset: string;
 }

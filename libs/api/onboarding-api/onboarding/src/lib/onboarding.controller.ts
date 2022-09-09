@@ -23,6 +23,7 @@ import {
   CardActivatedPayload,
   CollateralReceivedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
+import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-limit-api/constants';
 
 @Controller('v1/onboarding')
 export class OnboardingController {
@@ -78,7 +79,7 @@ export class OnboardingQueueController {
   }
 
   @Subscribe(
-    COLLATERAL_RECEIVED_TOPIC,
+    CREDIT_LINE_CREATED_TOPIC,
     OnboardingQueueController.CONTROLLER_QUEUE_NAME,
   )
   async collateralReceivedEventHandler(

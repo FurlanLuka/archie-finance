@@ -22,19 +22,17 @@ import {
   TransactionResponseDto,
 } from './rize.dto';
 import { Subscribe } from '@archie/api/utils/queue';
+import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
 import {
-  CREDIT_LIMIT_DECREASED_TOPIC,
-  CREDIT_LIMIT_INCREASED_TOPIC,
   MARGIN_CALL_COMPLETED_TOPIC,
   MARGIN_CALL_STARTED_TOPIC,
-  SERVICE_QUEUE_NAME,
-} from '@archie/api/credit-api/constants';
+} from '@archie/api/margin-api/constants';
 import {
-  CreditLimitDecreasedPayload,
-  CreditLimitIncreasedPayload,
   MarginCallCompletedPayload,
   MarginCallStartedPayload,
-} from '@archie/api/credit-api/data-transfer-objects';
+} from '@archie/api/margin-api/data-transfer-objects';
+import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 
 @Controller('v1/rize/users')
 export class RizeController {
@@ -103,22 +101,12 @@ export class RizeQueueController {
   }
 
   @Subscribe(
-    CREDIT_LIMIT_DECREASED_TOPIC,
+    CREDIT_BALANCE_UPDATED_TOPIC,
     RizeQueueController.CONTROLLER_QUEUE_NAME,
   )
   async creditLimitDecreasedHandler(
-    payload: CreditLimitDecreasedPayload,
+    payload: CreditBalanceUpdatedPayload,
   ): Promise<void> {
-    await this.rizeService.decreaseCreditLimit(payload.userId, payload.amount);
-  }
-
-  @Subscribe(
-    CREDIT_LIMIT_INCREASED_TOPIC,
-    RizeQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async creditLimitIncreasedHandler(
-    payload: CreditLimitIncreasedPayload,
-  ): Promise<void> {
-    await this.rizeService.increaseCreditLimit(payload.userId, payload.amount);
+    await this.rizeService.updateAvailableCredit(payload);
   }
 }
