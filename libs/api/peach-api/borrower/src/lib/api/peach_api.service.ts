@@ -23,6 +23,8 @@ import {
   Purchases,
   Balances,
   PeachResponseData,
+  Statement,
+  DocumentUrl,
   PeachOneTimePaymentStatus,
 } from './peach_api.interfaces';
 import { Borrower } from '../borrower.entity';
@@ -612,6 +614,31 @@ export class PeachApiService {
       {
         params: omitBy(query, isNil),
       },
+    );
+
+    return response.data;
+  }
+
+  public async getStatements(
+    personId: string,
+    loanId: string,
+  ): Promise<Statement[]> {
+    // TODO pagination?
+    const response = await this.peachClient.get(
+      `/people/${personId}/loans/${loanId}/statements`,
+      { params: { limit: 100 } },
+    );
+
+    return response.data.data;
+  }
+
+  public async getDocumentUrl(
+    personId: string,
+    documentId: string,
+  ): Promise<DocumentUrl> {
+    const response = await this.peachClient.get(
+      `/people/${personId}/documents/${documentId}/content`,
+      { params: { returnUrl: true } },
     );
 
     return response.data;
