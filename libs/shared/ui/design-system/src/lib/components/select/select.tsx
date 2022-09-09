@@ -10,9 +10,10 @@ interface SelectProps<T> {
   header: ReactElement;
   onChange: (value: T) => void;
   children: ReactElement<SelectOptionProps<T>>[];
+  disabled?: boolean;
 }
 
-export function Select<T>({ id, header, onChange, children }: SelectProps<T>) {
+export function Select<T>({ disabled, id, header, onChange, children }: SelectProps<T>) {
   const [selectOpen, setSelectOpen] = useState(false);
 
   const handleSelect = (value: T) => {
@@ -22,7 +23,7 @@ export function Select<T>({ id, header, onChange, children }: SelectProps<T>) {
 
   return (
     <SelectStyled id={id}>
-      <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
+      <div className={`select-header ${disabled && 'disabled'}`} onClick={() => setSelectOpen(!selectOpen)}>
         {header}
         <Icon name="caret" className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
       </div>

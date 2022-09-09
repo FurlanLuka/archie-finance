@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
-export const SelectStyled = styled.div`
+export const SelectStyled = styled.div<{ disabled?: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -27,6 +27,11 @@ export const SelectStyled = styled.div`
     & > :first-child {
       flex: 1;
     }
+  }
+
+  .disabled {
+    pointer-events: none;
+    border: 1px solid ${({ theme }) => theme.buttonDisabled};
   }
 
   .select-header-caret {
