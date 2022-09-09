@@ -300,6 +300,13 @@
       "scheduled_note": "Your payment of ${{newPayment}} has been scheduled for {{paymentDate}}!",
       "email_note": "You will receive an email notification.",
       "time_note": "Your payment will take 2-4 business days to settle."
+    },
+    "pay_with_paypal_form": {
+      "title": "Pay balance",
+      "time_note": "This payment will be processed through Paypal and is subject to their terms and conditions.",
+      "processed_note": "Your payment of ${{newPayment}} has been processed!",
+      "email_note": "You will receive an email confirmation.",
+      "btn": "Pay with Paypal"
     }
   }
 }

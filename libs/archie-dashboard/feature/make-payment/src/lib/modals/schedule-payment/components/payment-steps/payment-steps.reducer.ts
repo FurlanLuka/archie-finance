@@ -18,7 +18,7 @@ export type PaymentStepsAction =
       type: PaymentStepsActionType.MOVE_TO_CONFIRM_STEP;
       payload: {
         amount: number;
-        scheduledDate: string;
+        // scheduledDate: string;
         selectedAccount: AccountResponse;
       };
     }
@@ -48,7 +48,7 @@ export type PaymentStepsState =
       step: PaymentStep.CONFIRM;
       selectedAccount: AccountResponse;
       amount: number;
-      scheduledDate: string;
+      // scheduledDate: string;
     }
   | {
       step: PaymentStep.SCHEDULED;
@@ -78,7 +78,7 @@ export const paymentStepsReducer = (state: PaymentStepsState, action: PaymentSte
         step: PaymentStep.CONFIRM,
         selectedAccount: action.payload.selectedAccount,
         amount: action.payload.amount,
-        scheduledDate: action.payload.scheduledDate,
+        // scheduledDate: action.payload.scheduledDate,
       };
     case PaymentStepsActionType.MOVE_TO_COMPLETED_STEP:
       return {
