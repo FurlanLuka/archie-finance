@@ -316,7 +316,7 @@
               }
             }
           },
-          "500": {
+          "404": {
             "description": "COLLATERAL_NOT_FOUND"
           }
         },
@@ -1004,6 +1004,70 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GetLoanBalancesDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/loan_statements": {
+      "get": {
+        "operationId": "LoanStatementsController_getLoanStatements",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/loan_statements/{documentId}": {
+      "get": {
+        "operationId": "LoanStatementsController_getLoanDocumentUrl",
+        "parameters": [
+          {
+            "name": "documentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLoanDocumentDto"
                 }
               }
             }
@@ -2090,6 +2154,17 @@
           "totalCredit",
           "availableCredit",
           "utilizationAmount"
+        ]
+      },
+      "GetLoanDocumentDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
         ]
       },
       "LtvDto": {
