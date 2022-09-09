@@ -11,7 +11,7 @@ env:
 
 jobs:
   workflow:
-    uses: ./.github/workflows/deploy.yaml
+    uses: ./.github/workflows/reusable-ci.yaml
     with:
       NAME: 'Production deployment'
       IS_TAGGED: true
