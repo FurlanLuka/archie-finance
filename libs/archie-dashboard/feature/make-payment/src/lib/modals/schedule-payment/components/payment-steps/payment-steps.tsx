@@ -8,6 +8,7 @@ import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/p
 import { ChooseAccount } from '../choose-account/choose-account';
 import { PayWithPaypalForm } from '../pay-with-paypal-form/pay-with-paypal-form';
 import { PayWithPaypalConfirm } from '../pay-with-paypal-confirm/pay-with-paypal-confirm';
+import { PayWithPaypalScheduled } from '../pay-with-paypal-scheduled/pay-with-paypal-scheduled';
 import { PaymentScheduleForm } from '../payment-schedule-form/payment-schedule-form';
 import { PaymentConfirm } from '../payment-confirm/payment-confirm';
 import { PaymentScheduled } from '../payment-scheduled/payment-scheduled';
@@ -110,15 +111,23 @@ export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, kycData, clos
         );
       case PaymentStep.SCHEDULED:
         return (
-          <PaymentScheduled
+          <PayWithPaypalScheduled
             obligations={obligations}
             kycData={kycData}
             onConfirm={handleConfirm}
-            text={t('payment_modal.payment_scheduled.scheduled_note', {
+            text={t('payment_modal.pay_with_paypal_form.processed_note', {
               newPayment: stepsState.amount,
-              scheduledDate: stepsState.scheduledDate,
             })}
           />
+          // <PaymentScheduled
+          //   obligations={obligations}
+          //   kycData={kycData}
+          //   onConfirm={handleConfirm}
+          //   text={t('payment_modal.payment_scheduled.scheduled_note', {
+          //     newPayment: stepsState.amount,
+          //     scheduledDate: stepsState.scheduledDate,
+          //   })}
+          // />
         );
       default:
         console.warn('Unhandled step state');
