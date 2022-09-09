@@ -53,7 +53,7 @@ export const ChooseAccount: FC<ChooseAccountProps> = ({ onConfirm }) => {
 
   const getContent = () => {
     if (getConnectedAccountsResponse.state === RequestState.LOADING) {
-      return <Loader className="loader" />;
+      return <Loader marginAuto />;
     }
 
     if (getConnectedAccountsResponse.state === RequestState.ERROR) {

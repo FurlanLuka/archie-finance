@@ -5,10 +5,6 @@ export const ChooseAccountStyled = styled.div`
   flex-direction: column;
   min-height: 176px;
 
-  .loader {
-    margin: auto;
-  }
-
   .modal-title {
     margin-bottom: 1rem;
   }

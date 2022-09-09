@@ -28,7 +28,7 @@ export const HistoryScreen: FC = () => {
 
   const getContent = () => {
     if (getTransactionsResponse.state === RequestState.LOADING) {
-      return <Loader className="loader" />;
+      return <Loader marginAuto />;
     }
 
     if (getTransactionsResponse.state === RequestState.ERROR) {

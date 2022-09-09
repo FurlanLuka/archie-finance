@@ -16,8 +16,4 @@ export const SchedulePaymentStyled = styled.div`
     height: 1px;
     margin: 2rem 0 1.5rem;
   }
-
-  .loader {
-    margin: auto;
-  }
 `;

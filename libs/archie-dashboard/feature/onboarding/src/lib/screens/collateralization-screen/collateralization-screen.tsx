@@ -53,7 +53,7 @@ export const CollateralizationScreen: FC = () => {
 
   function getContent() {
     if (getAssetPriceResponse.state === RequestState.LOADING) {
-      return <Loader className="loader" />;
+      return <Loader marginAuto />;
     }
 
     if (getAssetPriceResponse.state === RequestState.ERROR) {

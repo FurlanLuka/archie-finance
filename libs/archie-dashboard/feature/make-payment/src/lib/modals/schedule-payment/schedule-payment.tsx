@@ -19,7 +19,7 @@ export const SchedulePaymentModal: FC<SchedulePaymentModalProps> = ({ close }) =
 
   const getContent = () => {
     if (getKycResponse.state === RequestState.LOADING || getObligationsResponse.state === RequestState.LOADING) {
-      return <Loader className="loader" />;
+      return <Loader marginAuto />;
     }
 
     if (getKycResponse.state === RequestState.ERROR || getObligationsResponse.state === RequestState.ERROR) {

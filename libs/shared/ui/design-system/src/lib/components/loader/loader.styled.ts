@@ -1,5 +1,10 @@
 import styled, { keyframes } from 'styled-components';
 
+interface LoaderProps {
+  color?: string;
+  marginAuto?: boolean;
+}
+
 const stretchdelay = keyframes`
   0%, 40%, 100% { 
     transform: translateY(25%);
@@ -9,9 +14,10 @@ const stretchdelay = keyframes`
   }
 `;
 
-export const LoaderStyled = styled.div<{ color?: string }>`
+export const LoaderStyled = styled.div<LoaderProps>`
   width: 50px;
   height: 35px;
+  margin: ${({ marginAuto }) => marginAuto && 'auto'};
 
   .rect {
     display: inline-block;

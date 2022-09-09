@@ -78,7 +78,7 @@ export const CardScreen: FC = () => {
       getCreditQueryResponse.state === RequestState.LOADING ||
       getCollateralTotalValueResponse.state === RequestState.LOADING
     ) {
-      return <Loader className="loader" />;
+      return <Loader marginAuto />;
     }
 
     if (
