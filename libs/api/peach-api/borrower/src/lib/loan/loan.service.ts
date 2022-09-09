@@ -20,8 +20,8 @@ import {
 import { BorrowerWithHomeAddress } from '../utils/borrower.validation.interfaces';
 import { Credit, Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
 import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
-import { AvailableCreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { AVAILABLE_CREDIT_LIMIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -197,8 +197,8 @@ export class PeachBorrowerService {
       borrower.creditLineId,
     );
 
-    this.queueService.publish<AvailableCreditBalanceUpdatedPayload>(
-      AVAILABLE_CREDIT_LIMIT_BALANCE_UPDATED_TOPIC,
+    this.queueService.publish<CreditBalanceUpdatedPayload>(
+      CREDIT_BALANCE_UPDATED_TOPIC,
       {
         ...credit,
         userId: creditLimit.userId,

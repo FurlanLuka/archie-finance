@@ -31,8 +31,8 @@ import {
   MarginCallCompletedPayload,
   MarginCallStartedPayload,
 } from '@archie/api/margin-api/data-transfer-objects';
-import { AVAILABLE_CREDIT_LIMIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
-import { AvailableCreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 
 @Controller('v1/rize/users')
 export class RizeController {
@@ -101,11 +101,11 @@ export class RizeQueueController {
   }
 
   @Subscribe(
-    AVAILABLE_CREDIT_LIMIT_BALANCE_UPDATED_TOPIC,
+    CREDIT_BALANCE_UPDATED_TOPIC,
     RizeQueueController.CONTROLLER_QUEUE_NAME,
   )
   async creditLimitDecreasedHandler(
-    payload: AvailableCreditBalanceUpdatedPayload,
+    payload: CreditBalanceUpdatedPayload,
   ): Promise<void> {
     await this.rizeService.updateAvailableCredit(payload);
   }

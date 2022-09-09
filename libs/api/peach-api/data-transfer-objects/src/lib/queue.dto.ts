@@ -10,19 +10,11 @@ export class CreditBalanceUpdatedPayload {
   creditLimitAmount: number;
   utilizationAmount: number;
   calculatedAt: string;
-  paymentDetails: {
+  paymentDetails?: {
     type: PaymentType;
     asset: string;
     amount: number;
   };
-}
-
-export class AvailableCreditBalanceUpdatedPayload {
-  userId: string;
-  availableCreditAmount: number;
-  creditLimitAmount: number;
-  utilizationAmount: number;
-  calculatedAt: string;
 }
 
 export class GetLoanBalancesPayload {

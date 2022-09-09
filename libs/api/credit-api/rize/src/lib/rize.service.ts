@@ -40,9 +40,10 @@ import {
 import { CardResponseDto, CardStatus } from './rize.dto';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 import {
-  AvailableCreditBalanceUpdatedPayload,
+  CreditBalanceUpdatedPayload,
   GetLoanBalancesPayload,
   GetLoanBalancesResponse,
+  PaymentType,
 } from '@archie/api/peach-api/data-transfer-objects';
 
 @Injectable()
@@ -328,12 +329,26 @@ export class RizeService {
   }
 
   public async updateAvailableCredit(
-    credit: AvailableCreditBalanceUpdatedPayload,
+    credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
+    if (credit.paymentDetails?.type === PaymentType.purchase) {
+      return;
+    }
+    // TODO: remember last credit update - calculatedAt
+
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       credit.userId,
     );
     this.rizeValidatorService.validateCustomerExists(customer);
+    const pendingTransactions: RizeList<RizeTransaction> =
+      await this.rizeApiService.getTransactions(customer.uid, 0, 100, [
+        'pending',
+        'queued',
+      ]);
+
+    if (pendingTransactions.data.length !== 0) {
+      throw new Error('Pending transactions in progress. Retry later');
+    }
     const cardBalance: number = Number(customer.total_balance);
 
     if (credit.availableCreditAmount > cardBalance) {

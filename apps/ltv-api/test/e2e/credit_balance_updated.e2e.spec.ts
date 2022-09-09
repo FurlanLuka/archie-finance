@@ -66,6 +66,7 @@ describe('CreditQueueController (e2e)', () => {
         asset,
         amount: startingEthAmount,
       });
+      const paymentAmount = 0.3;
       await ltvCreditRepository.insert({
         userId,
         utilizationAmount: 5,
@@ -80,7 +81,7 @@ describe('CreditQueueController (e2e)', () => {
         paymentDetails: {
           type: PaymentType.liquidation,
           asset: 'ETH',
-          amount: 0.3,
+          amount: paymentAmount,
         },
       };
 
@@ -88,9 +89,7 @@ describe('CreditQueueController (e2e)', () => {
         .get(CreditQueueController)
         .creditBalanceUpdatedHandler(balanceUpdatedPayload);
 
-      const collateralBalance =
-        ETH_PRICE *
-        (startingEthAmount - balanceUpdatedPayload.paymentDetails.amount);
+      const collateralBalance = ETH_PRICE * (startingEthAmount - paymentAmount);
       expect(queueStub.publish).toBeCalledTimes(1);
       expect(queueStub.publish).toBeCalledWith(LTV_UPDATED_TOPIC, {
         userId,
@@ -101,8 +100,7 @@ describe('CreditQueueController (e2e)', () => {
           collateralBalance: collateralBalance,
           collateral: [
             {
-              amount:
-                startingEthAmount - balanceUpdatedPayload.paymentDetails.amount,
+              amount: startingEthAmount - paymentAmount,
               asset,
               price: collateralBalance,
             },

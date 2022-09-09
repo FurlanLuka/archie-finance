@@ -47,7 +47,7 @@ export class CreditService {
         },
       );
 
-      if (credit.paymentDetails.type === PaymentType.liquidation) {
+      if (credit.paymentDetails?.type === PaymentType.liquidation) {
         await queryRunner.manager.decrement(
           LtvCollateral,
           {
