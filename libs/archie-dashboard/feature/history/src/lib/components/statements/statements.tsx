@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetStatements } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-statements';
-import { ButtonPrimary, Loader, Select, SelectOption } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, Loader, Select } from '@archie-webapps/shared/ui/design-system';
 
 import { StatementsStyled } from './statements.styled';
 
@@ -33,16 +33,6 @@ export const Statements: FC = () => {
 
     return <></>;
   }
-  const options = useMemo(() => {
-    if (getStatementsResponse.state === RequestState.SUCCESS) {
-      return getStatementsResponse.data.map((statement) => (
-        <SelectOption key={statement.id} value={statement}>
-          {statement.billingCycleStartDate} - {statement.billingCycleEndDate}
-        </SelectOption>
-      ));
-    }
-    return [];
-  }, [getStatementsResponse]);
 
   return <StatementsStyled>{getContent()}</StatementsStyled>;
 };
