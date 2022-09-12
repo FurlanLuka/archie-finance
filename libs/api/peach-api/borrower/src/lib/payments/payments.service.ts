@@ -211,6 +211,14 @@ export class PaymentsService {
       PeachOneTimePaymentStatus.succeeded,
     );
 
+    // TODO: test
+    function sleep(ms: number): Promise<void> {
+      return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+      });
+    }
+    await sleep(5000);
+
     const credit: Credit = await this.peachApiService.getCreditBalance(
       borrower.personId,
       borrower.creditLineId,

@@ -477,6 +477,7 @@ export class PeachApiService {
     const responseBody: Balances = response.data.data;
 
     if (responseBody.isLocked) {
+      Logger.error('Balance change is in progress, retry');
       throw new Error('Balance change is in progress, retry');
     }
 
