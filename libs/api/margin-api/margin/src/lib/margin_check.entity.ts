@@ -27,6 +27,9 @@ export class MarginCheck {
   @Column('float')
   ltv: number;
 
+  @Column('timestamp', { nullable: false })
+  ltvCalculatedAt: string;
+
   @CreateDateColumn({ select: false })
   createdAt: Date;
 

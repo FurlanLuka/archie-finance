@@ -33,5 +33,4 @@ export class CreditQueueController {
     await this.creditService.handleCreditLineCreatedEvent(payload);
   }
   // TODO: Add failed events
-  // TODO: Migrate existing credit balances
 }

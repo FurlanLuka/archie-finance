@@ -102,6 +102,7 @@ export class CollateralService {
           userId,
           asset,
           amount,
+          transactionId,
         },
       );
     }

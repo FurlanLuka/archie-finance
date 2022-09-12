@@ -38,7 +38,6 @@ export class CollateralQueueController {
   }
 
   // TODO: Add failed events
-  // TODO: Migrate existing collateral balances
 
   // TODO: Add another event for withdrawal fees + update collateral api with fee handling
 }

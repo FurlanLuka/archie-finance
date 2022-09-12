@@ -14,6 +14,7 @@ export class CreditBalanceUpdatedPayload {
     type: PaymentType;
     asset: string;
     amount: number;
+    id: string;
   };
 }
 
