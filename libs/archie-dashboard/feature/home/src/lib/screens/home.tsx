@@ -11,7 +11,7 @@ import {
   MyRewards,
 } from '@archie-webapps/archie-dashboard/components';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { KycResponse } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
+import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
 import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
 import { TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
@@ -24,7 +24,7 @@ import { HomeStyled } from './home.styled';
 export const HomeScreen: FC = () => {
   const { t } = useTranslation();
 
-  const getKycResponse: QueryResponse<KycResponse> = useGetKyc();
+  const getKycResponse: QueryResponse<Kyc> = useGetKyc();
 
   const getTitle = () => {
     if (getKycResponse.state === RequestState.ERROR) {

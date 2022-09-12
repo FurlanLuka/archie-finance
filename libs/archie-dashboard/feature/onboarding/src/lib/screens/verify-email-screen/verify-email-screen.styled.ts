@@ -49,8 +49,4 @@ export const VerifyEmailScreenStyled = styled.div`
   .resend-btn {
     margin-bottom: 0.5rem;
   }
-
-  .loader {
-    margin: auto;
-  }
 `;

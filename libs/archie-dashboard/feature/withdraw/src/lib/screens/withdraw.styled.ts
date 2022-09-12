@@ -31,8 +31,4 @@ export const WithdrawScreenStyled = styled.div`
   .link {
     color: ${({ theme }) => theme.textHighlight};
   }
-
-  .loader {
-    margin: auto;
-  }
 `;
