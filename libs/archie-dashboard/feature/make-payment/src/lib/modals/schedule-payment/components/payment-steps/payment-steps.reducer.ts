@@ -58,10 +58,11 @@ export type PaymentStepsState =
     };
 
 export const initalPaymentStepsState: PaymentStepsState = {
-  step: PaymentStep.ACCOUNT,
+  // step: PaymentStep.ACCOUNT,
+  step: PaymentStep.SCHEDULE,
   selectedAccount: null,
   amount: null,
-  scheduledDate: null,
+  // scheduledDate: null,
 };
 
 export const paymentStepsReducer = (state: PaymentStepsState, action: PaymentStepsAction): PaymentStepsState => {
