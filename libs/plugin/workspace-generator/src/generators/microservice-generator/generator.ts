@@ -7,6 +7,7 @@ import { updateTsConfig } from './lib/update-tsconfig';
 import { runTasksInSerial } from '@nrwl/workspace/src/utilities/run-tasks-in-serial';
 import { microserviceModuleGenerator } from '../microservice-module-generator/generator';
 import deploymentConfigGenerator from '../deployment-config-generator/generator';
+import microserviceProjectTargetGenerator from '../microservice-project-target-generator/generator';
 
 export interface NormalizedSchema extends MicroserviceGenerator {
   projectRoot: string;
@@ -60,6 +61,10 @@ export default async function (tree: Tree, options: MicroserviceGenerator) {
   deploymentConfigGenerator(tree, {
     projectName: options.name,
   });
+
+  microserviceProjectTargetGenerator(tree, {
+    projectName: options.name,
+  })
 
   return runTasksInSerial(
     initTask,

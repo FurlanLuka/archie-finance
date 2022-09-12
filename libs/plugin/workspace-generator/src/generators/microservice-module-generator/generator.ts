@@ -17,7 +17,7 @@ function normalizeOptions(
 ): NormalizedSchema {
   const projectRoot = joinPathFragments(
     getWorkspaceLayout(tree).appsDir,
-    options.name,
+    options.projectName,
   );
 
   const libraryRoot = joinPathFragments(
