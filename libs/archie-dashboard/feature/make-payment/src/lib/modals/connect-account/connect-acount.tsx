@@ -2,12 +2,12 @@ import { FC, useState } from 'react';
 
 import { Modal } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectableAccount } from './connect-acount.interfaces';
 import { ConnectableAccountSelect } from './components/connectable-account-select/connectable-account-select';
 import { PlaidLink } from './components/plaid-link/plaid-link';
+import { ConnectableAccount } from './connect-acount.interfaces';
 
 interface ConnectAccountProps {
-  close: VoidFunction;
+  close?: VoidFunction;
 }
 
 export const ConnectAccountModal: FC<ConnectAccountProps> = ({ close }) => {
