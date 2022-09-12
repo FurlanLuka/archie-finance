@@ -13,12 +13,6 @@ export function updateProjectConfiguration(
     (json) => {
       const target = generateTarget(options.projectName);
 
-      // const targetKeys = Object.keys(target);
-
-      // targetKeys.forEach((key) => {
-      //   json[key] = undefined;
-      // })
-
       json = {
         ...json,
         targets: {
