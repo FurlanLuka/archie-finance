@@ -31,19 +31,19 @@ export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, kycData, clos
 
   const getContent = () => {
     switch (stepsState.step) {
-      case PaymentStep.ACCOUNT:
-        return (
-          <ChooseAccount
-            onConfirm={(account) => {
-              dispatch({
-                type: PaymentStepsActionType.MOVE_TO_SCHEDULE_STEP,
-                payload: {
-                  selectedAccount: account,
-                },
-              });
-            }}
-          />
-        );
+      // case PaymentStep.ACCOUNT:
+      //   return (
+      //     <ChooseAccount
+      //       onConfirm={(account) => {
+      //         dispatch({
+      //           type: PaymentStepsActionType.MOVE_TO_SCHEDULE_STEP,
+      //           payload: {
+      //             selectedAccount: account,
+      //           },
+      //         });
+      //       }}
+      //     />
+      //   );
       case PaymentStep.SCHEDULE:
         return (
           <PayWithPaypalForm
@@ -52,10 +52,7 @@ export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, kycData, clos
             onConfirm={(desiredAmount: number) => {
               dispatch({
                 type: PaymentStepsActionType.MOVE_TO_CONFIRM_STEP,
-                payload: {
-                  selectedAccount: stepsState.selectedAccount,
-                  amount: desiredAmount,
-                },
+                amount: desiredAmount,
               });
             }}
           />
@@ -83,9 +80,6 @@ export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, kycData, clos
             onBack={() => {
               dispatch({
                 type: PaymentStepsActionType.MOVE_TO_SCHEDULE_STEP,
-                payload: {
-                  selectedAccount: stepsState.selectedAccount,
-                },
               });
             }}
             paymentAmount={stepsState.amount}
