@@ -1,10 +1,13 @@
-import { getWorkspaceLayout, Tree } from '@nrwl/devkit';
+import { getWorkspaceLayout, Tree, joinPathFragments } from '@nrwl/devkit';
 import { MicroserviceModuleGeneratorSchema } from './schema';
 import { libraryGenerator } from '@nrwl/nest';
-import { Linter } from '@nrwl/linter'
+import { Linter } from '@nrwl/linter';
+import { deleteFiles } from './lib/delete-files';
+import { createLibFiles } from './lib/create-files';
+import { runTasksInSerial } from '@nrwl/workspace/src/utilities/run-tasks-in-serial';
 
-interface NormalizedSchema extends MicroserviceModuleGeneratorSchema {
-  serviceRoot: string;
+export interface NormalizedSchema extends MicroserviceModuleGeneratorSchema {
+  projectRoot: string;
   libraryRoot: string;
 }
 
@@ -12,33 +15,22 @@ function normalizeOptions(
   tree: Tree,
   options: MicroserviceModuleGeneratorSchema,
 ): NormalizedSchema {
-  const serviceRoot = `${getWorkspaceLayout(tree).appsDir}/${
-    options.projectName
-  }`;
+  const projectRoot = joinPathFragments(
+    getWorkspaceLayout(tree).appsDir,
+    options.name,
+  );
 
-  const libraryRoot = `${getWorkspaceLayout(tree).libsDir}/api/${
-    options.projectName
-  }`;
+  const libraryRoot = joinPathFragments(
+    getWorkspaceLayout(tree).libsDir,
+    `api/${options.projectName}/${options.name}`,
+  );
 
   return {
     ...options,
-    serviceRoot,
+    projectRoot,
     libraryRoot,
   };
 }
-
-// function addFiles(tree: Tree, options: NormalizedSchema) {
-//   const templateOptions = {
-//     ...options,
-//     offsetFromRoot: offsetFromRoot(options.projectRoot),
-//   };
-//   generateFiles(
-//     tree,
-//     path.join(__dirname, 'files'),
-//     options.projectRoot,
-//     templateOptions,
-//   );
-// }
 
 export default async function (
   tree: Tree,
@@ -46,7 +38,7 @@ export default async function (
 ) {
   const normalizedOptions = normalizeOptions(tree, options);
 
-  await libraryGenerator(tree, {
+  const libraryGeneratorTask = await libraryGenerator(tree, {
     name: normalizedOptions.name,
     standaloneConfig: true,
     buildable: false,
@@ -58,7 +50,8 @@ export default async function (
     publishable: false,
   });
 
-  // visitNotIgnoredFiles(tree, `${normalizedOptions.serviceRoot}/src/`, (path) => console.log(path))
+  deleteFiles(tree, normalizedOptions);
+  createLibFiles(tree, normalizedOptions);
 
-  // addFiles(tree, normalizedOptions);
+  return runTasksInSerial(libraryGeneratorTask);
 }
