@@ -8,16 +8,6 @@
     "name": {
       "description": "Microservice name",
       "type": "string"
-    },
-    "includeDatabaseModule": {
-      "type": "boolean",
-      "default": false,
-      "description": "Preconfigure with database module"
-    },
-    "includeAuthModule": {
-      "type": "boolean",
-      "default": false,
-      "description": "Preconfigure with auth module"
     }
   },
   "required": ["name"]
