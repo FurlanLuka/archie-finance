@@ -32,7 +32,7 @@ function normalizeOptions(
   };
 }
 
-export default async function (
+export async function microserviceModuleGenerator (
   tree: Tree,
   options: MicroserviceModuleGeneratorSchema,
 ) {
@@ -55,3 +55,5 @@ export default async function (
 
   return runTasksInSerial(libraryGeneratorTask);
 }
+
+export default microserviceModuleGenerator;
