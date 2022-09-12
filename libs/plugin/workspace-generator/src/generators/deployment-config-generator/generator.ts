@@ -38,7 +38,7 @@ function addFiles(tree: Tree, options: NormalizedSchema) {
   );
 }
 
-export default async function (
+export function deploymentConfigGenerator (
   tree: Tree,
   options: DeploymentConfigGeneratorSchema,
 ) {
@@ -46,3 +46,5 @@ export default async function (
 
   addFiles(tree, normalizedOptions);
 }
+
+export default deploymentConfigGenerator;
