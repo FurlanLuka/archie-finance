@@ -1,8 +1,7 @@
 import { FC, useState, useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
 import { useTranslation } from 'react-i18next';
-import { Navigate } from 'react-router-dom';
-import { useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
 import {
   ArchieCard,
@@ -25,6 +24,7 @@ import { HomeStyled } from './home.styled';
 
 export const HomeScreen: FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
@@ -37,6 +37,11 @@ export const HomeScreen: FC = () => {
       setConfirmPaymentModalOpen(true);
     }
   }, [token]);
+
+  const handleConfirmPaymentModaConfirm = () => {
+    setConfirmPaymentModalOpen(false);
+    navigate('/');
+  };
 
   const getTitle = () => {
     if (getKycResponse.state === RequestState.ERROR) {
@@ -81,7 +86,7 @@ export const HomeScreen: FC = () => {
       </HomeStyled>
       {confirmPaymentModalOpen && (
         <Modal maxWidth="780px" isOpen close={close}>
-          <PayWithPaypalScheduled onConfirm={() => setConfirmPaymentModalOpen(false)} />
+          <PayWithPaypalScheduled onConfirm={handleConfirmPaymentModaConfirm} />
         </Modal>
       )}
     </>

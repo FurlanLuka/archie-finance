@@ -304,7 +304,7 @@
     "pay_with_paypal_form": {
       "title": "Pay balance",
       "time_note": "This payment will be processed through Paypal and is subject to their terms and conditions.",
-      "processed_note": "Your payment of ${{newPayment}} has been scheduled!",
+      "processed_note": "Your payment has been scheduled!",
       "email_note": "You will receive an email confirmation as soon as your payment has been processed.",
       "btn": "Pay with Paypal"
     }
