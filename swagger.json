@@ -993,6 +993,115 @@
         ]
       }
     },
+    "/v1/loan_autopay": {
+      "post": {
+        "operationId": "AutopayController_setupAutopay",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAutopayDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": "PAYMENT_INSTRUMENT_NOT_FOUND"
+          },
+          "409": {
+            "description": "AUTOPAY_ALREADY_CONFIGURED"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "AutopayController_cancelAutopay",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "AUTOPAY_NOT_CONFIGURED"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "AutopayController_getAutopayConfig",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutopayDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "AUTOPAY_NOT_CONFIGURED"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/loan_autopay/documents": {
+      "post": {
+        "operationId": "AutopayDocumentsController_createAutopayAgreement",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAutopayDocumentDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutopayAgreementDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "PAYMENT_INSTRUMENT_NOT_FOUND"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/v1/loan_balances": {
       "get": {
         "operationId": "LoanBalancesController_getLoanBalances",
@@ -1139,118 +1248,6 @@
         ]
       }
     },
-<<<<<<< HEAD
-    "/v1/loan_autopay": {
-      "post": {
-        "operationId": "AutopayController_setupAutopay",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateAutopayDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": ""
-          },
-          "404": {
-            "description": "AUTOPAY_ALREADY_CONFIGURED"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      },
-      "delete": {
-        "operationId": "AutopayController_cancelAutopay",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          },
-          "404": {
-            "description": "PAYMENT_INSTRUMENT_NOT_FOUND"
-          },
-          "409": {
-            "description": "AUTOPAY_NOT_CONFIGURED"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      },
-      "get": {
-        "operationId": "AutopayController_getAutopayConfig",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AutopayDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "PAYMENT_INSTRUMENT_NOT_FOUND"
-          },
-          "409": {
-            "description": "AUTOPAY_NOT_CONFIGURED"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/loan_autopay/documents": {
-      "post": {
-        "operationId": "AutopayDocumentsController_createAutopayAgreement",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateAutopayDocumentDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AutopayAgreementDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "PAYMENT_INSTRUMENT_NOT_FOUND"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-=======
     "/internal/ltv/periodic_check": {
       "post": {
         "operationId": "InternalPeriodicCheckController_startPeriodicCheck",
@@ -1260,7 +1257,111 @@
             "description": ""
           }
         }
->>>>>>> develop
+      }
+    },
+    "/v1/paypal/orders": {
+      "post": {
+        "operationId": "PaypalController_createOrder",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateOrderResponseDto"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "PaypalController_getOrders",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GetOrderResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/paypal/orders/{orderId}": {
+      "get": {
+        "operationId": "PaypalController_getOrder",
+        "parameters": [
+          {
+            "name": "orderId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetOrderResponseDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/paypal/orders/{orderId}/capture": {
+      "post": {
+        "operationId": "PaypalController_captureOrder",
+        "parameters": [
+          {
+            "name": "orderId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/paypal/webhook": {
+      "post": {
+        "operationId": "PaypalController_handleWebhook",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
       }
     }
   },
@@ -2250,7 +2351,6 @@
           "aprEffective"
         ]
       },
-<<<<<<< HEAD
       "CreateAutopayDto": {
         "type": "object",
         "properties": {
@@ -2400,7 +2500,8 @@
         "required": [
           "id",
           "document"
-=======
+        ]
+      },
       "GetLoanBalancesDto": {
         "type": "object",
         "properties": {
@@ -2450,7 +2551,56 @@
         "required": [
           "ltv",
           "status"
->>>>>>> develop
+        ]
+      },
+      "CreateOrderDto": {
+        "type": "object",
+        "properties": {
+          "paymentAmount": {
+            "type": "number",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "paymentAmount"
+        ]
+      },
+      "CreateOrderResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "paymentUrl": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "paymentUrl"
+        ]
+      },
+      "GetOrderResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "CREATED",
+              "COMPLETED"
+            ],
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "amount"
         ]
       }
     },
