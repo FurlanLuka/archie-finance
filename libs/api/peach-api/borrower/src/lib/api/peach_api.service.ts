@@ -792,13 +792,17 @@ export class PeachApiService {
           format: 'pdf',
         },
       },
+    );
+
+    return response.data;
+  }
 
   public async getStatements(
     personId: string,
     loanId: string,
   ): Promise<Statement[]> {
     // TODO pagination?
-    const response = await this.peachClient.get(
+    const response = await this.peachClient.get<PeachResponseData<Statement[]>>(
       `/people/${personId}/loans/${loanId}/statements`,
       { params: { limit: 100 } },
     );
@@ -810,7 +814,7 @@ export class PeachApiService {
     personId: string,
     documentId: string,
   ): Promise<DocumentUrl> {
-    const response = await this.peachClient.get(
+    const response = await this.peachClient.get<DocumentUrl>(
       `/people/${personId}/documents/${documentId}/content`,
       { params: { returnUrl: true } },
     );
@@ -837,6 +841,9 @@ export class PeachApiService {
       if (error.status === 404) {
         throw new AutopayNotConfiguredError();
       }
+
+      throw error;
+    }
   }
 
   private ignoreDuplicatedEntityError(error: PeachErrorResponse): void {
