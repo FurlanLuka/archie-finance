@@ -135,7 +135,7 @@ export class PaymentsService {
       );
     }
 
-    await this.peachApiService.createOneTimePaymentTransaction(
+    await this.peachApiService.tryCreatingOneTimePaymentTransaction(
       borrower,
       liquidationInstrumentId,
       transaction.price,
@@ -205,7 +205,7 @@ export class PaymentsService {
       );
     }
 
-    await this.peachApiService.createOneTimePaymentTransaction(
+    await this.peachApiService.tryCreatingOneTimePaymentTransaction(
       borrower,
       paypalInstrumentId,
       payload.amount,
