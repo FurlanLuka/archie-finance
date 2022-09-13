@@ -222,6 +222,7 @@ export class RizeApiService {
     customerId: string,
     page: number,
     limit: number,
+    status: ('queued' | 'pending' | 'settled' | 'failed')[],
   ): Promise<RizeList<RizeTransaction>> {
     const transactions: RizeList<RizeTransaction> = <RizeList<RizeTransaction>>(
       (<unknown>await this.rizeClient.transaction.getList({
@@ -229,6 +230,7 @@ export class RizeApiService {
         limit: limit,
         offset: page * limit,
         sort: 'created_at_desc',
+        status,
       }))
     );
 

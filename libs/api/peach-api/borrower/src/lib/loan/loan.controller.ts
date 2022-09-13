@@ -1,21 +1,19 @@
 import { Controller } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
+import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
 import {
-  CARD_ACTIVATED_TOPIC,
-  CREDIT_FUNDS_LOADED_TOPIC,
-  CREDIT_LIMIT_DECREASED_TOPIC,
-  CREDIT_LIMIT_INCREASED_TOPIC,
-  SERVICE_QUEUE_NAME,
-} from '@archie/api/credit-api/constants';
+  CREDIT_LIMIT_UPDATED_TOPIC,
+  CREDIT_LINE_CREATED_TOPIC,
+} from '@archie/api/credit-limit-api/constants';
 import { PeachBorrowerService } from './loan.service';
 import {
   EMAIL_VERIFIED_TOPIC,
   KYC_SUBMITTED_TOPIC,
 } from '@archie/api/user-api/constants';
 import {
-  CreditLimitDecreasedPayload,
-  CreditLimitIncreasedPayload,
-} from '@archie/api/credit-api/data-transfer-objects';
+  CreditLimitUpdatedPayload,
+  CreditLineCreatedPayload,
+} from '@archie/api/credit-limit-api/data-transfer-objects';
 import {
   EmailVerifiedPayload,
   KycSubmittedPayload,
@@ -44,38 +42,22 @@ export class PeachBorrowerQueueController {
   }
 
   @Subscribe(
-    CARD_ACTIVATED_TOPIC,
+    CREDIT_LINE_CREATED_TOPIC,
     PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async cardActivatedHandler(payload): Promise<void> {
-    await this.peachService.handleCardActivatedEvent(payload);
+  async creditLineCreatedHandler(
+    payload: CreditLineCreatedPayload,
+  ): Promise<void> {
+    await this.peachService.handleCreditLineCreatedEvent(payload);
   }
 
   @Subscribe(
-    CREDIT_FUNDS_LOADED_TOPIC,
-    PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async creditFundsLoadedHandler(payload): Promise<void> {
-    await this.peachService.handleFundsLoadedEvent(payload);
-  }
-
-  @Subscribe(
-    CREDIT_LIMIT_INCREASED_TOPIC,
+    CREDIT_LIMIT_UPDATED_TOPIC,
     PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
   )
   async creditLimitIncreasedHandler(
-    payload: CreditLimitIncreasedPayload,
+    payload: CreditLimitUpdatedPayload,
   ): Promise<void> {
-    await this.peachService.handleCreditLimitIncreased(payload);
-  }
-
-  @Subscribe(
-    CREDIT_LIMIT_DECREASED_TOPIC,
-    PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async creditLimitDecreasedHandler(
-    payload: CreditLimitDecreasedPayload,
-  ): Promise<void> {
-    await this.peachService.handleCreditLimitDecreased(payload);
+    await this.peachService.handleCreditLimitUpdatedEvent(payload);
   }
 }

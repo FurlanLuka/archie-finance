@@ -22,16 +22,8 @@ import { RizeFactoryService } from './factory/rize_factory.service';
 import { RizeValidatorService } from './validator/rize_validator.service';
 import {
   CARD_ACTIVATED_TOPIC,
-  CREDIT_FUNDS_LOADED_TOPIC,
   TRANSACTION_UPDATED_TOPIC,
 } from '@archie/api/credit-api/constants';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import {
-  Credit,
-  CreditService,
-  GetCreditResponse,
-} from '@archie/api/credit-api/credit';
 import { QueueService } from '@archie/api/utils/queue';
 import {
   GET_USER_EMAIL_ADDRESS_RPC,
@@ -43,22 +35,26 @@ import {
 } from '@archie/api/user-api/user';
 import {
   CardActivatedPayload,
-  FundsLoadedPayload,
   TransactionUpdatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
 import { CardResponseDto, CardStatus } from './rize.dto';
+import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
+import {
+  CreditBalanceUpdatedPayload,
+  GetLoanBalancesPayload,
+  GetLoanBalancesResponse,
+  PaymentType,
+} from '@archie/api/peach-api/data-transfer-objects';
 
 @Injectable()
 export class RizeService {
   private rizeMessagingQueueClient;
 
   constructor(
-    @InjectRepository(Credit) private creditRepository: Repository<Credit>,
     private rizeApiService: RizeApiService,
     private rizeFactoryService: RizeFactoryService,
     private rizeValidatorService: RizeValidatorService,
     private queueService: QueueService,
-    private creditService: CreditService,
   ) {
     this.rizeEventListener = this.rizeEventListener.bind(this);
     this.handleTransactionsEvent = this.handleTransactionsEvent.bind(this);
@@ -134,20 +130,11 @@ export class RizeService {
       )
     ) {
       const userId: string = transactionDetails.customer_external_uid;
-      const amount: string = transactionDetails.us_dollar_amount;
       const transactionId: string = transactionDetails.transaction_uid;
       const newStatus: TransactionStatus = transactionDetails.new_status;
 
       const transaction: RizeTransaction =
         await this.rizeApiService.getTransaction(transactionId);
-
-      if (transactionDetails.new_status === TransactionStatus.settled) {
-        if (transaction.net_asset === 'negative') {
-          await this.decreaseAvailableCredit(userId, Number(amount));
-        } else {
-          await this.increaseAvailableCredit(userId, Number(amount));
-        }
-      }
 
       this.queueService.publish<TransactionUpdatedPayload>(
         TRANSACTION_UPDATED_TOPIC,
@@ -167,30 +154,6 @@ export class RizeService {
 
       await this.loadFunds(userId, customerId);
     }
-  }
-
-  private async decreaseAvailableCredit(userId: string, amount: number) {
-    await this.creditRepository
-      .createQueryBuilder('Credit')
-      .update(Credit)
-      .where('userId = :userId', { userId })
-      .set({
-        availableCredit: () => '"availableCredit" - :amount',
-      })
-      .setParameter('amount', amount)
-      .execute();
-  }
-
-  private async increaseAvailableCredit(userId: string, amount: number) {
-    await this.creditRepository
-      .createQueryBuilder('Credit')
-      .update(Credit)
-      .where('userId = :userId', { userId })
-      .set({
-        availableCredit: () => '"availableCredit" + :amount',
-      })
-      .setParameter('amount', amount)
-      .execute();
   }
 
   public async getVirtualCard(userId: string): Promise<CardResponseDto> {
@@ -230,7 +193,12 @@ export class RizeService {
     this.rizeValidatorService.validateCustomerExists(customer);
 
     const rizeTransactions: RizeList<RizeTransaction> =
-      await this.rizeApiService.getTransactions(customer.uid, page, limit);
+      await this.rizeApiService.getTransactions(customer.uid, page, limit, [
+        'queued',
+        'pending',
+        'settled',
+        'failed',
+      ]);
 
     const transactions: Transaction[] = rizeTransactions.data.map(
       (txn: RizeTransaction) => ({
@@ -355,40 +323,52 @@ export class RizeService {
   }
 
   public async loadFunds(userId: string, customerId: string): Promise<void> {
-    const credit: GetCreditResponse = await this.creditService.getCredit(
+    const credit = await this.queueService.request<
+      GetLoanBalancesResponse,
+      GetLoanBalancesPayload
+    >(GET_LOAN_BALANCES_RPC, {
       userId,
-    );
+    });
 
     await this.rizeApiService.loadFunds(customerId, credit.availableCredit);
-
-    this.queueService.publish<FundsLoadedPayload>(CREDIT_FUNDS_LOADED_TOPIC, {
-      userId,
-      amount: credit.availableCredit,
-    });
   }
 
-  public async increaseCreditLimit(
-    userId: string,
-    amount: number,
+  public async updateAvailableCredit(
+    credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
+    if (credit.paymentDetails?.type === PaymentType.purchase) {
+      return;
+    }
+    // TODO: remember last credit update - calculatedAt
+
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
-      userId,
+      credit.userId,
     );
     this.rizeValidatorService.validateCustomerExists(customer);
+    const pendingTransactions: RizeList<RizeTransaction> =
+      await this.rizeApiService.getTransactions(customer.uid, 0, 100, [
+        'pending',
+        'queued',
+      ]);
 
-    await this.rizeApiService.loadFunds(customer.uid, amount);
-  }
+    if (pendingTransactions.data.length !== 0) {
+      throw new Error('Pending transactions in progress. Retry later');
+    }
+    const cardBalance: number = Number(customer.total_balance);
 
-  public async decreaseCreditLimit(
-    userId: string,
-    amount: number,
-  ): Promise<void> {
-    const customer: Customer | null = await this.rizeApiService.searchCustomers(
-      userId,
-    );
-    this.rizeValidatorService.validateCustomerExists(customer);
+    if (credit.availableCreditAmount > cardBalance) {
+      await this.rizeApiService.loadFunds(
+        customer.uid,
+        credit.availableCreditAmount - cardBalance,
+      );
+    }
 
-    await this.rizeApiService.decreaseCreditLimit(customer.uid, amount);
+    if (credit.availableCreditAmount < cardBalance) {
+      await this.rizeApiService.decreaseCreditLimit(
+        customer.uid,
+        cardBalance - credit.availableCreditAmount,
+      );
+    }
   }
 
   public async unlockCard(userId: string): Promise<void> {

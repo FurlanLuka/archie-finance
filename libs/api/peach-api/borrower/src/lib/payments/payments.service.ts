@@ -6,6 +6,7 @@ import {
   Credit,
   PaymentInstrument,
   Payments,
+  PeachOneTimePaymentStatus,
 } from '../api/peach_api.interfaces';
 import {
   GetPaymentsQueryDto,
@@ -14,13 +15,17 @@ import {
 } from './payments.dto';
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
-import { CreditLinePaymentReceivedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { CREDIT_LINE_PAYMENT_RECEIVED_TOPIC } from '@archie/api/peach-api/constants';
+import {
+  CreditBalanceUpdatedPayload,
+  PaymentType,
+} from '@archie/api/peach-api/data-transfer-objects';
+import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
 import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import { Injectable } from '@nestjs/common';
+import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
 
 @Injectable()
 export class PaymentsService {
@@ -87,11 +92,16 @@ export class PaymentsService {
       payment.loanId,
     );
 
-    this.queueService.publish<CreditLinePaymentReceivedPayload>(
-      CREDIT_LINE_PAYMENT_RECEIVED_TOPIC,
+    this.queueService.publish<CreditBalanceUpdatedPayload>(
+      CREDIT_BALANCE_UPDATED_TOPIC,
       {
         ...credit,
         userId: payment.personExternalId,
+        paymentDetails: {
+          type: PaymentType.payment,
+          amount: payment.amount,
+          asset: payment.currency,
+        },
       },
     );
   }
@@ -124,11 +134,29 @@ export class PaymentsService {
       );
     }
 
-    await this.peachApiService.createPendingOneTimePaymentTransaction(
+    await this.peachApiService.createOneTimePaymentTransaction(
       borrower,
       liquidationInstrumentId,
       transaction.price,
       transaction.id,
+      PeachOneTimePaymentStatus.pending,
+    );
+
+    const credit: Credit = await this.peachApiService.getCreditBalance(
+      borrower.personId,
+      borrower.creditLineId,
+    );
+    this.queueService.publish<CreditBalanceUpdatedPayload>(
+      CREDIT_BALANCE_UPDATED_TOPIC,
+      {
+        ...credit,
+        userId: transaction.userId,
+        paymentDetails: {
+          type: PaymentType.liquidation,
+          amount: transaction.amount,
+          asset: transaction.asset,
+        },
+      },
     );
   }
 
@@ -145,4 +173,62 @@ export class PaymentsService {
       transaction.transactionId,
     );
   }
+
+  public async handlePaypalPaymentReceivedEvent(
+    payload: PaypalPaymentReceivedPayload,
+  ): Promise<void> {
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
+      userId: payload.userId,
+    });
+
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
+
+    let paypalInstrumentId: string | null = borrower.paypalInstrumentId;
+
+    if (paypalInstrumentId === null) {
+      const paymentInstrument: PaymentInstrument =
+        await this.peachApiService.createPaypalPaymentInstrument(
+          borrower.personId,
+        );
+
+      paypalInstrumentId = paymentInstrument.id;
+
+      await this.borrowerRepository.update(
+        {
+          userId: payload.userId,
+        },
+        {
+          paypalInstrumentId,
+        },
+      );
+    }
+
+    await this.peachApiService.createOneTimePaymentTransaction(
+      borrower,
+      paypalInstrumentId,
+      payload.amount,
+      payload.orderId,
+      PeachOneTimePaymentStatus.succeeded,
+    );
+
+    const credit: Credit = await this.peachApiService.getCreditBalance(
+      borrower.personId,
+      borrower.creditLineId,
+    );
+
+    this.queueService.publish<CreditBalanceUpdatedPayload>(
+      CREDIT_BALANCE_UPDATED_TOPIC,
+      {
+        ...credit,
+        userId: payload.userId,
+        paymentDetails: {
+          type: PaymentType.payment,
+          amount: payload.amount,
+          asset: payload.currency,
+        },
+      },
+    );
+  }
+
+  // TODO: Handle failed transaction
 }

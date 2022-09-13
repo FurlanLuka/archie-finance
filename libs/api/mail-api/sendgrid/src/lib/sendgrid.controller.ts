@@ -15,7 +15,7 @@ import {
   LTV_LIMIT_APPROACHING_TOPIC,
   MARGIN_CALL_COMPLETED_TOPIC,
   MARGIN_CALL_STARTED_TOPIC,
-} from '@archie/api/credit-api/constants';
+} from '@archie/api/margin-api/constants';
 import {
   AppliedToWaitlistPayload,
   JoinedToWaitlistPayload,
@@ -24,7 +24,7 @@ import {
   LtvLimitApproachingPayload,
   MarginCallCompletedPayload,
   MarginCallStartedPayload,
-} from '@archie/api/credit-api/data-transfer-objects';
+} from '@archie/api/margin-api/data-transfer-objects';
 import { SalesConnectDto } from '@archie/api/referral-system-api/sales-connect';
 
 @Controller()

@@ -213,6 +213,7 @@ export class FireblocksService {
             userId,
             id: transaction.id,
             network: fireblocksAsset.network,
+            asset,
             amount,
             price,
           },

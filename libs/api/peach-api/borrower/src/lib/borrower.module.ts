@@ -6,6 +6,9 @@ import { InterestsModule } from './interests/interests.module';
 import { PurchasesModule } from './purchases/purchases.module';
 import { ObligationsModule } from './obligations/obligations.module';
 import { PaymentsModule } from './payments/payments.module';
+import { InterestsModule } from './interests/interests.module';
+import { LoanBalancesModule } from './loan-balances/loan-balances.module';
+import { LoanStatementsModule } from './statements/statements.module';
 
 @Module({
   controllers: [],
@@ -17,6 +20,8 @@ import { PaymentsModule } from './payments/payments.module';
     ObligationsModule,
     InterestsModule,
     AutopayModule,
+    LoanBalancesModule,
+    LoanStatementsModule,
   ],
   providers: [],
   exports: [],

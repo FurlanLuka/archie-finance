@@ -27,5 +27,8 @@ export class Borrower {
   liquidationInstrumentId: string | null;
 
   @Column('varchar', { nullable: true })
+  paypalInstrumentId: string | null;
+
+  @Column('varchar', { nullable: true })
   drawId: string | null;
 }

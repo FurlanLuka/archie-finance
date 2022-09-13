@@ -267,12 +267,14 @@ export interface Balances {
     duePrincipalAmount: number;
     dueTotalAmount: number;
   };
+  utilizationAmount: number;
 }
 
 export interface Credit {
   availableCreditAmount: number;
   creditLimitAmount: number;
   calculatedAt: string;
+  utilizationAmount: number;
 }
 
 export interface PeachErrorResponse {
@@ -367,4 +369,38 @@ export interface AutopayContext {
   supportPhone: string;
   supportEmail: string;
   dateSigned: string;
+}
+
+export interface Statement {
+  id: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string | null;
+  periodId: string;
+  version: number;
+  billingCycleStartDate: string;
+  billingCycleEndDate: string;
+  paymentDueDate: string;
+  documentDescriptorId: string;
+  statementDate: string;
+  minimumDueAmount: number;
+  overdueAmount: number;
+  newBalanceAmount: number;
+}
+
+// TODO use when/if statements pagination
+export interface Statements {
+  total: number;
+  count: number;
+  nextUrl: string | null;
+  previousUrl: string | null;
+  data: Statement[];
+}
+
+export interface DocumentUrl {
+  url: string;
+}
+export enum PeachOneTimePaymentStatus {
+  succeeded = 'succeeded',
+  pending = 'pending'
 }

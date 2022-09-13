@@ -122,294 +122,6 @@
         }
       }
     },
-    "/v1/credit": {
-      "post": {
-        "operationId": "CreditController_createCreditLine",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetCreditResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      },
-      "get": {
-        "operationId": "CreditController_getCreditLine",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetCreditResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/internal/credit/{userId}": {
-      "post": {
-        "operationId": "InternalCreditController_createCreditLine",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetCreditResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
-          }
-        }
-      },
-      "get": {
-        "operationId": "InternalCreditController_getCreditLine",
-        "parameters": [
-          {
-            "name": "userId",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetCreditResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "ERR_CREATE_CREDIT_MINIMUM_COLLATERAL"
-          },
-          "404": {
-            "description": "ERR_CREDIT_NOT_FOUND"
-          }
-        }
-      }
-    },
-    "/v1/apto/verification/start": {
-      "post": {
-        "operationId": "AptoController_startPhoneVerification",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StartPhoneVerificationResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/apto/verification/finish": {
-      "post": {
-        "operationId": "AptoController_finishPhoneVerification",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/FinishPhoneVerificationDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CompletePhoneVerificationResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/apto/verification/restart": {
-      "post": {
-        "operationId": "AptoController_restartPhoneVerification",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StartPhoneVerificationResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/apto/user": {
-      "post": {
-        "operationId": "AptoController_createUser",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreateUserResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/apto/user/card": {
-      "post": {
-        "operationId": "AptoController_applyForCard",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/IssueCardResponseDto"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/internal/margins/check": {
-      "post": {
-        "operationId": "MarginInternalController_checkMargin",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/v1/margins/ltv": {
-      "get": {
-        "operationId": "MarginController_getCurrentLtv",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/LtvResponseDto"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
     "/v1/rize/users": {
       "post": {
         "operationId": "RizeController_createUser",
@@ -604,7 +316,7 @@
               }
             }
           },
-          "500": {
+          "404": {
             "description": "COLLATERAL_NOT_FOUND"
           }
         },
@@ -1281,6 +993,153 @@
         ]
       }
     },
+    "/v1/loan_balances": {
+      "get": {
+        "operationId": "LoanBalancesController_getLoanBalances",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLoanBalancesDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/loan_statements": {
+      "get": {
+        "operationId": "LoanStatementsController_getLoanStatements",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/loan_statements/{documentId}": {
+      "get": {
+        "operationId": "LoanStatementsController_getLoanDocumentUrl",
+        "parameters": [
+          {
+            "name": "documentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetLoanDocumentDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/credit_limits": {
+      "post": {
+        "operationId": "CreditLimitController_createCreditLine",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "400": {
+            "description": "ERR_CREDIT_ALREADY_EXISTS"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/internal/credit_limits/periodic_check": {
+      "post": {
+        "operationId": "InternalPeriodicCheckController_triggerCreditLimitPeriodicCheck",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/ltv": {
+      "get": {
+        "operationId": "LtvController_getCurrentLtv",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LtvDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "CREDIT_NOT_SET_UP"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+<<<<<<< HEAD
     "/v1/loan_autopay": {
       "post": {
         "operationId": "AutopayController_setupAutopay",
@@ -1391,6 +1250,17 @@
             "bearer": []
           }
         ]
+=======
+    "/internal/ltv/periodic_check": {
+      "post": {
+        "operationId": "InternalPeriodicCheckController_startPeriodicCheck",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+>>>>>>> develop
       }
     }
   },
@@ -1409,170 +1279,6 @@
         },
         "required": [
           "address"
-        ]
-      },
-      "GetCreditResponseDto": {
-        "type": "object",
-        "properties": {
-          "totalCredit": {
-            "type": "number"
-          },
-          "availableCredit": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "totalCredit",
-          "availableCredit"
-        ]
-      },
-      "StartPhoneVerificationResponseDto": {
-        "type": "object",
-        "properties": {
-          "verificationId": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "verificationId",
-          "status"
-        ]
-      },
-      "FinishPhoneVerificationDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "CompletePhoneVerificationResponseDto": {
-        "type": "object",
-        "properties": {
-          "verificationId": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "verificationId",
-          "status"
-        ]
-      },
-      "CreateUserResponseDto": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string"
-          },
-          "user_id": {
-            "type": "string"
-          },
-          "user_token": {
-            "type": "string"
-          },
-          "user_data": {
-            "type": "object"
-          },
-          "metadata": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "user_id",
-          "user_token",
-          "user_data",
-          "metadata"
-        ]
-      },
-      "IssueCardResponseDto": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string"
-          },
-          "account_id": {
-            "type": "string"
-          },
-          "lastFour": {
-            "type": "string"
-          },
-          "cardNetwork": {
-            "type": "string"
-          },
-          "card_brand": {
-            "type": "string"
-          },
-          "expiration": {
-            "type": "string"
-          },
-          "pan": {
-            "type": "string"
-          },
-          "ccv": {
-            "type": "string"
-          },
-          "kyc_status": {
-            "type": "string"
-          },
-          "kyc_reason": {
-            "type": "string"
-          },
-          "cardholder_first_name": {
-            "type": "string"
-          },
-          "cardholder_last_name": {
-            "type": "string"
-          },
-          "issued_at": {
-            "type": "string"
-          },
-          "name_on_card": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "type",
-          "account_id",
-          "lastFour",
-          "cardNetwork",
-          "card_brand",
-          "expiration",
-          "pan",
-          "ccv",
-          "kyc_status",
-          "kyc_reason",
-          "cardholder_first_name",
-          "cardholder_last_name",
-          "issued_at",
-          "name_on_card"
-        ]
-      },
-      "LtvResponseDto": {
-        "type": "object",
-        "properties": {
-          "ltv": {
-            "type": "number"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "good",
-              "ok",
-              "warning",
-              "margin_call"
-            ]
-          },
-          "loanedBalance": {
-            "type": "number"
-          }
-        },
-        "required": [
-          "ltv",
-          "status",
-          "loanedBalance"
         ]
       },
       "CardResponseDto": {
@@ -2544,6 +2250,7 @@
           "aprEffective"
         ]
       },
+<<<<<<< HEAD
       "CreateAutopayDto": {
         "type": "object",
         "properties": {
@@ -2693,6 +2400,57 @@
         "required": [
           "id",
           "document"
+=======
+      "GetLoanBalancesDto": {
+        "type": "object",
+        "properties": {
+          "totalCredit": {
+            "type": "number"
+          },
+          "availableCredit": {
+            "type": "number"
+          },
+          "utilizationAmount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "totalCredit",
+          "availableCredit",
+          "utilizationAmount"
+        ]
+      },
+      "GetLoanDocumentDto": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ]
+      },
+      "LtvDto": {
+        "type": "object",
+        "properties": {
+          "ltv": {
+            "type": "number"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "good",
+              "ok",
+              "warning",
+              "margin_call"
+            ]
+          }
+        },
+        "required": [
+          "ltv",
+          "status"
+>>>>>>> develop
         ]
       }
     },
