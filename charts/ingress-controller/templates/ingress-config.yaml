@@ -168,6 +168,13 @@ spec:
                 name: archie-peach-api-service
                 port:
                   number: 80
+          - path: /v1/loan_autopay
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-peach-api-service
+                port:
+                  number: 80
           - path: /v1/loan_balances
             pathType: Prefix
             backend:

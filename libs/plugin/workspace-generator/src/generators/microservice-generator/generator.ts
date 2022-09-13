@@ -1,9 +1,16 @@
-import { getWorkspaceLayout, Tree } from '@nrwl/devkit';
+import { getWorkspaceLayout, joinPathFragments, Tree } from '@nrwl/devkit';
 import { MicroserviceGenerator } from './schema';
-import { applicationGenerator } from '@nrwl/nest';
+import { initGenerator } from '@nrwl/nest';
+import { applicationGenerator as nodeApplicationGenerator } from '@nrwl/node';
+import { createAppFiles, createLibFiles } from './lib/create-files';
+import { updateTsConfig } from './lib/update-tsconfig';
+import { runTasksInSerial } from '@nrwl/workspace/src/utilities/run-tasks-in-serial';
+import { microserviceModuleGenerator } from '../microservice-module-generator/generator';
+import deploymentConfigGenerator from '../deployment-config-generator/generator';
+import microserviceProjectTargetGenerator from '../microservice-project-target-generator/generator';
 
-interface NormalizedSchema extends MicroserviceGenerator {
-  serviceRoot: string;
+export interface NormalizedSchema extends MicroserviceGenerator {
+  projectRoot: string;
   constantsRoot: string;
 }
 
@@ -11,43 +18,57 @@ function normalizeOptions(
   tree: Tree,
   options: MicroserviceGenerator,
 ): NormalizedSchema {
-  const serviceRoot = `${getWorkspaceLayout(tree).appsDir}/${
-    options.projectName
-  }`;
+  const projectRoot = joinPathFragments(
+    getWorkspaceLayout(tree).appsDir,
+    options.name,
+  );
 
-  const constantsRoot = `${getWorkspaceLayout(tree).libsDir}/${
-    options.projectName
-  }/constants`;
+  const constantsRoot = joinPathFragments(
+    getWorkspaceLayout(tree).libsDir,
+    `api/${options.name}/constants`,
+  );
 
   return {
     ...options,
-    serviceRoot,
+    projectRoot,
     constantsRoot,
   };
 }
 
-// function addFiles(tree: Tree, options: NormalizedSchema) {
-//   const templateOptions = {
-//     ...options,
-//     offsetFromRoot: offsetFromRoot(options.projectRoot),
-//   };
-//   generateFiles(
-//     tree,
-//     path.join(__dirname, 'files'),
-//     options.projectRoot,
-//     templateOptions,
-//   );
-// }
-
 export default async function (tree: Tree, options: MicroserviceGenerator) {
   const normalizedOptions = normalizeOptions(tree, options);
 
-  await applicationGenerator(tree, {
-    name: 'peach-api',
-    standaloneConfig: true,
+  const initTask = await initGenerator(tree, {
+    unitTestRunner: 'jest',
+    skipFormat: true,
   });
 
-  // visitNotIgnoredFiles(tree, `${normalizedOptions.serviceRoot}/src/`, (path) => console.log(path))
+  const nodeApplicationTask = await nodeApplicationGenerator(tree, {
+    unitTestRunner: 'jest',
+    name: normalizedOptions.name,
+  });
 
-  // addFiles(tree, normalizedOptions);
+  createAppFiles(tree, normalizedOptions);
+  updateTsConfig(tree, normalizedOptions);
+
+  const createConstantsLibraryTask = await microserviceModuleGenerator(tree, {
+    projectName: options.name,
+    name: 'constants',
+  });
+
+  createLibFiles(tree, normalizedOptions);
+
+  deploymentConfigGenerator(tree, {
+    projectName: options.name,
+  });
+
+  microserviceProjectTargetGenerator(tree, {
+    projectName: options.name,
+  })
+
+  return runTasksInSerial(
+    initTask,
+    nodeApplicationTask,
+    createConstantsLibraryTask,
+  );
 }
