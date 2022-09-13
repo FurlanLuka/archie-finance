@@ -13,6 +13,6 @@ import { BorrowerUtil } from '../utils/utils.module';
   controllers: [AutopayController, AutopayDocumentsController],
   imports: [BorrowerUtil, TypeOrmModule.forFeature([Borrower]), PeachApiModule],
   providers: [AutopayService],
-  exports: [AutopayService],
+  exports: [],
 })
 export class AutopayModule {}
