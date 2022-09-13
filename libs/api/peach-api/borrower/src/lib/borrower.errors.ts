@@ -1,4 +1,8 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 
 export class BorrowerNotFoundError extends NotFoundException {
   constructor() {
@@ -33,6 +37,24 @@ export class AmountExceedsOutstandingBalanceError extends BadRequestException {
 export class AmountExceedsAvailableBalanceError extends NotFoundException {
   constructor() {
     super('AMOUNT_EXCEEDS_AVAILABLE_BALANCE');
+  }
+}
+
+export class PaymentInstrumentNotFound extends NotFoundException {
+  constructor() {
+    super('PAYMENT_INSTRUMENT_NOT_FOUND');
+  }
+}
+
+export class AutopayNotConfiguredError extends NotFoundException {
+  constructor() {
+    super('AUTOPAY_NOT_CONFIGURED');
+  }
+}
+
+export class AutopayAlreadyConfiguredError extends ConflictException {
+  constructor() {
+    super('AUTOPAY_ALREADY_CONFIGURED');
   }
 }
 

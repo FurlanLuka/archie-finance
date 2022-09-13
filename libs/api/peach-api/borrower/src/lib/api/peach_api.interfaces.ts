@@ -39,6 +39,10 @@ export interface PaymentInstrumentBalance extends PeachResponse {
   };
 }
 
+export interface Document extends PeachResponse {
+  id: string;
+}
+
 export enum PaymentStatus {
   scheduled = 'scheduled',
   initiated = 'initiated',
@@ -303,6 +307,68 @@ export enum PeachTransactionStatus {
   pending = 'pending',
   settled = 'settled',
   failed = 'canceled',
+}
+
+export enum AmountType {
+  statementMinimumAmount = 'statementMinimumAmount',
+  statementMinimumAmountPlusExtra = 'statementMinimumAmountPlusExtra',
+  statementBalanceAmount = 'statementBalanceAmount',
+}
+
+export interface AutopayOptions {
+  amountType: AmountType;
+  extraAmount?: number | null;
+  paymentInstrumentId: string;
+  isAlignedToDueDates: boolean;
+  offsetFromDueDate?: number[] | null;
+  agreementDocumentId: string;
+}
+
+export enum PaymentFrequency {
+  twiceMonthly = 'twiceMonthly',
+  everyTwoWeeks = 'everyTwoWeeks',
+  monthly = 'monthly',
+}
+
+export enum AutopayScheduleStatus {
+  booked = 'booked',
+  modified = 'modified',
+  canceled = 'canceled',
+  processed = 'processed',
+}
+
+export interface Autopay extends PeachResponse {
+  agreementDocumentId: string;
+  type: AmountType;
+  extraAmount: number;
+  isAlignedToDueDates: boolean;
+  paymentFrequency: PaymentFrequency;
+  specificDays: number[];
+  paymentInstrumentId: string;
+  cancelReason: string;
+  schedule: AutopaySchedule[];
+}
+
+export interface AutopaySchedule {
+  date: string;
+  periodId: string;
+  paymentType: string;
+  status: string;
+  amount: number;
+  originalAmount: number;
+  principalAmount: number;
+  interestAmount: number;
+  interestBeforeDiscountAmount: number;
+  isDeferred: boolean;
+}
+
+export interface AutopayContext {
+  lenderName: string;
+  paymentMethod: string;
+  paymentMethodLastFour: string;
+  supportPhone: string;
+  supportEmail: string;
+  dateSigned: string;
 }
 
 export interface Statement {
