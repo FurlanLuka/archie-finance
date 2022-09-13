@@ -138,7 +138,7 @@ export class PeachApiService {
     );
   }
 
-  public async createOneTimePaymentTransaction(
+  public async tryCreatingOneTimePaymentTransaction(
     borrower: BorrowerWithCreditLine,
     paymentInstrumentId: string,
     amount: number,
@@ -166,12 +166,7 @@ export class PeachApiService {
     } catch (e) {
       const error: PeachErrorResponse = e;
 
-      if (
-        error.status === 400 &&
-        error.errorResponse.message.startsWith(
-          'Amount exceeds outstanding balance.',
-        )
-      ) {
+      if (error.status === 400) {
         try {
           await this.getPayment(
             borrower.personId,
