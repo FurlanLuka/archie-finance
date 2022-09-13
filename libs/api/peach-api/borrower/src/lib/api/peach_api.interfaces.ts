@@ -86,45 +86,47 @@ export interface Payments extends PeachResponse {
   count: number;
   nextUrl: string | null;
   previousUrl: string | null;
-  data: {
-    id: string;
-    timestamps: {
-      appliedAt: string;
-      canceledAt: string | null;
-      chargebackAt: string | null;
-      createdAt: string;
-      deletedAt: string | null;
-      displayDate: string;
-      effectiveDate: string;
-      failedAt: string | null;
-      inDisputeAt: string | null;
-      initiatedAt: string;
-      originalEffectiveDate: string;
-      pendingAt: string;
-      scheduledDate: string;
-      succeededAt: string | null;
-      updatedAt: string | null;
+  data: Payment[];
+}
+
+export class Payment {
+  id: string;
+  timestamps: {
+    appliedAt: string;
+    canceledAt: string | null;
+    chargebackAt: string | null;
+    createdAt: string;
+    deletedAt: string | null;
+    displayDate: string;
+    effectiveDate: string;
+    failedAt: string | null;
+    inDisputeAt: string | null;
+    initiatedAt: string;
+    originalEffectiveDate: string;
+    pendingAt: string;
+    scheduledDate: string;
+    succeededAt: string | null;
+    updatedAt: string | null;
+  };
+  isExternal: boolean;
+  isVirtual: boolean;
+  status: PaymentStatus;
+  transactionType: TransactionType;
+  paymentDetails: {
+    type: PaymentType;
+    reason: PaymentReason;
+    fromInstrumentId: string;
+    fromInstrument: {
+      paymentNetworkName: string;
+      accountNumberLastFour?: string;
     };
-    isExternal: boolean;
-    isVirtual: boolean;
-    status: PaymentStatus;
-    transactionType: TransactionType;
-    paymentDetails: {
-      type: PaymentType;
-      reason: PaymentReason;
-      fromInstrumentId: string;
-      fromInstrument: {
-        paymentNetworkName: string;
-        accountNumberLastFour?: string;
-      };
-    };
-    actualAmount: number;
-    currency: string;
-    failureDescriptionShort: string | null;
-    failureDescriptionLong: string | null;
-    autopayPlanId: string | null;
-    cancelReason: string | null;
-  }[];
+  };
+  actualAmount: number;
+  currency: string;
+  failureDescriptionShort: string | null;
+  failureDescriptionLong: string | null;
+  autopayPlanId: string | null;
+  cancelReason: string | null;
 }
 
 export enum PurchaseType {
@@ -336,5 +338,5 @@ export interface DocumentUrl {
 }
 export enum PeachOneTimePaymentStatus {
   succeeded = 'succeeded',
-  pending = 'pending'
+  pending = 'pending',
 }

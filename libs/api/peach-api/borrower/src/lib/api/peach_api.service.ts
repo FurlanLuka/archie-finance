@@ -26,6 +26,7 @@ import {
   Statement,
   DocumentUrl,
   PeachOneTimePaymentStatus,
+  Payment,
 } from './peach_api.interfaces';
 import { Borrower } from '../borrower.entity';
 import {
@@ -35,6 +36,7 @@ import {
 import { omitBy, isNil } from 'lodash';
 import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects';
 import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import { BorrowerWithCreditLine } from '../utils/borrower.validation.interfaces';
 
 @Injectable()
 export class PeachApiService {
@@ -137,7 +139,7 @@ export class PeachApiService {
   }
 
   public async createOneTimePaymentTransaction(
-    borrower: Borrower,
+    borrower: BorrowerWithCreditLine,
     paymentInstrumentId: string,
     amount: number,
     externalId: string,
@@ -163,7 +165,25 @@ export class PeachApiService {
       );
     } catch (e) {
       const error: PeachErrorResponse = e;
-      this.ignoreDuplicatedEntityError(error);
+
+      if (
+        error.status === 400 &&
+        error.errorResponse.message.startsWith(
+          'Amount exceeds outstanding balance.',
+        )
+      ) {
+        try {
+          await this.getPayment(
+            borrower.personId,
+            borrower.creditLineId,
+            externalId,
+          );
+        } catch {
+          throw error;
+        }
+      } else {
+        this.ignoreDuplicatedEntityError(error);
+      }
     }
   }
 
@@ -413,7 +433,7 @@ export class PeachApiService {
         },
         {
           params: {
-            sync: true, // TODO: check if possible to refactor via Peach event
+            sync: true,
           },
         },
       );
@@ -471,14 +491,15 @@ export class PeachApiService {
     personId: string,
     loanId: string,
   ): Promise<Credit> {
-    const response = await this.peachClient.get(
+    const response = await this.peachClient.get<PeachResponseData<Balances>>(
       `people/${personId}/loans/${loanId}/balances`,
     );
     const responseBody: Balances = response.data.data;
 
     if (responseBody.isLocked) {
-      Logger.error('Balance change is in progress, retry');
-      throw new Error('Balance change is in progress, retry');
+      Logger.error('Credit balance change is in progress, retry');
+
+      throw new Error('Credit balance change is in progress, retry');
     }
 
     return {
@@ -601,6 +622,18 @@ export class PeachApiService {
       {
         params: omitBy(query, isNil),
       },
+    );
+
+    return response.data;
+  }
+
+  public async getPayment(
+    personId: string,
+    loanId: string,
+    externalTransactionId: string,
+  ): Promise<Payment> {
+    const response = await this.peachClient.get<Payment>(
+      `/people/${personId}/loans/${loanId}/transactions/ext-${externalTransactionId}`,
     );
 
     return response.data;
