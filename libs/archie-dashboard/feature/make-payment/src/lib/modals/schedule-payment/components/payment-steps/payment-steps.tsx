@@ -25,10 +25,6 @@ export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, kycData, clos
 
   const [stepsState, dispatch] = useReducer(paymentStepsReducer, initalPaymentStepsState);
 
-  const handleConfirm = () => {
-    close();
-  };
-
   const getContent = () => {
     switch (stepsState.step) {
       // case PaymentStep.ACCOUNT:
@@ -103,26 +99,18 @@ export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, kycData, clos
           //   }}
           // />
         );
-      case PaymentStep.SCHEDULED:
-        return (
-          <PayWithPaypalScheduled
-            obligations={obligations}
-            kycData={kycData}
-            onConfirm={handleConfirm}
-            text={t('payment_modal.pay_with_paypal_form.processed_note', {
-              newPayment: stepsState.amount,
-            })}
-          />
-          // <PaymentScheduled
-          //   obligations={obligations}
-          //   kycData={kycData}
-          //   onConfirm={handleConfirm}
-          //   text={t('payment_modal.payment_scheduled.scheduled_note', {
-          //     newPayment: stepsState.amount,
-          //     scheduledDate: stepsState.scheduledDate,
-          //   })}
-          // />
-        );
+      // case PaymentStep.SCHEDULED:
+      //   return (
+      //     <PaymentScheduled
+      //       obligations={obligations}
+      //       kycData={kycData}
+      //       onConfirm={() => close()}
+      //       text={t('payment_modal.payment_scheduled.scheduled_note', {
+      //         newPayment: stepsState.amount,
+      //         scheduledDate: stepsState.scheduledDate,
+      //       })}
+      //     />
+      //   );
       default:
         console.warn('Unhandled step state');
         return null;

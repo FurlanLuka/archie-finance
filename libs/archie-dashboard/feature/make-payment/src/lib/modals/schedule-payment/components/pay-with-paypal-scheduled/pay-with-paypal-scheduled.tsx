@@ -9,35 +9,21 @@ import { PayWithPaypalScheduledStyled } from './pay-with-paypal-scheduled.styled
 
 interface PayWithPaypalScheduledProps {
   onConfirm: () => void;
-  obligations: UserObligations;
-  kycData: Kyc;
-  text: string;
 }
 
-export const PayWithPaypalScheduled: FC<PayWithPaypalScheduledProps> = ({ onConfirm, obligations, kycData, text }) => {
+export const PayWithPaypalScheduled: FC<PayWithPaypalScheduledProps> = ({ onConfirm }) => {
   const { t } = useTranslation();
-
-  const handleConfirm = () => {
-    onConfirm();
-  };
 
   return (
     <PayWithPaypalScheduledStyled>
       <TitleS className="title">{t('payment_modal.payment_scheduled.title')}</TitleS>
-      <BodyL weight={600}>{t('payment_modal.credit_for', { name: kycData.firstName })}</BodyL>
-      <BodyM>
-        {t('payment_modal.interest_owed', {
-          interestOwed: obligations.interestOwed,
-        })}
-      </BodyM>
-      <div className="divider" />
       <BodyL weight={700} className="scheduled-note">
-        {text}
+        {t('payment_modal.pay_with_paypal_form.processed_note')}
       </BodyL>
       <BodyM weight={600}>{t('payment_modal.pay_with_paypal_form.email_note')}</BodyM>
       <BodyM>{t('payment_modal.pay_with_paypal_form.time_note')}</BodyM>
       <div className="btn-group">
-        <ButtonPrimary maxWidth="250px" onClick={handleConfirm}>
+        <ButtonPrimary maxWidth="250px" onClick={onConfirm}>
           {t('btn_ok')}
         </ButtonPrimary>
       </div>

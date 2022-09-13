@@ -1,5 +1,3 @@
-import { useQueryClient } from 'react-query';
-
 import { useExtendedMutation } from '../../helper-hooks';
 import { MutationQueryResponse } from '../../interface';
 import { payWithPaypal, PayWithPaypalPayload, PayWithPaypalResponse } from '../api/pay-with-paypal';
