@@ -43,8 +43,10 @@ import {
   CreditBalanceUpdatedPayload,
   GetLoanBalancesPayload,
   GetLoanBalancesResponse,
-  PaymentType,
 } from '@archie/api/peach-api/data-transfer-objects';
+import { LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { LastAdjustment } from './lastAdjustment.entity';
 
 @Injectable()
 export class RizeService {
@@ -55,6 +57,8 @@ export class RizeService {
     private rizeFactoryService: RizeFactoryService,
     private rizeValidatorService: RizeValidatorService,
     private queueService: QueueService,
+    @InjectRepository(LastAdjustment)
+    private lastAdjustmentRepository: Repository<LastAdjustment>,
   ) {
     this.rizeEventListener = this.rizeEventListener.bind(this);
     this.handleTransactionsEvent = this.handleTransactionsEvent.bind(this);
@@ -336,10 +340,22 @@ export class RizeService {
   public async updateAvailableCredit(
     credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
-    if (credit.paymentDetails?.type === PaymentType.purchase) {
+    // Properly done - this section (whole handler) would need to be locked otherwise 2 simultaneous events (2nd event with a greater date than the first)
+    // - can still enable both to enter and adjust credit limit. It is very unlikely - OK for POC
+    const updateResult: UpdateResult =
+      await this.lastAdjustmentRepository.update(
+        {
+          userId: credit.userId,
+          availableCreditCalculatedAt: LessThanOrEqual(credit.calculatedAt),
+        },
+        {
+          availableCreditCalculatedAt: credit.calculatedAt,
+        },
+      );
+
+    if (updateResult.affected === 0) {
       return;
     }
-    // TODO: remember last credit update - calculatedAt
 
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       credit.userId,

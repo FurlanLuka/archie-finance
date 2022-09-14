@@ -34,7 +34,7 @@
     "@nestjs/passport": "^8.2.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/swagger": "^5.2.1",
-    "@nestjs/typeorm": "^8.1.1",
+    "@nestjs/typeorm": "^8.1.4",
     "@nrwl/nx-plugin": "^14.3.6",
     "@rizefinance/rize-js": "github:RizeFinance/rize-js#v1.6.0",
     "@swc/helpers": "~0.3.3",

@@ -31,3 +31,8 @@ export interface TransactionResponse {
   meta: PaginationMeta;
   data: Transaction[];
 }
+
+export enum AdjustmentType {
+  fee = 'fee',
+  credit = 'credit',
+}
