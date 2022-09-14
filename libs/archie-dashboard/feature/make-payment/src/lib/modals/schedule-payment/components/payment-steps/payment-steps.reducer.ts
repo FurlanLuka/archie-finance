@@ -10,58 +10,61 @@ export enum PaymentStepsActionType {
 export type PaymentStepsAction =
   | {
       type: PaymentStepsActionType.MOVE_TO_SCHEDULE_STEP;
-      payload: {
-        selectedAccount: AccountResponse;
-      };
+      // payload: {
+      //   selectedAccount: AccountResponse;
+      // };
     }
   | {
       type: PaymentStepsActionType.MOVE_TO_CONFIRM_STEP;
-      payload: {
-        amount: number;
-        scheduledDate: string;
-        selectedAccount: AccountResponse;
-      };
+      amount: number;
+      // payload: {
+      //   amount: number;
+      //   scheduledDate: string;
+      //   selectedAccount: AccountResponse;
+      // };
     }
   | {
       type: PaymentStepsActionType.MOVE_TO_COMPLETED_STEP;
-      payload: {
-        amount: number;
-        scheduledDate: string;
-        selectedAccount: AccountResponse;
-      };
+      amount: number;
+      // payload: {
+      //   amount: number;
+      //   scheduledDate: string;
+      //   selectedAccount: AccountResponse;
+      // };
     };
 
 export type PaymentStepsState =
-  | {
-      step: PaymentStep.ACCOUNT;
-      selectedAccount: null;
-      amount: null;
-      scheduledDate: null;
-    }
+  // | {
+  //     step: PaymentStep.ACCOUNT;
+  //     selectedAccount: null;
+  //     amount: null;
+  //     scheduledDate: null;
+  //   }
   | {
       step: PaymentStep.SCHEDULE;
-      selectedAccount: AccountResponse;
+      // selectedAccount: AccountResponse;
       amount: null;
-      scheduledDate: null;
+      // scheduledDate: null;
     }
   | {
       step: PaymentStep.CONFIRM;
-      selectedAccount: AccountResponse;
+      // selectedAccount: AccountResponse;
       amount: number;
-      scheduledDate: string;
+      // scheduledDate: string;
     }
   | {
       step: PaymentStep.SCHEDULED;
-      selectedAccount: AccountResponse;
+      // selectedAccount: AccountResponse;
       amount: number;
-      scheduledDate: string;
+      // scheduledDate: string;
     };
 
 export const initalPaymentStepsState: PaymentStepsState = {
-  step: PaymentStep.ACCOUNT,
-  selectedAccount: null,
+  // step: PaymentStep.ACCOUNT,
+  step: PaymentStep.SCHEDULE,
+  // selectedAccount: null,
   amount: null,
-  scheduledDate: null,
+  // scheduledDate: null,
 };
 
 export const paymentStepsReducer = (state: PaymentStepsState, action: PaymentStepsAction): PaymentStepsState => {
@@ -69,23 +72,25 @@ export const paymentStepsReducer = (state: PaymentStepsState, action: PaymentSte
     case PaymentStepsActionType.MOVE_TO_SCHEDULE_STEP:
       return {
         step: PaymentStep.SCHEDULE,
-        selectedAccount: action.payload.selectedAccount,
+        // selectedAccount: action.payload.selectedAccount,
         amount: null,
-        scheduledDate: null,
+        // scheduledDate: null,
       };
     case PaymentStepsActionType.MOVE_TO_CONFIRM_STEP:
       return {
         step: PaymentStep.CONFIRM,
-        selectedAccount: action.payload.selectedAccount,
-        amount: action.payload.amount,
-        scheduledDate: action.payload.scheduledDate,
+        // selectedAccount: action.payload.selectedAccount,
+        // amount: action.payload.amount,
+        amount: action.amount,
+        // scheduledDate: action.payload.scheduledDate,
       };
     case PaymentStepsActionType.MOVE_TO_COMPLETED_STEP:
       return {
         step: PaymentStep.SCHEDULED,
-        selectedAccount: action.payload.selectedAccount,
-        amount: action.payload.amount,
-        scheduledDate: action.payload.scheduledDate,
+        // selectedAccount: action.payload.selectedAccount,
+        // amount: action.payload.amount,
+        amount: action.amount,
+        // scheduledDate: action.payload.scheduledDate,
       };
     default:
       throw new Error('Unsupported action type');
