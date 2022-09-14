@@ -4,16 +4,21 @@ import { Icon } from '@archie-webapps/shared/ui/icons';
 
 import { SelectOptionProps } from './select-option';
 import { SelectStyled } from './select.styled';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
-interface SelectProps<T> {
+export interface SelectProps<T> {
   id: string;
   header: ReactElement;
   onChange: (value: T) => void;
+  isLoading?: boolean;
+  isDisabled?: boolean;
+  maxWidth?: string;
+  small?: boolean;
   children: ReactElement<SelectOptionProps<T>>[];
-  disabled?: boolean;
 }
 
-export function Select<T>({ disabled, id, header, onChange, children }: SelectProps<T>) {
+// TODO: Refactor Select component to nest styled header and options and prevent passing many props
+export function Select<T>({ id, header, onChange, isLoading, isDisabled, maxWidth, small, children }: SelectProps<T>) {
   const [selectOpen, setSelectOpen] = useState(false);
 
   const handleSelect = (value: T) => {
@@ -22,10 +27,14 @@ export function Select<T>({ disabled, id, header, onChange, children }: SelectPr
   };
 
   return (
-    <SelectStyled id={id}>
-      <div className={`select-header ${disabled && 'disabled'}`} onClick={() => setSelectOpen(!selectOpen)}>
+    <SelectStyled id={id} isLoading={isLoading} isDisabled={isDisabled} maxWidth={maxWidth} small={small}>
+      <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
         {header}
-        <Icon name="caret" className={selectOpen ? 'select-header-caret open' : 'select-header-caret'} />
+        <Icon
+          name="caret"
+          fill={theme.textHighlight}
+          className={selectOpen ? 'select-header-caret open' : 'select-header-caret'}
+        />
       </div>
       {selectOpen && (
         <div className="select-list">

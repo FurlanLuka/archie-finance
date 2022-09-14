@@ -4,24 +4,25 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetStatements } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-statements';
-import { ButtonPrimary, Loader, Select } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, Loader, Select } from '@archie-webapps/shared/ui/design-system';
 
 import { StatementDownload } from './blocks/statement-download/statement-download';
 import { StatementsStyled } from './statements.styled';
 
 export const Statements: FC = () => {
-  const getStatementsResponse = useGetStatements();
   const { t } = useTranslation();
+  const getStatementsResponse = useGetStatements();
 
-  function getContent() {
+  const getContent = () => {
     if (getStatementsResponse.state === RequestState.LOADING) {
-      // TODO make this prettier for loading, can probably be handled on select or something
       return (
         <>
-          <Select id="accounts" disabled header={<Loader />} onChange={() => {}}>
+          <Select id="statements" small maxWidth="240px" isDisabled header={<p>Loading...</p>} onChange={() => {}}>
             {[]}
           </Select>
-          <ButtonPrimary isLoading>{t('dashboard_history.statements_download')}</ButtonPrimary>
+          <ButtonOutline small maxWidth="175px" isLoading>
+            {t('dashboard_history.statements_download')}
+          </ButtonOutline>
         </>
       );
     }
@@ -35,7 +36,7 @@ export const Statements: FC = () => {
     }
 
     return <></>;
-  }
+  };
 
   return <StatementsStyled>{getContent()}</StatementsStyled>;
 };

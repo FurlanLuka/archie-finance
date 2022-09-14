@@ -40,7 +40,7 @@ export const HistoryScreen: FC = () => {
     if (getTransactionsResponse.state === RequestState.SUCCESS) {
       return (
         <>
-          <div className="title-transactions">
+          <div className="title-group">
             <TitleS className="title">{t('dashboard_history.title')}</TitleS>
             <Statements />
           </div>
@@ -57,8 +57,8 @@ export const HistoryScreen: FC = () => {
     if (getTransactionsResponse.state === RequestState.LOADING_NEXT_PAGE) {
       return (
         <>
-          <div className="title-transactions">
-            <TitleS className="title">{t('dashboard_history.title')}</TitleS>
+          <div className="title-group">
+            <TitleS>{t('dashboard_history.title')}</TitleS>
             <Statements />
           </div>
           <TransactionsTable data={data} />
