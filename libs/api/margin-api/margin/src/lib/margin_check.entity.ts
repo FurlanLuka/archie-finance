@@ -27,7 +27,7 @@ export class MarginCheck {
   @Column('float')
   ltv: number;
 
-  @Column('timestamp', { nullable: false })
+  @Column('timestamp', { nullable: false, default: new Date().toISOString() })
   ltvCalculatedAt: string;
 
   @CreateDateColumn({ select: false })
