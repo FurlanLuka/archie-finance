@@ -17,7 +17,7 @@ export const Statements: FC = () => {
     if (getStatementsResponse.state === RequestState.LOADING) {
       return (
         <>
-          <Select id="statements" small minWidth="240px" isDisabled header={<Loader />} onChange={() => {}}>
+          <Select id="statements" small maxWidth="240px" isDisabled header={<p>Loading...</p>} onChange={() => {}}>
             {[]}
           </Select>
           <ButtonOutline small maxWidth="175px" isLoading>

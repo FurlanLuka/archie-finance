@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Statement } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-statements';
 import { Icon } from '@archie-webapps/shared/ui/icons';
-import { ButtonOutline, Select, SelectOption, BodyS } from '@archie-webapps/shared/ui/design-system';
+import { ButtonOutline, Select, SelectOption, BodyM, BodyS } from '@archie-webapps/shared/ui/design-system';
 
 import { useDownloadStatement } from './use-download-statement';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 interface StatementDownloadProps {
   statements: Statement[];
@@ -19,14 +20,16 @@ export const StatementDownload: FC<StatementDownloadProps> = ({ statements }) =>
   const { isLoading, downloadDocument } = useDownloadStatement(selectedStatement.documentDescriptorId);
 
   const header = (
-    <BodyS>
+    <BodyS weight={600} color={theme.textHighlight}>
       {selectedStatement.billingCycleStartDate} - {selectedStatement.billingCycleEndDate}
     </BodyS>
   );
 
   const options = statements.map((statement) => (
     <SelectOption key={statement.id} value={statement}>
-      {statement.billingCycleStartDate} - {statement.billingCycleEndDate}
+      <BodyM weight={500}>
+        {statement.billingCycleStartDate} - {statement.billingCycleEndDate}
+      </BodyM>
     </SelectOption>
   ));
 
@@ -35,7 +38,7 @@ export const StatementDownload: FC<StatementDownloadProps> = ({ statements }) =>
       <Select
         id="statements"
         small
-        minWidth="240px"
+        maxWidth="240px"
         header={header}
         onChange={(statement: Statement) => setSelectedStatement(statement)}
       >
