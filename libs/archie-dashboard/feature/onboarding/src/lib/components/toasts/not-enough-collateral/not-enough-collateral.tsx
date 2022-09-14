@@ -17,7 +17,7 @@ export const NotEnoughCollateral: FC<NotEnoughCollateralProps> = ({ creditValue 
         <BodyM weight={700}>
           {t('not_enough_collateral_popup.text', {
             creditValue: creditValue.toFixed(2),
-            difference: (creditValue - MIN_LINE_OF_CREDIT).toFixed(2),
+            difference: (MIN_LINE_OF_CREDIT - creditValue).toFixed(2),
           })}
         </BodyM>
       </Toast>

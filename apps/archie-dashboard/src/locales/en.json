@@ -261,6 +261,8 @@
     "title": ""
   },
   "payment_modal": {
+    "credit_for": "ArchCredit for {{name}}",
+    "interest_owed": "Interest owed: ${{interestOwed}}",
     "select_account": {
       "label": "Your accounts",
       "empty": "Select account to pay with",
@@ -269,9 +271,6 @@
     },
     "payment_schedule": {
       "title": "Schedule a payment",
-      "credit_for": "ArchCredit for {{name}}",
-      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
-      "interest_owed": "Interest owed: ${{interestOwed}}",
       "payment_date": "Payment Date",
       "payment_options": "Payment Options",
       "schedule": "Schedule",
@@ -293,7 +292,6 @@
     "payment_confirm": {
       "title": "Confirm payment",
       "credit_for": "ArchCredit for {{name}}",
-      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
       "balance_note": "Pay balance owed:",
       "time_note": "This payment will be processed today and will take 2-4 business days to settle.",
       "error": "Something went wrong, please try again"
@@ -301,10 +299,16 @@
     "payment_scheduled": {
       "title": "Payment scheduled",
       "credit_for": "ArchCredit for {{name}}",
-      "last_payment": "Last Payment: ${{lastPayment}} on {{date}}",
       "scheduled_note": "Your payment of ${{newPayment}} has been scheduled for {{paymentDate}}!",
       "email_note": "You will receive an email notification.",
       "time_note": "Your payment will take 2-4 business days to settle."
+    },
+    "pay_with_paypal_form": {
+      "title": "Pay balance",
+      "time_note": "This payment will be processed through Paypal and is subject to their terms and conditions.",
+      "processed_note": "Your payment has been scheduled!",
+      "email_note": "You will receive an email confirmation as soon as your payment has been processed.",
+      "btn": "Pay with Paypal"
     }
   }
 }

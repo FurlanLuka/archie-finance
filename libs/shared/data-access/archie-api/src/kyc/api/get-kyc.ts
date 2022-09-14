@@ -1,7 +1,7 @@
 import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
 
-export interface KycResponse {
+export interface Kyc {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
@@ -16,8 +16,8 @@ export const ERROR_LIST = new Map([
   ['KYC_NOT_FOUND', 'KYC record not found. Please submit your KYC or contact support.'],
 ]);
 
-export const getKyc = async (accessToken: string): Promise<KycResponse> => {
-  return getRequest<KycResponse>(
+export const getKyc = async (accessToken: string): Promise<Kyc> => {
+  return getRequest<Kyc>(
     `${API_URL}/v1/kyc`,
     {
       headers: {

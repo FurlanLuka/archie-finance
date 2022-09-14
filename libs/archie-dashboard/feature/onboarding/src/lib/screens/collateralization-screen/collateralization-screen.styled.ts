@@ -76,8 +76,4 @@ export const CollateralizationScreenStyled = styled.div`
     border-top: 1px solid ${({ theme }) => theme.borderPrimary};
     border-bottom: 1px solid ${({ theme }) => theme.borderPrimary};
   }
-
-  .loader {
-    margin: auto;
-  }
 `;

@@ -2,11 +2,11 @@ import { parse } from 'date-fns';
 
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse, RequestState } from '../../interface';
-import { getObligations, Obligation } from '../api/get-obligations';
-import { MISSING_PAYMENT_INFO_ERROR, UserObligations } from '../payment.interfaces';
+import { getObligations, Obligation, UserObligations, MISSING_PAYMENT_INFO_ERROR } from '../api/get-obligations';
+
+const MISSING_DATE = 'MISSING_DATE';
 
 export const OBLIGATIONS_RECORD_QUERY_KEY = 'obligations_record';
-const MISSING_DATE = 'MISSING_DATE';
 
 export const useGetObligations = (): QueryResponse<UserObligations> => {
   const queryResponse = useExtendedQuery(OBLIGATIONS_RECORD_QUERY_KEY, async (accessToken: string) => {

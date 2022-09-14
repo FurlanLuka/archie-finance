@@ -65,7 +65,7 @@ export const VerifyEmailScreen: FC = () => {
 
   function getContent() {
     if (getEmailVerificationResponse.state === RequestState.LOADING) {
-      return <Loader className="loader" />;
+      return <Loader marginAuto />;
     }
 
     if (getEmailVerificationResponse.state === RequestState.ERROR) {

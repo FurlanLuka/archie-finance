@@ -2,7 +2,8 @@ import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { LoanToValueChart, MakePaymentModal } from '@archie-webapps/archie-dashboard/components';
+import { MakePaymentModal } from '@archie-webapps/archie-dashboard/feature/make-payment';
+import { LoanToValueChart } from '@archie-webapps/archie-dashboard/components';
 import { canUserSchedulePayment, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';

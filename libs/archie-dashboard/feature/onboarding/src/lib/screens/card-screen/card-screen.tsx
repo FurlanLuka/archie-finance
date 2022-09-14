@@ -78,7 +78,7 @@ export const CardScreen: FC = () => {
       getCreditQueryResponse.state === RequestState.LOADING ||
       getCollateralTotalValueResponse.state === RequestState.LOADING
     ) {
-      return <Loader className="loader" />;
+      return <Loader marginAuto />;
     }
 
     if (
@@ -99,7 +99,7 @@ export const CardScreen: FC = () => {
             {stage === Stage.COMPLETE && (
               <Trans
                 components={{ br: <br /> }}
-                values={{ total_value: getCollateralTotalValue(), credit_value: getCreditValue() }}
+                values={{ total_value: getCollateralTotalValue().toFixed(2), credit_value: getCreditValue() }}
               >
                 card_step.subtitle
               </Trans>
