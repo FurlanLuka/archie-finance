@@ -6,6 +6,7 @@ import { RequestState } from '@archie-webapps/shared/data-access/archie-api/inte
 import { useGetStatements } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-statements';
 import { ButtonPrimary, Loader, Select } from '@archie-webapps/shared/ui/design-system';
 
+import { StatementDownload } from './blocks/statement-download/statement-download';
 import { StatementsStyled } from './statements.styled';
 
 export const Statements: FC = () => {
@@ -29,6 +30,8 @@ export const Statements: FC = () => {
       if (getStatementsResponse.data.length === 0) {
         return <div>{t('dashboard_history.no_statements')}</div>;
       }
+
+      return <StatementDownload statements={getStatementsResponse.data} />;
     }
 
     return <></>;
