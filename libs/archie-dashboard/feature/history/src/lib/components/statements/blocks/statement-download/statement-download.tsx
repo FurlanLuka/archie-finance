@@ -2,11 +2,11 @@ import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Statement } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-statements';
+import { theme } from '@archie-webapps/shared/ui/theme';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { ButtonOutline, Select, SelectOption, BodyM, BodyS } from '@archie-webapps/shared/ui/design-system';
 
 import { useDownloadStatement } from './use-download-statement';
-import { theme } from '@archie-webapps/shared/ui/theme';
 
 interface StatementDownloadProps {
   statements: Statement[];
@@ -38,14 +38,14 @@ export const StatementDownload: FC<StatementDownloadProps> = ({ statements }) =>
       <Select
         id="statements"
         small
-        maxWidth="240px"
+        maxWidth="220px"
         header={header}
         onChange={(statement: Statement) => setSelectedStatement(statement)}
       >
         {options}
       </Select>
       <ButtonOutline small maxWidth="175px" isLoading={isLoading} onClick={downloadDocument}>
-        {t('dashboard_history.statements_download')} <Icon name="download" />
+        {t('dashboard_history.btn_statements')} <Icon name="download" />
       </ButtonOutline>
     </>
   );

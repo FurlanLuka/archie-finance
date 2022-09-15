@@ -1,6 +1,8 @@
 import { Story, Meta } from '@storybook/react';
 import { useState } from 'react';
 
+import { theme } from '@archie-webapps/shared/ui/theme';
+
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
 import { BodyM, BodyS } from '../typography/typography.styled';
@@ -33,7 +35,7 @@ export const Default: Story<SelectStyledProps> = (props) => {
 
   return (
     <StoriesContainer>
-      <StoriesTitle title="Select" />
+      <StoriesTitle title="Select" subtitle="default" />
       <div style={{ maxWidth: '30%' }}>
         <Select {...props} id="select" header={header} onChange={(item: string) => setSelectedItem(item)}>
           {options}
@@ -45,6 +47,66 @@ export const Default: Story<SelectStyledProps> = (props) => {
 
 Default.args = {
   isLoading: false,
+  isDisabled: false,
+  maxWidth: '',
+  small: false,
+};
+
+export const Disabled: Story<SelectStyledProps> = (props) => {
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
+  const header = selectedItem ? (
+    <BodyM>{selectedItem}</BodyM>
+  ) : (
+    <BodyM weight={600} color={theme.textDisabled}>
+      No items
+    </BodyM>
+  );
+
+  return (
+    <StoriesContainer>
+      <StoriesTitle title="Select" subtitle="disabled" />
+      <div style={{ maxWidth: '30%' }}>
+        <Select {...props} id="select" header={header} onChange={(item: string) => setSelectedItem(item)}>
+          {[]}
+        </Select>
+      </div>
+    </StoriesContainer>
+  );
+};
+
+Disabled.args = {
+  isLoading: false,
+  isDisabled: true,
+  maxWidth: '',
+  small: false,
+};
+
+export const Loading: Story<SelectStyledProps> = (props) => {
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+
+  const header = selectedItem ? (
+    <BodyM>{selectedItem}</BodyM>
+  ) : (
+    <BodyM weight={600} color={theme.textDisabled}>
+      Fetching items...
+    </BodyM>
+  );
+
+  return (
+    <StoriesContainer>
+      <StoriesTitle title="Select" subtitle="loading" />
+      <div style={{ maxWidth: '30%' }}>
+        <Select {...props} id="select" header={header} onChange={(item: string) => setSelectedItem(item)}>
+          {[]}
+        </Select>
+      </div>
+    </StoriesContainer>
+  );
+};
+
+Loading.args = {
+  isLoading: true,
   isDisabled: false,
   maxWidth: '',
   small: false,
@@ -63,7 +125,7 @@ export const Small: Story<SelectStyledProps> = (props) => {
 
   return (
     <StoriesContainer>
-      <StoriesTitle title="Select" />
+      <StoriesTitle title="Select" subtitle="small" />
       <div style={{ maxWidth: '30%' }}>
         <Select {...props} id="select" header={header} onChange={(item: string) => setSelectedItem(item)}>
           {options}

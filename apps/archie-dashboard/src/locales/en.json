@@ -254,8 +254,9 @@
   "dashboard_history": {
     "title": "Recent Transactions",
     "btn_load_more": "Load more",
-    "statements_download": "Download Statement",
-    "no_statements": "No statements yet!"
+    "btn_statements": "Download Statement",
+    "fetch_statements": "Fetching statements...",
+    "no_statements": "No statements"
   },
   "dashboard_settings": {
     "title": ""

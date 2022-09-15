@@ -32,7 +32,7 @@ export function Select<T>({ id, header, onChange, isLoading, isDisabled, maxWidt
         {header}
         <Icon
           name="caret"
-          fill={theme.textHighlight}
+          fill={isLoading || isDisabled ? theme.textDisabled : theme.textHighlight}
           className={selectOpen ? 'select-header-caret open' : 'select-header-caret'}
         />
       </div>
