@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, MoreThan, Repository } from 'typeorm';
 import { Collateral } from './collateral.entity';
 import { CollateralDeposit } from './collateral_deposit.entity';
 import {
@@ -148,6 +148,7 @@ export class CollateralService {
       {
         userId: transaction.userId,
         asset: transaction.asset,
+        amount: MoreThan(0),
       },
       'amount',
       transaction.fee,

@@ -4,7 +4,13 @@ import {
   InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/fireblocks';
 import { Collateral } from './collateral.entity';
-import { DataSource, Repository, TypeORMError, UpdateResult } from 'typeorm';
+import {
+  DataSource,
+  MoreThan,
+  Repository,
+  TypeORMError,
+  UpdateResult,
+} from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CollateralBalanceUpdateUtilService } from './utils/collateral_balance_update.service';
 import { CreditLimitAdjustmentService } from './utils/credit_limit_adjustment.service';
@@ -185,6 +191,7 @@ export class CreditLimitService {
         {
           userId: transaction.userId,
           asset: transaction.asset,
+          amount: MoreThan(0),
         },
         'amount',
         transaction.fee,

@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, MoreThan, Repository } from 'typeorm';
 import {
   GetCollateralWithdrawalResponse,
   GetUserMaxWithdrawalAmountResponse,
@@ -97,6 +97,7 @@ export class CollateralWithdrawalService {
         {
           asset,
           userId,
+          amount: MoreThan(0),
         },
         'amount',
         fee,

@@ -5,7 +5,13 @@ import {
 } from '@archie/api/credit-api/data-transfer-objects';
 import { LtvCollateral } from '../collateral.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository, TypeORMError, UpdateResult } from 'typeorm';
+import {
+  DataSource,
+  MoreThan,
+  Repository,
+  TypeORMError,
+  UpdateResult,
+} from 'typeorm';
 import { LtvUpdatedUtilService } from '../utils/ltv_updated.service';
 import { CollateralTransaction } from '../collateral_transactions.entity';
 import { DatabaseErrorHandlingService } from '../utils/database_error_handling.service';
@@ -131,6 +137,7 @@ export class CollateralService {
         {
           userId: transaction.userId,
           asset: transaction.asset,
+          amount: MoreThan(0),
         },
         'amount',
         transaction.fee,
