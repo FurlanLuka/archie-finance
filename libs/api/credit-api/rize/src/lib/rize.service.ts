@@ -43,6 +43,7 @@ import {
   CreditBalanceUpdatedPayload,
   GetLoanBalancesPayload,
   GetLoanBalancesResponse,
+  PaymentType,
 } from '@archie/api/peach-api/data-transfer-objects';
 import { LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -340,6 +341,9 @@ export class RizeService {
   public async updateAvailableCredit(
     credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
+    if (credit.paymentDetails?.type === PaymentType.purchase) {
+      return;
+    }
     // Properly done - this section (whole handler) would need to be locked otherwise 2 simultaneous events (2nd event with a greater date than the first)
     // - can still enable both to enter and adjust credit limit. It is very unlikely - OK for POC
     const updateResult: UpdateResult =
