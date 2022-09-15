@@ -98,14 +98,12 @@ export class FireblocksWebhookService {
       throw new NotFoundException();
     }
 
-    Logger.log(transaction);
-
     this.queueService.publish<InternalCollateralTransactionCompletedPayload>(
       INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
       {
         transactionId: transaction.id,
         userId: userVaultAccount.userId,
-        fee: <number>transaction.serviceFee,
+        fee: transaction.networkFee,
         asset: transaction.assetId,
       },
     );
@@ -246,16 +244,13 @@ export class FireblocksWebhookService {
         },
       });
 
-      // TODO: remove
-      Logger.log(transaction);
-
       this.queueService.publish<CollateralWithdrawCompletedPayload>(
         COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
         {
           asset: assetId,
           transactionId: transaction.id,
           userId: userVaultAccount.userId,
-          fee: <number>transaction.serviceFee,
+          fee: transaction.networkFee,
         },
       );
     } catch (error) {
