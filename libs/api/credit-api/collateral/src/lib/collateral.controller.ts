@@ -21,7 +21,13 @@ import {
   RPCResponseType,
   Subscribe,
 } from '@archie/api/utils/queue';
-import { CollateralDepositedPayload } from '@archie/api/collateral-api/data-transfer-objects';
+import {
+  CollateralDepositedPayload,
+  InternalCollateralTransactionCompletedPayload,
+} from '@archie/api/collateral-api/data-transfer-objects';
+import { MARGIN_CALL_COMPLETED_TOPIC } from '@archie/api/margin-api/constants';
+import { LiquidateAssetsDto } from '@archie/api/collateral-api/fireblocks';
+import { INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC } from '@archie/api/collateral-api/constants';
 
 @Controller('v1/collateral')
 export class CollateralController {
@@ -67,6 +73,28 @@ export class CollateralQueueController {
     payload: CollateralDepositedPayload,
   ): Promise<void> {
     await this.collateralService.createDeposit(payload);
+  }
+
+  @Subscribe(
+    MARGIN_CALL_COMPLETED_TOPIC,
+    CollateralQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async marginCallCompletedLiquidationHandler(
+    payload: LiquidateAssetsDto,
+  ): Promise<void> {
+    await this.collateralService.liquidateAssets(payload);
+  }
+
+  @Subscribe(
+    INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
+    CollateralQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async internalCollateralTransactionCompletedTopic(
+    payload: InternalCollateralTransactionCompletedPayload,
+  ): Promise<void> {
+    await this.collateralService.handleInternalTransactionCopletedEvent(
+      payload,
+    );
   }
 
   @RequestHandler(

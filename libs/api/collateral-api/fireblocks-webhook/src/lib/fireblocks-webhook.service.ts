@@ -6,10 +6,7 @@ import {
   TransactionStatus,
 } from 'fireblocks-sdk';
 import { DepositAddressService } from '@archie/api/collateral-api/deposit-address';
-import {
-  FireblocksWebhookDto,
-  InternalCollateralTransactionCompletedPayload,
-} from './fireblocks-webhook.dto';
+import { FireblocksWebhookDto } from './fireblocks-webhook.dto';
 import {
   EventType,
   FireblocksWebhookPayload,
@@ -31,6 +28,7 @@ import { QueueService } from '@archie/api/utils/queue';
 import {
   CollateralDepositedPayload,
   CollateralWithdrawCompletedPayload,
+  InternalCollateralTransactionCompletedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
 
 @Injectable()
@@ -100,11 +98,15 @@ export class FireblocksWebhookService {
       throw new NotFoundException();
     }
 
+    Logger.log(transaction);
+
     this.queueService.publish<InternalCollateralTransactionCompletedPayload>(
       INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
       {
         transactionId: transaction.id,
         userId: userVaultAccount.userId,
+        fee: <number>transaction.serviceFee,
+        asset: transaction.assetId,
       },
     );
   }
@@ -244,12 +246,16 @@ export class FireblocksWebhookService {
         },
       });
 
+      // TODO: remove
+      Logger.log(transaction);
+
       this.queueService.publish<CollateralWithdrawCompletedPayload>(
         COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
         {
           asset: assetId,
           transactionId: transaction.id,
           userId: userVaultAccount.userId,
+          fee: <number>transaction.serviceFee,
         },
       );
     } catch (error) {

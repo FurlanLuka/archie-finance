@@ -13,9 +13,17 @@ export class CollateralWithdrawCompletedPayload {
   asset: string;
   transactionId: string;
   userId: string;
+  fee: number;
 }
 
 export class CollateralWithdrawTransactionCreatedPayload {
   withdrawalId: string;
   transactionId: string;
+}
+
+export class InternalCollateralTransactionCompletedPayload {
+  transactionId: string;
+  userId: string;
+  fee: number;
+  asset: string;
 }

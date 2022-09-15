@@ -14,9 +14,19 @@ import { CollateralValueService } from './collateral-value/collateral-value.serv
 import { QueueService } from '@archie/api/utils/queue';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
-import { CollateralDepositedPayload } from '@archie/api/collateral-api/data-transfer-objects';
-import { COLLATERAL_DEPOSIT_COMPLETED_TOPIC } from '@archie/api/credit-api/constants';
-import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import {
+  CollateralDepositedPayload,
+  InternalCollateralTransactionCompletedPayload,
+} from '@archie/api/collateral-api/data-transfer-objects';
+import {
+  COLLATERAL_DEPOSIT_COMPLETED_TOPIC,
+  COLLATERAL_LIQUIDATION_INITIATED_TOPIC,
+} from '@archie/api/credit-api/constants';
+import {
+  CollateralDepositCompletedPayload,
+  CollateralLiquidationInitiatedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
+import { LiquidateAssetsDto } from '@archie/api/collateral-api/fireblocks';
 
 @Injectable()
 export class CollateralService {
@@ -127,6 +137,60 @@ export class CollateralService {
       asset,
       amount: collateralAmount,
     };
+  }
+
+  public async handleInternalTransactionCopletedEvent(
+    transaction: InternalCollateralTransactionCompletedPayload,
+  ): Promise<void> {
+    // TODO: Do not handle same events multiple times
+    await this.collateralRepository.decrement(
+      {
+        userId: transaction.userId,
+        asset: transaction.asset,
+      },
+      'amount',
+      transaction.fee,
+    );
+  }
+
+  public async liquidateAssets(
+    liquidationAssets: LiquidateAssetsDto,
+  ): Promise<void> {
+    // TODO: Do not handle same events multiple times + check that current collateral balance === balance ltv was calculated on
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await Promise.all(
+        liquidationAssets.liquidation.map(async (liquidation) => {
+          await this.collateralRepository.decrement(
+            {
+              userId: liquidationAssets.userId,
+              asset: liquidation.asset,
+            },
+            'amount',
+            liquidation.amount,
+          );
+        }),
+      );
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+
+    this.queueService.publish<CollateralLiquidationInitiatedPayload>(
+      COLLATERAL_LIQUIDATION_INITIATED_TOPIC,
+      {
+        userId: liquidationAssets.userId,
+        collateral: liquidationAssets.liquidation,
+      },
+    );
   }
 
   public async getUserCollateral(

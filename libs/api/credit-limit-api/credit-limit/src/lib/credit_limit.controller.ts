@@ -4,6 +4,7 @@ import { SERVICE_QUEUE_NAME } from '@archie/api/ltv-api/constants';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   COLLATERAL_DEPOSIT_COMPLETED_TOPIC,
+  COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
   COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import {
@@ -11,7 +12,10 @@ import {
   InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/fireblocks';
 import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
-import { INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC } from '@archie/api/collateral-api/constants';
+import {
+  INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
+  INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
+} from '@archie/api/collateral-api/constants';
 import { CreditLimitService } from './credit_limit.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
@@ -19,6 +23,10 @@ import {
   CreateCreditMinimumCollateralError,
   CreditAlreadyExistsError,
 } from './credit_limit.errors';
+import {
+  CollateralWithdrawCompletedPayload,
+  InternalCollateralTransactionCompletedPayload,
+} from '@archie/api/collateral-api/data-transfer-objects';
 
 @Controller('v1/credit_limits')
 export class CreditLimitController {
@@ -76,5 +84,27 @@ export class CreditLimitQueueController {
     return this.creditLimitService.handleInternalTransactionCreatedEvent(
       payload,
     );
+  }
+
+  @Subscribe(
+    INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
+    CreditLimitQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async internalCollateralTransactionCompletedTopic(
+    payload: InternalCollateralTransactionCompletedPayload,
+  ): Promise<void> {
+    await this.creditLimitService.handleInternalTransactionCopletedEvent(
+      payload,
+    );
+  }
+
+  @Subscribe(
+    COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
+    CreditLimitQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async collateralWithdrawCompleteHandler(
+    payload: CollateralWithdrawCompletedPayload,
+  ): Promise<void> {
+    await this.creditLimitService.handleWithdrawalComplete(payload);
   }
 }
