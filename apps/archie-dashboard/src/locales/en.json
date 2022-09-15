@@ -253,7 +253,10 @@
   },
   "dashboard_history": {
     "title": "Recent Transactions",
-    "btn_load_more": "Load more"
+    "btn_load_more": "Load more",
+    "btn_statements": "Download Statement",
+    "fetch_statements": "Fetching statements...",
+    "no_statements": "No statements"
   },
   "dashboard_settings": {
     "title": ""

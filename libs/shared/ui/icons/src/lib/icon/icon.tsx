@@ -12,6 +12,7 @@ export type IconName =
   | 'close'
   | 'copy'
   | 'credit-card'
+  | 'download'
   | 'ethereum'
   | 'external-link'
   | 'home'

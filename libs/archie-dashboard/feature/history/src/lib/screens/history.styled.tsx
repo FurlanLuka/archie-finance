@@ -20,9 +20,11 @@ export const HistoryStyled = styled.div`
     padding: 1.5rem 1rem;
   }
 
-  .title {
-    margin-right: auto;
-    margin-bottom: 2rem;
+  .title-group {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 2.5rem;
   }
 
   .load-btn {
