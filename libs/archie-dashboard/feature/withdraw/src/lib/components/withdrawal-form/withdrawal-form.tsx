@@ -16,7 +16,7 @@ import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/suc
 
 import { getUpdatedCreditAndTotal } from './withdrawal-form.helpers';
 import { getWithdrawSchema } from './withdrawal-form.schema';
-import * as Styled from './withdrawal-form.styled';
+import { WithdrawalFormStyled } from './withdrawal-form.styled';
 
 interface WithdrawFormData {
   withdrawAmount: number;
@@ -83,7 +83,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
 
   return (
     <>
-      <Styled.WithdrawalForm onSubmit={onSubmit}>
+      <WithdrawalFormStyled onSubmit={onSubmit}>
         <InputText>
           <label htmlFor="withdrawAmount">
             {maxAmount > 0
@@ -146,14 +146,11 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
             {t('dashboard_withdraw.btn')}
           </ButtonPrimary>
         </div>
-      </Styled.WithdrawalForm>
+      </WithdrawalFormStyled>
       {isSuccessModalOpen && (
         <SuccessfullWithdrawalModal
           addressLink={`${CollateralAssets[currentAsset]?.url}/${depositAddress}`}
-          onConfirm={() => {
-            setIsSuccessModalOpen(false);
-            navigate('/collateral');
-          }}
+          onConfirm={() => setIsSuccessModalOpen(false)}
         />
       )}
     </>
