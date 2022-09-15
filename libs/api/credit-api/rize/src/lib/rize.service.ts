@@ -335,6 +335,11 @@ export class RizeService {
       userId,
     });
 
+    await this.lastAdjustmentRepository.insert({
+      userId,
+      availableCreditCalculatedAt: credit.calculatedAt,
+    });
+
     await this.rizeApiService.loadFunds(customerId, credit.availableCredit);
   }
 
