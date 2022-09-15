@@ -38,9 +38,9 @@ export class CreditLimitAdjustmentService {
     collateralValue: CollateralValue,
     assetList: AssetList,
   ): Promise<void> {
-    const newCreditLimit: number = this.calculateCreditLimit(
-      collateralValue.collateral,
-      assetList,
+    const newCreditLimit: number = Math.min(
+      this.calculateCreditLimit(collateralValue.collateral, assetList),
+      this.MAXIMUM_CREDIT,
     );
 
     const updatedCreditLimit: CreditLimit | undefined =

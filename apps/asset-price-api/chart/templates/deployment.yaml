@@ -141,7 +141,11 @@ kind: CronJob
 metadata:
   name: fetch-asset-prices
 spec:
+  {{- if eq .Values.environment "production" }}
   schedule: "*/5 * * * *"
+  {{- else }}
+  schedule: "0 * * * *"
+  {{- end }}
   jobTemplate:
     metadata:
       name: fetch-asset-prices
