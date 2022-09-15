@@ -53,11 +53,7 @@ Default.args = {
 };
 
 export const Disabled: Story<SelectStyledProps> = (props) => {
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
-
-  const header = selectedItem ? (
-    <BodyM>{selectedItem}</BodyM>
-  ) : (
+  const header = (
     <BodyM weight={600} color={theme.textDisabled}>
       No items
     </BodyM>
@@ -67,7 +63,7 @@ export const Disabled: Story<SelectStyledProps> = (props) => {
     <StoriesContainer>
       <StoriesTitle title="Select" subtitle="disabled" />
       <div style={{ maxWidth: '30%' }}>
-        <Select {...props} id="select" header={header} onChange={(item: string) => setSelectedItem(item)}>
+        <Select {...props} id="select" header={header} onChange={() => {}}>
           {[]}
         </Select>
       </div>
@@ -83,11 +79,7 @@ Disabled.args = {
 };
 
 export const Loading: Story<SelectStyledProps> = (props) => {
-  const [selectedItem, setSelectedItem] = useState<string | null>(null);
-
-  const header = selectedItem ? (
-    <BodyM>{selectedItem}</BodyM>
-  ) : (
+  const header = (
     <BodyM weight={600} color={theme.textDisabled}>
       Fetching items...
     </BodyM>
@@ -97,7 +89,7 @@ export const Loading: Story<SelectStyledProps> = (props) => {
     <StoriesContainer>
       <StoriesTitle title="Select" subtitle="loading" />
       <div style={{ maxWidth: '30%' }}>
-        <Select {...props} id="select" header={header} onChange={(item: string) => setSelectedItem(item)}>
+        <Select {...props} id="select" header={header} onChange={() => {}}>
           {[]}
         </Select>
       </div>
