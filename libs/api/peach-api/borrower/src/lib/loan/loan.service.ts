@@ -186,6 +186,7 @@ export class PeachBorrowerService {
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
+    // TODO: Remember the last update calculated at, as if the events don't come in order credit limit could be unintentionally changed - unlikely
     await this.peachApiService.updateCreditLimit(
       borrower.personId,
       borrower.creditLineId,
