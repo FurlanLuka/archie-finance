@@ -9,6 +9,11 @@ import { DataSource, Repository, TypeORMError, UpdateResult } from 'typeorm';
 import { LtvUpdatedUtilService } from '../utils/ltv_updated.service';
 import { CollateralTransaction } from '../collateral_transactions.entity';
 import { DatabaseErrorHandlingService } from '../utils/database_error_handling.service';
+import {
+  CollateralWithdrawCompletedPayload,
+  InternalCollateralTransactionCompletedPayload,
+} from '@archie/api/collateral-api/data-transfer-objects';
+import { TransactionStatus } from '../lib.interfaces';
 
 @Injectable()
 export class CollateralService {
@@ -34,6 +39,7 @@ export class CollateralService {
     try {
       await this.collateralTransaction.insert({
         externalTransactionId: transaction.withdrawalId,
+        status: TransactionStatus.initiated,
       });
 
       await this.ltvCollateralRepository.decrement(
@@ -70,6 +76,7 @@ export class CollateralService {
     try {
       await this.collateralTransaction.insert({
         externalTransactionId: transaction.transactionId,
+        status: TransactionStatus.initiated,
       });
 
       const updateResult: UpdateResult =
@@ -103,5 +110,43 @@ export class CollateralService {
     }
 
     await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(transaction.userId);
+  }
+
+  public async handleTransactionCompletedEvent(
+    transaction:
+      | InternalCollateralTransactionCompletedPayload
+      | CollateralWithdrawCompletedPayload,
+  ): Promise<void> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await this.collateralTransaction.insert({
+        externalTransactionId: transaction.transactionId,
+        status: TransactionStatus.completed,
+      });
+
+      await this.ltvCollateralRepository.decrement(
+        {
+          userId: transaction.userId,
+          asset: transaction.asset,
+        },
+        'amount',
+        transaction.fee,
+      );
+
+      await queryRunner.commitTransaction();
+    } catch (e) {
+      const error: TypeORMError = e;
+      Logger.error('Error updating collateral balance', error);
+      await queryRunner.rollbackTransaction();
+
+      return this.databaseErrorHandlingService.ignoreDuplicatedRecordError(
+        error,
+      );
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

@@ -276,6 +276,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         destinationAddress,
         transactionId: null,
         status: TransactionStatus.SUBMITTED,
+        fee: null,
         id: expect.any(String),
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
@@ -318,6 +319,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         destinationAddress,
         transactionId: null,
         status: TransactionStatus.SUBMITTED,
+        fee: null,
         id: expect.any(String),
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
@@ -372,9 +374,15 @@ describe('CollateralWithdrawalController (e2e)', () => {
   });
 
   describe('Withdrawal completed handler', () => {
-    it('should update status to completed', async () => {
+    it('should update status to completed and decrement collateral value with fee', async () => {
       const transactionId = 'transaction_id';
-
+      const startingAmount = 100;
+      const fee = 1;
+      await collateralRepository.insert({
+        userId,
+        asset: 'ETH',
+        amount: startingAmount,
+      });
       const withdrawal = await collateralWithdrawalRepository.save({
         userId,
         asset: 'ETH',
@@ -391,14 +399,22 @@ describe('CollateralWithdrawalController (e2e)', () => {
           userId,
           transactionId,
           asset: 'ETH',
+          fee: fee,
         });
 
       const withdrawalResult = await collateralWithdrawalRepository.findOne({
-        where: { id: withdrawal.id },
+        where: { id: withdrawal.id, fee },
         select: ['id', 'status'],
       });
 
       expect(withdrawalResult?.status).toEqual(TransactionStatus.COMPLETED);
+      expect(
+        await collateralRepository.findOneBy({
+          userId,
+          asset: 'ETH',
+          amount: startingAmount - fee,
+        }),
+      ).not.toBeNull();
     });
 
     it('should throw not found if transaction id has not been synced yet', async () => {
@@ -421,6 +437,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
             userId,
             transactionId,
             asset: 'ETH',
+            fee: 1,
           });
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);

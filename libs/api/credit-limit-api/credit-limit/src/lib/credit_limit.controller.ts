@@ -93,9 +93,7 @@ export class CreditLimitQueueController {
   async internalCollateralTransactionCompletedTopic(
     payload: InternalCollateralTransactionCompletedPayload,
   ): Promise<void> {
-    await this.creditLimitService.handleInternalTransactionCopletedEvent(
-      payload,
-    );
+    await this.creditLimitService.handleTransactionCompletedEvent(payload);
   }
 
   @Subscribe(
@@ -105,6 +103,6 @@ export class CreditLimitQueueController {
   async collateralWithdrawCompleteHandler(
     payload: CollateralWithdrawCompletedPayload,
   ): Promise<void> {
-    await this.creditLimitService.handleWithdrawalComplete(payload);
+    await this.creditLimitService.handleTransactionCompletedEvent(payload);
   }
 }

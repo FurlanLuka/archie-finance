@@ -16,6 +16,7 @@ export class GetCollateralWithdrawalResponse {
   currentAmount: number;
   withdrawalAmount: number;
   destinationAddress: string;
+  fee: number | null;
   status: TransactionStatus;
   createdAt: Date;
 }

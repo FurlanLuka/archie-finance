@@ -12,6 +12,7 @@ import { DateTime } from 'luxon';
 import { LtvUpdatedUtilService } from '../utils/ltv_updated.service';
 import { CollateralTransaction } from '../collateral_transactions.entity';
 import { DatabaseErrorHandlingService } from '../utils/database_error_handling.service';
+import { TransactionStatus } from '../lib.interfaces';
 
 @Injectable()
 export class CreditService {
@@ -55,6 +56,7 @@ export class CreditService {
       if (credit.paymentDetails?.type === PaymentType.liquidation) {
         await this.collateralTransaction.insert({
           externalTransactionId: credit.paymentDetails.id,
+          status: TransactionStatus.initiated,
         });
         await queryRunner.manager.decrement(
           LtvCollateral,

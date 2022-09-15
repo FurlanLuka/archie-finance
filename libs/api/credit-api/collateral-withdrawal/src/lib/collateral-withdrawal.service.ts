@@ -106,6 +106,7 @@ export class CollateralWithdrawalService {
           transactionId,
         },
         {
+          fee,
           status: TransactionStatus.COMPLETED,
         },
       );

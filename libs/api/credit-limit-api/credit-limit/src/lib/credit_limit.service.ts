@@ -18,6 +18,11 @@ import { AssetList } from '@archie/api/collateral-api/asset-information';
 import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
 import { DatabaseErrorHandlingService } from './utils/database_error_handling.service';
 import { CollateralTransaction } from './collateral_transactions.entity';
+import { TransactionStatus } from './credit_limit.interfaces';
+import {
+  CollateralWithdrawCompletedPayload,
+  InternalCollateralTransactionCompletedPayload,
+} from '@archie/api/collateral-api/data-transfer-objects';
 
 @Injectable()
 export class CreditLimitService {
@@ -46,6 +51,7 @@ export class CreditLimitService {
     try {
       await this.collateralTransactionRepository.insert({
         externalTransactionId: transaction.withdrawalId,
+        status: TransactionStatus.initiated,
       });
 
       await this.collateralRepository.decrement(
@@ -85,6 +91,7 @@ export class CreditLimitService {
     try {
       await this.collateralTransactionRepository.insert({
         externalTransactionId: transaction.transactionId,
+        status: TransactionStatus.initiated,
       });
 
       const updateResult: UpdateResult =
@@ -133,6 +140,7 @@ export class CreditLimitService {
     try {
       await this.collateralTransactionRepository.insert({
         externalTransactionId: transaction.id,
+        status: TransactionStatus.initiated,
       });
       await this.collateralRepository.decrement(
         {
@@ -157,6 +165,41 @@ export class CreditLimitService {
     await this.collateralBalanceUpdateUtilService.handleCollateralBalanceUpdate(
       transaction.userId,
     );
+  }
+
+  public async handleTransactionCompletedEvent(
+    transaction:
+      | InternalCollateralTransactionCompletedPayload
+      | CollateralWithdrawCompletedPayload,
+  ): Promise<void> {
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await this.collateralTransactionRepository.insert({
+        externalTransactionId: transaction.transactionId,
+        status: TransactionStatus.completed,
+      });
+      await this.collateralRepository.decrement(
+        {
+          userId: transaction.userId,
+          asset: transaction.asset,
+        },
+        'amount',
+        transaction.fee,
+      );
+    } catch (e) {
+      const error: TypeORMError = e;
+      Logger.error('Error updating collateral balance', error);
+      await queryRunner.rollbackTransaction();
+
+      return this.databaseErrorHandlingService.ignoreDuplicatedRecordError(
+        error,
+      );
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   public async createCredit(userId: string): Promise<void> {
