@@ -8,7 +8,13 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
-import { DataSource, MoreThan, Repository } from 'typeorm';
+import {
+  DataSource,
+  LessThan,
+  MoreThanOrEqual,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import {
   GetCollateralWithdrawalResponse,
   GetUserMaxWithdrawalAmountResponse,
@@ -93,15 +99,30 @@ export class CollateralWithdrawalService {
     await queryRunner.startTransaction();
 
     try {
-      await this.collateralRepository.decrement(
-        {
-          asset,
-          userId,
-          amount: MoreThan(0),
-        },
-        'amount',
-        fee,
-      );
+      const updatedResult: UpdateResult =
+        await this.collateralRepository.decrement(
+          {
+            asset,
+            userId,
+            amount: MoreThanOrEqual(fee),
+          },
+          'amount',
+          fee,
+        );
+
+      if (updatedResult.affected === 0) {
+        await this.collateralRepository.update(
+          {
+            asset,
+            userId,
+            amount: LessThan(fee),
+          },
+          {
+            amount: 0,
+          },
+        );
+      }
+
       const updateResult = await this.collateralWithdrawalRepository.update(
         {
           transactionId,

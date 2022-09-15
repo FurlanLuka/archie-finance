@@ -1,7 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
-import { DataSource, MoreThan, Repository } from 'typeorm';
+import {
+  DataSource,
+  LessThan,
+  MoreThan,
+  MoreThanOrEqual,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { Collateral } from './collateral.entity';
 import { CollateralDeposit } from './collateral_deposit.entity';
 import {
@@ -144,15 +151,29 @@ export class CollateralService {
     transaction: InternalCollateralTransactionCompletedPayload,
   ): Promise<void> {
     // TODO: Do not handle same events multiple times
-    await this.collateralRepository.decrement(
-      {
-        userId: transaction.userId,
-        asset: transaction.asset,
-        amount: MoreThan(0),
-      },
-      'amount',
-      transaction.fee,
-    );
+    const updatedResult: UpdateResult =
+      await this.collateralRepository.decrement(
+        {
+          userId: transaction.userId,
+          asset: transaction.asset,
+          amount: MoreThanOrEqual(transaction.fee),
+        },
+        'amount',
+        transaction.fee,
+      );
+
+    if (updatedResult.affected === 0) {
+      await this.collateralRepository.update(
+        {
+          userId: transaction.userId,
+          asset: transaction.asset,
+          amount: LessThan(transaction.fee),
+        },
+        {
+          amount: 0,
+        },
+      );
+    }
   }
 
   public async liquidateAssets(

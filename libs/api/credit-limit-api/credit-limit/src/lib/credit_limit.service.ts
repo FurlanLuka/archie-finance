@@ -6,7 +6,8 @@ import {
 import { Collateral } from './collateral.entity';
 import {
   DataSource,
-  MoreThan,
+  LessThan,
+  MoreThanOrEqual,
   Repository,
   TypeORMError,
   UpdateResult,
@@ -187,15 +188,30 @@ export class CreditLimitService {
         externalTransactionId: transaction.transactionId,
         status: TransactionStatus.completed,
       });
-      await this.collateralRepository.decrement(
-        {
-          userId: transaction.userId,
-          asset: transaction.asset,
-          amount: MoreThan(0),
-        },
-        'amount',
-        transaction.fee,
-      );
+
+      const updatedResult: UpdateResult =
+        await this.collateralRepository.decrement(
+          {
+            userId: transaction.userId,
+            asset: transaction.asset,
+            amount: MoreThanOrEqual(transaction.fee),
+          },
+          'amount',
+          transaction.fee,
+        );
+
+      if (updatedResult.affected === 0) {
+        await this.collateralRepository.update(
+          {
+            userId: transaction.userId,
+            asset: transaction.asset,
+            amount: LessThan(transaction.fee),
+          },
+          {
+            amount: 0,
+          },
+        );
+      }
     } catch (e) {
       const error: TypeORMError = e;
       Logger.error('Error updating collateral balance', error);

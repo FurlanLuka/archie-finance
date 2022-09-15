@@ -7,7 +7,8 @@ import { LtvCollateral } from '../collateral.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   DataSource,
-  MoreThan,
+  LessThan,
+  MoreThanOrEqual,
   Repository,
   TypeORMError,
   UpdateResult,
@@ -133,15 +134,29 @@ export class CollateralService {
         status: TransactionStatus.completed,
       });
 
-      await this.ltvCollateralRepository.decrement(
-        {
-          userId: transaction.userId,
-          asset: transaction.asset,
-          amount: MoreThan(0),
-        },
-        'amount',
-        transaction.fee,
-      );
+      const updatedResult: UpdateResult =
+        await this.ltvCollateralRepository.decrement(
+          {
+            userId: transaction.userId,
+            asset: transaction.asset,
+            amount: MoreThanOrEqual(transaction.fee),
+          },
+          'amount',
+          transaction.fee,
+        );
+
+      if (updatedResult.affected === 0) {
+        await this.ltvCollateralRepository.update(
+          {
+            userId: transaction.userId,
+            asset: transaction.asset,
+            amount: LessThan(transaction.fee),
+          },
+          {
+            amount: 0,
+          },
+        );
+      }
 
       await queryRunner.commitTransaction();
     } catch (e) {
