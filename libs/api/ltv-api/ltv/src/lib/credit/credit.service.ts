@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, LessThan, Repository } from 'typeorm';
+import { DataSource, LessThan, Repository, TypeORMError } from 'typeorm';
 import { LtvCredit } from '../credit.entity';
 import {
   CreditBalanceUpdatedPayload,
@@ -10,6 +10,8 @@ import { LtvCollateral } from '../collateral.entity';
 import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 import { DateTime } from 'luxon';
 import { LtvUpdatedUtilService } from '../utils/ltv_updated.service';
+import { CollateralTransaction } from '../collateral_transactions.entity';
+import { DatabaseErrorHandlingService } from '../utils/database_error_handling.service';
 
 @Injectable()
 export class CreditService {
@@ -18,8 +20,11 @@ export class CreditService {
     private ltvCreditRepository: Repository<LtvCredit>,
     @InjectRepository(LtvCollateral)
     private ltvCollateralRepository: Repository<LtvCollateral>,
+    @InjectRepository(CollateralTransaction)
+    private collateralTransaction: Repository<CollateralTransaction>,
     private ltvUpdatedUtilService: LtvUpdatedUtilService,
     private dataSource: DataSource,
+    private databaseErrorHandlingService: DatabaseErrorHandlingService,
   ) {}
 
   public async handleCreditBalanceUpdatedEvent(
@@ -48,6 +53,9 @@ export class CreditService {
       );
 
       if (credit.paymentDetails?.type === PaymentType.liquidation) {
+        await this.collateralTransaction.insert({
+          externalTransactionId: credit.paymentDetails.id,
+        });
         await queryRunner.manager.decrement(
           LtvCollateral,
           {
@@ -60,10 +68,14 @@ export class CreditService {
       }
 
       await queryRunner.commitTransaction();
-    } catch (error) {
+    } catch (e) {
+      const error: TypeORMError = e;
+      Logger.error('Error updating collateral balance', error);
       await queryRunner.rollbackTransaction();
 
-      throw error;
+      return this.databaseErrorHandlingService.ignoreDuplicatedRecordError(
+        error,
+      );
     } finally {
       await queryRunner.release();
     }

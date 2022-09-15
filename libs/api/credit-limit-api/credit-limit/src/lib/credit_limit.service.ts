@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   CollateralWithdrawInitializedDto,
   InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/fireblocks';
 import { Collateral } from './collateral.entity';
-import { Repository, UpdateResult } from 'typeorm';
+import { DataSource, Repository, TypeORMError, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CollateralBalanceUpdateUtilService } from './utils/collateral_balance_update.service';
 import { CreditLimitAdjustmentService } from './utils/credit_limit_adjustment.service';
@@ -16,6 +16,8 @@ import { QueueService } from '@archie/api/utils/queue';
 import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { AssetList } from '@archie/api/collateral-api/asset-information';
 import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
+import { DatabaseErrorHandlingService } from './utils/database_error_handling.service';
+import { CollateralTransaction } from './collateral_transactions.entity';
 
 @Injectable()
 export class CreditLimitService {
@@ -24,25 +26,49 @@ export class CreditLimitService {
   constructor(
     @InjectRepository(Collateral)
     private collateralRepository: Repository<Collateral>,
+    @InjectRepository(CollateralTransaction)
+    private collateralTransactionRepository: Repository<CollateralTransaction>,
     private collateralBalanceUpdateUtilService: CollateralBalanceUpdateUtilService,
     private creditLimitAdjustmentService: CreditLimitAdjustmentService,
     private queueService: QueueService,
     private collateralValueUtilService: CollateralValueUtilService,
+    private dataSource: DataSource,
+    private databaseErrorHandlingService: DatabaseErrorHandlingService,
   ) {}
 
   public async handleCollateralWithdrawInitializedEvent(
     transaction: CollateralWithdrawInitializedDto,
   ): Promise<void> {
-    // TODO: Store transaction ids - no duplicated events (check all queue handlers -common issue) / always publish whole state
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    await this.collateralRepository.decrement(
-      {
-        userId: transaction.userId,
-        asset: transaction.asset,
-      },
-      'amount',
-      transaction.withdrawalAmount,
-    );
+    try {
+      await this.collateralTransactionRepository.insert({
+        externalTransactionId: transaction.withdrawalId,
+      });
+
+      await this.collateralRepository.decrement(
+        {
+          userId: transaction.userId,
+          asset: transaction.asset,
+        },
+        'amount',
+        transaction.withdrawalAmount,
+      );
+
+      await queryRunner.commitTransaction();
+    } catch (e) {
+      const error: TypeORMError = e;
+      Logger.error('Error updating collateral balance', error);
+      await queryRunner.rollbackTransaction();
+
+      return this.databaseErrorHandlingService.ignoreDuplicatedRecordError(
+        error,
+      );
+    } finally {
+      await queryRunner.release();
+    }
 
     await this.collateralBalanceUpdateUtilService.handleCollateralBalanceUpdate(
       transaction.userId,
@@ -52,24 +78,44 @@ export class CreditLimitService {
   public async handleCollateralDepositCompletedEvent(
     transaction: CollateralDepositCompletedPayload,
   ): Promise<void> {
-    // TODO: Store transaction ids - no duplicated events
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    const updateResult: UpdateResult =
-      await this.collateralRepository.increment(
-        {
-          userId: transaction.userId,
-          asset: transaction.asset,
-        },
-        'amount',
-        transaction.amount,
-      );
-
-    if (updateResult.affected === this.NONE) {
-      await this.collateralRepository.insert({
-        userId: transaction.userId,
-        amount: transaction.amount,
-        asset: transaction.asset,
+    try {
+      await this.collateralTransactionRepository.insert({
+        externalTransactionId: transaction.transactionId,
       });
+
+      const updateResult: UpdateResult =
+        await this.collateralRepository.increment(
+          {
+            userId: transaction.userId,
+            asset: transaction.asset,
+          },
+          'amount',
+          transaction.amount,
+        );
+
+      if (updateResult.affected === this.NONE) {
+        await this.collateralRepository.insert({
+          userId: transaction.userId,
+          amount: transaction.amount,
+          asset: transaction.asset,
+        });
+      }
+
+      await queryRunner.commitTransaction();
+    } catch (e) {
+      const error: TypeORMError = e;
+      Logger.error('Error updating collateral balance', error);
+      await queryRunner.rollbackTransaction();
+
+      return this.databaseErrorHandlingService.ignoreDuplicatedRecordError(
+        error,
+      );
+    } finally {
+      await queryRunner.release();
     }
 
     await this.collateralBalanceUpdateUtilService.handleCollateralBalanceUpdate(
@@ -80,16 +126,33 @@ export class CreditLimitService {
   public async handleInternalTransactionCreatedEvent(
     transaction: InternalCollateralTransactionCreatedPayload,
   ): Promise<void> {
-    // TODO: Store transaction ids - no duplicated events
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
 
-    await this.collateralRepository.decrement(
-      {
-        userId: transaction.userId,
-        asset: transaction.asset,
-      },
-      'amount',
-      transaction.amount,
-    );
+    try {
+      await this.collateralTransactionRepository.insert({
+        externalTransactionId: transaction.id,
+      });
+      await this.collateralRepository.decrement(
+        {
+          userId: transaction.userId,
+          asset: transaction.asset,
+        },
+        'amount',
+        transaction.amount,
+      );
+    } catch (e) {
+      const error: TypeORMError = e;
+      Logger.error('Error updating collateral balance', error);
+      await queryRunner.rollbackTransaction();
+
+      return this.databaseErrorHandlingService.ignoreDuplicatedRecordError(
+        error,
+      );
+    } finally {
+      await queryRunner.release();
+    }
 
     await this.collateralBalanceUpdateUtilService.handleCollateralBalanceUpdate(
       transaction.userId,
