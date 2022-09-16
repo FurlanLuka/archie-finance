@@ -25,14 +25,16 @@ export const WithdrawScreen: FC = () => {
       getMaxWithdrawalAmountResponse.fetch();
     }
     if (getMaxWithdrawalAmountResponse.state === RequestState.SUCCESS) {
-      console.log(getMaxWithdrawalAmountResponse.data.maxAmount);
       getMaxWithdrawalAmountResponse.fetch();
+      console.log(getMaxWithdrawalAmountResponse.data.maxAmount);
     }
   };
 
+  const [shouldRefetch, setShouldRefetch] = useState(false);
+
   useEffect(() => {
     getMaxWithdrawalAmount();
-  }, []);
+  }, [shouldRefetch]);
 
   const getContent = () => {
     if (
@@ -80,7 +82,7 @@ export const WithdrawScreen: FC = () => {
             currentAsset={currentAsset}
             maxAmount={getMaxWithdrawalAmountResponse.data.maxAmount}
             collateral={getCollateralValueReponse.data}
-            onConfirm={getMaxWithdrawalAmount}
+            onConfirm={() => setShouldRefetch(true)}
           />
         </>
       );
