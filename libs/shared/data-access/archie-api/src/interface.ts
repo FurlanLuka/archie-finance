@@ -26,6 +26,7 @@ interface ErrorQueryResponse {
 
 interface SuccessQueryResponse<T = any> {
   state: RequestState.SUCCESS;
+  fetch: () => void;
   data: T;
 }
 

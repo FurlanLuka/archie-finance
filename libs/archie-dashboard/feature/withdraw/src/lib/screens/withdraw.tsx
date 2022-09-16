@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, Navigate, Link } from 'react-router-dom';
 
@@ -19,6 +19,20 @@ export const WithdrawScreen: FC = () => {
 
   const getMaxWithdrawalAmountResponse = useGetMaxWithdrawalAmount(currentAsset);
   const getCollateralValueReponse = useGetCollateralValue();
+
+  const getMaxWithdrawalAmount = () => {
+    if (getMaxWithdrawalAmountResponse.state === RequestState.IDLE) {
+      getMaxWithdrawalAmountResponse.fetch();
+    }
+    if (getMaxWithdrawalAmountResponse.state === RequestState.SUCCESS) {
+      console.log(getMaxWithdrawalAmountResponse.data.maxAmount);
+      getMaxWithdrawalAmountResponse.fetch();
+    }
+  };
+
+  useEffect(() => {
+    getMaxWithdrawalAmount();
+  }, []);
 
   const getContent = () => {
     if (
@@ -66,6 +80,7 @@ export const WithdrawScreen: FC = () => {
             currentAsset={currentAsset}
             maxAmount={getMaxWithdrawalAmountResponse.data.maxAmount}
             collateral={getCollateralValueReponse.data}
+            onConfirm={getMaxWithdrawalAmount}
           />
         </>
       );

@@ -27,9 +27,10 @@ interface WithdrawalFormProps {
   currentAsset: string;
   collateral: CollateralValue[];
   maxAmount: number;
+  onConfirm: () => void;
 }
 
-export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collateral, maxAmount }) => {
+export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collateral, maxAmount, onConfirm }) => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -78,6 +79,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
         withdrawalAmount: data.withdrawAmount,
         destinationAddress: data.withdrawAddress,
       });
+      onConfirm();
     }
   });
 
@@ -92,10 +94,6 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
           </label>
           <input
             id="withdrawAmount"
-            placeholder={t('dashboard_withdraw.form.amount_placeholder', {
-              maxWithdrawAmount: maxAmount,
-              currentAsset,
-            })}
             type="number"
             step="any"
             min={0}
