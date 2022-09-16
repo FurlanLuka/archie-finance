@@ -9,7 +9,6 @@ export class CollateralTransaction {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Index({ unique: true })
   @Column('varchar', { nullable: false })
   externalTransactionId: string;
 

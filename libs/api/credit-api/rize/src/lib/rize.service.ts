@@ -349,6 +349,7 @@ export class RizeService {
     if (credit.paymentDetails?.type === PaymentType.purchase) {
       return;
     }
+
     // Properly done - this section (whole handler) would need to be locked otherwise 2 simultaneous events (2nd event with a greater date than the first)
     // - can still enable both to enter and adjust credit limit. It is very unlikely - OK for POC
     const updateResult: UpdateResult =
