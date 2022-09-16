@@ -53,7 +53,6 @@ export const SettingsScreen: FC = () => {
           <BodyS color={theme.textSecondary}>Autopay is currently on</BodyS>
         </Card>
       </SettingsStyled>
-      {/* if user has not yet connected with plaid, call that modal fist */}
       {autopayModalOpen && <AutopayModal close={() => setAutopayModalOpen(false)} />}
     </>
   );

@@ -17,7 +17,7 @@ export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
 
   if (getConnectedAccountsResponse.state === RequestState.LOADING) {
     return (
-      <Modal maxWidth="760px" isOpen close={close}>
+      <Modal maxWidth="780px" isOpen close={close}>
         <Loader marginAuto />
       </Modal>
     );

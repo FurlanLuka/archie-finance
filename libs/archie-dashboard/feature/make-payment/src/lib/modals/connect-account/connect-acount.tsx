@@ -28,7 +28,7 @@ export const ConnectAccountModal: FC<ConnectAccountProps> = ({ close }) => {
   };
 
   return (
-    <Modal maxWidth="760px" isOpen close={close}>
+    <Modal maxWidth="780px" isOpen close={close}>
       {getContent()}
     </Modal>
   );
