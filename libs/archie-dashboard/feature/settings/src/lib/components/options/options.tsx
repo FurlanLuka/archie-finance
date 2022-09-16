@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-// import { AutopayModal } from '../../components/modals/autopay/autopay';
+import { AutopayModal } from '../../components/modals/autopay/autopay';
 
 import { OptionsItem } from './blocks/options-item/options-item';
 import { OptionsStyled } from './options.styled';
@@ -35,7 +35,7 @@ export const Options: FC = () => {
           onClick={() => console.log('clicked')}
         />
       </OptionsStyled>
-      {/* {autopayModalOpen && <AutopayModal close={() => setAutopayModalOpen(false)} />} */}
+      {autopayModalOpen && <AutopayModal close={() => setAutopayModalOpen(false)} />}
     </>
   );
 };

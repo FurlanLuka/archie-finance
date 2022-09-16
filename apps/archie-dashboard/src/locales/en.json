@@ -329,5 +329,8 @@
       "email_note": "You will receive an email confirmation as soon as your payment has been processed.",
       "btn": "Pay with Paypal"
     }
+  },
+  "autopay_modal": {
+    "title": "Manage Autopay"
   }
 }

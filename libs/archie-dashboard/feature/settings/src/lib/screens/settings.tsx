@@ -12,6 +12,7 @@ import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { Options } from '../components/options/options';
 
+import { AutopayModal } from '../components/modals/autopay/autopay';
 import { SettingsStyled } from './settings.styled';
 
 export const SettingsScreen: FC = () => {
