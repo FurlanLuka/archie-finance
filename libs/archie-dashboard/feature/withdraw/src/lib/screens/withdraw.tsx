@@ -64,7 +64,7 @@ export const WithdrawScreen: FC = () => {
           </BodyL>
           <WithdrawalForm
             currentAsset={currentAsset}
-            maxAmount={asset ? asset.assetAmount : getMaxWithdrawalAmountResponse.data.maxAmount}
+            maxAmount={getMaxWithdrawalAmountResponse.data.maxAmount}
             collateral={getCollateralValueReponse.data}
           />
         </>
