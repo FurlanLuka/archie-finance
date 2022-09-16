@@ -1,5 +1,5 @@
 import { AuthGuard } from '@archie/api/utils/auth0';
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Logger, Req, UseGuards } from '@nestjs/common';
 import { CollateralService } from './collateral.service';
 import {
   GetCollateralPayload,
@@ -92,7 +92,12 @@ export class CollateralQueueController {
   async internalCollateralTransactionCompletedTopic(
     payload: InternalCollateralTransactionCompletedPayload,
   ): Promise<void> {
-    await this.collateralService.handleInternalTransactionCopletedEvent(
+    Logger.log(
+      'INTERNAL_COLLATERAL_TRANSACTION_COMPLETED event received',
+      payload,
+    );
+
+    await this.collateralService.handleInternalTransactionCompletedEvent(
       payload,
     );
   }

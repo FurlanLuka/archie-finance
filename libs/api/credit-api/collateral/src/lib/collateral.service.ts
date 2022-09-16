@@ -4,7 +4,6 @@ import { TransactionStatus } from 'fireblocks-sdk';
 import {
   DataSource,
   LessThan,
-  MoreThan,
   MoreThanOrEqual,
   Repository,
   UpdateResult,
@@ -147,7 +146,7 @@ export class CollateralService {
     };
   }
 
-  public async handleInternalTransactionCopletedEvent(
+  public async handleInternalTransactionCompletedEvent(
     transaction: InternalCollateralTransactionCompletedPayload,
   ): Promise<void> {
     // TODO: Do not handle same events multiple times
