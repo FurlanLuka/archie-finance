@@ -19,7 +19,7 @@ export class Collateral {
   @Column('varchar', { nullable: false })
   asset: string;
 
-  @Column('float', { nullable: false })
+  @Column('numeric', { nullable: false, precision: 27, scale: 17 })
   amount: number;
 
   @CreateDateColumn({ select: false })

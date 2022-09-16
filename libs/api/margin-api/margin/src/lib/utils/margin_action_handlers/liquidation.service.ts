@@ -4,6 +4,8 @@ import { LiquidationAssets } from './margin_action_handlers.interfaces';
 
 @Injectable()
 export class LiquidationUtilService {
+  DECIMAL_LIMIT = 15;
+
   public getAssetsToLiquidate(
     amount: number,
     collateral: CollateralWithPrice[],
