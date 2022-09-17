@@ -11,8 +11,6 @@ import { Card, TitleM, TitleS, BodyM, Loader } from '@archie-webapps/shared/ui/d
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { Options } from '../components/options/options';
-
-import { AutopayModal } from '../components/modals/autopay/autopay';
 import { SettingsStyled } from './settings.styled';
 
 export const SettingsScreen: FC = () => {
@@ -55,7 +53,7 @@ export const SettingsScreen: FC = () => {
     <>
       <SettingsStyled>
         <TitleM className="title">{t('dashboard_settings.title')}</TitleM>
-        <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem" minHeight="656px">
+        <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem" minHeight="632px">
           {getContent()}
         </Card>
       </SettingsStyled>
