@@ -67,7 +67,7 @@ describe('MarginQueueController (e2e)', () => {
             {
               asset: asset,
               price: 1000,
-              amount: 1,
+              amount: '1',
             },
           ],
           collateralBalance: 1000,
@@ -98,7 +98,7 @@ describe('MarginQueueController (e2e)', () => {
         userId,
         liquidation: [
           {
-            amount: 0.75,
+            amount: '0.75',
             asset,
             price: expectedSale,
           },
@@ -120,7 +120,7 @@ describe('MarginQueueController (e2e)', () => {
             {
               asset: asset,
               price: 1000,
-              amount: 1,
+              amount: '1',
             },
           ],
           collateralBalance: 1000,
@@ -156,7 +156,7 @@ describe('MarginQueueController (e2e)', () => {
             {
               asset: asset,
               price: 1000,
-              amount: 1,
+              amount: '1',
             },
           ],
           collateralBalance: 1000,

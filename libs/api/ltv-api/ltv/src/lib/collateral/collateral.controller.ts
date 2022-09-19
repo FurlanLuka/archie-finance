@@ -5,10 +5,12 @@ import {
   COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
   COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
 } from '@archie/api/credit-api/constants';
-import { CollateralWithdrawInitializedDto } from '@archie/api/collateral-api/fireblocks';
 import { SERVICE_QUEUE_NAME } from '@archie/api/ltv-api/constants';
 import { CollateralService } from './collateral.service';
-import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import {
+  CollateralDepositCompletedPayload,
+  CollateralWithdrawInitializedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 import { INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC } from '@archie/api/collateral-api/constants';
 import {
   CollateralWithdrawCompletedPayload,
@@ -26,7 +28,7 @@ export class CollateralQueueController {
     CollateralQueueController.CONTROLLER_QUEUE_NAME,
   )
   async collateralWithdrawInitializedHandler(
-    payload: CollateralWithdrawInitializedDto,
+    payload: CollateralWithdrawInitializedPayload,
   ): Promise<void> {
     await this.collateralService.handleCollateralWithdrawInitializedEvent(
       payload,

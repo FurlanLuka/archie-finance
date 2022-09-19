@@ -19,8 +19,8 @@ export class CollateralDeposit {
   @Column('varchar', { nullable: false })
   asset: string;
 
-  @Column('float', { nullable: false })
-  amount: number;
+  @Column('numeric', { nullable: false, precision: 28, scale: 18 })
+  amount: string;
 
   @Column('varchar', { nullable: false })
   status: string;

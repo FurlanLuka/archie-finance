@@ -33,6 +33,7 @@ import {
   CollateralLiquidationInitiatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
 import { LiquidateAssetsDto } from '@archie/api/collateral-api/fireblocks';
+import { BigNumber } from 'bignumber.js';
 
 @Injectable()
 export class CollateralService {
@@ -127,7 +128,7 @@ export class CollateralService {
   private async getNewCollateralRecord(
     userId: string,
     asset: string,
-    amount: number,
+    amount: string,
   ): Promise<Partial<Collateral>> {
     const collateral: Collateral | null =
       await this.collateralRepository.findOneBy({
@@ -135,8 +136,12 @@ export class CollateralService {
         asset,
       });
 
-    const collateralAmount: number =
-      collateral === null ? amount : collateral.amount + amount; // TODO: refactor- update to use 1 db txn
+    const collateralAmount: string =
+      collateral === null
+        ? amount
+        : new BigNumber(collateral.amount)
+            .plus(new BigNumber(amount))
+            .toString(); // TODO: refactor- update to use 1 db txn
 
     return {
       ...collateral,
@@ -169,7 +174,7 @@ export class CollateralService {
           amount: LessThan(transaction.fee),
         },
         {
-          amount: 0,
+          amount: '0',
         },
       );
     }

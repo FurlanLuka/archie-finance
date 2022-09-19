@@ -3,12 +3,12 @@ import { TransactionStatus } from 'fireblocks-sdk';
 
 export class GetCollateralResponse {
   asset: string;
-  amount: number;
+  amount: string;
 }
 
 export class GetCollateralValueResponse {
   asset: string;
-  assetAmount: number;
+  assetAmount: string;
   price: number;
 }
 

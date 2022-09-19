@@ -131,7 +131,8 @@ export class FireblocksWebhookService {
       {
         transactionId: transaction.id,
         userId: userVaultAccount.userId,
-        fee: transaction.networkFee,
+        fee:
+          transaction.feeInfo?.networkFee ?? transaction.networkFee.toString(),
         asset: assetId,
       },
     );
@@ -164,13 +165,25 @@ export class FireblocksWebhookService {
         },
       });
 
+      console.log('Collateral deposit', COLLATERAL_DEPOSITED_TOPIC, {
+        transactionId: transaction.id,
+        userId,
+        asset: assetId,
+        amount:
+          transaction.amountInfo?.netAmount ?? transaction.netAmount.toString(),
+        destination: transaction.destinationAddress,
+        status: transaction.status,
+      });
+
       this.queueService.publish<CollateralDepositedPayload>(
         COLLATERAL_DEPOSITED_TOPIC,
         {
           transactionId: transaction.id,
           userId,
           asset: assetId,
-          amount: transaction.netAmount,
+          amount:
+            transaction.amountInfo?.netAmount ??
+            transaction.netAmount.toString(),
           destination: transaction.destinationAddress,
           status: transaction.status,
         },
@@ -245,7 +258,9 @@ export class FireblocksWebhookService {
           destinationAddress: transaction.destinationAddress,
           status: transaction.status,
           transactionId: transaction.id,
-          withdrawalAmount: transaction.amount,
+          withdrawalAmount:
+            transaction.amountInfo?.netAmount ??
+            transaction.netAmount.toString(),
           userId: userVaultAccount.userId,
         },
       });
@@ -256,7 +271,9 @@ export class FireblocksWebhookService {
           asset: assetId,
           transactionId: transaction.id,
           userId: userVaultAccount.userId,
-          fee: transaction.networkFee,
+          fee:
+            transaction.feeInfo?.networkFee ??
+            transaction.networkFee.toString(),
         },
       );
     } catch (error) {

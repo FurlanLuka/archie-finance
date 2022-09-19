@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CollateralWithPrice } from '@archie/api/ltv-api/data-transfer-objects';
 import { LiquidationAssets } from './margin_action_handlers.interfaces';
+import { BigNumber } from 'bignumber.js';
 
 @Injectable()
 export class LiquidationUtilService {
-  DECIMAL_LIMIT = 15;
-
   public getAssetsToLiquidate(
     amount: number,
     collateral: CollateralWithPrice[],
@@ -33,25 +32,30 @@ export class LiquidationUtilService {
             targetLiquidationAmount -= collateralValue.price;
           }
 
-          const assetPricePerUnit: number =
-            collateralValue.price / collateralValue.amount;
+          const assetPricePerUnit = Number(
+            BigNumber(collateralValue.price).dividedBy(
+              BigNumber(collateralValue.amount),
+            ),
+          );
 
           const newCollateralAssetAmount: number =
             newCollateralAssetPrice / assetPricePerUnit;
 
           return {
             asset: collateralValue.asset,
-            amount: collateralValue.amount - newCollateralAssetAmount,
+            amount: BigNumber(collateralValue.amount)
+              .minus(newCollateralAssetAmount)
+              .toString(),
             price: collateralValue.price - newCollateralAssetPrice,
           };
         }
 
         return {
           asset: collateralValue.asset,
-          amount: 0,
+          amount: '0',
           price: 0,
         };
       })
-      .filter((liquidatedAsset) => liquidatedAsset.amount > 0);
+      .filter((liquidatedAsset) => !BigNumber(liquidatedAsset.amount).isZero());
   }
 }

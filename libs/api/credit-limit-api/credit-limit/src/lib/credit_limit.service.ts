@@ -208,7 +208,7 @@ export class CreditLimitService {
             amount: LessThan(transaction.fee),
           },
           {
-            amount: 0,
+            amount: '0',
           },
         );
       }

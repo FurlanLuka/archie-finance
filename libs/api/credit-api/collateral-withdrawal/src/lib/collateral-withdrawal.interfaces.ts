@@ -4,8 +4,8 @@ import { TransactionStatus } from 'fireblocks-sdk';
 export class CollateralWithdrawCreateDto {
   @IsString()
   asset: string;
-  @IsNumber()
-  withdrawalAmount: number;
+  @IsString() // TODO: add number regex
+  withdrawalAmount: string;
   @IsString()
   destinationAddress: string;
 }
@@ -13,10 +13,10 @@ export class CollateralWithdrawCreateDto {
 export class GetCollateralWithdrawalResponse {
   id: string;
   asset: string;
-  currentAmount: number;
-  withdrawalAmount: number;
+  currentAmount: string;
+  withdrawalAmount: string;
   destinationAddress: string;
-  fee: number | null;
+  fee: string | null;
   status: TransactionStatus;
   createdAt: Date;
 }

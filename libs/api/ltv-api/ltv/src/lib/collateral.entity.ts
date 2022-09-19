@@ -22,8 +22,8 @@ export class LtvCollateral {
   @Column('varchar', { nullable: false })
   asset: string;
 
-  @Column('numeric', { nullable: false, precision: 27, scale: 17 })
-  amount: number;
+  @Column('numeric', { nullable: false, precision: 28, scale: 18 })
+  amount: string;
 
   @CreateDateColumn({ select: false })
   createdAt: Date;

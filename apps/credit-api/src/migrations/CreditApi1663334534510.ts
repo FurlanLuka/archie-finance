@@ -10,7 +10,7 @@ export class CreditApi1663334534510 implements MigrationInterface {
 
     await queryRunner.query(`
             ALTER TABLE "collateral"
-            ADD "amount" numeric(27, 17) NOT NULL DEFAULT 0
+            ADD "amount" numeric(28, 18) NOT NULL DEFAULT 0
         `);
 
     await queryRunner.query(`UPDATE "collateral" SET "amount" = "amount_temp"`);

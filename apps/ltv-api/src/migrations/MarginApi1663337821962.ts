@@ -10,7 +10,7 @@ export class MarginApi1663337821962 implements MigrationInterface {
 
     await queryRunner.query(`
             ALTER TABLE "ltv_collateral"
-            ADD "amount" numeric(27, 17) NOT NULL DEFAULT 0
+            ADD "amount" numeric(28, 18) NOT NULL DEFAULT 0
         `);
 
     await queryRunner.query(

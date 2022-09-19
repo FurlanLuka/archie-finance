@@ -5,7 +5,7 @@ export interface CollateralValue {
 
 export interface CollateralWithPrice {
   asset: string;
-  amount: number;
+  amount: string;
   price: number;
 }
 
@@ -13,6 +13,6 @@ export interface CollateralWithCalculationDate {
   id: string;
   userId: string;
   asset: string;
-  amount: number;
+  amount: string;
   calculatedAt: string;
 }

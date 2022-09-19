@@ -34,11 +34,13 @@ import {
   clearDatabase,
   queueStub,
   generateUserAccessToken,
+  equalToBigNumber,
 } from '@archie/test/integration';
 import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
+import { BigNumber } from 'bignumber.js';
 
 describe('CollateralWithdrawalController (e2e)', () => {
   let app: INestApplication;
@@ -134,7 +136,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
       expect(response.body.maxAmount).toEqual(0);
     });
 
-    it('should return 0 if user has an LTV of more than .3', async () => {
+    it.only('should return 0 if user has an LTV of more than .3', async () => {
       when(queueStub.request)
         .calledWith(GET_LOAN_BALANCES_RPC, { userId })
         .mockResolvedValue({
@@ -166,7 +168,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .expect(200);
 
       expect(response.body.maxAmount).toEqual(
-        defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount,
+        Number(defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount),
       );
     });
 
@@ -185,7 +187,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .expect(200);
 
       expect(response.body.maxAmount).toEqual(
-        defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount,
+        Number(defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount),
       );
     });
 
@@ -247,7 +249,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .post(`/v1/collateral/withdraw/`)
         .send({
           asset: 'ETH',
-          withdrawalAmount: 2,
+          withdrawalAmount: '2',
           destinationAddress: 'address',
         })
         .set('Authorization', `Bearer ${accessToken}`)
@@ -272,7 +274,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         userId,
         asset,
         withdrawalAmount,
-        currentAmount: 10,
+        currentAmount: equalToBigNumber(BigNumber(10)),
         destinationAddress,
         transactionId: null,
         status: TransactionStatus.SUBMITTED,
@@ -302,7 +304,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
 
     it('should withdraw collateral and publish to the exchange', async () => {
       const asset = 'ETH';
-      const withdrawalAmount = 5;
+      const withdrawalAmount = '5';
       const response = await app
         .get(CollateralWithdrawalController)
         .withdrawUserCollateral(
@@ -315,7 +317,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         userId,
         asset,
         withdrawalAmount,
-        currentAmount: 10,
+        currentAmount: equalToBigNumber(BigNumber(10)),
         destinationAddress,
         transactionId: null,
         status: TransactionStatus.SUBMITTED,
@@ -330,7 +332,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
         {
           asset,
-          withdrawalAmount,
+          withdrawalAmount: equalToBigNumber(BigNumber(withdrawalAmount)),
           userId,
           destinationAddress,
           withdrawalId: expect.any(String),
@@ -340,7 +342,9 @@ describe('CollateralWithdrawalController (e2e)', () => {
         userId,
         asset,
       });
-      expect(userCollateral?.amount).toEqual(10 - withdrawalAmount);
+      expect(userCollateral?.amount).toEqual(
+        equalToBigNumber(BigNumber(10).minus(BigNumber(withdrawalAmount))),
+      );
     });
   });
 
@@ -350,8 +354,8 @@ describe('CollateralWithdrawalController (e2e)', () => {
       const withdrawal = await collateralWithdrawalRepository.save({
         userId,
         asset: 'ETH',
-        withdrawalAmount: 5,
-        currentAmount: 10,
+        withdrawalAmount: '5',
+        currentAmount: '10',
         destinationAddress,
         transactionId: null,
         status: TransactionStatus.SUBMITTED,
@@ -376,8 +380,8 @@ describe('CollateralWithdrawalController (e2e)', () => {
   describe('Withdrawal completed handler', () => {
     it('should update status to completed and decrement collateral value with fee', async () => {
       const transactionId = 'transaction_id';
-      const startingAmount = 100;
-      const fee = 1;
+      const startingAmount = '100';
+      const fee = '1';
       await collateralRepository.insert({
         userId,
         asset: 'ETH',
@@ -386,8 +390,8 @@ describe('CollateralWithdrawalController (e2e)', () => {
       const withdrawal = await collateralWithdrawalRepository.save({
         userId,
         asset: 'ETH',
-        withdrawalAmount: 5,
-        currentAmount: 10,
+        withdrawalAmount: '5',
+        currentAmount: '10',
         destinationAddress,
         transactionId,
         status: TransactionStatus.SUBMITTED,
@@ -412,7 +416,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         await collateralRepository.findOneBy({
           userId,
           asset: 'ETH',
-          amount: startingAmount - fee,
+          amount: BigNumber(startingAmount).minus(BigNumber(fee)).toString(),
         }),
       ).not.toBeNull();
     });
@@ -424,8 +428,8 @@ describe('CollateralWithdrawalController (e2e)', () => {
         await collateralWithdrawalRepository.save({
           userId,
           asset: 'ETH',
-          withdrawalAmount: 5,
-          currentAmount: 10,
+          withdrawalAmount: '5',
+          currentAmount: '10',
           destinationAddress,
           transactionId: null,
           status: TransactionStatus.SUBMITTED,
@@ -437,7 +441,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
             userId,
             transactionId,
             asset: 'ETH',
-            fee: 1,
+            fee: '1',
           });
       } catch (error) {
         expect(error).toBeInstanceOf(NotFoundException);

@@ -43,6 +43,7 @@ import {
   GetLoanBalancesResponse,
 } from '@archie/api/peach-api/data-transfer-objects';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
+import { BigNumber } from 'bignumber.js';
 
 const MAX_LTV = 0.3;
 @Injectable()
@@ -118,7 +119,7 @@ export class CollateralWithdrawalService {
             amount: LessThan(fee),
           },
           {
-            amount: 0,
+            amount: '0',
           },
         );
       }
@@ -202,17 +203,24 @@ export class CollateralWithdrawalService {
       userId,
     });
 
+    console.log('credit', credit);
+
     const totalCollateralValue: number = collateralValue.reduce(
       (value: number, collateralAsset: GetCollateralValueResponse) =>
         value + collateralAsset.price,
       0,
     );
 
+    console.log('totalCollateralValue', totalCollateralValue);
+
     const maxAmountForMaxLtv = credit.utilizationAmount / MAX_LTV;
     const maxAvailableAmount = Math.max(
       totalCollateralValue - maxAmountForMaxLtv,
       0,
     );
+
+    console.log('maxAmountForMaxLtv', maxAmountForMaxLtv);
+    console.log('maxAvailableAmount', maxAvailableAmount);
 
     return {
       maxAmount:
@@ -223,7 +231,7 @@ export class CollateralWithdrawalService {
   public async withdrawUserCollateral(
     userId: string,
     asset: string,
-    withdrawalAmount: number,
+    withdrawalAmount: string,
     destinationAddress: string,
   ): Promise<GetCollateralWithdrawalResponse> {
     try {
@@ -240,7 +248,7 @@ export class CollateralWithdrawalService {
 
       if (userCollateral === null) throw new CollateralNotFoundError();
 
-      if (maxAmount < withdrawalAmount) {
+      if (BigNumber(withdrawalAmount).isGreaterThan(maxAmount)) {
         throw new BadRequestException({
           code: 'COLLATERAL_WITHDRAW_AMOUNT_ERROR',
           message: 'Not enough amount',
@@ -283,10 +291,14 @@ export class CollateralWithdrawalService {
             return (<Collateral[]>response.raw)[0];
           });
 
-      if (updatedCollateral !== undefined && updatedCollateral.amount == 0) {
+      if (
+        updatedCollateral !== undefined &&
+        new BigNumber(updatedCollateral.amount).isZero()
+        // TODO maybe add bn converter to db typeorm
+      ) {
         await this.collateralRepository.delete({
           id: updatedCollateral.id,
-          amount: 0,
+          amount: '0',
         });
       }
 

@@ -5,8 +5,8 @@ import { AssetType } from '@archie/api/collateral-api/asset-information';
 export class CollateralWithdrawInitializedDto {
   @IsString()
   asset: string;
-  @IsNumber()
-  withdrawalAmount: number;
+  @IsString()
+  withdrawalAmount: string;
   @IsString()
   userId: string;
   @IsString()

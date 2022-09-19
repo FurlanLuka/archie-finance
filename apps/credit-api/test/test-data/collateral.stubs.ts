@@ -1,5 +1,6 @@
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects';
+import { BigNumber } from 'bignumber.js';
 
 export const SOL_PRICE = 0.28;
 export const BTC_PRICE = 26;
@@ -32,10 +33,10 @@ export const assetPriceResponse: GetAssetPriceResponse[] = [
   },
 ];
 
-export const BTC_STARTING_AMOUNT = 1;
-export const ETH_STARTING_AMOUNT = 10;
-export const SOL_STARTING_AMOUNT = 100;
-export const USDC_STARTING_AMOUNT = 20;
+export const BTC_STARTING_AMOUNT = '1';
+export const ETH_STARTING_AMOUNT = '10';
+export const SOL_STARTING_AMOUNT = '100';
+export const USDC_STARTING_AMOUNT = '20';
 
 export function createUserCollateral(userId: string) {
   return [
@@ -61,11 +62,16 @@ export function createUserCollateral(userId: string) {
     },
   ];
 }
-export const defaultCollateralTotal =
-  BTC_STARTING_AMOUNT * BTC_PRICE +
-  ETH_STARTING_AMOUNT * ETH_PRICE +
-  SOL_STARTING_AMOUNT * SOL_PRICE +
-  USDC_STARTING_AMOUNT * 1;
+export const defaultCollateralTotal = BigNumber(BTC_STARTING_AMOUNT)
+  .multipliedBy(BTC_PRICE)
+  .plus(ETH_STARTING_AMOUNT)
+  .multipliedBy(ETH_PRICE)
+  .plus(SOL_STARTING_AMOUNT)
+  .multipliedBy(SOL_PRICE)
+  .plus(USDC_STARTING_AMOUNT)
+  .multipliedBy(1)
+  .toNumber();
+console.log(defaultCollateralTotal);
 
 export const getLoanBalancesResponse: GetLoanBalancesResponse = {
   totalCredit: defaultCollateralTotal / 2,

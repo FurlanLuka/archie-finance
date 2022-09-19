@@ -5,7 +5,11 @@ import { AppModule } from '../../src/app.module';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { LtvCollateral } from '../../../../libs/api/ltv-api/ltv/src/lib/collateral.entity';
-import { clearDatabase, queueStub } from '@archie/test/integration';
+import {
+  clearDatabase,
+  equalToBigNumber,
+  queueStub,
+} from '@archie/test/integration';
 import { QueueService } from '@archie/api/utils/queue';
 import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
@@ -14,6 +18,7 @@ import { CollateralQueueController } from '../../../../libs/api/ltv-api/ltv/src/
 import { LtvCredit } from '../../../../libs/api/ltv-api/ltv/src/lib/credit.entity';
 import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
 import { CollateralTransaction } from '../../../../libs/api/ltv-api/ltv/src/lib/collateral_transactions.entity';
+import { BigNumber } from 'bignumber.js';
 
 describe('CollateralQueueController (e2e)', () => {
   let app: INestApplication;
@@ -26,8 +31,8 @@ describe('CollateralQueueController (e2e)', () => {
   const userId = 'userId';
   const asset = 'ETH';
   const utilizationAmount = 10;
-  const startingAssetAmount = 1;
-  const withdrawalAmount = 0.3;
+  const startingAssetAmount = '1';
+  const withdrawalAmount = '0.3';
   const transactionId = 'transactionId';
 
   beforeEach(async () => {
@@ -86,8 +91,12 @@ describe('CollateralQueueController (e2e)', () => {
           withdrawalId: transactionId,
         });
 
-      const collateralBalance =
-        ETH_PRICE * (startingAssetAmount - withdrawalAmount);
+      const newCollateralAmount = BigNumber(startingAssetAmount).minus(
+        BigNumber(withdrawalAmount),
+      );
+      const collateralBalance = newCollateralAmount
+        .multipliedBy(ETH_PRICE)
+        .toNumber();
       expect(queueStub.publish).toBeCalledTimes(1);
       expect(queueStub.publish).toBeCalledWith(LTV_UPDATED_TOPIC, {
         userId,
@@ -97,7 +106,7 @@ describe('CollateralQueueController (e2e)', () => {
           collateralBalance: collateralBalance,
           collateral: [
             {
-              amount: startingAssetAmount - withdrawalAmount,
+              amount: equalToBigNumber(newCollateralAmount),
               asset,
               price: collateralBalance,
             },

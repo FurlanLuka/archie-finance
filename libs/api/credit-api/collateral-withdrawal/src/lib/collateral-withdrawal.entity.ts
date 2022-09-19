@@ -25,14 +25,14 @@ export class CollateralWithdrawal {
   @Column('varchar', { nullable: false })
   asset: string;
 
-  @Column('float', { nullable: false })
-  currentAmount: number;
+  @Column('numeric', { nullable: false, precision: 28, scale: 18 })
+  currentAmount: string;
 
-  @Column('float', { nullable: false })
-  withdrawalAmount: number;
+  @Column('numeric', { nullable: false, precision: 28, scale: 18 })
+  withdrawalAmount: string;
 
-  @Column('float', { nullable: true })
-  fee: number | null;
+  @Column('numeric', { nullable: true, precision: 28, scale: 18 })
+  fee: string | null;
 
   @Column('varchar', { nullable: true })
   destinationAddress: string;

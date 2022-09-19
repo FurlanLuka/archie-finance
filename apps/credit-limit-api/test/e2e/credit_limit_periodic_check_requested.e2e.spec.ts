@@ -18,6 +18,7 @@ import { CreditLimit } from '../../../../libs/api/credit-limit-api/credit-limit/
 import { CREDIT_LIMIT_UPDATED_TOPIC } from '../../../../libs/api/credit-limit-api/constants/src';
 import { GET_ASSET_INFORMATION_RPC } from '../../../../libs/api/collateral-api/constants/src';
 import { PeriodicCheckQueueController } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/periodic_check/periodic_check.controller';
+import { BigNumber } from 'bignumber.js';
 
 describe('PeriodicCheckQueueController (e2e)', () => {
   let app: INestApplication;
@@ -64,7 +65,7 @@ describe('PeriodicCheckQueueController (e2e)', () => {
 
   describe('CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED flow', () => {
     it.only('Should check credit limit for selected users', async () => {
-      const startingEthAmount = 1;
+      const startingEthAmount = '1';
       const currentCreditLimit = 100;
       await collateralRepository.insert({
         userId,
@@ -84,8 +85,12 @@ describe('PeriodicCheckQueueController (e2e)', () => {
           userIds: [userId],
         });
 
-      const expectedNewCreditLimit =
-        (ETH_PRICE * startingEthAmount * assetListResponse[asset]!.ltv) / 100;
+      const expectedNewCreditLimit = BigNumber(startingEthAmount)
+        .multipliedBy(ETH_PRICE)
+        .multipliedBy(assetListResponse[asset]!.ltv)
+        .dividedBy(100)
+        .toNumber();
+
       expect(queueStub.publish).toBeCalledTimes(1);
       expect(queueStub.publish).toBeCalledWith(CREDIT_LIMIT_UPDATED_TOPIC, {
         calculatedAt: expect.any(Date),

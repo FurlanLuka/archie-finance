@@ -5,7 +5,11 @@ import { AppModule } from '../../src/app.module';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { LtvCollateral } from '../../../../libs/api/ltv-api/ltv/src/lib/collateral.entity';
-import { clearDatabase, queueStub } from '@archie/test/integration';
+import {
+  clearDatabase,
+  equalToBigNumber,
+  queueStub,
+} from '@archie/test/integration';
 import { QueueService } from '@archie/api/utils/queue';
 import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
@@ -17,6 +21,7 @@ import {
   CreditBalanceUpdatedPayload,
   PaymentType,
 } from '@archie/api/peach-api/data-transfer-objects';
+import { BigNumber } from 'bignumber.js';
 
 describe('CreditQueueController (e2e)', () => {
   let app: INestApplication;
@@ -60,13 +65,13 @@ describe('CreditQueueController (e2e)', () => {
 
   describe('CREDIT_BALANCE_UPDATED flow', () => {
     it('Should publish ltv updated event if credit utilization amount changes', async () => {
-      const startingEthAmount = 1;
+      const startingEthAmount = '1';
       await ltvCollateralRepository.insert({
         userId,
         asset,
         amount: startingEthAmount,
       });
-      const paymentAmount = 0.3;
+      const paymentAmount = '0.3';
       await ltvCreditRepository.insert({
         userId,
         utilizationAmount: 5,
@@ -90,7 +95,12 @@ describe('CreditQueueController (e2e)', () => {
         .get(CreditQueueController)
         .creditBalanceUpdatedHandler(balanceUpdatedPayload);
 
-      const collateralBalance = ETH_PRICE * (startingEthAmount - paymentAmount);
+      const collateralAmount = BigNumber(startingEthAmount).minus(
+        BigNumber(paymentAmount),
+      );
+      const collateralBalance = collateralAmount
+        .multipliedBy(ETH_PRICE)
+        .toNumber();
       expect(queueStub.publish).toBeCalledTimes(1);
       expect(queueStub.publish).toBeCalledWith(LTV_UPDATED_TOPIC, {
         userId,
@@ -101,7 +111,7 @@ describe('CreditQueueController (e2e)', () => {
           collateralBalance: collateralBalance,
           collateral: [
             {
-              amount: startingEthAmount - paymentAmount,
+              amount: equalToBigNumber(collateralAmount),
               asset,
               price: collateralBalance,
             },
