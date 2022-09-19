@@ -28,6 +28,7 @@ import {
 import { COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC } from '@archie/api/credit-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import { CollateralWithdrawTransactionCreatedPayload } from '@archie/api/collateral-api/data-transfer-objects';
+import { CollateralLiquidationInitiatedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class FireblocksService {
@@ -150,14 +151,14 @@ export class FireblocksService {
   }
 
   public async liquidateAssets(
-    { userId, liquidation }: LiquidateAssetsDto,
+    { userId, collateral }: CollateralLiquidationInitiatedPayload,
     vaultAccountId: string,
   ): Promise<void> {
     Logger.log({
       code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
       params: {
         userId,
-        liquidation,
+        collateral,
       },
     });
     const internalVaultAccountId = this.configService.get(
@@ -176,7 +177,7 @@ export class FireblocksService {
     );
 
     await Promise.all(
-      liquidation.map(async ({ asset, amount, price }) => {
+      collateral.map(async ({ asset, amount, price }) => {
         const fireblocksAsset = assetList[asset];
 
         if (!fireblocksAsset) {

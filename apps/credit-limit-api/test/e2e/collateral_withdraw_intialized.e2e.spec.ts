@@ -18,6 +18,7 @@ import { CreditLimit } from '../../../../libs/api/credit-limit-api/credit-limit/
 import { CreditLimitQueueController } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.controller';
 import { CREDIT_LIMIT_UPDATED_TOPIC } from '../../../../libs/api/credit-limit-api/constants/src';
 import { GET_ASSET_INFORMATION_RPC } from '../../../../libs/api/collateral-api/constants/src';
+import { CollateralTransaction } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral_transactions.entity';
 
 describe('CreditLimitQueueController (e2e)', () => {
   let app: INestApplication;
@@ -25,9 +26,15 @@ describe('CreditLimitQueueController (e2e)', () => {
 
   let collateralRepository: Repository<Collateral>;
   let creditLimitRepository: Repository<CreditLimit>;
+  let collateralTransactionRepository: Repository<CollateralTransaction>;
 
   const userId = 'userId';
   const asset = 'ETH';
+
+  const startingAssetAmount = 1;
+  const withdrawalAmount = 0.3;
+  const currentCreditLimit = 100;
+  const transactionId = 'transactionId';
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
@@ -44,6 +51,9 @@ describe('CreditLimitQueueController (e2e)', () => {
 
     collateralRepository = app.get(getRepositoryToken(Collateral));
     creditLimitRepository = app.get(getRepositoryToken(CreditLimit));
+    collateralTransactionRepository = app.get(
+      getRepositoryToken(CollateralTransaction),
+    );
 
     when(queueStub.request)
       .calledWith(GET_ASSET_PRICES_RPC)
@@ -51,6 +61,18 @@ describe('CreditLimitQueueController (e2e)', () => {
     when(queueStub.request)
       .calledWith(GET_ASSET_INFORMATION_RPC)
       .mockResolvedValue(assetListResponse);
+
+    await collateralRepository.insert({
+      userId,
+      asset,
+      amount: startingAssetAmount,
+    });
+    await creditLimitRepository.insert({
+      userId,
+      creditLimit: currentCreditLimit,
+      calculatedOnCollateralBalance: 0,
+      calculatedAt: new Date().toISOString(),
+    });
   });
 
   afterEach(async () => {
@@ -64,21 +86,6 @@ describe('CreditLimitQueueController (e2e)', () => {
 
   describe('COLLATERAL_WITHDRAW_INITIALIZED flow', () => {
     it('Should publish CREDIT_LIMIT_INCREASED in case the credit limit is increased and collateral value changes by at least 10%', async () => {
-      const startingEthAmount = 1;
-      const withdrawalAmount = 0.3;
-      const currentCreditLimit = 100;
-      await collateralRepository.insert({
-        userId,
-        asset,
-        amount: startingEthAmount,
-      });
-      await creditLimitRepository.insert({
-        userId,
-        creditLimit: currentCreditLimit,
-        calculatedOnCollateralBalance: 0,
-        calculatedAt: new Date().toISOString(),
-      });
-
       await app
         .get(CreditLimitQueueController)
         .collateralWithdrawInitializedHandler({
@@ -91,7 +98,7 @@ describe('CreditLimitQueueController (e2e)', () => {
 
       const expectedNewCreditLimit =
         (ETH_PRICE *
-          (startingEthAmount - withdrawalAmount) *
+          (startingAssetAmount - withdrawalAmount) *
           assetListResponse[asset]!.ltv) /
         100;
       expect(queueStub.publish).toBeCalledTimes(1);
@@ -100,6 +107,32 @@ describe('CreditLimitQueueController (e2e)', () => {
         creditLimit: expectedNewCreditLimit,
         userId,
       });
+    });
+
+    it('Should not publish CREDIT_LIMIT_INCREASED or update collateral record in case the transaction was already handled', async () => {
+      await collateralTransactionRepository.insert({
+        externalTransactionId: transactionId,
+      });
+
+      await app
+        .get(CreditLimitQueueController)
+        .collateralWithdrawInitializedHandler({
+          userId,
+          asset,
+          withdrawalAmount: withdrawalAmount,
+          destinationAddress: 'destinationAddress',
+          withdrawalId: transactionId,
+        });
+
+      expect(queueStub.publish).toBeCalledTimes(0);
+      const collateralRecords: Collateral[] = await collateralRepository.findBy(
+        {
+          userId,
+          asset,
+          amount: startingAssetAmount,
+        },
+      );
+      expect(collateralRecords).toHaveLength(1);
     });
   });
 });

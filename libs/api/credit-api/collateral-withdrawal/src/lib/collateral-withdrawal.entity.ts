@@ -31,6 +31,9 @@ export class CollateralWithdrawal {
   @Column('float', { nullable: false })
   withdrawalAmount: number;
 
+  @Column('float', { nullable: true })
+  fee: number | null;
+
   @Column('varchar', { nullable: true })
   destinationAddress: string;
 

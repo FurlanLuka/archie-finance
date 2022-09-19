@@ -8,9 +8,14 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
-import { Repository } from 'typeorm';
 import {
-  CollateralWithdrawCompletedDto,
+  DataSource,
+  LessThan,
+  MoreThanOrEqual,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
+import {
   GetCollateralWithdrawalResponse,
   GetUserMaxWithdrawalAmountResponse,
 } from './collateral-withdrawal.interfaces';
@@ -29,7 +34,10 @@ import { QueueService } from '@archie/api/utils/queue';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { CollateralWithdrawInitializedPayload } from '@archie/api/credit-api/data-transfer-objects';
-import { CollateralWithdrawTransactionCreatedPayload } from '@archie/api/collateral-api/data-transfer-objects';
+import {
+  CollateralWithdrawCompletedPayload,
+  CollateralWithdrawTransactionCreatedPayload,
+} from '@archie/api/collateral-api/data-transfer-objects';
 import {
   GetLoanBalancesPayload,
   GetLoanBalancesResponse,
@@ -46,6 +54,7 @@ export class CollateralWithdrawalService {
     private collateralWithdrawalRepository: Repository<CollateralWithdrawal>,
     private collateralValueService: CollateralValueService,
     private queueService: QueueService,
+    private dataSource: DataSource,
   ) {}
 
   public async handleWithdrawalTransactionCreated({
@@ -73,7 +82,8 @@ export class CollateralWithdrawalService {
     userId,
     asset,
     transactionId,
-  }: CollateralWithdrawCompletedDto): Promise<void> {
+    fee,
+  }: CollateralWithdrawCompletedPayload): Promise<void> {
     Logger.log({
       code: 'COLLATERAL_WITHDRAW_COMPLETE',
       params: {
@@ -82,12 +92,43 @@ export class CollateralWithdrawalService {
         transactionId,
       },
     });
+
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
     try {
+      const updatedResult: UpdateResult =
+        await this.collateralRepository.decrement(
+          {
+            asset,
+            userId,
+            amount: MoreThanOrEqual(fee),
+          },
+          'amount',
+          fee,
+        );
+
+      if (updatedResult.affected === 0) {
+        await this.collateralRepository.update(
+          {
+            asset,
+            userId,
+            amount: LessThan(fee),
+          },
+          {
+            amount: 0,
+          },
+        );
+      }
+
       const updateResult = await this.collateralWithdrawalRepository.update(
         {
           transactionId,
         },
         {
+          fee,
           status: TransactionStatus.COMPLETED,
         },
       );
@@ -104,7 +145,10 @@ export class CollateralWithdrawalService {
         });
         throw new NotFoundException();
       }
+      await queryRunner.commitTransaction();
     } catch (error) {
+      await queryRunner.rollbackTransaction();
+
       if (error instanceof HttpException) {
         throw error;
       }
@@ -114,6 +158,8 @@ export class CollateralWithdrawalService {
         error: JSON.stringify(error),
         errorMessage: error.message,
       });
+    } finally {
+      await queryRunner.release();
     }
   }
 

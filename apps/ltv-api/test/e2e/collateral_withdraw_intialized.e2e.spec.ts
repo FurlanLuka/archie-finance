@@ -13,6 +13,7 @@ import { assetPriceResponse, ETH_PRICE } from '../test-data/collateral.stubs';
 import { CollateralQueueController } from '../../../../libs/api/ltv-api/ltv/src/lib/collateral/collateral.controller';
 import { LtvCredit } from '../../../../libs/api/ltv-api/ltv/src/lib/credit.entity';
 import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
+import { CollateralTransaction } from '../../../../libs/api/ltv-api/ltv/src/lib/collateral_transactions.entity';
 
 describe('CollateralQueueController (e2e)', () => {
   let app: INestApplication;
@@ -20,9 +21,14 @@ describe('CollateralQueueController (e2e)', () => {
 
   let ltvCollateralRepository: Repository<LtvCollateral>;
   let ltvCreditRepository: Repository<LtvCredit>;
+  let collateralTransactionRepository: Repository<CollateralTransaction>;
 
   const userId = 'userId';
   const asset = 'ETH';
+  const utilizationAmount = 10;
+  const startingAssetAmount = 1;
+  const withdrawalAmount = 0.3;
+  const transactionId = 'transactionId';
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
@@ -39,10 +45,24 @@ describe('CollateralQueueController (e2e)', () => {
 
     ltvCollateralRepository = app.get(getRepositoryToken(LtvCollateral));
     ltvCreditRepository = app.get(getRepositoryToken(LtvCredit));
+    collateralTransactionRepository = app.get(
+      getRepositoryToken(CollateralTransaction),
+    );
 
     when(queueStub.request)
       .calledWith(GET_ASSET_PRICES_RPC)
       .mockResolvedValue(assetPriceResponse);
+
+    await ltvCollateralRepository.insert({
+      userId,
+      asset,
+      amount: startingAssetAmount,
+    });
+    await ltvCreditRepository.insert({
+      userId,
+      utilizationAmount: utilizationAmount,
+      calculatedAt: new Date().toISOString(),
+    });
   });
 
   afterEach(async () => {
@@ -56,20 +76,6 @@ describe('CollateralQueueController (e2e)', () => {
 
   describe('COLLATERAL_WITHDRAW_INITIALIZED flow', () => {
     it('Should publish ltv updated event if collateral has been withdrawn', async () => {
-      const utilizationAmount = 10;
-      const startingEthAmount = 1;
-      const withdrawalAmount = 0.3;
-      await ltvCollateralRepository.insert({
-        userId,
-        asset,
-        amount: startingEthAmount,
-      });
-      await ltvCreditRepository.insert({
-        userId,
-        utilizationAmount: utilizationAmount,
-        calculatedAt: new Date().toISOString(),
-      });
-
       await app
         .get(CollateralQueueController)
         .collateralWithdrawInitializedHandler({
@@ -77,11 +83,11 @@ describe('CollateralQueueController (e2e)', () => {
           asset,
           withdrawalAmount: withdrawalAmount,
           destinationAddress: 'destinationAddress',
-          withdrawalId: 'withdrawalId',
+          withdrawalId: transactionId,
         });
 
       const collateralBalance =
-        ETH_PRICE * (startingEthAmount - withdrawalAmount);
+        ETH_PRICE * (startingAssetAmount - withdrawalAmount);
       expect(queueStub.publish).toBeCalledTimes(1);
       expect(queueStub.publish).toBeCalledWith(LTV_UPDATED_TOPIC, {
         userId,
@@ -91,13 +97,39 @@ describe('CollateralQueueController (e2e)', () => {
           collateralBalance: collateralBalance,
           collateral: [
             {
-              amount: startingEthAmount - withdrawalAmount,
+              amount: startingAssetAmount - withdrawalAmount,
               asset,
               price: collateralBalance,
             },
           ],
+          calculatedAt: expect.any(String),
         },
       });
+    });
+
+    it('Should not publish event in case same transaction was already handled', async () => {
+      await collateralTransactionRepository.insert({
+        externalTransactionId: transactionId,
+      });
+
+      await app
+        .get(CollateralQueueController)
+        .collateralWithdrawInitializedHandler({
+          userId,
+          asset,
+          withdrawalAmount: withdrawalAmount,
+          destinationAddress: 'destinationAddress',
+          withdrawalId: transactionId,
+        });
+
+      expect(queueStub.publish).toBeCalledTimes(0);
+      const ethCollateral: LtvCollateral[] =
+        await ltvCollateralRepository.findBy({
+          userId,
+          asset,
+          amount: startingAssetAmount,
+        });
+      expect(ethCollateral).toHaveLength(1);
     });
   });
 });

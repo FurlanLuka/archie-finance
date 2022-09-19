@@ -6,6 +6,7 @@ import { LtvUpdatedUtilService } from './ltv_updated.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LtvCollateral } from '../collateral.entity';
 import { LtvCredit } from '../credit.entity';
+import { DatabaseErrorHandlingService } from './database_error_handling.service';
 
 @Module({
   controllers: [],
@@ -15,12 +16,14 @@ import { LtvCredit } from '../credit.entity';
     CollateralValueUtilService,
     CreditAssetUtilService,
     LtvUpdatedUtilService,
+    DatabaseErrorHandlingService,
   ],
   exports: [
     LtvUtilService,
     CollateralValueUtilService,
     CreditAssetUtilService,
     LtvUpdatedUtilService,
+    DatabaseErrorHandlingService,
   ],
 })
 export class UtilsModule {}

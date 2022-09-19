@@ -6,10 +6,7 @@ import {
   TransactionStatus,
 } from 'fireblocks-sdk';
 import { DepositAddressService } from '@archie/api/collateral-api/deposit-address';
-import {
-  FireblocksWebhookDto,
-  InternalCollateralTransactionCompletedPayload,
-} from './fireblocks-webhook.dto';
+import { FireblocksWebhookDto } from './fireblocks-webhook.dto';
 import {
   EventType,
   FireblocksWebhookPayload,
@@ -31,6 +28,7 @@ import { QueueService } from '@archie/api/utils/queue';
 import {
   CollateralDepositedPayload,
   CollateralWithdrawCompletedPayload,
+  InternalCollateralTransactionCompletedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
 
 @Injectable()
@@ -75,6 +73,32 @@ export class FireblocksWebhookService {
     }
   }
 
+  private getAssetId(transaction: TransactionResponse): string {
+    const assetList: AssetList = this.configService.get(
+      ConfigVariables.ASSET_LIST,
+    );
+
+    Logger.log({
+      code: 'ASSET_LIST',
+      ...assetList,
+    });
+
+    const asset: string[] = Object.keys(assetList).flatMap((key) => {
+      if (assetList[key]!.fireblocks_id !== transaction.assetId) {
+        return [];
+      }
+
+      return [key];
+    });
+
+    Logger.log({
+      code: 'ASSET_INFORMATION',
+      ...asset,
+    });
+
+    return asset.length > 0 ? asset[0] : transaction.assetId;
+  }
+
   private async handleInternalCollateralTransaction(
     transaction: TransactionResponse,
   ): Promise<void> {
@@ -100,11 +124,15 @@ export class FireblocksWebhookService {
       throw new NotFoundException();
     }
 
+    const assetId: string = this.getAssetId(transaction);
+
     this.queueService.publish<InternalCollateralTransactionCompletedPayload>(
       INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
       {
         transactionId: transaction.id,
         userId: userVaultAccount.userId,
+        fee: transaction.networkFee,
+        asset: assetId,
       },
     );
   }
@@ -122,29 +150,7 @@ export class FireblocksWebhookService {
           transaction.destinationAddress,
         );
 
-      const assetList: AssetList = this.configService.get(
-        ConfigVariables.ASSET_LIST,
-      );
-
-      Logger.log({
-        code: 'ASSET_LIST',
-        ...assetList,
-      });
-
-      const asset: string[] = Object.keys(assetList).flatMap((key) => {
-        if (assetList[key]!.fireblocks_id !== transaction.assetId) {
-          return [];
-        }
-
-        return [key];
-      });
-
-      Logger.log({
-        code: 'ASSET_INFORMATION',
-        ...asset,
-      });
-
-      const assetId: string = asset.length > 0 ? asset[0] : transaction.assetId;
+      const assetId: string = this.getAssetId(transaction);
 
       Logger.log({
         code: 'CREATE_COLLATERAL_DEPOSIT',
@@ -250,6 +256,7 @@ export class FireblocksWebhookService {
           asset: assetId,
           transactionId: transaction.id,
           userId: userVaultAccount.userId,
+          fee: transaction.networkFee,
         },
       );
     } catch (error) {

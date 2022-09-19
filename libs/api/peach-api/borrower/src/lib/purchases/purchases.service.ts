@@ -75,6 +75,7 @@ export class PurchasesService {
             type: PaymentType.purchase,
             amount: Number(transaction.us_dollar_amount),
             asset: 'USD',
+            id: String(transaction.id),
           },
         },
       );

@@ -1,13 +1,13 @@
 import { Controller } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
-import { COLLATERAL_WITHDRAW_INITIALIZED_TOPIC } from '@archie/api/credit-api/constants';
-import { MARGIN_CALL_COMPLETED_TOPIC } from '@archie/api/margin-api/constants';
-import { SERVICE_QUEUE_NAME } from '@archie/api/collateral-api/constants';
 import {
-  CollateralWithdrawInitializedDto,
-  LiquidateAssetsDto,
-} from '@archie/api/collateral-api/fireblocks';
+  COLLATERAL_LIQUIDATION_INITIATED_TOPIC,
+  COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
+} from '@archie/api/credit-api/constants';
+import { SERVICE_QUEUE_NAME } from '@archie/api/collateral-api/constants';
+import { CollateralWithdrawInitializedDto } from '@archie/api/collateral-api/fireblocks';
 import { UserVaultAccountService } from './user-vault-account.service';
+import { CollateralLiquidationInitiatedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Controller()
 export class UserVaultQueueController {
@@ -25,11 +25,11 @@ export class UserVaultQueueController {
     await this.userVaultAccountService.withdrawAsset(payload);
   }
   @Subscribe(
-    MARGIN_CALL_COMPLETED_TOPIC,
+    COLLATERAL_LIQUIDATION_INITIATED_TOPIC,
     UserVaultQueueController.CONTROLLER_QUEUE_NAME,
   )
   async marginCallCompletedLiquidationHandler(
-    payload: LiquidateAssetsDto,
+    payload: CollateralLiquidationInitiatedPayload,
   ): Promise<void> {
     await this.userVaultAccountService.liquidateAssets(payload);
   }
