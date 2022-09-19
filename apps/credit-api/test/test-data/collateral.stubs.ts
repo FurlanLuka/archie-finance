@@ -64,14 +64,10 @@ export function createUserCollateral(userId: string) {
 }
 export const defaultCollateralTotal = BigNumber(BTC_STARTING_AMOUNT)
   .multipliedBy(BTC_PRICE)
-  .plus(ETH_STARTING_AMOUNT)
-  .multipliedBy(ETH_PRICE)
-  .plus(SOL_STARTING_AMOUNT)
-  .multipliedBy(SOL_PRICE)
-  .plus(USDC_STARTING_AMOUNT)
-  .multipliedBy(1)
+  .plus(BigNumber(ETH_STARTING_AMOUNT).multipliedBy(ETH_PRICE))
+  .plus(BigNumber(SOL_STARTING_AMOUNT).multipliedBy(SOL_PRICE))
+  .plus(BigNumber(USDC_STARTING_AMOUNT).multipliedBy(1))
   .toNumber();
-console.log(defaultCollateralTotal);
 
 export const getLoanBalancesResponse: GetLoanBalancesResponse = {
   totalCredit: defaultCollateralTotal / 2,

@@ -136,7 +136,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
       expect(response.body.maxAmount).toEqual(0);
     });
 
-    it.only('should return 0 if user has an LTV of more than .3', async () => {
+    it('should return 0 if user has an LTV of more than .3', async () => {
       when(queueStub.request)
         .calledWith(GET_LOAN_BALANCES_RPC, { userId })
         .mockResolvedValue({
