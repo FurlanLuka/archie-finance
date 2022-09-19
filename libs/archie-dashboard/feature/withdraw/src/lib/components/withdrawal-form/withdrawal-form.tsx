@@ -2,12 +2,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { calculateCollateralCreditValue, calculateCollateralTotalValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 import { useCreateWithdrawal } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-create-withdrawal';
+import { getMaxWithdrawalAmountQueryKey } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-max-withdrawal-amount';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { ButtonOutline, ButtonPrimary, InputText, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
@@ -16,7 +18,7 @@ import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/suc
 
 import { getUpdatedCreditAndTotal } from './withdrawal-form.helpers';
 import { getWithdrawSchema } from './withdrawal-form.schema';
-import * as Styled from './withdrawal-form.styled';
+import { WithdrawalFormStyled } from './withdrawal-form.styled';
 
 interface WithdrawFormData {
   withdrawAmount: number;
@@ -35,6 +37,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
   const navigate = useNavigate();
   const createWithdrawal = useCreateWithdrawal();
   const WithdrawSchema = getWithdrawSchema(maxAmount);
+  const queryClient = useQueryClient();
 
   const {
     handleSubmit,
@@ -56,6 +59,8 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
   useEffect(() => {
     if (createWithdrawal.state === RequestState.SUCCESS) {
       setIsSuccessModalOpen(true);
+      // Invalidate max withdrawal amount query so it refetches
+      queryClient.invalidateQueries(getMaxWithdrawalAmountQueryKey(currentAsset));
     }
   }, [createWithdrawal.state]);
 
@@ -83,7 +88,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
 
   return (
     <>
-      <Styled.WithdrawalForm onSubmit={onSubmit}>
+      <WithdrawalFormStyled onSubmit={onSubmit}>
         <InputText>
           <label htmlFor="withdrawAmount">
             {maxAmount > 0
@@ -92,10 +97,6 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
           </label>
           <input
             id="withdrawAmount"
-            placeholder={t('dashboard_withdraw.form.amount_placeholder', {
-              maxWithdrawAmount: maxAmount,
-              currentAsset,
-            })}
             type="number"
             step="any"
             min={0}
@@ -146,14 +147,11 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
             {t('dashboard_withdraw.btn')}
           </ButtonPrimary>
         </div>
-      </Styled.WithdrawalForm>
+      </WithdrawalFormStyled>
       {isSuccessModalOpen && (
         <SuccessfullWithdrawalModal
           addressLink={`${CollateralAssets[currentAsset]?.url}/${depositAddress}`}
-          onConfirm={() => {
-            setIsSuccessModalOpen(false);
-            navigate('/collateral');
-          }}
+          onConfirm={() => setIsSuccessModalOpen(false)}
         />
       )}
     </>

@@ -199,7 +199,6 @@
       "amount_label": "How much {{currentAsset}} would you like to withdraw? Max is {{maxAmount}}",
       "amount_label_empty": "You cannot withdraw any {{currentAsset}}.",
       "address_label": "Send {{currentAsset}} to:",
-      "amount_placeholder": "max: {{maxWithdrawAmount}} {{currentAsset}}",
       "address_placeholder": "Enter your address",
       "required_field_error": "This field is required",
       "amount_type_error": "Amount must be a number",
@@ -208,7 +207,7 @@
       "credit_change": "Withdrawing this amount will reduce your Archie Collateral from ${{initialCollateralValue}} to ${{updatedCollateralValue}}. This reduces your credit limit from ${{initialCreditValue}} to ${{updatedCreditValue}}"
     },
     "successfull_withdrawal_modal": {
-      "title": "Withdrawal Successfully Initiated",
+      "title": "Withdrawal successfully initiated",
       "subtitle": "We have initiated your withdrawal request. Follow along on the",
       "link": "the blockchain explorer"
     },
