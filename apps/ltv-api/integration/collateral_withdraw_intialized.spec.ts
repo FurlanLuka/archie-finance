@@ -1,30 +1,25 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../src/app.module';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { LtvCollateral } from '../../../libs/api/ltv-api/ltv/src/lib/collateral.entity';
 import { clearDatabase, queueStub } from '@archie/test/integration';
 import { QueueService } from '@archie/api/utils/queue';
 import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
-import {
-  assetListResponse,
-  assetPriceResponse,
-  ETH_PRICE,
-} from '../test-data/collateral.stubs';
-import { Collateral } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral.entity';
-import { CreditLimit } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
-import { CreditLimitQueueController } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.controller';
-import { CREDIT_LIMIT_UPDATED_TOPIC } from '../../../../libs/api/credit-limit-api/constants/src';
-import { GET_ASSET_INFORMATION_RPC } from '../../../../libs/api/collateral-api/constants/src';
+import { assetPriceResponse, ETH_PRICE } from './data/collateral.stubs';
+import { CollateralQueueController } from '../../../libs/api/ltv-api/ltv/src/lib/collateral/collateral.controller';
+import { LtvCredit } from '../../../libs/api/ltv-api/ltv/src/lib/credit.entity';
+import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
 
-describe('CreditLimitQueueController (e2e)', () => {
+describe('CollateralQueueController (e2e)', () => {
   let app: INestApplication;
   let module: TestingModule;
 
-  let collateralRepository: Repository<Collateral>;
-  let creditLimitRepository: Repository<CreditLimit>;
+  let ltvCollateralRepository: Repository<LtvCollateral>;
+  let ltvCreditRepository: Repository<LtvCredit>;
 
   const userId = 'userId';
   const asset = 'ETH';
@@ -42,15 +37,12 @@ describe('CreditLimitQueueController (e2e)', () => {
 
     await app.init();
 
-    collateralRepository = app.get(getRepositoryToken(Collateral));
-    creditLimitRepository = app.get(getRepositoryToken(CreditLimit));
+    ltvCollateralRepository = app.get(getRepositoryToken(LtvCollateral));
+    ltvCreditRepository = app.get(getRepositoryToken(LtvCredit));
 
     when(queueStub.request)
       .calledWith(GET_ASSET_PRICES_RPC)
       .mockResolvedValue(assetPriceResponse);
-    when(queueStub.request)
-      .calledWith(GET_ASSET_INFORMATION_RPC)
-      .mockResolvedValue(assetListResponse);
   });
 
   afterEach(async () => {
@@ -63,24 +55,23 @@ describe('CreditLimitQueueController (e2e)', () => {
   });
 
   describe('COLLATERAL_WITHDRAW_INITIALIZED flow', () => {
-    it('Should publish CREDIT_LIMIT_INCREASED in case the credit limit is increased and collateral value changes by at least 10%', async () => {
+    it('Should publish ltv updated event if collateral has been withdrawn', async () => {
+      const utilizationAmount = 10;
       const startingEthAmount = 1;
       const withdrawalAmount = 0.3;
-      const currentCreditLimit = 100;
-      await collateralRepository.insert({
+      await ltvCollateralRepository.insert({
         userId,
         asset,
         amount: startingEthAmount,
       });
-      await creditLimitRepository.insert({
+      await ltvCreditRepository.insert({
         userId,
-        creditLimit: currentCreditLimit,
-        calculatedOnCollateralBalance: 0,
+        utilizationAmount: utilizationAmount,
         calculatedAt: new Date().toISOString(),
       });
 
       await app
-        .get(CreditLimitQueueController)
+        .get(CollateralQueueController)
         .collateralWithdrawInitializedHandler({
           userId,
           asset,
@@ -89,16 +80,23 @@ describe('CreditLimitQueueController (e2e)', () => {
           withdrawalId: 'withdrawalId',
         });
 
-      const expectedNewCreditLimit =
-        (ETH_PRICE *
-          (startingEthAmount - withdrawalAmount) *
-          assetListResponse[asset]!.ltv) /
-        100;
+      const collateralBalance =
+        ETH_PRICE * (startingEthAmount - withdrawalAmount);
       expect(queueStub.publish).toBeCalledTimes(1);
-      expect(queueStub.publish).toBeCalledWith(CREDIT_LIMIT_UPDATED_TOPIC, {
-        calculatedAt: expect.any(Date),
-        creditLimit: expectedNewCreditLimit,
+      expect(queueStub.publish).toBeCalledWith(LTV_UPDATED_TOPIC, {
         userId,
+        ltv: (utilizationAmount / collateralBalance) * 100,
+        calculatedOn: {
+          utilizedCreditAmount: utilizationAmount,
+          collateralBalance: collateralBalance,
+          collateral: [
+            {
+              amount: startingEthAmount - withdrawalAmount,
+              asset,
+              price: collateralBalance,
+            },
+          ],
+        },
       });
     });
   });

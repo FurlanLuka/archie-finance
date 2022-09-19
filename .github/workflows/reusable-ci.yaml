@@ -123,6 +123,12 @@ jobs:
       - name: Affected Test
         if: inputs.BASE_BRANCH_NAME != ''
         run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test --parallel=3 --ci --code-coverage
+      - name: Affected Integration Test
+        if: inputs.BASE_BRANCH_NAME == ''
+        run: npx nx affected --target=test-integration --parallel=3 --ci --code-coverage
+      - name: Affected Integration Test
+        if: inputs.BASE_BRANCH_NAME != ''
+        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test-integration --parallel=3 --ci --code-coverage
       - name: Affected Build
         if: inputs.BASE_BRANCH_NAME == ''
         run: npx nx affected --target=build --parallel=3

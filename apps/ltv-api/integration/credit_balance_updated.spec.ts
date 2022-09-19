@@ -1,18 +1,18 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../src/app.module';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { LtvCollateral } from '../../../../libs/api/ltv-api/ltv/src/lib/collateral.entity';
+import { LtvCollateral } from '../../../libs/api/ltv-api/ltv/src/lib/collateral.entity';
 import { clearDatabase, queueStub } from '@archie/test/integration';
 import { QueueService } from '@archie/api/utils/queue';
 import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
-import { assetPriceResponse, ETH_PRICE } from '../test-data/collateral.stubs';
-import { LtvCredit } from '../../../../libs/api/ltv-api/ltv/src/lib/credit.entity';
+import { assetPriceResponse, ETH_PRICE } from './data/collateral.stubs';
+import { LtvCredit } from '../../../libs/api/ltv-api/ltv/src/lib/credit.entity';
 import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
-import { CreditQueueController } from '../../../../libs/api/ltv-api/ltv/src/lib/credit/credit.controller';
+import { CreditQueueController } from '../../../libs/api/ltv-api/ltv/src/lib/credit/credit.controller';
 import {
   CreditBalanceUpdatedPayload,
   PaymentType,

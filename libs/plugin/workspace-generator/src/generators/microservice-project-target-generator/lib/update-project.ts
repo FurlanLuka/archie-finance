@@ -21,6 +21,8 @@ export function updateProjectConfiguration(
         },
       };
 
+      delete json.targets.test;
+
       json.targets.build.options.tsPlugins = ['@nestjs/swagger/plugin'];
 
       return json;

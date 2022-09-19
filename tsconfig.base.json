@@ -180,10 +180,6 @@
     "node_modules",
     "test",
     "tmp",
-    "dist",
-    "**/*spec.ts",
-    "**/*spec.skip.ts",
-    "**/__data__",
-    "**/__mocks__"
+    "dist"
   ]
 }

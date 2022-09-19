@@ -13,7 +13,7 @@
     "**/*.test.ts",
     "**/__data__",
     "**/__mocks__",
-    "test"
+    "integration"
   ],
   "include": [
     "**/*.ts",
