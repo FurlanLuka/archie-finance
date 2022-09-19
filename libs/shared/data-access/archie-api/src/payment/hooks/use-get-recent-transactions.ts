@@ -14,7 +14,6 @@ export const useGetRecentTransactions = (): QueryResponse<Transaction[]> => {
     return {
       state: RequestState.SUCCESS,
       data: queryResponse.data.data,
-      fetch: () => {}, //Temp
     };
   }
 
