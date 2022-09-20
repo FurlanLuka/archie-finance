@@ -249,7 +249,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .post(`/v1/collateral/withdraw/`)
         .send({
           asset: 'ETH',
-          withdrawalAmount: '2',
+          withdrawalAmount: 2,
           destinationAddress: 'address',
         })
         .set('Authorization', `Bearer ${accessToken}`)
@@ -264,7 +264,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .post(`/v1/collateral/withdraw/`)
         .send({
           asset,
-          withdrawalAmount,
+          withdrawalAmount: Number(withdrawalAmount),
           destinationAddress,
         })
         .set('Authorization', `Bearer ${accessToken}`)
@@ -311,7 +311,11 @@ describe('CollateralWithdrawalController (e2e)', () => {
           {
             user: { sub: userId },
           },
-          { asset, destinationAddress, withdrawalAmount },
+          {
+            asset,
+            destinationAddress,
+            withdrawalAmount: Number(withdrawalAmount),
+          },
         );
       expect(response).toEqual({
         userId,
@@ -423,29 +427,26 @@ describe('CollateralWithdrawalController (e2e)', () => {
 
     it('should throw not found if transaction id has not been synced yet', async () => {
       const transactionId = 'transaction_id';
+      await collateralWithdrawalRepository.save({
+        userId,
+        asset: 'ETH',
+        withdrawalAmount: '5',
+        currentAmount: '10',
+        destinationAddress,
+        transactionId: null,
+        status: TransactionStatus.SUBMITTED,
+      });
 
-      try {
-        await collateralWithdrawalRepository.save({
-          userId,
-          asset: 'ETH',
-          withdrawalAmount: '5',
-          currentAmount: '10',
-          destinationAddress,
-          transactionId: null,
-          status: TransactionStatus.SUBMITTED,
-        });
-
-        await app
+      await expect(
+        app
           .get(CollateralWithdrawalQueueController)
           .collateralWithdrawCompleteHandler({
             userId,
             transactionId,
             asset: 'ETH',
             fee: '1',
-          });
-      } catch (error) {
-        expect(error).toBeInstanceOf(NotFoundException);
-      }
+          }),
+      ).rejects.toBeInstanceOf(NotFoundException);
     });
   });
 });

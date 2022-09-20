@@ -4,7 +4,6 @@ export class CreditApi1663593112669 implements MigrationInterface {
   name = 'CreditApi1663593112669';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
-    console.log(1);
     await queryRunner.query(`
             ALTER TABLE "collateral_deposit"
                 ALTER COLUMN "amount" SET DATA TYPE numeric(28, 18)

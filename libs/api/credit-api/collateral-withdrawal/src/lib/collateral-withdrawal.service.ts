@@ -203,15 +203,11 @@ export class CollateralWithdrawalService {
       userId,
     });
 
-    console.log('credit', credit);
-
     const totalCollateralValue: number = collateralValue.reduce(
       (value: number, collateralAsset: GetCollateralValueResponse) =>
         value + collateralAsset.price,
       0,
     );
-
-    console.log('totalCollateralValue', totalCollateralValue);
 
     const maxAmountForMaxLtv = credit.utilizationAmount / MAX_LTV;
     const maxAvailableAmount = Math.max(
@@ -219,9 +215,7 @@ export class CollateralWithdrawalService {
       0,
     );
 
-    console.log('maxAmountForMaxLtv', maxAmountForMaxLtv);
-    console.log('maxAvailableAmount', maxAvailableAmount);
-
+    // TODO: change so that we return string + accept amount as string --- othervise can not withdraw alll
     return {
       maxAmount:
         Math.min(maxAvailableAmount, desiredAsset.price) / assetPrice.price,
@@ -231,7 +225,7 @@ export class CollateralWithdrawalService {
   public async withdrawUserCollateral(
     userId: string,
     asset: string,
-    withdrawalAmount: string,
+    withdrawalAmount: number,
     destinationAddress: string,
   ): Promise<GetCollateralWithdrawalResponse> {
     try {
@@ -248,7 +242,7 @@ export class CollateralWithdrawalService {
 
       if (userCollateral === null) throw new CollateralNotFoundError();
 
-      if (BigNumber(withdrawalAmount).isGreaterThan(maxAmount)) {
+      if (withdrawalAmount > maxAmount) {
         throw new BadRequestException({
           code: 'COLLATERAL_WITHDRAW_AMOUNT_ERROR',
           message: 'Not enough amount',
@@ -268,7 +262,7 @@ export class CollateralWithdrawalService {
       const withdrawal = await this.collateralWithdrawalRepository.save({
         userId,
         asset,
-        withdrawalAmount,
+        withdrawalAmount: String(withdrawalAmount),
         currentAmount: userCollateral.amount,
         destinationAddress: destinationAddress,
         transactionId: null,
@@ -306,7 +300,7 @@ export class CollateralWithdrawalService {
         COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
         {
           asset,
-          withdrawalAmount,
+          withdrawalAmount: String(withdrawalAmount),
           userId,
           destinationAddress,
           withdrawalId: withdrawal.id,
