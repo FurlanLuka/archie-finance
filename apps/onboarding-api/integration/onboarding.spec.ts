@@ -16,6 +16,8 @@ import {
   mfaEnrolledDataFactory,
 } from '@archie/api/user-api/test-data';
 import { OnboardingQueueController } from '@archie/api/onboarding-api/onboarding';
+import { creditLineCreatedDataFactory } from '@archie/api/credit-limit-api/test-data';
+import { cardActivatedDataFactory } from '@archie/api/credit-api/test-data';
 
 jest.setTimeout(30000);
 
@@ -84,7 +86,15 @@ describe('Onboarding service tests', () => {
         .emailVerifiedEventHandler(emailVerifiedPayload);
     });
 
-    it('should return kyc stage completed', async () => {
+    it('should complete the collateralization stage', async () => {
+      const creditLineCreatedPayload = creditLineCreatedDataFactory();
+
+      await app
+        .get(OnboardingQueueController)
+        .collateralReceivedEventHandler(creditLineCreatedPayload);
+    });
+
+    it('should return all stages but card activation stage completed', async () => {
       const response = await request(app.getHttpServer())
         .get('/v1/onboarding')
         .set('Authorization', `Bearer ${accessToken}`)
@@ -93,10 +103,34 @@ describe('Onboarding service tests', () => {
       expect(response.body).toStrictEqual({
         kycStage: true,
         emailVerificationStage: true,
-        collateralizationStage: false,
+        collateralizationStage: true,
         cardActivationStage: false,
         mfaEnrollmentStage: true,
         completed: false,
+      });
+    });
+
+    it('should complete the card activation stage', async () => {
+      const creditLineCreatedPayload = cardActivatedDataFactory();
+
+      await app
+        .get(OnboardingQueueController)
+        .cardActivatedEventHandler(creditLineCreatedPayload);
+    });
+
+    it('should return all stages completed', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/onboarding')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toStrictEqual({
+        kycStage: true,
+        emailVerificationStage: true,
+        collateralizationStage: true,
+        cardActivationStage: true,
+        mfaEnrollmentStage: true,
+        completed: true,
       });
     });
   });

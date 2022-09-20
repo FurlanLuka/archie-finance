@@ -5,14 +5,14 @@ import {
 import { user } from '@archie/test/integration';
 
 export const mfaEnrolledDataFactory = (
-  override?: MfaEnrolledPayload,
+  override?: Partial<MfaEnrolledPayload>,
 ): MfaEnrolledPayload => ({
   userId: user.id,
   ...override,
 });
 
 export const emailVerifiedDataFactory = (
-  override?: EmailVerifiedPayload,
+  override?: Partial<EmailVerifiedPayload>,
 ): EmailVerifiedPayload => ({
   userId: user.id,
   email: 'test@test.com',
