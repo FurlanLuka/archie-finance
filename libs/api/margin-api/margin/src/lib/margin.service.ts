@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, LessThan, Repository, UpdateResult } from 'typeorm';
 import { MarginCall } from './margin_calls.entity';
 import { MarginCheck } from './margin_check.entity';
 import { MathUtilService } from './utils/math.service';
@@ -53,17 +53,14 @@ export class MarginService {
     );
 
     if (actions.length > 0) {
-      await this.marginCheckRepository.upsert(
-        {
-          userId: updatedLtv.userId,
-          ltv: updatedLtv.ltv,
-          collateralBalance: updatedLtv.calculatedOn.collateralBalance,
-          // TODO: compare calculation date
-        },
-        { conflictPaths: ['userId'] },
+      const isMarginCheckUpdated: boolean = await this.upsertMarginCheck(
+        updatedLtv,
+        lastMarginCheck ?? null,
       );
 
-      await this.marginActionHandlersUtilService.handle(actions, updatedLtv);
+      if (isMarginCheckUpdated) {
+        await this.marginActionHandlersUtilService.handle(actions, updatedLtv);
+      }
     }
   }
 
@@ -109,19 +106,49 @@ export class MarginService {
           updatedLtv.calculatedOn.collateralBalance,
         );
 
-        await this.marginActionHandlersUtilService.handle(actions, updatedLtv);
-
         if (actions.length > 0) {
-          await this.marginCheckRepository.upsert(
-            {
-              userId: updatedLtv.userId,
-              ltv: updatedLtv.ltv,
-              collateralBalance: updatedLtv.calculatedOn.collateralBalance,
-            },
-            { conflictPaths: ['userId'] },
+          const isMarginCheckUpdated: boolean = await this.upsertMarginCheck(
+            updatedLtv,
+            lastMarginCheck ?? null,
           );
+
+          if (isMarginCheckUpdated) {
+            await this.marginActionHandlersUtilService.handle(
+              actions,
+              updatedLtv,
+            );
+          }
         }
       }),
     );
+  }
+
+  private async upsertMarginCheck(
+    ltv: LtvUpdatedPayload,
+    lastMarginCheck: MarginCheck | null,
+  ): Promise<boolean> {
+    if (lastMarginCheck === null) {
+      await this.marginCheckRepository.insert({
+        userId: ltv.userId,
+        ltv: ltv.ltv,
+        collateralBalance: ltv.calculatedOn.collateralBalance,
+        ltvCalculatedAt: ltv.calculatedOn.calculatedAt,
+      });
+
+      return true;
+    }
+    const updateResult: UpdateResult = await this.marginCheckRepository.update(
+      {
+        userId: ltv.userId,
+        ltvCalculatedAt: LessThan(ltv.calculatedOn.calculatedAt),
+      },
+      {
+        ltv: ltv.ltv,
+        collateralBalance: ltv.calculatedOn.collateralBalance,
+        ltvCalculatedAt: ltv.calculatedOn.calculatedAt,
+      },
+    );
+
+    return <number>updateResult.affected > 0;
   }
 }

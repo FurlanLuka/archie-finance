@@ -75,4 +75,14 @@ export class CollateralDepositCompletedPayload {
   userId: string;
   asset: string;
   amount: number;
+  transactionId: string;
+}
+
+export class CollateralLiquidationInitiatedPayload {
+  userId: string;
+  collateral: {
+    asset: string;
+    amount: number;
+    price: number;
+  }[];
 }

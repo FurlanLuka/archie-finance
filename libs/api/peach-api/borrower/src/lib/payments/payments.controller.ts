@@ -34,9 +34,9 @@ import {
   INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
 } from '@archie/api/collateral-api/constants';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
-import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
 import { PAYPAL_PAYMENT_RECEIVED_TOPIC } from '@archie/api/paypal-api/constants';
 import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
+import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/data-transfer-objects';
 
 @Controller('v1/loan_payments')
 export class PaymentsController {

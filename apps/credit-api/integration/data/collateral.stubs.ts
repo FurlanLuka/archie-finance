@@ -71,4 +71,5 @@ export const getLoanBalancesResponse: GetLoanBalancesResponse = {
   totalCredit: defaultCollateralTotal / 2,
   availableCredit: (defaultCollateralTotal / 2) * 0.8,
   utilizationAmount: (defaultCollateralTotal / 2) * 0.2,
+  calculatedAt: new Date().toISOString(),
 };

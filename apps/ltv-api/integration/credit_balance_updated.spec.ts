@@ -82,6 +82,7 @@ describe('CreditQueueController (e2e)', () => {
           type: PaymentType.liquidation,
           asset: 'ETH',
           amount: paymentAmount,
+          id: 'id',
         },
       };
 
@@ -105,6 +106,7 @@ describe('CreditQueueController (e2e)', () => {
               price: collateralBalance,
             },
           ],
+          calculatedAt: expect.any(String),
         },
       });
     });

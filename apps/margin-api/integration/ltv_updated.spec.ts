@@ -72,6 +72,7 @@ describe('MarginQueueController (e2e)', () => {
           ],
           collateralBalance: 1000,
           utilizedCreditAmount: 900,
+          calculatedAt: new Date().toISOString(),
         },
       };
 
@@ -122,6 +123,7 @@ describe('MarginQueueController (e2e)', () => {
           ],
           collateralBalance: 1000,
           utilizedCreditAmount: 700,
+          calculatedAt: new Date().toISOString()
         },
       };
 
@@ -155,6 +157,7 @@ describe('MarginQueueController (e2e)', () => {
           ],
           collateralBalance: 1000,
           utilizedCreditAmount: 650,
+          calculatedAt: new Date().toISOString()
         },
       };
 

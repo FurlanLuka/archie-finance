@@ -92,6 +92,7 @@ export class CollateralWithdrawalQueueController {
   ): Promise<void> {
     await this.collateralWithdrawalService.handleWithdrawalComplete(payload);
   }
+
   @Subscribe(
     COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC,
     CollateralWithdrawalQueueController.CONTROLLER_QUEUE_NAME,

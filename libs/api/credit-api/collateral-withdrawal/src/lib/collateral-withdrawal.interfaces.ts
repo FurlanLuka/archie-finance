@@ -10,21 +10,13 @@ export class CollateralWithdrawCreateDto {
   destinationAddress: string;
 }
 
-export class CollateralWithdrawCompletedDto {
-  @IsString()
-  transactionId: string;
-  @IsString()
-  userId: string;
-  @IsString()
-  asset: string;
-}
-
 export class GetCollateralWithdrawalResponse {
   id: string;
   asset: string;
   currentAmount: number;
   withdrawalAmount: number;
   destinationAddress: string;
+  fee: number | null;
   status: TransactionStatus;
   createdAt: Date;
 }

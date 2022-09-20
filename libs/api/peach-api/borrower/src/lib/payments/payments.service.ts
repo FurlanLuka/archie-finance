@@ -22,10 +22,10 @@ import {
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
-import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import { Injectable } from '@nestjs/common';
 import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
+import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/data-transfer-objects';
 
 @Injectable()
 export class PaymentsService {
@@ -101,6 +101,7 @@ export class PaymentsService {
           type: PaymentType.payment,
           amount: payment.amount,
           asset: payment.currency,
+          id: payment.id,
         },
       },
     );
@@ -155,6 +156,7 @@ export class PaymentsService {
           type: PaymentType.liquidation,
           amount: transaction.amount,
           asset: transaction.asset,
+          id: transaction.id,
         },
       },
     );
@@ -225,6 +227,7 @@ export class PaymentsService {
           type: PaymentType.payment,
           amount: payload.amount,
           asset: payload.currency,
+          id: payload.orderId,
         },
       },
     );

@@ -14,6 +14,7 @@ export class CreditBalanceUpdatedPayload {
     type: PaymentType;
     asset: string;
     amount: number;
+    id: string;
   };
 }
 
@@ -25,4 +26,5 @@ export interface GetLoanBalancesResponse {
   totalCredit: number;
   availableCredit: number;
   utilizationAmount: number;
+  calculatedAt: string;
 }

@@ -30,6 +30,7 @@ export class LoanBalancesService {
       availableCredit: balance.availableCreditAmount,
       totalCredit: balance.creditLimitAmount,
       utilizationAmount: balance.utilizationAmount,
+      calculatedAt: balance.calculatedAt,
     };
   }
 }
