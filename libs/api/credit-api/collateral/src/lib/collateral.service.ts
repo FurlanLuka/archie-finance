@@ -139,9 +139,7 @@ export class CollateralService {
     const collateralAmount: string =
       collateral === null
         ? amount
-        : new BigNumber(collateral.amount)
-            .plus(new BigNumber(amount))
-            .toString(); // TODO: refactor- update to use 1 db txn
+        : BigNumber(collateral.amount).plus(amount).toString(); // TODO: refactor- update to use 1 db txn
 
     return {
       ...collateral,

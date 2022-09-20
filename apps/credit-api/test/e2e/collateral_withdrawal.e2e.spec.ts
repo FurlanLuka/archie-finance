@@ -317,7 +317,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
           {
             asset,
             destinationAddress,
-            withdrawalAmount: withdrawalAmount,
+            withdrawalAmount,
           },
         );
       expect(response).toEqual({

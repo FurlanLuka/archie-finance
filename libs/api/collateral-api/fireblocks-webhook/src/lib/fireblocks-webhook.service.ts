@@ -165,16 +165,6 @@ export class FireblocksWebhookService {
         },
       });
 
-      console.log('Collateral deposit', COLLATERAL_DEPOSITED_TOPIC, {
-        transactionId: transaction.id,
-        userId,
-        asset: assetId,
-        amount:
-          transaction.amountInfo?.netAmount ?? transaction.netAmount.toString(),
-        destination: transaction.destinationAddress,
-        status: transaction.status,
-      });
-
       this.queueService.publish<CollateralDepositedPayload>(
         COLLATERAL_DEPOSITED_TOPIC,
         {

@@ -9,7 +9,7 @@ export class FireblocksWebhookController {
   constructor(private fireblocksWebhookService: FireblocksWebhookService) {}
 
   @Post('')
-  // @UseGuards(FireblocksWebhookGuard)
+  @UseGuards(FireblocksWebhookGuard)
   @ApiErrorResponse([FireblocksWebhookError])
   public async webhook(@Body() body) {
     return this.fireblocksWebhookService.webhookHandler(body);

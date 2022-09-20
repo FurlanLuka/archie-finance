@@ -65,20 +65,20 @@ export class RizeService {
     this.handleTransactionsEvent = this.handleTransactionsEvent.bind(this);
     this.handleCustomerActiveEvent = this.handleCustomerActiveEvent.bind(this);
 
-    // this.rizeMessagingQueueClient =
-    //   rizeApiService.connectToRizeMessagingQueue();
-    //
-    // rizeApiService.subscribeToTopic(
-    //   this.rizeMessagingQueueClient,
-    //   'transaction',
-    //   this.rizeEventListener(this.handleTransactionsEvent),
-    // );
-    //
-    // rizeApiService.subscribeToTopic(
-    //   this.rizeMessagingQueueClient,
-    //   'customer',
-    //   this.rizeEventListener(this.handleCustomerActiveEvent),
-    // );
+    this.rizeMessagingQueueClient =
+      rizeApiService.connectToRizeMessagingQueue();
+
+    rizeApiService.subscribeToTopic(
+      this.rizeMessagingQueueClient,
+      'transaction',
+      this.rizeEventListener(this.handleTransactionsEvent),
+    );
+
+    rizeApiService.subscribeToTopic(
+      this.rizeMessagingQueueClient,
+      'customer',
+      this.rizeEventListener(this.handleCustomerActiveEvent),
+    );
   }
 
   private rizeEventListener<T>(handler: (message: T) => Promise<void>) {
