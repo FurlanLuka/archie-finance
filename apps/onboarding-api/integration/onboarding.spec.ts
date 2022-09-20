@@ -40,9 +40,18 @@ describe('Onboarding service tests', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
-      expect(response.body).toBe({
-        
+      expect(response.body).toStrictEqual({
+        kycStage: false,
+        emailVerificationStage: false,
+        collateralizationStage: false,
+        cardActivationStage: false,
+        mfaEnrollmentStage: false,
+        completed: false,
       })
     });
+
+    it('should complete kyc stage', async () => {
+      
+    })
   });
 });
