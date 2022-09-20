@@ -48,6 +48,7 @@
     "api-user-api-constants": "libs/api/user-api/constants",
     "api-user-api-data-transfer-objects": "libs/api/user-api/data-transfer-objects",
     "api-user-api-kyc": "libs/api/user-api/kyc",
+    "api-user-api-test-data": "libs/api/user-api/test-data",
     "api-user-api-user": "libs/api/user-api/user",
     "api-utils-auth0": "libs/api/utils/auth0",
     "api-utils-config": "libs/api/utils/config",
