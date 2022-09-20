@@ -13,7 +13,7 @@ import { assetPriceResponse, ETH_PRICE } from './data/collateral.stubs';
 import { CollateralQueueController } from '../../../libs/api/ltv-api/ltv/src/lib/collateral/collateral.controller';
 import { LtvCredit } from '../../../libs/api/ltv-api/ltv/src/lib/credit.entity';
 import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
-import { CollateralTransaction } from '../../../../libs/api/ltv-api/ltv/src/lib/collateral_transactions.entity';
+import { CollateralTransaction } from '../../../libs/api/ltv-api/ltv/src/lib/collateral_transactions.entity';
 
 describe('CollateralQueueController (e2e)', () => {
   let app: INestApplication;
