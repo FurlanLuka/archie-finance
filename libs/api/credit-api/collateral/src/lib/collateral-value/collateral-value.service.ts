@@ -24,8 +24,7 @@ export class CollateralValueService {
             ? 0
             : Number(
                 BigNumber(collateral.amount)
-                  .multipliedBy(new BigNumber(assetPrice.price))
-                  .toNumber()
+                  .multipliedBy(assetPrice.price)
                   .toFixed(2),
               ),
       };

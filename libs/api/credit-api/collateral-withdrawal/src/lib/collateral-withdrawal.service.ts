@@ -191,9 +191,8 @@ export class CollateralWithdrawalService {
 
     const desiredAsset = collateralValue.find((c) => c.asset === asset);
 
-    // early break if user isn't hodling the desired asset at all
     if (!desiredAsset) {
-      return { maxAmount: 0 };
+      return { maxAmount: '0' };
     }
 
     const credit = await this.queueService.request<
@@ -209,23 +208,25 @@ export class CollateralWithdrawalService {
       0,
     );
 
-    const maxAmountForMaxLtv = credit.utilizationAmount / MAX_LTV;
-    const maxAvailableAmount = Math.max(
-      totalCollateralValue - maxAmountForMaxLtv,
+    const maxAmountForMaxLtv = BigNumber(credit.utilizationAmount).dividedBy(
+      MAX_LTV,
+    );
+    const maxAvailableAmount = BigNumber.max(
+      BigNumber(totalCollateralValue).minus(maxAmountForMaxLtv),
       0,
     );
 
-    // TODO: change so that we return string + accept amount as string --- othervise can not withdraw alll
     return {
-      maxAmount:
-        Math.min(maxAvailableAmount, desiredAsset.price) / assetPrice.price,
+      maxAmount: BigNumber.min(maxAvailableAmount, desiredAsset.price)
+        .dividedBy(assetPrice.price)
+        .toString(),
     };
   }
 
   public async withdrawUserCollateral(
     userId: string,
     asset: string,
-    withdrawalAmount: number,
+    withdrawalAmount: string,
     destinationAddress: string,
   ): Promise<GetCollateralWithdrawalResponse> {
     try {
@@ -242,7 +243,7 @@ export class CollateralWithdrawalService {
 
       if (userCollateral === null) throw new CollateralNotFoundError();
 
-      if (withdrawalAmount > maxAmount) {
+      if (BigNumber(withdrawalAmount).isGreaterThan(maxAmount)) {
         throw new BadRequestException({
           code: 'COLLATERAL_WITHDRAW_AMOUNT_ERROR',
           message: 'Not enough amount',
@@ -262,7 +263,7 @@ export class CollateralWithdrawalService {
       const withdrawal = await this.collateralWithdrawalRepository.save({
         userId,
         asset,
-        withdrawalAmount: String(withdrawalAmount),
+        withdrawalAmount: withdrawalAmount,
         currentAmount: userCollateral.amount,
         destinationAddress: destinationAddress,
         transactionId: null,
@@ -287,8 +288,7 @@ export class CollateralWithdrawalService {
 
       if (
         updatedCollateral !== undefined &&
-        new BigNumber(updatedCollateral.amount).isZero()
-        // TODO maybe add bn converter to db typeorm
+        BigNumber(updatedCollateral.amount).isZero()
       ) {
         await this.collateralRepository.delete({
           id: updatedCollateral.id,
@@ -300,7 +300,7 @@ export class CollateralWithdrawalService {
         COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
         {
           asset,
-          withdrawalAmount: String(withdrawalAmount),
+          withdrawalAmount: withdrawalAmount,
           userId,
           destinationAddress,
           withdrawalId: withdrawal.id,

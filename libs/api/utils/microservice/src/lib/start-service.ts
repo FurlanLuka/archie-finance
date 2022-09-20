@@ -4,6 +4,7 @@ import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { Openapi } from '@archie/api/utils/openapi';
 import { AllExceptionsFilter } from '@archie/api/utils/tracing';
+import { BigNumber } from 'bignumber.js';
 
 export async function startService(
   _name: string,
@@ -21,6 +22,10 @@ export async function startService(
         }),
       ],
     }),
+  });
+  BigNumber.config({
+    DECIMAL_PLACES: 18,
+    ROUNDING_MODE: BigNumber.ROUND_DOWN,
   });
 
   await Openapi.generate(app);

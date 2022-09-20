@@ -32,21 +32,22 @@ export class LiquidationUtilService {
             targetLiquidationAmount -= collateralValue.price;
           }
 
-          const assetPricePerUnit = Number(
-            BigNumber(collateralValue.price).dividedBy(
-              BigNumber(collateralValue.amount),
-            ),
+          const assetPricePerUnit = BigNumber(collateralValue.price).dividedBy(
+            BigNumber(collateralValue.amount),
           );
 
-          const newCollateralAssetAmount: number =
-            newCollateralAssetPrice / assetPricePerUnit;
+          const newCollateralAssetAmount: BigNumber = BigNumber(
+            newCollateralAssetPrice,
+          ).dividedBy(assetPricePerUnit);
 
           return {
             asset: collateralValue.asset,
             amount: BigNumber(collateralValue.amount)
               .minus(newCollateralAssetAmount)
               .toString(),
-            price: collateralValue.price - newCollateralAssetPrice,
+            price: Number(
+              (collateralValue.price - newCollateralAssetPrice).toFixed(2),
+            ),
           };
         }
 

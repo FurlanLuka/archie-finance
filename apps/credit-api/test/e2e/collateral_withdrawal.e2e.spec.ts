@@ -133,7 +133,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
-      expect(response.body.maxAmount).toEqual(0);
+      expect(response.body.maxAmount).toEqual('0');
     });
 
     it('should return 0 if user has an LTV of more than .3', async () => {
@@ -150,7 +150,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
-      expect(response.body.maxAmount).toEqual(0);
+      expect(response.body.maxAmount).toEqual('0');
     });
 
     it('should return maximum amount if user has not loaned any', async () => {
@@ -168,7 +168,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .expect(200);
 
       expect(response.body.maxAmount).toEqual(
-        Number(defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount),
+        defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount,
       );
     });
 
@@ -187,7 +187,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .expect(200);
 
       expect(response.body.maxAmount).toEqual(
-        Number(defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount),
+        defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount,
       );
     });
 
@@ -208,7 +208,10 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .expect(200);
 
       expect(response.body.maxAmount).toEqual(
-        (defaultCollateralTotal - loanAmount / MAX_LTV) / ETH_PRICE,
+        BigNumber(defaultCollateralTotal)
+          .minus(BigNumber(loanAmount).dividedBy(MAX_LTV))
+          .dividedBy(ETH_PRICE)
+          .toString(),
       );
     });
   });
@@ -249,7 +252,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .post(`/v1/collateral/withdraw/`)
         .send({
           asset: 'ETH',
-          withdrawalAmount: 2,
+          withdrawalAmount: '2.0',
           destinationAddress: 'address',
         })
         .set('Authorization', `Bearer ${accessToken}`)
@@ -264,7 +267,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .post(`/v1/collateral/withdraw/`)
         .send({
           asset,
-          withdrawalAmount: Number(withdrawalAmount),
+          withdrawalAmount,
           destinationAddress,
         })
         .set('Authorization', `Bearer ${accessToken}`)
@@ -274,7 +277,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         userId,
         asset,
         withdrawalAmount,
-        currentAmount: equalToBigNumber(BigNumber(10)),
+        currentAmount: equalToBigNumber(10),
         destinationAddress,
         transactionId: null,
         status: TransactionStatus.SUBMITTED,
@@ -314,14 +317,14 @@ describe('CollateralWithdrawalController (e2e)', () => {
           {
             asset,
             destinationAddress,
-            withdrawalAmount: Number(withdrawalAmount),
+            withdrawalAmount: withdrawalAmount,
           },
         );
       expect(response).toEqual({
         userId,
         asset,
         withdrawalAmount,
-        currentAmount: equalToBigNumber(BigNumber(10)),
+        currentAmount: equalToBigNumber(10),
         destinationAddress,
         transactionId: null,
         status: TransactionStatus.SUBMITTED,
@@ -336,7 +339,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
         {
           asset,
-          withdrawalAmount: equalToBigNumber(BigNumber(withdrawalAmount)),
+          withdrawalAmount: equalToBigNumber(withdrawalAmount),
           userId,
           destinationAddress,
           withdrawalId: expect.any(String),
@@ -347,7 +350,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         asset,
       });
       expect(userCollateral?.amount).toEqual(
-        equalToBigNumber(BigNumber(10).minus(BigNumber(withdrawalAmount))),
+        equalToBigNumber(BigNumber(10).minus(withdrawalAmount)),
       );
     });
   });
