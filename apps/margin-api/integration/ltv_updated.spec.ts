@@ -1,21 +1,21 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../src/app.module';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { clearDatabase, queueStub } from '@archie/test/integration';
 import { QueueService } from '@archie/api/utils/queue';
-import { MarginCheck } from '../../../../libs/api/margin-api/margin/src/lib/margin_check.entity';
-import { MarginNotification } from '../../../../libs/api/margin-api/margin/src/lib/margin_notifications.entity';
-import { MarginCall } from '../../../../libs/api/margin-api/margin/src/lib/margin_calls.entity';
-import { MarginQueueController } from '../../../../libs/api/margin-api/margin/src/lib/margin.controller';
-import { LtvUpdatedPayload } from '../../../../libs/api/ltv-api/data-transfer-objects/src';
+import { MarginCheck } from '../../../libs/api/margin-api/margin/src/lib/margin_check.entity';
+import { MarginNotification } from '../../../libs/api/margin-api/margin/src/lib/margin_notifications.entity';
+import { MarginCall } from '../../../libs/api/margin-api/margin/src/lib/margin_calls.entity';
+import { MarginQueueController } from '../../../libs/api/margin-api/margin/src/lib/margin.controller';
+import { LtvUpdatedPayload } from '../../../libs/api/ltv-api/data-transfer-objects/src';
 import {
   LTV_LIMIT_APPROACHING_TOPIC,
   MARGIN_CALL_COMPLETED_TOPIC,
   MARGIN_CALL_STARTED_TOPIC,
-} from '../../../../libs/api/margin-api/constants/src';
+} from '../../../libs/api/margin-api/constants/src';
 
 describe('MarginQueueController (e2e)', () => {
   let app: INestApplication;
@@ -57,7 +57,7 @@ describe('MarginQueueController (e2e)', () => {
     await module.close();
   });
 
-  describe('MULTIPLE_LTVS_UPDATED flow', () => {
+  describe('LTV_UPDATED flow', () => {
     it('Should start and liquidate straight away if ltv is above 90% and was never above 75% before', async () => {
       const payload: LtvUpdatedPayload = {
         userId,
@@ -76,9 +76,7 @@ describe('MarginQueueController (e2e)', () => {
         },
       };
 
-      await app
-        .get(MarginQueueController)
-        .mutlipleltvsUpdatedHandler([payload]);
+      await app.get(MarginQueueController).ltvUpdatedHandler(payload);
 
       expect(queueStub.publish).toBeCalledTimes(2);
       expect(queueStub.publish).toBeCalledWith(MARGIN_CALL_STARTED_TOPIC, {
@@ -125,13 +123,11 @@ describe('MarginQueueController (e2e)', () => {
           ],
           collateralBalance: 1000,
           utilizedCreditAmount: 700,
-          calculatedAt: new Date().toISOString(),
+          calculatedAt: new Date().toISOString()
         },
       };
 
-      await app
-        .get(MarginQueueController)
-        .mutlipleltvsUpdatedHandler([payload]);
+      await app.get(MarginQueueController).ltvUpdatedHandler(payload);
 
       expect(queueStub.publish).toBeCalledTimes(1);
       const expectedSale = 0;
@@ -161,13 +157,11 @@ describe('MarginQueueController (e2e)', () => {
           ],
           collateralBalance: 1000,
           utilizedCreditAmount: 650,
-          calculatedAt: new Date().toISOString(),
+          calculatedAt: new Date().toISOString()
         },
       };
 
-      await app
-        .get(MarginQueueController)
-        .mutlipleltvsUpdatedHandler([payload]);
+      await app.get(MarginQueueController).ltvUpdatedHandler(payload);
 
       expect(queueStub.publish).toBeCalledTimes(1);
       expect(queueStub.publish).toBeCalledWith(LTV_LIMIT_APPROACHING_TOPIC, {

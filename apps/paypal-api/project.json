@@ -5,13 +5,19 @@
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/paypal-api",
         "main": "apps/paypal-api/src/main.ts",
         "tsConfig": "apps/paypal-api/tsconfig.app.json",
-        "assets": ["apps/paypal-api/src/assets"],
-        "tsPlugins": ["@nestjs/swagger/plugin"]
+        "assets": [
+          "apps/paypal-api/src/assets"
+        ],
+        "tsPlugins": [
+          "@nestjs/swagger/plugin"
+        ]
       },
       "configurations": {
         "production": {
@@ -35,9 +41,13 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/paypal-api/**/*.ts"]
+        "lintFilePatterns": [
+          "apps/paypal-api/**/*.ts"
+        ]
       }
     },
     "build-openapi": {
@@ -52,19 +62,22 @@
         "command": "npm run build paypal-api && node dist/apps/paypal-api/main generate-migration"
       }
     },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/paypal-api"],
-      "options": {
-        "jestConfig": "apps/paypal-api/jest.config.ts",
-        "passWithNoTests": true
-      }
-    },
     "build-docker": {
       "executor": "@archie/plugin/deployment:docker-build"
     },
     "deploy": {
       "executor": "@archie/plugin/deployment:deploy"
+    },
+    "test-integration": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/paypal-api"
+      ],
+      "options": {
+        "jestConfig": "apps/paypal-api/jest.config.ts",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
     }
   },
   "tags": []

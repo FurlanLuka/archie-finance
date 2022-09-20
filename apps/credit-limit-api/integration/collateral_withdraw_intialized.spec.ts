@@ -1,7 +1,7 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../src/app.module';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { clearDatabase, queueStub } from '@archie/test/integration';
@@ -12,13 +12,13 @@ import {
   assetListResponse,
   assetPriceResponse,
   ETH_PRICE,
-} from '../test-data/collateral.stubs';
-import { Collateral } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral.entity';
-import { CreditLimit } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
-import { CreditLimitQueueController } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.controller';
-import { CREDIT_LIMIT_UPDATED_TOPIC } from '../../../../libs/api/credit-limit-api/constants/src';
-import { GET_ASSET_INFORMATION_RPC } from '../../../../libs/api/collateral-api/constants/src';
-import { CollateralTransaction } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral_transactions.entity';
+} from './data/collateral.stubs';
+import { Collateral } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral.entity';
+import { CreditLimit } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
+import { CreditLimitQueueController } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.controller';
+import { CREDIT_LIMIT_UPDATED_TOPIC } from '../../../libs/api/credit-limit-api/constants/src';
+import { GET_ASSET_INFORMATION_RPC } from '../../../libs/api/collateral-api/constants/src';
+import { CollateralTransaction } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral_transactions.entity';
 
 describe('CreditLimitQueueController (e2e)', () => {
   let app: INestApplication;
