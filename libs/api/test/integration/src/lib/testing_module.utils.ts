@@ -54,7 +54,6 @@ export const createTestingModule = (
 export const initializeTestingModule = async (
   testingModule: TestingModule,
 ): Promise<INestApplication> => {
-  console.log(process.env);
   const app = testingModule.createNestApplication();
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
