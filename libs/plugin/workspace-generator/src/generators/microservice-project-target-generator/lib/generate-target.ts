@@ -15,6 +15,15 @@ export function generateTarget(projectName: string) {
     'build-docker': {
       executor: '@archie/plugin/deployment:docker-build',
     },
+    'test-integration': {
+      executor: '@nrwl/jest:jest',
+      outputs: [`coverage/apps/${projectName}`],
+      options: {
+        jestConfig: `apps/${projectName}/jest.config.ts`,
+        passWithNoTests: true,
+        runInBand: true,
+      },
+    },
     deploy: {
       executor: '@archie/plugin/deployment:deploy',
     },

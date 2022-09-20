@@ -1,6 +1,6 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../src/app.module';
 import { Test, TestingModule } from '@nestjs/testing';
 import {
   ExecutionContext,
@@ -19,7 +19,7 @@ import {
   ETH_PRICE,
   ETH_STARTING_AMOUNT,
   getLoanBalancesResponse,
-} from '../test-data/collateral.stubs';
+} from './data/collateral.stubs';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { Collateral } from '@archie/api/credit-api/collateral';
 import {
