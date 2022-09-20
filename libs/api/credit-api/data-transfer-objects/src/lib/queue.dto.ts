@@ -82,7 +82,7 @@ export class CollateralLiquidationInitiatedPayload {
   userId: string;
   collateral: {
     asset: string;
-    amount: number;
+    amount: string;
     price: number;
   }[];
 }

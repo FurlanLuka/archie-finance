@@ -13,7 +13,7 @@ export class CreditBalanceUpdatedPayload {
   paymentDetails?: {
     type: PaymentType;
     asset: string;
-    amount: string;
+    amount: number | string;
     id: string;
   };
 }
