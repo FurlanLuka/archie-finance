@@ -47,6 +47,7 @@ export class OnboardingService {
       await this.onboardingRepository.findOneBy({
         userId,
       });
+
     if (onboardingRecord === null) {
       throw new Error('ONBOARDING_RECORD_NOT_SETUP_YET');
     }
