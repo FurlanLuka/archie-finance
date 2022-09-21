@@ -78,3 +78,11 @@ export class CollateralLiquidationInitiatedPayload {
     price: number;
   }[];
 }
+
+export class CollateralWithdrawInitializedPayload {
+  asset: string;
+  withdrawalAmount: string;
+  userId: string;
+  destinationAddress: string;
+  withdrawalId: string;
+}

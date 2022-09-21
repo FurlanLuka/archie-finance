@@ -4,8 +4,10 @@ import { DepositAddressResponse, VaultAccountResponse } from 'fireblocks-sdk';
 import { Repository } from 'typeorm';
 import { FireblocksService } from '@archie/api/collateral-api/fireblocks';
 import { UserVaultAccount } from './user-vault-account.entity';
-import { CollateralLiquidationInitiatedPayload } from '@archie/api/credit-api/data-transfer-objects';
-import { CollateralWithdrawInitializedPayload } from '@archie/api/collateral-api/data-transfer-objects';
+import {
+  CollateralLiquidationInitiatedPayload,
+  CollateralWithdrawInitializedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 @Injectable()
 export class UserVaultAccountService {
   constructor(

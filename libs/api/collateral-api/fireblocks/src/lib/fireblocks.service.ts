@@ -23,11 +23,13 @@ import { AssetList } from '@archie/api/collateral-api/asset-information';
 import { COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC } from '@archie/api/credit-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import {
-  CollateralWithdrawInitializedPayload,
   CollateralWithdrawTransactionCreatedPayload,
   InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
-import { CollateralLiquidationInitiatedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import {
+  CollateralLiquidationInitiatedPayload,
+  CollateralWithdrawInitializedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class FireblocksService {

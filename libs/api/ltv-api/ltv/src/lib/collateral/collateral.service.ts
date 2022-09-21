@@ -1,7 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  CollateralDepositCompletedPayload,
-} from '@archie/api/credit-api/data-transfer-objects';
+import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { LtvCollateral } from '../collateral.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
@@ -18,8 +16,8 @@ import { DatabaseErrorHandlingService } from '../utils/database_error_handling.s
 import {
   CollateralWithdrawCompletedPayload,
   InternalCollateralTransactionCompletedPayload,
-  CollateralWithdrawInitializedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
+import { CollateralWithdrawInitializedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { TransactionStatus } from '../lib.interfaces';
 
 @Injectable()

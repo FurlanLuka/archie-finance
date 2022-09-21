@@ -12,6 +12,7 @@
     "api-collateral-api-fireblocks": "libs/api/collateral-api/fireblocks",
     "api-collateral-api-fireblocks-webhook": "libs/api/collateral-api/fireblocks-webhook",
     "api-collateral-api-omnibus-vault-account": "libs/api/collateral-api/omnibus-vault-account",
+    "api-collateral-api-test-data": "libs/api/collateral-api/test-data",
     "api-collateral-api-user-vault-account": "libs/api/collateral-api/user-vault-account",
     "api-credit-api-collateral": "libs/api/credit-api/collateral",
     "api-credit-api-collateral-withdrawal": "libs/api/credit-api/collateral-withdrawal",

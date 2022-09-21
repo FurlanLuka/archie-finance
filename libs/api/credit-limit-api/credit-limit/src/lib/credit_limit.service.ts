@@ -16,7 +16,10 @@ import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { CollateralValueUtilService } from './utils/collateral_value.service';
 import { QueueService } from '@archie/api/utils/queue';
-import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import {
+  CollateralDepositCompletedPayload,
+  CollateralWithdrawInitializedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 import { AssetList } from '@archie/api/collateral-api/asset-information';
 import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
 import { DatabaseErrorHandlingService } from './utils/database_error_handling.service';
@@ -24,7 +27,6 @@ import { CollateralTransaction } from './collateral_transactions.entity';
 import { TransactionStatus } from './credit_limit.interfaces';
 import {
   CollateralWithdrawCompletedPayload,
-  CollateralWithdrawInitializedPayload,
   InternalCollateralTransactionCompletedPayload,
   InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';

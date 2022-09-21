@@ -29,14 +29,6 @@ export class InternalCollateralTransactionCompletedPayload {
   asset: string;
 }
 
-export class CollateralWithdrawInitializedPayload {
-  asset: string;
-  withdrawalAmount: string;
-  userId: string;
-  destinationAddress: string;
-  withdrawalId: string;
-}
-
 export class InternalCollateralTransactionCreatedPayload {
   userId: string;
   id: string;

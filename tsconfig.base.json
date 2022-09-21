@@ -46,6 +46,9 @@
       "@archie/api/collateral-api/omnibus-vault-account": [
         "libs/api/collateral-api/omnibus-vault-account/src/index.ts"
       ],
+      "@archie/api/collateral-api/test-data": [
+        "libs/api/collateral-api/test-data/src/index.ts"
+      ],
       "@archie/api/collateral-api/user-vault-account": [
         "libs/api/collateral-api/user-vault-account/src/index.ts"
       ],

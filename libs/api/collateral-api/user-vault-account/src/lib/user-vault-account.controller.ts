@@ -6,8 +6,10 @@ import {
 } from '@archie/api/credit-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/collateral-api/constants';
 import { UserVaultAccountService } from './user-vault-account.service';
-import { CollateralLiquidationInitiatedPayload } from '@archie/api/credit-api/data-transfer-objects';
-import { CollateralWithdrawInitializedPayload } from '@archie/api/collateral-api/data-transfer-objects';
+import {
+  CollateralLiquidationInitiatedPayload,
+  CollateralWithdrawInitializedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 
 @Controller()
 export class UserVaultQueueController {

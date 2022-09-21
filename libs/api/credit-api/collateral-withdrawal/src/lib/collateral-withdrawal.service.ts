@@ -36,12 +36,12 @@ import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import {
   CollateralWithdrawCompletedPayload,
   CollateralWithdrawTransactionCreatedPayload,
-  CollateralWithdrawInitializedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
 import {
   GetLoanBalancesPayload,
   GetLoanBalancesResponse,
 } from '@archie/api/peach-api/data-transfer-objects';
+import { CollateralWithdrawInitializedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 import { BigNumber } from 'bignumber.js';
 
