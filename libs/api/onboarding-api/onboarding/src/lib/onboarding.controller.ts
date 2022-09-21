@@ -9,7 +9,6 @@ import {
   MFA_ENROLLED_TOPIC,
 } from '@archie/api/user-api/constants';
 import {
-  COLLATERAL_RECEIVED_TOPIC,
   CARD_ACTIVATED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
