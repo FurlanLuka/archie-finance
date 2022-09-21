@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AssetPrice } from './asset_price.entity';
 import { Repository } from 'typeorm';
 import { AssetPriceHistory } from './asset_price_history.entity';
-import { GetAssetPriceResponse } from './asset_price.interfaces';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { CoingeckoService } from '@archie/api/asset-price-api/coingecko';
 import { CoinPriceResponse } from '@archie/api/asset-price-api/coingecko';
 import { AssetList } from '@archie/api/collateral-api/asset-information';
