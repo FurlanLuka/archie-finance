@@ -168,7 +168,9 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .expect(200);
 
       expect(response.body.maxAmount).toEqual(
-        defaultUserCollateral.find((c) => c.asset === 'ETH')?.amount,
+        equalToBigNumber(
+          defaultUserCollateral.find((c) => c.asset === 'ETH')!.amount,
+        ),
       );
     });
 

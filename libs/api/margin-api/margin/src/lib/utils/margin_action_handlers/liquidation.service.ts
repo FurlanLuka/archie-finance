@@ -45,9 +45,7 @@ export class LiquidationUtilService {
             amount: BigNumber(collateralValue.amount)
               .minus(newCollateralAssetAmount)
               .toString(),
-            price: Number(
-              (collateralValue.price - newCollateralAssetPrice).toFixed(2),
-            ),
+            price: collateralValue.price - newCollateralAssetPrice,
           };
         }
 

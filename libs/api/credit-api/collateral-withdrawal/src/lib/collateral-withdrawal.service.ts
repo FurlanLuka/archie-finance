@@ -202,10 +202,17 @@ export class CollateralWithdrawalService {
       userId,
     });
 
-    const totalCollateralValue: number = collateralValue.reduce(
-      (value: number, collateralAsset: GetCollateralValueResponse) =>
-        value + collateralAsset.price,
-      0,
+    if (credit.utilizationAmount === 0) {
+      return { maxAmount: desiredAsset.assetAmount };
+    }
+
+    const totalCollateralValue: BigNumber = collateralValue.reduce(
+      (value: BigNumber, collateralAsset: GetCollateralValueResponse) => {
+        value = value.plus(collateralAsset.price);
+
+        return value;
+      },
+      BigNumber(0),
     );
 
     const maxAmountForMaxLtv = BigNumber(credit.utilizationAmount).dividedBy(
