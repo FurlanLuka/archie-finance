@@ -25,7 +25,7 @@ export function getUpdatedCreditAndTotal({
     return {
       ...collateralEntry,
       amount: newAmount,
-      price: Number(newAmount.multipliedBy(collateralEntry.price).dividedBy(collateralEntry.assetAmount).toFixed(2))
+      price: newAmount.multipliedBy(collateralEntry.price).dividedBy(collateralEntry.assetAmount).toNumber()
     };
   });
 
