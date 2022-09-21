@@ -46,6 +46,16 @@ describe('Onboarding service tests', () => {
     beforeAll(setup);
     afterAll(cleanup);
 
+    it('should throw an error because onboarding record was not created yet', async () => {
+      const kycSubmittedPayload = kycSubmittedDataFactory();
+
+      await expect(
+        app
+          .get(OnboardingQueueController)
+          .kycSubmittedEventHandler(kycSubmittedPayload),
+      ).rejects.toThrowError('ONBOARDING_RECORD_NOT_SETUP_YET');
+    });
+
     it('should return empty onboarding record', async () => {
       const response = await request(app.getHttpServer())
         .get('/v1/onboarding')
@@ -70,12 +80,44 @@ describe('Onboarding service tests', () => {
         .kycSubmittedEventHandler(kycSubmittedPayload);
     });
 
+    it('should onboarding record with kyc stage completed', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/onboarding')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toStrictEqual({
+        kycStage: true,
+        emailVerificationStage: false,
+        collateralizationStage: false,
+        cardActivationStage: false,
+        mfaEnrollmentStage: false,
+        completed: false,
+      });
+    });
+
     it('should complete the mfa stage', async () => {
       const mfaEnrolledPayload = mfaEnrolledDataFactory();
 
       await app
         .get(OnboardingQueueController)
         .mfaEnrollmentEventHandler(mfaEnrolledPayload);
+    });
+
+    it('should onboarding record with kyc and mfa stage completed', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/onboarding')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toStrictEqual({
+        kycStage: true,
+        emailVerificationStage: false,
+        collateralizationStage: false,
+        cardActivationStage: false,
+        mfaEnrollmentStage: true,
+        completed: false,
+      });
     });
 
     it('should complete the email verification stage', async () => {
@@ -86,6 +128,22 @@ describe('Onboarding service tests', () => {
         .emailVerifiedEventHandler(emailVerifiedPayload);
     });
 
+    it('should onboarding record with kyc, email verification and mfa stage completed', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/onboarding')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toStrictEqual({
+        kycStage: true,
+        emailVerificationStage: true,
+        collateralizationStage: false,
+        cardActivationStage: false,
+        mfaEnrollmentStage: true,
+        completed: false,
+      });
+    });
+
     it('should complete the collateralization stage', async () => {
       const creditLineCreatedPayload = creditLineCreatedDataFactory();
 
@@ -94,7 +152,7 @@ describe('Onboarding service tests', () => {
         .collateralReceivedEventHandler(creditLineCreatedPayload);
     });
 
-    it('should return all stages but card activation stage completed', async () => {
+    it('should onboarding record with kyc, email verification, collateralization and mfa stage completed', async () => {
       const response = await request(app.getHttpServer())
         .get('/v1/onboarding')
         .set('Authorization', `Bearer ${accessToken}`)
