@@ -9,12 +9,12 @@ import { SERVICE_QUEUE_NAME } from '@archie/api/ltv-api/constants';
 import { CollateralService } from './collateral.service';
 import {
   CollateralDepositCompletedPayload,
-  CollateralWithdrawInitializedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
 import { INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC } from '@archie/api/collateral-api/constants';
 import {
   CollateralWithdrawCompletedPayload,
   InternalCollateralTransactionCompletedPayload,
+  CollateralWithdrawInitializedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
 
 @Controller()

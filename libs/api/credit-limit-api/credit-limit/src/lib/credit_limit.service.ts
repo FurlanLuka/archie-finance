@@ -1,8 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  CollateralWithdrawInitializedDto,
-  InternalCollateralTransactionCreatedPayload,
-} from '@archie/api/collateral-api/fireblocks';
 import { Collateral } from './collateral.entity';
 import {
   DataSource,
@@ -28,7 +24,9 @@ import { CollateralTransaction } from './collateral_transactions.entity';
 import { TransactionStatus } from './credit_limit.interfaces';
 import {
   CollateralWithdrawCompletedPayload,
+  CollateralWithdrawInitializedPayload,
   InternalCollateralTransactionCompletedPayload,
+  InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
 
 @Injectable()
@@ -49,7 +47,7 @@ export class CreditLimitService {
   ) {}
 
   public async handleCollateralWithdrawInitializedEvent(
-    transaction: CollateralWithdrawInitializedDto,
+    transaction: CollateralWithdrawInitializedPayload,
   ): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();

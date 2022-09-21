@@ -32,7 +32,7 @@ import {
   CollateralDepositCompletedPayload,
   CollateralLiquidationInitiatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
-import { LiquidateAssetsDto } from '@archie/api/collateral-api/fireblocks';
+import { MarginCallCompletedPayload } from '@archie/api/margin-api/data-transfer-objects';
 import { BigNumber } from 'bignumber.js';
 
 @Injectable()
@@ -179,7 +179,7 @@ export class CollateralService {
   }
 
   public async liquidateAssets(
-    liquidationAssets: LiquidateAssetsDto,
+    liquidationAssets: MarginCallCompletedPayload,
   ): Promise<void> {
     // TODO: Do not handle same events multiple times + check that current collateral balance === balance ltv was calculated on
     const queryRunner = this.dataSource.createQueryRunner();

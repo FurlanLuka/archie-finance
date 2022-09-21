@@ -59,14 +59,6 @@ export class CardActivatedPayload {
   customerId: string;
 }
 
-export class CollateralWithdrawInitializedPayload {
-  asset: string;
-  withdrawalAmount: string;
-  userId: string;
-  destinationAddress: string;
-  withdrawalId: string;
-}
-
 export class CollateralReceivedPayload {
   userId: string;
 }

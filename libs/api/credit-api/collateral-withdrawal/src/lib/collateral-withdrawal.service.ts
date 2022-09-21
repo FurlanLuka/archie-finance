@@ -33,10 +33,10 @@ import {
 import { QueueService } from '@archie/api/utils/queue';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
-import { CollateralWithdrawInitializedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import {
   CollateralWithdrawCompletedPayload,
   CollateralWithdrawTransactionCreatedPayload,
+  CollateralWithdrawInitializedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
 import {
   GetLoanBalancesPayload,
