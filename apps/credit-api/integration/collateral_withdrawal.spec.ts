@@ -168,9 +168,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         .expect(200);
 
       expect(response.body.maxAmount).toEqual(
-        equalToBigNumber(
-          defaultUserCollateral.find((c) => c.asset === 'ETH')!.amount,
-        ),
+        defaultUserCollateral.find((c) => c.asset === 'ETH')!.amount,
       );
     });
 
@@ -279,7 +277,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         userId,
         asset,
         withdrawalAmount,
-        currentAmount: equalToBigNumber(10),
+        currentAmount: '10',
         destinationAddress,
         transactionId: null,
         status: TransactionStatus.SUBMITTED,
@@ -326,7 +324,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         userId,
         asset,
         withdrawalAmount,
-        currentAmount: equalToBigNumber(10),
+        currentAmount: '10',
         destinationAddress,
         transactionId: null,
         status: TransactionStatus.SUBMITTED,
@@ -341,7 +339,7 @@ describe('CollateralWithdrawalController (e2e)', () => {
         COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
         {
           asset,
-          withdrawalAmount: equalToBigNumber(withdrawalAmount),
+          withdrawalAmount: withdrawalAmount,
           userId,
           destinationAddress,
           withdrawalId: expect.any(String),

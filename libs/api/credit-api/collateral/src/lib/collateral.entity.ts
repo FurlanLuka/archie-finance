@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { BigNumberTrimEndingZerosTransformer } from '@archie/api/utils/typeorm-transformers';
 
 @Entity({
   name: 'collateral',
@@ -19,7 +20,12 @@ export class Collateral {
   @Column('varchar', { nullable: false })
   asset: string;
 
-  @Column('numeric', { nullable: false, precision: 28, scale: 18 })
+  @Column('numeric', {
+    nullable: false,
+    precision: 28,
+    scale: 18,
+    transformer: new BigNumberTrimEndingZerosTransformer(),
+  })
   amount: string;
 
   @CreateDateColumn({ select: false })

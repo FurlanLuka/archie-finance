@@ -106,7 +106,7 @@ describe('CollateralQueueController (e2e)', () => {
           collateralBalance: collateralBalance,
           collateral: [
             {
-              amount: equalToBigNumber(newCollateralAmount),
+              amount: newCollateralAmount.toString(),
               asset,
               price: collateralBalance,
             },
