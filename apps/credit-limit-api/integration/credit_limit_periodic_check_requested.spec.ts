@@ -12,7 +12,7 @@ import {
   assetListResponse,
   assetPriceResponse,
   ETH_PRICE,
-} from '../test-data/collateral.stubs';
+} from './data/collateral.stubs';
 import { BigNumber } from 'bignumber.js';
 import { Collateral } from '@archie/api/credit-api/collateral';
 import { CreditLimit } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';

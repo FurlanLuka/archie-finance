@@ -6,9 +6,9 @@ import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { clearDatabase, queueStub } from '@archie/test/integration';
 import { QueueService } from '@archie/api/utils/queue';
-import { LtvCredit } from '../../../api/ltv-api/ltv/src/lib/credit.entity';
 import { LTV_PERIODIC_CHECK_REQUESTED_TOPIC } from '@archie/api/ltv-api/constants';
 import * as request from 'supertest';
+import { LtvCredit } from '../../../libs/api/ltv-api/ltv/src/lib/credit.entity';
 
 describe('POST /internal/ltv/periodic_check (e2e)', () => {
   let app: INestApplication;

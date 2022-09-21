@@ -8,11 +8,6 @@ import { clearDatabase, queueStub } from '@archie/test/integration';
 import { QueueService } from '@archie/api/utils/queue';
 import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
-import {
-  assetListResponse,
-  assetPriceResponse,
-  ETH_PRICE,
-} from '../test-data/collateral.stubs';
 import { BigNumber } from 'bignumber.js';
 import { Collateral } from '@archie/api/credit-api/collateral';
 import { CreditLimit } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
@@ -20,6 +15,11 @@ import { CollateralTransaction } from '../../../libs/api/credit-limit-api/credit
 import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
 import { CreditLimitQueueController } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.controller';
 import { CREDIT_LIMIT_UPDATED_TOPIC } from '@archie/api/credit-limit-api/constants';
+import {
+  assetListResponse,
+  assetPriceResponse,
+  ETH_PRICE,
+} from './data/collateral.stubs';
 
 describe('CreditLimitQueueController (e2e)', () => {
   let app: INestApplication;
