@@ -19,8 +19,6 @@ import { OnboardingQueueController } from '@archie/api/onboarding-api/onboarding
 import { creditLineCreatedDataFactory } from '@archie/api/credit-limit-api/test-data';
 import { cardActivatedDataFactory } from '@archie/api/credit-api/test-data';
 
-jest.setTimeout(30000);
-
 describe('Onboarding service tests', () => {
   let app: INestApplication;
   let module: TestingModule;
