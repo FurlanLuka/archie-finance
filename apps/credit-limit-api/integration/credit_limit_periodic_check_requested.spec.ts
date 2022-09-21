@@ -64,7 +64,7 @@ describe('PeriodicCheckQueueController (e2e)', () => {
   });
 
   describe('CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED flow', () => {
-    it.only('Should check credit limit for selected users', async () => {
+    it('Should check credit limit for selected users', async () => {
       const startingEthAmount = '1';
       const currentCreditLimit = 100;
       await collateralRepository.insert({
