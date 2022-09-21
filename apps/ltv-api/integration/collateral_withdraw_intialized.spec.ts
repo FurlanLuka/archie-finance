@@ -4,7 +4,6 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { LtvCollateral } from '../../../../api/ltv-api/ltv/src/lib/collateral.entity';
 import {
   clearDatabase,
   equalToBigNumber,
@@ -12,13 +11,14 @@ import {
 } from '@archie/test/integration';
 import { QueueService } from '@archie/api/utils/queue';
 import { when } from 'jest-when';
+import { BigNumber } from 'bignumber.js';
+import { LtvCollateral } from '../../../libs/api/ltv-api/ltv/src/lib/collateral.entity';
+import { LtvCredit } from '../../../libs/api/ltv-api/ltv/src/lib/credit.entity';
+import { CollateralTransaction } from '../../../libs/api/ltv-api/ltv/src/lib/collateral_transactions.entity';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { assetPriceResponse, ETH_PRICE } from './data/collateral.stubs';
-import { CollateralQueueController } from '../../../api/ltv-api/ltv/src/lib/collateral/collateral.controller';
-import { LtvCredit } from '../../../api/ltv-api/ltv/src/lib/credit.entity';
 import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
-import { CollateralTransaction } from '../../../../api/ltv-api/ltv/src/lib/collateral_transactions.entity';
-import { BigNumber } from 'bignumber.js';
+import { CollateralQueueController } from '../../../libs/api/ltv-api/ltv/src/lib/collateral/collateral.controller';
 
 describe('CollateralQueueController (e2e)', () => {
   let app: INestApplication;

@@ -13,12 +13,12 @@ import {
   assetPriceResponse,
   ETH_PRICE,
 } from '../test-data/collateral.stubs';
-import { Collateral } from '../../../../api/credit-limit-api/credit-limit/src/lib/collateral.entity';
-import { CreditLimit } from '../../../../api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
-import { CREDIT_LIMIT_UPDATED_TOPIC } from '../../../../api/credit-limit-api/constants/src';
-import { GET_ASSET_INFORMATION_RPC } from '../../../../api/collateral-api/constants/src';
-import { PeriodicCheckQueueController } from '../../../../api/credit-limit-api/credit-limit/src/lib/periodic_check/periodic_check.controller';
 import { BigNumber } from 'bignumber.js';
+import { Collateral } from '@archie/api/credit-api/collateral';
+import { CreditLimit } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
+import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
+import { CREDIT_LIMIT_UPDATED_TOPIC } from '@archie/api/credit-limit-api/constants';
+import { PeriodicCheckQueueController } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/periodic_check/periodic_check.controller';
 
 describe('PeriodicCheckQueueController (e2e)', () => {
   let app: INestApplication;

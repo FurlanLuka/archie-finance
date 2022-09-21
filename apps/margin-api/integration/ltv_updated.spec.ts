@@ -6,16 +6,16 @@ import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { clearDatabase, queueStub } from '@archie/test/integration';
 import { QueueService } from '@archie/api/utils/queue';
-import { MarginCheck } from '../../../api/margin-api/margin/src/lib/margin_check.entity';
-import { MarginNotification } from '../../../api/margin-api/margin/src/lib/margin_notifications.entity';
-import { MarginCall } from '../../../api/margin-api/margin/src/lib/margin_calls.entity';
-import { MarginQueueController } from '../../../api/margin-api/margin/src/lib/margin.controller';
-import { LtvUpdatedPayload } from '../../../api/ltv-api/data-transfer-objects/src';
+import { MarginCall } from '../../../libs/api/margin-api/margin/src/lib/margin_calls.entity';
+import { MarginCheck } from '../../../libs/api/margin-api/margin/src/lib/margin_check.entity';
+import { MarginNotification } from '../../../libs/api/margin-api/margin/src/lib/margin_notifications.entity';
+import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
+import { MarginQueueController } from '../../../libs/api/margin-api/margin/src/lib/margin.controller';
 import {
   LTV_LIMIT_APPROACHING_TOPIC,
   MARGIN_CALL_COMPLETED_TOPIC,
   MARGIN_CALL_STARTED_TOPIC,
-} from '../../../api/margin-api/constants/src';
+} from '@archie/api/margin-api/constants';
 
 describe('MarginQueueController (e2e)', () => {
   let app: INestApplication;

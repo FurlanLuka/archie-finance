@@ -13,13 +13,13 @@ import {
   assetPriceResponse,
   ETH_PRICE,
 } from '../test-data/collateral.stubs';
-import { Collateral } from '../../../../api/credit-limit-api/credit-limit/src/lib/collateral.entity';
-import { CreditLimit } from '../../../../api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
-import { CreditLimitQueueController } from '../../../../api/credit-limit-api/credit-limit/src/lib/credit_limit.controller';
-import { CREDIT_LIMIT_UPDATED_TOPIC } from '../../../../api/credit-limit-api/constants/src';
-import { GET_ASSET_INFORMATION_RPC } from '../../../../api/collateral-api/constants/src';
-import { CollateralTransaction } from '../../../../api/credit-limit-api/credit-limit/src/lib/collateral_transactions.entity';
 import { BigNumber } from 'bignumber.js';
+import { Collateral } from '@archie/api/credit-api/collateral';
+import { CreditLimit } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
+import { CollateralTransaction } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral_transactions.entity';
+import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
+import { CreditLimitQueueController } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.controller';
+import { CREDIT_LIMIT_UPDATED_TOPIC } from '@archie/api/credit-limit-api/constants';
 
 describe('CreditLimitQueueController (e2e)', () => {
   let app: INestApplication;
