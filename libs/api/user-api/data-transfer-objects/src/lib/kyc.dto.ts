@@ -1,7 +1,3 @@
-export class MfaEnrolledPayload {
-  userId: string;
-}
-
 export class KycSubmittedPayload {
   userId: string;
   firstName: string;
@@ -16,9 +12,4 @@ export class KycSubmittedPayload {
   phoneNumber: string;
   phoneNumberCountryCode: string;
   ssn: string;
-}
-
-export class EmailVerifiedPayload {
-  userId: string;
-  email: string;
 }

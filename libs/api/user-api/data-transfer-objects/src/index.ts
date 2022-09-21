@@ -1,1 +1,2 @@
-export * from './lib/queue.dto';
+export * from './lib/kyc.dto';
+export * from './lib/user.dto';
