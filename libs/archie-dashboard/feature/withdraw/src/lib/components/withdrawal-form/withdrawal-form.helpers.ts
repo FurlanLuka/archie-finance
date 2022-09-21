@@ -1,5 +1,6 @@
 import { calculateCollateralCreditValue, calculateCollateralTotalValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
+import { BigNumber } from 'bignumber.js'
 
 interface GetUpdatedCreditAndTotalResult {
   updatedCreditValue: number;
@@ -12,19 +13,19 @@ export function getUpdatedCreditAndTotal({
   collateral,
 }: {
   asset: string;
-  withdrawalAmount: number;
+  withdrawalAmount: string;
   collateral: CollateralValue[];
 }): GetUpdatedCreditAndTotalResult {
   const updatedCollateral = collateral.map((collateralEntry) => {
     if (collateralEntry.asset !== asset) {
       return collateralEntry;
     }
-    const newAmount = collateralEntry.assetAmount - withdrawalAmount;
+    const newAmount = BigNumber(collateralEntry.assetAmount).minus(withdrawalAmount);
 
     return {
       ...collateralEntry,
       amount: newAmount,
-      price: (newAmount * collateralEntry.price) / collateralEntry.assetAmount,
+      price: Number(newAmount.multipliedBy(collateralEntry.price).dividedBy(collateralEntry.assetAmount).toFixed(2))
     };
   });
 
