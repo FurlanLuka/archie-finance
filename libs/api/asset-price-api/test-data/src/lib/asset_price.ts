@@ -10,18 +10,22 @@ export const getAssetPriceResponseDataFactory = (
   ...override,
 });
 
-export const getAssetPricesResponseDataFactory =
-  (): GetAssetPriceResponse[] => {
-    return [
-      ['BTC', 20000],
-      ['ETH', 4000],
-      ['SOL', 50],
-      ['USDC', 1],
-    ].map(
-      (data): GetAssetPriceResponse =>
-        getAssetPriceResponseDataFactory({
-          asset: data[0] as string,
-          price: data[1] as number,
-        }),
-    );
-  };
+export const getAssetPricesResponseDataFactory = ({
+  btcPrice = 20000,
+  ethPrice = 4000,
+  solPrice = 50,
+  usdcPrice = 1,
+}): GetAssetPriceResponse[] => {
+  return [
+    ['BTC', btcPrice],
+    ['ETH', ethPrice],
+    ['SOL', solPrice],
+    ['USDC', usdcPrice],
+  ].map(
+    (data): GetAssetPriceResponse =>
+      getAssetPriceResponseDataFactory({
+        asset: data[0] as string,
+        price: data[1] as number,
+      }),
+  );
+};
