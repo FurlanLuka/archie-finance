@@ -1,11 +1,11 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsString, Matches } from 'class-validator';
 import { TransactionStatus } from 'fireblocks-sdk';
 
 export class CollateralWithdrawCreateDto {
   @IsString()
   asset: string;
-  @IsNumber()
-  withdrawalAmount: number;
+  @Matches(/^\d+((.)|(.\d{0,18})?)$/)
+  withdrawalAmount: string;
   @IsString()
   destinationAddress: string;
 }
@@ -13,14 +13,14 @@ export class CollateralWithdrawCreateDto {
 export class GetCollateralWithdrawalResponse {
   id: string;
   asset: string;
-  currentAmount: number;
-  withdrawalAmount: number;
+  currentAmount: string;
+  withdrawalAmount: string;
   destinationAddress: string;
-  fee: number | null;
+  fee: string | null;
   status: TransactionStatus;
   createdAt: Date;
 }
 
 export class GetUserMaxWithdrawalAmountResponse {
-  maxAmount: number;
+  maxAmount: string;
 }

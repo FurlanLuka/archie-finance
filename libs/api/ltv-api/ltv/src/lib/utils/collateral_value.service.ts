@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { LtvCollateral } from '../collateral.entity';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
 import { CollateralValue, CollateralWithPrice } from './utils.interfaces';
+import { BigNumber } from 'bignumber.js';
 
 @Injectable()
 export class CollateralValueUtilService {
@@ -21,7 +22,9 @@ export class CollateralValueUtilService {
           price:
             assetPrice === undefined
               ? 0
-              : collateralAsset.amount * assetPrice.price,
+              : BigNumber(collateralAsset.amount)
+                  .multipliedBy(assetPrice.price)
+                  .toNumber(),
         };
       },
     );

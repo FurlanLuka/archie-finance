@@ -4,7 +4,7 @@ export class CollateralDepositedPayload {
   transactionId: string;
   userId: string;
   asset: string;
-  amount: number;
+  amount: string;
   destination: string;
   status: TransactionStatus;
 }
@@ -13,7 +13,7 @@ export class CollateralWithdrawCompletedPayload {
   asset: string;
   transactionId: string;
   userId: string;
-  fee: number;
+  fee: string;
 }
 
 export class CollateralWithdrawTransactionCreatedPayload {
@@ -24,6 +24,6 @@ export class CollateralWithdrawTransactionCreatedPayload {
 export class InternalCollateralTransactionCompletedPayload {
   transactionId: string;
   userId: string;
-  fee: number;
+  fee: string;
   asset: string;
 }

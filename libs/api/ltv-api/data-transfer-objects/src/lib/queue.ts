@@ -17,6 +17,6 @@ export class LtvPeriodicCheckRequestedPayload {
 
 export class CollateralWithPrice {
   asset: string;
-  amount: number;
+  amount: string;
   price: number;
 }

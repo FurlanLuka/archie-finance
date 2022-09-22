@@ -6,6 +6,7 @@ import {
   CollateralWithPrice,
 } from './utils.interfaces';
 import { Collateral } from '../collateral.entity';
+import { BigNumber } from 'bignumber.js';
 
 @Injectable()
 export class CollateralValueUtilService {
@@ -25,7 +26,9 @@ export class CollateralValueUtilService {
           price:
             assetPrice === undefined
               ? 0
-              : collateralAsset.amount * assetPrice.price,
+              : BigNumber(collateralAsset.amount)
+                  .multipliedBy(assetPrice.price)
+                  .toNumber(),
         };
       },
     );

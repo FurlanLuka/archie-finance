@@ -153,7 +153,7 @@ export class CollateralService {
             amount: LessThan(transaction.fee),
           },
           {
-            amount: 0,
+            amount: '0',
           },
         );
       }

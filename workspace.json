@@ -60,6 +60,7 @@
     "api-utils-openapi": "libs/api/utils/openapi",
     "api-utils-queue": "libs/api/utils/queue",
     "api-utils-tracing": "libs/api/utils/tracing",
+    "api-utils-typeorm-transformers": "libs/api/utils/typeorm-transformers",
     "api-webhook-api-constants": "libs/api/webhook-api/constants",
     "api-webhook-api-data-transfer-objects": "libs/api/webhook-api/data-transfer-objects",
     "api-webhook-api-peach": "libs/api/webhook-api/peach",

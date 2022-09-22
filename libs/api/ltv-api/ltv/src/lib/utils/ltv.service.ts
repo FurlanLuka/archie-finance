@@ -11,6 +11,10 @@ export class LtvUtilService {
     creditUtilization: number,
     collateralValue: number,
   ): number {
+    if (collateralValue === 0) {
+      return 0;
+    }
+
     return (creditUtilization / collateralValue) * 100;
   }
 

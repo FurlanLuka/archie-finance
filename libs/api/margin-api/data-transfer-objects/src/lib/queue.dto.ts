@@ -10,7 +10,7 @@ export class MarginCallCompletedPayload {
   userId: string;
   liquidation: {
     asset: string;
-    amount: number;
+    amount: string;
     price: number;
   }[];
   liquidationAmount: number;

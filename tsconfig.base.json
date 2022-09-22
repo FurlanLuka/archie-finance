@@ -16,6 +16,9 @@
     "baseUrl": ".",
     "strictNullChecks": true,
     "paths": {
+      "@archie/api/utils/typeorm-transformers": [
+        "libs/api/utils/typeorm-transformers/src/index.ts"
+      ],
       "@archie/api/asset-price-api/asset-price": [
         "libs/api/asset-price-api/asset-price/src/index.ts"
       ],

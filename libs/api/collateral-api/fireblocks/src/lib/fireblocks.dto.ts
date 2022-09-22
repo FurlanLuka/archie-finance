@@ -5,8 +5,8 @@ import { AssetType } from '@archie/api/collateral-api/asset-information';
 export class CollateralWithdrawInitializedDto {
   @IsString()
   asset: string;
-  @IsNumber()
-  withdrawalAmount: number;
+  @IsString()
+  withdrawalAmount: string;
   @IsString()
   userId: string;
   @IsString()
@@ -18,8 +18,8 @@ export class CollateralWithdrawInitializedDto {
 class LiquidationDto {
   @IsString()
   asset: string;
-  @IsNumber()
-  amount: number;
+  @IsString()
+  amount: string;
   @IsNumber()
   price: number;
 }
@@ -35,7 +35,7 @@ export class LiquidateAssetsDto {
 export class InternalCollateralTransactionCreatedPayload {
   userId: string;
   id: string;
-  amount: number;
+  amount: string;
   price: number;
   network: AssetType;
   asset: string;

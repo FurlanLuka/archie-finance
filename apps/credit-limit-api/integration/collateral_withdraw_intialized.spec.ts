@@ -8,17 +8,18 @@ import { clearDatabase, queueStub } from '@archie/test/integration';
 import { QueueService } from '@archie/api/utils/queue';
 import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
+import { BigNumber } from 'bignumber.js';
+import { CreditLimit } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
+import { Collateral } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral.entity';
+import { CollateralTransaction } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral_transactions.entity';
+import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
+import { CreditLimitQueueController } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.controller';
+import { CREDIT_LIMIT_UPDATED_TOPIC } from '@archie/api/credit-limit-api/constants';
 import {
   assetListResponse,
   assetPriceResponse,
   ETH_PRICE,
 } from './data/collateral.stubs';
-import { Collateral } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral.entity';
-import { CreditLimit } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
-import { CreditLimitQueueController } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.controller';
-import { CREDIT_LIMIT_UPDATED_TOPIC } from '../../../libs/api/credit-limit-api/constants/src';
-import { GET_ASSET_INFORMATION_RPC } from '../../../libs/api/collateral-api/constants/src';
-import { CollateralTransaction } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral_transactions.entity';
 
 describe('CreditLimitQueueController (e2e)', () => {
   let app: INestApplication;
@@ -31,8 +32,8 @@ describe('CreditLimitQueueController (e2e)', () => {
   const userId = 'userId';
   const asset = 'ETH';
 
-  const startingAssetAmount = 1;
-  const withdrawalAmount = 0.3;
+  const startingAssetAmount = '1';
+  const withdrawalAmount = '0.3';
   const currentCreditLimit = 100;
   const transactionId = 'transactionId';
 
@@ -85,7 +86,7 @@ describe('CreditLimitQueueController (e2e)', () => {
   });
 
   describe('COLLATERAL_WITHDRAW_INITIALIZED flow', () => {
-    it('Should publish CREDIT_LIMIT_INCREASED in case the credit limit is increased and collateral value changes by at least 10%', async () => {
+    it('Should publish CREDIT_LIMIT_UPDATED_TOPIC in case the credit limit is increased and collateral value changes by at least 10%', async () => {
       await app
         .get(CreditLimitQueueController)
         .collateralWithdrawInitializedHandler({
@@ -96,11 +97,13 @@ describe('CreditLimitQueueController (e2e)', () => {
           withdrawalId: 'withdrawalId',
         });
 
-      const expectedNewCreditLimit =
-        (ETH_PRICE *
-          (startingAssetAmount - withdrawalAmount) *
-          assetListResponse[asset]!.ltv) /
-        100;
+      const expectedNewCreditLimit = BigNumber(startingAssetAmount)
+        .minus(BigNumber(withdrawalAmount))
+        .multipliedBy(ETH_PRICE)
+        .multipliedBy(assetListResponse[asset]!.ltv)
+        .dividedBy(100)
+        .toNumber();
+
       expect(queueStub.publish).toBeCalledTimes(1);
       expect(queueStub.publish).toBeCalledWith(CREDIT_LIMIT_UPDATED_TOPIC, {
         calculatedAt: expect.any(Date),
@@ -109,7 +112,7 @@ describe('CreditLimitQueueController (e2e)', () => {
       });
     });
 
-    it('Should not publish CREDIT_LIMIT_INCREASED or update collateral record in case the transaction was already handled', async () => {
+    it('Should not publish CREDIT_LIMIT_UPDATED_TOPIC or update collateral record in case the transaction was already handled', async () => {
       await collateralTransactionRepository.insert({
         externalTransactionId: transactionId,
       });

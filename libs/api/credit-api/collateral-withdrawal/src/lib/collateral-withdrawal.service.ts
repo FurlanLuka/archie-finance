@@ -43,6 +43,7 @@ import {
   GetLoanBalancesResponse,
 } from '@archie/api/peach-api/data-transfer-objects';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
+import { BigNumber } from 'bignumber.js';
 
 const MAX_LTV = 0.3;
 @Injectable()
@@ -118,7 +119,7 @@ export class CollateralWithdrawalService {
             amount: LessThan(fee),
           },
           {
-            amount: 0,
+            amount: '0',
           },
         );
       }
@@ -190,9 +191,8 @@ export class CollateralWithdrawalService {
 
     const desiredAsset = collateralValue.find((c) => c.asset === asset);
 
-    // early break if user isn't hodling the desired asset at all
     if (!desiredAsset) {
-      return { maxAmount: 0 };
+      return { maxAmount: '0' };
     }
 
     const credit = await this.queueService.request<
@@ -202,28 +202,38 @@ export class CollateralWithdrawalService {
       userId,
     });
 
-    const totalCollateralValue: number = collateralValue.reduce(
-      (value: number, collateralAsset: GetCollateralValueResponse) =>
-        value + collateralAsset.price,
-      0,
+    if (credit.utilizationAmount === 0) {
+      return { maxAmount: desiredAsset.assetAmount };
+    }
+
+    const totalCollateralValue: BigNumber = collateralValue.reduce(
+      (value: BigNumber, collateralAsset: GetCollateralValueResponse) => {
+        value = value.plus(collateralAsset.price);
+
+        return value;
+      },
+      BigNumber(0),
     );
 
-    const maxAmountForMaxLtv = credit.utilizationAmount / MAX_LTV;
-    const maxAvailableAmount = Math.max(
-      totalCollateralValue - maxAmountForMaxLtv,
+    const maxAmountForMaxLtv = BigNumber(credit.utilizationAmount).dividedBy(
+      MAX_LTV,
+    );
+    const maxAvailableAmount = BigNumber.max(
+      BigNumber(totalCollateralValue).minus(maxAmountForMaxLtv),
       0,
     );
 
     return {
-      maxAmount:
-        Math.min(maxAvailableAmount, desiredAsset.price) / assetPrice.price,
+      maxAmount: BigNumber.min(maxAvailableAmount, desiredAsset.price)
+        .dividedBy(assetPrice.price)
+        .toString(),
     };
   }
 
   public async withdrawUserCollateral(
     userId: string,
     asset: string,
-    withdrawalAmount: number,
+    withdrawalAmount: string,
     destinationAddress: string,
   ): Promise<GetCollateralWithdrawalResponse> {
     try {
@@ -240,7 +250,7 @@ export class CollateralWithdrawalService {
 
       if (userCollateral === null) throw new CollateralNotFoundError();
 
-      if (maxAmount < withdrawalAmount) {
+      if (BigNumber(withdrawalAmount).isGreaterThan(maxAmount)) {
         throw new BadRequestException({
           code: 'COLLATERAL_WITHDRAW_AMOUNT_ERROR',
           message: 'Not enough amount',
@@ -260,7 +270,7 @@ export class CollateralWithdrawalService {
       const withdrawal = await this.collateralWithdrawalRepository.save({
         userId,
         asset,
-        withdrawalAmount,
+        withdrawalAmount: withdrawalAmount,
         currentAmount: userCollateral.amount,
         destinationAddress: destinationAddress,
         transactionId: null,
@@ -283,10 +293,13 @@ export class CollateralWithdrawalService {
             return (<Collateral[]>response.raw)[0];
           });
 
-      if (updatedCollateral !== undefined && updatedCollateral.amount == 0) {
+      if (
+        updatedCollateral !== undefined &&
+        BigNumber(updatedCollateral.amount).isZero()
+      ) {
         await this.collateralRepository.delete({
           id: updatedCollateral.id,
-          amount: 0,
+          amount: '0',
         });
       }
 
@@ -294,7 +307,7 @@ export class CollateralWithdrawalService {
         COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
         {
           asset,
-          withdrawalAmount,
+          withdrawalAmount: withdrawalAmount,
           userId,
           destinationAddress,
           withdrawalId: withdrawal.id,

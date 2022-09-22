@@ -6,16 +6,16 @@ import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { clearDatabase, queueStub } from '@archie/test/integration';
 import { QueueService } from '@archie/api/utils/queue';
+import { MarginCall } from '../../../libs/api/margin-api/margin/src/lib/margin_calls.entity';
 import { MarginCheck } from '../../../libs/api/margin-api/margin/src/lib/margin_check.entity';
 import { MarginNotification } from '../../../libs/api/margin-api/margin/src/lib/margin_notifications.entity';
-import { MarginCall } from '../../../libs/api/margin-api/margin/src/lib/margin_calls.entity';
+import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 import { MarginQueueController } from '../../../libs/api/margin-api/margin/src/lib/margin.controller';
-import { LtvUpdatedPayload } from '../../../libs/api/ltv-api/data-transfer-objects/src';
 import {
   LTV_LIMIT_APPROACHING_TOPIC,
   MARGIN_CALL_COMPLETED_TOPIC,
   MARGIN_CALL_STARTED_TOPIC,
-} from '../../../libs/api/margin-api/constants/src';
+} from '@archie/api/margin-api/constants';
 
 describe('MarginQueueController (e2e)', () => {
   let app: INestApplication;
@@ -67,7 +67,7 @@ describe('MarginQueueController (e2e)', () => {
             {
               asset: asset,
               price: 1000,
-              amount: 1,
+              amount: '1',
             },
           ],
           collateralBalance: 1000,
@@ -98,7 +98,7 @@ describe('MarginQueueController (e2e)', () => {
         userId,
         liquidation: [
           {
-            amount: 0.75,
+            amount: '0.75',
             asset,
             price: expectedSale,
           },
@@ -120,7 +120,7 @@ describe('MarginQueueController (e2e)', () => {
             {
               asset: asset,
               price: 1000,
-              amount: 1,
+              amount: '1',
             },
           ],
           collateralBalance: 1000,
@@ -156,7 +156,7 @@ describe('MarginQueueController (e2e)', () => {
             {
               asset: asset,
               price: 1000,
-              amount: 1,
+              amount: '1',
             },
           ],
           collateralBalance: 1000,

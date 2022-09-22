@@ -2513,12 +2513,16 @@
           },
           "utilizationAmount": {
             "type": "number"
+          },
+          "calculatedAt": {
+            "type": "string"
           }
         },
         "required": [
           "totalCredit",
           "availableCredit",
-          "utilizationAmount"
+          "utilizationAmount",
+          "calculatedAt"
         ]
       },
       "GetLoanDocumentDto": {

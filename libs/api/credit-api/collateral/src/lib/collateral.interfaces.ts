@@ -1,14 +1,15 @@
 import { IsNumber, IsString } from 'class-validator';
 import { TransactionStatus } from 'fireblocks-sdk';
+import { BigNumber } from 'bignumber.js';
 
 export class GetCollateralResponse {
   asset: string;
-  amount: number;
+  amount: string;
 }
 
 export class GetCollateralValueResponse {
   asset: string;
-  assetAmount: number;
+  assetAmount: string;
   price: number;
 }
 
