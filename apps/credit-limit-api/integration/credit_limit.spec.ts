@@ -308,7 +308,7 @@ describe('Credit limit service tests', () => {
     it('Should publish LTV_PERIODIC_CHECK_REQUESTED events for all users divided in chunks', async () => {
       const creditLimitRecords: Partial<CreditLimit>[] = [
         ...new Array(8999),
-      ].map(() => ({
+      ].map((_, i) => ({
         userId: Math.random().toString(),
         calculatedAt: new Date().toISOString(),
         creditLimit: 200,
