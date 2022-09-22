@@ -1,0 +1,89 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/collateralization-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/collateralization-api",
+        "main": "apps/collateralization-api/src/main.ts",
+        "tsConfig": "apps/collateralization-api/tsconfig.app.json",
+        "assets": [
+          "apps/collateralization-api/src/assets"
+        ],
+        "tsPlugins": [
+          "@nestjs/swagger/plugin"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/collateralization-api/src/environments/environment.ts",
+              "with": "apps/collateralization-api/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "collateralization-api:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "collateralization-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/collateralization-api/**/*.ts"
+        ]
+      }
+    },
+    "build-openapi": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build collateralization-api && node dist/apps/collateralization-api/main build-swagger"
+      }
+    },
+    "generate-migration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build collateralization-api && node dist/apps/collateralization-api/main generate-migration"
+      }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "test-integration": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/collateralization-api"
+      ],
+      "options": {
+        "jestConfig": "apps/collateralization-api/jest.config.ts",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
+    }
+  },
+  "tags": []
+}
