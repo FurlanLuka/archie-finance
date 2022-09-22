@@ -3,6 +3,11 @@ import {
   CollateralLiquidatedMail,
   MarginInfoMail,
 } from './email-data-factory.interfaces';
+import {
+  COLLATERAL_SALE_LTV_LIMIT,
+  LIQUIDATION_TARGET_LTV,
+  LTV_MARGIN_CALL_LIMIT,
+} from '@archie/api/margin-api/constants';
 
 @Injectable()
 export class EmailDataFactoryService {
@@ -34,6 +39,9 @@ export class EmailDataFactoryService {
       priceThatTriggersSale: this.roundValue(
         marginCall.priceForPartialCollateralSale,
       ),
+      collateralSaleLtv: COLLATERAL_SALE_LTV_LIMIT,
+      liquidationTargetLtv: LIQUIDATION_TARGET_LTV,
+      marginCallLtv: LTV_MARGIN_CALL_LIMIT,
     };
   }
 }

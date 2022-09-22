@@ -22,11 +22,9 @@ export class CollateralValueUtilService {
           price:
             assetPrice === undefined
               ? 0
-              : Number(
-                  BigNumber(collateralAsset.amount)
-                    .multipliedBy(assetPrice.price)
-                    .toFixed(2),
-                ),
+              : BigNumber(collateralAsset.amount)
+                  .multipliedBy(assetPrice.price)
+                  .toNumber(),
         };
       },
     );

@@ -4,11 +4,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { AppModule } from '../src/app.module';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import {
-  clearDatabase,
-  equalToBigNumber,
-  queueStub,
-} from '@archie/test/integration';
+import { clearDatabase, queueStub } from '@archie/test/integration';
 import { QueueService } from '@archie/api/utils/queue';
 import { when } from 'jest-when';
 import { BigNumber } from 'bignumber.js';
@@ -111,7 +107,7 @@ describe('CreditQueueController (e2e)', () => {
           collateralBalance: collateralBalance,
           collateral: [
             {
-              amount: equalToBigNumber(collateralAmount),
+              amount: collateralAmount.toString(),
               asset,
               price: collateralBalance,
             },

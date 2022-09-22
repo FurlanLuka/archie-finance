@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { BigNumberTrimEndingZerosTransformer } from '@archie/api/utils/typeorm-transformers';
 
 @Entity({
   name: 'collateral_withdrawal',
@@ -25,13 +26,28 @@ export class CollateralWithdrawal {
   @Column('varchar', { nullable: false })
   asset: string;
 
-  @Column('numeric', { nullable: false, precision: 28, scale: 18 })
+  @Column('numeric', {
+    nullable: false,
+    precision: 28,
+    scale: 18,
+    transformer: new BigNumberTrimEndingZerosTransformer(),
+  })
   currentAmount: string;
 
-  @Column('numeric', { nullable: false, precision: 28, scale: 18 })
+  @Column('numeric', {
+    nullable: false,
+    precision: 28,
+    scale: 18,
+    transformer: new BigNumberTrimEndingZerosTransformer(),
+  })
   withdrawalAmount: string;
 
-  @Column('numeric', { nullable: true, precision: 28, scale: 18 })
+  @Column('numeric', {
+    nullable: true,
+    precision: 28,
+    scale: 18,
+    transformer: new BigNumberTrimEndingZerosTransformer(),
+  })
   fee: string | null;
 
   @Column('varchar', { nullable: true })
