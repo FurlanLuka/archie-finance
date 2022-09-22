@@ -14,6 +14,7 @@ export enum ConfigVariables {
 
 export const COLLATERAL_SALE_LTV_LIMIT = 90;
 export const LTV_MARGIN_CALL_LIMIT = 75;
+export const LIQUIDATION_TARGET_LTV = 60;
 
 export const LTV_LIMIT_APPROACHING_TOPIC =
   'margin.margin_call.ltv_limit_approaching';

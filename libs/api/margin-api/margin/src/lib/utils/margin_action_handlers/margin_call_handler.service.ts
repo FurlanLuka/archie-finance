@@ -6,7 +6,10 @@ import {
   MarginCallCompletedPayload,
   MarginCallStartedPayload,
 } from '@archie/api/margin-api/data-transfer-objects';
-import { MARGIN_CALL_COMPLETED_TOPIC } from '@archie/api/margin-api/constants';
+import {
+  LIQUIDATION_TARGET_LTV,
+  MARGIN_CALL_COMPLETED_TOPIC,
+} from '@archie/api/margin-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import { LiquidationUtilService } from './liquidation.service';
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
@@ -16,8 +19,6 @@ import { LiquidationAssets } from './margin_action_handlers.interfaces';
 
 @Injectable()
 export class MarginCallHandlerService {
-  LIQUIDATION_TARGET_LTV = 60;
-
   constructor(
     @InjectRepository(MarginCall)
     private marginCallRepository: Repository<MarginCall>,
@@ -67,7 +68,7 @@ export class MarginCallHandlerService {
     const loanRepaymentAmount: number = this.calculateAmountToReachLtv(
       ltv.calculatedOn.utilizedCreditAmount,
       ltv.calculatedOn.collateralBalance,
-      this.LIQUIDATION_TARGET_LTV,
+      LIQUIDATION_TARGET_LTV,
     );
 
     const assetsToLiquidate: LiquidationAssets[] =
@@ -92,7 +93,7 @@ export class MarginCallHandlerService {
         userId: ltv.userId,
         liquidation: assetsToLiquidate,
         liquidationAmount: loanRepaymentAmount,
-        ltv: this.LIQUIDATION_TARGET_LTV,
+        ltv: LIQUIDATION_TARGET_LTV,
         ...this.marginCallPriceFactory.getMarginCallPrices({
           collateralBalance:
             ltv.calculatedOn.collateralBalance - loanRepaymentAmount,
