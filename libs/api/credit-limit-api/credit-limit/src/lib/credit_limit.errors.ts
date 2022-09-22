@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 export class CreateCreditMinimumCollateralError extends BadRequestException {
   constructor(minimumCredit: number) {
@@ -12,5 +12,11 @@ export class CreateCreditMinimumCollateralError extends BadRequestException {
 export class CreditAlreadyExistsError extends BadRequestException {
   constructor() {
     super('ERR_CREDIT_ALREADY_EXISTS', 'Credit line already exists');
+  }
+}
+
+export class CreditLineNotFound extends NotFoundException {
+  constructor() {
+    super('ERR_CREDIT_LINE_NOT_FOUND', 'Credit line not found');
   }
 }

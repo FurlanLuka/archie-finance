@@ -20,6 +20,7 @@ import { QueueService } from '@archie/api/utils/queue';
 import {
   CreditLimitUpdatedPayload,
   CreditLineCreatedPayload,
+  CreditLimitResponse,
 } from '@archie/api/credit-limit-api/data-transfer-objects';
 import {
   CreditAlreadyExistsError,
@@ -59,7 +60,7 @@ export class CreditLimitAdjustmentService {
       newCreditLimit / calculatedCreditLimit.creditLimit;
     const creditPerAssets: CreditAsset[] = calculatedCreditLimit.assets.map(
       (asset) => ({
-        credit: asset.credit * creditAssetWeight,
+        limit: asset.limit * creditAssetWeight,
         name: asset.name,
       }),
     );
@@ -69,7 +70,7 @@ export class CreditLimitAdjustmentService {
         userId,
         collateralCalculatedAt,
         newCreditLimit,
-        collateralValue,
+        collateralValue.collateralBalance,
         creditPerAssets,
       );
 
@@ -111,7 +112,7 @@ export class CreditLimitAdjustmentService {
             ...sum.assets,
             {
               name: value.asset,
-              credit: roundAmount,
+              limit: roundAmount,
             },
           ],
         };
@@ -127,7 +128,7 @@ export class CreditLimitAdjustmentService {
     userId: string,
     collateralCalculatedAt: string,
     newCreditLimit: number,
-    collateralValue: CollateralValue,
+    collateralBalance: number,
     creditPerAssets: CreditAsset[],
   ): Promise<CreditLimit | undefined> {
     const creditLimit: CreditLimit | undefined =
@@ -140,7 +141,7 @@ export class CreditLimitAdjustmentService {
         })
         .set({
           creditLimit: newCreditLimit,
-          calculatedOnCollateralBalance: collateralValue.collateralBalance,
+          calculatedOnCollateralBalance: collateralBalance,
           calculatedAt: collateralCalculatedAt,
         })
         .returning('*')
@@ -150,11 +151,7 @@ export class CreditLimitAdjustmentService {
         });
 
     if (creditLimit !== undefined) {
-      await this.insertCreditLimitPerAsset(
-        creditLimit,
-        collateralValue,
-        creditPerAssets,
-      );
+      await this.insertCreditLimitPerAsset(creditLimit, creditPerAssets);
     }
 
     return creditLimit;
@@ -162,20 +159,13 @@ export class CreditLimitAdjustmentService {
 
   private async insertCreditLimitPerAsset(
     creditLimit: CreditLimit,
-    collateralValue: CollateralValue,
     creditPerAssets: CreditAsset[],
   ): Promise<void> {
-    const creditLimitAssets = collateralValue.collateral.map((collateral) => {
-      const creditAsset: CreditAsset | undefined = creditPerAssets.find(
-        (ca) => ca.name === collateral.asset,
-      );
-
-      return {
-        credit: creditAsset?.credit ?? 0,
-        asset: collateral.asset,
-        creditLimit: creditLimit,
-      };
-    });
+    const creditLimitAssets = creditPerAssets.map((creditAsset) => ({
+      limit: creditAsset.limit,
+      asset: creditAsset.name,
+      creditLimit: creditLimit,
+    }));
 
     await this.creditLimitAssetRepository.upsert(creditLimitAssets, {
       conflictPaths: ['asset', 'creditLimit'],
@@ -186,7 +176,7 @@ export class CreditLimitAdjustmentService {
     userId: string,
     collateralValue: CollateralValue,
     assetList: AssetList,
-  ): Promise<void> {
+  ): Promise<CalculatedCreditLimit> {
     const creditLimit: CreditLimit | null =
       await this.creditLimitRepository.findOneBy({
         userId,
@@ -213,18 +203,15 @@ export class CreditLimitAdjustmentService {
         },
       });
 
+      // TODO: figure this out (percentage based / allocation based) & add test
       const creditAssetWeight: number =
         this.MAXIMUM_CREDIT / totalCreditValue.creditLimit;
-      const creditPerAssets: CreditAsset[] = totalCreditValue.assets.map(
-        (asset) => ({
-          credit: asset.credit * creditAssetWeight,
-          name: asset.name,
-        }),
-      );
-
       totalCreditValue = {
         creditLimit: this.MAXIMUM_CREDIT,
-        assets: creditPerAssets,
+        assets: totalCreditValue.assets.map((asset) => ({
+          limit: asset.limit * creditAssetWeight,
+          name: asset.name,
+        })),
       };
     }
 
@@ -242,7 +229,6 @@ export class CreditLimitAdjustmentService {
         });
       await this.insertCreditLimitPerAsset(
         insertedCreditLimit,
-        collateralValue,
         totalCreditValue.assets,
       );
       await queryRunner.commitTransaction();
@@ -260,5 +246,7 @@ export class CreditLimitAdjustmentService {
         amount: totalCreditValue.creditLimit,
       },
     );
+
+    return totalCreditValue;
   }
 }

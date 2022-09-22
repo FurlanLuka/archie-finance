@@ -12,3 +12,11 @@ export class CreditLineCreatedPayload {
   userId: string;
   amount: number;
 }
+
+export class CreditLimitResponse {
+  limit: number;
+  assets: {
+    asset: string;
+    limit: number;
+  }[];
+}

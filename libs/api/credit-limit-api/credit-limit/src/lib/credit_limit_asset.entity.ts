@@ -21,7 +21,7 @@ export class CreditLimitAsset {
   asset: string;
 
   @Column('float')
-  credit: number;
+  limit: number;
 
   @ManyToOne(
     (_type) => CreditLimit,

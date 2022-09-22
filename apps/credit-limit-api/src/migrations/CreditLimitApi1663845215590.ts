@@ -8,7 +8,7 @@ export class CreditLimitApi1663845215590 implements MigrationInterface {
             CREATE TABLE "credit_limit_asset" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "asset" character varying NOT NULL,
-                "credit" double precision NOT NULL,
+                "limit" double precision NOT NULL,
                 "createdAt" TIMESTAMP NOT NULL DEFAULT now(),
                 "updatedAt" TIMESTAMP NOT NULL DEFAULT now(),
                 "creditLimitId" uuid,

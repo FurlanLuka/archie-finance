@@ -24,5 +24,5 @@ export interface CalculatedCreditLimit {
 
 export interface CreditAsset {
   name: string;
-  credit: number;
+  limit: number;
 }

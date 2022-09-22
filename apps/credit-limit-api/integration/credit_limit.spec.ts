@@ -31,6 +31,7 @@ import {
 } from '@archie/api/credit-limit-api/constants';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreditLimitResponse } from '@archie/api/credit-limit-api/data-transfer-objects';
 
 describe('Credit limit service tests', () => {
   let app: INestApplication;
@@ -89,9 +90,35 @@ describe('Credit limit service tests', () => {
     });
   });
 
+  describe('Fetch credit limit when It is not created', () => {
+    beforeAll(setup);
+    afterAll(cleanup);
+
+    it('should fail fetching the credit limit since It was not created yet', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/credit_limits')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(404);
+
+      expect(response.body.message).toBe('ERR_CREDIT_LINE_NOT_FOUND');
+    });
+  });
+
   describe('Create credit line with over collateralization', () => {
     beforeAll(setup);
     afterAll(cleanup);
+
+    const creditLimit = 2000;
+
+    const expectedCreditLimit: CreditLimitResponse = {
+      limit: creditLimit,
+      assets: [
+        {
+          asset: 'BTC',
+          limit: creditLimit,
+        },
+      ],
+    };
 
     it('should increase users collateral to 1 BTC', async () => {
       const collateralDepositCompletedPayload =
@@ -106,7 +133,7 @@ describe('Credit limit service tests', () => {
     });
 
     it('should create the credit with a limit of 2_000 because user has collateralized more then credit limit', async () => {
-      await request(app.getHttpServer())
+      const response = await request(app.getHttpServer())
         .post('/v1/credit_limits')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(201);
@@ -115,9 +142,20 @@ describe('Credit limit service tests', () => {
         CREDIT_LINE_CREATED_TOPIC,
         {
           userId: user.id,
-          amount: 2000,
+          amount: creditLimit,
         },
       );
+
+      expect(response.body).toStrictEqual(expectedCreditLimit);
+    });
+
+    it('should be able to fetch newly created credit limit', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/credit_limits')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toStrictEqual(expectedCreditLimit);
     });
   });
 
@@ -129,9 +167,29 @@ describe('Credit limit service tests', () => {
     const ethAmount = 0.3;
     const btcAmount = 0.05;
 
-    const creditLimit =
-      (solAmount * solPrice + ethAmount * ethPrice + btcAmount * bitcoinPrice) *
-      0.5;
+    const btcCreditLimit = btcAmount * bitcoinPrice * 0.5;
+    const solCreditLimit = solAmount * solPrice * 0.5;
+    const ethCreditLimit = ethAmount * ethPrice * 0.5;
+
+    const creditLimit = btcCreditLimit + solCreditLimit + ethCreditLimit;
+
+    const expectedCreditLimit: CreditLimitResponse = {
+      limit: creditLimit,
+      assets: [
+        {
+          asset: 'BTC',
+          limit: btcCreditLimit,
+        },
+        {
+          asset: 'SOL',
+          limit: solCreditLimit,
+        },
+        {
+          asset: 'ETH',
+          limit: ethCreditLimit,
+        },
+      ],
+    };
 
     it(`should increase users collateral by ${btcAmount} BTC`, async () => {
       const collateralDepositCompletedPayload =
@@ -173,7 +231,7 @@ describe('Credit limit service tests', () => {
     });
 
     it(`should create the credit with a limit of ${creditLimit} after combining all collateral value`, async () => {
-      await request(app.getHttpServer())
+      const response = await request(app.getHttpServer())
         .post('/v1/credit_limits')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(201);
@@ -185,6 +243,16 @@ describe('Credit limit service tests', () => {
           amount: creditLimit,
         },
       );
+      expect(response.body).toStrictEqual(expectedCreditLimit);
+    });
+
+    it('should be able to fetch newly created credit limit', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/credit_limits')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toStrictEqual(expectedCreditLimit);
     });
   });
 
@@ -291,6 +359,23 @@ describe('Credit limit service tests', () => {
             calculatedAt: expect.anything(),
           },
         );
+      });
+
+      it('should be able to fetch updated credit limit', async () => {
+        const response = await request(app.getHttpServer())
+          .get('/v1/credit_limits')
+          .set('Authorization', `Bearer ${accessToken}`)
+          .expect(200);
+
+        expect(response.body).toStrictEqual({
+          limit: finalCreditLineLimit,
+          assets: [
+            {
+              asset: 'ETH',
+              limit: finalCreditLineLimit,
+            },
+          ],
+        });
       });
     });
   });
