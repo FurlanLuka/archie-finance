@@ -19,14 +19,18 @@ import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants'
 import { assetListResponseData } from '@archie/api/collateral-api/test-data';
 import * as request from 'supertest';
 import {
+  CreditLimit,
   CreditLimitQueueController,
   PeriodicCheckQueueController,
 } from '@archie/api/credit-limit-api/credit-limit';
 import { collateralDepositCompletedDataFactory } from '@archie/api/credit-api/test-data';
 import {
+  CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED,
   CREDIT_LIMIT_UPDATED_TOPIC,
   CREDIT_LINE_CREATED_TOPIC,
 } from '@archie/api/credit-limit-api/constants';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 describe('Credit limit service tests', () => {
   let app: INestApplication;
@@ -288,6 +292,57 @@ describe('Credit limit service tests', () => {
           },
         );
       });
+    });
+  });
+
+  describe('Periodic check', () => {
+    let creditLimitRepository: Repository<CreditLimit>;
+
+    beforeAll(async () => {
+      await setup();
+
+      creditLimitRepository = app.get(getRepositoryToken(CreditLimit));
+    });
+    afterAll(cleanup);
+
+    it('Should publish LTV_PERIODIC_CHECK_REQUESTED events for all users divided in chunks', async () => {
+      const creditLimitRecords: Partial<CreditLimit>[] = [
+        ...new Array(8999),
+      ].map(() => ({
+        userId: Math.random().toString(),
+        calculatedAt: new Date().toISOString(),
+        creditLimit: 200,
+        calculatedOnCollateralBalance: 400,
+      }));
+
+      await creditLimitRepository.insert(creditLimitRecords);
+
+      await request(app.getHttpServer())
+        .post(`/internal/credit_limits/periodic_check`)
+        .expect(201);
+
+      const expectedCallTimes = 4500;
+      const expectedCallTimesWithoutLastCall = expectedCallTimes - 1;
+
+      expect(queueStub.publish).toBeCalledTimes(expectedCallTimes);
+      [...new Array(expectedCallTimesWithoutLastCall)].forEach(
+        (_, callNumber) => {
+          expect(queueStub.publish).nthCalledWith(
+            callNumber + 1,
+            CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED,
+            {
+              userIds: [expect.any(String), expect.any(String)],
+            },
+          );
+          expect(queueStub.publish).nthCalledWith(
+            expectedCallTimes,
+            CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED,
+            {
+              userIds: [expect.any(String)],
+            },
+          );
+        },
+      );
     });
   });
 });
