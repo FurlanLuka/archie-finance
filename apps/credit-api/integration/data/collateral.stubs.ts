@@ -1,4 +1,4 @@
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects';
 import { BigNumber } from 'bignumber.js';
 

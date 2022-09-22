@@ -12,7 +12,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CollateralBalanceUpdateUtilService } from './utils/collateral_balance_update.service';
 import { CreditLimitAdjustmentService } from './utils/credit_limit_adjustment.service';
 import { CollateralValue } from './utils/utils.interfaces';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { CollateralValueUtilService } from './utils/collateral_value.service';
 import { QueueService } from '@archie/api/utils/queue';

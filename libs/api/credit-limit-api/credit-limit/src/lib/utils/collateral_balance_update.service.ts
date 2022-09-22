@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import {
   CollateralValue,

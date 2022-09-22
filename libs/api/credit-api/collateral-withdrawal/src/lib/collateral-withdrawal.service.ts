@@ -32,7 +32,7 @@ import {
 } from '@archie/api/credit-api/collateral';
 import { QueueService } from '@archie/api/utils/queue';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import {
   CollateralWithdrawCompletedPayload,
   CollateralWithdrawTransactionCreatedPayload,

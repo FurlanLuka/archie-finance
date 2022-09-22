@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { LtvCollateral } from '../collateral.entity';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { CollateralValue, CollateralWithPrice } from './utils.interfaces';
 import { BigNumber } from 'bignumber.js';
 

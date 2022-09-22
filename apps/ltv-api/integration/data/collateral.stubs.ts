@@ -1,4 +1,4 @@
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 
 export const SOL_PRICE = 100;
 export const BTC_PRICE = 20000;

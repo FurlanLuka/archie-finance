@@ -1,7 +1,7 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { AppModule } from '../src/app.module';
+import { AppModule } from '../../src/app.module';
 import { Connection, Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { clearDatabase, queueStub } from '@archie/test/integration';
@@ -9,11 +9,11 @@ import { QueueService } from '@archie/api/utils/queue';
 import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { BigNumber } from 'bignumber.js';
-import { CreditLimit } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
-import { Collateral } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral.entity';
-import { CollateralTransaction } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral_transactions.entity';
+import { CreditLimit } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.entity';
+import { Collateral } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral.entity';
+import { CollateralTransaction } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/collateral_transactions.entity';
 import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
-import { CreditLimitQueueController } from '../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.controller';
+import { CreditLimitQueueController } from '../../../../libs/api/credit-limit-api/credit-limit/src/lib/credit_limit.controller';
 import { CREDIT_LIMIT_UPDATED_TOPIC } from '@archie/api/credit-limit-api/constants';
 import {
   assetListResponse,
