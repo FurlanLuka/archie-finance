@@ -19,16 +19,17 @@ import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/suc
 import { getUpdatedCreditAndTotal } from './withdrawal-form.helpers';
 import { getWithdrawSchema } from './withdrawal-form.schema';
 import { WithdrawalFormStyled } from './withdrawal-form.styled';
+import { BigNumber } from 'bignumber.js'
 
 interface WithdrawFormData {
-  withdrawAmount: number;
+  withdrawAmount: string;
   withdrawAddress: string;
 }
 
 interface WithdrawalFormProps {
   currentAsset: string;
   collateral: CollateralValue[];
-  maxAmount: number;
+  maxAmount: string;
 }
 
 export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collateral, maxAmount }) => {
@@ -36,7 +37,8 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
 
   const navigate = useNavigate();
   const createWithdrawal = useCreateWithdrawal();
-  const WithdrawSchema = getWithdrawSchema(maxAmount);
+  const maxAmountBN = BigNumber(maxAmount)
+  const WithdrawSchema = getWithdrawSchema(maxAmountBN);
   const queryClient = useQueryClient();
 
   const {
@@ -91,25 +93,24 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
       <WithdrawalFormStyled onSubmit={onSubmit}>
         <InputText>
           <label htmlFor="withdrawAmount">
-            {maxAmount > 0
+            {maxAmountBN.isGreaterThan(0)
               ? t('dashboard_withdraw.form.amount_label', { currentAsset, maxAmount })
               : t('dashboard_withdraw.form.amount_label_empty', { currentAsset })}
           </label>
           <input
             id="withdrawAmount"
-            type="number"
+            type="tel"
             step="any"
-            min={0}
-            max={maxAmount}
-            disabled={maxAmount <= 0}
-            {...register('withdrawAmount', { valueAsNumber: true })}
+            pattern="^\d+((.)|(.\d{0,18})?)$"
+            disabled={maxAmountBN.isLessThanOrEqualTo(0)}
+            {...register('withdrawAmount', { valueAsNumber: false })}
           />
           {errors.withdrawAmount?.message && (
             <BodyM className="error" color={theme.textDanger}>
               {t(errors.withdrawAmount.message, { maxAmount })}
             </BodyM>
           )}
-          {withdrawalAmount > 0 && withdrawalAmount <= maxAmount && (
+          {maxAmountBN.isGreaterThan(0) && maxAmountBN.isGreaterThanOrEqualTo(withdrawalAmount) && (
             <BodyM color={theme.textSecondary} weight={500} className="credit-limit">
               {t('dashboard_withdraw.form.credit_change', {
                 initialCollateralValue: initialCollateralValue.toFixed(2),
@@ -131,7 +132,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
             <input
               id="withdrawAddress"
               placeholder={t('dashboard_withdraw.form.address_placeholder')}
-              disabled={maxAmount <= 0}
+              disabled={maxAmountBN.isLessThanOrEqualTo(0)}
               {...register('withdrawAddress')}
             />
             {errors.withdrawAddress?.message && (

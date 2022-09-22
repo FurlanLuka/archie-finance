@@ -4,7 +4,7 @@ import { DefaultVariables, postRequest } from '../../helpers';
 export interface CreateWithdrawalBody extends DefaultVariables {
   asset: string;
   destinationAddress: string;
-  withdrawalAmount: number;
+  withdrawalAmount: string;
 }
 
 export interface WithdrawalResponse {
