@@ -60,11 +60,9 @@ describe('Credit limit service tests', () => {
 
     accessToken = generateUserAccessToken();
 
-    // Mock RPC request to return array of asset prices
     when(queueStub.request)
       .calledWith(GET_ASSET_PRICES_RPC)
       .mockResolvedValue(getAssetPricesResponseData);
-    // Mock RPC request to return the asset list
     when(queueStub.request)
       .calledWith(GET_ASSET_INFORMATION_RPC)
       .mockResolvedValue(assetListResponseData);
@@ -244,7 +242,6 @@ describe('Credit limit service tests', () => {
           .calledWith(GET_ASSET_PRICES_RPC)
           .mockResolvedValue(getUpdatedAssetPricesResponseData);
 
-        // Reset mock so it doesnt contain call data from previous tests
         queueStub.publish.mockReset();
       });
 
@@ -271,8 +268,7 @@ describe('Credit limit service tests', () => {
         when(queueStub.request)
           .calledWith(GET_ASSET_PRICES_RPC)
           .mockResolvedValue(getUpdatedAssetPricesResponseData);
-
-        // Reset mock so it doesnt contain call data from previous tests
+  
         queueStub.publish.mockReset();
       });
 
