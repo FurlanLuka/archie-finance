@@ -16,3 +16,13 @@ export interface CollateralWithCalculationDate {
   amount: string;
   calculatedAt: string;
 }
+
+export interface CalculatedCreditLimit {
+  creditLimit: number;
+  assets: CreditAsset[];
+}
+
+export interface CreditAsset {
+  name: string;
+  credit: number;
+}

@@ -1,5 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CollateralValue, CollateralWithPrice } from './utils.interfaces';
+import {
+  CalculatedCreditLimit,
+  CollateralValue,
+  CollateralWithPrice,
+  CreditAsset,
+} from './utils.interfaces';
 import { CreditLimit } from '../credit_limit.entity';
 import {
   CREDIT_LIMIT_UPDATED_TOPIC,
@@ -10,7 +15,7 @@ import {
   AssetList,
 } from '@archie/api/collateral-api/asset-information';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { DataSource, InsertResult, Repository, UpdateResult } from 'typeorm';
 import { QueueService } from '@archie/api/utils/queue';
 import {
   CreditLimitUpdatedPayload,
@@ -20,6 +25,7 @@ import {
   CreditAlreadyExistsError,
   CreateCreditMinimumCollateralError,
 } from '../credit_limit.errors';
+import { CreditLimitAsset } from '../credit_limit_asset.entity';
 
 @Injectable()
 export class CreditLimitAdjustmentService {
@@ -29,7 +35,10 @@ export class CreditLimitAdjustmentService {
   constructor(
     @InjectRepository(CreditLimit)
     private creditLimitRepository: Repository<CreditLimit>,
+    @InjectRepository(CreditLimitAsset)
+    private creditLimitAssetRepository: Repository<CreditLimitAsset>,
     private queueService: QueueService,
+    private dataSource: DataSource,
   ) {}
 
   public async updateCreditLimit(
@@ -38,9 +47,21 @@ export class CreditLimitAdjustmentService {
     collateralValue: CollateralValue,
     assetList: AssetList,
   ): Promise<void> {
+    const calculatedCreditLimit: CalculatedCreditLimit =
+      this.calculateCreditLimit(collateralValue.collateral, assetList);
+
     const newCreditLimit: number = Math.min(
-      this.calculateCreditLimit(collateralValue.collateral, assetList),
+      calculatedCreditLimit.creditLimit,
       this.MAXIMUM_CREDIT,
+    );
+
+    const creditAssetWeight: number =
+      newCreditLimit / calculatedCreditLimit.creditLimit;
+    const creditPerAssets: CreditAsset[] = calculatedCreditLimit.assets.map(
+      (asset) => ({
+        credit: asset.credit * creditAssetWeight,
+        name: asset.name,
+      }),
     );
 
     const updatedCreditLimit: CreditLimit | undefined =
@@ -48,7 +69,8 @@ export class CreditLimitAdjustmentService {
         userId,
         collateralCalculatedAt,
         newCreditLimit,
-        collateralValue.collateralBalance,
+        collateralValue,
+        creditPerAssets,
       );
 
     if (updatedCreditLimit === undefined) {
@@ -68,45 +90,96 @@ export class CreditLimitAdjustmentService {
   private calculateCreditLimit(
     collateralValue: CollateralWithPrice[],
     assetList: AssetList,
-  ): number {
-    return collateralValue.reduce((sum: number, value: CollateralWithPrice) => {
-      const assetInformation: AssetInformation | undefined =
-        assetList[value.asset];
+  ): CalculatedCreditLimit {
+    return collateralValue.reduce(
+      (sum: CalculatedCreditLimit, value: CollateralWithPrice) => {
+        const assetInformation: AssetInformation | undefined =
+          assetList[value.asset];
 
-      if (assetInformation === undefined) {
-        return sum;
-      }
+        if (assetInformation === undefined) {
+          return sum;
+        }
 
-      const actualCollateralValue: number =
-        (value.price / 100) * assetInformation.ltv;
+        const actualCollateralValue: number =
+          (value.price / 100) * assetInformation.ltv;
 
-      return sum + Math.floor(actualCollateralValue);
-    }, 0);
+        const roundAmount = Math.floor(actualCollateralValue);
+
+        return {
+          creditLimit: sum.creditLimit + roundAmount,
+          assets: [
+            ...sum.assets,
+            {
+              name: value.asset,
+              credit: roundAmount,
+            },
+          ],
+        };
+      },
+      {
+        creditLimit: 0,
+        assets: [],
+      },
+    );
   }
 
   private async updateCreditLimitRecord(
     userId: string,
     collateralCalculatedAt: string,
     newCreditLimit: number,
-    collateralBalance: number,
+    collateralValue: CollateralValue,
+    creditPerAssets: CreditAsset[],
   ): Promise<CreditLimit | undefined> {
-    return this.creditLimitRepository
-      .createQueryBuilder('CreditLimit')
-      .update(CreditLimit)
-      .where('userId = :userId AND calculatedAt <= :calculatedAt ', {
-        userId: userId,
-        calculatedAt: collateralCalculatedAt,
-      })
-      .set({
-        creditLimit: newCreditLimit,
-        calculatedOnCollateralBalance: collateralBalance,
-        calculatedAt: collateralCalculatedAt,
-      })
-      .returning('*')
-      .execute()
-      .then((response: UpdateResult) => {
-        return (<CreditLimit[]>response.raw)[0];
-      });
+    const creditLimit: CreditLimit | undefined =
+      await this.creditLimitRepository
+        .createQueryBuilder('CreditLimit')
+        .update(CreditLimit)
+        .where('userId = :userId AND calculatedAt <= :calculatedAt ', {
+          userId: userId,
+          calculatedAt: collateralCalculatedAt,
+        })
+        .set({
+          creditLimit: newCreditLimit,
+          calculatedOnCollateralBalance: collateralValue.collateralBalance,
+          calculatedAt: collateralCalculatedAt,
+        })
+        .returning('*')
+        .execute()
+        .then((response: UpdateResult) => {
+          return (<CreditLimit[]>response.raw)[0];
+        });
+
+    if (creditLimit !== undefined) {
+      await this.insertCreditLimitPerAsset(
+        creditLimit,
+        collateralValue,
+        creditPerAssets,
+      );
+    }
+
+    return creditLimit;
+  }
+
+  private async insertCreditLimitPerAsset(
+    creditLimit: CreditLimit,
+    collateralValue: CollateralValue,
+    creditPerAssets: CreditAsset[],
+  ): Promise<void> {
+    const creditLimitAssets = collateralValue.collateral.map((collateral) => {
+      const creditAsset: CreditAsset | undefined = creditPerAssets.find(
+        (ca) => ca.name === collateral.asset,
+      );
+
+      return {
+        credit: creditAsset?.credit ?? 0,
+        asset: collateral.asset,
+        creditLimit: creditLimit,
+      };
+    });
+
+    await this.creditLimitAssetRepository.upsert(creditLimitAssets, {
+      conflictPaths: ['asset', 'creditLimit'],
+    });
   }
 
   public async createInitialCredit(
@@ -123,16 +196,16 @@ export class CreditLimitAdjustmentService {
       throw new CreditAlreadyExistsError();
     }
 
-    let totalCreditValue: number = this.calculateCreditLimit(
+    let totalCreditValue: CalculatedCreditLimit = this.calculateCreditLimit(
       collateralValue.collateral,
       assetList,
     );
 
-    if (totalCreditValue < this.MINIMUM_CREDIT) {
+    if (totalCreditValue.creditLimit < this.MINIMUM_CREDIT) {
       throw new CreateCreditMinimumCollateralError(this.MINIMUM_CREDIT);
     }
 
-    if (totalCreditValue > this.MAXIMUM_CREDIT) {
+    if (totalCreditValue.creditLimit > this.MAXIMUM_CREDIT) {
       Logger.warn({
         code: 'CREATE_CREDIT_MAXIMUM_COLLATERAL_VALUE_EXCEEDED',
         metadata: {
@@ -140,21 +213,51 @@ export class CreditLimitAdjustmentService {
         },
       });
 
-      totalCreditValue = this.MAXIMUM_CREDIT;
+      const creditAssetWeight: number =
+        this.MAXIMUM_CREDIT / totalCreditValue.creditLimit;
+      const creditPerAssets: CreditAsset[] = totalCreditValue.assets.map(
+        (asset) => ({
+          credit: asset.credit * creditAssetWeight,
+          name: asset.name,
+        }),
+      );
+
+      totalCreditValue = {
+        creditLimit: this.MAXIMUM_CREDIT,
+        assets: creditPerAssets,
+      };
     }
 
-    await this.creditLimitRepository.insert({
-      userId,
-      calculatedAt: new Date().toISOString(),
-      creditLimit: totalCreditValue,
-      calculatedOnCollateralBalance: collateralValue.collateralBalance,
-    });
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      const insertedCreditLimit: CreditLimit =
+        await this.creditLimitRepository.save({
+          userId,
+          calculatedAt: new Date().toISOString(),
+          creditLimit: totalCreditValue.creditLimit,
+          calculatedOnCollateralBalance: collateralValue.collateralBalance,
+        });
+      await this.insertCreditLimitPerAsset(
+        insertedCreditLimit,
+        collateralValue,
+        totalCreditValue.assets,
+      );
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
 
     this.queueService.publish<CreditLineCreatedPayload>(
       CREDIT_LINE_CREATED_TOPIC,
       {
         userId,
-        amount: totalCreditValue,
+        amount: totalCreditValue.creditLimit,
       },
     );
   }

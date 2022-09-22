@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CreditLimitAsset } from './credit_limit_asset.entity';
 
 @Entity({
   name: 'credit_limit',
@@ -29,6 +31,12 @@ export class CreditLimit {
 
   @Column('timestamp')
   calculatedAt: string;
+
+  @OneToMany(
+    (_type) => CreditLimitAsset,
+    (creditLimitAsset) => creditLimitAsset.creditLimit,
+  )
+  creditLimitAssets: CreditLimitAsset[];
 
   @CreateDateColumn({ select: false })
   createdAt: Date;

@@ -7,10 +7,13 @@ import { Collateral } from '../collateral.entity';
 import { CreditLimit } from '../credit_limit.entity';
 import { CollateralBalanceUpdateUtilService } from './collateral_balance_update.service';
 import { DatabaseErrorHandlingService } from './database_error_handling.service';
+import { CreditLimitAsset } from '../credit_limit_asset.entity';
 
 @Module({
   controllers: [],
-  imports: [TypeOrmModule.forFeature([Collateral, CreditLimit])],
+  imports: [
+    TypeOrmModule.forFeature([Collateral, CreditLimit, CreditLimitAsset]),
+  ],
   providers: [
     MathUtilService,
     CollateralValueUtilService,
