@@ -17,6 +17,7 @@
     "api-collateral-api-test-data": "libs/api/collateral-api/test-data",
     "api-collateral-api-user-vault-account": "libs/api/collateral-api/user-vault-account",
     "api-collateralization-api-constants": "libs/api/collateralization-api/constants",
+    "api-collateralization-api-data-transfer-objects": "libs/api/collateralization-api/data-transfer-objects",
     "api-collateralization-api-fireblocks": "libs/api/collateralization-api/fireblocks",
     "api-credit-api-collateral": "libs/api/credit-api/collateral",
     "api-credit-api-collateral-withdrawal": "libs/api/credit-api/collateral-withdrawal",
