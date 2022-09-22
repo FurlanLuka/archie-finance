@@ -309,7 +309,7 @@ describe('Credit limit service tests', () => {
       const creditLimitRecords: Partial<CreditLimit>[] = [
         ...new Array(8999),
       ].map((_, i) => ({
-        userId: Math.random().toString(),
+        userId: i.toString(),
         calculatedAt: new Date().toISOString(),
         creditLimit: 200,
         calculatedOnCollateralBalance: 400,
