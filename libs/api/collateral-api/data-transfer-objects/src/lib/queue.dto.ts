@@ -1,4 +1,5 @@
 import { TransactionStatus } from 'fireblocks-sdk';
+import { AssetType } from '@archie/api/collateral-api/asset-information';
 
 export class CollateralDepositedPayload {
   transactionId: string;
@@ -25,5 +26,14 @@ export class InternalCollateralTransactionCompletedPayload {
   transactionId: string;
   userId: string;
   fee: string;
+  asset: string;
+}
+
+export class InternalCollateralTransactionCreatedPayload {
+  userId: string;
+  id: string;
+  amount: string;
+  price: number;
+  network: AssetType;
   asset: string;
 }

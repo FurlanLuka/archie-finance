@@ -8,10 +8,9 @@ import {
   COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import {
-  CollateralWithdrawInitializedDto,
-  InternalCollateralTransactionCreatedPayload,
-} from '@archie/api/collateral-api/fireblocks';
-import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
+  CollateralDepositCompletedPayload,
+  CollateralWithdrawInitializedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 import {
   INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
   INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
@@ -26,6 +25,7 @@ import {
 import {
   CollateralWithdrawCompletedPayload,
   InternalCollateralTransactionCompletedPayload,
+  InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
 
 @Controller('v1/credit_limits')
@@ -55,7 +55,7 @@ export class CreditLimitQueueController {
     CreditLimitQueueController.CONTROLLER_QUEUE_NAME,
   )
   async collateralWithdrawInitializedHandler(
-    payload: CollateralWithdrawInitializedDto,
+    payload: CollateralWithdrawInitializedPayload,
   ): Promise<void> {
     return this.creditLimitService.handleCollateralWithdrawInitializedEvent(
       payload,

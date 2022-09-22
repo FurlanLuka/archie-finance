@@ -1,8 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  CollateralWithdrawInitializedDto,
-  InternalCollateralTransactionCreatedPayload,
-} from '@archie/api/collateral-api/fireblocks';
 import { Collateral } from './collateral.entity';
 import {
   DataSource,
@@ -16,11 +12,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CollateralBalanceUpdateUtilService } from './utils/collateral_balance_update.service';
 import { CreditLimitAdjustmentService } from './utils/credit_limit_adjustment.service';
 import { CollateralValue } from './utils/utils.interfaces';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { CollateralValueUtilService } from './utils/collateral_value.service';
 import { QueueService } from '@archie/api/utils/queue';
-import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import {
+  CollateralDepositCompletedPayload,
+  CollateralWithdrawInitializedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 import { AssetList } from '@archie/api/collateral-api/asset-information';
 import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
 import { DatabaseErrorHandlingService } from './utils/database_error_handling.service';
@@ -29,6 +28,7 @@ import { TransactionStatus } from './credit_limit.interfaces';
 import {
   CollateralWithdrawCompletedPayload,
   InternalCollateralTransactionCompletedPayload,
+  InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
 
 @Injectable()
@@ -49,7 +49,7 @@ export class CreditLimitService {
   ) {}
 
   public async handleCollateralWithdrawInitializedEvent(
-    transaction: CollateralWithdrawInitializedDto,
+    transaction: CollateralWithdrawInitializedPayload,
   ): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();

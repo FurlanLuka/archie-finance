@@ -1,5 +1,5 @@
 import { LtvCredit } from '../credit.entity';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 
 export interface CreditAssets {
   credit: LtvCredit;
