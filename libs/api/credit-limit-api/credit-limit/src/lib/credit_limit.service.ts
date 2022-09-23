@@ -30,7 +30,6 @@ import {
   CollateralWithdrawCompletedPayload,
   InternalCollateralTransactionCompletedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
-import { CreditLimit } from './credit_limit.entity';
 
 @Injectable()
 export class CreditLimitService {
