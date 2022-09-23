@@ -61,18 +61,14 @@ export class CreditLimitService {
         status: TransactionStatus.initiated,
       });
 
-      await this.collateralRepository
-        .decrement(
-          {
-            userId: transaction.userId,
-            asset: transaction.asset,
-          },
-          'amount',
-          transaction.withdrawalAmount,
-        )
-        .then((response: UpdateResult) => {
-          return response;
-        });
+      await this.collateralRepository.decrement(
+        {
+          userId: transaction.userId,
+          asset: transaction.asset,
+        },
+        'amount',
+        transaction.withdrawalAmount,
+      );
 
       await queryRunner.commitTransaction();
     } catch (e) {
