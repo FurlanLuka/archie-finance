@@ -91,8 +91,9 @@ export class CreditLimitAdjustmentService {
   private calculateCreditLimit(
     collateralValue: CollateralWithPrice[],
     assetList: AssetList,
+    userId: string,
   ): CalculatedCreditLimit {
-    return collateralValue.reduce(
+    const creditLimit = collateralValue.reduce(
       (sum: CalculatedCreditLimit, value: CollateralWithPrice) => {
         const assetInformation: AssetInformation | undefined =
           assetList[value.asset];
@@ -122,6 +123,60 @@ export class CreditLimitAdjustmentService {
         assets: [],
       },
     );
+
+    if (creditLimit.creditLimit > this.MAXIMUM_CREDIT) {
+      Logger.warn({
+        code: 'CREATE_CREDIT_MAXIMUM_COLLATERAL_VALUE_EXCEEDED',
+        metadata: {
+          userId,
+        },
+      });
+
+      // TODO: recalculate credit limit + asset credit limit
+      const sortedCreditAssetsByLimit: CreditAsset[] = creditLimit.assets
+        .slice()
+        .sort((a, b) => (a.limit >= b.limit ? -1 : 1));
+
+      sortedCreditAssetsByLimit.reduce(
+        (creditAssets: any, value: CreditAsset) => {
+          if (creditAssets.targetLimit === 0) {
+            return {
+              targetLimit: 0,
+              assets: [
+                ...creditAssets.assets,
+                {
+                  name: value.name,
+                  limit: 0,
+                },
+              ],
+            };
+          }
+
+          return {
+            targetLimit:
+              creditAssets.targetLimit > value.limit
+                ? creditAssets.targetLimit - value.limit
+                : 0,
+            assets: [
+              ...creditAssets.assets,
+              {
+                name: value.name,
+                limit:
+                  creditAssets.targetLimit > value.limit
+                    ? value.limit
+                    : creditAssets.targetLimit,
+              },
+            ],
+          };
+        },
+        {
+          targetLimit: this.MAXIMUM_CREDIT,
+          assets: [],
+        },
+      );
+    }
+
+    return creditLimit;
   }
 
   private async updateCreditLimitRecord(
