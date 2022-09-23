@@ -26,6 +26,7 @@ export async function startService(
   BigNumber.config({
     DECIMAL_PLACES: 18,
     ROUNDING_MODE: BigNumber.ROUND_DOWN,
+    EXPONENTIAL_AT: 19,
   });
 
   await Openapi.generate(app);
