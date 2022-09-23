@@ -59,7 +59,6 @@ describe('Credit limit service tests', () => {
 
     accessToken = generateUserAccessToken();
 
-    // Mock RPC request to return array of asset prices
     when(queueStub.request)
       .calledWith(GET_ASSET_PRICES_RPC)
       .mockResolvedValue(getAssetPricesResponseData);
@@ -343,7 +342,6 @@ describe('Credit limit service tests', () => {
           .calledWith(GET_ASSET_PRICES_RPC)
           .mockResolvedValue(getUpdatedAssetPricesResponseData);
 
-        // Reset mock so it doesnt contain call data from previous tests
         queueStub.publish.mockReset();
       });
 
@@ -370,8 +368,7 @@ describe('Credit limit service tests', () => {
         when(queueStub.request)
           .calledWith(GET_ASSET_PRICES_RPC)
           .mockResolvedValue(getUpdatedAssetPricesResponseData);
-
-        // Reset mock so it doesnt contain call data from previous tests
+  
         queueStub.publish.mockReset();
       });
 
@@ -425,8 +422,8 @@ describe('Credit limit service tests', () => {
     it('Should publish LTV_PERIODIC_CHECK_REQUESTED events for all users divided in chunks', async () => {
       const creditLimitRecords: Partial<CreditLimit>[] = [
         ...new Array(8999),
-      ].map(() => ({
-        userId: Math.random().toString(),
+      ].map((_, i) => ({
+        userId: i.toString(),
         calculatedAt: new Date().toISOString(),
         creditLimit: 200,
         calculatedOnCollateralBalance: 400,
