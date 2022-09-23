@@ -195,6 +195,11 @@ export class CollateralService {
           );
         }),
       );
+
+      await this.collateralRepository.delete({
+        userId: liquidationAssets.userId,
+        amount: '0',
+      });
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();

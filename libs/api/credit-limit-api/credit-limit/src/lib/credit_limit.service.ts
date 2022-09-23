@@ -30,6 +30,7 @@ import {
   CollateralWithdrawCompletedPayload,
   InternalCollateralTransactionCompletedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
+import { CreditLimit } from './credit_limit.entity';
 
 @Injectable()
 export class CreditLimitService {
@@ -61,14 +62,18 @@ export class CreditLimitService {
         status: TransactionStatus.initiated,
       });
 
-      await this.collateralRepository.decrement(
-        {
-          userId: transaction.userId,
-          asset: transaction.asset,
-        },
-        'amount',
-        transaction.withdrawalAmount,
-      );
+      await this.collateralRepository
+        .decrement(
+          {
+            userId: transaction.userId,
+            asset: transaction.asset,
+          },
+          'amount',
+          transaction.withdrawalAmount,
+        )
+        .then((response: UpdateResult) => {
+          return response;
+        });
 
       await queryRunner.commitTransaction();
     } catch (e) {
