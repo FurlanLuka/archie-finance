@@ -58,6 +58,9 @@
       "@archie/api/collateral-api/user-vault-account": [
         "libs/api/collateral-api/user-vault-account/src/index.ts"
       ],
+      "@archie/api/collateralization-api/assets": [
+        "libs/api/collateralization-api/assets/src/index.ts"
+      ],
       "@archie/api/collateralization-api/constants": [
         "libs/api/collateralization-api/constants/src/index.ts"
       ],

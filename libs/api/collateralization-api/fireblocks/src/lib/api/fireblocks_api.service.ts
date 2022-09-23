@@ -11,7 +11,7 @@ import { ConfigService } from '@archie/api/utils/config';
 import { CryptoService } from '@archie/api/utils/crypto';
 
 @Injectable()
-export class FireblocksService {
+export class FireblocksApiService {
   private fireblocksClient: FireblocksSDK;
 
   constructor(
