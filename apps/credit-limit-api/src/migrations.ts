@@ -1,4 +1,3 @@
-import { CreditLimitApi1663845215590 } from './migrations/CreditLimitApi1663845215590';
 import { MarginApi1662460918826 } from './migrations/MarginApi1662460918826';
 import { MarginApi1662563334470 } from './migrations/MarginApi1662563334470';
 import { MarginApi1662644141968 } from './migrations/MarginApi1662644141968';
@@ -7,7 +6,6 @@ import { MarginApi1663237150104 } from './migrations/MarginApi1663237150104';
 import { MarginApi1663337847779 } from './migrations/MarginApi1663337847779';
 
 export const migrations = [
-  CreditLimitApi1663845215590,
   MarginApi1662460918826,
   MarginApi1662563334470,
   MarginApi1662644141968,

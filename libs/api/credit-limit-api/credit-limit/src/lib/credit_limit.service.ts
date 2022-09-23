@@ -11,10 +11,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { CollateralBalanceUpdateUtilService } from './utils/collateral_balance_update.service';
 import { CreditLimitAdjustmentService } from './utils/credit_limit_adjustment.service';
-import {
-  CalculatedCreditLimit,
-  CollateralValue,
-} from './utils/utils.interfaces';
+import { CollateralValue, CreditLimitPerAsset } from './utils/utils.interfaces';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { CollateralValueUtilService } from './utils/collateral_value.service';
@@ -23,24 +20,25 @@ import {
   CollateralDepositCompletedPayload,
   CollateralWithdrawInitializedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
-import { AssetList } from '@archie/api/collateral-api/asset-information';
-import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
 import { DatabaseErrorHandlingService } from './utils/database_error_handling.service';
 import { CollateralTransaction } from './collateral_transactions.entity';
-import { TransactionStatus } from './credit_limit.interfaces';
+import { AssetLtvList, TransactionStatus } from './credit_limit.interfaces';
 import {
   CollateralWithdrawCompletedPayload,
   InternalCollateralTransactionCompletedPayload,
   InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
-import { CreditLimitAsset } from './credit_limit_asset.entity';
 import { CreditLimit } from './credit_limit.entity';
 import { CreditLineNotFound } from './credit_limit.errors';
 import { CreditLimitResponse } from '@archie/api/credit-limit-api/data-transfer-objects';
+import { CreditLimitCalculationUtilService } from './utils/credit_limit_calculation.service';
+import { ConfigService } from '@archie/api/utils/config';
+import { ConfigVariables } from '@archie/api/credit-limit-api/constants';
 
 @Injectable()
 export class CreditLimitService {
   NONE = 0;
+  assetList: AssetLtvList;
 
   constructor(
     @InjectRepository(Collateral)
@@ -55,7 +53,12 @@ export class CreditLimitService {
     private collateralValueUtilService: CollateralValueUtilService,
     private dataSource: DataSource,
     private databaseErrorHandlingService: DatabaseErrorHandlingService,
-  ) {}
+    private creditLimitCalculationUtilService: CreditLimitCalculationUtilService,
+    private configService: ConfigService,
+  ) {
+    this.assetList = configService.get(ConfigVariables.ASSET_LTV_LIST);
+    console.log(typeof this.assetList, 'asa');
+  }
 
   public async handleCollateralWithdrawInitializedEvent(
     transaction: CollateralWithdrawInitializedPayload,
@@ -241,9 +244,6 @@ export class CreditLimitService {
 
     const assetPrices: GetAssetPriceResponse[] =
       await this.queueService.request(GET_ASSET_PRICES_RPC);
-    const assetList: AssetList = await this.queueService.request(
-      GET_ASSET_INFORMATION_RPC,
-    );
 
     const collateralValue: CollateralValue =
       this.collateralValueUtilService.getCollateralValue(
@@ -251,43 +251,55 @@ export class CreditLimitService {
         assetPrices,
       );
 
-    const creditLimit: CalculatedCreditLimit =
+    const creditLimit: number =
       await this.creditLimitAdjustmentService.createInitialCredit(
         userId,
         collateralValue,
-        assetList,
+        this.assetList,
+      );
+
+    const creditLimitPerAssets: CreditLimitPerAsset[] =
+      this.creditLimitCalculationUtilService.calculateCreditLimitPerAsset(
+        creditLimit,
+        collateralValue.collateral,
+        this.assetList,
       );
 
     return {
-      limit: creditLimit.creditLimit,
-      assets: creditLimit.assets.map((asset) => ({
-        asset: asset.name,
-        limit: asset.limit,
-      })),
+      creditLimit,
+      assetLimits: creditLimitPerAssets,
     };
   }
 
   public async getCreditLine(userId: string): Promise<CreditLimitResponse> {
     const creditLimit: CreditLimit | null =
-      await this.creditLimitRepository.findOne({
-        where: {
-          userId,
-        },
-        relations: {
-          creditLimitAssets: true,
-        },
-      });
+      await this.creditLimitRepository.findOneBy({ userId });
 
     if (creditLimit === null) {
       throw new CreditLineNotFound();
     }
 
+    const collateral: Collateral[] = await this.collateralRepository.findBy({
+      userId,
+    });
+    const assetPrices: GetAssetPriceResponse[] =
+      await this.queueService.request(GET_ASSET_PRICES_RPC);
+    const collateralValue: CollateralValue =
+      this.collateralValueUtilService.getCollateralValue(
+        collateral,
+        assetPrices,
+      );
+
+    const creditLimitPerAssets: CreditLimitPerAsset[] =
+      this.creditLimitCalculationUtilService.calculateCreditLimitPerAsset(
+        creditLimit.creditLimit,
+        collateralValue.collateral,
+        this.assetList,
+      );
+
     return {
-      limit: creditLimit.creditLimit,
-      assets: creditLimit.creditLimitAssets.map((asset) => ({
-        asset: asset.asset,
-        limit: asset.limit,
-      })),
+      creditLimit: creditLimit.creditLimit,
+      assetLimits: creditLimitPerAssets,
     };
   }
 }

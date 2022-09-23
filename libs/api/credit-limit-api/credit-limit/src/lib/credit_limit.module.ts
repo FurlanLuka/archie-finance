@@ -10,17 +10,11 @@ import { Collateral } from './collateral.entity';
 import { CreditLimit } from './credit_limit.entity';
 import { PeriodicCheckModule } from './periodic_check/periodic_check.module';
 import { CollateralTransaction } from './collateral_transactions.entity';
-import { CreditLimitAsset } from './credit_limit_asset.entity';
 
 @Module({
   imports: [
     UtilsModule,
-    TypeOrmModule.forFeature([
-      Collateral,
-      CreditLimit,
-      CollateralTransaction,
-      CreditLimitAsset,
-    ]),
+    TypeOrmModule.forFeature([Collateral, CreditLimit, CollateralTransaction]),
     PeriodicCheckModule,
   ],
   controllers: [CreditLimitController, CreditLimitQueueController],

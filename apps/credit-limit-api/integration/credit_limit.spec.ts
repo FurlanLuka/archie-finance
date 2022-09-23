@@ -15,8 +15,6 @@ import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { getAssetPricesResponseDataFactory } from '@archie/api/asset-price-api/test-data';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
-import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
-import { assetListResponseData } from '@archie/api/collateral-api/test-data';
 import * as request from 'supertest';
 import {
   CreditLimit,
@@ -65,10 +63,6 @@ describe('Credit limit service tests', () => {
     when(queueStub.request)
       .calledWith(GET_ASSET_PRICES_RPC)
       .mockResolvedValue(getAssetPricesResponseData);
-    // Mock RPC request to return the asset list
-    when(queueStub.request)
-      .calledWith(GET_ASSET_INFORMATION_RPC)
-      .mockResolvedValue(assetListResponseData);
   };
 
   const cleanup = async (): Promise<void> =>
@@ -109,13 +103,15 @@ describe('Credit limit service tests', () => {
     afterAll(cleanup);
 
     const creditLimit = 2000;
+    const bitcoinMaxCreditLimit = 1 * bitcoinPrice * 0.5;
 
-    const expectedCreditLimit: CreditLimitResponse = {
-      limit: creditLimit,
-      assets: [
+    const expectedBTCCreditLimit: CreditLimitResponse = {
+      creditLimit: creditLimit,
+      assetLimits: [
         {
           asset: 'BTC',
           limit: creditLimit,
+          utilizationPercentage: (creditLimit / bitcoinMaxCreditLimit) * 100,
         },
       ],
     };
@@ -146,7 +142,7 @@ describe('Credit limit service tests', () => {
         },
       );
 
-      expect(response.body).toStrictEqual(expectedCreditLimit);
+      expect(response.body).toStrictEqual(expectedBTCCreditLimit);
     });
 
     it('should be able to fetch newly created credit limit', async () => {
@@ -155,7 +151,39 @@ describe('Credit limit service tests', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
-      expect(response.body).toStrictEqual(expectedCreditLimit);
+      expect(response.body).toStrictEqual(expectedBTCCreditLimit);
+    });
+
+    it('should increase users collateral to 1 ETH', async () => {
+      const collateralDepositCompletedPayload =
+        collateralDepositCompletedDataFactory({
+          amount: '1',
+          asset: 'ETH',
+          transactionId: 'transactionIdEth',
+        });
+
+      await app
+        .get(CreditLimitQueueController)
+        .collateralDepositCompletedHandler(collateralDepositCompletedPayload);
+    });
+
+    it('Credit limit should stay the same as before, as It is already overcollaterized', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/credit_limits')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toStrictEqual({
+        creditLimit: creditLimit,
+        assetLimits: [
+          ...expectedBTCCreditLimit.assetLimits,
+          {
+            asset: 'ETH',
+            limit: 0,
+            utilizationPercentage: 0,
+          },
+        ],
+      });
     });
   });
 
@@ -174,19 +202,22 @@ describe('Credit limit service tests', () => {
     const creditLimit = btcCreditLimit + solCreditLimit + ethCreditLimit;
 
     const expectedCreditLimit: CreditLimitResponse = {
-      limit: creditLimit,
-      assets: [
+      creditLimit,
+      assetLimits: [
         {
           asset: 'BTC',
           limit: btcCreditLimit,
-        },
-        {
-          asset: 'SOL',
-          limit: solCreditLimit,
+          utilizationPercentage: 100,
         },
         {
           asset: 'ETH',
           limit: ethCreditLimit,
+          utilizationPercentage: 100,
+        },
+        {
+          asset: 'SOL',
+          limit: solCreditLimit,
+          utilizationPercentage: 100,
         },
       ],
     };
@@ -368,11 +399,12 @@ describe('Credit limit service tests', () => {
           .expect(200);
 
         expect(response.body).toStrictEqual({
-          limit: finalCreditLineLimit,
-          assets: [
+          creditLimit: finalCreditLineLimit,
+          assetLimits: [
             {
               asset: 'ETH',
               limit: finalCreditLineLimit,
+              utilizationPercentage: 100,
             },
           ],
         });

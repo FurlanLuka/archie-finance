@@ -7,19 +7,18 @@ import { Collateral } from '../collateral.entity';
 import { CreditLimit } from '../credit_limit.entity';
 import { CollateralBalanceUpdateUtilService } from './collateral_balance_update.service';
 import { DatabaseErrorHandlingService } from './database_error_handling.service';
-import { CreditLimitAsset } from '../credit_limit_asset.entity';
+import { CreditLimitCalculationUtilService } from './credit_limit_calculation.service';
 
 @Module({
   controllers: [],
-  imports: [
-    TypeOrmModule.forFeature([Collateral, CreditLimit, CreditLimitAsset]),
-  ],
+  imports: [TypeOrmModule.forFeature([Collateral, CreditLimit])],
   providers: [
     MathUtilService,
     CollateralValueUtilService,
     CollateralBalanceUpdateUtilService,
     CreditLimitAdjustmentService,
     DatabaseErrorHandlingService,
+    CreditLimitCalculationUtilService,
   ],
   exports: [
     MathUtilService,
@@ -27,6 +26,7 @@ import { CreditLimitAsset } from '../credit_limit_asset.entity';
     CollateralBalanceUpdateUtilService,
     CreditLimitAdjustmentService,
     DatabaseErrorHandlingService,
+    CreditLimitCalculationUtilService,
   ],
 })
 export class UtilsModule {}
