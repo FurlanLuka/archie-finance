@@ -27,7 +27,7 @@ import {
 } from './payments.dto';
 import { Subscribe } from '@archie/api/utils/queue';
 import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
-import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { PeachWebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
 import {
   INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
@@ -86,7 +86,7 @@ export class PaymentsQueueController {
     PaymentsQueueController.CONTROLLER_QUEUE_NAME,
   )
   async peachWebhookPaymentConfirmedHandler(
-    payload: WebhookPaymentPayload,
+    payload: PeachWebhookPaymentPayload,
   ): Promise<void> {
     await this.paymentsService.handlePaymentConfirmedEvent(payload);
   }

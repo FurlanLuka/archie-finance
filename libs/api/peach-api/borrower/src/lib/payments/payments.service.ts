@@ -14,7 +14,7 @@ import {
   ScheduleTransactionDto,
 } from './payments.dto';
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
-import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { PeachWebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import {
   CreditBalanceUpdatedPayload,
   PaymentType,
@@ -87,7 +87,7 @@ export class PaymentsService {
   }
 
   public async handlePaymentConfirmedEvent(
-    payment: WebhookPaymentPayload,
+    payment: PeachWebhookPaymentPayload,
   ): Promise<void> {
     const credit: Credit = await this.peachApiService.getCreditBalance(
       payment.personId,

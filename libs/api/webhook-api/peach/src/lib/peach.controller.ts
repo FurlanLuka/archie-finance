@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { PeachWebhookService } from './peach.service';
-import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { PeachWebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 
 @Controller('internal/webhook/peach')
 export class PeachWebhookController {
@@ -50,7 +50,7 @@ export class PeachWebhookController {
   //       updatedAt: null,
   //       userId: 'UR-G2K6-VB45',
   //     }
-  public async paymentAppliedHandler(@Body() body: WebhookPaymentPayload) {
+  public async paymentAppliedHandler(@Body() body: PeachWebhookPaymentPayload) {
     await this.peachWebhookService.publishPaymentConfirmedEvent(body);
   }
 }
