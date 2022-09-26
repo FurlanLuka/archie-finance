@@ -39,6 +39,16 @@ export const KycScreenStyled = styled.div`
     }
   }
 
+  .income {
+    -moz-appearance: textfield;
+
+    ::-webkit-outer-spin-button,
+    ::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+
   .error {
     margin: 0.25rem 0;
   }

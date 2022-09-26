@@ -10,7 +10,6 @@ export const useCreateKyc = (): MutationQueryResponse<CreateKycPayload, CreateKy
 
   return useExtendedMutation<CreateKycResponse, CreateKycPayload>('kyc_record', createKyc, {
     onSuccess: () => {
-      console.log('successful!!');
       queryClient.invalidateQueries(ONBOARDING_RECORD_QUERY_KEY);
     },
   });

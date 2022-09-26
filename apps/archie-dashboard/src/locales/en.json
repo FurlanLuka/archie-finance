@@ -26,7 +26,8 @@
       "address": "Address",
       "apt_unit": "Apt/Unit",
       "phone_number": "Phone Number",
-      "ssn": "SSN/TIN"
+      "ssn": "SSN/TIN",
+      "income": "Income"
     },
     "placeholder": {
       "first_name": "First Name",
@@ -35,7 +36,8 @@
       "address": "Mailing address (no P.O. Boxes)",
       "apt_unit": "Apartment or unit number (optional)",
       "phone_number": "Phone number",
-      "ssn": "XXX-XX-XXXX"
+      "ssn": "XXX-XX-XXXX",
+      "income": "00.0"
     },
     "error": {
       "required_field": "This field is required",
@@ -49,7 +51,8 @@
       "should_be_under": "You must be under 122 years old",
       "cannot_be_future": "Date cannot be in the future",
       "phone_number_digits": "Invalid phone number",
-      "ssn_digits": "Invalid SSN/TIN"
+      "ssn_digits": "Invalid SSN/TIN",
+      "income_digits": "Please enter your annual income"
     }
   },
   "verify_phone_step": {

@@ -24,6 +24,7 @@ interface KycFormData {
   aptUnit: string;
   phoneNumber: string;
   ssn: string;
+  income: number;
 }
 
 export const KycScreen: FC = () => {
@@ -47,6 +48,7 @@ export const KycScreen: FC = () => {
       aptUnit: '',
       phoneNumber: '',
       ssn: '',
+      income: undefined,
     },
     resolver: yupResolver(KycSchema),
   });
@@ -64,6 +66,7 @@ export const KycScreen: FC = () => {
         phoneNumberCountryCode,
         phoneNumber: data.phoneNumber,
         ssn: data.ssn,
+        income: data.income,
       });
     }
   });
@@ -191,6 +194,20 @@ export const KycScreen: FC = () => {
             {errors.ssn?.message && (
               <BodyM className="error" color={theme.textDanger}>
                 {t(errors.ssn.message)}
+              </BodyM>
+            )}
+          </InputText>
+          <InputText>
+            {t('kyc_step.label.income')}
+            <input
+              type="number"
+              placeholder={t('kyc_step.placeholder.income')}
+              className="income"
+              {...register('income')}
+            />
+            {errors.income?.message && (
+              <BodyM className="error" color={theme.textDanger}>
+                {t(errors.income.message)}
               </BodyM>
             )}
           </InputText>

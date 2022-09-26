@@ -9,6 +9,7 @@ export interface Kyc {
   phoneNumber: string;
   phoneNumberCountryCode: string;
   ssnDigits: number;
+  income: number;
   createdAt: string;
 }
 

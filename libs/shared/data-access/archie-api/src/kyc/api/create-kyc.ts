@@ -14,6 +14,7 @@ export interface CreateKycPayload extends DefaultVariables {
   phoneNumberCountryCode: string;
   phoneNumber: string;
   ssn: string;
+  income: number;
 }
 
 export type CreateKycResponse = CreateKycPayload;
