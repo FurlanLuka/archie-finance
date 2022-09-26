@@ -103,7 +103,7 @@
       "create": "Issuing credit card...",
       "complete": "Your Archie Card is ready!"
     },
-    "subtitle": "You have submitted {{total_value}} worth of collateral and have a {{credit_value}} credit limit. Make sure <br /> your email is verified before continuing.",
+    "subtitle": "You have submitted ${{total_value}} worth of collateral and have a ${{credit_value}} credit limit. Make sure <br /> your email is verified before continuing.",
     "img_alt": "Your Archie Card is ready",
     "btn": "Go to my dashboard"
   },
