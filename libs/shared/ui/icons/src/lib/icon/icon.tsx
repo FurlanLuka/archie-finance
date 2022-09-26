@@ -9,6 +9,7 @@ export type IconName =
   | 'bitcoin'
   | 'calendar'
   | 'caret'
+  | 'chevron-right'
   | 'close'
   | 'copy'
   | 'credit-card'

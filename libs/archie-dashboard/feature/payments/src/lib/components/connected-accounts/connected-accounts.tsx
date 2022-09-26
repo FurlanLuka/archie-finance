@@ -9,6 +9,7 @@ import { Card, Skeleton, ButtonOutline, TitleS, BodyM } from '@archie-webapps/sh
 
 import { ConnectedAccount } from './blocks/connected-account';
 import { ConnectedAccountsStyled } from './connected-accounts.styled';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 export const ConnectedAccounts: FC = () => {
   const { t } = useTranslation();
@@ -18,7 +19,7 @@ export const ConnectedAccounts: FC = () => {
 
   if (getConnectedAccountsResponse.state === RequestState.LOADING) {
     return (
-      <Card minHeight="220px">
+      <Card minHeight="280px">
         <Skeleton />
       </Card>
     );
@@ -31,7 +32,11 @@ export const ConnectedAccounts: FC = () => {
   if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
     const getAccountsList = () => {
       if (getConnectedAccountsResponse.data.length === 0) {
-        return <BodyM>{t('dashboard_payment.connected_accounts.no_accounts')}</BodyM>;
+        return (
+          <BodyM color={theme.textSecondary} weight={500}>
+            {t('dashboard_payment.connected_accounts.no_accounts')}
+          </BodyM>
+        );
       }
 
       return getConnectedAccountsResponse.data.map((account) => (
@@ -41,7 +46,7 @@ export const ConnectedAccounts: FC = () => {
 
     return (
       <ConnectedAccountsStyled>
-        <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem">
+        <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem" minHeight="280px">
           <TitleS className="title">{t('dashboard_payment.connected_accounts.title')}</TitleS>
           <div className="account-list">{getAccountsList()}</div>
           <ButtonOutline small onClick={() => setConnectedAccountModalOpen(true)}>
