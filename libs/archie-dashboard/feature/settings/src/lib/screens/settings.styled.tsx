@@ -21,6 +21,14 @@ export const SettingsStyled = styled.div`
   }
 
   .title {
+    margin-bottom: 1.5rem;
+  }
+
+  .name {
     margin-bottom: 0.5rem;
+  }
+
+  .email {
+    letter-spacing: 0.02em;
   }
 `;

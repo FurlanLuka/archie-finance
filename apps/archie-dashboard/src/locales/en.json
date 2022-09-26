@@ -258,7 +258,25 @@
     "no_statements": "No statements"
   },
   "dashboard_settings": {
-    "title": ""
+    "title": "Settings",
+    "password": {
+      "title": "Reset Password"
+    },
+    "2fa": {
+      "title": "Change 2FA device"
+    },
+    "autopay": {
+      "title": "Autopay Settings",
+      "subtitle": "Autopay is currently {{autopay}}"
+    },
+    "support": {
+      "title": "Contact support",
+      "subtitle": "Need help? Chat with Archie support"
+    },
+    "whitelisted_addresses": {
+      "title": "Manage whitelisted wallet addresses",
+      "subtitle": "Manage addresses you can withdraw collateral to"
+    }
   },
   "payment_modal": {
     "credit_for": "ArchCredit for {{name}}",
@@ -310,5 +328,8 @@
       "email_note": "You will receive an email confirmation as soon as your payment has been processed.",
       "btn": "Pay with Paypal"
     }
+  },
+  "autopay_modal": {
+    "title": "Manage Autopay"
   }
 }
