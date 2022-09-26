@@ -41,7 +41,7 @@ export class KycService {
       kycRecord.phoneNumber,
       kycRecord.phoneNumberCountryCode,
       kycRecord.ssn,
-      kycRecord.declaredIncome,
+      kycRecord.income,
     ]);
 
     return {
@@ -57,7 +57,7 @@ export class KycService {
       phoneNumber: decryptedData[9],
       phoneNumberCountryCode: decryptedData[10],
       ssn: decryptedData[11],
-      declaredIncome: Number(decryptedData[12]),
+      income: Number(decryptedData[12]),
       createdAt: kycRecord.createdAt,
     };
   }
@@ -84,7 +84,7 @@ export class KycService {
       payload.phoneNumber,
       payload.phoneNumberCountryCode,
       payload.ssn,
-      String(payload.declaredIncome),
+      String(payload.income),
     ]);
 
     const kyc: Kyc = await this.kycRepository.save({
@@ -101,7 +101,7 @@ export class KycService {
       phoneNumber: encryptedData[9],
       phoneNumberCountryCode: encryptedData[10],
       ssn: encryptedData[11],
-      declaredIncome: encryptedData[12],
+      income: encryptedData[12],
     });
 
     this.queueService.publish<KycSubmittedPayload>(KYC_SUBMITTED_TOPIC, {
@@ -122,7 +122,7 @@ export class KycService {
       phoneNumber: payload.phoneNumber,
       phoneNumberCountryCode: payload.phoneNumberCountryCode,
       ssn: payload.ssn,
-      declaredIncome: payload.declaredIncome,
+      income: payload.income,
 
       createdAt: kyc.createdAt,
     };

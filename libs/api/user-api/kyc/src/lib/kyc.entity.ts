@@ -50,7 +50,7 @@ export class Kyc {
   ssn: string;
 
   @Column('varchar', { nullable: false })
-  declaredIncome: string;
+  income: string;
 
   @CreateDateColumn({ select: true })
   createdAt: Date;

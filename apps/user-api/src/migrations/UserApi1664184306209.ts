@@ -11,28 +11,28 @@ export class UserApi1664184306209 implements MigrationInterface {
 
     await queryRunner.query(`
         ALTER TABLE "kyc"
-            ADD "declaredIncome" character varying
+            ADD "income" character varying
         `);
 
     await queryRunner.manager.update(
       'kyc',
       {
-        declaredIncome: IsNull(),
+        income: IsNull(),
       },
       {
-        declaredIncome: cryptoService.encrypt('0'),
+        income: cryptoService.encrypt('0'),
       },
     );
 
     await queryRunner.query(`
             ALTER TABLE "kyc"
-            ALTER COLUMN "declaredIncome" SET NOT NULL 
+            ALTER COLUMN "income" SET NOT NULL 
         `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-            ALTER TABLE "kyc" DROP COLUMN "declaredIncome"
+            ALTER TABLE "kyc" DROP COLUMN "income"
         `);
   }
 }

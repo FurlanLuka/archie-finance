@@ -44,7 +44,7 @@ export class KycDto {
   ssn: string;
 
   @IsNumber()
-  declaredIncome: number;
+  income: number;
 }
 
 export class GetKycResponse {
@@ -60,7 +60,7 @@ export class GetKycResponse {
   phoneNumberCountryCode: string;
   phoneNumber: string;
   ssn: string;
-  declaredIncome: number;
+  income: number;
   createdAt: Date;
 }
 
