@@ -1,5 +1,5 @@
 import { Transform, Type } from 'class-transformer';
-import { Equals, IsString, Length, MaxDate } from 'class-validator';
+import { Equals, IsNumber, IsString, Length, MaxDate } from 'class-validator';
 import { DateTime } from 'luxon';
 
 export class KycDto {
@@ -42,6 +42,9 @@ export class KycDto {
   @IsString()
   @Length(9, 9)
   ssn: string;
+
+  @IsNumber()
+  declaredIncome: number;
 }
 
 export class GetKycResponse {
@@ -57,6 +60,7 @@ export class GetKycResponse {
   phoneNumberCountryCode: string;
   phoneNumber: string;
   ssn: string;
+  declaredIncome: number;
   createdAt: Date;
 }
 

@@ -49,6 +49,9 @@ export class Kyc {
   @Column('varchar', { nullable: false })
   ssn: string;
 
+  @Column('varchar', { nullable: false })
+  declaredIncome: string;
+
   @CreateDateColumn({ select: true })
   createdAt: Date;
 
