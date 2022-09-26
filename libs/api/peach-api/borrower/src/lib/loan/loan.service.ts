@@ -22,6 +22,7 @@ import { Credit, Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
 import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -181,22 +182,37 @@ export class PeachBorrowerService {
   public async handleCreditLimitUpdatedEvent(
     creditLimit: CreditLimitUpdatedPayload,
   ): Promise<void> {
-    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId: creditLimit.userId,
+    const borrower: Borrower | null = await this.borrowerRepository.findOne({
+      where: {
+        userId: creditLimit.userId,
+      },
+      relations: {
+        lastCreditLimitUpdate: true,
+      },
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
+    // TODO: Try to update - check if ok to update - based on borrower - if yes then lock resource and update db record + update credit limit, release
     // TODO: Remember the last update calculated at, as if the events don't come in order credit limit could be unintentionally changed - unlikely
-    await this.peachApiService.updateCreditLimit(
-      borrower.personId,
-      borrower.creditLineId,
-      creditLimit.creditLimit,
-    );
+
+    if (
+      borrower.lastCreditLimitUpdate === null ||
+      DateTime.fromISO(borrower.lastCreditLimitUpdate.calculatedAt) <=
+        DateTime.fromISO(creditLimit.calculatedAt)
+    )
+      // lock
+      await this.peachApiService.updateCreditLimit(
+        borrower.personId,
+        borrower.creditLineId,
+        creditLimit.creditLimit,
+      );
 
     const credit: Credit = await this.peachApiService.getCreditBalance(
       borrower.personId,
       borrower.creditLineId,
     );
+
+    // release
 
     this.queueService.publish<CreditBalanceUpdatedPayload>(
       CREDIT_BALANCE_UPDATED_TOPIC,

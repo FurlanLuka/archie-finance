@@ -8,11 +8,12 @@ import { CryptoModule } from '@archie/api/utils/crypto';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
 import { BorrowerUtil } from '../utils/utils.module';
+import { LastCreditLimitUpdate } from '../last_credit_limit_update.entity';
 
 @Module({
   controllers: [PeachBorrowerQueueController],
   imports: [
-    TypeOrmModule.forFeature([Borrower]),
+    TypeOrmModule.forFeature([Borrower, LastCreditLimitUpdate]),
     PeachApiModule,
     CryptoModule.register({
       imports: [ConfigModule],
