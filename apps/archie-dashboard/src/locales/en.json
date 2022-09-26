@@ -93,9 +93,9 @@
     },
     "terms": {
       "title": "Terms & Conditions",
-      "first": "You may spend up to <b>{{selected_collateral_asset}}%</b> of your line of credit.",
+      "first": "You may spend up to <b>75%</b> of the value of your digital assets. We strongly suggest you maintain a line of credit less than <b>{{loan_to_value}}%</b> of your {{asset}} collateral.",
       "second": "Your minimum payment is due monthly. You will receive an email reminder when your payment is due.",
-      "third": "You will be notified to pay down your balance or add collateral if <br /> your loan-to-value ratio exceeds {{selected_collateral_asset}}%."
+      "third": "You will be notified to pay down your balance or add collateral if your <br/> loan-to-value ratio exceeds 75%. You will be immediately partially liquidated if your loan-to-value ratio exceeds 90%."
     }
   },
   "card_step": {
