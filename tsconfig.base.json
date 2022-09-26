@@ -28,6 +28,12 @@
       "@archie/api/asset-price-api/constants": [
         "libs/api/asset-price-api/constants/src/index.ts"
       ],
+      "@archie/api/asset-price-api/data-transfer-objects": [
+        "libs/api/asset-price-api/data-transfer-objects/src/index.ts"
+      ],
+      "@archie/api/asset-price-api/test-data": [
+        "libs/api/asset-price-api/test-data/src/index.ts"
+      ],
       "@archie/api/collateral-api/asset-information": [
         "libs/api/collateral-api/asset-information/src/index.ts"
       ],
@@ -48,6 +54,9 @@
       ],
       "@archie/api/collateral-api/omnibus-vault-account": [
         "libs/api/collateral-api/omnibus-vault-account/src/index.ts"
+      ],
+      "@archie/api/collateral-api/test-data": [
+        "libs/api/collateral-api/test-data/src/index.ts"
       ],
       "@archie/api/collateral-api/user-vault-account": [
         "libs/api/collateral-api/user-vault-account/src/index.ts"

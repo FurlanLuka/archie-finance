@@ -1,8 +1,4 @@
 import { Injectable, Logger } from '@nestjs/common';
-import {
-  CollateralWithdrawInitializedDto,
-  InternalCollateralTransactionCreatedPayload,
-} from '@archie/api/collateral-api/fireblocks';
 import { Collateral } from './collateral.entity';
 import {
   DataSource,
@@ -15,41 +11,57 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { CollateralBalanceUpdateUtilService } from './utils/collateral_balance_update.service';
 import { CreditLimitAdjustmentService } from './utils/credit_limit_adjustment.service';
-import { CollateralValue } from './utils/utils.interfaces';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { CollateralValue, CreditLimitPerAsset } from './utils/utils.interfaces';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { CollateralValueUtilService } from './utils/collateral_value.service';
 import { QueueService } from '@archie/api/utils/queue';
-import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
-import { AssetList } from '@archie/api/collateral-api/asset-information';
-import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
+import {
+  CollateralDepositCompletedPayload,
+  CollateralWithdrawInitializedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 import { DatabaseErrorHandlingService } from './utils/database_error_handling.service';
 import { CollateralTransaction } from './collateral_transactions.entity';
-import { TransactionStatus } from './credit_limit.interfaces';
+import { AssetLtvList, TransactionStatus } from './credit_limit.interfaces';
 import {
   CollateralWithdrawCompletedPayload,
   InternalCollateralTransactionCompletedPayload,
+  InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
+import { CreditLimit } from './credit_limit.entity';
+import { CreditLineNotFound } from './credit_limit.errors';
+import { CreditLimitResponse } from '@archie/api/credit-limit-api/data-transfer-objects';
+import { CreditLimitCalculationUtilService } from './utils/credit_limit_calculation.service';
+import { ConfigService } from '@archie/api/utils/config';
+import { ConfigVariables } from '@archie/api/credit-limit-api/constants';
 
 @Injectable()
 export class CreditLimitService {
   NONE = 0;
+  assetList: AssetLtvList;
 
   constructor(
     @InjectRepository(Collateral)
     private collateralRepository: Repository<Collateral>,
     @InjectRepository(CollateralTransaction)
     private collateralTransactionRepository: Repository<CollateralTransaction>,
+    @InjectRepository(CreditLimit)
+    private creditLimitRepository: Repository<CreditLimit>,
     private collateralBalanceUpdateUtilService: CollateralBalanceUpdateUtilService,
     private creditLimitAdjustmentService: CreditLimitAdjustmentService,
     private queueService: QueueService,
     private collateralValueUtilService: CollateralValueUtilService,
     private dataSource: DataSource,
     private databaseErrorHandlingService: DatabaseErrorHandlingService,
-  ) {}
+    private creditLimitCalculationUtilService: CreditLimitCalculationUtilService,
+    private configService: ConfigService,
+  ) {
+    this.assetList = configService.get(ConfigVariables.ASSET_LTV_LIST);
+    console.log(typeof this.assetList, 'asa');
+  }
 
   public async handleCollateralWithdrawInitializedEvent(
-    transaction: CollateralWithdrawInitializedDto,
+    transaction: CollateralWithdrawInitializedPayload,
   ): Promise<void> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -225,16 +237,13 @@ export class CreditLimitService {
     }
   }
 
-  public async createCredit(userId: string): Promise<void> {
+  public async createCredit(userId: string): Promise<CreditLimitResponse> {
     const collateral: Collateral[] = await this.collateralRepository.findBy({
       userId,
     });
 
     const assetPrices: GetAssetPriceResponse[] =
       await this.queueService.request(GET_ASSET_PRICES_RPC);
-    const assetList: AssetList = await this.queueService.request(
-      GET_ASSET_INFORMATION_RPC,
-    );
 
     const collateralValue: CollateralValue =
       this.collateralValueUtilService.getCollateralValue(
@@ -242,10 +251,55 @@ export class CreditLimitService {
         assetPrices,
       );
 
-    return this.creditLimitAdjustmentService.createInitialCredit(
+    const creditLimit: number =
+      await this.creditLimitAdjustmentService.createInitialCredit(
+        userId,
+        collateralValue,
+        this.assetList,
+      );
+
+    const creditLimitPerAssets: CreditLimitPerAsset[] =
+      this.creditLimitCalculationUtilService.calculateCreditLimitPerAsset(
+        creditLimit,
+        collateralValue.collateral,
+        this.assetList,
+      );
+
+    return {
+      creditLimit,
+      assetLimits: creditLimitPerAssets,
+    };
+  }
+
+  public async getCreditLine(userId: string): Promise<CreditLimitResponse> {
+    const creditLimit: CreditLimit | null =
+      await this.creditLimitRepository.findOneBy({ userId });
+
+    if (creditLimit === null) {
+      throw new CreditLineNotFound();
+    }
+
+    const collateral: Collateral[] = await this.collateralRepository.findBy({
       userId,
-      collateralValue,
-      assetList,
-    );
+    });
+    const assetPrices: GetAssetPriceResponse[] =
+      await this.queueService.request(GET_ASSET_PRICES_RPC);
+    const collateralValue: CollateralValue =
+      this.collateralValueUtilService.getCollateralValue(
+        collateral,
+        assetPrices,
+      );
+
+    const creditLimitPerAssets: CreditLimitPerAsset[] =
+      this.creditLimitCalculationUtilService.calculateCreditLimitPerAsset(
+        creditLimit.creditLimit,
+        collateralValue.collateral,
+        this.assetList,
+      );
+
+    return {
+      creditLimit: creditLimit.creditLimit,
+      assetLimits: creditLimitPerAssets,
+    };
   }
 }

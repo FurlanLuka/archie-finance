@@ -78,6 +78,9 @@ jobs:
       PEACH_BORROWER_ROLE_ID: 'RL-G2K6-NLK4'
       PEACH_LOAN_ID: 'LT-GDB3-WEBO'
       API_BASE_URL: 'http://localhost'
+
+      # Credit limit api
+      ASSET_LTV_LIST: '{"BTC":{"ltv":"50"},"ETH":{"ltv":"50"},"SOL":{"ltv":"50"},"USDC":{"ltv":"70"}}'
     services:
       postgres:
         image: postgres:alpine
