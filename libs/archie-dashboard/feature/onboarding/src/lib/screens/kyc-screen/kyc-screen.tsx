@@ -202,6 +202,8 @@ export const KycScreen: FC = () => {
             <input
               type="number"
               placeholder={t('kyc_step.placeholder.income')}
+              // prevent value change on scroll
+              onWheel={(e) => e.currentTarget.blur()}
               className="income"
               {...register('income')}
             />
