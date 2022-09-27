@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
 import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { QueueService } from '@archie/api/utils/queue';
@@ -23,6 +23,7 @@ import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-tran
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { DateTime } from 'luxon';
+import { LastCreditLimitUpdate } from '../last_credit_limit_update.entity';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -30,6 +31,8 @@ export class PeachBorrowerService {
     private peachApiService: PeachApiService,
     @InjectRepository(Borrower)
     private borrowerRepository: Repository<Borrower>,
+    @InjectRepository(LastCreditLimitUpdate)
+    private lastCreditLimitUpdateRepository: Repository<LastCreditLimitUpdate>,
     private cryptoService: CryptoService,
     private queueService: QueueService,
     private borrowerValidation: BorrowerValidation,
@@ -199,20 +202,34 @@ export class PeachBorrowerService {
       borrower.lastCreditLimitUpdate === null ||
       DateTime.fromISO(borrower.lastCreditLimitUpdate.calculatedAt) <=
         DateTime.fromISO(creditLimit.calculatedAt)
-    )
+    ) {
       // lock
-      await this.peachApiService.updateCreditLimit(
-        borrower.personId,
-        borrower.creditLineId,
-        creditLimit.creditLimit,
-      );
+      const updatedResult: UpdateResult =
+        await this.lastCreditLimitUpdateRepository.update(
+          {
+            borrower: { uuid: borrower.uuid },
+            calculatedAt: LessThanOrEqual(creditLimit.calculatedAt),
+          },
+          {
+            calculatedAt: creditLimit.calculatedAt,
+          },
+        );
+
+      if (updatedResult.affected !== 0) {
+        await this.peachApiService.updateCreditLimit(
+          borrower.personId,
+          borrower.creditLineId,
+          creditLimit.creditLimit,
+        );
+      }
+
+      // release
+    }
 
     const credit: Credit = await this.peachApiService.getCreditBalance(
       borrower.personId,
       borrower.creditLineId,
     );
-
-    // release
 
     this.queueService.publish<CreditBalanceUpdatedPayload>(
       CREDIT_BALANCE_UPDATED_TOPIC,
