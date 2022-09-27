@@ -52,6 +52,9 @@ export class Kyc {
   @Column('varchar', { nullable: false })
   income: string;
 
+  @Column('varchar', { nullable: true })
+  aptUnit: string | null;
+
   @CreateDateColumn({ select: true })
   createdAt: Date;
 

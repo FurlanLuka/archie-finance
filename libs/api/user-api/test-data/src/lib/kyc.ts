@@ -18,6 +18,7 @@ export const kycSubmittedDataFactory = (
     phoneNumber: '+1343234567',
     phoneNumberCountryCode: 'US',
     ssn: '3324234234',
+    aptUnit: '6',
     ...override,
   };
 };
