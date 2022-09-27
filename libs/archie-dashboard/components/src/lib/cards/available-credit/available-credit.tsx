@@ -52,7 +52,7 @@ export const AvailableCredit: FC = () => {
                 {t('available_credit_card.title_1')}
               </BodyM>
               <TitleM weight={400} className="card-info border-active">
-                ${getFormattedValue(creditData.totalCredit - creditData.availableCredit)}
+                ${getFormattedValue(creditData.utilizationAmount)}
               </TitleM>
               <div className="btn-group">
                 <ButtonOutline

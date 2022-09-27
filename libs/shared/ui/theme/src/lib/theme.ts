@@ -82,6 +82,8 @@ export interface Theme {
   // tooltip
   tooltipBackground: string;
   tooltipText: string;
+  // nav-item
+  navItemActive: string,
   // loading screen
   loadingBackground: string;
   loadingBorder: string;
@@ -145,6 +147,8 @@ export const theme: Theme = {
   // tooltip
   tooltipBackground: colors.coral_500,
   tooltipText: colors.white,
+  // nav-item
+  navItemActive: colors.neutralgray_500,
   // loading screen
   loadingBackground: colors.teal_800,
   loadingBorder: colors.neutralgray_300,

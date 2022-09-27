@@ -17,11 +17,11 @@ export const dashboardNavItems: DashboardNavItem[] = [
     name: 'Collateral',
     path: '/collateral',
   },
-  {
-    icon: 'bitcoin-outline',
-    name: 'Rewards',
-    path: '/rewards',
-  },
+  // {
+  //   icon: 'bitcoin-outline',
+  //   name: 'Rewards',
+  //   path: '/rewards',
+  // },
   {
     icon: 'credit-card',
     name: 'Payment',

@@ -31,6 +31,18 @@ export const NavigationStyled = styled.div`
     cursor: pointer;
   }
 
+  .nav-item[aria-current] p {
+    color: ${({ theme }) => theme.navItemActive};
+  }
+
+  .nav-item[aria-current] svg path {
+    fill: ${({ theme }) => theme.navItemActive};
+  }
+
+  .nav-item[aria-current] svg circle {
+    stroke: ${({ theme }) => theme.navItemActive};
+  }
+
   .nav-item-title {
     padding-bottom: 0.2rem;
 

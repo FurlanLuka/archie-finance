@@ -1,3 +1,4 @@
+export * from './lib/alerts/margin-call/margin-call';
 export * from './lib/cards/archie-card/archie-card'
 export * from './lib/cards/available-credit/available-credit'
 export * from './lib/cards/collateral-value/collateral-value'
