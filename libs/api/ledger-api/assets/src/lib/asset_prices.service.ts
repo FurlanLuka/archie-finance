@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import {
-  AssetList,
-  GetAssetPriceResponse,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AssetPrices } from './asset_prices.entity';
 import { Repository } from 'typeorm';
 import { CoingeckoAssetInformationResponse } from './api/coingecko.interfaces';
 import { CoingeckoApiService } from './api/coingecko.service';
 import { AssetsService } from './assets.service';
+import { AssetList } from './assets.interfaces';
+import { AssetPrice } from './asset_prices.interfaces';
+import { AssetNotFoundError } from './asset_prices.errors';
 
 @Injectable()
 export class AssetPricesService {
@@ -49,7 +48,7 @@ export class AssetPricesService {
       }
 
       assetPrices.push({
-        asset: assetId,
+        assetId,
         price: coingeckoAsset.usd,
         currency: 'USD',
         dailyChange: coingeckoAsset.usd_24h_change,
@@ -59,12 +58,34 @@ export class AssetPricesService {
     await this.assetPriceRepository.save(assetPrices);
   }
 
-  public async getLatestAssetPrices(): Promise<GetAssetPriceResponse[]> {
+  public async getLatestAssetPrices(): Promise<AssetPrice[]> {
     const assetPrices: AssetPrices[] = await this.assetPriceRepository.find();
 
     return assetPrices.map(
       ({ createdAt: _createdAt, updatedAt: _updatedAt, ...assetPriceRecord }) =>
         assetPriceRecord,
     );
+  }
+
+  public async getLatestAssetPrice(
+    assetId: string,
+  ): Promise<AssetPrice> {
+    const assetPrice: AssetPrices | null =
+      await this.assetPriceRepository.findOneBy({
+        assetId,
+      });
+
+    if (assetPrice === null) {
+      throw new AssetNotFoundError({
+        assetId,
+      });
+    }
+
+    return {
+      assetId,
+      currency: assetPrice.currency,
+      dailyChange: assetPrice.dailyChange,
+      price: assetPrice.price,
+    };
   }
 }

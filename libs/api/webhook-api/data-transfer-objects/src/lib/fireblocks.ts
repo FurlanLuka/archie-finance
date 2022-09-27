@@ -13,6 +13,7 @@ export interface FireblocksDepositTransactionPayload {
 
 export interface FireblocksWithdrawTransactionPayload {
   transactionId: string;
+  internalTransactionId?: string;
   assetId: string;
   sourceVaultId: string;
   destinationAddress: string;

@@ -1,14 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { VaultAccountResponse } from 'fireblocks-sdk';
+import {
+  CreateTransactionResponse,
+  VaultAccountResponse,
+} from 'fireblocks-sdk';
 import { Repository } from 'typeorm';
 import { VaultAccount } from './vault_account.entity';
 import { DepositAddress } from './deposit_address.entity';
-import { AssetsService } from '@archie/api/fireblocks-api/assets';
 import {
   AssetInformation,
-  GetDepositAddressResponse,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
+  AssetsService,
+} from '@archie/api/fireblocks-api/assets';
+import { GetDepositAddressResponse } from '@archie/api/fireblocks-api/data-transfer-objects';
 import {
   DepositAddressNotFoundError,
   UnknownAssetError,
@@ -145,5 +148,21 @@ export class VaultAccountService {
     }
 
     return vaultAccount;
+  }
+
+  public async createWithdrawalTransaction(
+    vaultAccountId: string,
+    assetId: string,
+    amount: string,
+    destinationAddress: string,
+    internalTransactionId: string,
+  ): Promise<CreateTransactionResponse> {
+    return this.fireblocksApiService.createOutboundTransaction(
+      assetId,
+      amount,
+      destinationAddress,
+      internalTransactionId,
+      vaultAccountId,
+    );
   }
 }

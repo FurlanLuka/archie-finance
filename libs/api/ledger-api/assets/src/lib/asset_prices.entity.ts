@@ -11,7 +11,7 @@ import {
 })
 export class AssetPrices {
   @PrimaryColumn('varchar')
-  asset: string;
+  assetId: string;
 
   @Column('float')
   price: number;

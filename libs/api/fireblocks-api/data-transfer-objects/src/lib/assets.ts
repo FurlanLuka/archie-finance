@@ -17,10 +17,3 @@ export class AssetInformation {
 export class AssetList {
   [key: string]: Omit<AssetInformation, 'id'>;
 }
-
-export class GetAssetPriceResponse {
-  asset: string;
-  price: number;
-  dailyChange: number;
-  currency: string;
-}

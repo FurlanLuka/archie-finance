@@ -58,21 +58,6 @@
       "@archie/api/collateral-api/user-vault-account": [
         "libs/api/collateral-api/user-vault-account/src/index.ts"
       ],
-      "@archie/api/fireblocks-api/assets": [
-        "libs/api/fireblocks-api/assets/src/index.ts"
-      ],
-      "@archie/api/fireblocks-api/constants": [
-        "libs/api/fireblocks-api/constants/src/index.ts"
-      ],
-      "@archie/api/fireblocks-api/data-transfer-objects": [
-        "libs/api/fireblocks-api/data-transfer-objects/src/index.ts"
-      ],
-      "@archie/api/fireblocks-api/fireblocks": [
-        "libs/api/fireblocks-api/fireblocks/src/index.ts"
-      ],
-      "@archie/api/fireblocks-api/ledger": [
-        "libs/api/fireblocks-api/ledger/src/index.ts"
-      ],
       "@archie/api/credit-api/collateral": [
         "libs/api/credit-api/collateral/src/index.ts"
       ],
@@ -103,6 +88,33 @@
       ],
       "@archie/api/credit-limit-api/test-data": [
         "libs/api/credit-limit-api/test-data/src/index.ts"
+      ],
+      "@archie/api/fireblocks-api/assets": [
+        "libs/api/fireblocks-api/assets/src/index.ts"
+      ],
+      "@archie/api/fireblocks-api/constants": [
+        "libs/api/fireblocks-api/constants/src/index.ts"
+      ],
+      "@archie/api/fireblocks-api/data-transfer-objects": [
+        "libs/api/fireblocks-api/data-transfer-objects/src/index.ts"
+      ],
+      "@archie/api/fireblocks-api/fireblocks": [
+        "libs/api/fireblocks-api/fireblocks/src/index.ts"
+      ],
+      "@archie/api/fireblocks-api/ledger": [
+        "libs/api/fireblocks-api/ledger/src/index.ts"
+      ],
+      "@archie/api/ledger-api/assets": [
+        "libs/api/ledger-api/assets/src/index.ts"
+      ],
+      "@archie/api/ledger-api/constants": [
+        "libs/api/ledger-api/constants/src/index.ts"
+      ],
+      "@archie/api/ledger-api/data-transfer-objects": [
+        "libs/api/ledger-api/data-transfer-objects/src/index.ts"
+      ],
+      "@archie/api/ledger-api/ledger": [
+        "libs/api/ledger-api/ledger/src/index.ts"
       ],
       "@archie/api/ltv-api/constants": [
         "libs/api/ltv-api/constants/src/index.ts"

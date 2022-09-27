@@ -1,4 +1,4 @@
-export interface CollateralDepositCompletedPayload {
+export interface CollateralDepositTransactionCompletedPayload {
   userId: string;
   assetId: string;
   amount: string;

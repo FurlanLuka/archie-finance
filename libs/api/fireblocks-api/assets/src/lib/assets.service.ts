@@ -1,10 +1,7 @@
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { Injectable } from '@nestjs/common';
-import {
-  AssetList,
-  AssetInformation,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
+import { AssetInformation, AssetList } from './assets.interfaces';
 
 @Injectable()
 export class AssetsService {

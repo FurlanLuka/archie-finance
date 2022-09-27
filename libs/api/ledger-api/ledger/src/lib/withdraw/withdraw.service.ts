@@ -1,0 +1,286 @@
+import { Injectable, Logger } from '@nestjs/common';
+import { QueueService } from '@archie/api/utils/queue';
+import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects';
+import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
+import { LedgerService } from '../ledger/ledger.service';
+import { BigNumber } from 'bignumber.js';
+import {
+  Ledger,
+  InternalLedgerAccountData,
+} from '@archie/api/ledger-api/data-transfer-objects';
+import {
+  GetMaxWithdrawalAmount,
+} from '@archie/api/ledger-api/data-transfer-objects';
+import {
+  InvalidWithdrawalAmountError,
+  WithdrawalAmountTooHighError,
+} from './withdraw.errors';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Withdrawal, WithdrawalStatus } from './withdrawal.entity';
+import { Repository } from 'typeorm';
+import {
+  CollateralWithdrawalTransactionErrorPayload,
+  CollateralWithdrawalTransactionSubmittedPayload,
+  CollateralWithdrawalTransactionUpdatedPayload,
+  CollateralWithdrawalTransactionUpdatedStatus,
+  InitiateCollateralWithdrawalCommandPayload,
+} from '@archie/api/fireblocks-api/data-transfer-objects';
+import { INITIATE_COLLATERAL_WITHDRAWAL_COMMAND } from '@archie/api/fireblocks-api/constants';
+import { v4 } from 'uuid';
+
+@Injectable()
+export class WithdrawService {
+  constructor(
+    private ledgerService: LedgerService,
+    private queueService: QueueService,
+    @InjectRepository(Withdrawal)
+    private withdrawalRepository: Repository<Withdrawal>,
+  ) {}
+
+  static MIN_LTV = 0.3;
+
+  public async getMaxWithdrawalAmount(
+    userId: string,
+    assetId: string,
+  ): Promise<GetMaxWithdrawalAmount> {
+    const ledger: Ledger = await this.ledgerService.getLedger(userId);
+
+    const ledgerAccount: InternalLedgerAccountData | undefined =
+      ledger.accounts.find((account) => account.assetId === assetId);
+
+    if (ledgerAccount === undefined) {
+      return {
+        maxAmount: BigNumber(0).toString(),
+      };
+    }
+
+    const loanBalances: GetLoanBalancesResponse =
+      await this.queueService.request(GET_LOAN_BALANCES_RPC, {
+        userId,
+      });
+
+    if (loanBalances.utilizationAmount === 0) {
+      return {
+        maxAmount: ledgerAccount.assetAmount,
+      };
+    }
+
+    const amountRequiredForMinimumLtv = BigNumber(
+      loanBalances.utilizationAmount,
+    ).dividedBy(WithdrawService.MIN_LTV);
+
+    const maxWithdrawableAmount = BigNumber.max(
+      BigNumber(ledger.value).minus(amountRequiredForMinimumLtv),
+      0,
+    );
+
+    return {
+      maxAmount: BigNumber.min(
+        maxWithdrawableAmount,
+        ledgerAccount.accountValue,
+      )
+        .dividedBy(ledgerAccount.assetPrice)
+        .toString(),
+    };
+  }
+
+  public async withdraw(
+    userId: string,
+    assetId: string,
+    amount: string,
+    destinationAddress: string,
+  ): Promise<void> {
+    const withdrawalAmount = BigNumber(amount);
+
+    if (withdrawalAmount.lte(0)) {
+      throw new InvalidWithdrawalAmountError({
+        userId,
+        assetId,
+        amount,
+      });
+    }
+
+    const maxWithdrawalAmount: GetMaxWithdrawalAmount =
+      await this.getMaxWithdrawalAmount(userId, assetId);
+
+    if (withdrawalAmount.gt(BigNumber(maxWithdrawalAmount.maxAmount))) {
+      throw new WithdrawalAmountTooHighError({
+        userId,
+        assetId,
+        amount,
+      });
+    }
+
+    await this.ledgerService.decrementLedgerAccount(
+      userId,
+      assetId,
+      amount,
+      'Withdrawal decrement',
+    );
+
+    const internalTransactionId: string = v4();
+
+    await this.withdrawalRepository.save({
+      userId,
+      assetId,
+      internalTransactionId,
+      amount,
+      status: WithdrawalStatus.INITIATED,
+    });
+
+    this.queueService.publish<InitiateCollateralWithdrawalCommandPayload>(
+      INITIATE_COLLATERAL_WITHDRAWAL_COMMAND,
+      {
+        userId,
+        assetId,
+        amount,
+        internalTransactionId,
+        destinationAddress,
+      },
+    );
+  }
+
+  public async withdrawalTransactionSubmittedHandler({
+    internalTransactionId,
+    transactionId,
+    userId,
+  }: CollateralWithdrawalTransactionSubmittedPayload): Promise<void> {
+    const withdrawalRecord: Withdrawal | null =
+      await this.withdrawalRepository.findOneBy({
+        internalTransactionId,
+      });
+
+    if (withdrawalRecord === null) {
+      Logger.error({
+        code: 'WITHDRAWAL_RECORD_NOT_FOUND',
+        metadata: {
+          handler: 'submitted',
+          transactionId,
+          internalTransactionId,
+          userId,
+        },
+      });
+
+      return;
+    }
+
+    await this.withdrawalRepository.update(
+      {
+        internalTransactionId,
+      },
+      {
+        externalTransactionId: transactionId,
+        status: WithdrawalStatus.SUBMITTED,
+      },
+    );
+  }
+
+  public async withdrawalTransactionUpdatedHandler({
+    userId,
+    internalTransactionId,
+    transactionId,
+    status,
+    assetId,
+    networkFee,
+  }: CollateralWithdrawalTransactionUpdatedPayload): Promise<void> {
+    const withdrawalRecord: Withdrawal | null =
+      await this.withdrawalRepository.findOne({
+        where: [
+          { externalTransactionId: transactionId },
+          {
+            internalTransactionId,
+          },
+        ],
+      });
+
+    if (withdrawalRecord === null) {
+      Logger.error({
+        code: 'WITHDRAWAL_RECORD_NOT_FOUND',
+        metadata: {
+          handler: 'updated',
+          status,
+          transactionId,
+          internalTransactionId,
+          userId,
+        },
+      });
+
+      return;
+    }
+
+    if (status === CollateralWithdrawalTransactionUpdatedStatus.COMPLETED) {
+      if (withdrawalRecord.status === WithdrawalStatus.FEE_REDUCED) {
+        await this.withdrawalRepository.update(
+          {
+            internalTransactionId,
+          },
+          {
+            externalTransactionId: transactionId,
+            status: WithdrawalStatus.COMPLETED,
+          },
+        );
+      }
+    } else {
+      if (withdrawalRecord.status === WithdrawalStatus.SUBMITTED) {
+        await this.ledgerService.decrementLedgerAccount(
+          userId,
+          assetId,
+          networkFee,
+          'Network fee decrement',
+        );
+
+        await this.withdrawalRepository.update(
+          {
+            internalTransactionId,
+          },
+          {
+            externalTransactionId: transactionId,
+            status: WithdrawalStatus.FEE_REDUCED,
+            networkFee,
+          },
+        );
+      }
+    }
+  }
+
+  public async withdrawalTransactionErrorHandler({
+    internalTransactionId,
+    transactionId,
+    userId,
+    assetId,
+  }: CollateralWithdrawalTransactionErrorPayload): Promise<void> {
+    const withdrawalRecord: Withdrawal | null =
+      await this.withdrawalRepository.findOne({
+        where: [
+          { externalTransactionId: transactionId },
+          {
+            internalTransactionId,
+          },
+        ],
+      });
+
+    if (withdrawalRecord === null) {
+      Logger.error({
+        code: 'WITHDRAWAL_RECORD_NOT_FOUND',
+        metadata: {
+          handler: 'error',
+          transactionId,
+          internalTransactionId,
+          userId,
+        },
+      });
+
+      return;
+    }
+
+    const withdrawalAmount = BigNumber(withdrawalRecord.amount);
+    const networkFee = BigNumber(withdrawalRecord.networkFee ?? 0);
+
+    await this.ledgerService.incrementLedgerAccount(
+      userId,
+      assetId,
+      withdrawalAmount.plus(networkFee).toString(),
+      'Transaction failed increment',
+    );
+  }
+}

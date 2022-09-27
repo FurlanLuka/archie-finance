@@ -59,6 +59,7 @@ export class FireblocksWebhookService {
         WEBHOOK_FIREBLOCKS_WITHDRAWAL_TRANSACTION_TOPIC,
         {
           transactionId: payload.data.id,
+          internalTransactionId: payload.data.externalTxId,
           assetId: payload.data.assetId,
           sourceVaultId: payload.data.source.id,
           destinationAddress: payload.data.destinationAddress,

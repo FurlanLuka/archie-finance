@@ -16,9 +16,17 @@ export enum ConfigVariables {
   QUEUE_URL = 'QUEUE_URL',
 }
 
-export const COLLATERAL_WITHDRAWAL_COMPLETED_TOPIC =
-  'collateral.withdrawal.completed';
-export const COLLATERAL_DEPOSIT_COMPLETED_TOPIC =
+export const COLLATERAL_WITHDRAWAL_TRANSACTION_SUBMITTED_TOPIC =
+  'collateral.withdrawal.submitted';
+export const COLLATERAL_WITHDRAWAL_TRANSACTION_UPDATED_TOPIC =
+  'collateral.withdrawal.updated';
+export const COLLATERAL_WITHDRAWAL_TRANSACTION_ERROR_TOPIC =
+  'collateral.withdrawal.error';
+
+export const COLLATERAL_DEPOSIT_TRANSACTION_COMPLETED_TOPIC =
   'collateral.deposit.completed';
 export const COLLATERAL_LIQUIDATION_COMPLETED_TOPIC =
   'collateral.liquidation.completed';
+
+export const INITIATE_COLLATERAL_WITHDRAWAL_COMMAND =
+  'initiate.collateral.withdrawal';

@@ -1,19 +1,32 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { FireblocksWithdrawTransactionPayload } from '@archie/api/webhook-api/data-transfer-objects';
-import { TransactionStatus } from 'fireblocks-sdk';
-import { AssetsService } from '@archie/api/fireblocks-api/assets';
+import {
+  CreateTransactionResponse,
+  TransactionStatus,
+  VaultAccountResponse,
+} from 'fireblocks-sdk';
+import {
+  AssetInformation,
+  AssetsService,
+} from '@archie/api/fireblocks-api/assets';
 import { VaultAccountService } from '../vault-account/vault_account.service';
 import { VaultAccount } from '../vault-account/vault_account.entity';
 import {
-  AssetInformation,
-  CollateralWithdrawalCompletedPayload,
+  CollateralWithdrawalTransactionErrorPayload,
+  CollateralWithdrawalTransactionUpdatedStatus,
+  CollateralWithdrawalTransactionSubmittedPayload,
+  CollateralWithdrawalTransactionUpdatedPayload,
+  InitiateCollateralWithdrawalCommandPayload,
 } from '@archie/api/fireblocks-api/data-transfer-objects';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Withdraw } from './withdraw.entity';
 import { Repository } from 'typeorm';
 import { QueueService } from '@archie/api/utils/queue';
-import { COLLATERAL_WITHDRAWAL_COMPLETED_TOPIC } from '@archie/api/fireblocks-api/constants';
-import { BigNumber } from 'bignumber.js';
+import {
+  COLLATERAL_WITHDRAWAL_TRANSACTION_ERROR_TOPIC,
+  COLLATERAL_WITHDRAWAL_TRANSACTION_SUBMITTED_TOPIC,
+  COLLATERAL_WITHDRAWAL_TRANSACTION_UPDATED_TOPIC,
+} from '@archie/api/fireblocks-api/constants';
 
 @Injectable()
 export class WithdrawService {
@@ -25,10 +38,54 @@ export class WithdrawService {
     private withdrawRepository: Repository<Withdraw>,
   ) {}
 
+  public async initiateCollateralWithdrawalCommandHandler({
+    userId,
+    assetId,
+    amount,
+    internalTransactionId,
+    destinationAddress,
+  }: InitiateCollateralWithdrawalCommandPayload): Promise<void> {
+    try {
+      const vaultAccount: VaultAccountResponse =
+        await this.vaultAccountService.getOrCreateVaultAccount(userId);
+
+      const createTransactioResponse: CreateTransactionResponse =
+        await this.vaultAccountService.createWithdrawalTransaction(
+          vaultAccount.id,
+          assetId,
+          amount,
+          destinationAddress,
+          internalTransactionId,
+        );
+
+      this.queueService.publish<CollateralWithdrawalTransactionSubmittedPayload>(
+        COLLATERAL_WITHDRAWAL_TRANSACTION_SUBMITTED_TOPIC,
+        {
+          userId,
+          assetId,
+          amount,
+          internalTransactionId,
+          transactionId: createTransactioResponse.id,
+        },
+      );
+    } catch (error) {
+      this.queueService.publish<CollateralWithdrawalTransactionErrorPayload>(
+        COLLATERAL_WITHDRAWAL_TRANSACTION_ERROR_TOPIC,
+        {
+          userId,
+          assetId,
+          amount,
+          internalTransactionId,
+        },
+      );
+    }
+  }
+
   public async withdrawalTransactionHandler({
     status,
     sourceVaultId,
     destinationAddress,
+    internalTransactionId,
     assetId,
     transactionId,
     netAmount,
@@ -63,14 +120,45 @@ export class WithdrawService {
     });
 
     if (status === TransactionStatus.COMPLETED) {
-      this.queueService.publish<CollateralWithdrawalCompletedPayload>(
-        COLLATERAL_WITHDRAWAL_COMPLETED_TOPIC,
+      this.queueService.publish<CollateralWithdrawalTransactionUpdatedPayload>(
+        COLLATERAL_WITHDRAWAL_TRANSACTION_UPDATED_TOPIC,
         {
           userId: vaultAccount.userId,
           assetId: assetInformation.id,
-          amount: BigNumber(netAmount.toString())
-            .plus(networkFee.toString())
-            .toString(),
+          amount: netAmount.toString(),
+          networkFee: networkFee.toString(),
+          transactionId,
+          internalTransactionId,
+          status: CollateralWithdrawalTransactionUpdatedStatus.COMPLETED,
+        },
+      );
+    } else if (status === TransactionStatus.BROADCASTING) {
+      this.queueService.publish<CollateralWithdrawalTransactionUpdatedPayload>(
+        COLLATERAL_WITHDRAWAL_TRANSACTION_UPDATED_TOPIC,
+        {
+          userId: vaultAccount.userId,
+          assetId: assetInformation.id,
+          amount: netAmount.toString(),
+          networkFee: networkFee.toString(),
+          internalTransactionId,
+          transactionId,
+          status: CollateralWithdrawalTransactionUpdatedStatus.IN_PROGRESS,
+        },
+      );
+    } else if (
+      status === TransactionStatus.BLOCKED ||
+      status === TransactionStatus.CANCELLED ||
+      status === TransactionStatus.REJECTED ||
+      status === TransactionStatus.FAILED
+    ) {
+      this.queueService.publish<CollateralWithdrawalTransactionErrorPayload>(
+        COLLATERAL_WITHDRAWAL_TRANSACTION_ERROR_TOPIC,
+        {
+          userId: vaultAccount.userId,
+          assetId: assetInformation.id,
+          amount: netAmount.toString(),
+          internalTransactionId,
+          transactionId,
         },
       );
     }

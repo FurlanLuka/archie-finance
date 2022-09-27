@@ -218,6 +218,7 @@ export class CollateralWithdrawalService {
     const maxAmountForMaxLtv = BigNumber(credit.utilizationAmount).dividedBy(
       MAX_LTV,
     );
+
     const maxAvailableAmount = BigNumber.max(
       BigNumber(totalCollateralValue).minus(maxAmountForMaxLtv),
       0,

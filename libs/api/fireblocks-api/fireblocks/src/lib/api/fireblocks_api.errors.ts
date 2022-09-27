@@ -26,3 +26,12 @@ export class CreateVaultAssetError extends InternalServerErrorException {
     this.metadata = metadata;
   }
 }
+
+export class CreateTransactionError extends InternalServerErrorException {
+  metadata: object;
+
+  constructor(metadata: object) {
+    super('CREATE_TRANSACTION_ERROR');
+    this.metadata = metadata;
+  }
+}

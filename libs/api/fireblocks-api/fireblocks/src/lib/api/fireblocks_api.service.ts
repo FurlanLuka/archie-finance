@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import {
+  CreateTransactionResponse,
   FireblocksSDK,
   GenerateAddressResponse,
+  PeerType,
   VaultAccountResponse,
   VaultAssetResponse,
 } from 'fireblocks-sdk';
@@ -9,6 +11,7 @@ import { ConfigVariables } from '@archie/api/collateral-api/constants';
 import { ConfigService } from '@archie/api/utils/config';
 import { CryptoService } from '@archie/api/utils/crypto';
 import {
+  CreateTransactionError,
   CreateVaultAccountError,
   CreateVaultAssetError,
   GenerateDepositAddressError,
@@ -36,7 +39,7 @@ export class FireblocksApiService {
     userId: string,
   ): Promise<GenerateAddressResponse> {
     const hashedUserId: string = this.cryptoService.sha256(userId);
-this.fireblocksClient.createInternalWallet
+
     try {
       return await this.fireblocksClient.generateNewAddress(
         vaultAccountId,
@@ -91,6 +94,51 @@ this.fireblocksClient.createInternalWallet
       throw new CreateVaultAssetError({
         vaultAccountId,
         asset,
+      });
+    }
+  }
+
+  public async createOutboundTransaction(
+    assetId: string,
+    amount: string,
+    destinationAddress: string,
+    internalTransactionId: string,
+    vaultAccountId: string,
+  ): Promise<CreateTransactionResponse> {
+    try {
+      const createTransactionResponse: CreateTransactionResponse =
+        await this.fireblocksClient.createTransaction({
+          assetId,
+          amount,
+          source: {
+            type: PeerType.VAULT_ACCOUNT,
+            id: vaultAccountId,
+          },
+          destination: {
+            type: PeerType.ONE_TIME_ADDRESS,
+            oneTimeAddress: {
+              address: destinationAddress,
+            },
+          },
+          externalTxId: internalTransactionId,
+        });
+
+      if (
+        ['REJECTED', 'BLOCKED', 'FAILED', 'CANCELLED'].includes(
+          createTransactionResponse.status,
+        )
+      ) {
+        throw new Error('Transaction rejected');
+      }
+
+      return createTransactionResponse;
+    } catch (error) {
+      throw new CreateTransactionError({
+        assetId,
+        amount,
+        destinationAddress,
+        internalTransactionId,
+        vaultAccountId,
       });
     }
   }
