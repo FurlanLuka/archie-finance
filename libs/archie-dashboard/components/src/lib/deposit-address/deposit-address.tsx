@@ -95,7 +95,10 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
             <ul className="terms-list">
               <li className="terms-list-item">
                 <BodyM>
-                  <Trans components={{ b: <b /> }} values={{ selected_collateral_asset: assetInfo.loan_to_value }}>
+                  <Trans
+                    components={{ b: <b /> }}
+                    values={{ loan_to_value: assetInfo.loan_to_value, asset: assetInfo.short }}
+                  >
                     collateralization_step.terms.first
                   </Trans>
                 </BodyM>
@@ -105,9 +108,7 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
               </li>
               <li className="terms-list-item">
                 <BodyM>
-                  <Trans components={{ br: <br /> }} values={{ selected_collateral_asset: assetInfo.loan_to_value }}>
-                    collateralization_step.terms.third
-                  </Trans>
+                  <Trans components={{ br: <br /> }}>collateralization_step.terms.third</Trans>
                 </BodyM>
               </li>
             </ul>

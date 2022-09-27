@@ -43,4 +43,12 @@ export const addAddress = (place: GooglePlace): Partial<Address> => {
 
 export const getAddressError = (errors: FieldErrors<Address>) => Object.values(errors)[0].message ?? '';
 
-export const parseDate = (value: string) => parse(value, 'MMddyyyy', new Date());
+export const parseDate = (value: string) => {
+  const TO_SECONDS = 60
+  const TO_MS = 1000
+  const date = parse(value, 'MMddyyyy', new Date())
+
+  // subtract the time zone offset of the local time zone
+  const timezoneOffset = -date.getTimezoneOffset()
+  return new Date(date.getTime() + timezoneOffset * TO_SECONDS * TO_MS);
+};
