@@ -11,5 +11,6 @@ export class KycSubmittedPayload {
   addressCountry: string;
   phoneNumber: string;
   phoneNumberCountryCode: string;
+  aptUnit: string | null;
   ssn: string;
 }

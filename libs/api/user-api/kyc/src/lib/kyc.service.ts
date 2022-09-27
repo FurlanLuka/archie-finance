@@ -43,6 +43,10 @@ export class KycService {
       kycRecord.ssn,
       kycRecord.income,
     ]);
+    const decryptedAptUnit: string | null =
+      kycRecord.aptUnit !== null
+        ? this.cryptoService.decrypt(kycRecord.aptUnit)
+        : null;
 
     return {
       firstName: decryptedData[0],
@@ -58,6 +62,7 @@ export class KycService {
       phoneNumberCountryCode: decryptedData[10],
       ssn: decryptedData[11],
       income: Number(decryptedData[12]),
+      aptUnit: decryptedAptUnit,
       createdAt: kycRecord.createdAt,
     };
   }
@@ -86,6 +91,10 @@ export class KycService {
       payload.ssn,
       String(payload.income),
     ]);
+    const encryptedAptUnit: string | null =
+      payload.aptUnit !== null
+        ? this.cryptoService.encrypt(payload.aptUnit)
+        : null;
 
     const kyc: Kyc = await this.kycRepository.save({
       userId,
@@ -102,6 +111,7 @@ export class KycService {
       phoneNumberCountryCode: encryptedData[10],
       ssn: encryptedData[11],
       income: encryptedData[12],
+      aptUnit: encryptedAptUnit,
     });
 
     this.queueService.publish<KycSubmittedPayload>(KYC_SUBMITTED_TOPIC, {
@@ -123,7 +133,7 @@ export class KycService {
       phoneNumberCountryCode: payload.phoneNumberCountryCode,
       ssn: payload.ssn,
       income: payload.income,
-
+      aptUnit: payload.aptUnit,
       createdAt: kyc.createdAt,
     };
   }
