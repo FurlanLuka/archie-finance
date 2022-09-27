@@ -27,7 +27,7 @@
       "apt_unit": "Apt/Unit",
       "phone_number": "Phone Number",
       "ssn": "SSN/TIN",
-      "income": "Income"
+      "income": "Annual Income"
     },
     "placeholder": {
       "first_name": "First Name",
@@ -37,7 +37,7 @@
       "apt_unit": "Apartment or unit number (optional)",
       "phone_number": "Phone number",
       "ssn": "XXX-XX-XXXX",
-      "income": "00.0"
+      "income": "$"
     },
     "error": {
       "required_field": "This field is required",

@@ -61,5 +61,5 @@ export const KycSchema = yup.object({
   aptUnit: yup.string(),
   phoneNumber: yup.string().required('kyc_step.error.required_field').min(10, 'kyc_step.error.phone_number_digits'),
   ssn: yup.string().required('kyc_step.error.required_field').length(9, 'kyc_step.error.ssn_digits'),
-  income: yup.number().required('kyc_step.error.required_field').min(5, 'kyc_step.error.income_digits'),
+  income: yup.number().required('kyc_step.error.required_field'),
 });
