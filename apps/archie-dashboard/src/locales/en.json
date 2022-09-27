@@ -26,7 +26,8 @@
       "address": "Address",
       "apt_unit": "Apt/Unit",
       "phone_number": "Phone Number",
-      "ssn": "SSN/TIN"
+      "ssn": "SSN/TIN",
+      "income": "Annual Income"
     },
     "placeholder": {
       "first_name": "First Name",
@@ -35,7 +36,8 @@
       "address": "Mailing address (no P.O. Boxes)",
       "apt_unit": "Apartment or unit number (optional)",
       "phone_number": "Phone number",
-      "ssn": "XXX-XX-XXXX"
+      "ssn": "XXX-XX-XXXX",
+      "income": "$"
     },
     "error": {
       "required_field": "This field is required",
@@ -49,7 +51,8 @@
       "should_be_under": "You must be under 122 years old",
       "cannot_be_future": "Date cannot be in the future",
       "phone_number_digits": "Invalid phone number",
-      "ssn_digits": "Invalid SSN/TIN"
+      "ssn_digits": "Invalid SSN/TIN",
+      "income_digits": "Please enter your annual income"
     }
   },
   "verify_phone_step": {
@@ -78,7 +81,7 @@
     },
     "result": {
       "first": "Collateral Required",
-      "second": "Loan-to-Value",
+      "second": "Suggested Loan-to-Value",
       "third": "Interest Rate"
     },
     "address": {
@@ -90,9 +93,9 @@
     },
     "terms": {
       "title": "Terms & Conditions",
-      "first": "You may spend up to <b>{{selected_collateral_asset}}%</b> of your line of credit.",
+      "first": "You may spend up to <b>75%</b> of the value of your digital assets. We strongly suggest you maintain a line of credit less than <b>{{loan_to_value}}%</b> of your {{asset}} collateral.",
       "second": "Your minimum payment is due monthly. You will receive an email reminder when your payment is due.",
-      "third": "You will be notified to pay down your balance or add collateral if <br /> your loan-to-value ratio exceeds {{selected_collateral_asset}}%."
+      "third": "You will be notified to pay down your balance or add collateral if your <br/> loan-to-value ratio exceeds 75%. You will be immediately partially liquidated if your loan-to-value ratio exceeds 90%."
     }
   },
   "card_step": {
@@ -100,7 +103,7 @@
       "create": "Issuing credit card...",
       "complete": "Your Archie Card is ready!"
     },
-    "subtitle": "You have submitted {{total_value}} worth of collateral and have a {{credit_value}} credit limit. Make sure <br /> your email is verified before continuing.",
+    "subtitle": "You have submitted ${{total_value}} worth of collateral and have a ${{credit_value}} credit limit. Make sure <br /> your email is verified before continuing.",
     "img_alt": "Your Archie Card is ready",
     "btn": "Go to my dashboard"
   },
