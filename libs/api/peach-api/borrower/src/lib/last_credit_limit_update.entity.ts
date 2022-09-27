@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   Index,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -19,5 +20,6 @@ export class LastCreditLimitUpdate {
   calculatedAt: string;
 
   @OneToOne((_) => Borrower, (borrower) => borrower.uuid, { nullable: false })
+  @JoinColumn()
   borrower: Borrower;
 }

@@ -59,6 +59,7 @@
     "api-utils-migration-generator": "libs/api/utils/migration-generator",
     "api-utils-openapi": "libs/api/utils/openapi",
     "api-utils-queue": "libs/api/utils/queue",
+    "api-utils-redis": "libs/api/utils/redis",
     "api-utils-tracing": "libs/api/utils/tracing",
     "api-utils-typeorm-transformers": "libs/api/utils/typeorm-transformers",
     "api-webhook-api-constants": "libs/api/webhook-api/constants",

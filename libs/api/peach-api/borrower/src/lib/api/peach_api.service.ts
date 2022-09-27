@@ -76,7 +76,7 @@ export class PeachApiService {
           ...error.config,
           headers: null,
         },
-        status: (<AxiosResponse>error.response).status,
+        status: error.response?.status ?? 500,
         errorResponse: <PeachErrorData>error.response?.data,
       };
       Logger.error(JSON.stringify(response, null, 2));
@@ -231,6 +231,7 @@ export class PeachApiService {
   }
 
   public async createPerson(kyc: KycSubmittedPayload): Promise<Person> {
+    console.log(kyc.dateOfBirth);
     const response = await this.peachClient.post<PeachResponseData<Person>>(
       '/people',
       {

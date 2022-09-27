@@ -18,12 +18,16 @@ import {
   EmailVerifiedPayload,
   KycSubmittedPayload,
 } from '@archie/api/user-api/data-transfer-objects';
+import { RedisService } from '@archie-microservices/api/utils/redis';
 
 @Controller()
 export class PeachBorrowerQueueController {
   private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-borrower-loan`;
 
-  constructor(private peachService: PeachBorrowerService) {}
+  constructor(
+    private peachService: PeachBorrowerService,
+    private redisService: RedisService,
+  ) {}
 
   @Subscribe(
     KYC_SUBMITTED_TOPIC,
@@ -55,9 +59,19 @@ export class PeachBorrowerQueueController {
     CREDIT_LIMIT_UPDATED_TOPIC,
     PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async creditLimitIncreasedHandler(
+  async creditLimitUpdatedHandler(
     payload: CreditLimitUpdatedPayload,
   ): Promise<void> {
-    await this.peachService.handleCreditLimitUpdatedEvent(payload);
+    console.log('TRY ACQUIRE');
+
+    const lock = await this.redisService.acquireLock(payload.userId);
+    console.log('ACQUIRED');
+    try {
+      await this.peachService.handleCreditLimitUpdatedEvent(payload);
+    } finally {
+      console.log('RELEASED');
+
+      await this.redisService.releaseLock(lock);
+    }
   }
 }

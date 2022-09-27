@@ -22,7 +22,6 @@ import { Credit, Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
 import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
-import { DateTime } from 'luxon';
 import { LastCreditLimitUpdate } from '../last_credit_limit_update.entity';
 
 @Injectable()
@@ -103,6 +102,15 @@ export class PeachBorrowerService {
       borrower,
       payload.amount,
     );
+    await this.lastCreditLimitUpdateRepository.upsert(
+      {
+        borrower: borrower,
+        calculatedAt: new Date().toISOString(),
+      },
+      {
+        conflictPaths: ['borrower'],
+      },
+    );
 
     await this.createActiveDraw(borrower, creditLineId);
   }
@@ -114,6 +122,7 @@ export class PeachBorrowerService {
     let creditLineId: string | null = borrower.creditLineId;
 
     if (creditLineId === null) {
+      // TODO: Add down payment to the event payload
       const collateralValue: GetCollateralValueResponse[] =
         await this.queueService.request<
           GetCollateralValueResponse[],
@@ -185,45 +194,31 @@ export class PeachBorrowerService {
   public async handleCreditLimitUpdatedEvent(
     creditLimit: CreditLimitUpdatedPayload,
   ): Promise<void> {
-    const borrower: Borrower | null = await this.borrowerRepository.findOne({
-      where: {
-        userId: creditLimit.userId,
-      },
-      relations: {
-        lastCreditLimitUpdate: true,
-      },
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
+      userId: creditLimit.userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    // TODO: Try to update - check if ok to update - based on borrower - if yes then lock resource and update db record + update credit limit, release
-    // TODO: Remember the last update calculated at, as if the events don't come in order credit limit could be unintentionally changed - unlikely
+    // TODO: insert when credit line is created
+    const updatedResult: UpdateResult =
+      await this.lastCreditLimitUpdateRepository.update(
+        {
+          borrower: { uuid: borrower.uuid },
+          calculatedAt: LessThanOrEqual(creditLimit.calculatedAt),
+        },
+        {
+          calculatedAt: creditLimit.calculatedAt,
+        },
+      );
 
-    if (
-      borrower.lastCreditLimitUpdate === null ||
-      DateTime.fromISO(borrower.lastCreditLimitUpdate.calculatedAt) <=
-        DateTime.fromISO(creditLimit.calculatedAt)
-    ) {
-      // lock
-      const updatedResult: UpdateResult =
-        await this.lastCreditLimitUpdateRepository.update(
-          {
-            borrower: { uuid: borrower.uuid },
-            calculatedAt: LessThanOrEqual(creditLimit.calculatedAt),
-          },
-          {
-            calculatedAt: creditLimit.calculatedAt,
-          },
-        );
+    console.log(updatedResult);
 
-      if (updatedResult.affected !== 0) {
-        await this.peachApiService.updateCreditLimit(
-          borrower.personId,
-          borrower.creditLineId,
-          creditLimit.creditLimit,
-        );
-      }
-
-      // release
+    if (updatedResult.affected !== 0) {
+      await this.peachApiService.updateCreditLimit(
+        borrower.personId,
+        borrower.creditLineId,
+        creditLimit.creditLimit,
+      );
     }
 
     const credit: Credit = await this.peachApiService.getCreditBalance(
