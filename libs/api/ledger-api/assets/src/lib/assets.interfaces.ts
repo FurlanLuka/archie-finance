@@ -1,8 +1,8 @@
-export class AssetInformation {
+export interface AssetInformation {
   coingeckoId: string;
+  liquidationWalletId: string;
+  liquidationWeight: string;
   id: string;
 }
 
-export class AssetList {
-  [key: string]: Omit<AssetInformation, 'id'>;
-}
+export type AssetList = AssetInformation[];

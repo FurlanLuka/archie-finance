@@ -16,9 +16,6 @@ export class AssetsService {
       ConfigVariables.ASSET_LIST,
     );
 
-    return {
-      ...assetList[asset],
-      id: asset,
-    };
+    return assetList.find((item) => item.id === asset);
   }
 }

@@ -12,3 +12,5 @@ export enum ConfigVariables {
 }
 
 export const LEDGER_ACCOUNT_UPDATED_TOPIC = 'ledger.account.updated';
+
+export const INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND = 'ledger.asset.liquidation';

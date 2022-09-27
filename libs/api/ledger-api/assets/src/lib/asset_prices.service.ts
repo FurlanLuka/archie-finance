@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { CoingeckoAssetInformationResponse } from './api/coingecko.interfaces';
 import { CoingeckoApiService } from './api/coingecko.service';
 import { AssetsService } from './assets.service';
-import { AssetList } from './assets.interfaces';
+import { AssetInformation, AssetList } from './assets.interfaces';
 import { AssetPrice } from './asset_prices.interfaces';
 import { AssetNotFoundError } from './asset_prices.errors';
 
@@ -21,10 +21,8 @@ export class AssetPricesService {
   public async fetchAssetPrices(): Promise<void> {
     const assetList: AssetList = this.assetsService.getSupportedAssetList();
 
-    const assets: string[] = Object.keys(assetList);
-
-    const coingeckoAssetIds: string[] = assets.map(
-      (asset) => assetList[asset].coingeckoId,
+    const coingeckoAssetIds: string[] = assetList.map(
+      (asset) => asset.coingeckoId,
     );
 
     const coingeckoAssetInformation: CoingeckoAssetInformationResponse =
@@ -37,18 +35,16 @@ export class AssetPricesService {
     Object.keys(coingeckoAssetInformation).forEach((coingeckoAssetKey) => {
       const coingeckoAsset = coingeckoAssetInformation[coingeckoAssetKey];
 
-      const assetId: string | undefined = assets.find((assetKey) => {
-        const archieAsset = assetList[assetKey];
-
-        return coingeckoAssetKey === archieAsset.coingeckoId;
+      const asset: AssetInformation | undefined = assetList.find((item) => {
+        return coingeckoAssetKey === item.coingeckoId;
       });
 
-      if (assetId === undefined) {
+      if (asset === undefined) {
         return;
       }
 
       assetPrices.push({
-        assetId,
+        assetId: asset.id,
         price: coingeckoAsset.usd,
         currency: 'USD',
         dailyChange: coingeckoAsset.usd_24h_change,
@@ -67,9 +63,7 @@ export class AssetPricesService {
     );
   }
 
-  public async getLatestAssetPrice(
-    assetId: string,
-  ): Promise<AssetPrice> {
+  public async getLatestAssetPrice(assetId: string): Promise<AssetPrice> {
     const assetPrice: AssetPrices | null =
       await this.assetPriceRepository.findOneBy({
         assetId,
