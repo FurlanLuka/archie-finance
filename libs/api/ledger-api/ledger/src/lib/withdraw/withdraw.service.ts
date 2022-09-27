@@ -8,16 +8,14 @@ import {
   Ledger,
   InternalLedgerAccountData,
 } from '@archie/api/ledger-api/data-transfer-objects';
-import {
-  GetMaxWithdrawalAmount,
-} from '@archie/api/ledger-api/data-transfer-objects';
+import { GetMaxWithdrawalAmount } from '@archie/api/ledger-api/data-transfer-objects';
 import {
   InvalidWithdrawalAmountError,
   WithdrawalAmountTooHighError,
 } from './withdraw.errors';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Withdrawal, WithdrawalStatus } from './withdrawal.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import {
   CollateralWithdrawalTransactionErrorPayload,
   CollateralWithdrawalTransactionSubmittedPayload,
@@ -35,6 +33,7 @@ export class WithdrawService {
     private queueService: QueueService,
     @InjectRepository(Withdrawal)
     private withdrawalRepository: Repository<Withdrawal>,
+    private dataSource: DataSource,
   ) {}
 
   static MIN_LTV = 0.3;
@@ -111,22 +110,31 @@ export class WithdrawService {
       });
     }
 
-    await this.ledgerService.decrementLedgerAccount(
-      userId,
-      assetId,
-      amount,
-      'Withdrawal decrement',
-    );
-
     const internalTransactionId: string = v4();
 
-    await this.withdrawalRepository.save({
-      userId,
-      assetId,
-      internalTransactionId,
-      amount,
-      status: WithdrawalStatus.INITIATED,
-    });
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    try {
+      await queryRunner.startTransaction();
+      await queryRunner.manager.insert(Withdrawal, {
+        userId,
+        assetId,
+        internalTransactionId,
+        amount,
+        status: WithdrawalStatus.INITIATED,
+      });
+
+      await this.ledgerService.decrementLedgerAccount(
+        userId,
+        assetId,
+        amount,
+        'Withdrawal decrement',
+      );
+    } catch {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
 
     this.queueService.publish<InitiateCollateralWithdrawalCommandPayload>(
       INITIATE_COLLATERAL_WITHDRAWAL_COMMAND,
@@ -208,18 +216,19 @@ export class WithdrawService {
       return;
     }
 
-    if (status === CollateralWithdrawalTransactionUpdatedStatus.COMPLETED) {
-      if (withdrawalRecord.status === WithdrawalStatus.FEE_REDUCED) {
-        await this.withdrawalRepository.update(
-          {
-            internalTransactionId,
-          },
-          {
-            externalTransactionId: transactionId,
-            status: WithdrawalStatus.COMPLETED,
-          },
-        );
-      }
+    if (
+      status === CollateralWithdrawalTransactionUpdatedStatus.COMPLETED &&
+      withdrawalRecord.status === WithdrawalStatus.FEE_REDUCED
+    ) {
+      await this.withdrawalRepository.update(
+        {
+          internalTransactionId,
+        },
+        {
+          externalTransactionId: transactionId,
+          status: WithdrawalStatus.COMPLETED,
+        },
+      );
     } else {
       if (withdrawalRecord.status === WithdrawalStatus.SUBMITTED) {
         await this.ledgerService.decrementLedgerAccount(
@@ -274,7 +283,7 @@ export class WithdrawService {
     }
 
     const withdrawalAmount = BigNumber(withdrawalRecord.amount);
-    const networkFee = BigNumber(withdrawalRecord.networkFee ?? 0);
+    const networkFee = BigNumber(withdrawalRecord.networkFee);
 
     await this.ledgerService.incrementLedgerAccount(
       userId,

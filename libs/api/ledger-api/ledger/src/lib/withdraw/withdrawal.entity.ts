@@ -47,12 +47,13 @@ export class Withdrawal {
   amount: string;
 
   @Column('numeric', {
-    nullable: true,
+    nullable: false,
     precision: 28,
     scale: 18,
+    default: '0',
     transformer: new BigNumberTrimEndingZerosTransformer(),
   })
-  networkFee: string | null;
+  networkFee: string;
 
   @CreateDateColumn()
   createdAt: Date;

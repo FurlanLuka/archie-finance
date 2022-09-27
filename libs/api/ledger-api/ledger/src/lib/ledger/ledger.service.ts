@@ -42,13 +42,6 @@ export class LedgerService {
       amount,
     });
 
-    await this.ledgerLogRepository.insert({
-      userId,
-      amount,
-      assetId,
-      action: LedgerAction.LEDGER_ACCOUNT_CREATED,
-    });
-
     this.queueService.publish<LedgerAccountUpdatedPayload>(
       LEDGER_ACCOUNT_UPDATED_TOPIC,
       {
@@ -62,6 +55,13 @@ export class LedgerService {
         },
       },
     );
+
+    await this.ledgerLogRepository.insert({
+      userId,
+      amount,
+      assetId,
+      action: LedgerAction.LEDGER_ACCOUNT_CREATED,
+    });
   }
 
   async getLedgerAccount(
