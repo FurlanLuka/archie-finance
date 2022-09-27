@@ -51,12 +51,13 @@ export class LiquidationService {
           return 0;
         }
 
-        return BigNumber(firstAccountAsset.liquidationWeight)
-          .minus(secondAccountAsset.liquidationWeight)
-          .toNumber();
+        return (
+          firstAccountAsset.liquidationWeight -
+          secondAccountAsset.liquidationWeight
+        );
       });
 
-    const accountsToLiquidate = sortedLedgerAccounts.reduce(
+    const accountsLiquidationReducerResult = sortedLedgerAccounts.reduce(
       (previousValue, ledgerAccount): AccountsLiquidationReducer => {
         if (BigNumber(previousValue.amountLeftToLiquidate).eq(0)) {
           return previousValue;
@@ -100,6 +101,11 @@ export class LiquidationService {
         amountLeftToLiquidate: amount,
         accountsToLiquidate: [],
       },
+    );
+
+    await this.ledgerService.batchDecrementLedgerAccounts(
+      userId,
+      accountsLiquidationReducerResult.accountsToLiquidate,
     );
   }
 }

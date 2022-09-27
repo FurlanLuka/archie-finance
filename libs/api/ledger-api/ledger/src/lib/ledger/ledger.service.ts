@@ -1,13 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { LedgerAccount } from './ledger_account.entity';
 import { BigNumber } from 'bignumber.js';
 import { LedgerAction, LedgerLog } from './ledger_log.entity';
-import {
-  InvalidLedgerDeductionAmountError,
-  LedgerAccountNotFoundError,
-} from './ledger.errors';
+import { LedgerAccountNotFoundError } from './ledger.errors';
 import { AssetPrice, AssetPricesService } from '@archie/api/ledger-api/assets';
 import {
   InternalLedgerAccountData,
@@ -16,6 +13,7 @@ import {
 } from '@archie/api/ledger-api/data-transfer-objects';
 import { QueueService } from '@archie/api/utils/queue';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
+import { BatchDecrementLedgerAccounts } from './ledger.interfaces';
 
 @Injectable()
 export class LedgerService {
@@ -26,6 +24,7 @@ export class LedgerService {
     private ledgerLogRepository: Repository<LedgerLog>,
     private assetPricesService: AssetPricesService,
     private queueService: QueueService,
+    private dataSource: DataSource,
   ) {}
 
   async createLedgerAccount(
@@ -46,13 +45,15 @@ export class LedgerService {
       LEDGER_ACCOUNT_UPDATED_TOPIC,
       {
         userId,
-        ledgerAccount: {
-          assetId,
-          assetAmount: amount,
-          accountValue: BigNumber(amount)
-            .multipliedBy(assetPrice.price)
-            .toString(),
-        },
+        ledgerAccounts: [
+          {
+            assetId,
+            assetAmount: amount,
+            accountValue: BigNumber(amount)
+              .multipliedBy(assetPrice.price)
+              .toString(),
+          },
+        ],
       },
     );
 
@@ -102,7 +103,7 @@ export class LedgerService {
 
         const accountValue: string = BigNumber(account.amount)
           .multipliedBy(assetPrice.price)
-          .toFormat(2);
+          .toFormat(2, BigNumber.ROUND_DOWN);
 
         ledgerValue = ledgerValue.plus(accountValue);
 
@@ -150,17 +151,14 @@ export class LedgerService {
           userId,
           assetId,
           amount,
+          deductionAmount,
         },
-      });
-
-      throw new InvalidLedgerDeductionAmountError({
-        userId,
-        assetId,
-        amount,
       });
     }
 
-    const updatedAmount: BigNumber = assetAmount.minus(deductionAmount);
+    const updatedAmount: BigNumber = deductionAmount.gt(assetAmount)
+      ? BigNumber(0)
+      : assetAmount.minus(deductionAmount);
 
     await this.ledgerRepository.update(
       {
@@ -176,13 +174,15 @@ export class LedgerService {
       LEDGER_ACCOUNT_UPDATED_TOPIC,
       {
         userId,
-        ledgerAccount: {
-          assetId: ledgerAccount.assetId,
-          assetAmount: updatedAmount.toString(),
-          accountValue: updatedAmount
-            .multipliedBy(ledgerAccount.assetPrice)
-            .toString(),
-        },
+        ledgerAccounts: [
+          {
+            assetId: ledgerAccount.assetId,
+            assetAmount: updatedAmount.toString(),
+            accountValue: updatedAmount
+              .multipliedBy(ledgerAccount.assetPrice)
+              .toString(),
+          },
+        ],
       },
     );
 
@@ -193,6 +193,84 @@ export class LedgerService {
       action: LedgerAction.LEDGER_ACCOUNT_DECREMENTED,
       note,
     });
+  }
+
+  async batchDecrementLedgerAccounts(
+    userId: string,
+    accounts: BatchDecrementLedgerAccounts,
+  ): Promise<void> {
+    const ledger: Ledger = await this.getLedger(userId);
+
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    try {
+      await queryRunner.startTransaction();
+
+      const updatedLedgerAccounts: InternalLedgerAccountData[] =
+        await Promise.all(
+          accounts.map(
+            async (updateAccount): Promise<InternalLedgerAccountData> => {
+              const ledgerAccount: InternalLedgerAccountData =
+                ledger.accounts.find(
+                  (account) => account.assetId === updateAccount.assetId,
+                )!;
+
+              const deductionAmount = BigNumber(updateAccount.amount);
+              const assetAmount = BigNumber(ledgerAccount.assetAmount);
+
+              if (deductionAmount.gt(assetAmount)) {
+                Logger.error({
+                  code: 'INVALID_LEDGER_DEDUCTION_AMOUNT',
+                  metadata: {
+                    userId,
+                    assetId: ledgerAccount.assetId,
+                    amount: assetAmount.toString(),
+                    deductionAmount,
+                  },
+                });
+              }
+
+              const updatedAmount = deductionAmount.gt(assetAmount)
+                ? '0'
+                : assetAmount.minus(deductionAmount).toString();
+
+              await queryRunner.manager.update(
+                LedgerAccount,
+                {
+                  userId,
+                  assetId: ledgerAccount.assetId,
+                },
+                {
+                  amount: updatedAmount,
+                },
+              );
+
+              return {
+                assetId: ledgerAccount.assetId,
+                assetAmount: updatedAmount,
+                accountValue: BigNumber(updatedAmount)
+                  .dividedBy(ledgerAccount.assetPrice)
+                  .toFormat(2, BigNumber.ROUND_DOWN),
+                assetPrice: ledgerAccount.assetPrice,
+              };
+            },
+          ),
+        );
+
+      this.queueService.publish<LedgerAccountUpdatedPayload>(
+        LEDGER_ACCOUNT_UPDATED_TOPIC,
+        {
+          userId,
+          ledgerAccounts: updatedLedgerAccounts.map(
+            ({ assetPrice: _, ...updatedAccount }) => updatedAccount,
+          ),
+        },
+      );
+    } catch {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   async incrementLedgerAccount(
@@ -224,13 +302,15 @@ export class LedgerService {
       LEDGER_ACCOUNT_UPDATED_TOPIC,
       {
         userId,
-        ledgerAccount: {
-          assetId,
-          assetAmount: updatedAmount.toString(),
-          accountValue: updatedAmount
-            .multipliedBy(ledgerAccount.assetPrice)
-            .toString(),
-        },
+        ledgerAccounts: [
+          {
+            assetId,
+            assetAmount: updatedAmount.toString(),
+            accountValue: updatedAmount
+              .multipliedBy(ledgerAccount.assetPrice)
+              .toString(),
+          },
+        ],
       },
     );
 

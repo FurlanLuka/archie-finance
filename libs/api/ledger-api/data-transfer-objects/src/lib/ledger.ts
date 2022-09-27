@@ -18,5 +18,5 @@ export interface Ledger {
 
 export interface LedgerAccountUpdatedPayload {
   userId: string;
-  ledgerAccount: LedgerAccountData;
+  ledgerAccounts: LedgerAccountData[];
 }
