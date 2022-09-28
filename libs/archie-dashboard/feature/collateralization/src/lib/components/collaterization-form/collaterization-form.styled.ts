@@ -43,18 +43,32 @@ export const CollaterizationFormStyled = styled.div`
   .result-item {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     width: 33.33%;
-    max-width: 9rem;
+    padding-right: 0.5rem;
+
+    @media (max-width: ${breakpoints.screenMD}) {
+      width: 36%;
+    }
 
     @media (max-width: ${breakpoints.screenSM}) {
       width: 100%;
       margin-bottom: 1rem;
     }
 
+    :nth-child(2) {
+      max-width: 186px;
+    }
+
+    :nth-child(3) {
+      max-width: 96px;
+    }
+
     h4 {
-      position: relative;
       white-space: nowrap;
+
+      @media (max-width: ${breakpoints.screenMD}) {
+        white-space: normal;
+      }
     }
 
     p {
