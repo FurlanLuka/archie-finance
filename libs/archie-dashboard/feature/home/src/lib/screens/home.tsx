@@ -9,6 +9,7 @@ import {
   CollateralValue,
   NextPayment,
   MyRewards,
+  MarginCallAlert,
 } from '@archie-webapps/archie-dashboard/components';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
@@ -17,7 +18,6 @@ import { PayWithPaypalScheduled } from '@archie-webapps/archie-dashboard/feature
 import { Modal, TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { MarginCallAlert } from '../components/alerts/margin-call/margin-call';
 import { RecentTransactions } from '../components/recent-transactions/recent-transactions';
 
 import { HomeStyled } from './home.styled';
@@ -69,7 +69,7 @@ export const HomeScreen: FC = () => {
   return (
     <>
       <HomeStyled>
-        <MarginCallAlert />
+        <MarginCallAlert withButton />
         <div className="section-title">{getTitle()}</div>
         <div className="section-cards one">
           <ArchieCard />

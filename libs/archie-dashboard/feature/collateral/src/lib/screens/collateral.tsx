@@ -9,6 +9,7 @@ import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/ap
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { MarginCallAlert } from '@archie-webapps/archie-dashboard/components';
 import { Card, Loader, Badge, TitleM, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -61,6 +62,7 @@ export const CollateralScreen: FC = () => {
 
   return (
     <CollateralStyled>
+      <MarginCallAlert />
       <Card column alignItems="center" justifyContent="center" padding="2rem 1.5rem 2.5rem" minHeight="560px">
         {getContent()}
       </Card>
