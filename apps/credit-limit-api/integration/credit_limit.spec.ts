@@ -138,6 +138,8 @@ describe('Credit limit service tests', () => {
         {
           userId: user.id,
           amount: creditLimit,
+          calculatedAt: expect.any(String),
+          downPayment: bitcoinPrice,
         },
       );
 
@@ -194,9 +196,13 @@ describe('Credit limit service tests', () => {
     const ethAmount = 0.3;
     const btcAmount = 0.05;
 
-    const btcCreditLimit = btcAmount * bitcoinPrice * 0.5;
-    const solCreditLimit = solAmount * solPrice * 0.5;
-    const ethCreditLimit = ethAmount * ethPrice * 0.5;
+    const btcUsdValue = btcAmount * bitcoinPrice;
+    const solUsdValue = solAmount * solPrice;
+    const ethUsdValue = ethAmount * ethPrice;
+
+    const btcCreditLimit = btcUsdValue * 0.5;
+    const solCreditLimit = solUsdValue * 0.5;
+    const ethCreditLimit = ethUsdValue * 0.5;
 
     const creditLimit = btcCreditLimit + solCreditLimit + ethCreditLimit;
 
@@ -271,6 +277,8 @@ describe('Credit limit service tests', () => {
         {
           userId: user.id,
           amount: creditLimit,
+          calculatedAt: expect.any(String),
+          downPayment: btcUsdValue + ethUsdValue + solUsdValue,
         },
       );
       expect(response.body).toStrictEqual(expectedCreditLimit);
@@ -324,6 +332,8 @@ describe('Credit limit service tests', () => {
           {
             userId: user.id,
             amount: initialCreditLineLimit,
+            calculatedAt: expect.any(String),
+            downPayment: ethAmount * ethPrice,
           },
         );
       });
@@ -368,7 +378,7 @@ describe('Credit limit service tests', () => {
         when(queueStub.request)
           .calledWith(GET_ASSET_PRICES_RPC)
           .mockResolvedValue(getUpdatedAssetPricesResponseData);
-  
+
         queueStub.publish.mockReset();
       });
 

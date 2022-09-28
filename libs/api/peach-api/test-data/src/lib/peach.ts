@@ -16,6 +16,7 @@ import { RequestBodyMatcher } from 'nock';
 import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 
 export type PeachRequestBody = RequestBodyMatcher;
+export type PeachResponse = Record<string, unknown>;
 
 export const personFactory = (override?: Partial<Person>): Person => ({
   id: 'personId',

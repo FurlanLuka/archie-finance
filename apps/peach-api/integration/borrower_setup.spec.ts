@@ -8,7 +8,10 @@ import {
   TestDatabase,
 } from '@archie/test/integration';
 import { AppModule } from '../src/app.module';
-import { PeachBorrowerQueueController } from '@archie/api/peach-api/borrower';
+import {
+  Balances,
+  PeachBorrowerQueueController,
+} from '@archie/api/peach-api/borrower';
 import {
   emailVerifiedDataFactory,
   kycSubmittedDataFactory,
@@ -43,6 +46,16 @@ import {
   creditLimitFactory,
   balancesFactory,
   creditLimitUpdateRequestBodyFactory,
+  setupBaseNock,
+  setupCreatePersonNock,
+  setupCreateContactNock,
+  setupCreateUserNock,
+  setupCreateLoanNock,
+  setupActivateLoanNock,
+  setupCreateDrawNock,
+  setupActivateDrawNock,
+  setupUpdateCreditLimitNock,
+  setupGetBalancesNock,
 } from '@archie-microservices/api/peach-api/test-data';
 
 describe('Peach service tests', () => {
@@ -51,7 +64,6 @@ describe('Peach service tests', () => {
   let config: ConfigService;
 
   let testDatabase: TestDatabase;
-  let baseNock: nock.Scope;
 
   const setup = async (): Promise<void> => {
     testDatabase = await createTestDatabase();
@@ -63,8 +75,8 @@ describe('Peach service tests', () => {
     app = await initializeTestingModule(module);
 
     config = app.get(ConfigService);
-    baseNock = nock(config.get(ConfigVariables.PEACH_BASE_URL)).matchHeader(
-      'X-API-KEY',
+    setupBaseNock(
+      config.get(ConfigVariables.PEACH_BASE_URL),
       config.get(ConfigVariables.PEACH_API_KEY),
     );
   };
@@ -81,27 +93,21 @@ describe('Peach service tests', () => {
     const homeAddress: HomeAddress = homeAddressContactFactory();
     const creditLine: CreditLine = creditLineFactory();
 
-    it('Should store KYC info', async () => {
+    it('Should create person and add phone and home address contact', async () => {
       const kycSubmittedPayload = kycSubmittedDataFactory();
-      baseNock
-        .post('/people', personRequestBodyFactory(kycSubmittedPayload))
-        .reply(201, {
-          data: person,
-        });
-      baseNock
-        .post(
-          `/people/${person.id}/contacts`,
-          phoneContactRequestBodyFactory(kycSubmittedPayload),
-        )
-        .reply(201, {
-          data: {},
-        });
-      baseNock
-        .post(
-          `/people/${person.id}/contacts`,
-          homeAddressContactRequestBodyFactory(kycSubmittedPayload),
-        )
-        .reply(201, { data: homeAddress });
+      setupCreatePersonNock(
+        personRequestBodyFactory(kycSubmittedPayload),
+        person,
+      );
+      setupCreateContactNock(
+        person.id,
+        phoneContactRequestBodyFactory(kycSubmittedPayload),
+      );
+      setupCreateContactNock(
+        person.id,
+        homeAddressContactRequestBodyFactory(kycSubmittedPayload),
+        homeAddress,
+      );
 
       await app
         .get(PeachBorrowerQueueController)
@@ -110,14 +116,12 @@ describe('Peach service tests', () => {
       expect(nock.isDone()).toEqual(true);
     });
 
-    it('Should store Email', async () => {
+    it('Should add email contact', async () => {
       const emailVerifiedPayload = emailVerifiedDataFactory();
-      baseNock
-        .post(
-          `/people/${person.id}/contacts`,
-          emailContactRequestBodyFactory(emailVerifiedPayload),
-        )
-        .reply(201, { data: {} });
+      setupCreateContactNock(
+        person.id,
+        emailContactRequestBodyFactory(emailVerifiedPayload),
+      );
 
       await app
         .get(PeachBorrowerQueueController)
@@ -130,40 +134,31 @@ describe('Peach service tests', () => {
       const emailVerifiedPayload = emailVerifiedDataFactory();
       const creditLineCreatedPayload = creditLineCreatedDataFactory();
       const draw: Draw = drawFactory();
-      baseNock
-        .post(
-          `/companies/${config.get(ConfigVariables.PEACH_COMPANY_ID)}/users`,
-          userRequestBodyFactory(
-            emailVerifiedPayload.email,
-            config.get(ConfigVariables.PEACH_BORROWER_ROLE_ID),
-            person.id,
-          ),
-        )
-        .reply(201, { data: {} });
-      baseNock
-        .post(
-          `/people/${person.id}/loans`,
-          loanRequestBodyFactory(
-            config.get(ConfigVariables.PEACH_LOAN_ID),
-            creditLineCreatedPayload,
-            homeAddress.id,
-          ),
-        )
-        .reply(201, { data: creditLine });
-      baseNock
-        .post(`/people/${person.id}/loans/${creditLine.id}/activate`, {})
-        .reply(201, { data: {} });
-      baseNock
-        .post(
-          `/people/${person.id}/loans/${creditLine.id}/draws`,
-          drawRequestBodyFactory(),
-        )
-        .reply(201, { data: draw });
-      baseNock
-        .post(
-          `/people/${person.id}/loans/${creditLine.id}/draws/${draw.id}/activate`,
-        )
-        .reply(201, { data: {} });
+      setupCreateUserNock(
+        config.get(ConfigVariables.PEACH_COMPANY_ID),
+        userRequestBodyFactory(
+          emailVerifiedPayload.email,
+          config.get(ConfigVariables.PEACH_BORROWER_ROLE_ID),
+          person.id,
+        ),
+      );
+      setupCreateLoanNock(
+        person.id,
+        loanRequestBodyFactory(
+          config.get(ConfigVariables.PEACH_LOAN_ID),
+          creditLineCreatedPayload,
+          homeAddress.id,
+        ),
+        creditLine,
+      );
+      setupActivateLoanNock(person.id, creditLine.id, {});
+      setupCreateDrawNock(
+        person.id,
+        creditLine.id,
+        drawRequestBodyFactory(),
+        draw,
+      );
+      setupActivateDrawNock(person.id, creditLine.id, draw.id);
 
       await app
         .get(PeachBorrowerQueueController)
@@ -174,25 +169,23 @@ describe('Peach service tests', () => {
 
     describe('Credit limit updates', () => {
       const creditLimit: CreditLimit = creditLimitFactory();
-      const balances = balancesFactory();
+      const balances: Balances = balancesFactory();
       let firstCreditLimitUpdatedPayload;
 
       beforeAll(() => {
         firstCreditLimitUpdatedPayload = creditLimitUpdatedDataFactory();
       });
 
-      it('Should update credit limit', async () => {
-        baseNock
-          .post(
-            `/people/${person.id}/loans/${creditLine.id}/credit-limit`,
-            creditLimitUpdateRequestBodyFactory(
-              firstCreditLimitUpdatedPayload.creditLimit,
-            ),
-          )
-          .reply(201, { data: creditLimit });
-        baseNock
-          .get(`/people/${person.id}/loans/${creditLine.id}/balances`)
-          .reply(201, { data: balances });
+      it('Should update the credit limit', async () => {
+        setupUpdateCreditLimitNock(
+          person.id,
+          creditLine.id,
+          creditLimitUpdateRequestBodyFactory(
+            firstCreditLimitUpdatedPayload.creditLimit,
+          ),
+          creditLimit,
+        );
+        setupGetBalancesNock(person.id, creditLine.id, balances);
 
         await app
           .get(PeachBorrowerQueueController)
@@ -201,15 +194,14 @@ describe('Peach service tests', () => {
         expect(nock.isDone()).toEqual(true);
       });
 
-      it('Should not update the credit limit if calculated at is before the handled one', async () => {
-        const creditLimitUpdateRequest = baseNock
-          .post(`/people/${person.id}/loans/${creditLine.id}/credit-limit`, {
-            creditLimitAmount: creditLimit.creditLimitAmount,
-          })
-          .reply(201, { data: creditLimit });
-        baseNock
-          .get(`/people/${person.id}/loans/${creditLine.id}/balances`)
-          .reply(201, { data: balances });
+      it('Should not update the credit limit if It was calculated before already handled event', async () => {
+        const creditLimitUpdateRequest = setupUpdateCreditLimitNock(
+          person.id,
+          creditLine.id,
+          creditLimitUpdateRequestBodyFactory(creditLimit.creditLimitAmount),
+          creditLimit,
+        );
+        setupGetBalancesNock(person.id, creditLine.id, balances);
 
         await app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler(
           creditLimitUpdatedDataFactory({
@@ -224,16 +216,16 @@ describe('Peach service tests', () => {
         expect(creditLimitUpdateRequest.isDone()).toEqual(false);
       });
 
-      it('Should reject credit limit update in case the lock is already taken', async () => {
-        baseNock
-          .post(`/people/${person.id}/loans/${creditLine.id}/credit-limit`, {
-            creditLimitAmount: creditLimit.creditLimitAmount,
-          })
-          .delay(100)
-          .reply(201, { data: creditLimit });
-        baseNock
-          .get(`/people/${person.id}/loans/${creditLine.id}/balances`)
-          .reply(201, { data: balances });
+      it('Should throw error in case the lock for credit limit update is already taken', async () => {
+        setupUpdateCreditLimitNock(
+          person.id,
+          creditLine.id,
+          creditLimitUpdateRequestBodyFactory(creditLimit.creditLimitAmount),
+          creditLimit,
+          201,
+          50,
+        );
+        setupGetBalancesNock(person.id, creditLine.id, balances);
 
         await expect(
           Promise.allSettled([
