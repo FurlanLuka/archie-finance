@@ -165,4 +165,28 @@ export class VaultAccountService {
       vaultAccountId,
     );
   }
+
+  public async createLiquidationTransaction(
+    vaultAccountId: string,
+    assetId: string,
+    amount: string,
+    internalTransactionId: string,
+  ): Promise<CreateTransactionResponse> {
+    const assetInformation: AssetInformation | undefined =
+      this.assetsService.getAssetInformation(assetId);
+
+    if (assetInformation === undefined) {
+      throw new UnknownAssetError({
+        assetId,
+      });
+    }
+
+    return this.fireblocksApiService.createInternalTransaction(
+      assetId,
+      amount,
+      assetInformation.liquidationVaultId,
+      internalTransactionId,
+      vaultAccountId,
+    );
+  }
 }

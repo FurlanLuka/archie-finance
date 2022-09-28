@@ -142,4 +142,47 @@ export class FireblocksApiService {
       });
     }
   }
+
+  public async createInternalTransaction(
+    assetId: string,
+    amount: string,
+    destinationVaultId: string,
+    internalTransactionId: string,
+    vaultAccountId: string,
+  ): Promise<CreateTransactionResponse> {
+    try {
+      const createTransactionResponse: CreateTransactionResponse =
+        await this.fireblocksClient.createTransaction({
+          assetId,
+          amount,
+          source: {
+            type: PeerType.VAULT_ACCOUNT,
+            id: vaultAccountId,
+          },
+          destination: {
+            type: PeerType.VAULT_ACCOUNT,
+            id: destinationVaultId,
+          },
+          externalTxId: internalTransactionId,
+        });
+
+      if (
+        ['REJECTED', 'BLOCKED', 'FAILED', 'CANCELLED'].includes(
+          createTransactionResponse.status,
+        )
+      ) {
+        throw new Error('Transaction rejected');
+      }
+
+      return createTransactionResponse;
+    } catch (error) {
+      throw new CreateTransactionError({
+        assetId,
+        amount,
+        destinationVaultId,
+        internalTransactionId,
+        vaultAccountId,
+      });
+    }
+  }
 }

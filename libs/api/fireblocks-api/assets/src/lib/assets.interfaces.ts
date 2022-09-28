@@ -7,7 +7,7 @@ export enum AssetType {
 export class AssetInformation {
   fireblocksId: string;
   network: 'ERC20' | 'SOL' | 'BTC';
-  liquidationWalletAddress: string;
+  liquidationVaultId: string;
   id: string;
 }
 

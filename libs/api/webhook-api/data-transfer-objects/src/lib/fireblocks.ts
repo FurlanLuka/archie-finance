@@ -1,4 +1,4 @@
-import { TransactionStatus } from "fireblocks-sdk";
+import { TransactionStatus } from 'fireblocks-sdk';
 
 export interface FireblocksDepositTransactionPayload {
   transactionId: string;
@@ -25,6 +25,7 @@ export interface FireblocksWithdrawTransactionPayload {
 
 export interface FireblocksInternalTransactionPayload {
   transactionId: string;
+  internalTransactionId?: string;
   assetId: string;
   sourceVaultId: string;
   destinationVaultId: string;

@@ -291,5 +291,15 @@ export class WithdrawService {
       withdrawalAmount.plus(networkFee).toString(),
       'Transaction failed increment',
     );
+
+    await this.withdrawalRepository.update(
+      {
+        internalTransactionId,
+      },
+      {
+        externalTransactionId: transactionId,
+        status: WithdrawalStatus.FAILED,
+      },
+    );
   }
 }
