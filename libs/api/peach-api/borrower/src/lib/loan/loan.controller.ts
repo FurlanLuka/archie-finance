@@ -62,15 +62,10 @@ export class PeachBorrowerQueueController {
   async creditLimitUpdatedHandler(
     payload: CreditLimitUpdatedPayload,
   ): Promise<void> {
-    console.log('TRY ACQUIRE');
-
     const lock = await this.redisService.acquireLock(payload.userId);
-    console.log('ACQUIRED');
     try {
       await this.peachService.handleCreditLimitUpdatedEvent(payload);
     } finally {
-      console.log('RELEASED');
-
       await this.redisService.releaseLock(lock);
     }
   }

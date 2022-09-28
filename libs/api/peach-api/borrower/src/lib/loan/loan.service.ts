@@ -86,10 +86,10 @@ export class PeachBorrowerService {
   }
 
   public async handleCreditLineCreatedEvent(
-    payload: CreditLineCreatedPayload,
+    creditLine: CreditLineCreatedPayload,
   ): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId: payload.userId,
+      userId: creditLine.userId,
     });
     this.borrowerValidation.isBorrowerMailDefined(borrower);
     this.borrowerValidation.isBorrowerHomeAddressDefined(borrower);
@@ -100,16 +100,7 @@ export class PeachBorrowerService {
 
     const creditLineId = await this.createActiveCreditLine(
       borrower,
-      payload.amount,
-    );
-    await this.lastCreditLimitUpdateRepository.upsert(
-      {
-        borrower: borrower,
-        calculatedAt: new Date().toISOString(),
-      },
-      {
-        conflictPaths: ['borrower'],
-      },
+      creditLine,
     );
 
     await this.createActiveDraw(borrower, creditLineId);
@@ -117,30 +108,16 @@ export class PeachBorrowerService {
 
   private async createActiveCreditLine(
     borrower: BorrowerWithHomeAddress,
-    amount: number,
+    creditLineInfo: CreditLineCreatedPayload,
   ): Promise<string> {
     let creditLineId: string | null = borrower.creditLineId;
 
     if (creditLineId === null) {
-      // TODO: Add down payment to the event payload
-      const collateralValue: GetCollateralValueResponse[] =
-        await this.queueService.request<
-          GetCollateralValueResponse[],
-          GetCollateralValuePayload
-        >(GET_COLLATERAL_VALUE_RPC, {
-          userId: borrower.userId,
-        });
-      const downPayment: number = collateralValue.reduce(
-        (price: number, collateral: GetCollateralValueResponse) =>
-          price + collateral.price,
-        0,
-      );
-
       const creditLine = await this.peachApiService.createCreditLine(
         borrower.personId,
-        amount,
+        creditLineInfo.amount,
         borrower.homeAddressContactId,
-        downPayment,
+        creditLineInfo.downPayment,
       );
       creditLineId = creditLine.id;
 
@@ -153,6 +130,17 @@ export class PeachBorrowerService {
         },
       );
     }
+
+    // TODO: add migration for existing users
+    await this.lastCreditLimitUpdateRepository.upsert(
+      {
+        borrower: borrower,
+        calculatedAt: creditLineInfo.calculatedAt,
+      },
+      {
+        conflictPaths: ['borrower'],
+      },
+    );
 
     await this.peachApiService.activateCreditLine(
       borrower.personId,
@@ -210,8 +198,6 @@ export class PeachBorrowerService {
           calculatedAt: creditLimit.calculatedAt,
         },
       );
-
-    console.log(updatedResult);
 
     if (updatedResult.affected !== 0) {
       await this.peachApiService.updateCreditLimit(

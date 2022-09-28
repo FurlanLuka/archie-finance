@@ -1,21 +1,21 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import Client from 'ioredis';
-import Redlock, { Lock } from 'redlock';
+import Redlock from 'redlock';
+import { RedisConfig, Lock } from './redis.interfaces';
 
 @Injectable()
 export class RedisService implements OnModuleInit {
   private redisClient: Client;
   private redlock: Redlock;
-
+  private NO_RETRY = 0;
   DEFAULT_MAX_LOCK_DURATION_IN_MS = 30000;
 
+  constructor(@Inject('CONFIG_OPTIONS') private options: RedisConfig) {}
+
   onModuleInit(): void {
-    // TODO: accept service prefix
-    this.redisClient = new Client();
+    this.redisClient = new Client(this.options.url);
     this.redlock = new Redlock([this.redisClient], {
-      retryCount: 0,
-      retryDelay: 200,
-      retryJitter: 200,
+      retryCount: this.NO_RETRY,
     });
   }
 
@@ -23,7 +23,9 @@ export class RedisService implements OnModuleInit {
     resource: string,
     duration = this.DEFAULT_MAX_LOCK_DURATION_IN_MS,
   ): Promise<Lock> {
-    return this.redlock.acquire([resource], duration);
+    const prefixedKey = `${this.options.keyPrefix}_${resource}`;
+
+    return this.redlock.acquire([prefixedKey], duration);
   }
 
   public async releaseLock(lock: Lock): Promise<void> {

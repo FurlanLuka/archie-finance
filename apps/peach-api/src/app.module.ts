@@ -9,6 +9,7 @@ import { QueueModule } from '@archie/api/utils/queue';
 import { CryptoModule } from '@archie/api/utils/crypto';
 import { PeachBorrowerModule } from '@archie/api/peach-api/borrower';
 import { RedisModule } from '@archie-microservices/api/utils/redis';
+import { seeds } from './seeds';
 
 @Module({
   imports: [
@@ -45,7 +46,7 @@ import { RedisModule } from '@archie-microservices/api/utils/redis';
         keepConnectionAlive: true,
         migrationsRun: true,
         migrationsTableName: `${SERVICE_NAME}-migrations`,
-        migrations: migrations,
+        migrations: [...migrations, ...seeds],
       }),
       inject: [ConfigService],
     }),
@@ -67,7 +68,14 @@ import { RedisModule } from '@archie-microservices/api/utils/redis';
     HealthModule,
     QueueModule.register(),
     PeachBorrowerModule,
-    RedisModule,
+    RedisModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        url: configService.get(ConfigVariables.REDIS_URL),
+        keyPrefix: SERVICE_NAME,
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [],
   providers: [],

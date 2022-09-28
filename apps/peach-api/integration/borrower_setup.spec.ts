@@ -31,8 +31,8 @@ import {
 } from '../../../libs/api/peach-api/borrower/src/lib/api/peach_api.interfaces';
 import { when } from 'jest-when';
 import { GET_COLLATERAL_VALUE_RPC } from '@archie/api/credit-api/constants';
-import { createUserCollateral } from '../../credit-api/integration/data/collateral.stubs';
 import { getCollateralValueResponse } from '@archie/api/credit-api/test-data';
+import { ExecutionError } from '@archie-microservices/api/utils/redis';
 
 describe('Peach service tests', () => {
   let app: INestApplication;
@@ -266,6 +266,70 @@ describe('Peach service tests', () => {
           creditLimit: updatedCreditLimit.creditLimitAmount,
           calculatedAt: new Date().toISOString(),
         });
+
+        expect(nock.isDone()).toEqual(true);
+      });
+
+      it.only('Should not update the credit limit if calculated at is before the handled one', async () => {
+        const balances = {
+          isLocked: false,
+          availableCreditAmount: 100,
+          creditLimitAmount: 100,
+          calculatedAt: new Date().toISOString(),
+        };
+        const creditLimitUpdate = baseNock
+          .post(`/people/${person.id}/loans/${creditLine.id}/credit-limit`, {
+            creditLimitAmount: updatedCreditLimit.creditLimitAmount + 1,
+          })
+          .reply(201, { data: updatedCreditLimit });
+        baseNock
+          .get(`/people/${person.id}/loans/${creditLine.id}/balances`)
+          .reply(201, { data: balances });
+
+        await app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler({
+          userId: user.id,
+          creditLimit: updatedCreditLimit.creditLimitAmount + 1,
+          calculatedAt: dateBeforeUpdate,
+        });
+
+        expect(creditLimitUpdate.isDone()).toEqual(false);
+      });
+
+      it.only('Should reject credit limit update in case the lock is already taken ', async () => {
+        const balances = {
+          isLocked: false,
+          availableCreditAmount: 100,
+          creditLimitAmount: 100,
+          calculatedAt: new Date().toISOString(),
+        };
+        const failedCreditLimitUpdate = 20;
+        baseNock
+          .post(`/people/${person.id}/loans/${creditLine.id}/credit-limit`, {
+            creditLimitAmount: updatedCreditLimit.creditLimitAmount,
+          })
+          .delay(500)
+          .reply(201, { data: updatedCreditLimit });
+        baseNock
+          .get(`/people/${person.id}/loans/${creditLine.id}/balances`)
+          .reply(201, { data: balances });
+
+        await expect(
+          Promise.allSettled([
+            app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler({
+              userId: user.id,
+              creditLimit: updatedCreditLimit.creditLimitAmount,
+              calculatedAt: new Date().toISOString(),
+            }),
+            app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler({
+              userId: user.id,
+              creditLimit: failedCreditLimitUpdate,
+              calculatedAt: new Date().toISOString(),
+            }),
+          ]),
+        ).resolves.toStrictEqual([
+          { status: 'fulfilled', value: undefined },
+          { reason: expect.any(ExecutionError), status: 'rejected' },
+        ]);
 
         expect(nock.isDone()).toEqual(true);
       });
