@@ -44,7 +44,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral, assetLimit
           collateral_asset: item.asset,
           balance: `$${getFormattedValue(item.price)}`,
           holdings: `${item.assetAmount} ${item.asset}`,
-          credit_limit: assetLimits.filter((i) => i.asset === item.asset)[0], //TBD
+          credit_limit: `$${getFormattedValue(assetLimits.find((i) => i.asset === item.asset)?.limit ?? 0)}`,
           change: {
             collateral_asset: item.asset,
           },
@@ -67,6 +67,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral, assetLimit
         collateral_asset: item.id,
         balance: '$0',
         holdings: `0 ${item.short}`,
+        credit_limit: '$0',
         change: {
           collateral_asset: item.id,
         },
