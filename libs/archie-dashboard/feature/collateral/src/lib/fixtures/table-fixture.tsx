@@ -112,6 +112,14 @@ export const tableColumns = [
         width: 2,
       },
       {
+        Header: 'Credit limit',
+        accessor: 'credit_limit',
+        width: 2,
+        Cell: ({ value }: any) => {
+          return value ? value.limit : 0; //TBD
+        },
+      },
+      {
         Header: <AllocationCellStyled>Change</AllocationCellStyled>,
         accessor: 'change',
         width: 1,

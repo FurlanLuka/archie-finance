@@ -34,7 +34,7 @@ export const TableStyled = styled.div`
       color: ${({ theme }) => theme.textSecondary};
       letter-spacing: 0.02em;
       text-align: left;
-      padding: 0.5rem 1.5rem;
+      padding: 0.5rem 1rem;
       border-bottom: 1px solid ${({ theme }) => theme.tableBorderOuther};
     }
 
@@ -44,7 +44,7 @@ export const TableStyled = styled.div`
       color: ${({ theme }) => theme.textPrimary};
       line-height: 1.2;
       text-align: left;
-      padding: 0.75rem 1.5rem;
+      padding: 0.75rem 1rem;
       border-bottom: 1px solid ${({ theme }) => theme.tableBorderInner};
     }
   }
