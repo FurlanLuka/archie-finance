@@ -32,8 +32,7 @@ import {
 } from '@archie/api/credit-api/collateral';
 import { QueueService } from '@archie/api/utils/queue';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
-import { CollateralWithdrawInitializedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import {
   CollateralWithdrawCompletedPayload,
   CollateralWithdrawTransactionCreatedPayload,
@@ -42,6 +41,7 @@ import {
   GetLoanBalancesPayload,
   GetLoanBalancesResponse,
 } from '@archie/api/peach-api/data-transfer-objects';
+import { CollateralWithdrawInitializedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 import { BigNumber } from 'bignumber.js';
 

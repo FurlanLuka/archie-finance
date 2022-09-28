@@ -1,5 +1,5 @@
 import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
-import { GetAssetPriceResponse } from './asset_price.interfaces';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { AssetPriceService } from './asset_price.service';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import {

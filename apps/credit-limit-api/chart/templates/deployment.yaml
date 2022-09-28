@@ -118,6 +118,11 @@ spec:
                 secretKeyRef:
                   name: queue-shared-secrets
                   key: queue-url
+            - name: ASSET_LTV_LIST
+              valueFrom:
+                secretKeyRef:
+                  name: credit-limit-api-secrets
+                  key: asset-ltv-list
           {{- end }}
       imagePullSecrets:
         - name: regcred

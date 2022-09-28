@@ -1198,10 +1198,41 @@
         "parameters": [],
         "responses": {
           "201": {
-            "description": ""
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditLimitResponse"
+                }
+              }
+            }
           },
           "400": {
             "description": "ERR_CREDIT_ALREADY_EXISTS"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "CreditLimitController_getCreditLine",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditLimitResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ERR_CREDIT_LINE_NOT_FOUND"
           }
         },
         "security": [
@@ -2535,6 +2566,10 @@
         "required": [
           "url"
         ]
+      },
+      "CreditLimitResponse": {
+        "type": "object",
+        "properties": {}
       },
       "LtvDto": {
         "type": "object",

@@ -14,3 +14,12 @@ export class CreditLineCreatedPayload {
   calculatedAt: string;
   downPayment: number;
 }
+
+export class CreditLimitResponse {
+  creditLimit: number;
+  assetLimits: {
+    asset: string;
+    limit: number;
+    utilizationPercentage: number;
+  }[];
+}

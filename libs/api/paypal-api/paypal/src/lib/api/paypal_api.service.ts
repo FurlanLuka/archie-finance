@@ -2,7 +2,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@archie/api/utils/config';
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { ConfigVariables, PAYPAL_PAYMENT_CURRENCY } from '@archie/api/paypal-api/constants';
+import {
+  ConfigVariables,
+  PAYPAL_PAYMENT_CURRENCY,
+} from '@archie/api/paypal-api/constants';
 import { URLSearchParams } from 'url';
 import {
   CaptureOrderResponse,

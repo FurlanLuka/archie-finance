@@ -26,8 +26,8 @@ import {
   InternalCollateralTransactionCompletedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
 import { MARGIN_CALL_COMPLETED_TOPIC } from '@archie/api/margin-api/constants';
-import { LiquidateAssetsDto } from '@archie/api/collateral-api/fireblocks';
 import { INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC } from '@archie/api/collateral-api/constants';
+import { MarginCallCompletedPayload } from '@archie/api/margin-api/data-transfer-objects';
 
 @Controller('v1/collateral')
 export class CollateralController {
@@ -80,7 +80,7 @@ export class CollateralQueueController {
     CollateralQueueController.CONTROLLER_QUEUE_NAME,
   )
   async marginCallCompletedLiquidationHandler(
-    payload: LiquidateAssetsDto,
+    payload: MarginCallCompletedPayload,
   ): Promise<void> {
     await this.collateralService.liquidateAssets(payload);
   }

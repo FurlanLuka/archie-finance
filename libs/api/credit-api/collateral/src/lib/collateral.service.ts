@@ -18,7 +18,7 @@ import {
 import { DepositCreationInternalError } from './collateral.errors';
 import { CollateralValueService } from './collateral-value/collateral-value.service';
 import { QueueService } from '@archie/api/utils/queue';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import {
   CollateralDepositedPayload,
@@ -32,7 +32,7 @@ import {
   CollateralDepositCompletedPayload,
   CollateralLiquidationInitiatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
-import { LiquidateAssetsDto } from '@archie/api/collateral-api/fireblocks';
+import { MarginCallCompletedPayload } from '@archie/api/margin-api/data-transfer-objects';
 import { BigNumber } from 'bignumber.js';
 
 @Injectable()
@@ -174,7 +174,7 @@ export class CollateralService {
   }
 
   public async liquidateAssets(
-    liquidationAssets: LiquidateAssetsDto,
+    liquidationAssets: MarginCallCompletedPayload,
   ): Promise<void> {
     // TODO: Do not handle same events multiple times + check that current collateral balance === balance ltv was calculated on
     const queryRunner = this.dataSource.createQueryRunner();

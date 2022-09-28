@@ -1,14 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CollateralValue, CollateralWithPrice } from './utils.interfaces';
+import { CollateralValue } from './utils.interfaces';
 import { CreditLimit } from '../credit_limit.entity';
 import {
   CREDIT_LIMIT_UPDATED_TOPIC,
   CREDIT_LINE_CREATED_TOPIC,
 } from '@archie/api/credit-limit-api/constants';
-import {
-  AssetInformation,
-  AssetList,
-} from '@archie/api/collateral-api/asset-information';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import { QueueService } from '@archie/api/utils/queue';
@@ -20,6 +16,8 @@ import {
   CreditAlreadyExistsError,
   CreateCreditMinimumCollateralError,
 } from '../credit_limit.errors';
+import { CreditLimitCalculationUtilService } from './credit_limit_calculation.service';
+import { AssetLtvList } from '../credit_limit.interfaces';
 
 @Injectable()
 export class CreditLimitAdjustmentService {
@@ -30,16 +28,20 @@ export class CreditLimitAdjustmentService {
     @InjectRepository(CreditLimit)
     private creditLimitRepository: Repository<CreditLimit>,
     private queueService: QueueService,
+    private creditLimitCalculationUtilService: CreditLimitCalculationUtilService,
   ) {}
 
   public async updateCreditLimit(
     userId: string,
     collateralCalculatedAt: string,
     collateralValue: CollateralValue,
-    assetList: AssetList,
+    assetList: AssetLtvList,
   ): Promise<void> {
     const newCreditLimit: number = Math.min(
-      this.calculateCreditLimit(collateralValue.collateral, assetList),
+      this.creditLimitCalculationUtilService.calculateCreditLimit(
+        collateralValue.collateral,
+        assetList,
+      ),
       this.MAXIMUM_CREDIT,
     );
 
@@ -63,25 +65,6 @@ export class CreditLimitAdjustmentService {
         calculatedAt: collateralCalculatedAt,
       },
     );
-  }
-
-  private calculateCreditLimit(
-    collateralValue: CollateralWithPrice[],
-    assetList: AssetList,
-  ): number {
-    return collateralValue.reduce((sum: number, value: CollateralWithPrice) => {
-      const assetInformation: AssetInformation | undefined =
-        assetList[value.asset];
-
-      if (assetInformation === undefined) {
-        return sum;
-      }
-
-      const actualCollateralValue: number =
-        (value.price / 100) * assetInformation.ltv;
-
-      return sum + Math.floor(actualCollateralValue);
-    }, 0);
   }
 
   private async updateCreditLimitRecord(
@@ -112,8 +95,8 @@ export class CreditLimitAdjustmentService {
   public async createInitialCredit(
     userId: string,
     collateralValue: CollateralValue,
-    assetList: AssetList,
-  ): Promise<void> {
+    assetList: AssetLtvList,
+  ): Promise<number> {
     const creditLimit: CreditLimit | null =
       await this.creditLimitRepository.findOneBy({
         userId,
@@ -123,10 +106,11 @@ export class CreditLimitAdjustmentService {
       throw new CreditAlreadyExistsError();
     }
 
-    let totalCreditValue: number = this.calculateCreditLimit(
-      collateralValue.collateral,
-      assetList,
-    );
+    let totalCreditValue: number =
+      this.creditLimitCalculationUtilService.calculateCreditLimit(
+        collateralValue.collateral,
+        assetList,
+      );
 
     if (totalCreditValue < this.MINIMUM_CREDIT) {
       throw new CreateCreditMinimumCollateralError(this.MINIMUM_CREDIT);
@@ -144,7 +128,7 @@ export class CreditLimitAdjustmentService {
     }
 
     const calculatedAt = new Date().toISOString();
-    await this.creditLimitRepository.insert({
+    await this.creditLimitRepository.save({
       userId,
       calculatedAt,
       creditLimit: totalCreditValue,
@@ -160,5 +144,7 @@ export class CreditLimitAdjustmentService {
         downPayment: collateralValue.collateralBalance,
       },
     );
+
+    return totalCreditValue;
   }
 }
