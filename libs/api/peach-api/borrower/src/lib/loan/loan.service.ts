@@ -5,11 +5,6 @@ import { LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
 import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { QueueService } from '@archie/api/utils/queue';
-import {
-  GetCollateralValuePayload,
-  GetCollateralValueResponse,
-} from '@archie/api/credit-api/collateral';
-import { GET_COLLATERAL_VALUE_RPC } from '@archie/api/credit-api/constants';
 import { CreditLimitUpdatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 import { BorrowerNotFoundError } from '../borrower.errors';
 import { BorrowerValidation } from '../utils/borrower.validation';
@@ -131,7 +126,6 @@ export class PeachBorrowerService {
       );
     }
 
-    // TODO: add migration for existing users
     await this.lastCreditLimitUpdateRepository.upsert(
       {
         borrower: borrower,
@@ -187,7 +181,6 @@ export class PeachBorrowerService {
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    // TODO: insert when credit line is created
     const updatedResult: UpdateResult =
       await this.lastCreditLimitUpdateRepository.update(
         {

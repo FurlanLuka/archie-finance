@@ -4,19 +4,19 @@ import {
   cleanUpTestingModule,
   createTestDatabase,
   createTestingModule,
-  generateUserAccessToken,
   initializeTestingModule,
-  queueStub,
   TestDatabase,
-  user,
 } from '@archie/test/integration';
 import { AppModule } from '../src/app.module';
-import { PeachBorrowerQueueController } from '../../../libs/api/peach-api/borrower/src/lib/loan/loan.controller';
+import { PeachBorrowerQueueController } from '@archie/api/peach-api/borrower';
 import {
   emailVerifiedDataFactory,
   kycSubmittedDataFactory,
 } from '@archie/api/user-api/test-data';
-import { creditLineCreatedDataFactory } from '@archie/api/credit-limit-api/test-data';
+import {
+  creditLimitUpdatedDataFactory,
+  creditLineCreatedDataFactory,
+} from '@archie/api/credit-limit-api/test-data';
 import * as nock from 'nock';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
@@ -25,14 +25,25 @@ import {
   CreditLine,
   Draw,
   HomeAddress,
-  IdentityType,
   Person,
-  PersonStatus,
-} from '../../../libs/api/peach-api/borrower/src/lib/api/peach_api.interfaces';
-import { when } from 'jest-when';
-import { GET_COLLATERAL_VALUE_RPC } from '@archie/api/credit-api/constants';
-import { getCollateralValueResponse } from '@archie/api/credit-api/test-data';
+} from '@archie/api/peach-api/borrower';
 import { ExecutionError } from '@archie-microservices/api/utils/redis';
+import {
+  homeAddressContactRequestBodyFactory,
+  creditLineFactory,
+  homeAddressContactFactory,
+  personFactory,
+  personRequestBodyFactory,
+  phoneContactRequestBodyFactory,
+  emailContactRequestBodyFactory,
+  userRequestBodyFactory,
+  loanRequestBodyFactory,
+  drawFactory,
+  drawRequestBodyFactory,
+  creditLimitFactory,
+  balancesFactory,
+  creditLimitUpdateRequestBodyFactory,
+} from '@archie-microservices/api/peach-api/test-data';
 
 describe('Peach service tests', () => {
   let app: INestApplication;
@@ -40,7 +51,6 @@ describe('Peach service tests', () => {
   let config: ConfigService;
 
   let testDatabase: TestDatabase;
-  let accessToken: string;
   let baseNock: nock.Scope;
 
   const setup = async (): Promise<void> => {
@@ -52,7 +62,6 @@ describe('Peach service tests', () => {
 
     app = await initializeTestingModule(module);
 
-    accessToken = generateUserAccessToken();
     config = app.get(ConfigService);
     baseNock = nock(config.get(ConfigVariables.PEACH_BASE_URL)).matchHeader(
       'X-API-KEY',
@@ -66,74 +75,32 @@ describe('Peach service tests', () => {
   describe('Create and manage loan', () => {
     beforeAll(setup);
     afterAll(cleanup);
-    afterEach(() => {
-      nock.cleanAll();
-    });
+    afterEach(nock.cleanAll);
 
-    const person: Person = {
-      id: 'personId',
-      companyId: 'companyId',
-    };
-    const homeAddress: HomeAddress = {
-      id: 'homeAddressId',
-    };
-    const creditLine: CreditLine = {
-      id: 'creditLineId',
-      atOrigination: {
-        aprEffective: 16,
-        aprNominal: 0,
-      },
-    };
+    const person: Person = personFactory();
+    const homeAddress: HomeAddress = homeAddressContactFactory();
+    const creditLine: CreditLine = creditLineFactory();
 
-    it.only('Should store KYC info', async () => {
+    it('Should store KYC info', async () => {
       const kycSubmittedPayload = kycSubmittedDataFactory();
-
-      console.log(kycSubmittedPayload.dateOfBirth.toISOString());
       baseNock
-        .post('/people', {
-          externalId: kycSubmittedPayload.userId,
-          status: PersonStatus.active,
-          name: {
-            firstName: kycSubmittedPayload.firstName,
-            lastName: kycSubmittedPayload.lastName,
-          },
-          dateOfBirth: kycSubmittedPayload.dateOfBirth.toISOString(),
-          identity: {
-            identityType: IdentityType.SSN,
-            value: kycSubmittedPayload.ssn,
-          },
-        })
+        .post('/people', personRequestBodyFactory(kycSubmittedPayload))
         .reply(201, {
           data: person,
         });
       baseNock
-        .post(`/people/${person.id}/contacts`, {
-          contactType: 'phone',
-          label: 'personal',
-          affiliation: 'self',
-          status: 'primary',
-          value: `${kycSubmittedPayload.phoneNumberCountryCode}${kycSubmittedPayload.phoneNumber}`,
-          valid: true,
-          verified: false,
-          receiveTextMessages: false,
-        })
+        .post(
+          `/people/${person.id}/contacts`,
+          phoneContactRequestBodyFactory(kycSubmittedPayload),
+        )
         .reply(201, {
           data: {},
         });
       baseNock
-        .post(`/people/${person.id}/contacts`, {
-          contactType: 'address',
-          label: 'home',
-          affiliation: 'self',
-          status: 'primary',
-          address: {
-            addressLine1: `${kycSubmittedPayload.addressStreetNumber} ${kycSubmittedPayload.addressStreet}`,
-            city: kycSubmittedPayload.addressLocality,
-            state: kycSubmittedPayload.addressRegion,
-            postalCode: kycSubmittedPayload.addressPostalCode,
-            country: kycSubmittedPayload.addressCountry,
-          },
-        })
+        .post(
+          `/people/${person.id}/contacts`,
+          homeAddressContactRequestBodyFactory(kycSubmittedPayload),
+        )
         .reply(201, { data: homeAddress });
 
       await app
@@ -143,18 +110,13 @@ describe('Peach service tests', () => {
       expect(nock.isDone()).toEqual(true);
     });
 
-    it.only('Should store Email', async () => {
+    it('Should store Email', async () => {
       const emailVerifiedPayload = emailVerifiedDataFactory();
       baseNock
-        .post(`/people/${person.id}/contacts`, {
-          contactType: 'email',
-          label: 'personal',
-          affiliation: 'self',
-          status: 'primary',
-          value: emailVerifiedPayload.email,
-          valid: true,
-          verified: true,
-        })
+        .post(
+          `/people/${person.id}/contacts`,
+          emailContactRequestBodyFactory(emailVerifiedPayload),
+        )
         .reply(201, { data: {} });
 
       await app
@@ -164,66 +126,38 @@ describe('Peach service tests', () => {
       expect(nock.isDone()).toEqual(true);
     });
 
-    it.only('Should create active user and active loan', async () => {
+    it('Should create user and active loan', async () => {
       const emailVerifiedPayload = emailVerifiedDataFactory();
       const creditLineCreatedPayload = creditLineCreatedDataFactory();
+      const draw: Draw = drawFactory();
       baseNock
         .post(
           `/companies/${config.get(ConfigVariables.PEACH_COMPANY_ID)}/users`,
-          {
-            userType: 'borrower',
-            authType: {
-              email: emailVerifiedPayload.email,
-            },
-            roles: [config.get(ConfigVariables.PEACH_BORROWER_ROLE_ID)],
-            associatedPersonId: person.id,
-          },
+          userRequestBodyFactory(
+            emailVerifiedPayload.email,
+            config.get(ConfigVariables.PEACH_BORROWER_ROLE_ID),
+            person.id,
+          ),
         )
         .reply(201, { data: {} });
-      const collateralValue = getCollateralValueResponse();
-      when(queueStub.request)
-        .calledWith(GET_COLLATERAL_VALUE_RPC, {
-          userId: user.id,
-        })
-        .mockReturnValue(collateralValue);
       baseNock
-        .post(`/people/${person.id}/loans`, {
-          loanTypeId: config.get(ConfigVariables.PEACH_LOAN_ID),
-          type: 'lineOfCredit',
-          servicedBy: 'creditor',
-          status: 'originated',
-          newDrawsAllowed: true,
-          atOrigination: {
-            interestRates: [{ days: null, rate: 0 }],
-            paymentFrequency: 'monthly',
-            originationLicense: 'nationalBank',
-            originatingCreditorName: 'Bank of Mars',
-            aprNominal: 0,
-            aprEffective: 0.16,
-            creditLimitAmount: creditLineCreatedPayload.amount,
-            downPaymentAmount: collateralValue[0].price,
-            personAddressId: homeAddress.id,
-          },
-        })
+        .post(
+          `/people/${person.id}/loans`,
+          loanRequestBodyFactory(
+            config.get(ConfigVariables.PEACH_LOAN_ID),
+            creditLineCreatedPayload,
+            homeAddress.id,
+          ),
+        )
         .reply(201, { data: creditLine });
       baseNock
         .post(`/people/${person.id}/loans/${creditLine.id}/activate`, {})
         .reply(201, { data: {} });
-
-      const draw: Draw = {
-        id: 'drawId',
-      };
       baseNock
-        .post(`/people/${person.id}/loans/${creditLine.id}/draws`, {
-          nickname: 'Credit Card',
-          status: 'originated',
-          atOrigination: {
-            minPaymentCalculation: {
-              percentageOfPrincipal: 0.1,
-              minAmount: 0,
-            },
-          },
-        })
+        .post(
+          `/people/${person.id}/loans/${creditLine.id}/draws`,
+          drawRequestBodyFactory(),
+        )
         .reply(201, { data: draw });
       baseNock
         .post(
@@ -239,92 +173,78 @@ describe('Peach service tests', () => {
     });
 
     describe('Credit limit updates', () => {
-      const updatedCreditLimit: CreditLimit = {
-        creditLimitAmount: 100,
-      };
-      const dateBeforeUpdate = new Date().toISOString();
+      const creditLimit: CreditLimit = creditLimitFactory();
+      const balances = balancesFactory();
+      let firstCreditLimitUpdatedPayload;
 
-      // TODO: shouldn't update second time if date is lower, locks
-      it.only('Should update credit limit', async () => {
-        const balances = {
-          isLocked: false,
-          availableCreditAmount: 100,
-          creditLimitAmount: 100,
-          calculatedAt: new Date().toISOString(),
-        };
+      beforeAll(() => {
+        firstCreditLimitUpdatedPayload = creditLimitUpdatedDataFactory();
+      });
+
+      it('Should update credit limit', async () => {
         baseNock
-          .post(`/people/${person.id}/loans/${creditLine.id}/credit-limit`, {
-            creditLimitAmount: updatedCreditLimit.creditLimitAmount,
-          })
-          .reply(201, { data: updatedCreditLimit });
+          .post(
+            `/people/${person.id}/loans/${creditLine.id}/credit-limit`,
+            creditLimitUpdateRequestBodyFactory(
+              firstCreditLimitUpdatedPayload.creditLimit,
+            ),
+          )
+          .reply(201, { data: creditLimit });
         baseNock
           .get(`/people/${person.id}/loans/${creditLine.id}/balances`)
           .reply(201, { data: balances });
 
-        await app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler({
-          userId: user.id,
-          creditLimit: updatedCreditLimit.creditLimitAmount,
-          calculatedAt: new Date().toISOString(),
-        });
+        await app
+          .get(PeachBorrowerQueueController)
+          .creditLimitUpdatedHandler(firstCreditLimitUpdatedPayload);
 
         expect(nock.isDone()).toEqual(true);
       });
 
-      it.only('Should not update the credit limit if calculated at is before the handled one', async () => {
-        const balances = {
-          isLocked: false,
-          availableCreditAmount: 100,
-          creditLimitAmount: 100,
-          calculatedAt: new Date().toISOString(),
-        };
-        const creditLimitUpdate = baseNock
+      it('Should not update the credit limit if calculated at is before the handled one', async () => {
+        const creditLimitUpdateRequest = baseNock
           .post(`/people/${person.id}/loans/${creditLine.id}/credit-limit`, {
-            creditLimitAmount: updatedCreditLimit.creditLimitAmount + 1,
+            creditLimitAmount: creditLimit.creditLimitAmount,
           })
-          .reply(201, { data: updatedCreditLimit });
+          .reply(201, { data: creditLimit });
         baseNock
           .get(`/people/${person.id}/loans/${creditLine.id}/balances`)
           .reply(201, { data: balances });
 
-        await app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler({
-          userId: user.id,
-          creditLimit: updatedCreditLimit.creditLimitAmount + 1,
-          calculatedAt: dateBeforeUpdate,
-        });
+        await app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler(
+          creditLimitUpdatedDataFactory({
+            ...firstCreditLimitUpdatedPayload,
+            calculatedAt: new Date(
+              new Date(firstCreditLimitUpdatedPayload.calculatedAt).getTime() -
+                1000,
+            ).toISOString(),
+          }),
+        );
 
-        expect(creditLimitUpdate.isDone()).toEqual(false);
+        expect(creditLimitUpdateRequest.isDone()).toEqual(false);
       });
 
-      it.only('Should reject credit limit update in case the lock is already taken ', async () => {
-        const balances = {
-          isLocked: false,
-          availableCreditAmount: 100,
-          creditLimitAmount: 100,
-          calculatedAt: new Date().toISOString(),
-        };
-        const failedCreditLimitUpdate = 20;
+      it('Should reject credit limit update in case the lock is already taken', async () => {
         baseNock
           .post(`/people/${person.id}/loans/${creditLine.id}/credit-limit`, {
-            creditLimitAmount: updatedCreditLimit.creditLimitAmount,
+            creditLimitAmount: creditLimit.creditLimitAmount,
           })
-          .delay(500)
-          .reply(201, { data: updatedCreditLimit });
+          .delay(100)
+          .reply(201, { data: creditLimit });
         baseNock
           .get(`/people/${person.id}/loans/${creditLine.id}/balances`)
           .reply(201, { data: balances });
 
         await expect(
           Promise.allSettled([
-            app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler({
-              userId: user.id,
-              creditLimit: updatedCreditLimit.creditLimitAmount,
-              calculatedAt: new Date().toISOString(),
-            }),
-            app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler({
-              userId: user.id,
-              creditLimit: failedCreditLimitUpdate,
-              calculatedAt: new Date().toISOString(),
-            }),
+            app
+              .get(PeachBorrowerQueueController)
+              .creditLimitUpdatedHandler(creditLimitUpdatedDataFactory()),
+            app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler(
+              creditLimitUpdatedDataFactory({
+                creditLimit: 20,
+              }),
+            ),
           ]),
         ).resolves.toStrictEqual([
           { status: 'fulfilled', value: undefined },

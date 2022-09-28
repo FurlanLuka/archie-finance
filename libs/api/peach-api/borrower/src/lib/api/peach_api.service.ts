@@ -231,7 +231,6 @@ export class PeachApiService {
   }
 
   public async createPerson(kyc: KycSubmittedPayload): Promise<Person> {
-    console.log(kyc.dateOfBirth);
     const response = await this.peachClient.post<PeachResponseData<Person>>(
       '/people',
       {
