@@ -81,10 +81,10 @@ export class PeachBorrowerService {
   }
 
   public async handleCreditLineCreatedEvent(
-    creditLine: CreditLineCreatedPayload,
+    createdCreditLine: CreditLineCreatedPayload,
   ): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId: creditLine.userId,
+      userId: createdCreditLine.userId,
     });
     this.borrowerValidation.isBorrowerMailDefined(borrower);
     this.borrowerValidation.isBorrowerHomeAddressDefined(borrower);
@@ -95,7 +95,7 @@ export class PeachBorrowerService {
 
     const creditLineId = await this.createActiveCreditLine(
       borrower,
-      creditLine,
+      createdCreditLine,
     );
 
     await this.createActiveDraw(borrower, creditLineId);
@@ -103,16 +103,16 @@ export class PeachBorrowerService {
 
   private async createActiveCreditLine(
     borrower: BorrowerWithHomeAddress,
-    creditLineInfo: CreditLineCreatedPayload,
+    createdCreditLine: CreditLineCreatedPayload,
   ): Promise<string> {
     let creditLineId: string | null = borrower.creditLineId;
 
     if (creditLineId === null) {
       const creditLine = await this.peachApiService.createCreditLine(
         borrower.personId,
-        creditLineInfo.amount,
+        createdCreditLine.amount,
         borrower.homeAddressContactId,
-        creditLineInfo.downPayment,
+        createdCreditLine.downPayment,
       );
       creditLineId = creditLine.id;
 
@@ -129,7 +129,7 @@ export class PeachBorrowerService {
     await this.lastCreditLimitUpdateRepository.upsert(
       {
         borrower: borrower,
-        calculatedAt: creditLineInfo.calculatedAt,
+        calculatedAt: createdCreditLine.calculatedAt,
       },
       {
         conflictPaths: ['borrower'],
