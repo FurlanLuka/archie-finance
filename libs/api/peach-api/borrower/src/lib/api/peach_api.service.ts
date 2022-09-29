@@ -289,7 +289,9 @@ export class PeachApiService {
         verified: false,
         receiveTextMessages: false,
       });
+      console.log('hsdf');
     } catch (error) {
+      console.log(error, 'asdfs');
       const axiosError: PeachErrorResponse = error;
 
       if (axiosError.status !== this.CONTACT_ALREADY_EXISTS_STATUS) throw error;

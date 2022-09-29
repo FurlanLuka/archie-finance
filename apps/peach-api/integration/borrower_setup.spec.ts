@@ -93,27 +93,57 @@ describe('Peach service tests', () => {
     const homeAddress: HomeAddress = homeAddressContactFactory();
     const creditLine: CreditLine = creditLineFactory();
 
-    it('Should create person and add phone and home address contact', async () => {
+    describe('Kyc submitted event handling', () => {
       const kycSubmittedPayload = kycSubmittedDataFactory();
-      setupCreatePersonNock(
-        personRequestBodyFactory(kycSubmittedPayload),
-        person,
-      );
-      setupCreateContactNock(
-        person.id,
-        phoneContactRequestBodyFactory(kycSubmittedPayload),
-      );
-      setupCreateContactNock(
-        person.id,
-        homeAddressContactRequestBodyFactory(kycSubmittedPayload),
-        homeAddress,
-      );
+      let createPhoneContactNock: nock.Interceptor;
 
-      await app
-        .get(PeachBorrowerQueueController)
-        .kycSubmittedHandler(kycSubmittedPayload);
+      beforeEach(() => {
+        setupCreatePersonNock(
+          personRequestBodyFactory(kycSubmittedPayload),
+          person,
+        );
+        createPhoneContactNock = setupCreateContactNock(
+          person.id,
+          phoneContactRequestBodyFactory(kycSubmittedPayload),
+        );
+        setupCreateContactNock(
+          person.id,
+          homeAddressContactRequestBodyFactory(kycSubmittedPayload),
+          homeAddress,
+        );
+      });
 
-      expect(nock.isDone()).toEqual(true);
+      it('Should create person and add phone and home address contact', async () => {
+        await app
+          .get(PeachBorrowerQueueController)
+          .kycSubmittedHandler(kycSubmittedPayload);
+
+        expect(nock.isDone()).toEqual(true);
+      });
+
+      it('Should not throw in case the event is retried', async () => {
+        await expect(
+          app
+            .get(PeachBorrowerQueueController)
+            .kycSubmittedHandler(kycSubmittedPayload),
+        ).resolves.not.toThrow();
+      });
+
+      it('Should not rethrow in case phone contact was already added', async () => {
+        nock.removeInterceptor(createPhoneContactNock);
+        setupCreateContactNock(
+          person.id,
+          phoneContactRequestBodyFactory(kycSubmittedPayload),
+          {},
+          400,
+        );
+
+        await expect(
+          app
+            .get(PeachBorrowerQueueController)
+            .kycSubmittedHandler(kycSubmittedPayload),
+        ).resolves.not.toThrow();
+      });
     });
 
     it('Should add email contact', async () => {
