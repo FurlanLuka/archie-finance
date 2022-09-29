@@ -9,7 +9,7 @@ import {
   InternalLedgerAccountData,
   WithdrawResponseDto,
 } from '@archie/api/ledger-api/data-transfer-objects';
-import { GetMaxWithdrawalAmount } from '@archie/api/ledger-api/data-transfer-objects';
+import { MaxWithdrawalAmountResponse } from '@archie/api/ledger-api/data-transfer-objects';
 import {
   InvalidAssetError,
   InvalidWithdrawalAmountError,
@@ -45,7 +45,7 @@ export class WithdrawService {
   public async getMaxWithdrawalAmount(
     userId: string,
     assetId: string,
-  ): Promise<GetMaxWithdrawalAmount> {
+  ): Promise<MaxWithdrawalAmountResponse> {
     const ledger: Ledger = await this.ledgerService.getLedger(userId);
 
     const ledgerAccount: InternalLedgerAccountData | undefined =
@@ -104,7 +104,7 @@ export class WithdrawService {
       });
     }
 
-    const withdrawalAmount = BigNumber(amount);
+    const withdrawalAmount = BigNumber(amount).decimalPlaces(18);
 
     if (withdrawalAmount.lte(0)) {
       throw new InvalidWithdrawalAmountError({
@@ -114,7 +114,7 @@ export class WithdrawService {
       });
     }
 
-    const maxWithdrawalAmount: GetMaxWithdrawalAmount =
+    const maxWithdrawalAmount: MaxWithdrawalAmountResponse =
       await this.getMaxWithdrawalAmount(userId, assetId);
 
     if (withdrawalAmount.gt(BigNumber(maxWithdrawalAmount.maxAmount))) {

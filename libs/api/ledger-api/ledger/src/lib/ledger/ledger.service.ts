@@ -180,6 +180,7 @@ export class LedgerService {
             assetAmount: updatedAmount.toString(),
             accountValue: updatedAmount
               .multipliedBy(ledgerAccount.assetPrice)
+              .decimalPlaces(2, BigNumber.ROUND_DOWN)
               .toString(),
           },
         ],
@@ -250,7 +251,8 @@ export class LedgerService {
                 assetAmount: updatedAmount,
                 accountValue: BigNumber(updatedAmount)
                   .dividedBy(ledgerAccount.assetPrice)
-                  .toFormat(2, BigNumber.ROUND_DOWN),
+                  .decimalPlaces(2, BigNumber.ROUND_DOWN)
+                  .toString(),
                 assetPrice: ledgerAccount.assetPrice,
               };
             },
@@ -308,6 +310,7 @@ export class LedgerService {
             assetAmount: updatedAmount.toString(),
             accountValue: updatedAmount
               .multipliedBy(ledgerAccount.assetPrice)
+              .decimalPlaces(2, BigNumber.ROUND_DOWN)
               .toString(),
           },
         ],

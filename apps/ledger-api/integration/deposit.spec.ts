@@ -6,7 +6,9 @@ import {
   createTestingModule,
   generateUserAccessToken,
   initializeTestingModule,
+  queueStub,
   TestDatabase,
+  user,
 } from '@archie/test/integration';
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';
@@ -17,6 +19,7 @@ import { AssetPrices } from '@archie/api/ledger-api/assets';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { BigNumber } from 'bignumber.js';
+import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
 
 describe('Ledger api deposit tests', () => {
   let app: INestApplication;
@@ -50,7 +53,7 @@ describe('Ledger api deposit tests', () => {
   };
 
   const setup = async (): Promise<void> => {
-    testDatabase = await createTestDatabase(true);
+    testDatabase = await createTestDatabase();
 
     module = await createTestingModule({
       imports: [AppModule],
@@ -89,8 +92,17 @@ describe('Ledger api deposit tests', () => {
 
     const firstDepositAssetId = 'BTC';
     const firstdepositAssetAmount = '1';
+
+    const firstDepositAccountValue = BigNumber(firstdepositAssetAmount)
+      .multipliedBy(BITCOIN_PRICE)
+      .decimalPlaces(2, BigNumber.ROUND_DOWN);
+
     const secondDepositAssetId = 'ETH';
     const secondDepositAssetAmount = '0.94823';
+
+    const secondDepositAccountValue = BigNumber(secondDepositAssetAmount)
+      .multipliedBy(ETH_PRICE)
+      .decimalPlaces(2, BigNumber.ROUND_DOWN);
 
     it(`should return en empty ledger because user hasn't deposited any collateral yet`, async () => {
       const response = await request(app.getHttpServer())
@@ -121,20 +133,31 @@ describe('Ledger api deposit tests', () => {
         .expect(200);
 
       expect(response.body).toStrictEqual<Ledger>({
-        value: BigNumber(firstdepositAssetAmount)
-          .multipliedBy(BITCOIN_PRICE)
-          .toString(),
+        value: firstDepositAccountValue.toString(),
         accounts: [
           {
             assetAmount: firstdepositAssetAmount,
             assetId: firstDepositAssetId,
             assetPrice: BITCOIN_PRICE.toString(),
-            accountValue: BigNumber(firstdepositAssetAmount)
-              .multipliedBy(BITCOIN_PRICE)
-              .toString(),
+            accountValue: firstDepositAccountValue.toString(),
           },
         ],
       });
+
+      expect(queueStub.publish).toHaveBeenNthCalledWith(
+        1,
+        LEDGER_ACCOUNT_UPDATED_TOPIC,
+        {
+          userId: user.id,
+          ledgerAccounts: [
+            {
+              assetId: firstDepositAssetId,
+              assetAmount: firstdepositAssetAmount,
+              accountValue: firstDepositAccountValue.toString(),
+            },
+          ],
+        },
+      );
     });
 
     it('should return ledger with two accounts after another deposit has been made', async () => {
@@ -153,37 +176,40 @@ describe('Ledger api deposit tests', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
-      const bitcoinAccountValue = BigNumber(firstdepositAssetAmount)
-        .multipliedBy(BITCOIN_PRICE)
-        .decimalPlaces(2, BigNumber.ROUND_DOWN);
-
-      const ethereumAccountValue = BigNumber(secondDepositAssetAmount)
-        .multipliedBy(ETH_PRICE)
-        .decimalPlaces(2, BigNumber.ROUND_DOWN);
-
       expect(response.body).toStrictEqual<Ledger>({
-        value: bitcoinAccountValue.plus(ethereumAccountValue).toString(),
+        value: firstDepositAccountValue
+          .plus(secondDepositAccountValue)
+          .toString(),
         accounts: [
           {
             assetAmount: firstdepositAssetAmount,
             assetId: firstDepositAssetId,
             assetPrice: BITCOIN_PRICE.toString(),
-            accountValue: BigNumber(firstdepositAssetAmount)
-              .multipliedBy(BITCOIN_PRICE)
-              .decimalPlaces(2, BigNumber.ROUND_DOWN)
-              .toString(),
+            accountValue: firstDepositAccountValue.toString(),
           },
           {
             assetAmount: secondDepositAssetAmount,
             assetId: secondDepositAssetId,
             assetPrice: ETH_PRICE.toString(),
-            accountValue: BigNumber(secondDepositAssetAmount)
-              .multipliedBy(ETH_PRICE)
-              .decimalPlaces(2, BigNumber.ROUND_DOWN)
-              .toString(),
+            accountValue: secondDepositAccountValue.toString(),
           },
         ],
       });
+
+      expect(queueStub.publish).toHaveBeenNthCalledWith(
+        2,
+        LEDGER_ACCOUNT_UPDATED_TOPIC,
+        {
+          userId: user.id,
+          ledgerAccounts: [
+            {
+              assetId: secondDepositAssetId,
+              assetAmount: secondDepositAssetAmount,
+              accountValue: secondDepositAccountValue.toString(),
+            },
+          ],
+        },
+      );
     });
   });
 });

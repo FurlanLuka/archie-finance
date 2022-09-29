@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export interface GetMaxWithdrawalAmount {
+export interface MaxWithdrawalAmountResponse {
   maxAmount: string;
 }
 

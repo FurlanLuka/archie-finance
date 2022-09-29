@@ -1,4 +1,12 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { SERVICE_QUEUE_NAME } from '@archie/api/ledger-api/constants';
 import { WithdrawService } from './withdraw.service';
 import {
@@ -16,7 +24,15 @@ import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   WithdrawPayloadDto,
   WithdrawResponseDto,
+  MaxWithdrawalAmountResponse,
 } from '@archie/api/ledger-api/data-transfer-objects';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
+import {
+  InvalidAssetError,
+  InvalidWithdrawalAmountError,
+  WithdrawalAmountTooHighError,
+} from './withdraw.errors';
 
 @Controller('/v1/ledger/withdraw')
 export class WithdrawController {
@@ -24,6 +40,12 @@ export class WithdrawController {
 
   @Post()
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiErrorResponse([
+    InvalidWithdrawalAmountError,
+    WithdrawalAmountTooHighError,
+    InvalidAssetError,
+  ])
   async withdraw(
     @Body() { assetId, amount, destinationAddress }: WithdrawPayloadDto,
     @Req() request,
@@ -33,6 +55,19 @@ export class WithdrawController {
       assetId,
       amount,
       destinationAddress,
+    );
+  }
+
+  @Get('/:assetId/max_amount')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  async getMaxWithdrawalAmount(
+    @Param('assetId') assetId: string,
+    @Req() request,
+  ): Promise<MaxWithdrawalAmountResponse> {
+    return this.withdrawService.getMaxWithdrawalAmount(
+      request.user.sub,
+      assetId,
     );
   }
 }

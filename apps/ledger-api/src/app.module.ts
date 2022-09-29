@@ -27,6 +27,13 @@ import {
         ConfigVariables.AUTH0_AUDIENCE,
         ConfigVariables.AUTH0_DOMAIN,
       ],
+      parse: (configVariable: ConfigVariables, value) => {
+        if (configVariable === ConfigVariables.ASSET_LIST) {
+          return JSON.parse(value);
+        }
+
+        return value;
+      },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
