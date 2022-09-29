@@ -149,8 +149,8 @@ export const theme: Theme = {
   tooltipBackground: colors.coral_500,
   tooltipText: colors.white,
   // nav item
-  navItem: colors.neutralgray_600,
-  navItemActive: colors.black,
+  navItem: colors.black,
+  navItemActive: colors.neutralgray_600,
   // loading screen
   loadingBackground: colors.teal_800,
   loadingBorder: colors.neutralgray_300,
