@@ -73,7 +73,7 @@ export const CardScreen: FC = () => {
     return 0;
   };
 
-  function getContent() {
+  const getContent = () => {
     if (
       getCreditQueryResponse.state === RequestState.LOADING ||
       getCollateralTotalValueResponse.state === RequestState.LOADING
@@ -116,7 +116,7 @@ export const CardScreen: FC = () => {
     }
 
     return <></>;
-  }
+  };
 
   return (
     <Container column mobileColumn alignItems="center">
