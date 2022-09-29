@@ -30,7 +30,6 @@ import {
   HomeAddress,
   Person,
 } from '@archie/api/peach-api/borrower';
-import { ExecutionError } from '@archie-microservices/api/utils/redis';
 import {
   homeAddressContactRequestBodyFactory,
   creditLineFactory,
@@ -57,6 +56,7 @@ import {
   setupUpdateCreditLimitNock,
   setupGetBalancesNock,
 } from '@archie-microservices/api/peach-api/test-data';
+import { LockedResourceError } from '@archie-microservices/api/utils/redis';
 
 describe('Peach service tests', () => {
   let app: INestApplication;
@@ -240,7 +240,7 @@ describe('Peach service tests', () => {
           ]),
         ).resolves.toStrictEqual([
           { status: 'fulfilled', value: undefined },
-          { reason: expect.any(ExecutionError), status: 'rejected' },
+          { reason: expect.any(LockedResourceError), status: 'rejected' },
         ]);
 
         expect(nock.isDone()).toEqual(true);

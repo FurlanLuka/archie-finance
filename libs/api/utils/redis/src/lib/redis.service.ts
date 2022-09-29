@@ -1,7 +1,8 @@
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import Client from 'ioredis';
-import Redlock, { Lock as RedlockLock } from 'redlock';
+import Redlock, { Lock as RedlockLock, ExecutionError } from 'redlock';
 import { RedisConfig } from './redis.interfaces';
+import { LockedResourceError } from './redis.errors';
 
 @Injectable()
 export class RedisService implements OnModuleInit {
@@ -71,9 +72,19 @@ export function Lock(
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {
-      const lockedResource = await this.redisService.acquireLock(
-        resourceNameCallBack(args[0]),
-      );
+      let lockedResource: string;
+
+      try {
+        lockedResource = await this.redisService.acquireLock(
+          resourceNameCallBack(args[0]),
+        );
+      } catch (error) {
+        if (error instanceof ExecutionError) {
+          throw new LockedResourceError();
+        }
+
+        throw error;
+      }
 
       try {
         const response = await originalMethod.apply(this, args);
