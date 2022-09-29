@@ -29,6 +29,7 @@ import { seeds } from './seeds';
         ConfigVariables.PEACH_LOAN_ID,
         ConfigVariables.PEACH_BASE_URL,
         ConfigVariables.API_BASE_URL,
+        ConfigVariables.REDIS_URL,
       ],
       parse: (_configVariable, value: unknown) => value,
     }),

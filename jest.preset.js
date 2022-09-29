@@ -1,3 +1,3 @@
 const nxPreset = require('@nrwl/jest/preset').default;
 
-module.exports = { ...nxPreset, testTimeout: 60000 };
+module.exports = { ...nxPreset, testTimeout: 30000 };
