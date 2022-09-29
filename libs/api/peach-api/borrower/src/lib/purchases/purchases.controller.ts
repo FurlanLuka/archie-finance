@@ -1,9 +1,7 @@
 import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
-import {
-  SERVICE_QUEUE_NAME,
-  TRANSACTION_UPDATED_TOPIC,
-} from '@archie/api/credit-api/constants';
+import { SERVICE_QUEUE_NAME } from '@archie/api/peach-api/constants';
+import { TRANSACTION_UPDATED_TOPIC } from '@archie/api/credit-api/constants';
 import { PurchasesService } from './purchases.service';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';

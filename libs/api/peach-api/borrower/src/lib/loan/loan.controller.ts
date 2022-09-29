@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
-import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
+import { SERVICE_QUEUE_NAME } from '@archie/api/peach-api/constants';
 import {
   CREDIT_LIMIT_UPDATED_TOPIC,
   CREDIT_LINE_CREATED_TOPIC,
@@ -18,16 +18,12 @@ import {
   EmailVerifiedPayload,
   KycSubmittedPayload,
 } from '@archie/api/user-api/data-transfer-objects';
-import { RedisService } from '@archie-microservices/api/utils/redis';
 
 @Controller()
 export class PeachBorrowerQueueController {
   private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-borrower-loan`;
 
-  constructor(
-    private peachService: PeachBorrowerService,
-    private redisService: RedisService,
-  ) {}
+  constructor(private peachService: PeachBorrowerService) {}
 
   @Subscribe(
     KYC_SUBMITTED_TOPIC,
@@ -62,11 +58,6 @@ export class PeachBorrowerQueueController {
   async creditLimitUpdatedHandler(
     payload: CreditLimitUpdatedPayload,
   ): Promise<void> {
-    const lock = await this.redisService.acquireLock(payload.userId);
-    try {
-      await this.peachService.handleCreditLimitUpdatedEvent(payload);
-    } finally {
-      await this.redisService.releaseLock(lock);
-    }
+    await this.peachService.handleCreditLimitUpdatedEvent(payload);
   }
 }

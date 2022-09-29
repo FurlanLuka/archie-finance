@@ -18,6 +18,7 @@ import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-tran
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { LastCreditLimitUpdate } from '../last_credit_limit_update.entity';
+import { LockHandler } from '@archie-microservices/api/utils/redis';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -173,6 +174,7 @@ export class PeachBorrowerService {
     );
   }
 
+  @LockHandler('userId')
   public async handleCreditLimitUpdatedEvent(
     creditLimit: CreditLimitUpdatedPayload,
   ): Promise<void> {
