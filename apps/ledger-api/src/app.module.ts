@@ -5,6 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigVariables } from '@archie/api/ledger-api/constants';
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
+import {
+  DepositModule,
+  LiquidationModule,
+  LedgerModule,
+  WithdrawModule,
+} from '@archie/api/ledger-api/ledger';
 
 @Module({
   imports: [
@@ -16,6 +22,10 @@ import { QueueModule } from '@archie/api/utils/queue';
         ConfigVariables.TYPEORM_PORT,
         ConfigVariables.TYPEORM_USERNAME,
         ConfigVariables.QUEUE_URL,
+        ConfigVariables.ASSET_LIST,
+        ConfigVariables.COINGECKO_API_URI,
+        ConfigVariables.AUTH0_AUDIENCE,
+        ConfigVariables.AUTH0_DOMAIN,
       ],
     }),
     TypeOrmModule.forRootAsync({
@@ -37,6 +47,10 @@ import { QueueModule } from '@archie/api/utils/queue';
     }),
     QueueModule.register(),
     HealthModule,
+    DepositModule,
+    LiquidationModule,
+    LedgerModule,
+    WithdrawModule,
   ],
   controllers: [],
   providers: [],

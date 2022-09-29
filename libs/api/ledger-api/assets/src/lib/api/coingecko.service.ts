@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
-import { ConfigVariables } from '@archie/api/fireblocks-api/constants';
+import { ConfigVariables } from '@archie/api/ledger-api/constants';
 import { CoingeckoAssetInformationResponse } from './coingecko.interfaces';
 
 @Injectable()

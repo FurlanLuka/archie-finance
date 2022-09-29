@@ -1,6 +1,5 @@
 export interface AssetInformation {
   coingeckoId: string;
-  liquidationWalletId: string;
   liquidationWeight: number;
   id: string;
 }

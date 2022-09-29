@@ -11,7 +11,7 @@ import { BigNumberTrimEndingZerosTransformer } from '@archie/api/utils/typeorm-t
 @Entity({
   name: 'ledger_account',
 })
-@Index(['userId', 'asset'], { unique: true })
+@Index(['userId', 'assetId'], { unique: true })
 export class LedgerAccount {
   @PrimaryGeneratedColumn('uuid')
   id: string;

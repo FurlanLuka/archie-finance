@@ -104,6 +104,9 @@
       "@archie/api/fireblocks-api/ledger": [
         "libs/api/fireblocks-api/ledger/src/index.ts"
       ],
+      "@archie/api/fireblocks-api/test-data": [
+        "libs/api/fireblocks-api/test-data/src/index.ts"
+      ],
       "@archie/api/ledger-api/assets": [
         "libs/api/ledger-api/assets/src/index.ts"
       ],
