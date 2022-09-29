@@ -101,9 +101,9 @@ export class LedgerService {
           return [];
         }
 
-        const accountValue: string = BigNumber(account.amount)
+        const accountValue = BigNumber(account.amount)
           .multipliedBy(assetPrice.price)
-          .toFormat(2, BigNumber.ROUND_DOWN);
+          .decimalPlaces(2, BigNumber.ROUND_DOWN);
 
         ledgerValue = ledgerValue.plus(accountValue);
 
@@ -111,7 +111,7 @@ export class LedgerService {
           {
             assetId: account.assetId,
             assetPrice: assetPrice.price.toString(),
-            accountValue: accountValue,
+            accountValue: accountValue.toString(),
             assetAmount: account.amount,
           },
         ];
@@ -119,7 +119,7 @@ export class LedgerService {
     );
 
     return {
-      value: ledgerValue.toFormat(2),
+      value: ledgerValue.decimalPlaces(2, BigNumber.ROUND_DOWN).toString(),
       accounts: accountData,
     };
   }

@@ -41,7 +41,7 @@ export class LedgerLog {
   })
   action: LedgerAction;
 
-  @Column('varchar')
+  @Column('varchar', { nullable: true })
   note: string;
 
   @CreateDateColumn()
