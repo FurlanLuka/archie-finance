@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react';
 
 import { calculateCollateralTotalValue } from '@archie-webapps/archie-dashboard/utils';
 import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
-import { CollateralAssets, CollateralCurrency } from '@archie-webapps/shared/constants';
+import { CollateralAssets, CollateralCurrency, LTVStatus } from '@archie-webapps/shared/constants';
 import { AssetLimits } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit-line';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 import { Table } from '@archie-webapps/shared/ui/design-system';
@@ -30,11 +30,13 @@ type AssetMap = Record<
 interface CollateralInfoProps {
   collateral: CollateralValue[];
   assetLimits: AssetLimits[];
+  ltvStatus: LTVStatus;
 }
 
-export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral, assetLimits }) => {
+export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral, assetLimits, ltvStatus }) => {
   const totalValue = calculateCollateralTotalValue(collateral);
   const columns = useMemo(() => tableColumns, []);
+  const isInMarginCall = ltvStatus === LTVStatus.MARGIN_CALL;
 
   const assetMap: AssetMap = useMemo(() => {
     return collateral.reduce(
@@ -52,6 +54,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral, assetLimit
           actions: {
             collateral_asset: item.asset,
             isHolding: true,
+            isInMarginCall,
           },
         },
       }),
@@ -75,6 +78,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral, assetLimit
         actions: {
           collateral_asset: item.id,
           isHolding: false,
+          isInMarginCall,
         },
       })),
     );
