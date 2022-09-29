@@ -15,8 +15,6 @@ import { when } from 'jest-when';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import { getAssetPricesResponseDataFactory } from '@archie/api/asset-price-api/test-data';
 import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
-import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
-import { assetListResponseData } from '@archie/api/collateral-api/test-data';
 import * as request from 'supertest';
 import {
   CreditLimit,
@@ -31,6 +29,7 @@ import {
 } from '@archie/api/credit-limit-api/constants';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreditLimitResponse } from '@archie/api/credit-limit-api/data-transfer-objects';
 
 describe('Credit limit service tests', () => {
   let app: INestApplication;
@@ -60,14 +59,9 @@ describe('Credit limit service tests', () => {
 
     accessToken = generateUserAccessToken();
 
-    // Mock RPC request to return array of asset prices
     when(queueStub.request)
       .calledWith(GET_ASSET_PRICES_RPC)
       .mockResolvedValue(getAssetPricesResponseData);
-    // Mock RPC request to return the asset list
-    when(queueStub.request)
-      .calledWith(GET_ASSET_INFORMATION_RPC)
-      .mockResolvedValue(assetListResponseData);
   };
 
   const cleanup = async (): Promise<void> =>
@@ -89,9 +83,37 @@ describe('Credit limit service tests', () => {
     });
   });
 
+  describe('Fetch credit limit when It is not created', () => {
+    beforeAll(setup);
+    afterAll(cleanup);
+
+    it('should fail fetching the credit limit since It was not created yet', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/credit_limits')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(404);
+
+      expect(response.body.message).toBe('ERR_CREDIT_LINE_NOT_FOUND');
+    });
+  });
+
   describe('Create credit line with over collateralization', () => {
     beforeAll(setup);
     afterAll(cleanup);
+
+    const creditLimit = 2000;
+    const bitcoinMaxCreditLimit = 1 * bitcoinPrice * 0.5;
+
+    const expectedBTCCreditLimit: CreditLimitResponse = {
+      creditLimit: creditLimit,
+      assetLimits: [
+        {
+          asset: 'BTC',
+          limit: creditLimit,
+          utilizationPercentage: (creditLimit / bitcoinMaxCreditLimit) * 100,
+        },
+      ],
+    };
 
     it('should increase users collateral to 1 BTC', async () => {
       const collateralDepositCompletedPayload =
@@ -106,7 +128,7 @@ describe('Credit limit service tests', () => {
     });
 
     it('should create the credit with a limit of 2_000 because user has collateralized more then credit limit', async () => {
-      await request(app.getHttpServer())
+      const response = await request(app.getHttpServer())
         .post('/v1/credit_limits')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(201);
@@ -115,9 +137,52 @@ describe('Credit limit service tests', () => {
         CREDIT_LINE_CREATED_TOPIC,
         {
           userId: user.id,
-          amount: 2000,
+          amount: creditLimit,
         },
       );
+
+      expect(response.body).toStrictEqual(expectedBTCCreditLimit);
+    });
+
+    it('should be able to fetch newly created credit limit', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/credit_limits')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toStrictEqual(expectedBTCCreditLimit);
+    });
+
+    it('should increase users collateral to 1 ETH', async () => {
+      const collateralDepositCompletedPayload =
+        collateralDepositCompletedDataFactory({
+          amount: '1',
+          asset: 'ETH',
+          transactionId: 'transactionIdEth',
+        });
+
+      await app
+        .get(CreditLimitQueueController)
+        .collateralDepositCompletedHandler(collateralDepositCompletedPayload);
+    });
+
+    it('Credit limit should stay the same as before, as It is already overcollaterized', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/credit_limits')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toStrictEqual({
+        creditLimit: creditLimit,
+        assetLimits: [
+          ...expectedBTCCreditLimit.assetLimits,
+          {
+            asset: 'ETH',
+            limit: 0,
+            utilizationPercentage: 0,
+          },
+        ],
+      });
     });
   });
 
@@ -129,9 +194,32 @@ describe('Credit limit service tests', () => {
     const ethAmount = 0.3;
     const btcAmount = 0.05;
 
-    const creditLimit =
-      (solAmount * solPrice + ethAmount * ethPrice + btcAmount * bitcoinPrice) *
-      0.5;
+    const btcCreditLimit = btcAmount * bitcoinPrice * 0.5;
+    const solCreditLimit = solAmount * solPrice * 0.5;
+    const ethCreditLimit = ethAmount * ethPrice * 0.5;
+
+    const creditLimit = btcCreditLimit + solCreditLimit + ethCreditLimit;
+
+    const expectedCreditLimit: CreditLimitResponse = {
+      creditLimit,
+      assetLimits: [
+        {
+          asset: 'BTC',
+          limit: btcCreditLimit,
+          utilizationPercentage: 100,
+        },
+        {
+          asset: 'ETH',
+          limit: ethCreditLimit,
+          utilizationPercentage: 100,
+        },
+        {
+          asset: 'SOL',
+          limit: solCreditLimit,
+          utilizationPercentage: 100,
+        },
+      ],
+    };
 
     it(`should increase users collateral by ${btcAmount} BTC`, async () => {
       const collateralDepositCompletedPayload =
@@ -173,7 +261,7 @@ describe('Credit limit service tests', () => {
     });
 
     it(`should create the credit with a limit of ${creditLimit} after combining all collateral value`, async () => {
-      await request(app.getHttpServer())
+      const response = await request(app.getHttpServer())
         .post('/v1/credit_limits')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(201);
@@ -185,6 +273,16 @@ describe('Credit limit service tests', () => {
           amount: creditLimit,
         },
       );
+      expect(response.body).toStrictEqual(expectedCreditLimit);
+    });
+
+    it('should be able to fetch newly created credit limit', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/credit_limits')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(response.body).toStrictEqual(expectedCreditLimit);
     });
   });
 
@@ -244,7 +342,6 @@ describe('Credit limit service tests', () => {
           .calledWith(GET_ASSET_PRICES_RPC)
           .mockResolvedValue(getUpdatedAssetPricesResponseData);
 
-        // Reset mock so it doesnt contain call data from previous tests
         queueStub.publish.mockReset();
       });
 
@@ -271,8 +368,7 @@ describe('Credit limit service tests', () => {
         when(queueStub.request)
           .calledWith(GET_ASSET_PRICES_RPC)
           .mockResolvedValue(getUpdatedAssetPricesResponseData);
-
-        // Reset mock so it doesnt contain call data from previous tests
+  
         queueStub.publish.mockReset();
       });
 
@@ -292,6 +388,24 @@ describe('Credit limit service tests', () => {
           },
         );
       });
+
+      it('should be able to fetch updated credit limit', async () => {
+        const response = await request(app.getHttpServer())
+          .get('/v1/credit_limits')
+          .set('Authorization', `Bearer ${accessToken}`)
+          .expect(200);
+
+        expect(response.body).toStrictEqual({
+          creditLimit: finalCreditLineLimit,
+          assetLimits: [
+            {
+              asset: 'ETH',
+              limit: finalCreditLineLimit,
+              utilizationPercentage: 100,
+            },
+          ],
+        });
+      });
     });
   });
 
@@ -308,8 +422,8 @@ describe('Credit limit service tests', () => {
     it('Should publish LTV_PERIODIC_CHECK_REQUESTED events for all users divided in chunks', async () => {
       const creditLimitRecords: Partial<CreditLimit>[] = [
         ...new Array(8999),
-      ].map(() => ({
-        userId: Math.random().toString(),
+      ].map((_, i) => ({
+        userId: i.toString(),
         calculatedAt: new Date().toISOString(),
         creditLimit: 200,
         calculatedOnCollateralBalance: 400,

@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
 import {
   DataSource,
-  LessThan,
-  MoreThanOrEqual,
+  LessThanOrEqual,
+  MoreThan,
   Repository,
   UpdateResult,
 } from 'typeorm';
@@ -158,23 +158,18 @@ export class CollateralService {
         {
           userId: transaction.userId,
           asset: transaction.asset,
-          amount: MoreThanOrEqual(transaction.fee),
+          amount: MoreThan(transaction.fee),
         },
         'amount',
         transaction.fee,
       );
 
     if (updatedResult.affected === 0) {
-      await this.collateralRepository.update(
-        {
-          userId: transaction.userId,
-          asset: transaction.asset,
-          amount: LessThan(transaction.fee),
-        },
-        {
-          amount: '0',
-        },
-      );
+      await this.collateralRepository.delete({
+        userId: transaction.userId,
+        asset: transaction.asset,
+        amount: LessThanOrEqual(transaction.fee),
+      });
     }
   }
 
@@ -200,6 +195,11 @@ export class CollateralService {
           );
         }),
       );
+
+      await this.collateralRepository.delete({
+        userId: liquidationAssets.userId,
+        amount: '0',
+      });
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();

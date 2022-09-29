@@ -20,7 +20,15 @@ import { CreditLimitModule } from '@archie/api/credit-limit-api/credit-limit';
         ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.QUEUE_URL,
+        ConfigVariables.ASSET_LTV_LIST,
       ],
+      parse: (configVariable, value) => {
+        if (configVariable === ConfigVariables.ASSET_LTV_LIST) {
+          return JSON.parse(value);
+        }
+
+        return value;
+      },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

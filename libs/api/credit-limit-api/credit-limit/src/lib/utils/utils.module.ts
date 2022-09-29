@@ -7,6 +7,7 @@ import { Collateral } from '../collateral.entity';
 import { CreditLimit } from '../credit_limit.entity';
 import { CollateralBalanceUpdateUtilService } from './collateral_balance_update.service';
 import { DatabaseErrorHandlingService } from './database_error_handling.service';
+import { CreditLimitCalculationUtilService } from './credit_limit_calculation.service';
 
 @Module({
   controllers: [],
@@ -17,6 +18,7 @@ import { DatabaseErrorHandlingService } from './database_error_handling.service'
     CollateralBalanceUpdateUtilService,
     CreditLimitAdjustmentService,
     DatabaseErrorHandlingService,
+    CreditLimitCalculationUtilService,
   ],
   exports: [
     MathUtilService,
@@ -24,6 +26,7 @@ import { DatabaseErrorHandlingService } from './database_error_handling.service'
     CollateralBalanceUpdateUtilService,
     CreditLimitAdjustmentService,
     DatabaseErrorHandlingService,
+    CreditLimitCalculationUtilService,
   ],
 })
 export class UtilsModule {}
