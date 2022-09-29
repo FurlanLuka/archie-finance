@@ -1,4 +1,4 @@
-export { ExecutionError, Lock } from 'redlock';
+export { ExecutionError } from 'redlock';
 
 export interface RedisConfig {
   url: string;

@@ -1,14 +1,7 @@
-import {
-  ExecutionContext,
-  Inject,
-  Injectable,
-  Logger,
-  OnModuleInit,
-} from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import Client from 'ioredis';
-import Redlock from 'redlock';
-import { RedisConfig, Lock } from './redis.interfaces';
-import { createMethodDecorator } from '@nestjs/swagger/dist/decorators/helpers';
+import Redlock, { Lock as RedlockLock } from 'redlock';
+import { RedisConfig } from './redis.interfaces';
 
 @Injectable()
 export class RedisService implements OnModuleInit {
@@ -17,7 +10,7 @@ export class RedisService implements OnModuleInit {
   private NO_RETRY = 0;
   DEFAULT_MAX_LOCK_DURATION_IN_MS = 30000;
 
-  private activeLocks: Lock[] = [];
+  private activeLocks: RedlockLock[] = [];
 
   constructor(@Inject('CONFIG_OPTIONS') private options: RedisConfig) {}
 
@@ -34,16 +27,21 @@ export class RedisService implements OnModuleInit {
   ): Promise<string> {
     const prefixedKey = `${this.options.keyPrefix}_${resource}`;
 
-    const lock: Lock = await this.redlock.acquire([prefixedKey], duration);
+    const lock: RedlockLock = await this.redlock.acquire(
+      [prefixedKey],
+      duration,
+    );
     this.activeLocks.push(lock);
 
-    return resource;
+    return prefixedKey;
   }
 
   public async releaseLock(resource: string): Promise<void> {
-    const lock: Lock | undefined = this.activeLocks.find((activeLock) =>
+    const lock: RedlockLock | undefined = this.activeLocks.find((activeLock) =>
       activeLock.resources.includes(resource),
     );
+
+    console.log(lock);
 
     if (lock !== undefined) {
       this.activeLocks = this.activeLocks.filter(
@@ -55,7 +53,9 @@ export class RedisService implements OnModuleInit {
   }
 }
 
-export function LockHandler(resourceIdentifierPath: string): MethodDecorator {
+export function Lock(
+  resourceNameCallBack: <T>(payload: T) => string,
+): MethodDecorator {
   const injector = Inject(RedisService);
 
   return (
@@ -74,8 +74,9 @@ export function LockHandler(resourceIdentifierPath: string): MethodDecorator {
 
     descriptor.value = async function (...args: any[]) {
       const lockedResource = await this.redisService.acquireLock(
-        args[0][resourceIdentifierPath],
+        resourceNameCallBack(args[0]),
       );
+
       try {
         const response = await originalMethod.apply(this, args);
         return response;
