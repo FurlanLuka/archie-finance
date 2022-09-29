@@ -408,7 +408,7 @@ export class RizeService {
     );
 
     if (debitCard !== null) {
-      await this.rizeApiService.lockCard(debitCard.uid);
+      await this.rizeApiService.unlockCard(debitCard.uid);
     }
   }
 
@@ -423,7 +423,7 @@ export class RizeService {
     );
 
     if (debitCard !== null) {
-      await this.rizeApiService.unlockCard(debitCard.uid);
+      await this.rizeApiService.lockCard(debitCard.uid);
     }
   }
 }
