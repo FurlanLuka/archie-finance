@@ -14,6 +14,7 @@ import {
 } from '@archie/api/user-api/data-transfer-objects';
 import { RequestBodyMatcher } from 'nock';
 import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
+import { user } from '@archie/test/integration';
 
 export type PeachRequestBody = RequestBodyMatcher;
 export type PeachResponse = Record<string, unknown>;
@@ -84,7 +85,7 @@ export const balancesFactory = (override?: Partial<Balances>): Balances => ({
 export const personRequestBodyFactory = (
   kyc: KycSubmittedPayload,
 ): PeachRequestBody => ({
-  externalId: kyc.userId,
+  externalId: user.id,
   status: PersonStatus.active,
   name: {
     firstName: kyc.firstName,
