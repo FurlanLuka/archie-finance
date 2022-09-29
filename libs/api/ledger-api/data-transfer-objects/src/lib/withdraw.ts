@@ -4,9 +4,10 @@ export interface MaxWithdrawalAmountResponse {
   maxAmount: string;
 }
 
-export interface GetWithdrawalLog {
+export interface WithdrawalRecord {
   assetId: string;
   status: string;
+  networkFee: string | null;
   amount: string;
   createdAt: Date;
   updatedAt: Date;

@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 export class InvalidWithdrawalAmountError extends BadRequestException {
   metadata: object;
@@ -23,6 +23,15 @@ export class InvalidAssetError extends BadRequestException {
 
   constructor(metadata: object) {
     super('INVALID_ASSET');
+    this.metadata = metadata;
+  }
+}
+
+export class WithdrawalRecordNotFoundError extends NotFoundException {
+  metadata: object;
+
+  constructor(metadata: object) {
+    super('WITHDRAWAL_RECORD_NOT_FOUND');
     this.metadata = metadata;
   }
 }

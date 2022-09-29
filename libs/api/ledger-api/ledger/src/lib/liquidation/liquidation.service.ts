@@ -23,7 +23,7 @@ import {
 import BigNumber from 'bignumber.js';
 
 interface LiquidatedAccounts {
-  assetId: string;
+  asset: AssetInformation;
   amount: string;
 }
 
@@ -79,6 +79,13 @@ export class LiquidationService {
           return previousValue;
         }
 
+        const assetInformation: AssetInformation | undefined =
+          this.assetsService.getAssetInformation(ledgerAccount.assetId);
+
+        if (assetInformation === undefined) {
+          return previousValue;
+        }
+
         const newLedgerAccountValue = BigNumber(
           ledgerAccount.accountValue,
         ).minus(previousValue.amountLeftToLiquidate);
@@ -93,7 +100,7 @@ export class LiquidationService {
             accountsToLiquidate: [
               ...previousValue.accountsToLiquidate,
               {
-                assetId: ledgerAccount.assetId,
+                asset: assetInformation,
                 amount: amountToTake.toString(),
               },
             ],
@@ -106,7 +113,7 @@ export class LiquidationService {
             accountsToLiquidate: [
               ...previousValue.accountsToLiquidate,
               {
-                assetId: ledgerAccount.assetId,
+                asset: assetInformation,
                 amount: ledgerAccount.assetAmount,
               },
             ],
@@ -126,13 +133,13 @@ export class LiquidationService {
 
     await Promise.allSettled(
       accountsLiquidationReducerResult.accountsToLiquidate.map(
-        async ({ assetId, amount }) => {
+        async ({ asset, amount }) => {
           const internalTransactionId = v4();
 
           await this.liquidationRepository.insert({
             userId,
             amount,
-            assetId,
+            assetId: asset.id,
             internalTransactionId,
             status: LiquidationStatus.INITIATED,
           });
@@ -142,7 +149,7 @@ export class LiquidationService {
             {
               userId,
               amount,
-              assetId,
+              assetId: asset.id,
               internalTransactionId,
             },
           );

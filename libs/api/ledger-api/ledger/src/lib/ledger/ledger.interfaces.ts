@@ -1,4 +1,6 @@
+import { AssetInformation } from '@archie/api/ledger-api/assets';
+
 export type BatchDecrementLedgerAccounts = {
-  assetId: string;
+  asset: AssetInformation;
   amount: string;
 }[];

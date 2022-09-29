@@ -8,12 +8,14 @@ import {
   Ledger,
   InternalLedgerAccountData,
   WithdrawResponseDto,
+  WithdrawalRecord,
 } from '@archie/api/ledger-api/data-transfer-objects';
 import { MaxWithdrawalAmountResponse } from '@archie/api/ledger-api/data-transfer-objects';
 import {
   InvalidAssetError,
   InvalidWithdrawalAmountError,
   WithdrawalAmountTooHighError,
+  WithdrawalRecordNotFoundError,
 } from './withdraw.errors';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Withdrawal, WithdrawalStatus } from './withdrawal.entity';
@@ -87,6 +89,26 @@ export class WithdrawService {
     };
   }
 
+  public async getWithdrawalRecord(
+    userId: string,
+    internalTransactionId: string,
+  ): Promise<WithdrawalRecord> {
+    const withdrawalRecord: WithdrawalRecord | null =
+      await this.withdrawalRepository.findOneBy({
+        userId,
+        internalTransactionId,
+      });
+
+    if (withdrawalRecord === null) {
+      throw new WithdrawalRecordNotFoundError({
+        userId,
+        internalTransactionId,
+      });
+    }
+
+    return withdrawalRecord;
+  }
+
   public async withdraw(
     userId: string,
     assetId: string,
@@ -104,7 +126,9 @@ export class WithdrawService {
       });
     }
 
-    const withdrawalAmount = BigNumber(amount).decimalPlaces(18);
+    const withdrawalAmount = BigNumber(amount).decimalPlaces(
+      assetInformation.decimalPlaces,
+    );
 
     if (withdrawalAmount.lte(0)) {
       throw new InvalidWithdrawalAmountError({
@@ -141,7 +165,7 @@ export class WithdrawService {
 
       await this.ledgerService.decrementLedgerAccount(
         userId,
-        assetId,
+        assetInformation,
         amount,
         'Withdrawal decrement',
       );
@@ -210,6 +234,16 @@ export class WithdrawService {
     assetId,
     networkFee,
   }: CollateralWithdrawalTransactionUpdatedPayload): Promise<void> {
+    const assetInformation: AssetInformation | undefined =
+      this.assetService.getAssetInformation(assetId);
+
+    if (assetInformation === undefined) {
+      throw new InvalidAssetError({
+        userId,
+        assetId,
+      });
+    }
+
     const withdrawalRecord: Withdrawal | null =
       await this.withdrawalRepository.findOne({
         where: [
@@ -252,7 +286,7 @@ export class WithdrawService {
       if (withdrawalRecord.status === WithdrawalStatus.SUBMITTED) {
         await this.ledgerService.decrementLedgerAccount(
           userId,
-          assetId,
+          assetInformation,
           networkFee,
           'Network fee decrement',
         );
@@ -277,6 +311,16 @@ export class WithdrawService {
     userId,
     assetId,
   }: CollateralWithdrawalTransactionErrorPayload): Promise<void> {
+    const assetInformation: AssetInformation | undefined =
+      this.assetService.getAssetInformation(assetId);
+
+    if (assetInformation === undefined) {
+      throw new InvalidAssetError({
+        userId,
+        assetId,
+      });
+    }
+
     const withdrawalRecord: Withdrawal | null =
       await this.withdrawalRepository.findOne({
         where: [
@@ -306,7 +350,7 @@ export class WithdrawService {
 
     await this.ledgerService.incrementLedgerAccount(
       userId,
-      assetId,
+      assetInformation,
       withdrawalAmount.plus(networkFee).toString(),
       'Transaction failed increment',
     );

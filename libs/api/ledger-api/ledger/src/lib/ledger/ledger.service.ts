@@ -5,7 +5,12 @@ import { LedgerAccount } from './ledger_account.entity';
 import { BigNumber } from 'bignumber.js';
 import { LedgerAction, LedgerLog } from './ledger_log.entity';
 import { LedgerAccountNotFoundError } from './ledger.errors';
-import { AssetPrice, AssetPricesService } from '@archie/api/ledger-api/assets';
+import {
+  AssetInformation,
+  AssetPrice,
+  AssetPricesService,
+  AssetsService,
+} from '@archie/api/ledger-api/assets';
 import {
   InternalLedgerAccountData,
   Ledger,
@@ -23,21 +28,22 @@ export class LedgerService {
     @InjectRepository(LedgerLog)
     private ledgerLogRepository: Repository<LedgerLog>,
     private assetPricesService: AssetPricesService,
+    private assetsService: AssetsService,
     private queueService: QueueService,
     private dataSource: DataSource,
   ) {}
 
   async createLedgerAccount(
     userId: string,
-    assetId: string,
+    asset: AssetInformation,
     amount: string,
   ): Promise<void> {
     const assetPrice: AssetPrice =
-      await this.assetPricesService.getLatestAssetPrice(assetId);
+      await this.assetPricesService.getLatestAssetPrice(asset.id);
 
     await this.ledgerRepository.save({
       userId,
-      assetId,
+      assetId: asset.id,
       amount,
     });
 
@@ -47,10 +53,11 @@ export class LedgerService {
         userId,
         ledgerAccounts: [
           {
-            assetId,
+            assetId: asset.id,
             assetAmount: amount,
             accountValue: BigNumber(amount)
               .multipliedBy(assetPrice.price)
+              .decimalPlaces(2, BigNumber.ROUND_DOWN)
               .toString(),
           },
         ],
@@ -60,19 +67,19 @@ export class LedgerService {
     await this.ledgerLogRepository.insert({
       userId,
       amount,
-      assetId,
+      assetId: asset.id,
       action: LedgerAction.LEDGER_ACCOUNT_CREATED,
     });
   }
 
   async getLedgerAccount(
     userId: string,
-    assetId: string,
+    asset: AssetInformation,
   ): Promise<InternalLedgerAccountData | null> {
     const ledger: Ledger = await this.getLedger(userId);
 
     const ledgerAccount: InternalLedgerAccountData | undefined =
-      ledger.accounts.find((account) => account.assetId === assetId);
+      ledger.accounts.find((account) => account.assetId === asset.id);
 
     if (ledgerAccount === undefined) {
       return null;
@@ -92,16 +99,23 @@ export class LedgerService {
     let ledgerValue: BigNumber = BigNumber(0);
 
     const accountData: InternalLedgerAccountData[] = ledgerAccounts.flatMap(
-      (account) => {
+      ({ assetId, amount }) => {
+        const assetInformation: AssetInformation | undefined =
+          this.assetsService.getAssetInformation(assetId);
+
+        if (assetInformation === undefined) {
+          return [];
+        }
+
         const assetPrice: AssetPrice | undefined = assetPrices.find(
-          (assetPrice) => assetPrice.assetId === account.assetId,
+          (assetPrice) => assetPrice.assetId === assetId,
         );
 
         if (assetPrice === undefined) {
           return [];
         }
 
-        const accountValue = BigNumber(account.amount)
+        const accountValue = BigNumber(amount)
           .multipliedBy(assetPrice.price)
           .decimalPlaces(2, BigNumber.ROUND_DOWN);
 
@@ -109,10 +123,10 @@ export class LedgerService {
 
         return [
           {
-            assetId: account.assetId,
+            assetId: assetId,
             assetPrice: assetPrice.price.toString(),
             accountValue: accountValue.toString(),
-            assetAmount: account.amount,
+            assetAmount: amount,
           },
         ];
       },
@@ -126,44 +140,49 @@ export class LedgerService {
 
   async decrementLedgerAccount(
     userId: string,
-    assetId: string,
+    asset: AssetInformation,
     amount: string,
     note?: string,
   ): Promise<void> {
-    const deductionAmount: BigNumber = BigNumber(amount);
+    const decrementingAmount = BigNumber(amount).decimalPlaces(
+      asset.decimalPlaces,
+      BigNumber.ROUND_DOWN,
+    );
 
     const ledgerAccount: InternalLedgerAccountData | null =
-      await this.getLedgerAccount(userId, assetId);
+      await this.getLedgerAccount(userId, asset);
 
     if (ledgerAccount === null) {
       throw new LedgerAccountNotFoundError({
         userId,
-        assetId,
+        assetId: asset.id,
       });
     }
 
     const assetAmount: BigNumber = BigNumber(ledgerAccount.assetAmount);
 
-    if (deductionAmount.gt(assetAmount)) {
+    if (decrementingAmount.gt(assetAmount)) {
       Logger.error({
         code: 'INVALID_LEDGER_DEDUCTION_AMOUNT',
         metadata: {
           userId,
-          assetId,
+          assetId: asset.id,
           amount,
-          deductionAmount,
+          decrementingAmount: decrementingAmount.toString(),
         },
       });
     }
 
-    const updatedAmount: BigNumber = deductionAmount.gt(assetAmount)
+    const updatedAmount: BigNumber = decrementingAmount.gt(assetAmount)
       ? BigNumber(0)
-      : assetAmount.minus(deductionAmount);
+      : assetAmount
+          .minus(decrementingAmount)
+          .decimalPlaces(asset.decimalPlaces, BigNumber.ROUND_DOWN);
 
     await this.ledgerRepository.update(
       {
         userId,
-        assetId,
+        assetId: asset.id,
       },
       {
         amount: updatedAmount.toString(),
@@ -190,7 +209,7 @@ export class LedgerService {
     await this.ledgerLogRepository.insert({
       userId,
       amount,
-      assetId,
+      assetId: asset.id,
       action: LedgerAction.LEDGER_ACCOUNT_DECREMENTED,
       note,
     });
@@ -210,30 +229,26 @@ export class LedgerService {
       const updatedLedgerAccounts: InternalLedgerAccountData[] =
         await Promise.all(
           accounts.map(
-            async (updateAccount): Promise<InternalLedgerAccountData> => {
+            async ({ asset, amount }): Promise<InternalLedgerAccountData> => {
               const ledgerAccount: InternalLedgerAccountData =
                 ledger.accounts.find(
-                  (account) => account.assetId === updateAccount.assetId,
+                  (account) => account.assetId === asset.id,
                 )!;
 
-              const deductionAmount = BigNumber(updateAccount.amount);
+              const decrementingAmount = BigNumber(amount).decimalPlaces(
+                asset.decimalPlaces,
+                BigNumber.ROUND_DOWN,
+              );
+
               const assetAmount = BigNumber(ledgerAccount.assetAmount);
 
-              if (deductionAmount.gt(assetAmount)) {
-                Logger.error({
-                  code: 'INVALID_LEDGER_DEDUCTION_AMOUNT',
-                  metadata: {
-                    userId,
-                    assetId: ledgerAccount.assetId,
-                    amount: assetAmount.toString(),
-                    deductionAmount,
-                  },
-                });
-              }
-
-              const updatedAmount = deductionAmount.gt(assetAmount)
-                ? '0'
-                : assetAmount.minus(deductionAmount).toString();
+              const updatedAmount: BigNumber = decrementingAmount.gt(
+                assetAmount,
+              )
+                ? BigNumber(0)
+                : assetAmount
+                    .minus(decrementingAmount)
+                    .decimalPlaces(asset.decimalPlaces, BigNumber.ROUND_DOWN);
 
               await queryRunner.manager.update(
                 LedgerAccount,
@@ -242,13 +257,13 @@ export class LedgerService {
                   assetId: ledgerAccount.assetId,
                 },
                 {
-                  amount: updatedAmount,
+                  amount: updatedAmount.toString(),
                 },
               );
 
               return {
                 assetId: ledgerAccount.assetId,
-                assetAmount: updatedAmount,
+                assetAmount: updatedAmount.toString(),
                 accountValue: BigNumber(updatedAmount)
                   .dividedBy(ledgerAccount.assetPrice)
                   .decimalPlaces(2, BigNumber.ROUND_DOWN)
@@ -277,23 +292,34 @@ export class LedgerService {
 
   async incrementLedgerAccount(
     userId: string,
-    assetId: string,
+    asset: AssetInformation,
     amount: string,
     note?: string,
   ): Promise<void> {
+    const incrementingAmount = BigNumber(amount).decimalPlaces(
+      asset.decimalPlaces,
+      BigNumber.ROUND_DOWN,
+    );
+
     const ledgerAccount: InternalLedgerAccountData | null =
-      await this.getLedgerAccount(userId, assetId);
+      await this.getLedgerAccount(userId, asset);
 
     if (ledgerAccount === null) {
-      return this.createLedgerAccount(userId, assetId, amount);
+      return this.createLedgerAccount(
+        userId,
+        asset,
+        incrementingAmount.toString(),
+      );
     }
 
-    const updatedAmount = BigNumber(ledgerAccount.assetAmount).plus(amount);
+    const updatedAmount = BigNumber(ledgerAccount.assetAmount)
+      .plus(incrementingAmount)
+      .decimalPlaces(asset.decimalPlaces, BigNumber.ROUND_DOWN);
 
     await this.ledgerRepository.update(
       {
         userId,
-        assetId,
+        assetId: asset.id,
       },
       {
         amount: updatedAmount.toString(),
@@ -306,7 +332,7 @@ export class LedgerService {
         userId,
         ledgerAccounts: [
           {
-            assetId,
+            assetId: asset.id,
             assetAmount: updatedAmount.toString(),
             accountValue: updatedAmount
               .multipliedBy(ledgerAccount.assetPrice)
@@ -319,8 +345,8 @@ export class LedgerService {
 
     await this.ledgerLogRepository.insert({
       userId,
-      amount,
-      assetId,
+      amount: incrementingAmount.toString(),
+      assetId: asset.id,
       action: LedgerAction.LEDGER_ACCOUNT_INCREMENTED,
       note,
     });

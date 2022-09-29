@@ -18,12 +18,21 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 import { when } from 'jest-when';
-import { collateralDepositTransactionCompletedPayloadFactory } from '@archie/api/fireblocks-api/test-data';
-import { DepositQueueController } from '@archie/api/ledger-api/ledger';
+import {
+  collateralDepositTransactionCompletedPayloadFactory,
+  collateralWithdrawalTransactionErrorPayloadFactory,
+  collateralWithdrawalTransactionSubmittedPayloadFactory,
+  collateralWithdrawalTransactionUpdatedPayloadFactory,
+} from '@archie/api/fireblocks-api/test-data';
+import {
+  DepositQueueController,
+  WithdrawQueueController,
+} from '@archie/api/ledger-api/ledger';
 import { BigNumber } from 'bignumber.js';
 import { Ledger } from '@archie/api/ledger-api/data-transfer-objects';
 import { INITIATE_COLLATERAL_WITHDRAWAL_COMMAND } from '@archie/api/fireblocks-api/constants';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
+import { CollateralWithdrawalTransactionUpdatedStatus } from '@archie/api/fireblocks-api/data-transfer-objects';
 
 describe('Ledger api withdrawal tests', () => {
   let app: INestApplication;
@@ -100,15 +109,15 @@ describe('Ledger api withdrawal tests', () => {
     beforeAll(setup);
     afterAll(cleanup);
 
-    const assetId = 'BTC';
+    const assetId = 'ETH';
     const assetAmount = '1';
 
-    const utilizationAmount = 1124;
+    const utilizationAmount = 500;
 
-    const maxWithdrawalAmount = BigNumber(BITCOIN_PRICE)
+    const maxWithdrawalAmount = BigNumber(ETH_PRICE)
       .multipliedBy(assetAmount)
       .minus(BigNumber(utilizationAmount).dividedBy(0.3))
-      .dividedBy(BITCOIN_PRICE);
+      .dividedBy(ETH_PRICE);
 
     const loanBalancesResponse: GetLoanBalancesResponse = {
       totalCredit: 5000,
@@ -118,6 +127,10 @@ describe('Ledger api withdrawal tests', () => {
     };
 
     const destinationAddress = 'destinationAddress';
+
+    let internalTransactionId = '';
+
+    let initialLedger;
 
     beforeEach(() => {
       setupLoanBalancesResponse(loanBalancesResponse);
@@ -139,19 +152,21 @@ describe('Ledger api withdrawal tests', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
-      expect(response.body).toStrictEqual<Ledger>({
-        value: BigNumber(assetAmount).multipliedBy(BITCOIN_PRICE).toString(),
+      initialLedger = {
+        value: BigNumber(assetAmount).multipliedBy(ETH_PRICE).toString(),
         accounts: [
           {
             assetAmount: assetAmount,
             assetId: assetId,
-            assetPrice: BITCOIN_PRICE.toString(),
+            assetPrice: ETH_PRICE.toString(),
             accountValue: BigNumber(assetAmount)
-              .multipliedBy(BITCOIN_PRICE)
+              .multipliedBy(ETH_PRICE)
               .toString(),
           },
         ],
-      });
+      };
+
+      expect(response.body).toStrictEqual<Ledger>(initialLedger);
     });
 
     it(`should return 400 because requested asset is not supported`, async () => {
@@ -172,7 +187,7 @@ describe('Ledger api withdrawal tests', () => {
       const response = await request(app.getHttpServer())
         .post('/v1/ledger/withdraw')
         .send({
-          assetId: 'BTC',
+          assetId: 'ETH',
           amount: '0',
           destinationAddress: 'destinationAddress',
         })
@@ -186,7 +201,7 @@ describe('Ledger api withdrawal tests', () => {
       const response = await request(app.getHttpServer())
         .post('/v1/ledger/withdraw')
         .send({
-          assetId: 'BTC',
+          assetId: 'ETH',
           amount: BigNumber(assetAmount).plus(1),
           destinationAddress: 'destinationAddress',
         })
@@ -196,9 +211,9 @@ describe('Ledger api withdrawal tests', () => {
       expect(response.body.message).toStrictEqual('WITHDRAWAL_AMOUNT_TOO_HIGH');
     });
 
-    it(`should successfully withdraw half of maximum available BTC balance for withdrawal`, async () => {
+    it(`should start the withdrawal of half of maximum withdrawable ETH`, async () => {
       const maxAmountResponse = await request(app.getHttpServer())
-        .get('/v1/ledger/withdraw/BTC/max_amount')
+        .get('/v1/ledger/withdraw/ETH/max_amount')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
@@ -228,7 +243,7 @@ describe('Ledger api withdrawal tests', () => {
         .expect(200);
 
       const newBitcoinAccountValue = newAssetAmount
-        .multipliedBy(BITCOIN_PRICE)
+        .multipliedBy(ETH_PRICE)
         .decimalPlaces(2, BigNumber.ROUND_DOWN)
         .toString();
 
@@ -242,7 +257,7 @@ describe('Ledger api withdrawal tests', () => {
           {
             assetAmount: newBitcoinAccountAmount,
             assetId: assetId,
-            assetPrice: BITCOIN_PRICE.toString(),
+            assetPrice: ETH_PRICE.toString(),
             accountValue: newBitcoinAccountValue,
           },
         ],
@@ -272,6 +287,86 @@ describe('Ledger api withdrawal tests', () => {
           destinationAddress,
         },
       );
+
+      internalTransactionId = withdrawResponse.body.id;
+    });
+
+    it('should handle the transaction submitted and updated event and decrease ledger account by the network fee', async () => {
+      const ledgerResponse = await request(app.getHttpServer())
+        .get('/v1/ledger')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      const ledgerAssetAmount = ledgerResponse.body.accounts[0].assetAmount;
+
+      const collateralWithdrawalTransactionSubmittedPayload =
+        collateralWithdrawalTransactionSubmittedPayloadFactory({
+          internalTransactionId,
+        });
+
+      await app
+        .get(WithdrawQueueController)
+        .withdrawalTransactionSubmitted(
+          collateralWithdrawalTransactionSubmittedPayload,
+        );
+
+      const networkFee = '0.0000000001';
+
+      const updatedLedgerAssetAmount =
+        BigNumber(ledgerAssetAmount).minus(networkFee);
+
+      const updatedLedgerValue = BigNumber(updatedLedgerAssetAmount)
+        .multipliedBy(ETH_PRICE)
+        .decimalPlaces(2, BigNumber.ROUND_DOWN);
+
+      const collateralWithdrawalTransactionUpdatedPayload =
+        collateralWithdrawalTransactionUpdatedPayloadFactory({
+          internalTransactionId,
+          status: CollateralWithdrawalTransactionUpdatedStatus.IN_PROGRESS,
+          networkFee,
+        });
+
+      await app
+        .get(WithdrawQueueController)
+        .withdrawalTransactionUpdated(
+          collateralWithdrawalTransactionUpdatedPayload,
+        );
+
+      const updatedLedgerResponse = await request(app.getHttpServer())
+        .get('/v1/ledger')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(updatedLedgerResponse.body).toStrictEqual({
+        ...ledgerResponse.body,
+        accounts: [
+          {
+            ...ledgerResponse.body.accounts[0],
+            assetAmount: updatedLedgerAssetAmount.toString(),
+            accountValue: updatedLedgerValue.toString(),
+          },
+        ],
+      });
+    });
+
+    it('should revert ledger back to pre-withdrawal value because the withdrawal failed', async () => {
+      const collateralWithdrawalTransactionErrorPayload =
+        collateralWithdrawalTransactionErrorPayloadFactory({
+          internalTransactionId,
+        });
+
+      await app
+        .get(WithdrawQueueController)
+        .withdrawalTransactionError(
+          collateralWithdrawalTransactionErrorPayload,
+        );
+
+      const ledgerResponse = await request(app.getHttpServer())
+        .get('/v1/ledger')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      expect(ledgerResponse.body).toStrictEqual(initialLedger);
     });
   });
 });
