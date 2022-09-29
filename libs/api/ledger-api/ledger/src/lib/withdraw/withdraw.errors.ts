@@ -17,3 +17,12 @@ export class WithdrawalAmountTooHighError extends BadRequestException {
     this.metadata = metadata;
   }
 }
+
+export class InvalidAssetError extends BadRequestException {
+  metadata: object;
+
+  constructor(metadata: object) {
+    super('INVALID_ASSET');
+    this.metadata = metadata;
+  }
+}

@@ -7,9 +7,11 @@ import { BigNumber } from 'bignumber.js';
 import {
   Ledger,
   InternalLedgerAccountData,
+  WithdrawResponseDto,
 } from '@archie/api/ledger-api/data-transfer-objects';
 import { GetMaxWithdrawalAmount } from '@archie/api/ledger-api/data-transfer-objects';
 import {
+  InvalidAssetError,
   InvalidWithdrawalAmountError,
   WithdrawalAmountTooHighError,
 } from './withdraw.errors';
@@ -25,6 +27,7 @@ import {
 } from '@archie/api/fireblocks-api/data-transfer-objects';
 import { INITIATE_COLLATERAL_WITHDRAWAL_COMMAND } from '@archie/api/fireblocks-api/constants';
 import { v4 } from 'uuid';
+import { AssetInformation, AssetsService } from '@archie/api/ledger-api/assets';
 
 @Injectable()
 export class WithdrawService {
@@ -34,6 +37,7 @@ export class WithdrawService {
     @InjectRepository(Withdrawal)
     private withdrawalRepository: Repository<Withdrawal>,
     private dataSource: DataSource,
+    private assetService: AssetsService,
   ) {}
 
   static MIN_LTV = 0.3;
@@ -88,7 +92,18 @@ export class WithdrawService {
     assetId: string,
     amount: string,
     destinationAddress: string,
-  ): Promise<void> {
+  ): Promise<WithdrawResponseDto> {
+    const assetInformation: AssetInformation | undefined =
+      this.assetService.getAssetInformation(assetId);
+
+    if (assetInformation === undefined) {
+      throw new InvalidAssetError({
+        userId,
+        assetId,
+        amount,
+      });
+    }
+
     const withdrawalAmount = BigNumber(amount);
 
     if (withdrawalAmount.lte(0)) {
@@ -146,6 +161,10 @@ export class WithdrawService {
         destinationAddress,
       },
     );
+
+    return {
+      id: internalTransactionId,
+    };
   }
 
   public async withdrawalTransactionSubmittedHandler({
