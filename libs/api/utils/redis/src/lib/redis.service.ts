@@ -41,8 +41,6 @@ export class RedisService implements OnModuleInit {
       activeLock.resources.includes(resource),
     );
 
-    console.log(lock);
-
     if (lock !== undefined) {
       this.activeLocks = this.activeLocks.filter(
         (activeLock) => !activeLock.resources.includes(resource),
@@ -54,7 +52,7 @@ export class RedisService implements OnModuleInit {
 }
 
 export function Lock(
-  resourceNameCallBack: <T>(payload: T) => string,
+  resourceNameCallBack: (payload: unknown) => string,
 ): MethodDecorator {
   const injector = Inject(RedisService);
 
