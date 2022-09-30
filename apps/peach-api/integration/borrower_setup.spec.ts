@@ -5,7 +5,9 @@ import {
   createTestDatabase,
   createTestingModule,
   initializeTestingModule,
+  queueStub,
   TestDatabase,
+  user,
 } from '@archie/test/integration';
 import { AppModule } from '../src/app.module';
 import {
@@ -22,7 +24,10 @@ import {
 } from '@archie/api/credit-limit-api/test-data';
 import * as nock from 'nock';
 import { ConfigService } from '@archie/api/utils/config';
-import { ConfigVariables } from '@archie/api/peach-api/constants';
+import {
+  ConfigVariables,
+  CREDIT_BALANCE_UPDATED_TOPIC,
+} from '@archie/api/peach-api/constants';
 import {
   CreditLimit,
   CreditLine,
@@ -45,18 +50,14 @@ import {
   creditLimitFactory,
   balancesFactory,
   creditLimitUpdateRequestBodyFactory,
-  setupBaseNock,
-  setupCreatePersonNock,
-  setupCreateContactNock,
-  setupCreateUserNock,
-  setupCreateLoanNock,
-  setupActivateLoanNock,
-  setupCreateDrawNock,
-  setupActivateDrawNock,
-  setupUpdateCreditLimitNock,
-  setupGetBalancesNock,
+  PeachNock,
 } from '@archie-microservices/api/peach-api/test-data';
 import { LockedResourceError } from '@archie-microservices/api/utils/redis';
+import {
+  BorrowerMailNotFoundError,
+  BorrowerNotFoundError,
+  CreditLineNotFoundError,
+} from '../../../libs/api/peach-api/borrower/src/lib/borrower.errors';
 
 describe('Peach service tests', () => {
   let app: INestApplication;
@@ -64,6 +65,7 @@ describe('Peach service tests', () => {
   let config: ConfigService;
 
   let testDatabase: TestDatabase;
+  let peachNock: PeachNock;
 
   const setup = async (): Promise<void> => {
     testDatabase = await createTestDatabase();
@@ -75,7 +77,7 @@ describe('Peach service tests', () => {
     app = await initializeTestingModule(module);
 
     config = app.get(ConfigService);
-    setupBaseNock(
+    peachNock = new PeachNock(
       config.get(ConfigVariables.PEACH_BASE_URL),
       config.get(ConfigVariables.PEACH_API_KEY),
     );
@@ -84,10 +86,50 @@ describe('Peach service tests', () => {
   const cleanup = async (): Promise<void> =>
     cleanUpTestingModule(app, module, testDatabase);
 
+  describe('Borrower is not created yet', () => {
+    beforeAll(setup);
+    afterAll(cleanup);
+    afterEach(() => {
+      peachNock.cleanAll();
+    });
+
+    it('Should throw borrower not found and retry email verified event', async () => {
+      const emailVerifiedPayload = emailVerifiedDataFactory();
+
+      await expect(
+        app
+          .get(PeachBorrowerQueueController)
+          .emailVerifiedHandler(emailVerifiedPayload),
+      ).rejects.toBeInstanceOf(BorrowerNotFoundError);
+    });
+
+    it('Should throw borrower not found and retry credit line created event', async () => {
+      const creditLineCreatedPayload = creditLineCreatedDataFactory();
+
+      await expect(
+        app
+          .get(PeachBorrowerQueueController)
+          .creditLineCreatedHandler(creditLineCreatedPayload),
+      ).rejects.toBeInstanceOf(BorrowerNotFoundError);
+    });
+
+    it('Should throw borrower not found and retry credit limit updated event', async () => {
+      const creditLimitUpdatedPayload = creditLimitUpdatedDataFactory();
+
+      await expect(
+        app
+          .get(PeachBorrowerQueueController)
+          .creditLimitUpdatedHandler(creditLimitUpdatedPayload),
+      ).rejects.toBeInstanceOf(BorrowerNotFoundError);
+    });
+  });
+
   describe('Create and manage loan', () => {
     beforeAll(setup);
     afterAll(cleanup);
-    afterEach(nock.cleanAll);
+    afterEach(() => {
+      peachNock.cleanAll();
+    });
 
     const person: Person = personFactory();
     const homeAddress: HomeAddress = homeAddressContactFactory();
@@ -96,17 +138,18 @@ describe('Peach service tests', () => {
     describe('Kyc submitted event handling', () => {
       const kycSubmittedPayload = kycSubmittedDataFactory();
       let createPhoneContactNock: nock.Interceptor;
+      let createPersonNock: nock.Interceptor;
 
       beforeEach(() => {
-        setupCreatePersonNock(
+        createPersonNock = peachNock.setupCreatePersonNock(
           personRequestBodyFactory(kycSubmittedPayload),
           person,
         );
-        createPhoneContactNock = setupCreateContactNock(
+        createPhoneContactNock = peachNock.setupCreateContactNock(
           person.id,
           phoneContactRequestBodyFactory(kycSubmittedPayload),
         );
-        setupCreateContactNock(
+        peachNock.setupCreateContactNock(
           person.id,
           homeAddressContactRequestBodyFactory(kycSubmittedPayload),
           homeAddress,
@@ -118,85 +161,130 @@ describe('Peach service tests', () => {
           .get(PeachBorrowerQueueController)
           .kycSubmittedHandler(kycSubmittedPayload);
 
-        expect(nock.isDone()).toEqual(true);
+        expect(peachNock.areAllDone()).toEqual(true);
       });
 
-      it('Should not throw in case the event is retried', async () => {
+      it('Should not rethrow in case phone contact was already added and keep the same person entity', async () => {
+        createPhoneContactNock.reply(400);
+
         await expect(
           app
             .get(PeachBorrowerQueueController)
             .kycSubmittedHandler(kycSubmittedPayload),
         ).resolves.not.toThrow();
-      });
 
-      it('Should not rethrow in case phone contact was already added', async () => {
-        nock.removeInterceptor(createPhoneContactNock);
-        setupCreateContactNock(
+        expect(peachNock.isDone(createPersonNock)).toEqual(false);
+      });
+    });
+
+    describe('Borrower mail is not defined', () => {
+      it('Should throw mail not found error on the credit line created handler and retry', async () => {
+        const creditLineCreatedPayload = creditLineCreatedDataFactory();
+
+        await expect(
+          app
+            .get(PeachBorrowerQueueController)
+            .creditLineCreatedHandler(creditLineCreatedPayload),
+        ).rejects.toBeInstanceOf(BorrowerMailNotFoundError);
+      });
+    });
+
+    describe('Email verified event handling', () => {
+      it('Should add email contact', async () => {
+        const emailVerifiedPayload = emailVerifiedDataFactory();
+        peachNock.setupCreateContactNock(
           person.id,
-          phoneContactRequestBodyFactory(kycSubmittedPayload),
-          {},
-          400,
+          emailContactRequestBodyFactory(emailVerifiedPayload),
         );
 
-        await expect(
-          app
-            .get(PeachBorrowerQueueController)
-            .kycSubmittedHandler(kycSubmittedPayload),
-        ).resolves.not.toThrow();
+        await app
+          .get(PeachBorrowerQueueController)
+          .emailVerifiedHandler(emailVerifiedPayload);
+
+        expect(peachNock.areAllDone()).toEqual(true);
       });
     });
 
-    it('Should add email contact', async () => {
-      const emailVerifiedPayload = emailVerifiedDataFactory();
-      setupCreateContactNock(
-        person.id,
-        emailContactRequestBodyFactory(emailVerifiedPayload),
-      );
+    describe('Credit line is not defined', () => {
+      it('Should throw credit line not found error on the credit limit updated handler and retry', async () => {
+        const creditLimitUpdatedPayload = creditLimitUpdatedDataFactory();
 
-      await app
-        .get(PeachBorrowerQueueController)
-        .emailVerifiedHandler(emailVerifiedPayload);
-
-      expect(nock.isDone()).toEqual(true);
+        await expect(
+          app
+            .get(PeachBorrowerQueueController)
+            .creditLimitUpdatedHandler(creditLimitUpdatedPayload),
+        ).rejects.toBeInstanceOf(CreditLineNotFoundError);
+      });
     });
 
-    it('Should create user and active loan', async () => {
+    describe('Credit line created event handling', () => {
       const emailVerifiedPayload = emailVerifiedDataFactory();
       const creditLineCreatedPayload = creditLineCreatedDataFactory();
       const draw: Draw = drawFactory();
-      setupCreateUserNock(
-        config.get(ConfigVariables.PEACH_COMPANY_ID),
-        userRequestBodyFactory(
-          emailVerifiedPayload.email,
-          config.get(ConfigVariables.PEACH_BORROWER_ROLE_ID),
+      let createUserNock: nock.Interceptor;
+      let createLoanNock: nock.Interceptor;
+      let activateLoanNock: nock.Interceptor;
+      let activateDrawNock: nock.Interceptor;
+      let createDrawNock: nock.Interceptor;
+
+      beforeEach(() => {
+        createUserNock = peachNock.setupCreateUserNock(
+          config.get(ConfigVariables.PEACH_COMPANY_ID),
+          userRequestBodyFactory(
+            emailVerifiedPayload.email,
+            config.get(ConfigVariables.PEACH_BORROWER_ROLE_ID),
+            person.id,
+          ),
+        );
+        createLoanNock = peachNock.setupCreateLoanNock(
           person.id,
-        ),
-      );
-      setupCreateLoanNock(
-        person.id,
-        loanRequestBodyFactory(
-          config.get(ConfigVariables.PEACH_LOAN_ID),
-          creditLineCreatedPayload,
-          homeAddress.id,
-        ),
-        creditLine,
-      );
-      setupActivateLoanNock(person.id, creditLine.id, {});
-      setupCreateDrawNock(
-        person.id,
-        creditLine.id,
-        drawRequestBodyFactory(),
-        draw,
-      );
-      setupActivateDrawNock(person.id, creditLine.id, draw.id);
+          loanRequestBodyFactory(
+            config.get(ConfigVariables.PEACH_LOAN_ID),
+            creditLineCreatedPayload,
+            homeAddress.id,
+          ),
+          creditLine,
+        );
+        activateLoanNock = peachNock.setupActivateLoanNock(
+          person.id,
+          creditLine.id,
+          {},
+        );
+        createDrawNock = peachNock.setupCreateDrawNock(
+          person.id,
+          creditLine.id,
+          drawRequestBodyFactory(),
+          draw,
+        );
+        activateDrawNock = peachNock.setupActivateDrawNock(
+          person.id,
+          creditLine.id,
+          draw.id,
+        );
+      });
 
-      await app
-        .get(PeachBorrowerQueueController)
-        .creditLineCreatedHandler(creditLineCreatedPayload);
+      it('Should create user and active loan', async () => {
+        await app
+          .get(PeachBorrowerQueueController)
+          .creditLineCreatedHandler(creditLineCreatedPayload);
 
-      expect(nock.isDone()).toEqual(true);
+        expect(peachNock.areAllDone()).toEqual(true);
+      });
+
+      it('Should handle retried event without creating a new loan or draw', async () => {
+        peachNock.clearInterceptor(createUserNock);
+        createUserNock.reply(409);
+        activateDrawNock.reply(400);
+        activateLoanNock.reply(400);
+
+        await app
+          .get(PeachBorrowerQueueController)
+          .creditLineCreatedHandler(creditLineCreatedPayload);
+
+        expect(peachNock.isDone(createLoanNock)).toEqual(false);
+        expect(peachNock.isDone(createDrawNock)).toEqual(false);
+      });
     });
-
     describe('Credit limit updates', () => {
       const creditLimit: CreditLimit = creditLimitFactory();
       const balances: Balances = balancesFactory();
@@ -207,7 +295,7 @@ describe('Peach service tests', () => {
       });
 
       it('Should update the credit limit', async () => {
-        setupUpdateCreditLimitNock(
+        peachNock.setupUpdateCreditLimitNock(
           person.id,
           creditLine.id,
           creditLimitUpdateRequestBodyFactory(
@@ -215,23 +303,33 @@ describe('Peach service tests', () => {
           ),
           creditLimit,
         );
-        setupGetBalancesNock(person.id, creditLine.id, balances);
+        peachNock.setupGetBalancesNock(person.id, creditLine.id, balances);
 
         await app
           .get(PeachBorrowerQueueController)
           .creditLimitUpdatedHandler(firstCreditLimitUpdatedPayload);
 
-        expect(nock.isDone()).toEqual(true);
+        expect(peachNock.areAllDone()).toEqual(true);
+        expect(queueStub.publish).toHaveBeenCalledWith(
+          CREDIT_BALANCE_UPDATED_TOPIC,
+          {
+            userId: user.id,
+            availableCreditAmount: balances.availableCreditAmount,
+            calculatedAt: balances.calculatedAt,
+            creditLimitAmount: balances.creditLimitAmount,
+            utilizationAmount: balances.utilizationAmount,
+          },
+        );
       });
 
       it('Should not update the credit limit if It was calculated before already handled event', async () => {
-        const creditLimitUpdateRequest = setupUpdateCreditLimitNock(
+        const creditLimitUpdateRequest = peachNock.setupUpdateCreditLimitNock(
           person.id,
           creditLine.id,
           creditLimitUpdateRequestBodyFactory(creditLimit.creditLimitAmount),
           creditLimit,
         );
-        setupGetBalancesNock(person.id, creditLine.id, balances);
+        peachNock.setupGetBalancesNock(person.id, creditLine.id, balances);
 
         await app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler(
           creditLimitUpdatedDataFactory({
@@ -243,11 +341,11 @@ describe('Peach service tests', () => {
           }),
         );
 
-        expect(creditLimitUpdateRequest.isDone()).toEqual(false);
+        expect(peachNock.isDone(creditLimitUpdateRequest)).toEqual(false);
       });
 
       it('Should throw error in case the lock for credit limit update is already taken', async () => {
-        setupUpdateCreditLimitNock(
+        peachNock.setupUpdateCreditLimitNock(
           person.id,
           creditLine.id,
           creditLimitUpdateRequestBodyFactory(creditLimit.creditLimitAmount),
@@ -255,7 +353,7 @@ describe('Peach service tests', () => {
           201,
           50,
         );
-        setupGetBalancesNock(person.id, creditLine.id, balances);
+        peachNock.setupGetBalancesNock(person.id, creditLine.id, balances);
 
         await expect(
           Promise.allSettled([
@@ -273,7 +371,7 @@ describe('Peach service tests', () => {
           { reason: expect.any(LockedResourceError), status: 'rejected' },
         ]);
 
-        expect(nock.isDone()).toEqual(true);
+        expect(peachNock.areAllDone()).toEqual(true);
       });
     });
   });
