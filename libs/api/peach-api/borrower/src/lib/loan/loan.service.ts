@@ -6,7 +6,6 @@ import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { QueueService } from '@archie/api/utils/queue';
 import { CreditLimitUpdatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
-import { BorrowerNotFoundError } from '../borrower.errors';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import {
   EmailVerifiedPayload,
@@ -64,7 +63,7 @@ export class PeachBorrowerService {
     email: EmailVerifiedPayload,
   ): Promise<void> {
     const encryptedEmail: string = this.cryptoService.encrypt(email.email);
-    const borrower: Borrower | undefined = await this.borrowerRepository
+    const borrower: Borrower | null = await this.borrowerRepository
       .createQueryBuilder()
       .update(Borrower, {
         encryptedEmail,
@@ -72,11 +71,9 @@ export class PeachBorrowerService {
       .where('userId = :userId', { userId: email.userId })
       .returning('*')
       .execute()
-      .then((response: UpdateResult) => (<Borrower[]>response.raw)[0]);
+      .then((response: UpdateResult) => (<Borrower[]>response.raw)[0] ?? null);
 
-    if (borrower === undefined) {
-      throw new BorrowerNotFoundError();
-    }
+    this.borrowerValidation.isBorrowerDefined(borrower);
 
     await this.peachApiService.addMailContact(borrower.personId, email.email);
   }
@@ -200,19 +197,19 @@ export class PeachBorrowerService {
         borrower.creditLineId,
         creditLimit.creditLimit,
       );
+
+      const credit: Credit = await this.peachApiService.getCreditBalance(
+        borrower.personId,
+        borrower.creditLineId,
+      );
+
+      this.queueService.publish<CreditBalanceUpdatedPayload>(
+        CREDIT_BALANCE_UPDATED_TOPIC,
+        {
+          ...credit,
+          userId: creditLimit.userId,
+        },
+      );
     }
-
-    const credit: Credit = await this.peachApiService.getCreditBalance(
-      borrower.personId,
-      borrower.creditLineId,
-    );
-
-    this.queueService.publish<CreditBalanceUpdatedPayload>(
-      CREDIT_BALANCE_UPDATED_TOPIC,
-      {
-        ...credit,
-        userId: creditLimit.userId,
-      },
-    );
   }
 }
