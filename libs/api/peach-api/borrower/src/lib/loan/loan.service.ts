@@ -6,7 +6,6 @@ import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { QueueService } from '@archie/api/utils/queue';
 import { CreditLimitUpdatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
-import { BorrowerNotFoundError } from '../borrower.errors';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import {
   EmailVerifiedPayload,

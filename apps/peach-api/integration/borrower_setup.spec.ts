@@ -34,6 +34,9 @@ import {
   Draw,
   HomeAddress,
   Person,
+  BorrowerMailNotFoundError,
+  BorrowerNotFoundError,
+  CreditLineNotFoundError,
 } from '@archie/api/peach-api/borrower';
 import {
   homeAddressContactRequestBodyFactory,
@@ -53,11 +56,6 @@ import {
   PeachNock,
 } from '@archie-microservices/api/peach-api/test-data';
 import { LockedResourceError } from '@archie-microservices/api/utils/redis';
-import {
-  BorrowerMailNotFoundError,
-  BorrowerNotFoundError,
-  CreditLineNotFoundError,
-} from '../../../libs/api/peach-api/borrower/src/lib/borrower.errors';
 
 describe('Peach service tests', () => {
   let app: INestApplication;

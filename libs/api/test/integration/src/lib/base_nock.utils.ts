@@ -1,14 +1,4 @@
 import * as nock from 'nock';
-import {
-  PeachRequestBody,
-  PeachResponse,
-} from '@archie-microservices/api/peach-api/test-data';
-import {
-  Balances,
-  CreditLimit,
-  Draw,
-  Person,
-} from '@archie/api/peach-api/borrower';
 import { Interceptor } from 'nock';
 
 export class BaseNock {
