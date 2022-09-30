@@ -16,6 +16,12 @@
     "baseUrl": ".",
     "strictNullChecks": true,
     "paths": {
+      "@archie-microservices/api/peach-api/test-data": [
+        "libs/api/peach-api/test-data/src/index.ts"
+      ],
+      "@archie-microservices/api/utils/redis": [
+        "libs/api/utils/redis/src/index.ts"
+      ],
       "@archie/api/asset-price-api/asset-price": [
         "libs/api/asset-price-api/asset-price/src/index.ts"
       ],

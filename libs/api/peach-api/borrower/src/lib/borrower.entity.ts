@@ -1,4 +1,11 @@
-import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { LastCreditLimitUpdate } from './last_credit_limit_update.entity';
 
 @Entity({
   name: 'borrower',
@@ -31,4 +38,10 @@ export class Borrower {
 
   @Column('varchar', { nullable: true })
   drawId: string | null;
+
+  @OneToOne(
+    (_) => LastCreditLimitUpdate,
+    (creditLimitUpdate) => creditLimitUpdate.id,
+  )
+  lastCreditLimitUpdate: LastCreditLimitUpdate | null;
 }

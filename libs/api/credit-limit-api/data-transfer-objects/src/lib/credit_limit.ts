@@ -11,6 +11,8 @@ export class CreditLimitPeriodicCheckRequestedPayload {
 export class CreditLineCreatedPayload {
   userId: string;
   amount: number;
+  calculatedAt: string;
+  downPayment: number;
 }
 
 export class CreditLimitResponse {

@@ -126,9 +126,11 @@ export class CreditLimitAdjustmentService {
 
       totalCreditValue = this.MAXIMUM_CREDIT;
     }
+
+    const calculatedAt = new Date().toISOString();
     await this.creditLimitRepository.save({
       userId,
-      calculatedAt: new Date().toISOString(),
+      calculatedAt,
       creditLimit: totalCreditValue,
       calculatedOnCollateralBalance: collateralValue.collateralBalance,
     });
@@ -138,6 +140,8 @@ export class CreditLimitAdjustmentService {
       {
         userId,
         amount: totalCreditValue,
+        calculatedAt,
+        downPayment: collateralValue.collateralBalance,
       },
     );
 

@@ -8,6 +8,8 @@ import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
 import { CryptoModule } from '@archie/api/utils/crypto';
 import { PeachBorrowerModule } from '@archie/api/peach-api/borrower';
+import { RedisModule } from '@archie-microservices/api/utils/redis';
+import { seeds } from './seeds';
 
 @Module({
   imports: [
@@ -27,6 +29,7 @@ import { PeachBorrowerModule } from '@archie/api/peach-api/borrower';
         ConfigVariables.PEACH_LOAN_ID,
         ConfigVariables.PEACH_BASE_URL,
         ConfigVariables.API_BASE_URL,
+        ConfigVariables.REDIS_URL,
       ],
       parse: (_configVariable, value: unknown) => value,
     }),
@@ -44,7 +47,7 @@ import { PeachBorrowerModule } from '@archie/api/peach-api/borrower';
         keepConnectionAlive: true,
         migrationsRun: true,
         migrationsTableName: `${SERVICE_NAME}-migrations`,
-        migrations: migrations,
+        migrations: [...migrations, ...seeds],
       }),
       inject: [ConfigService],
     }),
@@ -66,6 +69,14 @@ import { PeachBorrowerModule } from '@archie/api/peach-api/borrower';
     HealthModule,
     QueueModule.register(),
     PeachBorrowerModule,
+    RedisModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        url: configService.get(ConfigVariables.REDIS_URL),
+        keyPrefix: SERVICE_NAME,
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [],
   providers: [],

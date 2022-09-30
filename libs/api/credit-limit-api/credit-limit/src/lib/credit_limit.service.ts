@@ -54,10 +54,9 @@ export class CreditLimitService {
     private dataSource: DataSource,
     private databaseErrorHandlingService: DatabaseErrorHandlingService,
     private creditLimitCalculationUtilService: CreditLimitCalculationUtilService,
-    private configService: ConfigService,
+    configService: ConfigService,
   ) {
     this.assetList = configService.get(ConfigVariables.ASSET_LTV_LIST);
-  
   }
 
   public async handleCollateralWithdrawInitializedEvent(

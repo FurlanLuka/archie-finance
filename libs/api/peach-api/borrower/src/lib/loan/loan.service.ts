@@ -1,15 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
 import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { QueueService } from '@archie/api/utils/queue';
-import {
-  GetCollateralValuePayload,
-  GetCollateralValueResponse,
-} from '@archie/api/credit-api/collateral';
-import { GET_COLLATERAL_VALUE_RPC } from '@archie/api/credit-api/constants';
 import { CreditLimitUpdatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 import { BorrowerNotFoundError } from '../borrower.errors';
 import { BorrowerValidation } from '../utils/borrower.validation';
@@ -22,6 +17,8 @@ import { Credit, Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
 import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
+import { LastCreditLimitUpdate } from '../last_credit_limit_update.entity';
+import { Lock } from '@archie-microservices/api/utils/redis';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -29,6 +26,8 @@ export class PeachBorrowerService {
     private peachApiService: PeachApiService,
     @InjectRepository(Borrower)
     private borrowerRepository: Repository<Borrower>,
+    @InjectRepository(LastCreditLimitUpdate)
+    private lastCreditLimitUpdateRepository: Repository<LastCreditLimitUpdate>,
     private cryptoService: CryptoService,
     private queueService: QueueService,
     private borrowerValidation: BorrowerValidation,
@@ -83,10 +82,10 @@ export class PeachBorrowerService {
   }
 
   public async handleCreditLineCreatedEvent(
-    payload: CreditLineCreatedPayload,
+    createdCreditLine: CreditLineCreatedPayload,
   ): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId: payload.userId,
+      userId: createdCreditLine.userId,
     });
     this.borrowerValidation.isBorrowerMailDefined(borrower);
     this.borrowerValidation.isBorrowerHomeAddressDefined(borrower);
@@ -97,7 +96,7 @@ export class PeachBorrowerService {
 
     const creditLineId = await this.createActiveCreditLine(
       borrower,
-      payload.amount,
+      createdCreditLine,
     );
 
     await this.createActiveDraw(borrower, creditLineId);
@@ -105,29 +104,16 @@ export class PeachBorrowerService {
 
   private async createActiveCreditLine(
     borrower: BorrowerWithHomeAddress,
-    amount: number,
+    createdCreditLine: CreditLineCreatedPayload,
   ): Promise<string> {
     let creditLineId: string | null = borrower.creditLineId;
 
     if (creditLineId === null) {
-      const collateralValue: GetCollateralValueResponse[] =
-        await this.queueService.request<
-          GetCollateralValueResponse[],
-          GetCollateralValuePayload
-        >(GET_COLLATERAL_VALUE_RPC, {
-          userId: borrower.userId,
-        });
-      const downPayment: number = collateralValue.reduce(
-        (price: number, collateral: GetCollateralValueResponse) =>
-          price + collateral.price,
-        0,
-      );
-
       const creditLine = await this.peachApiService.createCreditLine(
         borrower.personId,
-        amount,
+        createdCreditLine.amount,
         borrower.homeAddressContactId,
-        downPayment,
+        createdCreditLine.downPayment,
       );
       creditLineId = creditLine.id;
 
@@ -140,6 +126,16 @@ export class PeachBorrowerService {
         },
       );
     }
+
+    await this.lastCreditLimitUpdateRepository.upsert(
+      {
+        borrower: borrower,
+        calculatedAt: createdCreditLine.calculatedAt,
+      },
+      {
+        conflictPaths: ['borrower'],
+      },
+    );
 
     await this.peachApiService.activateCreditLine(
       borrower.personId,
@@ -178,6 +174,7 @@ export class PeachBorrowerService {
     );
   }
 
+  @Lock((payload: CreditLimitUpdatedPayload) => payload.userId)
   public async handleCreditLimitUpdatedEvent(
     creditLimit: CreditLimitUpdatedPayload,
   ): Promise<void> {
@@ -186,12 +183,24 @@ export class PeachBorrowerService {
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    // TODO: Remember the last update calculated at, as if the events don't come in order credit limit could be unintentionally changed - unlikely
-    await this.peachApiService.updateCreditLimit(
-      borrower.personId,
-      borrower.creditLineId,
-      creditLimit.creditLimit,
-    );
+    const updatedResult: UpdateResult =
+      await this.lastCreditLimitUpdateRepository.update(
+        {
+          borrower: { uuid: borrower.uuid },
+          calculatedAt: LessThanOrEqual(creditLimit.calculatedAt),
+        },
+        {
+          calculatedAt: creditLimit.calculatedAt,
+        },
+      );
+
+    if (updatedResult.affected !== 0) {
+      await this.peachApiService.updateCreditLimit(
+        borrower.personId,
+        borrower.creditLineId,
+        creditLimit.creditLimit,
+      );
+    }
 
     const credit: Credit = await this.peachApiService.getCreditBalance(
       borrower.personId,

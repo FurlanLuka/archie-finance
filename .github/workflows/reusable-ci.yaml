@@ -52,6 +52,7 @@ jobs:
 
       INTERNAL_API_URL: http://localhost
       QUEUE_URL: amqp://localhost
+      REDIS_URL: 'redis://localhost:6379'
 
       ENCRYPTION_KEY: ')J@McQfTjWnZr4u7x!A%D*G-KaPdRgUk'
 
@@ -99,6 +100,10 @@ jobs:
         image: heidiks/rabbitmq-delayed-message-exchange:3.10.2-management
         ports:
           - 5672:5672
+      redis:
+        image: redis:alpine3.16
+        ports:
+          - 6379:6379
     steps:
       - uses: actions/checkout@v2
         name: Checkout
