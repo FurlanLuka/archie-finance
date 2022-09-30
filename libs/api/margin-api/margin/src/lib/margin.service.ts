@@ -14,8 +14,6 @@ import {
   MarginCallsDto,
   MarginCallStatus,
 } from './margin.dto';
-import { DateTime } from 'luxon';
-import { MARGIN_CALL_LIQUIDATION_AFTER_HOURS } from '@archie/api/margin-api/constants';
 import { MarginCallFactory } from './utils/margin_call_factory.service';
 
 @Injectable()
