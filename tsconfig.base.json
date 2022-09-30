@@ -119,6 +119,9 @@
       "@archie/api/ledger-api/ledger": [
         "libs/api/ledger-api/ledger/src/index.ts"
       ],
+      "@archie/api/ledger-api/test-data": [
+        "libs/api/ledger-api/test-data/src/index.ts"
+      ],
       "@archie/api/ltv-api/constants": [
         "libs/api/ltv-api/constants/src/index.ts"
       ],

@@ -20,6 +20,7 @@ import {
   CollateralLiquidationTransactionUpdatedStatus,
   InitiateCollateralLiquidationCommandPayload,
 } from '@archie/api/fireblocks-api/data-transfer-objects';
+import { Liquidation as ILiquidation } from '@archie/api/ledger-api/data-transfer-objects';
 import BigNumber from 'bignumber.js';
 
 interface LiquidatedAccounts {
@@ -41,6 +42,24 @@ export class LiquidationService {
     private assetsService: AssetsService,
     private queueService: QueueService,
   ) {}
+
+  public async getliquidations(userId: string): Promise<ILiquidation[]> {
+    const liquidations: Liquidation[] = await this.liquidationRepository.findBy(
+      {
+        userId,
+      },
+    );
+
+    return liquidations.map(
+      ({ assetId, amount, networkFee, updatedAt, createdAt, status }) => ({
+        assetId,
+        amount: BigNumber(amount).plus(networkFee).toString(),
+        updatedAt: updatedAt.toISOString(),
+        createdAt: createdAt.toISOString(),
+        status,
+      }),
+    );
+  }
 
   public async initiateLedgerAssetLiquidation({
     userId,
@@ -68,8 +87,8 @@ export class LiquidationService {
         }
 
         return (
-          firstAccountAsset.liquidationWeight -
-          secondAccountAsset.liquidationWeight
+          secondAccountAsset.liquidationWeight -
+          firstAccountAsset.liquidationWeight
         );
       });
 
@@ -93,7 +112,11 @@ export class LiquidationService {
         if (newLedgerAccountValue.gte(0)) {
           const amountToTake = BigNumber(ledgerAccount.accountValue)
             .minus(newLedgerAccountValue)
-            .dividedBy(ledgerAccount.assetPrice);
+            .dividedBy(ledgerAccount.assetPrice)
+            .decimalPlaces(
+              assetInformation.decimalPlaces,
+              BigNumber.ROUND_DOWN,
+            );
 
           return {
             amountLeftToLiquidate: '0',
@@ -131,7 +154,7 @@ export class LiquidationService {
       accountsLiquidationReducerResult.accountsToLiquidate,
     );
 
-    await Promise.allSettled(
+    await Promise.all(
       accountsLiquidationReducerResult.accountsToLiquidate.map(
         async ({ asset, amount }) => {
           const internalTransactionId = v4();

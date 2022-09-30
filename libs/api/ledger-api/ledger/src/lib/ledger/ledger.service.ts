@@ -264,8 +264,8 @@ export class LedgerService {
               return {
                 assetId: ledgerAccount.assetId,
                 assetAmount: updatedAmount.toString(),
-                accountValue: BigNumber(updatedAmount)
-                  .dividedBy(ledgerAccount.assetPrice)
+                accountValue: updatedAmount
+                  .multipliedBy(ledgerAccount.assetPrice)
                   .decimalPlaces(2, BigNumber.ROUND_DOWN)
                   .toString(),
                 assetPrice: ledgerAccount.assetPrice,
@@ -283,6 +283,8 @@ export class LedgerService {
           ),
         },
       );
+
+      await queryRunner.commitTransaction();
     } catch {
       await queryRunner.rollbackTransaction();
     } finally {

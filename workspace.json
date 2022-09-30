@@ -37,6 +37,7 @@
     "api-ledger-api-constants": "libs/api/ledger-api/constants",
     "api-ledger-api-data-transfer-objects": "libs/api/ledger-api/data-transfer-objects",
     "api-ledger-api-ledger": "libs/api/ledger-api/ledger",
+    "api-ledger-api-test-data": "libs/api/ledger-api/test-data",
     "api-ltv-api-constants": "libs/api/ltv-api/constants",
     "api-ltv-api-data-transfer-objects": "libs/api/ltv-api/data-transfer-objects",
     "api-ltv-api-ltv": "libs/api/ltv-api/ltv",
