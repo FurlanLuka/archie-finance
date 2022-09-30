@@ -28,7 +28,7 @@ import {
 import { Subscribe } from '@archie/api/utils/queue';
 import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
 import { PeachWebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
-import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
+import { SERVICE_QUEUE_NAME } from '@archie/api/peach-api/constants';
 import {
   INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
   INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
