@@ -29,9 +29,7 @@ export class BaseNock {
 
   public areAllDone(): boolean {
     return this.interceptors.every((interceptor) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore // -  Bad interface
-      return interceptor.interceptionCounter > 0;
+      return this.isDone(interceptor);
     });
   }
 
