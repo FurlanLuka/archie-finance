@@ -57,7 +57,6 @@ export class CreditLimitService {
     private configService: ConfigService,
   ) {
     this.assetList = configService.get(ConfigVariables.ASSET_LTV_LIST);
-    console.log(typeof this.assetList, 'asa');
   }
 
   public async handleCollateralWithdrawInitializedEvent(

@@ -76,7 +76,7 @@ export class PeachApiService {
           ...error.config,
           headers: null,
         },
-        status: (<AxiosResponse>error.response).status,
+        status: error.response?.status ?? 500,
         errorResponse: <PeachErrorData>error.response?.data,
       };
       Logger.error(JSON.stringify(response, null, 2));

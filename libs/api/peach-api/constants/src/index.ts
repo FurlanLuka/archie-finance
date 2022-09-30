@@ -17,6 +17,7 @@ export enum ConfigVariables {
   PEACH_LOAN_ID = 'PEACH_LOAN_ID',
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
   API_BASE_URL = 'API_BASE_URL',
+  REDIS_URL = 'REDIS_URL',
 }
 
 export const CREDIT_BALANCE_UPDATED_TOPIC = 'peach.credit_balance.updated';
