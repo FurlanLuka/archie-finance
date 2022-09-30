@@ -8,6 +8,7 @@ import { MarginNotification } from '../margin_notifications.entity';
 import {
   COLLATERAL_SALE_LTV_LIMIT,
   LTV_MARGIN_CALL_LIMIT,
+  MARGIN_CALL_LIQUIDATION_AFTER_HOURS,
 } from '@archie/api/margin-api/constants';
 
 @Injectable()
@@ -64,7 +65,10 @@ export class MarginActionsCheckUtilService {
           DateTime.utc(),
         ).length('hours');
 
-      if (hoursPassedSinceTheStartOfMarginCall >= 72) {
+      if (
+        hoursPassedSinceTheStartOfMarginCall >=
+        MARGIN_CALL_LIQUIDATION_AFTER_HOURS
+      ) {
         return [
           MarginAction.liquidate,
           MarginAction.reset_margin_call_in_danger_notifications,

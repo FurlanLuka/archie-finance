@@ -1290,6 +1290,32 @@
         }
       }
     },
+    "/v1/margin_calls": {
+      "get": {
+        "operationId": "MarginController_getMarginCalls",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MarginCallsDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/v1/paypal/orders": {
       "post": {
         "operationId": "PaypalController_createOrder",
@@ -2590,6 +2616,29 @@
         "required": [
           "ltv",
           "status"
+        ]
+      },
+      "MarginCallsDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "completed"
+            ]
+          },
+          "automaticLiquidationAt": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "automaticLiquidationAt",
+          "createdAt"
         ]
       },
       "CreateOrderDto": {
