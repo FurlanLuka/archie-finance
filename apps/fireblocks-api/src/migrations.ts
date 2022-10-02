@@ -1,5 +1,5 @@
-import { FireblocksApi1664718742265 } from './migrations/FireblocksApi1664718742265';
+import { FireblocksApi1664742132286 } from './migrations/FireblocksApi1664742132286';
 
 export const migrations = [
-  FireblocksApi1664718742265,
+  FireblocksApi1664742132286,
   ]
