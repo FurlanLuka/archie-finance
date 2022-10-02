@@ -46,7 +46,7 @@ export class Liquidation {
   @Column('varchar')
   destinationVaultId: string;
 
-  @Column('status')
+  @Column('varchar')
   status: TransactionStatus;
 
   @CreateDateColumn()

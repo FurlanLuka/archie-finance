@@ -11,6 +11,4 @@ export class AssetInformation {
   id: string;
 }
 
-export class AssetList {
-  [key: string]: Omit<AssetInformation, 'id'>;
-}
+export type AssetList = AssetInformation[];

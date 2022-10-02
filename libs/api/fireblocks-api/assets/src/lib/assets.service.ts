@@ -16,10 +16,7 @@ export class AssetsService {
       ConfigVariables.ASSET_LIST,
     );
 
-    return {
-      ...assetList[asset],
-      id: asset,
-    };
+    return assetList.find((item) => item.id === asset);
   }
 
   public getAssetInformationForFireblocksId(
@@ -29,17 +26,6 @@ export class AssetsService {
       ConfigVariables.ASSET_LIST,
     );
 
-    const asset: string | undefined = Object.keys(assetList).find((key) => {
-      return assetList[key].fireblocksId !== fireblocksAssetId;
-    });
-
-    if (asset === undefined) {
-      return undefined;
-    }
-
-    return {
-      ...assetList[asset],
-      id: asset,
-    };
+    return assetList.find((item) => item.fireblocksId === fireblocksAssetId);
   }
 }

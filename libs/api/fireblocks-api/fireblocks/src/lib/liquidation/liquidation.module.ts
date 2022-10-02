@@ -7,7 +7,11 @@ import { LiquidationService } from './liquidation.service';
 import { VaultAccountModule } from '../vault-account/vault_account.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Liquidation]), AssetsModule, VaultAccountModule],
+  imports: [
+    TypeOrmModule.forFeature([Liquidation]),
+    AssetsModule,
+    VaultAccountModule,
+  ],
   providers: [LiquidationService],
   controllers: [LiquidationQueueController],
 })

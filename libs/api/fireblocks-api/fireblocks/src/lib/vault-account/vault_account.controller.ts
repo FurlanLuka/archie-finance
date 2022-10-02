@@ -18,10 +18,4 @@ export class VaultAccountController {
       request.user.sub,
     );
   }
-
-  @Post('whitelisted_address/:assetId')
-  async whitelistAddress(): Promise<void> {
-    // TODO: whitelisting
-    return;
-  }
 }

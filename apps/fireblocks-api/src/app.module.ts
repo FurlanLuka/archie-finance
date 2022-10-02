@@ -8,7 +8,9 @@ import { QueueModule } from '@archie/api/utils/queue';
 import { AssetsModule } from '@archie/api/fireblocks-api/assets';
 import {
   DepositModule,
+  LiquidationModule,
   VaultAccountModule,
+  WithdrawModule,
 } from '@archie/api/fireblocks-api/fireblocks';
 
 @Module({
@@ -21,7 +23,19 @@ import {
         ConfigVariables.TYPEORM_PORT,
         ConfigVariables.TYPEORM_USERNAME,
         ConfigVariables.QUEUE_URL,
+        ConfigVariables.FIREBLOCKS_API_KEY,
+        ConfigVariables.FIREBLOCKS_PRIVATE_KEY,
+        ConfigVariables.FIREBLOCKS_PUBLIC_KEY,
+        ConfigVariables.FIREBLOCKS_VAULT_ACCOUNT_ID,
+        ConfigVariables.ASSET_LIST,
       ],
+      parse: (configVariable: ConfigVariables, value) => {
+        if (configVariable === ConfigVariables.ASSET_LIST) {
+          return JSON.parse(value);
+        }
+
+        return value;
+      },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -45,6 +59,8 @@ import {
     AssetsModule,
     DepositModule,
     VaultAccountModule,
+    WithdrawModule,
+    LiquidationModule,
   ],
   controllers: [],
   providers: [],

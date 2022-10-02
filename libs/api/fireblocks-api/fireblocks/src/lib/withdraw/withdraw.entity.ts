@@ -46,7 +46,7 @@ export class Withdraw {
   @Column('varchar')
   destinationAddress: string;
 
-  @Column('status')
+  @Column('varchar')
   status: TransactionStatus;
 
   @CreateDateColumn()

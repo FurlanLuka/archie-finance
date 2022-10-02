@@ -12,7 +12,10 @@ import {
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';
 import { collateralDepositTransactionCompletedPayloadFactory } from '@archie/api/fireblocks-api/test-data';
-import { DepositQueueController, LedgerQueueController } from '@archie/api/ledger-api/ledger';
+import {
+  DepositQueueController,
+  LedgerQueueController,
+} from '@archie/api/ledger-api/ledger';
 import { AssetPrices } from '@archie/api/ledger-api/assets';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -145,7 +148,7 @@ describe('Ledger api deposit tests', () => {
 
     it('should handle the recalculation events and publish ledger updates', async () => {
       queueStub.publish.mockReset();
-  
+
       for (const userId in generatedUserIds) {
         const initiateLedgerRecalcuationCommandPayload =
           initiateLedgerRecalcuationCommandPayloadFactory({
@@ -154,9 +157,11 @@ describe('Ledger api deposit tests', () => {
 
         await app
           .get(LedgerQueueController)
-          .recalculationCommandHandler(initiateLedgerRecalcuationCommandPayload);
+          .recalculationCommandHandler(
+            initiateLedgerRecalcuationCommandPayload,
+          );
       }
-      
+
       expect(queueStub.publish).toHaveBeenCalledTimes(100);
 
       generatedUserIds.forEach((userId, index) => {
