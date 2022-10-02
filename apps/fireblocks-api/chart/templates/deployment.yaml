@@ -108,6 +108,21 @@ spec:
                 secretKeyRef:
                   name: fireblocks-api-secrets
                   key: db-database
+            - name: ASSET_LIST
+              valueFrom:
+                secretKeyRef:
+                  name: fireblocks-api-secrets
+                  key: asset-list
+            - name: FIREBLOCKS_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fireblocks-api-secrets
+                  key: fireblocks-api-key
+            - name: FIREBLOCKS_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: fireblocks-api-secrets
+                  key: fireblocks-private-key
           {{- end }}
       imagePullSecrets:
         - name: regcred

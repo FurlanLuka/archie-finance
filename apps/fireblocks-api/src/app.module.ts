@@ -25,8 +25,6 @@ import {
         ConfigVariables.QUEUE_URL,
         ConfigVariables.FIREBLOCKS_API_KEY,
         ConfigVariables.FIREBLOCKS_PRIVATE_KEY,
-        ConfigVariables.FIREBLOCKS_PUBLIC_KEY,
-        ConfigVariables.FIREBLOCKS_VAULT_ACCOUNT_ID,
         ConfigVariables.ASSET_LIST,
       ],
       parse: (configVariable: ConfigVariables, value) => {

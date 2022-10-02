@@ -113,6 +113,11 @@ spec:
                 secretKeyRef:
                   name: peach-api-secrets
                   key: peach-base-url
+            - name: FIREBLOCKS_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: webhook-api-secrets
+                  key: fireblocks-public-key
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:

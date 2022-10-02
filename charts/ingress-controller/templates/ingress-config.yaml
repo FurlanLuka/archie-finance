@@ -212,3 +212,27 @@ spec:
                 name: archie-paypal-api-service
                 port:
                   number: 80
+          # Ledger api
+          - path: /v1/ledger
+            pathType: Prefix
+              backend:
+                service:
+                  name: archie-ledger-api-service
+                  port:
+                    number: 80
+          # Fireblocks api
+          - path: /v1/vault_account
+            pathType: Prefix
+              backend:
+                service:
+                  name: archie-fireblocks-api-service
+                  port:
+                    number: 80
+          # Webhook api
+          - path: /v1/webhook
+            pathType: Prefix
+              backend:
+                service:
+                  name: archie-webhook-api-service
+                  port:
+                    number: 80

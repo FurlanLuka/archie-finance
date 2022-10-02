@@ -108,6 +108,26 @@ spec:
                 secretKeyRef:
                   name: ledger-api-secrets
                   key: db-database
+            - name: ASSET_LIST
+              valueFrom:
+                secretKeyRef:
+                  name: ledger-api-secrets
+                  key: asset-list
+            - name: COINGECKO_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: ledger-api-secrets
+                  key: coingecko-api-url
+            - name: AUTH0_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: auth0-shared-secrets
+                  key: domain
+            - name: AUTH0_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: auth0-shared-secrets
+                  key: audience
           {{- end }}
       imagePullSecrets:
         - name: regcred
@@ -125,3 +145,71 @@ spec:
       targetPort: 80
   selector:
     app: archie-ledger-api
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: fetch-asset-prices-v2
+spec:
+  {{- if eq .Values.environment "production" }}
+  schedule: "*/5 * * * *"
+  {{- else }}
+  schedule: "0 * * * *"
+  {{- end }}
+  jobTemplate:
+    metadata:
+      name: fetch-asset-prices-v2
+    spec:
+      template:
+        spec:
+          containers:
+          - name: fetch-asset-prices-v2-job
+            image: curlimages/curl
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: INTERNAL_API_URL
+              {{- if not .Values.local }}
+              valueFrom:
+                secretKeyRef:
+                  name: internal-api-shared-secrets
+                  key: internal-api-url
+              {{- else }}
+              value: http://host.minikube.internal
+              {{- end }}
+            command:
+            - /bin/sh
+            - -c
+            - curl ${INTERNAL_API_URL}/internal/asset/price/fetch
+          restartPolicy: OnFailure
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: recalculate-ledger-values
+spec:
+  schedule: "0 * * * *"
+  jobTemplate:
+    metadata:
+      name: recalculate-ledger-values
+    spec:
+      template:
+        spec:
+          containers:
+            - name: recalculate-ledger-values-job
+              image: curlimages/curl
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: INTERNAL_API_URL
+                  {{- if not .Values.local }}
+                  valueFrom:
+                    secretKeyRef:
+                      name: internal-api-shared-secrets
+                      key: internal-api-url
+                  {{- else }}
+                  value: http://host.minikube.internal
+                  {{- end }}
+              command:
+                - /bin/sh
+                - -c
+                - curl -X POST ${INTERNAL_API_URL}/internal/ledger/recalculate
+          restartPolicy: OnFailure

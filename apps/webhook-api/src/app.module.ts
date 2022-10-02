@@ -22,6 +22,7 @@ import { FireblocksWebhookModule } from '@archie/api/webhook-api/fireblocks';
         ConfigVariables.QUEUE_URL,
         ConfigVariables.PEACH_BASE_URL,
         ConfigVariables.PEACH_API_KEY,
+        ConfigVariables.FIREBLOCKS_PUBLIC_KEY,
       ],
     }),
     TypeOrmModule.forRootAsync({

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { VaultAccountService } from './vault_account.service';
 import { GetDepositAddressResponse } from '@archie/api/fireblocks-api/data-transfer-objects';
