@@ -113,7 +113,7 @@ spec:
                 secretKeyRef:
                   name: ledger-api-secrets
                   key: asset-list
-            - name: COINGECKO_API_URL
+            - name: COINGECKO_API_URI
               valueFrom:
                 secretKeyRef:
                   name: ledger-api-secrets
