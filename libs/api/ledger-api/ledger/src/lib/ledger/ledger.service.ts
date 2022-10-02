@@ -12,13 +12,18 @@ import {
   AssetsService,
 } from '@archie/api/ledger-api/assets';
 import {
+  InitiateLedgerRecalculationCommandPayload,
   InternalLedgerAccountData,
   Ledger,
   LedgerAccountUpdatedPayload,
 } from '@archie/api/ledger-api/data-transfer-objects';
 import { QueueService } from '@archie/api/utils/queue';
-import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
+import {
+  INITIATE_LEDGER_RECALCULATION_COMMAND,
+  LEDGER_ACCOUNT_UPDATED_TOPIC,
+} from '@archie/api/ledger-api/constants';
 import { BatchDecrementLedgerAccounts } from './ledger.interfaces';
+import { LedgerUser } from './ledger_user.entity';
 
 @Injectable()
 export class LedgerService {
@@ -27,11 +32,15 @@ export class LedgerService {
     private ledgerRepository: Repository<LedgerAccount>,
     @InjectRepository(LedgerLog)
     private ledgerLogRepository: Repository<LedgerLog>,
+    @InjectRepository(LedgerUser)
+    private ledgerUserRepository: Repository<LedgerUser>,
     private assetPricesService: AssetPricesService,
     private assetsService: AssetsService,
     private queueService: QueueService,
     private dataSource: DataSource,
   ) {}
+
+  private MAXIMUM_RECALCULATION_EVENTS = 5000;
 
   async createLedgerAccount(
     userId: string,
@@ -70,6 +79,10 @@ export class LedgerService {
       assetId: asset.id,
       action: LedgerAction.LEDGER_ACCOUNT_CREATED,
     });
+
+    await this.ledgerUserRepository.save({
+      userId,
+    });
   }
 
   async getLedgerAccount(
@@ -88,13 +101,13 @@ export class LedgerService {
     return ledgerAccount;
   }
 
-  async getLedger(userId: string): Promise<Ledger> {
+  async getLedger(userId: string, assetPrice?: AssetPrice[]): Promise<Ledger> {
     const ledgerAccounts: LedgerAccount[] = await this.ledgerRepository.findBy({
       userId,
     });
 
     const assetPrices: AssetPrice[] =
-      await this.assetPricesService.getLatestAssetPrices();
+      assetPrice ?? (await this.assetPricesService.getLatestAssetPrices());
 
     let ledgerValue: BigNumber = BigNumber(0);
 
@@ -136,6 +149,50 @@ export class LedgerService {
       value: ledgerValue.decimalPlaces(2, BigNumber.ROUND_DOWN).toString(),
       accounts: accountData,
     };
+  }
+
+  async initiateLedgerRecalculation(): Promise<void> {
+    const ledgerUsers: LedgerUser[] = await this.ledgerUserRepository.find();
+
+    const chunkSize = Math.ceil(
+      ledgerUsers.length / this.MAXIMUM_RECALCULATION_EVENTS,
+    );
+
+    for (let i = 0; i < ledgerUsers.length; i += chunkSize) {
+      const userIdChunk = ledgerUsers
+        .slice(i, i + chunkSize)
+        .map((ledgerUser) => ledgerUser.userId);
+
+      this.queueService.publish<InitiateLedgerRecalculationCommandPayload>(
+        INITIATE_LEDGER_RECALCULATION_COMMAND,
+        {
+          userIds: userIdChunk,
+        },
+      );
+    }
+  }
+
+  async initiateLedgerRecalcuationCommandHandler(
+    payload: InitiateLedgerRecalculationCommandPayload,
+  ): Promise<void> {
+    const assetPrices: AssetPrice[] =
+      await this.assetPricesService.getLatestAssetPrices();
+
+    await Promise.all(
+      payload.userIds.map(async (userId) => {
+        const ledger = await this.getLedger(userId, assetPrices);
+
+        this.queueService.publish<LedgerAccountUpdatedPayload>(
+          LEDGER_ACCOUNT_UPDATED_TOPIC,
+          {
+            userId,
+            ledgerAccounts: ledger.accounts.map(
+              ({ assetPrice: _, ...updatedAccount }) => updatedAccount,
+            ),
+          },
+        );
+      }),
+    );
   }
 
   async decrementLedgerAccount(

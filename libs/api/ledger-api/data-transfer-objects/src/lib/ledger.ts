@@ -20,3 +20,7 @@ export interface LedgerAccountUpdatedPayload {
   userId: string;
   ledgerAccounts: LedgerAccountData[];
 }
+
+export interface InitiateLedgerRecalculationCommandPayload {
+  userIds: string[];
+}
