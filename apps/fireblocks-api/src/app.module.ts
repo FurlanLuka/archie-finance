@@ -27,6 +27,8 @@ import { AuthModule } from '@archie/api/utils/auth0';
         ConfigVariables.FIREBLOCKS_API_KEY,
         ConfigVariables.FIREBLOCKS_PRIVATE_KEY,
         ConfigVariables.ASSET_LIST,
+        ConfigVariables.AUTH0_AUDIENCE,
+        ConfigVariables.AUTH0_DOMAIN,
       ],
       parse: (configVariable: ConfigVariables, value) => {
         if (configVariable === ConfigVariables.ASSET_LIST) {
