@@ -1,5 +1,5 @@
-import { FC, useState, useEffect } from 'react';
 import { format, parseISO } from 'date-fns';
+import { FC, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -8,13 +8,12 @@ import {
   AvailableCredit,
   CollateralValue,
   NextPayment,
-  MyRewards,
   MarginCallAlert,
 } from '@archie-webapps/archie-dashboard/components';
+import { PayWithPaypalScheduled } from '@archie-webapps/archie-dashboard/feature/make-payment';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
 import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
-import { PayWithPaypalScheduled } from '@archie-webapps/archie-dashboard/feature/make-payment';
 import { Modal, TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 

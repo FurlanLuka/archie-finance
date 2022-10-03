@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetStatements } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-statements';
-import { Icon } from '@archie-webapps/shared/ui/icons';
 import { ButtonOutline, Select, BodyS } from '@archie-webapps/shared/ui/design-system';
+import { Icon } from '@archie-webapps/shared/ui/icons';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { StatementDownload } from './blocks/statement-download/statement-download';
 import { StatementsStyled } from './statements.styled';
-import { theme } from '@archie-webapps/shared/ui/theme';
 
 export const Statements: FC = () => {
   const { t } = useTranslation();

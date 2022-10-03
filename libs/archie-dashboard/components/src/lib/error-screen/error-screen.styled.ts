@@ -6,10 +6,10 @@ export const ErrorScreenStyled = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  padding: 3rem 2rem 3rem calc(${NAV_WIDTH} + 2rem);
+  padding: 3rem 2rem;
 
   @media (max-width: ${breakpoints.screenLG}) {
-    padding: 3rem 2rem 3rem calc(${NAV_WIDTH_TABLET} + 2rem);
+    padding: 3rem 2rem;
   }
 
   @media (max-width: ${breakpoints.screenMD}) {
