@@ -15,9 +15,10 @@ import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 interface CollateralizationFormProps {
   assetInfo: CollateralAsset;
   assetPrice: AssetPrice;
+  currentLtv: number;
 }
 
-export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInfo, assetPrice }) => {
+export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInfo, assetPrice, currentLtv }) => {
   const { t } = useTranslation();
 
   const [lineOfCredit, setLineOfCredit] = useState(200);
@@ -43,12 +44,12 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
     <CollaterizationFormStyled>
       <div className="ltv-info">
         <BodyL weight={700} color={theme.textDanger}>
-          Current LTV: 70%
+          {t('collateralization_step.margin_call_info.current_ltv', { ltv: currentLtv.toFixed(2) })}
         </BodyL>
         <BodyL weight={700} color={theme.textSuccess}>
-          Suggested LTV: 50%
+          {t('collateralization_step.margin_call_info.suggested_ltv')}
         </BodyL>
-        <BodyL weight={700}>Collateral to add: 0.15 BTC, 1 ETH, or 1459 USDC</BodyL>
+        <BodyL weight={700}> {t('collateralization_step.margin_call_info.collateral_to_add')}</BodyL>
       </div>
       <hr className="divider" />
       <InputRange

@@ -73,6 +73,11 @@
   "collateralization_step": {
     "title": "Create your credit line",
     "subtitle": "Select the crypto asset you'd like to collateralize and your desired credit limit",
+    "margin_call_info": {
+      "current_ltv": "Current LTV: {{ltv}}%",
+      "suggested_ltv": "Suggested LTV: 50%",
+      "collateral_to_add": "Collateral to add: 0.15 BTC, 1 ETH, or 1459 USDC"
+    },
     "inputs": {
       "input_range_label": "Credit amount",
       "input_range_label_margin_call": "Collateral to add",

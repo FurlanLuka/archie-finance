@@ -6,11 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { MarginCall } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-margin-calls';
 import { useGetMarginCalls } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-margin-calls';
-import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
 import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
-import { TotalCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-total-value';
 import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-total-value';
 import { TARGET_LTV } from '@archie-webapps/archie-dashboard/constants';
 import { ButtonLight, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
@@ -25,9 +22,9 @@ export const Danger: FC<DangerProps> = ({ withButton }) => {
   const navigate = useNavigate();
 
   const getLTVResponse: QueryResponse<LTV> = useGetLTV();
-  const getMarginCallsResponse: QueryResponse<MarginCall[]> = useGetMarginCalls();
-  const getCreditQueryResponse: QueryResponse<GetCreditResponse> = useGetCredit();
-  const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = useGetCollateralTotalValue();
+  const getMarginCallsResponse = useGetMarginCalls();
+  const getCreditQueryResponse = useGetCredit();
+  const getCollateralTotalValueResponse = useGetCollateralTotalValue();
 
   if (
     getLTVResponse.state === RequestState.SUCCESS &&
