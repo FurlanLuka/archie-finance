@@ -1,17 +1,18 @@
 import { FC, useMemo, useState } from 'react';
-import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
+import { useNavigate } from 'react-router-dom';
 
 import { usePollCollateralDeposit } from '@archie-webapps/archie-dashboard/hooks';
 import { calculateCollateralCreditValue, calculateCollateralTotalValue } from '@archie-webapps/archie-dashboard/utils';
+import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
+import { Modal } from '@archie-webapps/shared/ui/design-system';
 
-import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
-import { useNavigate } from 'react-router-dom';
+import { CollateralReceived } from './blocks/collateral-received/collateral-received';
 
-interface CollateralDepositProps {
+interface CollateralUpdatedModalProps {
   initialCollateral: CollateralValue[];
 }
 
-export const CollateralDeposit: FC<CollateralDepositProps> = ({ initialCollateral }) => {
+export const CollateralUpdatedModal: FC<CollateralUpdatedModalProps> = ({ initialCollateral }) => {
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,16 +31,18 @@ export const CollateralDeposit: FC<CollateralDepositProps> = ({ initialCollatera
 
   if (isModalOpen) {
     return (
-      <CollateralReceivedModal
-        onConfirm={() => {
-          setIsModalOpen(false);
-          navigate('/collateral');
-        }}
-        collateralValue={collateralTotalValue}
-        creditValue={collateralCreditValue}
-      />
+      <Modal isOpen={true} maxWidth="800px">
+        <CollateralReceived
+          onConfirm={() => {
+            setIsModalOpen(false);
+            navigate('/collateral');
+          }}
+          collateralValue={collateralTotalValue}
+          creditValue={collateralCreditValue}
+        />
+      </Modal>
     );
   }
 
-  return null;
+  return <></>;
 };

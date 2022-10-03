@@ -6,7 +6,7 @@ import { MAX_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
 import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
-import { InputRange, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
+import { InputRange, TitleL, BodyM, BodyL } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollaterizationFormStyled } from './collaterization-form.styled';
@@ -41,9 +41,19 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
 
   return (
     <CollaterizationFormStyled>
+      <div className="ltv-info">
+        <BodyL weight={700} color={theme.textDanger}>
+          Current LTV: 70%
+        </BodyL>
+        <BodyL weight={700} color={theme.textSuccess}>
+          Suggested LTV: 50%
+        </BodyL>
+        <BodyL weight={700}>Collateral to add: 0.15 BTC, 1 ETH, or 1459 USDC</BodyL>
+      </div>
+      <hr className="divider" />
       <InputRange
         className="credit-slider"
-        label={t('collateralization_step.inputs.input_range_label')}
+        label={t('collateralization_step.inputs.input_range_label_margin_call')}
         min={50}
         max={MAX_LINE_OF_CREDIT}
         value={lineOfCredit}
