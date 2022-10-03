@@ -33,29 +33,6 @@ export class FireblocksApiService {
     );
   }
 
-  public async generateDepositAddress(
-    vaultAccountId: string,
-    assetId: string,
-    userId: string,
-  ): Promise<GenerateAddressResponse> {
-    const hashedUserId: string = this.cryptoService.sha256(userId);
-
-    try {
-      return await this.fireblocksClient.generateNewAddress(
-        vaultAccountId,
-        assetId,
-        undefined,
-        hashedUserId,
-      );
-    } catch (error) {
-      throw new GenerateDepositAddressError({
-        vaultAccountId,
-        assetId,
-        userId,
-      });
-    }
-  }
-
   public async createVaultAccount(
     userId: string,
   ): Promise<VaultAccountResponse> {

@@ -80,7 +80,7 @@ export class VaultAccountService {
     const createVaultAssetResponse =
       await this.fireblocksApiService.createVaultAsset(
         vaultAccount.id,
-        assetId,
+        assetInformation.fireblocksId,
       );
 
     await this.depositAddressRepository.save({
@@ -157,8 +157,17 @@ export class VaultAccountService {
     destinationAddress: string,
     internalTransactionId: string,
   ): Promise<CreateTransactionResponse> {
+    const assetInformation: AssetInformation | undefined =
+      this.assetsService.getAssetInformation(assetId);
+
+    if (assetInformation === undefined) {
+      throw new UnknownAssetError({
+        assetId,
+      });
+    }
+
     return this.fireblocksApiService.createOutboundTransaction(
-      assetId,
+      assetInformation.fireblocksId,
       amount,
       destinationAddress,
       internalTransactionId,
@@ -182,7 +191,7 @@ export class VaultAccountService {
     }
 
     return this.fireblocksApiService.createInternalTransaction(
-      assetId,
+      assetInformation.fireblocksId,
       amount,
       assetInformation.liquidationVaultId,
       internalTransactionId,
