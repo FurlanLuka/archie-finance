@@ -105,7 +105,6 @@
     "jsonc-eslint-parser": "^2.1.0",
     "nx": "14.8.2",
     "prettier": "^2.7.1",
-    "swagger-ui-express": "^4.5.0",
     "ts-jest": "27.1.4",
     "ts-node": "~10.9.1",
     "tslib": "^2.4.0",
