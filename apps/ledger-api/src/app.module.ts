@@ -11,6 +11,7 @@ import {
   LedgerModule,
   WithdrawModule,
 } from '@archie/api/ledger-api/ledger';
+import { AuthModule } from '@archie/api/utils/auth0';
 
 @Module({
   imports: [
@@ -49,6 +50,14 @@ import {
         autoLoadEntities: true,
         migrations: migrations,
         migrationsRun: true,
+      }),
+      inject: [ConfigService],
+    }),
+    AuthModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        domain: configService.get(ConfigVariables.AUTH0_DOMAIN),
+        audience: configService.get(ConfigVariables.AUTH0_AUDIENCE),
       }),
       inject: [ConfigService],
     }),

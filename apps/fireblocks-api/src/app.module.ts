@@ -12,6 +12,7 @@ import {
   VaultAccountModule,
   WithdrawModule,
 } from '@archie/api/fireblocks-api/fireblocks';
+import { AuthModule } from '@archie/api/utils/auth0';
 
 @Module({
   imports: [
@@ -49,6 +50,14 @@ import {
         autoLoadEntities: true,
         migrations: migrations,
         migrationsRun: true,
+      }),
+      inject: [ConfigService],
+    }),
+    AuthModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        domain: configService.get(ConfigVariables.AUTH0_DOMAIN),
+        audience: configService.get(ConfigVariables.AUTH0_AUDIENCE),
       }),
       inject: [ConfigService],
     }),
