@@ -150,7 +150,7 @@
   },
   "margin_call_alert": {
     "title": "Margin Call - Action Required",
-    "text_1": "Your LTV is {{ltv}}%, which exceeds the 75% margin call threshold, as the value of your collateral has declined. To avoid liquidation, please send at least <CAN WE SPECIFY THE MINIMUM AMOUNT OF COLLATERAL REQUIRED?> collateral to restore your LTV to below 75% before <MMM DD, YYYY HH:mm>.",
+    "text_1": "Your LTV is {{ltv}}%, which exceeds the 75% margin call threshold, as the value of your collateral has declined. To avoid liquidation, please send at least ${{minCollateral}} collateral to restore your LTV to below 75% before <b>{{date}}</b>.",
     "text_2": "Note that Archie may liquidate some of your collateral if your LTV exceeds 90% at any time, even if it is before the above date.",
     "btn": "Cure"
   },
