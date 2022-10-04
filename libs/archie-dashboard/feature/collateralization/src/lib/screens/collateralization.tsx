@@ -2,9 +2,8 @@ import { FC } from 'react';
 import { useParams } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 
-import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 
-import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { LTVStatus } from '@archie-webapps/shared/constants';
 import { MarginCallAlert } from '@archie-webapps/archie-dashboard/components';
@@ -18,7 +17,7 @@ import { CollateralizationStyled } from './collateralization.styled';
 
 export const CollateralizationScreen: FC = () => {
   const { asset } = useParams<CollateralizationRouteParams>();
-  const getLTVResponse: QueryResponse<LTV> = useGetLTV();
+  const getLTVResponse = useGetLTV();
 
   if (asset === undefined) {
     return <Navigate to="/collateral" />;
@@ -49,7 +48,7 @@ export const CollateralizationScreen: FC = () => {
   return (
     <CollateralizationStyled>
       <MarginCallAlert />
-      <Card column alignItems="center" padding="2.5rem 1.5rem 3.5rem" minHeight="948px">
+      <Card column alignItems="center" padding="2.5rem 1.5rem 3.5rem" minHeight="826px">
         {getContent()}
       </Card>
     </CollateralizationStyled>

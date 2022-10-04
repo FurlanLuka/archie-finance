@@ -9,7 +9,7 @@ import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collate
 import { useGetMarginCalls } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-margin-calls';
 import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-total-value';
-import { TARGET_LTV } from '@archie-webapps/archie-dashboard/constants';
+import { calculateCollateralMinValue } from '@archie-webapps/archie-dashboard/utils';
 import { ButtonLight, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -26,6 +26,7 @@ export const Danger: FC<DangerProps> = ({ withButton }) => {
   const getCreditQueryResponse = useGetCredit();
   const getCollateralTotalValueResponse = useGetCollateralTotalValue();
 
+  // TODO: Think of optimizing these
   if (
     getLTVResponse.state === RequestState.SUCCESS &&
     getMarginCallsResponse.state === RequestState.SUCCESS &&
@@ -38,34 +39,35 @@ export const Danger: FC<DangerProps> = ({ withButton }) => {
     const collateralTotalValue = getCollateralTotalValueResponse.data.value;
 
     const getDate = () => format(parseISO(marginCallsData.automaticLiquidationAt), 'MMM dd, yyyy HH:mm');
+    const getCollateralMinValue = calculateCollateralMinValue(creditData.utilizationAmount, collateralTotalValue);
 
-    const getMinCollateral = () => {
-      const ltv = TARGET_LTV / 100;
-
-      return (creditData.utilizationAmount - ltv * collateralTotalValue) / (1 - ltv);
-    };
-
-    return (
-      <div className="content">
-        <BodyL weight={800} color={theme.textLight}>
-          {t('margin_call_alert.title')}
-        </BodyL>
-        <BodyM color={theme.textLight}>
-          <Trans
-            components={{ b: <b /> }}
-            values={{ ltv: ltvData.ltv.toFixed(2), minCollateral: getMinCollateral().toFixed(2), date: getDate() }}
-          >
-            margin_call_alert.text_1
-          </Trans>
-        </BodyM>
-        <BodyM color={theme.textLight}>{t('margin_call_alert.text_2')}</BodyM>
-        {withButton && (
-          <ButtonLight color={theme.textDanger} onClick={() => navigate('/collateral')}>
-            {t('margin_call_alert.btn')}
-          </ButtonLight>
-        )}
-      </div>
-    );
+    if (marginCallsData) {
+      return (
+        <div className="content">
+          <BodyL weight={800} color={theme.textLight}>
+            {t('margin_call_alert.title')}
+          </BodyL>
+          <BodyM color={theme.textLight}>
+            <Trans
+              components={{ b: <b /> }}
+              values={{
+                ltv: ltvData.ltv.toFixed(2),
+                minCollateral: getCollateralMinValue.toFixed(2),
+                date: getDate(),
+              }}
+            >
+              margin_call_alert.text_1
+            </Trans>
+          </BodyM>
+          <BodyM color={theme.textLight}>{t('margin_call_alert.text_2')}</BodyM>
+          {withButton && (
+            <ButtonLight color={theme.textDanger} onClick={() => navigate('/collateral')}>
+              {t('margin_call_alert.btn')}
+            </ButtonLight>
+          )}
+        </div>
+      );
+    }
   }
 
   return <></>;

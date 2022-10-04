@@ -16,20 +16,25 @@ interface CollateralizationFormProps {
   assetInfo: CollateralAsset;
   assetPrice: AssetPrice;
   currentLtv: number;
+  minCollateral: number;
 }
 
-export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInfo, assetPrice, currentLtv }) => {
+export const CollateralizationForm: FC<CollateralizationFormProps> = ({
+  assetInfo,
+  assetPrice,
+  currentLtv,
+  minCollateral,
+}) => {
   const { t } = useTranslation();
 
-  const [lineOfCredit, setLineOfCredit] = useState(200);
   const [requiredCollateral, setRequiredCollateral] = useState(0);
 
   useEffect(() => {
     const price = 1 / assetPrice.price;
-    const result = (lineOfCredit / (assetInfo.loan_to_value / 100)) * price;
+    const result = (minCollateral / (assetInfo.loan_to_value / 100)) * price;
 
     setRequiredCollateral(Math.ceil(result * 10000) / 10000);
-  }, [lineOfCredit, assetPrice]);
+  }, [minCollateral, assetPrice]);
 
   const getFormattedCollateral = () => {
     const value =
@@ -49,17 +54,11 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
         <BodyL weight={700} color={theme.textSuccess}>
           {t('collateralization_step.margin_call_info.suggested_ltv')}
         </BodyL>
-        <BodyL weight={700}> {t('collateralization_step.margin_call_info.collateral_to_add')}</BodyL>
+        <BodyL weight={700}>
+          {t('collateralization_step.margin_call_info.collateral_to_add', { collateral: getFormattedCollateral() })}
+        </BodyL>
       </div>
       <hr className="divider" />
-      <InputRange
-        className="credit-slider"
-        label={t('collateralization_step.inputs.input_range_label_margin_call')}
-        min={50}
-        max={MAX_LINE_OF_CREDIT}
-        value={lineOfCredit}
-        onChange={setLineOfCredit}
-      />
       <div className="result">
         <div className="result-item">
           <BodyM weight={700}>{t('collateralization_step.result.first')}</BodyM>
