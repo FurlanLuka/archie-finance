@@ -16,4 +16,8 @@ export const SetupAutopayStyled = styled.div`
     height: 1px;
     margin: 1.5rem 0;
   }
+
+  .select-label {
+    margin-bottom: 0.75rem;
+  }
 `;

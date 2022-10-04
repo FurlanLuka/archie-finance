@@ -333,6 +333,10 @@
     }
   },
   "autopay_modal": {
-    "title": "Manage Autopay"
+    "title": "Manage Autopay",
+    "select": {
+      "empty": "Select payment method",
+      "label": "Payment method"
+    }
   }
 }

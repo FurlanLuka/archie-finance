@@ -15,7 +15,6 @@ interface AutopayModalProps {
 
 export const AutopayModal: FC<AutopayModalProps> = ({ close }) => {
   const getConnectedAccountsResponse = useGetConnectedAccounts();
-  console.log('mwaji akawnti', getConnectedAccountsResponse);
 
   const getContent = () => {
     if (getConnectedAccountsResponse.state === RequestState.LOADING) {
@@ -31,7 +30,7 @@ export const AutopayModal: FC<AutopayModalProps> = ({ close }) => {
         return <ConnectAccountModal />;
       }
 
-      return <SetupAutopay accounts={getConnectedAccountsResponse.data} onConnect={close} />;
+      return <SetupAutopay accounts={getConnectedAccountsResponse.data} onSuccess={close} />;
     }
 
     return <></>;
