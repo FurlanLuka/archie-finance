@@ -1,4 +1,4 @@
-export const SERVICE_NAME = 'credit-limit-api';
+export const SERVICE_NAME = 'credit-line-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
 export enum ConfigVariables {
@@ -10,11 +10,8 @@ export enum ConfigVariables {
   TYPEORM_DATABASE = 'TYPEORM_DATABASE',
   TYPEORM_PORT = 'TYPEORM_PORT',
   QUEUE_URL = 'QUEUE_URL',
-  ASSET_LTV_LIST = 'ASSET_LTV_LIST',
+  ASSET_LIST = 'ASSET_LIST',
 }
 
-export const CREDIT_LINE_CREATED_TOPIC = 'credit_limit.credit_line.created';
-export const CREDIT_LIMIT_UPDATED_TOPIC = 'credit_limit.credit_limit.updated';
-
-export const CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED =
-  'credit_limit.credit_limit_periodic_check.requested';
+export const CREDIT_LINE_CREATED_TOPIC = 'credit_line.created';
+export const CREDIT_LINE_UPDATED_TOPIC = 'credit_line.updated';

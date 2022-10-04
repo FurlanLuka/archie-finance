@@ -1,6 +1,6 @@
 export interface AssetInformation {
   id: string;
-  ltv: string;
+  assetToCreditUtilizationPercentage: number;
 }
 
 export type AssetList = AssetInformation[];

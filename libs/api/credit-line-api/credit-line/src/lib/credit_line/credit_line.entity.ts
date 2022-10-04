@@ -8,24 +8,27 @@ import {
 } from 'typeorm';
 
 @Entity({
-  name: 'ledger_account',
+  name: 'credit_limit',
 })
-@Index(['userId', 'assetId'], { unique: true })
-export class LedgerAccount {
+export class CreditLine {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Index()
+  @Index({ unique: true })
   @Column('varchar', { nullable: false })
   userId: string;
 
-  @Column('varchar', { nullable: false })
-  assetId: string;
-
   @Column('float', {
-    comment: 'Ledger account value in USD',
+    comment:
+      'Collateral value in usd. It is updated together with the credit limit.',
   })
-  value: number;
+  calculatedOnLedgerValue: number;
+
+  @Column('float')
+  creditLimit: number;
+
+  @Column('numeric')
+  calculatedAt: number;
 
   @CreateDateColumn({ select: false })
   createdAt: Date;

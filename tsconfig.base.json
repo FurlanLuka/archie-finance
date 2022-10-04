@@ -95,6 +95,15 @@
       "@archie/api/credit-limit-api/test-data": [
         "libs/api/credit-limit-api/test-data/src/index.ts"
       ],
+      "@archie/api/credit-line-api/constants": [
+        "libs/api/credit-line-api/constants/src/index.ts"
+      ],
+      "@archie/api/credit-line-api/credit-line": [
+        "libs/api/credit-line-api/credit-line/src/index.ts"
+      ],
+      "@archie/api/credit-line-api/data-transfer-objects": [
+        "libs/api/credit-line-api/data-transfer-objects/src/index.ts"
+      ],
       "@archie/api/fireblocks-api/assets": [
         "libs/api/fireblocks-api/assets/src/index.ts"
       ],

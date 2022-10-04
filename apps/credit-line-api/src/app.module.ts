@@ -1,29 +1,29 @@
-import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import {
-  ConfigVariables,
-  SERVICE_NAME,
-} from '@archie/api/credit-limit-api/constants';
 import { HealthModule } from '@archie/api/utils/health';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { QueueModule } from '@archie/api/utils/queue';
+import { ConfigVariables } from '@archie/api/credit-line-api/constants';
 import { migrations } from './migrations';
+import { QueueModule } from '@archie/api/utils/queue';
+import { CreditLineModule } from '@archie/api/credit-line-api/credit-line';
 import { AuthModule } from '@archie/api/utils/auth0';
-import { CreditLimitModule } from '@archie/api/credit-limit-api/credit-limit';
 
 @Module({
   imports: [
     ConfigModule.register({
       requiredEnvironmentVariables: [
-        ConfigVariables.TYPEORM_HOST,
-        ConfigVariables.TYPEORM_USERNAME,
-        ConfigVariables.TYPEORM_PASSWORD,
         ConfigVariables.TYPEORM_DATABASE,
+        ConfigVariables.TYPEORM_HOST,
+        ConfigVariables.TYPEORM_PASSWORD,
+        ConfigVariables.TYPEORM_PORT,
+        ConfigVariables.TYPEORM_USERNAME,
         ConfigVariables.QUEUE_URL,
-        ConfigVariables.ASSET_LTV_LIST,
+        ConfigVariables.ASSET_LIST,
+        ConfigVariables.AUTH0_AUDIENCE,
+        ConfigVariables.AUTH0_DOMAIN,
       ],
       parse: (configVariable, value) => {
-        if (configVariable === ConfigVariables.ASSET_LTV_LIST) {
+        if (configVariable === ConfigVariables.ASSET_LIST) {
           return JSON.parse(value);
         }
 
@@ -33,18 +33,17 @@ import { CreditLimitModule } from '@archie/api/credit-limit-api/credit-limit';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
+        type: `postgres`,
         host: configService.get(ConfigVariables.TYPEORM_HOST),
         username: configService.get(ConfigVariables.TYPEORM_USERNAME),
         password: configService.get(ConfigVariables.TYPEORM_PASSWORD),
         database: configService.get(ConfigVariables.TYPEORM_DATABASE),
         port: configService.get(ConfigVariables.TYPEORM_PORT),
         synchronize: false,
-        autoLoadEntities: true,
         keepConnectionAlive: true,
-        migrationsRun: true,
-        migrationsTableName: `${SERVICE_NAME}-migrations`,
+        autoLoadEntities: true,
         migrations: migrations,
+        migrationsRun: true,
       }),
       inject: [ConfigService],
     }),
@@ -56,9 +55,9 @@ import { CreditLimitModule } from '@archie/api/credit-limit-api/credit-limit';
       }),
       inject: [ConfigService],
     }),
-    HealthModule,
     QueueModule.register(),
-    CreditLimitModule,
+    HealthModule,
+    CreditLineModule,
   ],
   controllers: [],
   providers: [],

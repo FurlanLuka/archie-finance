@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@archie/api/utils/config';
 import { AssetInformation, AssetList } from './assets.interfaces';
-import { ConfigVariables } from '@archie/api/credit-limit-api/constants';
+import { ConfigVariables } from '@archie/api/credit-line-api/constants';
 
 @Injectable()
 export class AssetsService {

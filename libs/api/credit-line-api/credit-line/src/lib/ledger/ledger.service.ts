@@ -30,12 +30,28 @@ export class LedgerService {
     try {
       await Promise.all(
         ledgerAccounts.map(async (ledgerAccountData) => {
+          const ledgerAccount = await queryRunner.manager.findOneBy(
+            LedgerAccount,
+            {
+              assetId: ledgerAccountData.assetId,
+              userId,
+            },
+          );
+
+          if (
+            ledgerAccount &&
+            ledgerAccount.calculatedAt > ledgerAccountData.calculatedAt
+          ) {
+            return;
+          }
+
           await queryRunner.manager.save(LedgerAccount, {
             userId,
             assetId: ledgerAccountData.assetId,
             value: BigNumber(ledgerAccountData.accountValue)
               .decimalPlaces(2, BigNumber.ROUND_DOWN)
               .toNumber(),
+            calculatedAt: ledgerAccountData.calculatedAt,
           });
         }),
       );
@@ -48,9 +64,7 @@ export class LedgerService {
     }
   }
 
-  public async getLedgerValue(
-    ledgerAccounts: LedgerAccount[],
-  ): Promise<number> {
+  public getLedgerValue(ledgerAccounts: LedgerAccount[]): number {
     const ledgerValue = ledgerAccounts.reduce(
       (previousValue, ledgerAccount) => {
         return previousValue.plus(ledgerAccount.value);

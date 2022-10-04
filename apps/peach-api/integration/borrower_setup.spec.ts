@@ -206,10 +206,7 @@ describe('Peach service tests', () => {
         await app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler(
           creditLimitUpdatedDataFactory({
             ...firstCreditLimitUpdatedPayload,
-            calculatedAt: new Date(
-              new Date(firstCreditLimitUpdatedPayload.calculatedAt).getTime() -
-                1000,
-            ).toISOString(),
+            calculatedAt: Date.now() - 1000,
           }),
         );
 
