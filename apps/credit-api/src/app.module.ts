@@ -14,6 +14,8 @@ import { CollateralWithdrawalModule } from '@archie/api/credit-api/collateral-wi
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
 import { CryptoModule } from '@archie/api/utils/crypto';
+import { RedisModule } from '@archie-microservices/api/utils/redis';
+import { PeachBorrowerModule } from '@archie/api/peach-api/borrower';
 
 @Module({
   imports: [
@@ -34,6 +36,7 @@ import { CryptoModule } from '@archie/api/utils/crypto';
         ConfigVariables.RIZE_MQ_TOPIC_PREFIX,
         ConfigVariables.QUEUE_URL,
         ConfigVariables.ENCRYPTION_KEY,
+        ConfigVariables.REDIS_URL,
       ],
       parse: (_configVariable, value) => value,
     }),
@@ -76,6 +79,15 @@ import { CryptoModule } from '@archie/api/utils/crypto';
     CollateralModule,
     CollateralWithdrawalModule,
     QueueModule.register(),
+    PeachBorrowerModule,
+    RedisModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        url: configService.get(ConfigVariables.REDIS_URL),
+        keyPrefix: SERVICE_NAME,
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [],
   providers: [],

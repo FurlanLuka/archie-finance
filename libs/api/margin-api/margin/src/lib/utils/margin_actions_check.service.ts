@@ -33,7 +33,8 @@ export class MarginActionsCheckUtilService {
 
       if (
         collateralValueChange < this.MIN_COLLATERAL_VALUE_CHANGE &&
-        activeMarginCall === null
+        activeMarginCall === null &&
+        ltv < LTV_MARGIN_CALL_LIMIT
       ) {
         return [];
       }

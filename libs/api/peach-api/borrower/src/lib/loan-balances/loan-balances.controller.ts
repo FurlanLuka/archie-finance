@@ -59,7 +59,7 @@ export class LoanBalancesQueueController {
     payload: GetLoanBalancesPayload,
   ): Promise<RPCResponse<GetLoanBalancesResponse>> {
     try {
-      const data = await this.loanBalancesService.getLoanBalances(
+      const data = await this.loanBalancesService.getLatestLoanBalance(
         payload.userId,
       );
 
