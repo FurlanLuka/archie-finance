@@ -68,7 +68,7 @@ export class LedgerService {
               .multipliedBy(assetPrice.price)
               .decimalPlaces(2, BigNumber.ROUND_DOWN)
               .toString(),
-            calculatedAt: Date.now()
+            calculatedAt: Date.now(),
           },
         ],
       },
@@ -188,7 +188,10 @@ export class LedgerService {
           {
             userId,
             ledgerAccounts: ledger.accounts.map(
-              ({ assetPrice: _, ...updatedAccount }) => updatedAccount,
+              ({ assetPrice: _, ...updatedAccount }) => ({
+                ...updatedAccount,
+                calculatedAt: Date.now(),
+              }),
             ),
           },
         );
@@ -259,6 +262,7 @@ export class LedgerService {
               .multipliedBy(ledgerAccount.assetPrice)
               .decimalPlaces(2, BigNumber.ROUND_DOWN)
               .toString(),
+            calculatedAt: Date.now(),
           },
         ],
       },
@@ -337,7 +341,10 @@ export class LedgerService {
         {
           userId,
           ledgerAccounts: updatedLedgerAccounts.map(
-            ({ assetPrice: _, ...updatedAccount }) => updatedAccount,
+            ({ assetPrice: _, ...updatedAccount }) => ({
+              ...updatedAccount,
+              calculatedAt: Date.now(),
+            }),
           ),
         },
       );
@@ -398,6 +405,7 @@ export class LedgerService {
               .multipliedBy(ledgerAccount.assetPrice)
               .decimalPlaces(2, BigNumber.ROUND_DOWN)
               .toString(),
+            calculatedAt: Date.now(),
           },
         ],
       },
