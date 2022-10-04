@@ -86,7 +86,7 @@
     },
     "result": {
       "first": "Collateral Required",
-      "second": "Suggested Loan-to-Value",
+      "second": "Credit Limit Ratio",
       "third": "Interest Rate"
     },
     "address": {

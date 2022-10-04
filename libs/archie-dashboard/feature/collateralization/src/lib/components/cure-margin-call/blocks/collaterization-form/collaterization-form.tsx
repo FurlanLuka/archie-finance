@@ -2,11 +2,10 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactTooltip from 'react-tooltip';
 
-import { MAX_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
 import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
-import { InputRange, TitleL, BodyM, BodyL } from '@archie-webapps/shared/ui/design-system';
+import { TitleL, BodyM, BodyL } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollaterizationFormStyled } from './collaterization-form.styled';

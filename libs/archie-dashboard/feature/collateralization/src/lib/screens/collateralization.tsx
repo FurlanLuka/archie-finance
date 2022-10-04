@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { LTVStatus } from '@archie-webapps/shared/constants';
 import { MarginCallAlert } from '@archie-webapps/archie-dashboard/components';
