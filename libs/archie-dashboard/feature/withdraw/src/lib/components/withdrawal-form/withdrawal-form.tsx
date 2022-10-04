@@ -2,12 +2,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { calculateCollateralCreditValue, calculateCollateralTotalValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 import { useCreateWithdrawal } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-create-withdrawal';
+import { getMaxWithdrawalAmountQueryKey } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-max-withdrawal-amount';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { ButtonOutline, ButtonPrimary, InputText, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
@@ -16,17 +18,18 @@ import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/suc
 
 import { getUpdatedCreditAndTotal } from './withdrawal-form.helpers';
 import { getWithdrawSchema } from './withdrawal-form.schema';
-import * as Styled from './withdrawal-form.styled';
+import { WithdrawalFormStyled } from './withdrawal-form.styled';
+import { BigNumber } from 'bignumber.js'
 
 interface WithdrawFormData {
-  withdrawAmount: number;
+  withdrawAmount: string;
   withdrawAddress: string;
 }
 
 interface WithdrawalFormProps {
   currentAsset: string;
   collateral: CollateralValue[];
-  maxAmount: number;
+  maxAmount: string;
 }
 
 export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collateral, maxAmount }) => {
@@ -34,7 +37,9 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
 
   const navigate = useNavigate();
   const createWithdrawal = useCreateWithdrawal();
-  const WithdrawSchema = getWithdrawSchema(maxAmount);
+  const maxAmountBN = BigNumber(maxAmount)
+  const WithdrawSchema = getWithdrawSchema(maxAmountBN);
+  const queryClient = useQueryClient();
 
   const {
     handleSubmit,
@@ -56,6 +61,8 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
   useEffect(() => {
     if (createWithdrawal.state === RequestState.SUCCESS) {
       setIsSuccessModalOpen(true);
+      // Invalidate max withdrawal amount query so it refetches
+      queryClient.invalidateQueries(getMaxWithdrawalAmountQueryKey(currentAsset));
     }
   }, [createWithdrawal.state]);
 
@@ -83,32 +90,27 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
 
   return (
     <>
-      <Styled.WithdrawalForm onSubmit={onSubmit}>
+      <WithdrawalFormStyled onSubmit={onSubmit}>
         <InputText>
           <label htmlFor="withdrawAmount">
-            {maxAmount > 0
+            {maxAmountBN.isGreaterThan(0)
               ? t('dashboard_withdraw.form.amount_label', { currentAsset, maxAmount })
               : t('dashboard_withdraw.form.amount_label_empty', { currentAsset })}
           </label>
           <input
             id="withdrawAmount"
-            placeholder={t('dashboard_withdraw.form.amount_placeholder', {
-              maxWithdrawAmount: maxAmount,
-              currentAsset,
-            })}
-            type="number"
+            type="tel"
             step="any"
-            min={0}
-            max={maxAmount}
-            disabled={maxAmount <= 0}
-            {...register('withdrawAmount', { valueAsNumber: true })}
+            pattern="^\d+((.)|(.\d{0,18})?)$"
+            disabled={maxAmountBN.isLessThanOrEqualTo(0)}
+            {...register('withdrawAmount', { valueAsNumber: false })}
           />
           {errors.withdrawAmount?.message && (
             <BodyM className="error" color={theme.textDanger}>
               {t(errors.withdrawAmount.message, { maxAmount })}
             </BodyM>
           )}
-          {withdrawalAmount > 0 && withdrawalAmount <= maxAmount && (
+          {maxAmountBN.isGreaterThan(0) && maxAmountBN.isGreaterThanOrEqualTo(withdrawalAmount) && (
             <BodyM color={theme.textSecondary} weight={500} className="credit-limit">
               {t('dashboard_withdraw.form.credit_change', {
                 initialCollateralValue: initialCollateralValue.toFixed(2),
@@ -130,7 +132,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
             <input
               id="withdrawAddress"
               placeholder={t('dashboard_withdraw.form.address_placeholder')}
-              disabled={maxAmount <= 0}
+              disabled={maxAmountBN.isLessThanOrEqualTo(0)}
               {...register('withdrawAddress')}
             />
             {errors.withdrawAddress?.message && (
@@ -146,14 +148,11 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
             {t('dashboard_withdraw.btn')}
           </ButtonPrimary>
         </div>
-      </Styled.WithdrawalForm>
+      </WithdrawalFormStyled>
       {isSuccessModalOpen && (
         <SuccessfullWithdrawalModal
           addressLink={`${CollateralAssets[currentAsset]?.url}/${depositAddress}`}
-          onConfirm={() => {
-            setIsSuccessModalOpen(false);
-            navigate('/collateral');
-          }}
+          onConfirm={() => setIsSuccessModalOpen(false)}
         />
       )}
     </>

@@ -9,7 +9,11 @@ import { Danger } from './blocks/danger/danger';
 import { Warning } from './blocks/warning/warning';
 import { MarginCallAlertStyled } from './margin-call.styled';
 
-export const MarginCallAlert: FC = () => {
+interface MarginCallAlertProps {
+  withButton?: boolean;
+}
+
+export const MarginCallAlert: FC<MarginCallAlertProps> = ({ withButton }) => {
   const getLTVResponse: QueryResponse<LTV> = useGetLTV();
 
   const getContent = () => {
@@ -19,7 +23,7 @@ export const MarginCallAlert: FC = () => {
       if (ltvData.status === LTVStatus.WARNING) {
         return (
           <MarginCallAlertStyled bgColor={LTVColor[ltvData.status]}>
-            <Warning />
+            <Warning withButton={withButton} />
           </MarginCallAlertStyled>
         );
       }
@@ -27,7 +31,7 @@ export const MarginCallAlert: FC = () => {
       if (ltvData.status === LTVStatus.MARGIN_CALL) {
         return (
           <MarginCallAlertStyled bgColor={LTVColor[ltvData.status]}>
-            <Danger />
+            <Danger withButton={withButton} />
           </MarginCallAlertStyled>
         );
       }

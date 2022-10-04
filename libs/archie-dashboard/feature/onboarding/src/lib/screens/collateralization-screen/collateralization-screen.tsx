@@ -66,7 +66,6 @@ export const CollateralizationScreen: FC = () => {
           <CollateralDepositAlerts />
           <TitleL className="title">{t('collateralization_step.title')}</TitleL>
           <BodyM className="subtitle">{t('collateralization_step.subtitle')}</BodyM>
-
           <div className="inputs">
             <CollateralAssetSelect
               selectedAsset={selectedCollateralAsset}
@@ -80,7 +79,6 @@ export const CollateralizationScreen: FC = () => {
               onChange={setLineOfCredit}
             />
           </div>
-
           <div className="result">
             <div className="result-item">
               <BodyM weight={700}>{t('collateralization_step.result.first')}</BodyM>

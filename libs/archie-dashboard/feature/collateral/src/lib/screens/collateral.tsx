@@ -7,8 +7,11 @@ import { LTVText, LTVColor } from '@archie-webapps/shared/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
+import { useGetCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit-line';
+import { CreditLineResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit-line';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { MarginCallAlert } from '@archie-webapps/archie-dashboard/components';
 import { Card, Loader, Badge, TitleM, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -21,18 +24,33 @@ export const CollateralScreen: FC = () => {
 
   const getCollateralValueResponse: QueryResponse<CollateralValue[]> = useGetCollateralValue();
   const getLTVResponse: QueryResponse<LTV> = useGetLTV();
+  const getCreditLine: QueryResponse<CreditLineResponse> = useGetCreditLine();
 
   const getContent = () => {
-    if (getCollateralValueResponse.state === RequestState.LOADING || getLTVResponse.state === RequestState.LOADING) {
+    // TODO: Think of optimizing these
+    if (
+      getCollateralValueResponse.state === RequestState.LOADING ||
+      getLTVResponse.state === RequestState.LOADING ||
+      getCreditLine.state === RequestState.LOADING
+    ) {
       return <Loader />;
     }
 
-    if (getCollateralValueResponse.state === RequestState.ERROR || getLTVResponse.state === RequestState.ERROR) {
+    if (
+      getCollateralValueResponse.state === RequestState.ERROR ||
+      getLTVResponse.state === RequestState.ERROR ||
+      getCreditLine.state === RequestState.ERROR
+    ) {
       return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
     }
 
-    if (getCollateralValueResponse.state === RequestState.SUCCESS && getLTVResponse.state === RequestState.SUCCESS) {
+    if (
+      getCollateralValueResponse.state === RequestState.SUCCESS &&
+      getLTVResponse.state === RequestState.SUCCESS &&
+      getCreditLine.state === RequestState.SUCCESS
+    ) {
       const ltvData = getLTVResponse.data;
+      const creditLineData = getCreditLine.data;
 
       return (
         <>
@@ -51,7 +69,7 @@ export const CollateralScreen: FC = () => {
               <Badge statusColor={LTVColor[ltvData.status]}>{LTVText[ltvData.status]}</Badge>
             </div>
           </div>
-          <CollateralInfo collateral={getCollateralValueResponse.data} />
+          <CollateralInfo collateral={getCollateralValueResponse.data} assetLimits={creditLineData.assetLimits} />
         </>
       );
     }
@@ -61,6 +79,7 @@ export const CollateralScreen: FC = () => {
 
   return (
     <CollateralStyled>
+      <MarginCallAlert />
       <Card column alignItems="center" justifyContent="center" padding="2rem 1.5rem 2.5rem" minHeight="560px">
         {getContent()}
       </Card>

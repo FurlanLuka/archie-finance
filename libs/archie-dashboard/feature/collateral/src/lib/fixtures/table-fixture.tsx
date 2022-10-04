@@ -10,7 +10,12 @@ import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/
 import { ButtonOutline, CollateralCurrency } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { AllocationCellStyled, ChangeCellStyled, ActionsCellStyled } from './table-fixtures.styled';
+import {
+  AlignCenterCellStyled,
+  AlignEndCellStyled,
+  ChangeCellStyled,
+  ActionsCellStyled,
+} from './table-fixtures.styled';
 
 interface CollateralAssetCellProps {
   id: string;
@@ -56,7 +61,7 @@ interface AllocationCellProps {
 }
 
 const AllocationCell: FC<AllocationCellProps> = ({ value }) => (
-  <AllocationCellStyled>
+  <AlignEndCellStyled>
     <span data-tip={`${value}%`}>{value.toFixed(2)}%</span>
     <ReactTooltip
       textColor={theme.tooltipText}
@@ -64,7 +69,7 @@ const AllocationCell: FC<AllocationCellProps> = ({ value }) => (
       effect="solid"
       delayHide={1000}
     />
-  </AllocationCellStyled>
+  </AlignEndCellStyled>
 );
 
 interface ActionsCellProps {
@@ -112,7 +117,15 @@ export const tableColumns = [
         width: 2,
       },
       {
-        Header: <AllocationCellStyled>Change</AllocationCellStyled>,
+        Header: <AlignCenterCellStyled>Credit limit</AlignCenterCellStyled>,
+        accessor: 'credit_limit',
+        width: 1,
+        Cell: ({ value }: any) => {
+          return <AlignCenterCellStyled>{value}</AlignCenterCellStyled>;
+        },
+      },
+      {
+        Header: <AlignCenterCellStyled>Change</AlignCenterCellStyled>,
         accessor: 'change',
         width: 1,
         Cell: ({ value: { collateral_asset } }: any) => {
@@ -120,7 +133,7 @@ export const tableColumns = [
         },
       },
       {
-        Header: <AllocationCellStyled>Allocation</AllocationCellStyled>,
+        Header: <AlignEndCellStyled>Allocation</AlignEndCellStyled>,
         accessor: 'allocation',
         width: 1,
         Cell: ({ value }: any) => {

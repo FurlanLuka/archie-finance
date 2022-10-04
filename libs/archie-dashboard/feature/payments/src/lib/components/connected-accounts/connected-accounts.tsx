@@ -9,6 +9,7 @@ import { Card, Skeleton, ButtonOutline, TitleS, BodyM } from '@archie-webapps/sh
 
 import { ConnectedAccount } from './blocks/connected-account';
 import { ConnectedAccountsStyled } from './connected-accounts.styled';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 export const ConnectedAccounts: FC = () => {
   const { t } = useTranslation();
@@ -31,7 +32,11 @@ export const ConnectedAccounts: FC = () => {
   if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
     const getAccountsList = () => {
       if (getConnectedAccountsResponse.data.length === 0) {
-        return <BodyM>{t('dashboard_payment.connected_accounts.no_accounts')}</BodyM>;
+        return (
+          <BodyM color={theme.textSecondary} weight={500}>
+            {t('dashboard_payment.connected_accounts.no_accounts')}
+          </BodyM>
+        );
       }
 
       return getConnectedAccountsResponse.data.map((account) => (

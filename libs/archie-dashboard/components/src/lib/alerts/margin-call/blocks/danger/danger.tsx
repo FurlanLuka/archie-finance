@@ -1,15 +1,17 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import { ButtonLight, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-export const Danger: FC = () => {
-  const { t } = useTranslation();
+interface DangerProps {
+  withButton?: boolean;
+}
 
-  const handleClick = () => {
-    console.log('clicked');
-  };
+export const Danger: FC<DangerProps> = ({ withButton }) => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -17,9 +19,11 @@ export const Danger: FC = () => {
         {t('margin_call_alert.title')}
       </BodyL>
       <BodyM color={theme.textLight}>{t('margin_call_alert.text')}</BodyM>
-      <ButtonLight color={theme.textDanger} onClick={handleClick}>
-        {t('margin_call_alert.btn')}
-      </ButtonLight>
+      {withButton && (
+        <ButtonLight color={theme.textDanger} onClick={() => navigate('/collateral')}>
+          {t('margin_call_alert.btn')}
+        </ButtonLight>
+      )}
     </>
   );
 };

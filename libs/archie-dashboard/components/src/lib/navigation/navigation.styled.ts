@@ -29,6 +29,24 @@ export const NavigationStyled = styled.div`
     gap: 0.5rem;
     margin-bottom: 1.5rem;
     cursor: pointer;
+
+    p {
+      color: ${({ theme }) => theme.navItem};
+    }
+  }
+
+  .nav-item[aria-current] {
+    p {
+      color: ${({ theme }) => theme.navItemActive};
+    }
+
+    svg path {
+      fill: ${({ theme }) => theme.navItemActive};
+    }
+
+    svg circle {
+      stroke: ${({ theme }) => theme.navItemActive};
+    }
   }
 
   .nav-item-title {

@@ -42,4 +42,8 @@ export const SettingsStyled = styled.div`
     padding: 0;
     cursor: pointer;
   }
+
+  .email {
+    letter-spacing: 0.02em;
+  }
 `;

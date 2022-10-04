@@ -6,9 +6,11 @@ export interface Kyc {
   lastName: string;
   dateOfBirth: string;
   address: string;
+  aptUnit: string;
   phoneNumber: string;
   phoneNumberCountryCode: string;
   ssnDigits: number;
+  income: number;
   createdAt: string;
 }
 
