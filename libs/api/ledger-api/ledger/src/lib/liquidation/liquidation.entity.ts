@@ -27,11 +27,7 @@ export class Liquidation {
   @Column('varchar')
   userId: string;
 
-  @Column({
-    type: 'enum',
-    enum: LiquidationStatus,
-    default: LiquidationStatus.INITIATED,
-  })
+  @Column('varchar')
   status: LiquidationStatus;
 
   @Column('varchar')

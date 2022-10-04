@@ -253,10 +253,9 @@ export class LiquidationService {
 
     await this.liquidationRepository.update(
       {
-        internalTransactionId,
+        externalTransactionId: transactionId,
       },
       {
-        externalTransactionId: transactionId,
         status: newLiquidationRecordStatus,
       },
     );
@@ -290,6 +289,21 @@ export class LiquidationService {
 
       return;
     }
+
+    const assetInformation: AssetInformation | undefined =
+      this.assetsService.getAssetInformation(liquidationRecord.assetId);
+
+    if (assetInformation === undefined) {
+      return;
+    }
+
+    await this.ledgerService.incrementLedgerAccount(
+      userId,
+      assetInformation,
+      BigNumber(liquidationRecord.amount)
+        .plus(liquidationRecord.networkFee)
+        .toString(),
+    );
 
     await this.liquidationRepository.update(
       {

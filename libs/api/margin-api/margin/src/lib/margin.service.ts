@@ -29,8 +29,6 @@ export class MarginService {
   ): Promise<void> {
     // TODO: Security improvements (very unlikely).
     //  Add calculation date in payload and execute logic only in case calculation date is the latest (store calculation date in margin check table)
-    //   Create external ids for fireblocks txn. Reject(ignore) any updates that come before the txn is confirmed - add txn id to the ltv updated event
-
     const activeMarginCall: MarginCall | null =
       await this.marginCallsRepository.findOneBy({
         userId: updatedLtv.userId,

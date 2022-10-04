@@ -10,7 +10,7 @@ export enum ConfigVariables {
   TYPEORM_DATABASE = 'TYPEORM_DATABASE',
   TYPEORM_PORT = 'TYPEORM_PORT',
   QUEUE_URL = 'QUEUE_URL',
-  ASSET_LTV_LIST = 'ASSET_LTV_LIST',
+  ASSET_LIST = 'ASSET_LIST',
 }
 
 export const CREDIT_LINE_CREATED_TOPIC = 'credit_limit.credit_line.created';

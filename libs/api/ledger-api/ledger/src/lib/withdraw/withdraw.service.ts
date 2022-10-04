@@ -169,6 +169,8 @@ export class WithdrawService {
         amount,
         'Withdrawal decrement',
       );
+
+      await queryRunner.commitTransaction();
     } catch {
       await queryRunner.rollbackTransaction();
     } finally {

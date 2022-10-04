@@ -22,7 +22,7 @@ export class CreditLimit {
     comment:
       'Collateral value in usd. It is updated together with the credit limit.',
   })
-  calculatedOnLedgerValue: number;
+  collateralValueOnCalculation: number;
 
   @Column('float')
   creditLimit: number;

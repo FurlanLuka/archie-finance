@@ -35,7 +35,7 @@ export class DepositService {
     }
 
     const userId: string =
-      await this.vaultAccountService.getUserIdForDepositAddress(sourceAddress);
+      await this.vaultAccountService.getUserIdForDepositAddress(destinationAddress);
 
     const assetInformation: AssetInformation | undefined =
       this.assetsService.getAssetInformationForFireblocksId(assetId);

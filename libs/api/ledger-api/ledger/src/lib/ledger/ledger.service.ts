@@ -68,6 +68,7 @@ export class LedgerService {
               .multipliedBy(assetPrice.price)
               .decimalPlaces(2, BigNumber.ROUND_DOWN)
               .toString(),
+            calculatedAt: Date.now()
           },
         ],
       },

@@ -1,8 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   CreateTransactionResponse,
   FireblocksSDK,
-  GenerateAddressResponse,
   PeerType,
   VaultAccountResponse,
   VaultAssetResponse,
@@ -14,7 +13,6 @@ import {
   CreateTransactionError,
   CreateVaultAccountError,
   CreateVaultAssetError,
-  GenerateDepositAddressError,
 } from './fireblocks_api.errors';
 
 @Injectable()
@@ -37,7 +35,6 @@ export class FireblocksApiService {
     userId: string,
   ): Promise<VaultAccountResponse> {
     const hashedUserId: string = this.cryptoService.sha256(userId);
-
     try {
       return await this.fireblocksClient.createVaultAccount(
         hashedUserId,

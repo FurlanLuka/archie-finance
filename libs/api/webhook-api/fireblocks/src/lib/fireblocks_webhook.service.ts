@@ -34,9 +34,12 @@ export class FireblocksWebhookService {
   private async handleTransactionWebhook(
     payload: FireblocksWebhookPayload,
   ): Promise<void> {
+    Logger.log(payload.data.status);
     if (
       payload.data.source.type === PeerType.VAULT_ACCOUNT &&
-      payload.data.destination.type === PeerType.VAULT_ACCOUNT
+      payload.data.destination.type === PeerType.VAULT_ACCOUNT &&
+      payload.data.netAmount &&
+      payload.data.networkFee
     ) {
       this.queueService.publish<FireblocksInternalTransactionPayload>(
         WEBHOOK_FIREBLOCKS_INTERNAL_TRANSACTION_TOPIC,
@@ -53,7 +56,8 @@ export class FireblocksWebhookService {
       );
     } else if (
       payload.data.source.type === PeerType.VAULT_ACCOUNT &&
-      payload.data.destination.type === PeerType.EXTERNAL_WALLET
+      payload.data.destination.type === PeerType.EXTERNAL_WALLET &&
+      payload.data.destinationAddress.length > 0
     ) {
       this.queueService.publish<FireblocksWithdrawTransactionPayload>(
         WEBHOOK_FIREBLOCKS_WITHDRAWAL_TRANSACTION_TOPIC,
@@ -71,7 +75,7 @@ export class FireblocksWebhookService {
       );
     } else if (
       payload.data.source.type === PeerType.EXTERNAL_WALLET &&
-      payload.data.destination.type === PeerType.INTERNAL_WALLET
+      payload.data.destination.type === PeerType.VAULT_ACCOUNT
     ) {
       if (payload.data.sourceAddress === undefined) {
         Logger.error({

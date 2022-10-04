@@ -1,7 +1,7 @@
 export class CreditLimitUpdatedPayload {
   userId: string;
   creditLimit: number;
-  calculatedAt: string;
+  calculatedAt: number;
 }
 
 export class CreditLimitPeriodicCheckRequestedPayload {

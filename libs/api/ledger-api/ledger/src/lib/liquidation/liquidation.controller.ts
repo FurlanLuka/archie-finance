@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Logger, Req, UseGuards } from '@nestjs/common';
 import {
   INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND,
   SERVICE_QUEUE_NAME,
@@ -15,7 +15,10 @@ import {
   CollateralLiquidationTransactionSubmittedPayload,
   CollateralLiquidationTransactionUpdatedPayload,
 } from '@archie/api/fireblocks-api/data-transfer-objects';
-import { InitiateLedgerAssetLiquidationCommandPayload, Liquidation } from '@archie/api/ledger-api/data-transfer-objects';
+import {
+  InitiateLedgerAssetLiquidationCommandPayload,
+  Liquidation,
+} from '@archie/api/ledger-api/data-transfer-objects';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
