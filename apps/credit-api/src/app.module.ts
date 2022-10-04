@@ -15,7 +15,6 @@ import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
 import { CryptoModule } from '@archie/api/utils/crypto';
 import { RedisModule } from '@archie-microservices/api/utils/redis';
-import { PeachBorrowerModule } from '@archie/api/peach-api/borrower';
 
 @Module({
   imports: [
@@ -79,7 +78,6 @@ import { PeachBorrowerModule } from '@archie/api/peach-api/borrower';
     CollateralModule,
     CollateralWithdrawalModule,
     QueueModule.register(),
-    PeachBorrowerModule,
     RedisModule.register({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
