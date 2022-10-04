@@ -337,6 +337,7 @@
     "select": {
       "empty": "Select payment method",
       "label": "Payment method"
-    }
+    },
+    "consent_text": "I agree to the <a>Autopay Consent</a>."
   }
 }

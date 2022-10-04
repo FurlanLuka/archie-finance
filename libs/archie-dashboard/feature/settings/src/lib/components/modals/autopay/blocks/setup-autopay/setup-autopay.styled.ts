@@ -20,4 +20,17 @@ export const SetupAutopayStyled = styled.div`
   .select-label {
     margin-bottom: 0.75rem;
   }
+
+  .consent-check {
+    margin-top: 1rem;
+  }
+
+  .disabled {
+    color: 1px solid ${({ theme }) => theme.textDisabled};
+  }
+
+  .link {
+    color: ${({ theme }) => theme.textHighlight};
+    padding-left: 0.25rem;
+  }
 `;
