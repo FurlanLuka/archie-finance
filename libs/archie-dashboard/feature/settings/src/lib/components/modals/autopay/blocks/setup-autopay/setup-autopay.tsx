@@ -1,6 +1,8 @@
 import { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { useSetAutopay } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-set-autopay';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { TitleS, BodyM, SelectOption, Select, ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
 
@@ -18,6 +20,8 @@ export const SetupAutopay: FC<AutopayModalProps> = ({ accounts }) => {
   const { t } = useTranslation();
   const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
   const [hasConsent, setHasConsent] = useState<boolean>(false);
+  const [consentDocumentId, setConsentDocumentId] = useState<string | null>(null);
+  const setAutopayMutation = useSetAutopay();
 
   const header = selectedAccount ? (
     <ConnectedAccountItem account={selectedAccount} />
@@ -61,10 +65,32 @@ export const SetupAutopay: FC<AutopayModalProps> = ({ accounts }) => {
           onChange={(val) => {
             setHasConsent(val);
           }}
+          setDocumentId={(documentId) => {
+            setConsentDocumentId(documentId);
+          }}
           selectedAccount={selectedAccount}
         />
       </div>
-      <ButtonPrimary>{t('autopay_modal.btn_confirm')}</ButtonPrimary>
+      <ButtonPrimary
+        disabled={!hasConsent || selectedAccount === null || consentDocumentId === null}
+        isLoading={setAutopayMutation.state === RequestState.LOADING}
+        onClick={() => {
+          console.log('kej kaj', { hasConsent, selectedAccount, consentDocumentId });
+          if (
+            hasConsent &&
+            selectedAccount !== null &&
+            consentDocumentId !== null &&
+            setAutopayMutation.state === RequestState.IDLE
+          ) {
+            setAutopayMutation.mutate({
+              agreementDocumentId: consentDocumentId,
+              paymentInstrumentId: selectedAccount.id,
+            });
+          }
+        }}
+      >
+        {t('autopay_modal.btn_confirm')}
+      </ButtonPrimary>
     </SetupAutopayStyled>
   );
 };

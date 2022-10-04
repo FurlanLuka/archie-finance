@@ -11,10 +11,11 @@ import { ConsentCheckboxStyled } from './consent-checkbox.styled';
 interface ConsentCheckboxProps {
   hasConsent: boolean;
   onChange: (hasConsent: boolean) => void;
+  setDocumentId: (documentId: string) => void;
   selectedAccount: AccountResponse | null;
 }
 
-export const ConsentCheckbox: FC<ConsentCheckboxProps> = ({ hasConsent, onChange, selectedAccount }) => {
+export const ConsentCheckbox: FC<ConsentCheckboxProps> = ({ hasConsent, onChange, selectedAccount, setDocumentId }) => {
   const { t } = useTranslation();
   const [showDocument, setShowDocument] = useState(false);
   const createAutopayDocumentMutation = useCreateAutopayDocument();
@@ -24,6 +25,12 @@ export const ConsentCheckbox: FC<ConsentCheckboxProps> = ({ hasConsent, onChange
       createAutopayDocumentMutation.mutate({ paymentInstrumentId: selectedAccount.id });
     }
   }, [selectedAccount, createAutopayDocumentMutation]);
+
+  useEffect(() => {
+    if (createAutopayDocumentMutation.state === RequestState.SUCCESS) {
+      setDocumentId(createAutopayDocumentMutation.data.id);
+    }
+  }, [createAutopayDocumentMutation, setDocumentId]);
 
   const getContent = () => {
     if (!selectedAccount) {
