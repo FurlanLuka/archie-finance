@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects';
 import { LedgerService } from '../ledger/ledger.service';
 import { LedgerAccount } from '../ledger/ledger_account.entity';

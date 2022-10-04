@@ -45,7 +45,7 @@ export class CreditLineQueueController {
     LEDGER_ACCOUNT_UPDATED_TOPIC,
     CreditLineQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async lederUpdated(payload: LedgerAccountUpdatedPayload): Promise<void> {
+  async ledgerUpdated(payload: LedgerAccountUpdatedPayload): Promise<void> {
     return this.creditLineService.ledgerAccountUpdatedHandler(payload);
   }
 }

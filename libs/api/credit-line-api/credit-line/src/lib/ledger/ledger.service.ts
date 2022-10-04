@@ -38,26 +38,41 @@ export class LedgerService {
             },
           );
 
-          if (
-            ledgerAccount &&
-            ledgerAccount.calculatedAt > ledgerAccountData.calculatedAt
-          ) {
+          if (ledgerAccount === null) {
+            await queryRunner.manager.save(LedgerAccount, {
+              userId,
+              assetId: ledgerAccountData.assetId,
+              value: BigNumber(ledgerAccountData.accountValue)
+                .decimalPlaces(2, BigNumber.ROUND_DOWN)
+                .toNumber(),
+              calculatedAt: ledgerAccountData.calculatedAt,
+            });
+
             return;
           }
 
-          await queryRunner.manager.save(LedgerAccount, {
-            userId,
-            assetId: ledgerAccountData.assetId,
-            value: BigNumber(ledgerAccountData.accountValue)
-              .decimalPlaces(2, BigNumber.ROUND_DOWN)
-              .toNumber(),
-            calculatedAt: ledgerAccountData.calculatedAt,
-          });
+          if (ledgerAccount.calculatedAt > ledgerAccountData.calculatedAt) {
+            return;
+          }
+
+          await queryRunner.manager.update(
+            LedgerAccount,
+            {
+              userId,
+              assetId: ledgerAccountData.assetId,
+            },
+            {
+              value: BigNumber(ledgerAccountData.accountValue)
+                .decimalPlaces(2, BigNumber.ROUND_DOWN)
+                .toNumber(),
+              calculatedAt: ledgerAccountData.calculatedAt,
+            },
+          );
         }),
       );
 
       await queryRunner.commitTransaction();
-    } catch {
+    } catch (error) {
       await queryRunner.rollbackTransaction();
     } finally {
       await queryRunner.release();
