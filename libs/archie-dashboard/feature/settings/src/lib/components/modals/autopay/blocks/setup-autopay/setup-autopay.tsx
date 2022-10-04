@@ -2,7 +2,7 @@ import { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
-import { TitleS, BodyM, SelectOption, Select } from '@archie-webapps/shared/ui/design-system';
+import { TitleS, BodyM, SelectOption, Select, ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectedAccountItem } from '../connected-account-item/connected-account-item';
 import { ConsentCheckbox } from '../consent-checkbox/consent-checkbox';
@@ -42,16 +42,29 @@ export const SetupAutopay: FC<AutopayModalProps> = ({ accounts }) => {
       <BodyM className="select-label" weight={700}>
         {t('autopay_modal.select.label')}
       </BodyM>
-      <Select id="accounts" header={header} onChange={(account: AccountResponse) => setSelectedAccount(account)}>
+      <Select
+        id="accounts"
+        header={header}
+        onChange={(account: AccountResponse) => {
+          // if we change, we need to get consent anew
+          if (account !== selectedAccount) {
+            setHasConsent(false);
+            setSelectedAccount(account);
+          }
+        }}
+      >
         {options}
       </Select>
-      <ConsentCheckbox
-        hasConsent={hasConsent}
-        onChange={(val) => {
-          setHasConsent(val);
-        }}
-        selectedAccount={selectedAccount}
-      />
+      <div className="consent-check">
+        <ConsentCheckbox
+          hasConsent={hasConsent}
+          onChange={(val) => {
+            setHasConsent(val);
+          }}
+          selectedAccount={selectedAccount}
+        />
+      </div>
+      <ButtonPrimary>{t('autopay_modal.btn_confirm')}</ButtonPrimary>
     </SetupAutopayStyled>
   );
 };

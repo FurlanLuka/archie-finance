@@ -1,10 +1,10 @@
-import { FC, useEffect } from 'react';
-import { Trans } from 'react-i18next';
+import { FC, useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useCreateAutopayDocument } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-create-autopay-document';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
-import { BodyL, Loader } from '@archie-webapps/shared/ui/design-system';
+import { BodyL, ButtonPrimary, Loader, Modal } from '@archie-webapps/shared/ui/design-system';
 
 import { ConsentCheckboxStyled } from './consent-checkbox.styled';
 
@@ -15,6 +15,8 @@ interface ConsentCheckboxProps {
 }
 
 export const ConsentCheckbox: FC<ConsentCheckboxProps> = ({ hasConsent, onChange, selectedAccount }) => {
+  const { t } = useTranslation();
+  const [showDocument, setShowDocument] = useState(false);
   const createAutopayDocumentMutation = useCreateAutopayDocument();
 
   useEffect(() => {
@@ -26,59 +28,90 @@ export const ConsentCheckbox: FC<ConsentCheckboxProps> = ({ hasConsent, onChange
   const getContent = () => {
     if (!selectedAccount) {
       return (
-        <>
+        <ConsentCheckboxStyled>
           <input type="checkbox" checked={false} disabled />
           <BodyL className="disabled">
-            <Trans components={{ a: <span /> }}>autopay_modal.consent_text</Trans>
+            <Trans components={{ btn: <span /> }}>autopay_modal.consent_text</Trans>
           </BodyL>
-        </>
+        </ConsentCheckboxStyled>
       );
     }
 
     if (createAutopayDocumentMutation.state === RequestState.LOADING) {
       return (
-        <>
+        <ConsentCheckboxStyled>
           <input type="checkbox" checked={false} disabled />
           <BodyL>
-            <Trans components={{ a: <span /> }}>autopay_modal.consent_text</Trans>
+            <Trans components={{ btn: <span /> }}>autopay_modal.consent_text</Trans>
           </BodyL>
           <Loader />
-        </>
+        </ConsentCheckboxStyled>
       );
     }
 
     if (createAutopayDocumentMutation.state === RequestState.SUCCESS) {
       return (
         <>
-          <input
-            type="checkbox"
-            checked={hasConsent}
-            onChange={(e) => {
-              onChange(e.target.checked);
-            }}
-          />
-          <BodyL>
-            <Trans
-              components={{
-                a: <a className="link" href={createAutopayDocumentMutation.data.document} />,
+          <ConsentCheckboxStyled>
+            <input
+              type="checkbox"
+              checked={hasConsent}
+              onChange={(e) => {
+                onChange(e.target.checked);
+              }}
+            />
+            <BodyL>
+              <Trans
+                components={{
+                  btn: (
+                    <button
+                      className="document-btn"
+                      onClick={() => {
+                        setShowDocument(true);
+                      }}
+                    />
+                  ),
+                }}
+              >
+                autopay_modal.consent_text
+              </Trans>
+            </BodyL>
+          </ConsentCheckboxStyled>
+          {showDocument && (
+            <Modal
+              isOpen
+              close={() => {
+                setShowDocument(false);
               }}
             >
-              autopay_modal.consent_text
-            </Trans>
-          </BodyL>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: createAutopayDocumentMutation.data.document,
+                }}
+              />
+              <ButtonPrimary
+                onClick={() => {
+                  setShowDocument(false);
+                  onChange(true);
+                }}
+              >
+                {t('autopay_modal.document_agree')}
+              </ButtonPrimary>
+            </Modal>
+          )}
         </>
       );
     }
 
     return (
-      <>
+      <ConsentCheckboxStyled>
         <input type="checkbox" checked={false} disabled />
         <BodyL>
-          <Trans components={{ a: <span /> }}>autopay_modal.consent_text</Trans>
+          <Trans components={{ btn: <span /> }}>autopay_modal.consent_text</Trans>
         </BodyL>
-      </>
+      </ConsentCheckboxStyled>
     );
   };
 
-  return <ConsentCheckboxStyled>{getContent()}</ConsentCheckboxStyled>;
+  return getContent();
 };

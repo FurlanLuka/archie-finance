@@ -7,8 +7,17 @@ export const ConsentCheckboxStyled = styled(InputRadio)`
     color: 1px solid ${({ theme }) => theme.textDisabled};
   }
 
-  .link {
+  .document-btn {
     color: ${({ theme }) => theme.textHighlight};
-    padding-left: 0.25rem;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    font-weight: inherit;
+
+    :hover {
+      cursor: pointer;
+      text-decoration: underline;
+    }
   }
 `;

@@ -338,6 +338,8 @@
       "empty": "Select payment method",
       "label": "Payment method"
     },
-    "consent_text": "I agree to the <a>Autopay Consent</a>."
+    "btn_confirm": "Set Autopay",
+    "consent_text": "I agree to the <btn>Autopay Consent</btn>.",
+    "document_agree": "Got it!"
   }
 }

@@ -22,15 +22,6 @@ export const SetupAutopayStyled = styled.div`
   }
 
   .consent-check {
-    margin-top: 1rem;
-  }
-
-  .disabled {
-    color: 1px solid ${({ theme }) => theme.textDisabled};
-  }
-
-  .link {
-    color: ${({ theme }) => theme.textHighlight};
-    padding-left: 0.25rem;
+    margin: 1rem 0 5rem;
   }
 `;
