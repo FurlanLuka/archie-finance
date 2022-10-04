@@ -28,9 +28,9 @@ export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
   }
 
   if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
-    // if (getConnectedAccountsResponse.data.length === 0) {
-    //   return <ConnectAccountModal />;
-    // }
+    if (getConnectedAccountsResponse.data.length === 0) {
+      return <ConnectAccountModal />;
+    }
 
     return <SchedulePaymentModal close={close} />;
   }

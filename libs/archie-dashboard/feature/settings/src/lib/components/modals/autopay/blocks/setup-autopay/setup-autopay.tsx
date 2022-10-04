@@ -1,15 +1,14 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectableAccount } from '../../autopay.interfaces';
 import { SetupAutopayStyled } from './setup-autopay.styled';
 
 interface AutopayModalProps {
-  accounts: ConnectableAccount[];
+  accounts: AccountResponse[];
   onConnect?: VoidFunction;
-  publicToken: string;
 }
 
 export const SetupAutopay: FC<AutopayModalProps> = () => {
