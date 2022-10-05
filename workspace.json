@@ -44,6 +44,7 @@
     "api-ltv-api-constants": "libs/api/ltv-api/constants",
     "api-ltv-api-data-transfer-objects": "libs/api/ltv-api/data-transfer-objects",
     "api-ltv-api-ltv": "libs/api/ltv-api/ltv",
+    "api-ltv-api-margin": "libs/api/ltv-api/margin",
     "api-mail-api-constants": "libs/api/mail-api/constants",
     "api-mail-api-contact": "libs/api/mail-api/contact",
     "api-mail-api-sendgrid": "libs/api/mail-api/sendgrid",
