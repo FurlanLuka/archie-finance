@@ -129,6 +129,7 @@ describe('Ledger api deposit tests', () => {
                   .multipliedBy(BITCOIN_PRICE)
                   .decimalPlaces(2, BigNumber.ROUND_DOWN)
                   .toString(),
+                calculatedAt: expect.any(String),
               },
             ],
           },
@@ -178,6 +179,7 @@ describe('Ledger api deposit tests', () => {
                   .multipliedBy(BITCOIN_PRICE)
                   .decimalPlaces(2, BigNumber.ROUND_DOWN)
                   .toString(),
+                calculatedAt: expect.any(String),
               },
             ],
           },
