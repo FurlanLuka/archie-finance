@@ -4,6 +4,7 @@ import { useGetAutopay } from '@archie-webapps/shared/data-access/archie-api/aut
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { Loader, Modal } from '@archie-webapps/shared/ui/design-system';
 
+import { AutopayRemoveModal } from '../../autopay-remove/autopay-remove';
 import { Autopay } from '../../autopay/autopay';
 
 interface ManageAutopayModalProps {
@@ -32,7 +33,7 @@ export const ManageAutopayModal: FC<ManageAutopayModalProps> = ({ close }) => {
 
     if (getAutopayResponse.state === RequestState.SUCCESS) {
       if (getAutopayResponse.data !== null) {
-        return <span>ajej nesi zrihtou</span>;
+        return <AutopayRemoveModal close={close} />;
       }
 
       return <Autopay close={close} />;

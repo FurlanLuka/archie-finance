@@ -1,3 +1,5 @@
+export const AUTOPAY_NOT_CONFIGURED = 'AUTOPAY_NOT_CONFIGURED';
+
 export interface Autopay {
   type: AmountType;
   extraAmount: number;
