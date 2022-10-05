@@ -113,12 +113,12 @@ describe('Peach service tests', () => {
     });
 
     it('Should throw borrower not found and retry credit limit updated event', async () => {
-      const creditLimitUpdatedPayload = creditLimitUpdatedDataFactory();
+      const creditLimitUpdatedPayload = creditLineUpdatedDataFactory();
 
       await expect(
         app
           .get(PeachBorrowerQueueController)
-          .creditLimitUpdatedHandler(creditLimitUpdatedPayload),
+          .creditLineUpdatedHandler(creditLimitUpdatedPayload),
       ).rejects.toBeInstanceOf(BorrowerNotFoundError);
     });
   });
@@ -206,12 +206,12 @@ describe('Peach service tests', () => {
 
     describe('Credit line is not defined', () => {
       it('Should throw credit line not found error on the credit limit updated handler and retry', async () => {
-        const creditLimitUpdatedPayload = creditLimitUpdatedDataFactory();
+        const creditLimitUpdatedPayload = creditLineUpdatedDataFactory();
 
         await expect(
           app
             .get(PeachBorrowerQueueController)
-            .creditLimitUpdatedHandler(creditLimitUpdatedPayload),
+            .creditLineUpdatedHandler(creditLimitUpdatedPayload),
         ).rejects.toBeInstanceOf(CreditLineNotFoundError);
       });
     });
