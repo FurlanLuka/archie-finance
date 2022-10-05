@@ -2116,7 +2116,7 @@
           },
           "paymentInstrumentId": {
             "type": "string",
-            "pattern": {}
+            "pattern": "PEACH_ID_REGEX"
           }
         },
         "required": [
@@ -2426,7 +2426,7 @@
           },
           "paymentInstrumentId": {
             "type": "string",
-            "pattern": {}
+            "pattern": "PEACH_ID_REGEX"
           },
           "isAlignedToDueDates": {
             "type": "boolean"
@@ -2537,7 +2537,7 @@
         "properties": {
           "paymentInstrumentId": {
             "type": "string",
-            "pattern": {}
+            "pattern": "PEACH_ID_REGEX"
           }
         },
         "required": [

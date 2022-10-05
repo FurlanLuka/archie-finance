@@ -8,9 +8,9 @@ import {
 } from 'typeorm';
 
 @Entity({
-  name: 'last_adjustment',
+  name: 'last_debit_card_update_meta',
 })
-export class LastAdjustment {
+export class LastDebitCardUpdateMeta {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -19,7 +19,10 @@ export class LastAdjustment {
   userId: string;
 
   @Column('timestamp', { nullable: false })
-  availableCreditCalculatedAt: string;
+  adjustmentCalculatedAt: string;
+
+  @Column('timestamp', { nullable: false, default: () => 'CURRENT_TIMESTAMP' })
+  cardStatusChangedAt: string;
 
   @CreateDateColumn({ select: false })
   createdAt: Date;

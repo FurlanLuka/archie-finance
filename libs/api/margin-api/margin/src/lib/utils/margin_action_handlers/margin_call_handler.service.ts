@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { MarginCall } from '../../margin_calls.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { Repository } from 'typeorm';
 import {
   MarginCallCompletedPayload,
   MarginCallStartedPayload,
@@ -28,7 +28,7 @@ export class MarginCallHandlerService {
   ) {}
 
   public async activate(ltv: LtvUpdatedPayload): Promise<void> {
-    await this.marginCallRepository.insert({
+    const marginCall: MarginCall = await this.marginCallRepository.save({
       userId: ltv.userId,
     });
 
@@ -36,6 +36,7 @@ export class MarginCallHandlerService {
       MARGIN_CALL_STARTED_TOPIC,
       {
         userId: ltv.userId,
+        startedAt: marginCall.updatedAt.toISOString(),
         ltv: ltv.ltv,
         ...this.marginCallPriceFactory.getMarginCallPrices(ltv.calculatedOn),
       },
@@ -43,18 +44,17 @@ export class MarginCallHandlerService {
   }
 
   public async deactivate(ltv: LtvUpdatedPayload): Promise<void> {
-    const updateResult: UpdateResult =
-      await this.marginCallRepository.softDelete({
-        userId: ltv.userId,
-      });
+    const completedMarginCall: MarginCall | null =
+      await this.softDeleteMarginCall(ltv.userId);
 
-    if (updateResult.affected === 0) {
+    if (completedMarginCall === null) {
       throw new Error('Already deleted by other process. Retry');
     }
 
     this.queueService.publish<MarginCallCompletedPayload>(
       MARGIN_CALL_COMPLETED_TOPIC,
       {
+        completedAt: completedMarginCall.updatedAt.toISOString(),
         userId: ltv.userId,
         liquidation: [],
         liquidationAmount: 0,
@@ -77,12 +77,10 @@ export class MarginCallHandlerService {
         ltv.calculatedOn.collateral,
       );
 
-    const updateResult: UpdateResult =
-      await this.marginCallRepository.softDelete({
-        userId: ltv.userId,
-      });
+    const completedMarginCall: MarginCall | null =
+      await this.softDeleteMarginCall(ltv.userId);
 
-    if (updateResult.affected === 0) {
+    if (completedMarginCall === null) {
       Logger.log('Collateral was already liquidated by other process.', ltv);
       return;
     }
@@ -90,6 +88,7 @@ export class MarginCallHandlerService {
     this.queueService.publish<MarginCallCompletedPayload>(
       MARGIN_CALL_COMPLETED_TOPIC,
       {
+        completedAt: completedMarginCall.updatedAt.toISOString(),
         userId: ltv.userId,
         liquidation: assetsToLiquidate,
         liquidationAmount: loanRepaymentAmount,
@@ -102,6 +101,18 @@ export class MarginCallHandlerService {
         }),
       },
     );
+  }
+
+  private softDeleteMarginCall(userId: string): Promise<MarginCall | null> {
+    return this.marginCallRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where({
+        userId,
+      })
+      .returning('*')
+      .execute()
+      .then((deletedResult): MarginCall | null => deletedResult.raw[0] ?? null);
   }
 
   private calculateAmountToReachLtv(

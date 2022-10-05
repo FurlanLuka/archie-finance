@@ -80,6 +80,7 @@ describe('MarginQueueController (e2e)', () => {
 
       expect(queueStub.publish).toBeCalledTimes(2);
       expect(queueStub.publish).toBeCalledWith(MARGIN_CALL_STARTED_TOPIC, {
+        startedAt: expect.any(String),
         collateralBalance: payload.calculatedOn.collateralBalance,
         ltv: payload.ltv,
         priceForMarginCall: 1200,
@@ -88,6 +89,7 @@ describe('MarginQueueController (e2e)', () => {
       });
       const expectedSale = 750;
       expect(queueStub.publish).toBeCalledWith(MARGIN_CALL_COMPLETED_TOPIC, {
+        completedAt: expect.any(String),
         collateralBalance:
           payload.calculatedOn.collateralBalance - expectedSale,
         ltv: 60,
@@ -132,6 +134,7 @@ describe('MarginQueueController (e2e)', () => {
       expect(queueStub.publish).toBeCalledTimes(1);
       const expectedSale = 0;
       expect(queueStub.publish).toBeCalledWith(MARGIN_CALL_COMPLETED_TOPIC, {
+        completedAt: expect.any(String),
         collateralBalance:
           payload.calculatedOn.collateralBalance - expectedSale,
         ltv: payload.ltv,
