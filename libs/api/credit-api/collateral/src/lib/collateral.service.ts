@@ -1,7 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
-import { DataSource, Repository } from 'typeorm';
+import {
+  DataSource,
+  LessThanOrEqual,
+  MoreThan,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
 import { Collateral } from './collateral.entity';
 import { CollateralDeposit } from './collateral_deposit.entity';
 import {
@@ -12,11 +18,22 @@ import {
 import { DepositCreationInternalError } from './collateral.errors';
 import { CollateralValueService } from './collateral-value/collateral-value.service';
 import { QueueService } from '@archie/api/utils/queue';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
-import { CollateralDepositedPayload } from '@archie/api/collateral-api/data-transfer-objects';
-import { COLLATERAL_DEPOSIT_COMPLETED_TOPIC } from '@archie/api/credit-api/constants';
-import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import {
+  CollateralDepositedPayload,
+  InternalCollateralTransactionCompletedPayload,
+} from '@archie/api/collateral-api/data-transfer-objects';
+import {
+  COLLATERAL_DEPOSIT_COMPLETED_TOPIC,
+  COLLATERAL_LIQUIDATION_INITIATED_TOPIC,
+} from '@archie/api/credit-api/constants';
+import {
+  CollateralDepositCompletedPayload,
+  CollateralLiquidationInitiatedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
+import { MarginCallCompletedPayload } from '@archie/api/margin-api/data-transfer-objects';
+import { BigNumber } from 'bignumber.js';
 
 @Injectable()
 export class CollateralService {
@@ -102,6 +119,7 @@ export class CollateralService {
           userId,
           asset,
           amount,
+          transactionId,
         },
       );
     }
@@ -110,7 +128,7 @@ export class CollateralService {
   private async getNewCollateralRecord(
     userId: string,
     asset: string,
-    amount: number,
+    amount: string,
   ): Promise<Partial<Collateral>> {
     const collateral: Collateral | null =
       await this.collateralRepository.findOneBy({
@@ -118,8 +136,10 @@ export class CollateralService {
         asset,
       });
 
-    const collateralAmount: number =
-      collateral === null ? amount : collateral.amount + amount; // TODO: refactor- update to use 1 db txn
+    const collateralAmount: string =
+      collateral === null
+        ? amount
+        : BigNumber(collateral.amount).plus(amount).toString(); // TODO: refactor- update to use 1 db txn
 
     return {
       ...collateral,
@@ -127,6 +147,75 @@ export class CollateralService {
       asset,
       amount: collateralAmount,
     };
+  }
+
+  public async handleInternalTransactionCompletedEvent(
+    transaction: InternalCollateralTransactionCompletedPayload,
+  ): Promise<void> {
+    // TODO: Do not handle same events multiple times
+    const updatedResult: UpdateResult =
+      await this.collateralRepository.decrement(
+        {
+          userId: transaction.userId,
+          asset: transaction.asset,
+          amount: MoreThan(transaction.fee),
+        },
+        'amount',
+        transaction.fee,
+      );
+
+    if (updatedResult.affected === 0) {
+      await this.collateralRepository.delete({
+        userId: transaction.userId,
+        asset: transaction.asset,
+        amount: LessThanOrEqual(transaction.fee),
+      });
+    }
+  }
+
+  public async liquidateAssets(
+    liquidationAssets: MarginCallCompletedPayload,
+  ): Promise<void> {
+    // TODO: Do not handle same events multiple times + check that current collateral balance === balance ltv was calculated on
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      await Promise.all(
+        liquidationAssets.liquidation.map(async (liquidation) => {
+          await this.collateralRepository.decrement(
+            {
+              userId: liquidationAssets.userId,
+              asset: liquidation.asset,
+            },
+            'amount',
+            liquidation.amount,
+          );
+        }),
+      );
+
+      await this.collateralRepository.delete({
+        userId: liquidationAssets.userId,
+        amount: '0',
+      });
+      await queryRunner.commitTransaction();
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+
+    this.queueService.publish<CollateralLiquidationInitiatedPayload>(
+      COLLATERAL_LIQUIDATION_INITIATED_TOPIC,
+      {
+        userId: liquidationAssets.userId,
+        collateral: liquidationAssets.liquidation,
+      },
+    );
   }
 
   public async getUserCollateral(

@@ -39,6 +39,10 @@ export interface PaymentInstrumentBalance extends PeachResponse {
   };
 }
 
+export interface Document extends PeachResponse {
+  id: string;
+}
+
 export enum PaymentStatus {
   scheduled = 'scheduled',
   initiated = 'initiated',
@@ -86,45 +90,47 @@ export interface Payments extends PeachResponse {
   count: number;
   nextUrl: string | null;
   previousUrl: string | null;
-  data: {
-    id: string;
-    timestamps: {
-      appliedAt: string;
-      canceledAt: string | null;
-      chargebackAt: string | null;
-      createdAt: string;
-      deletedAt: string | null;
-      displayDate: string;
-      effectiveDate: string;
-      failedAt: string | null;
-      inDisputeAt: string | null;
-      initiatedAt: string;
-      originalEffectiveDate: string;
-      pendingAt: string;
-      scheduledDate: string;
-      succeededAt: string | null;
-      updatedAt: string | null;
+  data: Payment[];
+}
+
+export class Payment {
+  id: string;
+  timestamps: {
+    appliedAt: string;
+    canceledAt: string | null;
+    chargebackAt: string | null;
+    createdAt: string;
+    deletedAt: string | null;
+    displayDate: string;
+    effectiveDate: string;
+    failedAt: string | null;
+    inDisputeAt: string | null;
+    initiatedAt: string;
+    originalEffectiveDate: string;
+    pendingAt: string;
+    scheduledDate: string;
+    succeededAt: string | null;
+    updatedAt: string | null;
+  };
+  isExternal: boolean;
+  isVirtual: boolean;
+  status: PaymentStatus;
+  transactionType: TransactionType;
+  paymentDetails: {
+    type: PaymentType;
+    reason: PaymentReason;
+    fromInstrumentId: string;
+    fromInstrument: {
+      paymentNetworkName: string;
+      accountNumberLastFour?: string;
     };
-    isExternal: boolean;
-    isVirtual: boolean;
-    status: PaymentStatus;
-    transactionType: TransactionType;
-    paymentDetails: {
-      type: PaymentType;
-      reason: PaymentReason;
-      fromInstrumentId: string;
-      fromInstrument: {
-        paymentNetworkName: string;
-        accountNumberLastFour?: string;
-      };
-    };
-    actualAmount: number;
-    currency: string;
-    failureDescriptionShort: string | null;
-    failureDescriptionLong: string | null;
-    autopayPlanId: string | null;
-    cancelReason: string | null;
-  }[];
+  };
+  actualAmount: number;
+  currency: string;
+  failureDescriptionShort: string | null;
+  failureDescriptionLong: string | null;
+  autopayPlanId: string | null;
+  cancelReason: string | null;
 }
 
 export enum PurchaseType {
@@ -305,6 +311,68 @@ export enum PeachTransactionStatus {
   failed = 'canceled',
 }
 
+export enum AmountType {
+  statementMinimumAmount = 'statementMinimumAmount',
+  statementMinimumAmountPlusExtra = 'statementMinimumAmountPlusExtra',
+  statementBalanceAmount = 'statementBalanceAmount',
+}
+
+export interface AutopayOptions {
+  amountType: AmountType;
+  extraAmount?: number | null;
+  paymentInstrumentId: string;
+  isAlignedToDueDates: boolean;
+  offsetFromDueDate?: number[] | null;
+  agreementDocumentId: string;
+}
+
+export enum PaymentFrequency {
+  twiceMonthly = 'twiceMonthly',
+  everyTwoWeeks = 'everyTwoWeeks',
+  monthly = 'monthly',
+}
+
+export enum AutopayScheduleStatus {
+  booked = 'booked',
+  modified = 'modified',
+  canceled = 'canceled',
+  processed = 'processed',
+}
+
+export interface Autopay extends PeachResponse {
+  agreementDocumentId: string;
+  type: AmountType;
+  extraAmount: number;
+  isAlignedToDueDates: boolean;
+  paymentFrequency: PaymentFrequency;
+  specificDays: number[];
+  paymentInstrumentId: string;
+  cancelReason: string;
+  schedule: AutopaySchedule[];
+}
+
+export interface AutopaySchedule {
+  date: string;
+  periodId: string;
+  paymentType: string;
+  status: string;
+  amount: number;
+  originalAmount: number;
+  principalAmount: number;
+  interestAmount: number;
+  interestBeforeDiscountAmount: number;
+  isDeferred: boolean;
+}
+
+export interface AutopayContext {
+  lenderName: string;
+  paymentMethod: string;
+  paymentMethodLastFour: string;
+  supportPhone: string;
+  supportEmail: string;
+  dateSigned: string;
+}
+
 export interface Statement {
   id: string;
   createdAt: string;
@@ -336,5 +404,5 @@ export interface DocumentUrl {
 }
 export enum PeachOneTimePaymentStatus {
   succeeded = 'succeeded',
-  pending = 'pending'
+  pending = 'pending',
 }

@@ -1,6 +1,6 @@
 import { AppModule } from './app.module';
 import { Logger } from '@nestjs/common';
-import { SERVICE_NAME } from '@archie/api/margin-api/constants';
+import { SERVICE_NAME } from '@archie/api/ltv-api/constants';
 import { start } from '@archie/api/utils/microservice';
 import './tracer';
 

@@ -6,7 +6,7 @@ export interface MarginPrices {
 
 export interface LiquidationAssets {
   asset: string;
-  amount: number;
+  amount: string;
   price: number;
 }
 

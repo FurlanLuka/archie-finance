@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, UseGuards, Request, Query } from '@nestjs/common';
 import { SERVICE_QUEUE_NAME } from '@archie/api/margin-api/constants';
 import { MarginService } from './margin.service';
 import { Subscribe } from '@archie/api/utils/queue';
@@ -7,6 +7,26 @@ import {
   MULTIPLE_LTVS_UPDATED_TOPIC,
 } from '@archie/api/ltv-api/constants';
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
+import { AuthGuard } from '@archie/api/utils/auth0';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiErrorResponse } from '@archie/api/utils/openapi';
+import { MarginCallQueryDto, MarginCallsDto } from './margin.dto';
+
+@Controller('v1/margin_calls')
+export class MarginController {
+  constructor(private marginService: MarginService) {}
+
+  @Get()
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiErrorResponse([])
+  async getMarginCalls(
+    @Request() req,
+    @Query() query: MarginCallQueryDto,
+  ): Promise<MarginCallsDto[]> {
+    return this.marginService.getMarginCalls(req.user.sub, query);
+  }
+}
 
 @Controller()
 export class MarginQueueController {

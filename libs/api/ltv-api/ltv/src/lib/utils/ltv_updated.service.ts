@@ -46,7 +46,7 @@ export class LtvUpdatedUtilService {
           utilizedCreditAmount: creditAssets.credit.utilizationAmount,
           collateralBalance: collateralValue.collateralBalance,
           collateral: collateralValue.collateral,
-          // TODO: add calculated at
+          calculatedAt: new Date().toISOString(),
         },
       });
     } catch (error) {
@@ -81,7 +81,7 @@ export class LtvUpdatedUtilService {
               utilizedCreditAmount: creditAssets.credit.utilizationAmount,
               collateralBalance: collateralValue.collateralBalance,
               collateral: collateralValue.collateral,
-              // TODO: add calculated at
+              calculatedAt: new Date().toISOString(),
             },
           };
         },

@@ -1,6 +1,10 @@
 import { Collateral } from '../collateral.entity';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
-import { GetCollateralResponse, GetCollateralValueResponse } from '../collateral.interfaces';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
+import {
+  GetCollateralResponse,
+  GetCollateralValueResponse,
+} from '../collateral.interfaces';
+import { BigNumber } from 'bignumber.js';
 
 export class CollateralValueService {
   public getUserCollateralValue(
@@ -16,7 +20,11 @@ export class CollateralValueService {
         asset: collateral.asset,
         assetAmount: collateral.amount,
         price:
-          assetPrice === undefined ? 0 : collateral.amount * assetPrice.price,
+          assetPrice === undefined
+            ? 0
+            : BigNumber(collateral.amount)
+                .multipliedBy(assetPrice.price)
+                .toNumber(),
       };
     });
   }

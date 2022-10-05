@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { In, IsNull, LessThan, Not, Repository, UpdateResult } from 'typeorm';
 import { MarginCall } from './margin_calls.entity';
 import { MarginCheck } from './margin_check.entity';
 import { MathUtilService } from './utils/math.service';
@@ -9,6 +9,12 @@ import { MarginActionsCheckUtilService } from './utils/margin_actions_check.serv
 import { MarginAction } from './utils/utils.interfaces';
 import { MarginActionHandlersUtilService } from './utils/margin_action_handlers.service';
 import { MarginNotification } from './margin_notifications.entity';
+import {
+  MarginCallQueryDto,
+  MarginCallsDto,
+  MarginCallStatus,
+} from './margin.dto';
+import { MarginCallFactory } from './utils/margin_call_factory.service';
 
 @Injectable()
 export class MarginService {
@@ -22,7 +28,28 @@ export class MarginService {
     private mathUtilService: MathUtilService,
     private marginCheckUtilService: MarginActionsCheckUtilService,
     private marginActionHandlersUtilService: MarginActionHandlersUtilService,
+    private marginCallFactory: MarginCallFactory,
   ) {}
+
+  public async getMarginCalls(
+    userId: string,
+    filters: MarginCallQueryDto,
+  ): Promise<MarginCallsDto[]> {
+    const statusFilter = {
+      [MarginCallStatus.active]: IsNull(),
+      [MarginCallStatus.completed]: Not(IsNull()),
+    };
+    const marginCalls: MarginCall[] = await this.marginCallsRepository.find({
+      where: {
+        userId,
+        deletedAt:
+          filters.status === null ? undefined : statusFilter[filters.status],
+      },
+      withDeleted: true,
+    });
+
+    return marginCalls.map(this.marginCallFactory.create);
+  }
 
   public async handleLtvUpdatedEvent(
     updatedLtv: LtvUpdatedPayload,
@@ -53,17 +80,14 @@ export class MarginService {
     );
 
     if (actions.length > 0) {
-      await this.marginCheckRepository.upsert(
-        {
-          userId: updatedLtv.userId,
-          ltv: updatedLtv.ltv,
-          collateralBalance: updatedLtv.calculatedOn.collateralBalance,
-          // TODO: compare calculation date
-        },
-        { conflictPaths: ['userId'] },
+      const isMarginCheckUpdated: boolean = await this.upsertMarginCheck(
+        updatedLtv,
+        lastMarginCheck ?? null,
       );
 
-      await this.marginActionHandlersUtilService.handle(actions, updatedLtv);
+      if (isMarginCheckUpdated) {
+        await this.marginActionHandlersUtilService.handle(actions, updatedLtv);
+      }
     }
   }
 
@@ -109,19 +133,49 @@ export class MarginService {
           updatedLtv.calculatedOn.collateralBalance,
         );
 
-        await this.marginActionHandlersUtilService.handle(actions, updatedLtv);
-
         if (actions.length > 0) {
-          await this.marginCheckRepository.upsert(
-            {
-              userId: updatedLtv.userId,
-              ltv: updatedLtv.ltv,
-              collateralBalance: updatedLtv.calculatedOn.collateralBalance,
-            },
-            { conflictPaths: ['userId'] },
+          const isMarginCheckUpdated: boolean = await this.upsertMarginCheck(
+            updatedLtv,
+            lastMarginCheck ?? null,
           );
+
+          if (isMarginCheckUpdated) {
+            await this.marginActionHandlersUtilService.handle(
+              actions,
+              updatedLtv,
+            );
+          }
         }
       }),
     );
+  }
+
+  private async upsertMarginCheck(
+    ltv: LtvUpdatedPayload,
+    lastMarginCheck: MarginCheck | null,
+  ): Promise<boolean> {
+    if (lastMarginCheck === null) {
+      await this.marginCheckRepository.insert({
+        userId: ltv.userId,
+        ltv: ltv.ltv,
+        collateralBalance: ltv.calculatedOn.collateralBalance,
+        ltvCalculatedAt: ltv.calculatedOn.calculatedAt,
+      });
+
+      return true;
+    }
+    const updateResult: UpdateResult = await this.marginCheckRepository.update(
+      {
+        userId: ltv.userId,
+        ltvCalculatedAt: LessThan(ltv.calculatedOn.calculatedAt),
+      },
+      {
+        ltv: ltv.ltv,
+        collateralBalance: ltv.calculatedOn.collateralBalance,
+        ltvCalculatedAt: ltv.calculatedOn.calculatedAt,
+      },
+    );
+
+    return <number>updateResult.affected > 0;
   }
 }

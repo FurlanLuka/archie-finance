@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { LtvCollateral } from '../collateral.entity';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { LtvCredit } from '../credit.entity';
 import { CreditNotSetUpError } from '../lib.errors';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';

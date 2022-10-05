@@ -1,18 +1,13 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  CreateTransactionResponse,
-  DepositAddressResponse,
-  VaultAccountResponse,
-} from 'fireblocks-sdk';
+import { DepositAddressResponse, VaultAccountResponse } from 'fireblocks-sdk';
 import { Repository } from 'typeorm';
-import {
-  FireblocksService,
-  CollateralWithdrawInitializedDto,
-  LiquidateAssetsDto,
-} from '@archie/api/collateral-api/fireblocks';
+import { FireblocksService } from '@archie/api/collateral-api/fireblocks';
 import { UserVaultAccount } from './user-vault-account.entity';
-
+import {
+  CollateralLiquidationInitiatedPayload,
+  CollateralWithdrawInitializedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 @Injectable()
 export class UserVaultAccountService {
   constructor(
@@ -73,7 +68,7 @@ export class UserVaultAccountService {
   }
 
   public async withdrawAsset(
-    collateralWithdrawInitialized: CollateralWithdrawInitializedDto,
+    collateralWithdrawInitialized: CollateralWithdrawInitializedPayload,
   ): Promise<void> {
     const userVaultAccount: UserVaultAccount | null =
       await this.userVaultAccount.findOneBy({
@@ -92,7 +87,7 @@ export class UserVaultAccountService {
   }
 
   public async liquidateAssets(
-    assetsToLiquidate: LiquidateAssetsDto,
+    assetsToLiquidate: CollateralLiquidationInitiatedPayload,
   ): Promise<void> {
     const userVaultAccount: UserVaultAccount | null =
       await this.userVaultAccount.findOneBy({

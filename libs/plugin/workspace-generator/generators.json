@@ -17,6 +17,11 @@
       "factory": "./src/generators/microservice-module-generator/generator",
       "schema": "./src/generators/microservice-module-generator/schema.json",
       "description": "microservice module generator"
+    },
+    "microservice-project-target-generator": {
+      "factory": "./src/generators/microservice-project-target-generator/generator",
+      "schema": "./src/generators/microservice-project-target-generator/schema.json",
+      "description": "microservice project target generator"
     }
   }
 }

@@ -1,24 +1,34 @@
 import { AuthGuard } from '@archie/api/utils/auth0';
-import { Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { SERVICE_QUEUE_NAME } from '@archie/api/ltv-api/constants';
 import { Subscribe } from '@archie/api/utils/queue';
 import {
   COLLATERAL_DEPOSIT_COMPLETED_TOPIC,
+  COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
   COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
 } from '@archie/api/credit-api/constants';
 import {
-  CollateralWithdrawInitializedDto,
-  InternalCollateralTransactionCreatedPayload,
-} from '@archie/api/collateral-api/fireblocks';
-import { CollateralDepositCompletedPayload } from '@archie/api/credit-api/data-transfer-objects';
-import { INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC } from '@archie/api/collateral-api/constants';
+  CollateralDepositCompletedPayload,
+  CollateralWithdrawInitializedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
+import {
+  INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
+  INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
+} from '@archie/api/collateral-api/constants';
 import { CreditLimitService } from './credit_limit.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import {
   CreateCreditMinimumCollateralError,
   CreditAlreadyExistsError,
+  CreditLineNotFound,
 } from './credit_limit.errors';
+import {
+  CollateralWithdrawCompletedPayload,
+  InternalCollateralTransactionCompletedPayload,
+  InternalCollateralTransactionCreatedPayload,
+} from '@archie/api/collateral-api/data-transfer-objects';
+import { CreditLimitResponse } from '@archie/api/credit-limit-api/data-transfer-objects';
 
 @Controller('v1/credit_limits')
 export class CreditLimitController {
@@ -31,8 +41,16 @@ export class CreditLimitController {
     CreateCreditMinimumCollateralError,
     CreditAlreadyExistsError,
   ])
-  async createCreditLine(@Req() req): Promise<void> {
+  async createCreditLine(@Req() req): Promise<CreditLimitResponse> {
     return this.creditLimitService.createCredit(req.user.sub);
+  }
+
+  @Get()
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiErrorResponse([CreditLineNotFound])
+  async getCreditLine(@Req() req): Promise<CreditLimitResponse> {
+    return this.creditLimitService.getCreditLine(req.user.sub);
   }
 }
 
@@ -47,7 +65,7 @@ export class CreditLimitQueueController {
     CreditLimitQueueController.CONTROLLER_QUEUE_NAME,
   )
   async collateralWithdrawInitializedHandler(
-    payload: CollateralWithdrawInitializedDto,
+    payload: CollateralWithdrawInitializedPayload,
   ): Promise<void> {
     return this.creditLimitService.handleCollateralWithdrawInitializedEvent(
       payload,
@@ -76,5 +94,25 @@ export class CreditLimitQueueController {
     return this.creditLimitService.handleInternalTransactionCreatedEvent(
       payload,
     );
+  }
+
+  @Subscribe(
+    INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
+    CreditLimitQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async internalCollateralTransactionCompletedTopic(
+    payload: InternalCollateralTransactionCompletedPayload,
+  ): Promise<void> {
+    await this.creditLimitService.handleTransactionCompletedEvent(payload);
+  }
+
+  @Subscribe(
+    COLLATERAL_WITHDRAW_COMPLETED_TOPIC,
+    CreditLimitQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async collateralWithdrawCompleteHandler(
+    payload: CollateralWithdrawCompletedPayload,
+  ): Promise<void> {
+    await this.creditLimitService.handleTransactionCompletedEvent(payload);
   }
 }

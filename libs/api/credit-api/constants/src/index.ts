@@ -22,6 +22,7 @@ export enum ConfigVariables {
   PLAID_REDIRECT_URI = 'PLAID_REDIRECT_URI',
   QUEUE_URL = 'QUEUE_URL',
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
+  REDIS_URL = 'REDIS_URL',
 }
 
 export const COLLATERAL_RECEIVED_TOPIC = 'credit.collateral.received';
@@ -32,6 +33,9 @@ export const COLLATERAL_DEPOSITED_TOPIC = 'credit.collateral.deposited';
 
 export const COLLATERAL_DEPOSIT_COMPLETED_TOPIC =
   'credit.collateral_deposit.completed';
+
+export const COLLATERAL_LIQUIDATION_INITIATED_TOPIC =
+  'credit.collateral_liquidation.initiated';
 
 export const COLLATERAL_WITHDRAW_INITIALIZED_TOPIC =
   'credit.collateral.withdraw.initialized';

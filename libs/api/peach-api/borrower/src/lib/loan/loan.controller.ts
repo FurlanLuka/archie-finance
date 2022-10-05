@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue';
-import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
+import { SERVICE_QUEUE_NAME } from '@archie/api/peach-api/constants';
 import {
   CREDIT_LIMIT_UPDATED_TOPIC,
   CREDIT_LINE_CREATED_TOPIC,
@@ -28,6 +28,7 @@ export class PeachBorrowerQueueController {
   @Subscribe(
     KYC_SUBMITTED_TOPIC,
     PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
+    { logBody: false },
   )
   async kycSubmittedHandler(payload: KycSubmittedPayload): Promise<void> {
     await this.peachService.handleKycSubmittedEvent(payload);
@@ -36,6 +37,7 @@ export class PeachBorrowerQueueController {
   @Subscribe(
     EMAIL_VERIFIED_TOPIC,
     PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
+    { logBody: false },
   )
   async emailVerifiedHandler(payload: EmailVerifiedPayload): Promise<void> {
     await this.peachService.handleEmailVerifiedEvent(payload);
@@ -55,7 +57,7 @@ export class PeachBorrowerQueueController {
     CREDIT_LIMIT_UPDATED_TOPIC,
     PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async creditLimitIncreasedHandler(
+  async creditLimitUpdatedHandler(
     payload: CreditLimitUpdatedPayload,
   ): Promise<void> {
     await this.peachService.handleCreditLimitUpdatedEvent(payload);

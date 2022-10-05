@@ -1,4 +1,6 @@
-export const closeToMatcher = (expected: number, precision = 10) => ({
-  asymmetricMatch: (actual) =>
-    Math.abs(expected - actual) < Math.pow(10, -precision) / 2,
+import { BigNumber } from 'bignumber.js';
+
+export const equalToBigNumber = (exected: BigNumber | string | number) => ({
+  asymmetricMatch: (actual: number | string) =>
+    BigNumber(actual).isEqualTo(BigNumber(exected)),
 });

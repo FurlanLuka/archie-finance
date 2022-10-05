@@ -5,6 +5,7 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { BigNumberTrimEndingZerosTransformer } from '@archie/api/utils/typeorm-transformers';
 
 @Entity({
   name: 'collateral_deposit',
@@ -19,8 +20,13 @@ export class CollateralDeposit {
   @Column('varchar', { nullable: false })
   asset: string;
 
-  @Column('float', { nullable: false })
-  amount: number;
+  @Column('numeric', {
+    nullable: false,
+    precision: 28,
+    scale: 18,
+    transformer: new BigNumberTrimEndingZerosTransformer(),
+  })
+  amount: string;
 
   @Column('varchar', { nullable: false })
   status: string;

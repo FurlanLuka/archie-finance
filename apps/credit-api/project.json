@@ -5,13 +5,19 @@
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/credit-api",
         "main": "apps/credit-api/src/main.ts",
         "tsConfig": "apps/credit-api/tsconfig.app.json",
-        "tsPlugins": ["@nestjs/swagger/plugin"],
-        "assets": ["apps/credit-api/src/assets"]
+        "tsPlugins": [
+          "@nestjs/swagger/plugin"
+        ],
+        "assets": [
+          "apps/credit-api/src/assets"
+        ]
       },
       "configurations": {
         "production": {
@@ -47,18 +53,13 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "outputs": [
+        "{options.outputFile}"
+      ],
       "options": {
-        "lintFilePatterns": ["apps/credit-api/**/*.ts"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/credit-api"],
-      "options": {
-        "jestConfig": "apps/credit-api/jest.config.ts",
-        "passWithNoTests": true,
-        "runInBand": true
+        "lintFilePatterns": [
+          "apps/credit-api/**/*.ts"
+        ]
       }
     },
     "build-docker": {
@@ -66,6 +67,17 @@
     },
     "deploy": {
       "executor": "@archie/plugin/deployment:deploy"
+    },
+    "test-integration": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/credit-api"
+      ],
+      "options": {
+        "jestConfig": "apps/credit-api/jest.config.ts",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
     }
   },
   "tags": []

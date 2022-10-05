@@ -255,12 +255,16 @@ export class RizeApiService {
           Authorization: await this.getToken(),
         },
       });
-    const increaseCreditAdjustmentType: AdjustmentType = <AdjustmentType>(
+    const increaseCreditAdjustmentType: AdjustmentType | undefined =
       adjustmentTypesResponse.data.data.find(
         (adjustmentType: AdjustmentType) =>
           adjustmentType.name === 'credit_limit_update_increase',
-      )
-    );
+      );
+
+    if (increaseCreditAdjustmentType === undefined) {
+      Logger.warn('Rize credit_limit_update_increase is not set up');
+      return;
+    }
 
     await this.rizeApiClient.post(
       `adjustments`,
@@ -287,19 +291,23 @@ export class RizeApiService {
           Authorization: await this.getToken(),
         },
       });
-    const increaseCreditAdjustmentType: AdjustmentType = <AdjustmentType>(
+    const decreaseCreditAdjustmentType: AdjustmentType | undefined =
       adjustmentTypesResponse.data.data.find(
         (adjustmentType: AdjustmentType) =>
           adjustmentType.name === 'credit_limit_update_decrease',
-      )
-    );
+      );
+
+    if (decreaseCreditAdjustmentType === undefined) {
+      Logger.warn('Rize credit_limit_update_decrease is not set up');
+      return;
+    }
 
     await this.rizeApiClient.post(
       `adjustments`,
       {
         customer_uid: customerId,
         usd_adjustment_amount: adjustmentAmount,
-        adjustment_type_uid: increaseCreditAdjustmentType.uid,
+        adjustment_type_uid: decreaseCreditAdjustmentType.uid,
       },
       {
         headers: {

@@ -28,15 +28,17 @@ import {
 import { Subscribe } from '@archie/api/utils/queue';
 import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
 import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
-import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
+import { SERVICE_QUEUE_NAME } from '@archie/api/peach-api/constants';
 import {
   INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
   INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
 } from '@archie/api/collateral-api/constants';
-import { InternalCollateralTransactionCreatedPayload } from '@archie/api/collateral-api/fireblocks';
-import { InternalCollateralTransactionCompletedPayload } from '@archie/api/collateral-api/fireblocks-webhook';
 import { PAYPAL_PAYMENT_RECEIVED_TOPIC } from '@archie/api/paypal-api/constants';
 import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
+import {
+  InternalCollateralTransactionCompletedPayload,
+  InternalCollateralTransactionCreatedPayload,
+} from '@archie/api/collateral-api/data-transfer-objects';
 
 @Controller('v1/loan_payments')
 export class PaymentsController {

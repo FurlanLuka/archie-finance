@@ -73,8 +73,9 @@ export class PurchasesService {
           userId: transaction.userId,
           paymentDetails: {
             type: PaymentType.purchase,
-            amount: Number(transaction.us_dollar_amount),
+            amount: transaction.us_dollar_amount,
             asset: 'USD',
+            id: String(transaction.id),
           },
         },
       );

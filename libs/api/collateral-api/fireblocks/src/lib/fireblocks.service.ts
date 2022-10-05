@@ -20,14 +20,16 @@ import {
 import { ConfigService } from '@archie/api/utils/config';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { AssetList } from '@archie/api/collateral-api/asset-information';
-import {
-  CollateralWithdrawInitializedDto,
-  LiquidateAssetsDto,
-  InternalCollateralTransactionCreatedPayload,
-} from './fireblocks.dto';
 import { COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC } from '@archie/api/credit-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
-import { CollateralWithdrawTransactionCreatedPayload } from '@archie/api/collateral-api/data-transfer-objects';
+import {
+  CollateralWithdrawTransactionCreatedPayload,
+  InternalCollateralTransactionCreatedPayload,
+} from '@archie/api/collateral-api/data-transfer-objects';
+import {
+  CollateralLiquidationInitiatedPayload,
+  CollateralWithdrawInitializedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
 
 @Injectable()
 export class FireblocksService {
@@ -104,7 +106,7 @@ export class FireblocksService {
       withdrawalAmount,
       destinationAddress,
       withdrawalId,
-    }: CollateralWithdrawInitializedDto,
+    }: CollateralWithdrawInitializedPayload,
     vaultAccountId: string,
   ): Promise<CreateTransactionResponse> {
     const assetList: AssetList = this.configService.get(
@@ -150,14 +152,14 @@ export class FireblocksService {
   }
 
   public async liquidateAssets(
-    { userId, liquidation }: LiquidateAssetsDto,
+    { userId, collateral }: CollateralLiquidationInitiatedPayload,
     vaultAccountId: string,
   ): Promise<void> {
     Logger.log({
       code: 'FIREBLOCKS_SERVICE_LIQUIDATION',
       params: {
         userId,
-        liquidation,
+        collateral,
       },
     });
     const internalVaultAccountId = this.configService.get(
@@ -176,7 +178,7 @@ export class FireblocksService {
     );
 
     await Promise.all(
-      liquidation.map(async ({ asset, amount, price }) => {
+      collateral.map(async ({ asset, amount, price }) => {
         const fireblocksAsset = assetList[asset];
 
         if (!fireblocksAsset) {

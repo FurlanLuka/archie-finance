@@ -45,6 +45,10 @@ import {
   GetLoanBalancesResponse,
   PaymentType,
 } from '@archie/api/peach-api/data-transfer-objects';
+import { LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { LastDebitCardUpdateMeta } from './last_debit_card_update_meta.entity';
+import { Lock } from '@archie-microservices/api/utils/redis';
 
 @Injectable()
 export class RizeService {
@@ -55,6 +59,8 @@ export class RizeService {
     private rizeFactoryService: RizeFactoryService,
     private rizeValidatorService: RizeValidatorService,
     private queueService: QueueService,
+    @InjectRepository(LastDebitCardUpdateMeta)
+    private lastDebitCardUpdateMetaRepository: Repository<LastDebitCardUpdateMeta>,
   ) {
     this.rizeEventListener = this.rizeEventListener.bind(this);
     this.handleTransactionsEvent = this.handleTransactionsEvent.bind(this);
@@ -330,16 +336,36 @@ export class RizeService {
       userId,
     });
 
+    await this.lastDebitCardUpdateMetaRepository.insert({
+      userId,
+      adjustmentCalculatedAt: credit.calculatedAt,
+    });
+
     await this.rizeApiService.loadFunds(customerId, credit.availableCredit);
   }
 
+  @Lock((credit: CreditBalanceUpdatedPayload) => credit.userId)
   public async updateAvailableCredit(
     credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
     if (credit.paymentDetails?.type === PaymentType.purchase) {
       return;
     }
-    // TODO: remember last credit update - calculatedAt
+
+    const updateResult: UpdateResult =
+      await this.lastDebitCardUpdateMetaRepository.update(
+        {
+          userId: credit.userId,
+          adjustmentCalculatedAt: LessThanOrEqual(credit.calculatedAt),
+        },
+        {
+          adjustmentCalculatedAt: credit.calculatedAt,
+        },
+      );
+
+    if (updateResult.affected === 0) {
+      return;
+    }
 
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       credit.userId,
@@ -371,22 +397,23 @@ export class RizeService {
     }
   }
 
-  public async unlockCard(userId: string): Promise<void> {
-    const customer: Customer | null = await this.rizeApiService.searchCustomers(
-      userId,
-    );
-    this.rizeValidatorService.validateCustomerExists(customer);
+  @Lock((userId: string) => userId)
+  public async unlockCard(userId: string, unlockAt: string): Promise<void> {
+    const updateResult: UpdateResult =
+      await this.lastDebitCardUpdateMetaRepository.update(
+        {
+          userId: userId,
+          cardStatusChangedAt: LessThanOrEqual(unlockAt),
+        },
+        {
+          cardStatusChangedAt: unlockAt,
+        },
+      );
 
-    const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
-      customer.uid,
-    );
-
-    if (debitCard !== null) {
-      await this.rizeApiService.lockCard(debitCard.uid);
+    if (updateResult.affected === 0) {
+      return;
     }
-  }
 
-  public async lockCard(userId: string): Promise<void> {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
@@ -398,6 +425,37 @@ export class RizeService {
 
     if (debitCard !== null) {
       await this.rizeApiService.unlockCard(debitCard.uid);
+    }
+  }
+
+  @Lock((userId: string) => userId)
+  public async lockCard(userId: string, lockAt: string): Promise<void> {
+    const updateResult: UpdateResult =
+      await this.lastDebitCardUpdateMetaRepository.update(
+        {
+          userId: userId,
+          cardStatusChangedAt: LessThanOrEqual(lockAt),
+        },
+        {
+          cardStatusChangedAt: lockAt,
+        },
+      );
+
+    if (updateResult.affected === 0) {
+      return;
+    }
+
+    const customer: Customer | null = await this.rizeApiService.searchCustomers(
+      userId,
+    );
+    this.rizeValidatorService.validateCustomerExists(customer);
+
+    const debitCard: DebitCard | null = await this.rizeApiService.getDebitCard(
+      customer.uid,
+    );
+
+    if (debitCard !== null) {
+      await this.rizeApiService.lockCard(debitCard.uid);
     }
   }
 }

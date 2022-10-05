@@ -1,10 +1,9 @@
 import { LtvCredit } from '../credit.entity';
-import { LtvCollateral } from '../collateral.entity';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 
 export interface CreditAssets {
   credit: LtvCredit;
-  collateral: LtvCollateral[];
+  collateral: CollateralWithCalculationDate[];
   assetPrices: GetAssetPriceResponse[];
 }
 
@@ -15,7 +14,7 @@ export interface MultipleCreditAssets {
 
 export interface CreditPerUser {
   credit: LtvCredit;
-  collateral: LtvCollateral[];
+  collateral: CollateralWithCalculationDate[];
 }
 
 export interface CollateralValue {
@@ -25,6 +24,15 @@ export interface CollateralValue {
 
 export interface CollateralWithPrice {
   asset: string;
-  amount: number;
+  amount: string;
   price: number;
+}
+
+export interface CollateralWithCalculationDate {
+  id: string;
+  userId: string;
+  asset: string;
+  amount: string;
+  createdAt: Date;
+  updatedAt: Date;
 }

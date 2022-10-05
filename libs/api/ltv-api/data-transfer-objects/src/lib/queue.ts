@@ -8,6 +8,7 @@ export class LtvCalculatedOn {
   collateral: CollateralWithPrice[];
   collateralBalance: number;
   utilizedCreditAmount: number;
+  calculatedAt: string;
 }
 
 export class LtvPeriodicCheckRequestedPayload {
@@ -16,6 +17,6 @@ export class LtvPeriodicCheckRequestedPayload {
 
 export class CollateralWithPrice {
   asset: string;
-  amount: number;
+  amount: string;
   price: number;
 }

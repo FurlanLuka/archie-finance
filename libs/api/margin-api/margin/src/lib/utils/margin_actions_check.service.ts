@@ -5,13 +5,15 @@ import { DateTime, Interval } from 'luxon';
 import { MarginAction } from './utils.interfaces';
 import { MathUtilService } from './math.service';
 import { MarginNotification } from '../margin_notifications.entity';
-import { LTV_MARGIN_CALL_LIMIT } from '@archie/api/margin-api/constants';
+import {
+  COLLATERAL_SALE_LTV_LIMIT,
+  LTV_MARGIN_CALL_LIMIT,
+  MARGIN_CALL_LIQUIDATION_AFTER_HOURS,
+} from '@archie/api/margin-api/constants';
 
 @Injectable()
 export class MarginActionsCheckUtilService {
   LTV_ALERT_LIMITS = [65, 70, 73];
-  LTV_DIRECT_LIQUIDATION_LIMIT = 90;
-
   MIN_COLLATERAL_VALUE_CHANGE = 10;
 
   constructor(private mathUtilService: MathUtilService) {}
@@ -31,13 +33,14 @@ export class MarginActionsCheckUtilService {
 
       if (
         collateralValueChange < this.MIN_COLLATERAL_VALUE_CHANGE &&
-        activeMarginCall === null
+        activeMarginCall === null &&
+        ltv < LTV_MARGIN_CALL_LIMIT
       ) {
         return [];
       }
     }
 
-    if (ltv >= this.LTV_DIRECT_LIQUIDATION_LIMIT) {
+    if (ltv >= COLLATERAL_SALE_LTV_LIMIT) {
       const additionalActions: MarginAction[] =
         activeMarginCall === null ? [MarginAction.activate_margin_call] : [];
 
@@ -55,7 +58,7 @@ export class MarginActionsCheckUtilService {
     if (
       activeMarginCall !== null &&
       ltv >= LTV_MARGIN_CALL_LIMIT &&
-      ltv < this.LTV_DIRECT_LIQUIDATION_LIMIT
+      ltv < COLLATERAL_SALE_LTV_LIMIT
     ) {
       const hoursPassedSinceTheStartOfMarginCall: number =
         Interval.fromDateTimes(
@@ -63,7 +66,10 @@ export class MarginActionsCheckUtilService {
           DateTime.utc(),
         ).length('hours');
 
-      if (hoursPassedSinceTheStartOfMarginCall >= 72) {
+      if (
+        hoursPassedSinceTheStartOfMarginCall >=
+        MARGIN_CALL_LIQUIDATION_AFTER_HOURS
+      ) {
         return [
           MarginAction.liquidate,
           MarginAction.reset_margin_call_in_danger_notifications,

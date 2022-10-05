@@ -8,9 +8,14 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TransactionStatus } from 'fireblocks-sdk';
-import { Repository } from 'typeorm';
 import {
-  CollateralWithdrawCompletedDto,
+  DataSource,
+  LessThanOrEqual,
+  MoreThan,
+  Repository,
+  UpdateResult,
+} from 'typeorm';
+import {
   GetCollateralWithdrawalResponse,
   GetUserMaxWithdrawalAmountResponse,
 } from './collateral-withdrawal.interfaces';
@@ -27,14 +32,18 @@ import {
 } from '@archie/api/credit-api/collateral';
 import { QueueService } from '@archie/api/utils/queue';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
-import { CollateralWithdrawInitializedPayload } from '@archie/api/credit-api/data-transfer-objects';
-import { CollateralWithdrawTransactionCreatedPayload } from '@archie/api/collateral-api/data-transfer-objects';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
+import {
+  CollateralWithdrawCompletedPayload,
+  CollateralWithdrawTransactionCreatedPayload,
+} from '@archie/api/collateral-api/data-transfer-objects';
 import {
   GetLoanBalancesPayload,
   GetLoanBalancesResponse,
 } from '@archie/api/peach-api/data-transfer-objects';
+import { CollateralWithdrawInitializedPayload } from '@archie/api/credit-api/data-transfer-objects';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
+import { BigNumber } from 'bignumber.js';
 
 const MAX_LTV = 0.3;
 @Injectable()
@@ -46,6 +55,7 @@ export class CollateralWithdrawalService {
     private collateralWithdrawalRepository: Repository<CollateralWithdrawal>,
     private collateralValueService: CollateralValueService,
     private queueService: QueueService,
+    private dataSource: DataSource,
   ) {}
 
   public async handleWithdrawalTransactionCreated({
@@ -73,7 +83,8 @@ export class CollateralWithdrawalService {
     userId,
     asset,
     transactionId,
-  }: CollateralWithdrawCompletedDto): Promise<void> {
+    fee,
+  }: CollateralWithdrawCompletedPayload): Promise<void> {
     Logger.log({
       code: 'COLLATERAL_WITHDRAW_COMPLETE',
       params: {
@@ -82,12 +93,38 @@ export class CollateralWithdrawalService {
         transactionId,
       },
     });
+
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
     try {
+      const updatedResult: UpdateResult =
+        await this.collateralRepository.decrement(
+          {
+            asset,
+            userId,
+            amount: MoreThan(fee),
+          },
+          'amount',
+          fee,
+        );
+
+      if (updatedResult.affected === 0) {
+        await this.collateralRepository.delete({
+          asset,
+          userId,
+          amount: LessThanOrEqual(fee),
+        });
+      }
+
       const updateResult = await this.collateralWithdrawalRepository.update(
         {
           transactionId,
         },
         {
+          fee,
           status: TransactionStatus.COMPLETED,
         },
       );
@@ -104,7 +141,10 @@ export class CollateralWithdrawalService {
         });
         throw new NotFoundException();
       }
+      await queryRunner.commitTransaction();
     } catch (error) {
+      await queryRunner.rollbackTransaction();
+
       if (error instanceof HttpException) {
         throw error;
       }
@@ -114,6 +154,8 @@ export class CollateralWithdrawalService {
         error: JSON.stringify(error),
         errorMessage: error.message,
       });
+    } finally {
+      await queryRunner.release();
     }
   }
 
@@ -144,9 +186,8 @@ export class CollateralWithdrawalService {
 
     const desiredAsset = collateralValue.find((c) => c.asset === asset);
 
-    // early break if user isn't hodling the desired asset at all
     if (!desiredAsset) {
-      return { maxAmount: 0 };
+      return { maxAmount: '0' };
     }
 
     const credit = await this.queueService.request<
@@ -156,28 +197,38 @@ export class CollateralWithdrawalService {
       userId,
     });
 
-    const totalCollateralValue: number = collateralValue.reduce(
-      (value: number, collateralAsset: GetCollateralValueResponse) =>
-        value + collateralAsset.price,
-      0,
+    if (credit.utilizationAmount === 0) {
+      return { maxAmount: desiredAsset.assetAmount };
+    }
+
+    const totalCollateralValue: BigNumber = collateralValue.reduce(
+      (value: BigNumber, collateralAsset: GetCollateralValueResponse) => {
+        value = value.plus(collateralAsset.price);
+
+        return value;
+      },
+      BigNumber(0),
     );
 
-    const maxAmountForMaxLtv = credit.utilizationAmount / MAX_LTV;
-    const maxAvailableAmount = Math.max(
-      totalCollateralValue - maxAmountForMaxLtv,
+    const maxAmountForMaxLtv = BigNumber(credit.utilizationAmount).dividedBy(
+      MAX_LTV,
+    );
+    const maxAvailableAmount = BigNumber.max(
+      BigNumber(totalCollateralValue).minus(maxAmountForMaxLtv),
       0,
     );
 
     return {
-      maxAmount:
-        Math.min(maxAvailableAmount, desiredAsset.price) / assetPrice.price,
+      maxAmount: BigNumber.min(maxAvailableAmount, desiredAsset.price)
+        .dividedBy(assetPrice.price)
+        .toString(),
     };
   }
 
   public async withdrawUserCollateral(
     userId: string,
     asset: string,
-    withdrawalAmount: number,
+    withdrawalAmount: string,
     destinationAddress: string,
   ): Promise<GetCollateralWithdrawalResponse> {
     try {
@@ -194,7 +245,7 @@ export class CollateralWithdrawalService {
 
       if (userCollateral === null) throw new CollateralNotFoundError();
 
-      if (maxAmount < withdrawalAmount) {
+      if (BigNumber(withdrawalAmount).isGreaterThan(maxAmount)) {
         throw new BadRequestException({
           code: 'COLLATERAL_WITHDRAW_AMOUNT_ERROR',
           message: 'Not enough amount',
@@ -214,7 +265,7 @@ export class CollateralWithdrawalService {
       const withdrawal = await this.collateralWithdrawalRepository.save({
         userId,
         asset,
-        withdrawalAmount,
+        withdrawalAmount: withdrawalAmount,
         currentAmount: userCollateral.amount,
         destinationAddress: destinationAddress,
         transactionId: null,
@@ -237,10 +288,13 @@ export class CollateralWithdrawalService {
             return (<Collateral[]>response.raw)[0];
           });
 
-      if (updatedCollateral !== undefined && updatedCollateral.amount == 0) {
+      if (
+        updatedCollateral !== undefined &&
+        BigNumber(updatedCollateral.amount).isZero()
+      ) {
         await this.collateralRepository.delete({
           id: updatedCollateral.id,
-          amount: 0,
+          amount: '0',
         });
       }
 
@@ -248,7 +302,7 @@ export class CollateralWithdrawalService {
         COLLATERAL_WITHDRAW_INITIALIZED_TOPIC,
         {
           asset,
-          withdrawalAmount,
+          withdrawalAmount: withdrawalAmount,
           userId,
           destinationAddress,
           withdrawalId: withdrawal.id,

@@ -5,10 +5,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { LtvCollateral } from '../collateral.entity';
 import { LtvCredit } from '../credit.entity';
 import { UtilsModule } from '../utils/utils.module';
+import { CollateralTransaction } from '../collateral_transactions.entity';
 
 @Module({
   controllers: [CreditQueueController],
-  imports: [TypeOrmModule.forFeature([LtvCollateral, LtvCredit]), UtilsModule],
+  imports: [
+    TypeOrmModule.forFeature([LtvCollateral, LtvCredit, CollateralTransaction]),
+    UtilsModule,
+  ],
   providers: [CreditService],
   exports: [CreditService],
 })

@@ -1,8 +1,8 @@
-import { Payments } from '../../api/peach_api.interfaces';
 import { PaymentsResponseDto } from '../payments.dto';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
 import { Injectable } from '@nestjs/common';
+import { Payments } from '../../api/peach_api.interfaces';
 
 @Injectable()
 export class PaymentsResponseFactory {

@@ -1,12 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { GetAssetPriceResponse } from '@archie/api/asset-price-api/asset-price';
+import { GetAssetPriceResponse } from '@archie/api/asset-price-api/data-transfer-objects';
 import { GET_ASSET_PRICES_RPC } from '@archie/api/asset-price-api/constants';
 import {
   CollateralValue,
   CollateralWithCalculationDate,
 } from './utils.interfaces';
 import { CreditLimit } from '../credit_limit.entity';
-import { CREDIT_LIMIT_UPDATED_TOPIC } from '@archie/api/credit-limit-api/constants';
+import {
+  ConfigVariables,
+  CREDIT_LIMIT_UPDATED_TOPIC,
+} from '@archie/api/credit-limit-api/constants';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Collateral } from '../collateral.entity';
 import { In, Repository } from 'typeorm';
@@ -14,12 +17,13 @@ import { CollateralValueUtilService } from './collateral_value.service';
 import { MathUtilService } from './math.service';
 import { QueueService } from '@archie/api/utils/queue';
 import { CreditLimitAdjustmentService } from './credit_limit_adjustment.service';
-import { AssetList } from '@archie/api/collateral-api/asset-information';
-import { GET_ASSET_INFORMATION_RPC } from '@archie/api/collateral-api/constants';
+import { ConfigService } from '@archie/api/utils/config';
+import { AssetLtvList } from '../credit_limit.interfaces';
 
 @Injectable()
 export class CollateralBalanceUpdateUtilService {
   MINIMUM_COLLATERAL_CHANGE_PERCENTAGE_TO_ADJUST_CREDIT_LIMIT = 10;
+  assetList: AssetLtvList;
 
   constructor(
     @InjectRepository(Collateral)
@@ -30,7 +34,10 @@ export class CollateralBalanceUpdateUtilService {
     private mathUtilService: MathUtilService,
     private queueService: QueueService,
     private creditLimitAdjustmentService: CreditLimitAdjustmentService,
-  ) {}
+    private configService: ConfigService,
+  ) {
+    this.assetList = configService.get(ConfigVariables.ASSET_LTV_LIST);
+  }
 
   public async handleCollateralBalanceUpdate(userId: string): Promise<void> {
     try {
@@ -49,9 +56,6 @@ export class CollateralBalanceUpdateUtilService {
             collateral,
             assetPrices,
           );
-        const assetList: AssetList = await this.queueService.request(
-          GET_ASSET_INFORMATION_RPC,
-        );
 
         const collateralValueChange: number =
           this.mathUtilService.getDifference(
@@ -67,7 +71,7 @@ export class CollateralBalanceUpdateUtilService {
             userId,
             collateral[0].calculatedAt,
             collateralValue,
-            assetList,
+            this.assetList,
           );
         }
       }
@@ -91,9 +95,6 @@ export class CollateralBalanceUpdateUtilService {
       await this.queueService.request(GET_ASSET_PRICES_RPC);
     const collaterals: CollateralWithCalculationDate[] =
       await this.getCollateralWithCalculationDateForManyUsers(userIds);
-    const assetList: AssetList = await this.queueService.request(
-      GET_ASSET_INFORMATION_RPC,
-    );
 
     await Promise.all(
       userIds.map(async (userId: string) => {
@@ -127,7 +128,7 @@ export class CollateralBalanceUpdateUtilService {
             userId,
             collateral[0].calculatedAt,
             collateralValue,
-            assetList,
+            this.assetList,
           );
         }
       }),
