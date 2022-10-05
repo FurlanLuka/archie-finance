@@ -10,6 +10,7 @@ export enum ConfigVariables {
   TYPEORM_DATABASE = 'TYPEORM_DATABASE',
   TYPEORM_PORT = 'TYPEORM_PORT',
   QUEUE_URL = 'QUEUE_URL',
+  REDIS_URL = 'REDIS_URL',
 }
 
 export const LTV_UPDATED_TOPIC = 'ltv.ltv.updated';

@@ -15,7 +15,9 @@ import {
   InitiateLedgerRecalculationCommandPayload,
   InternalLedgerAccountData,
   Ledger,
+  LedgerAccountAction,
   LedgerAccountUpdatedPayload,
+  LedgerActionType,
 } from '@archie/api/ledger-api/data-transfer-objects';
 import { QueueService } from '@archie/api/utils/queue';
 import {
@@ -71,6 +73,9 @@ export class LedgerService {
             calculatedAt: Date.now(),
           },
         ],
+        action: {
+          type: LedgerActionType.deposit,
+        },
       },
     );
 
@@ -193,6 +198,9 @@ export class LedgerService {
                 calculatedAt: Date.now(),
               }),
             ),
+            action: {
+              type: LedgerActionType.assetPriceUpdate,
+            },
           },
         );
       }),
@@ -203,6 +211,7 @@ export class LedgerService {
     userId: string,
     asset: AssetInformation,
     amount: string,
+    action: LedgerAccountAction,
     note?: string,
   ): Promise<void> {
     const decrementingAmount = BigNumber(amount).decimalPlaces(
@@ -265,6 +274,7 @@ export class LedgerService {
             calculatedAt: Date.now(),
           },
         ],
+        action,
       },
     );
 
@@ -280,6 +290,7 @@ export class LedgerService {
   async batchDecrementLedgerAccounts(
     userId: string,
     accounts: BatchDecrementLedgerAccounts,
+    action: LedgerAccountAction,
   ): Promise<void> {
     const ledger: Ledger = await this.getLedger(userId);
 
@@ -346,6 +357,7 @@ export class LedgerService {
               calculatedAt: Date.now(),
             }),
           ),
+          action: action,
         },
       );
 
@@ -361,6 +373,7 @@ export class LedgerService {
     userId: string,
     asset: AssetInformation,
     amount: string,
+    action: LedgerAccountAction,
     note?: string,
   ): Promise<void> {
     const incrementingAmount = BigNumber(amount).decimalPlaces(
@@ -408,6 +421,7 @@ export class LedgerService {
             calculatedAt: Date.now(),
           },
         ],
+        action,
       },
     );
 

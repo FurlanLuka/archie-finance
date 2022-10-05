@@ -28,6 +28,10 @@ import {
   InternalCollateralTransactionCompletedPayload,
   InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
+import {
+  LedgerAccountUpdatedPayload,
+  LedgerActionType,
+} from '@archie/api/ledger-api/data-transfer-objects';
 
 @Injectable()
 export class PaymentsService {
@@ -159,6 +163,67 @@ export class PaymentsService {
           amount: transaction.amount,
           asset: transaction.asset,
           id: transaction.id,
+        },
+      },
+    );
+  }
+
+  public async handleLedgerAccountUpdatedEvent({
+    userId,
+    action,
+  }: LedgerAccountUpdatedPayload): Promise<void> {
+    if (action?.type !== LedgerActionType.liquidation) {
+      return;
+    }
+    const liquidationInfo = action.liquidation!;
+
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
+      userId,
+    });
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
+
+    let liquidationInstrumentId: string | null =
+      borrower.liquidationInstrumentId;
+
+    if (liquidationInstrumentId === null) {
+      const paymentInstrument: PaymentInstrument =
+        await this.peachApiService.createLiquidationPaymentInstrument(
+          borrower.personId,
+        );
+      liquidationInstrumentId = paymentInstrument.id;
+
+      await this.borrowerRepository.update(
+        {
+          userId: userId,
+        },
+        {
+          liquidationInstrumentId,
+        },
+      );
+    }
+
+    await this.peachApiService.tryCreatingOneTimePaymentTransaction(
+      borrower,
+      liquidationInstrumentId,
+      Number(liquidationInfo.usdAmount),
+      liquidationInfo.id,
+      PeachOneTimePaymentStatus.succeeded,
+    );
+
+    const credit: Credit = await this.peachApiService.getCreditBalance(
+      borrower.personId,
+      borrower.creditLineId,
+    );
+    this.queueService.publish<CreditBalanceUpdatedPayload>(
+      CREDIT_BALANCE_UPDATED_TOPIC,
+      {
+        ...credit,
+        userId: userId,
+        paymentDetails: {
+          type: PaymentType.liquidation,
+          amount: liquidationInfo.usdAmount,
+          asset: 'USD',
+          id: liquidationInfo.id,
         },
       },
     );

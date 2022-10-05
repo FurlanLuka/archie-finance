@@ -30,12 +30,8 @@ export class LtvLimitApproachingPayload {
 }
 
 export class MarginCallCompletedPayload {
+  completedAt: string;
   userId: string;
-  liquidation: {
-    asset: string;
-    amount: string;
-    price: number;
-  }[];
   liquidationAmount: number;
   ltv: number;
   priceForMarginCall: number;

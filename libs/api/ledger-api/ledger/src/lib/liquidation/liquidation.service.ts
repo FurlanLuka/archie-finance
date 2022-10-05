@@ -3,10 +3,15 @@ import {
   InitiateLedgerAssetLiquidationCommandPayload,
   InternalLedgerAccountData,
   Ledger,
+  LedgerActionType,
+  Liquidation as ILiquidation,
 } from '@archie/api/ledger-api/data-transfer-objects';
 import { LedgerService } from '../ledger/ledger.service';
-import { AssetList, AssetsService } from '@archie/api/ledger-api/assets';
-import { AssetInformation } from '@archie/api/ledger-api/assets';
+import {
+  AssetInformation,
+  AssetList,
+  AssetsService,
+} from '@archie/api/ledger-api/assets';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Liquidation, LiquidationStatus } from './liquidation.entity';
 import { Repository } from 'typeorm';
@@ -20,7 +25,6 @@ import {
   CollateralLiquidationTransactionUpdatedStatus,
   InitiateCollateralLiquidationCommandPayload,
 } from '@archie/api/fireblocks-api/data-transfer-objects';
-import { Liquidation as ILiquidation } from '@archie/api/ledger-api/data-transfer-objects';
 import BigNumber from 'bignumber.js';
 
 interface LiquidatedAccounts {
@@ -64,6 +68,7 @@ export class LiquidationService {
   public async initiateLedgerAssetLiquidation({
     userId,
     amount,
+    liquidationId,
   }: InitiateLedgerAssetLiquidationCommandPayload): Promise<void> {
     const ledger: Ledger = await this.ledgerService.getLedger(userId);
 
@@ -152,6 +157,13 @@ export class LiquidationService {
     await this.ledgerService.batchDecrementLedgerAccounts(
       userId,
       accountsLiquidationReducerResult.accountsToLiquidate,
+      {
+        type: LedgerActionType.liquidation,
+        liquidation: {
+          id: liquidationId,
+          usdAmount: amount,
+        },
+      },
     );
 
     await Promise.all(
@@ -296,14 +308,6 @@ export class LiquidationService {
     if (assetInformation === undefined) {
       return;
     }
-
-    await this.ledgerService.incrementLedgerAccount(
-      userId,
-      assetInformation,
-      BigNumber(liquidationRecord.amount)
-        .plus(liquidationRecord.networkFee)
-        .toString(),
-    );
 
     await this.liquidationRepository.update(
       {

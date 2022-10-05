@@ -144,7 +144,6 @@
         "libs/api/ltv-api/data-transfer-objects/src/index.ts"
       ],
       "@archie/api/ltv-api/ltv": ["libs/api/ltv-api/ltv/src/index.ts"],
-      "@archie/api/ltv-api/margin": ["libs/api/ltv-api/margin/src/index.ts"],
       "@archie/api/mail-api/constants": [
         "libs/api/mail-api/constants/src/index.ts"
       ],

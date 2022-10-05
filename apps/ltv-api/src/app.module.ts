@@ -6,7 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { QueueModule } from '@archie/api/utils/queue';
 import { migrations } from './migrations';
 import { AuthModule } from '@archie/api/utils/auth0';
-import { LibModule } from '@archie/api/ltv-api/ltv';
+import { LtvModule } from '@archie/api/ltv-api/ltv';
+import { RedisModule } from '@archie-microservices/api/utils/redis';
 
 @Module({
   imports: [
@@ -47,7 +48,15 @@ import { LibModule } from '@archie/api/ltv-api/ltv';
     }),
     HealthModule,
     QueueModule.register(),
-    LibModule,
+    LtvModule,
+    RedisModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        url: configService.get(ConfigVariables.REDIS_URL),
+        keyPrefix: SERVICE_NAME,
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [],
   providers: [],

@@ -1,6 +1,7 @@
 export interface InitiateLedgerAssetLiquidationCommandPayload {
   userId: string;
   amount: string;
+  liquidationId: string;
 }
 
 export interface Liquidation {

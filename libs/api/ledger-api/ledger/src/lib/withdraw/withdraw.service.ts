@@ -5,12 +5,13 @@ import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 import { LedgerService } from '../ledger/ledger.service';
 import { BigNumber } from 'bignumber.js';
 import {
-  Ledger,
   InternalLedgerAccountData,
-  WithdrawResponseDto,
+  Ledger,
+  LedgerActionType,
+  MaxWithdrawalAmountResponse,
   WithdrawalRecord,
+  WithdrawResponseDto,
 } from '@archie/api/ledger-api/data-transfer-objects';
-import { MaxWithdrawalAmountResponse } from '@archie/api/ledger-api/data-transfer-objects';
 import {
   InvalidAssetError,
   InvalidWithdrawalAmountError,
@@ -167,6 +168,9 @@ export class WithdrawService {
         userId,
         assetInformation,
         amount,
+        {
+          type: LedgerActionType.withdrawal,
+        },
         'Withdrawal decrement',
       );
 
@@ -290,6 +294,9 @@ export class WithdrawService {
           userId,
           assetInformation,
           networkFee,
+          {
+            type: LedgerActionType.fee,
+          },
           'Network fee decrement',
         );
 
@@ -354,6 +361,9 @@ export class WithdrawService {
       userId,
       assetInformation,
       withdrawalAmount.plus(networkFee).toString(),
+      {
+        type: LedgerActionType.withdrawalFailed,
+      },
       'Transaction failed increment',
     );
 

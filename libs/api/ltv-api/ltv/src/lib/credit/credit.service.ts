@@ -1,91 +1,42 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, LessThan, Repository, TypeORMError } from 'typeorm';
-import { LtvCredit } from '../credit.entity';
-import {
-  CreditBalanceUpdatedPayload,
-  PaymentType,
-} from '@archie/api/peach-api/data-transfer-objects';
-import { LtvCollateral } from '../collateral.entity';
-import { CreditLineCreatedPayload } from '@archie/api/credit-line-api/data-transfer-objects';
+import { LessThan, Repository } from 'typeorm';
+import { Credit } from './credit.entity';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import { DateTime } from 'luxon';
-import { LtvUpdatedUtilService } from '../utils/ltv_updated.service';
-import { CollateralTransaction } from '../collateral_transactions.entity';
-import { DatabaseErrorHandlingService } from '../utils/database_error_handling.service';
-import { TransactionStatus } from '../lib.interfaces';
 
 @Injectable()
 export class CreditService {
   constructor(
-    @InjectRepository(LtvCredit)
-    private ltvCreditRepository: Repository<LtvCredit>,
-    @InjectRepository(CollateralTransaction)
-    private collateralTransaction: Repository<CollateralTransaction>,
-    private ltvUpdatedUtilService: LtvUpdatedUtilService,
-    private dataSource: DataSource,
-    private databaseErrorHandlingService: DatabaseErrorHandlingService,
+    @InjectRepository(Credit)
+    private ltvCreditRepository: Repository<Credit>,
   ) {}
 
-  public async handleCreditBalanceUpdatedEvent(
+  public async updateCreditBalance(
     credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
-    Logger.log('Credit balance updated event received', {
-      payload: credit,
-    });
-
-    const queryRunner = this.dataSource.createQueryRunner();
-
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
-    try {
-      await queryRunner.manager.update(
-        LtvCredit,
-        {
-          userId: credit.userId,
-          calculatedAt: LessThan(credit.calculatedAt),
-        },
-        {
-          utilizationAmount: credit.utilizationAmount,
-          calculatedAt: credit.calculatedAt,
-        },
-      );
-
-      if (credit.paymentDetails?.type === PaymentType.liquidation) {
-        await this.collateralTransaction.insert({
-          externalTransactionId: credit.paymentDetails.id,
-          status: TransactionStatus.initiated,
-        });
-        await queryRunner.manager.decrement(
-          LtvCollateral,
-          {
-            userId: credit.userId,
-            asset: credit.paymentDetails.asset,
-          },
-          'amount',
-          credit.paymentDetails.amount,
-        );
-      }
-
-      await queryRunner.commitTransaction();
-    } catch (e) {
-      const error: TypeORMError = e;
-      Logger.error('Error updating collateral balance', error);
-      await queryRunner.rollbackTransaction();
-
-      return this.databaseErrorHandlingService.ignoreDuplicatedRecordError(
-        error,
-      );
-    } finally {
-      await queryRunner.release();
-    }
-
-    await this.ltvUpdatedUtilService.publishLtvUpdatedEvent(credit.userId);
+    await this.ltvCreditRepository.manager.update(
+      Credit,
+      {
+        userId: credit.userId,
+        calculatedAt: LessThan(credit.calculatedAt),
+      },
+      {
+        utilizationAmount: credit.utilizationAmount,
+        calculatedAt: credit.calculatedAt,
+      },
+    );
   }
 
-  public async handleCreditLineCreatedEvent({
-    userId,
-  }: CreditLineCreatedPayload): Promise<void> {
+  public async getCreditBalance(userId: string): Promise<number> {
+    const credit: Credit | null = await this.ltvCreditRepository.findOneBy({
+      userId: userId,
+    });
+
+    return credit?.utilizationAmount ?? 0;
+  }
+
+  public async createCreditBalance(userId: string): Promise<void> {
     await this.ltvCreditRepository.insert({
       userId,
       calculatedAt: DateTime.now().toISO(),
