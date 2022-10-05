@@ -1,8 +1,8 @@
 import { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useSetAutopay } from '@archie-webapps/shared/data-access/archie-api/autopay/hooks/use-set-autopay';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useSetAutopay } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-set-autopay';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { TitleS, BodyM, SelectOption, Select, ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
 

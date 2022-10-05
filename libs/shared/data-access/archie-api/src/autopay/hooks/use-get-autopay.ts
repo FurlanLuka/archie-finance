@@ -2,7 +2,7 @@ import { ApiError } from '../../api-error';
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';
 import { AUTOPAY_NOT_CONFIGURED, getAutopay } from '../api/get-autopay';
-import { Autopay } from '../payment.interfaces';
+import { Autopay } from '../autopay.interfaces';
 
 const AUTOPAY_RECORD_QUERY_KEY = 'autopay_record';
 

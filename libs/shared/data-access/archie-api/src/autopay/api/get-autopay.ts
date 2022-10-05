@@ -1,6 +1,6 @@
 import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
-import { Autopay } from '../payment.interfaces';
+import { Autopay } from '../autopay.interfaces';
 
 export const AUTOPAY_NOT_CONFIGURED = 'AUTOPAY_NOT_CONFIGURED';
 export const ERROR_LIST = new Map<string, string>([[AUTOPAY_NOT_CONFIGURED, 'Autopay not configured']]);

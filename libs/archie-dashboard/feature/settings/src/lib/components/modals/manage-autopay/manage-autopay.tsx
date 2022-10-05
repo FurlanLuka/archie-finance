@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
+import { useGetAutopay } from '@archie-webapps/shared/data-access/archie-api/autopay/hooks/use-get-autopay';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useGetAutopay } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-autopay';
 import { Loader, Modal } from '@archie-webapps/shared/ui/design-system';
 
 import { Autopay } from '../../autopay/autopay';

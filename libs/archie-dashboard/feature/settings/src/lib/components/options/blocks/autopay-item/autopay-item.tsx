@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useGetAutopay } from '@archie-webapps/shared/data-access/archie-api/autopay/hooks/use-get-autopay';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useGetAutopay } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-autopay';
 
 import { ManageAutopayModal } from '../../../modals/manage-autopay/manage-autopay';
 import { OptionsItem } from '../options-item/options-item';
