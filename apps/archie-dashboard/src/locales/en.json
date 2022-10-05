@@ -261,7 +261,8 @@
     "title": ""
   },
   "dashboard_history": {
-    "title": "Recent Transactions",
+    "title": "History",
+    "subtitle": "Recent Transactions",
     "btn_load_more": "Load more",
     "btn_statements": "Download Statement",
     "fetch_statements": "Fetching statements...",
