@@ -30,6 +30,7 @@
     "api-credit-line-api-constants": "libs/api/credit-line-api/constants",
     "api-credit-line-api-credit-line": "libs/api/credit-line-api/credit-line",
     "api-credit-line-api-data-transfer-objects": "libs/api/credit-line-api/data-transfer-objects",
+    "api-credit-line-api-test-data": "libs/api/credit-line-api/test-data",
     "api-fireblocks-api-assets": "libs/api/fireblocks-api/assets",
     "api-fireblocks-api-constants": "libs/api/fireblocks-api/constants",
     "api-fireblocks-api-data-transfer-objects": "libs/api/fireblocks-api/data-transfer-objects",

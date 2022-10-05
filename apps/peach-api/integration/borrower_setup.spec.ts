@@ -17,9 +17,9 @@ import {
   kycSubmittedDataFactory,
 } from '@archie/api/user-api/test-data';
 import {
-  creditLimitUpdatedDataFactory,
+  creditLineUpdatedDataFactory,
   creditLineCreatedDataFactory,
-} from '@archie/api/credit-limit-api/test-data';
+} from '@archie/api/credit-line-api/test-data';
 import * as nock from 'nock';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
@@ -57,6 +57,7 @@ import {
   setupGetBalancesNock,
 } from '@archie-microservices/api/peach-api/test-data';
 import { LockedResourceError } from '@archie-microservices/api/utils/redis';
+import { DateTime } from 'luxon';
 
 describe('Peach service tests', () => {
   let app: INestApplication;
@@ -170,10 +171,10 @@ describe('Peach service tests', () => {
     describe('Credit limit updates', () => {
       const creditLimit: CreditLimit = creditLimitFactory();
       const balances: Balances = balancesFactory();
-      let firstCreditLimitUpdatedPayload;
+      let firstCreditLineUpdatedPayload;
 
       beforeAll(() => {
-        firstCreditLimitUpdatedPayload = creditLimitUpdatedDataFactory();
+        firstCreditLineUpdatedPayload = creditLineUpdatedDataFactory();
       });
 
       it('Should update the credit limit', async () => {
@@ -181,7 +182,7 @@ describe('Peach service tests', () => {
           person.id,
           creditLine.id,
           creditLimitUpdateRequestBodyFactory(
-            firstCreditLimitUpdatedPayload.creditLimit,
+            firstCreditLineUpdatedPayload.creditLimit,
           ),
           creditLimit,
         );
@@ -189,7 +190,7 @@ describe('Peach service tests', () => {
 
         await app
           .get(PeachBorrowerQueueController)
-          .creditLimitUpdatedHandler(firstCreditLimitUpdatedPayload);
+          .creditLineUpdatedHandler(firstCreditLineUpdatedPayload);
 
         expect(nock.isDone()).toEqual(true);
       });
@@ -203,10 +204,10 @@ describe('Peach service tests', () => {
         );
         setupGetBalancesNock(person.id, creditLine.id, balances);
 
-        await app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler(
-          creditLimitUpdatedDataFactory({
-            ...firstCreditLimitUpdatedPayload,
-            calculatedAt: Date.now() - 1000,
+        await app.get(PeachBorrowerQueueController).creditLineUpdatedHandler(
+          creditLineUpdatedDataFactory({
+            ...firstCreditLineUpdatedPayload,
+            calculatedAt: DateTime.local().minus({ minutes: 1 }).toISO(),
           }),
         );
 
@@ -228,9 +229,9 @@ describe('Peach service tests', () => {
           Promise.allSettled([
             app
               .get(PeachBorrowerQueueController)
-              .creditLimitUpdatedHandler(creditLimitUpdatedDataFactory()),
-            app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler(
-              creditLimitUpdatedDataFactory({
+              .creditLineUpdatedHandler(creditLineUpdatedDataFactory()),
+            app.get(PeachBorrowerQueueController).creditLineUpdatedHandler(
+              creditLineUpdatedDataFactory({
                 creditLimit: 20,
               }),
             ),

@@ -16,7 +16,7 @@ import {
   mfaEnrolledDataFactory,
 } from '@archie/api/user-api/test-data';
 import { OnboardingQueueController } from '@archie/api/onboarding-api/onboarding';
-import { creditLineCreatedDataFactory } from '@archie/api/credit-limit-api/test-data';
+import { creditLineCreatedDataFactory } from '@archie/api/credit-line-api/test-data';
 import { cardActivatedDataFactory } from '@archie/api/credit-api/test-data';
 
 describe('Onboarding service tests', () => {

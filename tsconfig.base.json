@@ -104,6 +104,9 @@
       "@archie/api/credit-line-api/data-transfer-objects": [
         "libs/api/credit-line-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/credit-line-api/test-data": [
+        "libs/api/credit-line-api/test-data/src/index.ts"
+      ],
       "@archie/api/fireblocks-api/assets": [
         "libs/api/fireblocks-api/assets/src/index.ts"
       ],
