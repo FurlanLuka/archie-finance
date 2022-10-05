@@ -85,7 +85,7 @@ export const CollateralScreen: FC = () => {
     <CollateralStyled>
       <MarginCallAlert />
       <TitleM className="title">{t('dashboard_collateral.title')}</TitleM>
-      <Card column alignItems="center" padding="1.5rem 1.5rem 2rem" minHeight="544px">
+      <Card column alignItems="center" padding="1.5rem 1.5rem 2rem" minHeight="528px">
         {getContent()}
       </Card>
     </CollateralStyled>

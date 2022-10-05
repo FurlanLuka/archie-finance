@@ -37,7 +37,7 @@ export const SettingsScreen: FC = () => {
             <TitleS className="name">
               {kycData.firstName} {kycData.lastName}
             </TitleS>
-            <BodyM color={theme.textSecondary} weight={500} className="email">
+            <BodyM color={theme.textSecondary} className="email">
               {emailVerificationData.email}
             </BodyM>
           </div>
@@ -53,7 +53,7 @@ export const SettingsScreen: FC = () => {
     <>
       <SettingsStyled>
         <TitleM className="title">{t('dashboard_settings.title')}</TitleM>
-        <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem" minHeight="632px">
+        <Card column alignItems="flex-start" padding="1.5rem 1.5rem 2rem" minHeight="615px">
           {getContent()}
         </Card>
       </SettingsStyled>

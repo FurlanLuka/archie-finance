@@ -23,7 +23,7 @@ export const CollateralStyled = styled.div`
   }
 
   .subtitle {
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.5rem;
   }
 
   .total {

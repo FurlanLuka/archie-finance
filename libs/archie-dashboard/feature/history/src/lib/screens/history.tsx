@@ -75,7 +75,7 @@ export const HistoryScreen: FC = () => {
   return (
     <HistoryStyled>
       <TitleM className="title">{t('dashboard_history.title')}</TitleM>
-      <Card column alignItems="flex-start" padding="2rem 1.5rem 2.5rem" minHeight="450px">
+      <Card column alignItems="flex-start" padding="1.5rem 1.5rem 2rem" minHeight="450px">
         {getContent()}
       </Card>
     </HistoryStyled>
