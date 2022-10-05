@@ -1,24 +1,38 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { AutopayModal } from '../../../modals/autopay/autopay';
+import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { useGetAutopay } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-autopay';
+
+import { ManageAutopayModal } from '../../../modals/manage-autopay/manage-autopay';
 import { OptionsItem } from '../options-item/options-item';
 
 export const AutopayItem: FC = () => {
   const { t } = useTranslation();
-  const [autopayModalOpen, setAutopayModalOpen] = useState(false);
+  const [manageAutopayModalOpen, setManageAutopayModalOpen] = useState(false);
+  const getAutopayResponse = useGetAutopay();
 
-  //temp data
-  const autopay = 'on';
+  function getAutopayText() {
+    if (getAutopayResponse.state === RequestState.SUCCESS) {
+      if (getAutopayResponse.data === null) {
+        return 'off';
+      }
+      return 'on';
+    }
+
+    return '...';
+  }
 
   return (
     <>
       <OptionsItem
         title={t('dashboard_settings.autopay.title')}
-        subtitle={t('dashboard_settings.autopay.subtitle', { autopay })}
-        onClick={() => setAutopayModalOpen(true)}
+        subtitle={t('dashboard_settings.autopay.subtitle', { autopay: getAutopayText() })}
+        onClick={() => {
+          setManageAutopayModalOpen(true);
+        }}
       />
-      {autopayModalOpen && <AutopayModal close={() => setAutopayModalOpen(false)} />}
+      {manageAutopayModalOpen && <ManageAutopayModal close={() => setManageAutopayModalOpen(false)} />}
     </>
   );
 };
