@@ -53,7 +53,7 @@ export const CollateralizationScreen: FC = () => {
 
   function getContent() {
     if (getAssetPriceResponse.state === RequestState.LOADING) {
-      return <Loader className="loader" />;
+      return <Loader marginAuto />;
     }
 
     if (getAssetPriceResponse.state === RequestState.ERROR) {
@@ -66,7 +66,6 @@ export const CollateralizationScreen: FC = () => {
           <CollateralDepositAlerts />
           <TitleL className="title">{t('collateralization_step.title')}</TitleL>
           <BodyM className="subtitle">{t('collateralization_step.subtitle')}</BodyM>
-
           <div className="inputs">
             <CollateralAssetSelect
               selectedAsset={selectedCollateralAsset}
@@ -80,7 +79,6 @@ export const CollateralizationScreen: FC = () => {
               onChange={setLineOfCredit}
             />
           </div>
-
           <div className="result">
             <div className="result-item">
               <BodyM weight={700}>{t('collateralization_step.result.first')}</BodyM>
@@ -126,7 +124,7 @@ export const CollateralizationScreen: FC = () => {
             </div>
           </div>
           {selectedCollateralAsset ? (
-            <DepositAddress assetInfo={selectedCollateralAsset} assetAmount={requiredCollateral} />
+            <DepositAddress assetInfo={selectedCollateralAsset} assetAmount={requiredCollateral} showTerms />
           ) : (
             <div className="address-placeholder" />
           )}

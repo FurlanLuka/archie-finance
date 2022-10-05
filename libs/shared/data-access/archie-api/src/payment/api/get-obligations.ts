@@ -1,6 +1,8 @@
 import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
-import { CREDIT_LINE_NOT_FOUND_ERROR } from '../payment.interfaces';
+
+export const MISSING_PAYMENT_INFO_ERROR = 'MISSING_PAYMENT_INFO_ERROR';
+export const CREDIT_LINE_NOT_FOUND_ERROR = 'CREDIT_LINE_NOT_FOUND_ERROR';
 
 export interface Obligation {
   capitalizedAmount: number;
@@ -11,6 +13,13 @@ export interface Obligation {
   obligationAmount: number;
   overpaymentsAmount: number;
   remainingAmount: number;
+}
+
+export interface UserObligations {
+  dueDate: Date;
+  balanceOwed: number;
+  fullBalance: number;
+  interestOwed: number;
 }
 
 export interface GetObligationsResponse {

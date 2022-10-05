@@ -1,3 +1,4 @@
+export * from './lib/alerts/margin-call/margin-call';
 export * from './lib/cards/archie-card/archie-card'
 export * from './lib/cards/available-credit/available-credit'
 export * from './lib/cards/collateral-value/collateral-value'
@@ -11,7 +12,6 @@ export * from './lib/charts/next-payment/next-payment.styled';
 export * from './lib/collateral-asset-select/collateral-asset-select';
 export * from './lib/error-screen/error-screen';
 export * from './lib/header/header';
-export * from './lib/modals/make-payment/make-payment';
 export * from './lib/modals/reveal-card/reveal-card';
 export * from './lib/navigation/navigation';
 export * from './lib/transactions-table/transactions-table';

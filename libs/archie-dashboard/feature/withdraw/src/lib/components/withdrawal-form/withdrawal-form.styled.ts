@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const WithdrawalForm = styled.form`
+export const WithdrawalFormStyled = styled.form`
   width: 100%;
   max-width: 730px;
 

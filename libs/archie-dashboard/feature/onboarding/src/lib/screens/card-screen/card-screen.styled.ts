@@ -20,8 +20,4 @@ export const CardScreenStyled = styled.div`
   button {
     margin-top: 2rem;
   }
-
-  .loader {
-    margin: auto;
-  }
 `;

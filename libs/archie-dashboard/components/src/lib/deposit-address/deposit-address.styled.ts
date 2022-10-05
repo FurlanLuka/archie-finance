@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 import { QR_CODE } from '@archie-webapps/shared/ui/theme';
 
-export const DepositAddressStyled = styled.div`
+export const DepositAddressStyled = styled.div<{ showTerms?: boolean; }>`
   position: relative;
   background-color: ${({ theme }) => theme.backgroundSecondary};
   border-top: 1px solid ${({ theme }) => theme.borderPrimary};
   border-bottom: 1px solid ${({ theme }) => theme.borderPrimary};
   width: 100%;
-  min-height: 470px;
+  min-height: ${({ showTerms }) => showTerms ? '470px' : '276px'};
   padding: 1.5rem 1rem;
 
   .address-copy {

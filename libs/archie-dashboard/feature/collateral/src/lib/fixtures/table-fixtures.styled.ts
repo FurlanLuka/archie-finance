@@ -1,17 +1,19 @@
 import styled from 'styled-components';
 
-export const AllocationCellStyled = styled.div`
+export const AlignCenterCellStyled = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
+export const AlignEndCellStyled = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
 
-export const ChangeCellStyled = styled.div<{ isPositive: boolean }>`
+export const ChangeCellStyled = styled(AlignCenterCellStyled)<{ isPositive: boolean }>`
   position: relative;
-  display: flex;
-  justify-content: flex-end;
   gap: 0.25rem;
   color: ${({ theme, isPositive }) => (isPositive ? theme.textSuccess : theme.textDanger)};
-  padding-left: 0.5rem;
 `;
 
 export const ActionsCellStyled = styled.div`

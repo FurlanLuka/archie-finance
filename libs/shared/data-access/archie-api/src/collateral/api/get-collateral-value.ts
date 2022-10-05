@@ -3,7 +3,7 @@ import { getRequest } from '../../helpers';
 
 export interface CollateralValue {
   asset: string;
-  assetAmount: number;
+  assetAmount: string;
   price: number;
 }
 

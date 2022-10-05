@@ -2,22 +2,34 @@ import styled from 'styled-components';
 
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
-export const SelectStyled = styled.div`
+export interface SelectStyledProps {
+  isLoading?: boolean;
+  isDisabled?: boolean;
+  maxWidth?: string;
+  small?: boolean;
+}
+
+export interface SelectOptionStyledProps {
+  small?: boolean;
+}
+
+export const SelectStyled = styled.div<SelectStyledProps>`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%;
+  width: ${({ maxWidth }) => maxWidth};
 
   .select-header {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    border-radius: 0.5rem;
-    border: 1px solid ${({ theme }) => theme.borderHighlight};
-    height: 3rem;
+    border-radius: ${({ small }) => (small ? '0.25rem' : '0.5rem')};
+    border: 1px solid ${({ theme, isDisabled, isLoading }) => isDisabled || isLoading ? theme.buttonDisabled : theme.borderHighlight};
+    height: ${({ small }) => (small ? '1.5rem' : '3rem')};;
     width: 100%;
-    padding: 0 1rem;
+    padding: 0 0.75rem 0 1rem;
+    pointer-events: ${({ isDisabled, isLoading }) => isDisabled || isLoading ? 'none' : 'all'};
     cursor: pointer;
 
     @media (max-width: ${breakpoints.screenSM}) {
@@ -66,7 +78,7 @@ export const SelectStyled = styled.div`
   }
 `;
 
-export const SelectOptionStyled = styled.div`
+export const SelectOptionStyled = styled.div<SelectOptionStyledProps>`
   padding: 0.5rem 1rem;
 
   @media (max-width: ${breakpoints.screenSM}) {

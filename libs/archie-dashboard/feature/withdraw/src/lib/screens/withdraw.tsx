@@ -25,7 +25,7 @@ export const WithdrawScreen: FC = () => {
       getMaxWithdrawalAmountResponse.state === RequestState.LOADING ||
       getCollateralValueReponse.state === RequestState.LOADING
     ) {
-      return <Loader className="loader" />;
+      return <Loader marginAuto />;
     }
 
     if (

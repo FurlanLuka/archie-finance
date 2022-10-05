@@ -35,7 +35,7 @@ export const CollateralAssetSelect: FC<InputSelectProps> = ({ selectedAsset, set
       <BodyM className="select-label" weight={700}>
         {t('collateralization_step.inputs.input_select_label')}
       </BodyM>
-      <Select id="collateral-asset" header={header} onChange={handleSelect}>
+      <Select id="collateral-asset" maxWidth="100%" header={header} onChange={handleSelect}>
         {options}
       </Select>
     </CollateralAssetStyled>

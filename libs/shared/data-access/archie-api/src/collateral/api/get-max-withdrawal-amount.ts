@@ -2,7 +2,7 @@ import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
 
 export interface MaxWithdrawalAmount {
-  maxAmount: number;
+  maxAmount: string;
 }
 
 export const ERROR_LIST = new Map<string, string>([]);

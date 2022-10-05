@@ -19,7 +19,7 @@ export const ModalStyled = styled.div<ModalProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  visibility: ${({ isOpen }) => (isOpen ? `visible` : `hidden`)};
+  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   transition: opacity 0.2s ease;
   z-index: 3;

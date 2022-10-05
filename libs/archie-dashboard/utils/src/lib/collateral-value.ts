@@ -1,5 +1,6 @@
 import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
+import { TARGET_LTV } from '@archie-webapps/archie-dashboard/constants';
 
 export const getFormattedValue = (value: number) => value.toLocaleString(undefined, { maximumFractionDigits: 2 });
 
@@ -20,6 +21,12 @@ export const calculateCollateralCreditValue = (collateral: CollateralValue[]): n
 
     return sum + entryValue;
   }, 0);
+
+export const calculateCollateralMinValue = (creditBalance: number, collateralTotalValue: number ): number => {
+  const ltv = TARGET_LTV / 100;
+
+  return (creditBalance - ltv * collateralTotalValue) / (1 - ltv);
+}
 
 export const formatEntireCollateral = (collateral: CollateralValue[]): string =>  
   collateral.reduce((text, collateralEntry, i) => {

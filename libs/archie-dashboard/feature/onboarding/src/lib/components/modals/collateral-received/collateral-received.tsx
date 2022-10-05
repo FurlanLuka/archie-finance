@@ -47,8 +47,8 @@ export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
             })}
           </BodyM>
           <div className="btn-group">
-            <ButtonPrimary onClick={onClose}>{t('collateral_received_modal.btn')}</ButtonPrimary>
-            <ButtonOutline onClick={handleConfirm}>{t('btn_next')}</ButtonOutline>
+            <ButtonOutline onClick={onClose}>{t('collateral_received_modal.btn')}</ButtonOutline>
+            <ButtonPrimary onClick={handleConfirm}>{t('btn_next')}</ButtonPrimary>
           </div>
         </div>
       </CollateralReceivedModalStyled>
