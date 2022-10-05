@@ -24,7 +24,6 @@ import { QueueModule } from '@archie/api/utils/queue';
         if (configVariable === ConfigVariables.ASSET_LIST) {
           return JSON.parse(value);
         }
-
         return value;
       },
     }),
