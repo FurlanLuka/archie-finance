@@ -33,7 +33,7 @@ export const CollateralScreen: FC = () => {
       getLTVResponse.state === RequestState.LOADING ||
       getCreditLine.state === RequestState.LOADING
     ) {
-      return <Loader />;
+      return <Loader marginAuto />;
     }
 
     if (
@@ -54,8 +54,8 @@ export const CollateralScreen: FC = () => {
 
       return (
         <>
-          <div className="title-group">
-            <TitleS className="title">{t('dashboard_collateral.title')}</TitleS>
+          <div className="subtitle-group">
+            <TitleS className="subtitle">{t('dashboard_collateral.subtitle')}</TitleS>
             <TitleM weight={400} className="total">
               ${getFormattedValue(calculateCollateralTotalValue(getCollateralValueResponse.data))}
             </TitleM>
@@ -84,7 +84,8 @@ export const CollateralScreen: FC = () => {
   return (
     <CollateralStyled>
       <MarginCallAlert />
-      <Card column alignItems="center" justifyContent="center" padding="2rem 1.5rem 2.5rem" minHeight="560px">
+      <TitleM className="title">{t('dashboard_collateral.title')}</TitleM>
+      <Card column alignItems="center" padding="1.5rem 1.5rem 2rem" minHeight="544px">
         {getContent()}
       </Card>
     </CollateralStyled>

@@ -196,7 +196,8 @@
     }
   },
   "dashboard_collateral": {
-    "title": "My Wallet"
+    "title": "Collateral",
+    "subtitle": "Your Wallet"
   },
   "dashboard_withdraw": {
     "title": "Withdraw {{currentAsset}}",
