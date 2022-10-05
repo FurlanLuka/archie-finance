@@ -23,6 +23,9 @@ export const getMarginCalls = async (accessToken: string): Promise<MarginCall[]>
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
+      params: {
+        status: MarginCallStatus.ACTIVE,
+      },
     },
     ERROR_LIST,
   );
