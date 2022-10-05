@@ -1,7 +1,7 @@
 import { Tree } from '@nrwl/devkit';
 import { readWorkspace } from 'nx/src/generators/utils/project-configuration';
 
-export function testeEnvironmentGenerator(tree: Tree) {
+export function testEnvironmentGenerator(tree: Tree) {
   const workspace = readWorkspace(tree);
 
   const projects = Object.keys(workspace.projects).flatMap((projectKey) => {
@@ -14,7 +14,12 @@ export function testeEnvironmentGenerator(tree: Tree) {
     return [];
   });
 
-  console.log(projects)
+  projects.forEach((project) => {
+    const integrationEnvironmentFilePath = `${project.root}/.env.integration`;
+    if (tree.exists(integrationEnvironmentFilePath)) {
+      tree.rename(integrationEnvironmentFilePath, `${project.root}/.env`);
+    }
+  });
 }
 
-export default testeEnvironmentGenerator;
+export default testEnvironmentGenerator;
