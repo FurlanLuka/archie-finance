@@ -39,6 +39,7 @@ import {
   PaymentInstrumentNotFound,
   AutopayNotConfiguredError,
   AutopayAlreadyConfiguredError,
+  CreditBalanceChangeInProgress,
 } from '../borrower.errors';
 import { DateTime } from 'luxon';
 import { omitBy, isNil } from 'lodash';
@@ -534,7 +535,7 @@ export class PeachApiService {
     if (responseBody.isLocked) {
       Logger.error('Credit balance change is in progress, retry');
 
-      throw new Error('Credit balance change is in progress, retry');
+      throw new CreditBalanceChangeInProgress();
     }
 
     return {

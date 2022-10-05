@@ -20,20 +20,39 @@ const RETRY_BACKOFF = 2;
 
 export const RABBIT_RETRY_HANDLER = 'RABBIT_RETRY_HANDLER';
 
+interface SubscriptionOptions {
+  logBody?: boolean;
+  requeueOnError?: boolean;
+}
+
+interface DefinedSubscriptionOptions {
+  logBody: boolean;
+  requeueOnError: boolean;
+}
+
 export function Subscribe(
   routingKey: string,
   queueName: string,
-  requeueOnError = true,
-  exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
+  options: SubscriptionOptions = {
+    logBody: true,
+    requeueOnError: true,
+  },
+  exchange = QueueUtilService.GLOBAL_EXCHANGE.name,
 ): AppliedDecorator {
+  const subscriptionOptions: DefinedSubscriptionOptions = {
+    logBody: options.logBody ?? true,
+    requeueOnError: options.requeueOnError ?? true,
+  };
+
   const queueSpecificRoutingKey = `${queueName}-${routingKey}`;
+  const queue = `${queueName}-${exchange}_${routingKey}`;
 
   const baseQueueOptions = {
     createQueueIfNotExists: true,
-    queue: `${queueName}-${exchange}_${routingKey}`,
+    queue,
     errorHandler: createErrorHandler(
       queueSpecificRoutingKey,
-      requeueOnError,
+      subscriptionOptions,
       exchange,
     ),
     queueOptions: {
@@ -47,12 +66,13 @@ export function Subscribe(
   };
 
   const decorators: MethodDecorator[] = <MethodDecorator[]>[
+    LogEvent(queue, subscriptionOptions.logBody),
     RabbitSubscribe({
       exchange: exchange,
       routingKey: routingKey,
       ...baseQueueOptions,
     }),
-    requeueOnError
+    subscriptionOptions.requeueOnError
       ? SetMetadata(RABBIT_RETRY_HANDLER, {
           type: 'subscribe',
           routingKey: queueSpecificRoutingKey,
@@ -87,7 +107,7 @@ export function RequestHandler(
 
 function createErrorHandler(
   queueSpecificRoutingKey: string,
-  requeueOnError: boolean,
+  options: DefinedSubscriptionOptions,
   exchange: string,
 ): (
   channel: Channel,
@@ -100,13 +120,13 @@ function createErrorHandler(
 
     Logger.error({
       message: `Event handling failed for routing key "${queueSpecificRoutingKey}"`,
-      payload: msg.content.toString(),
+      payload: options.logBody ? msg.content.toString() : undefined,
       error,
-      requeue: requeueOnError,
+      requeue: options.requeueOnError,
       retryAttempt,
     });
 
-    if (requeueOnError) {
+    if (options.requeueOnError) {
       const delay: number = headers['x-delay'] ?? INITIAL_DELAY / RETRY_BACKOFF;
 
       if (retryAttempt < MAX_RETRIES) {
@@ -136,4 +156,28 @@ function pushToDeadLetterQueue(
   error,
 ): void | Promise<void> {
   return defaultNackErrorHandler(channel, msg, error);
+}
+
+export function LogEvent(queueName: string, logBody: boolean): MethodDecorator {
+  return (
+    target: any,
+    _key?: string | symbol,
+    descriptor?: TypedPropertyDescriptor<any>,
+  ) => {
+    if (descriptor === undefined) {
+      Logger.warn('Incorrect decorator usage, descriptor is undefined');
+      return;
+    }
+
+    const originalMethod = descriptor.value;
+
+    descriptor.value = async function (...args: any[]) {
+      Logger.log({
+        message: `New event on queue ${queueName} received`,
+        payload: logBody ? args[0] : null,
+      });
+
+      await originalMethod.apply(this, args);
+    };
+  };
 }

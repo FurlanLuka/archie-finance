@@ -236,3 +236,11 @@ spec:
                 name: archie-webhook-api-service
                 port:
                   number: 80
+          ## Margin service
+          - path: /v1/margin_calls
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-margin-api-service
+                port:
+                  number: 80

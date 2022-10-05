@@ -1,4 +1,4 @@
-import { DynamicModule, Module } from '@nestjs/common';
+import { DynamicModule, Logger, Module } from '@nestjs/common';
 import {
   RabbitMQExchangeConfig,
   RabbitMQModule,
@@ -28,6 +28,7 @@ export class QueueModule {
             uri: configService.get(ConfigVariables.QUEUE_URL),
             enableControllerDiscovery: true,
             connectionInitOptions: { wait: false },
+            logger: new Logger(),
           }),
         }),
       ],

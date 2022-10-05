@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  HttpException,
   NotFoundException,
 } from '@nestjs/common';
 
@@ -67,5 +68,11 @@ export class BorrowerMailNotFoundError extends NotFoundException {
 export class BorrowerHomeAddressNotFoundError extends NotFoundException {
   constructor() {
     super('BORROWER_HOME_ADDRESS_NOT_FOUND');
+  }
+}
+
+export class CreditBalanceChangeInProgress extends HttpException {
+  constructor() {
+    super('CREDIT_BALANCE_CHANGE_IN_PROGRESS', 423);
   }
 }

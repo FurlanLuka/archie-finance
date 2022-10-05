@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, LessThan, Repository, UpdateResult } from 'typeorm';
+import { In, IsNull, LessThan, Not, Repository, UpdateResult } from 'typeorm';
 import { MarginCall } from './margin_calls.entity';
 import { MarginCheck } from './margin_check.entity';
 import { MathUtilService } from './utils/math.service';
@@ -9,6 +9,12 @@ import { MarginActionsCheckUtilService } from './utils/margin_actions_check.serv
 import { MarginAction } from './utils/utils.interfaces';
 import { MarginActionHandlersUtilService } from './utils/margin_action_handlers.service';
 import { MarginNotification } from './margin_notifications.entity';
+import {
+  MarginCallQueryDto,
+  MarginCallsDto,
+  MarginCallStatus,
+} from './margin.dto';
+import { MarginCallFactory } from './utils/margin_call_factory.service';
 
 @Injectable()
 export class MarginService {
@@ -22,7 +28,28 @@ export class MarginService {
     private mathUtilService: MathUtilService,
     private marginCheckUtilService: MarginActionsCheckUtilService,
     private marginActionHandlersUtilService: MarginActionHandlersUtilService,
+    private marginCallFactory: MarginCallFactory,
   ) {}
+
+  public async getMarginCalls(
+    userId: string,
+    filters: MarginCallQueryDto,
+  ): Promise<MarginCallsDto[]> {
+    const statusFilter = {
+      [MarginCallStatus.active]: IsNull(),
+      [MarginCallStatus.completed]: Not(IsNull()),
+    };
+    const marginCalls: MarginCall[] = await this.marginCallsRepository.find({
+      where: {
+        userId,
+        deletedAt:
+          filters.status === null ? undefined : statusFilter[filters.status],
+      },
+      withDeleted: true,
+    });
+
+    return marginCalls.map(this.marginCallFactory.create);
+  }
 
   public async handleLtvUpdatedEvent(
     updatedLtv: LtvUpdatedPayload,
