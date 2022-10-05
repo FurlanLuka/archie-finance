@@ -144,8 +144,8 @@ export const tableColumns = [
         Header: '',
         accessor: 'actions',
         width: 1,
-        Cell: ({ value: { collateral_asset, isHolding } }: any) => {
-          return <ActionsCell id={collateral_asset} canClaim={isHolding} />;
+        Cell: ({ value: { collateral_asset, isHolding, isInMarginCall } }: any) => {
+          return <ActionsCell id={collateral_asset} canClaim={isHolding && !isInMarginCall} />;
         },
       },
     ],

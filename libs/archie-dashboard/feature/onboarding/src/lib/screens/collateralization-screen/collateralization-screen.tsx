@@ -124,7 +124,7 @@ export const CollateralizationScreen: FC = () => {
             </div>
           </div>
           {selectedCollateralAsset ? (
-            <DepositAddress assetInfo={selectedCollateralAsset} assetAmount={requiredCollateral} />
+            <DepositAddress assetInfo={selectedCollateralAsset} assetAmount={requiredCollateral} showTerms />
           ) : (
             <div className="address-placeholder" />
           )}
