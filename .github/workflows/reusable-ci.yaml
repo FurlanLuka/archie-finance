@@ -173,9 +173,6 @@ jobs:
       matrix:
         project: ${{ fromJSON(needs.check_and_build.outputs.affectedProjects) }}
     steps:
-      - name: Poor mans manual trigger
-        if: ${{ github.run_attempt == 1}}
-        run: exit 1
       - uses: actions/checkout@v2
         name: Checkout
       - uses: ./.github/actions/install-dependencies
