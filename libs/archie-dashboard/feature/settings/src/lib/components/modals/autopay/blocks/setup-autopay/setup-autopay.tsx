@@ -37,6 +37,12 @@ export const SetupAutopay: FC<AutopayModalProps> = ({ accounts }) => {
     ));
   }, [accounts]);
 
+  const canSubmit =
+    hasConsent &&
+    selectedAccount !== null &&
+    consentDocumentId !== null &&
+    setAutopayMutation.state === RequestState.IDLE;
+
   return (
     <SetupAutopayStyled>
       <TitleS className="title">{t('autopay_modal.title')}</TitleS>
@@ -72,16 +78,10 @@ export const SetupAutopay: FC<AutopayModalProps> = ({ accounts }) => {
         />
       </div>
       <ButtonPrimary
-        disabled={!hasConsent || selectedAccount === null || consentDocumentId === null}
+        disabled={!canSubmit}
         isLoading={setAutopayMutation.state === RequestState.LOADING}
         onClick={() => {
-          console.log('kej kaj', { hasConsent, selectedAccount, consentDocumentId });
-          if (
-            hasConsent &&
-            selectedAccount !== null &&
-            consentDocumentId !== null &&
-            setAutopayMutation.state === RequestState.IDLE
-          ) {
+          if (canSubmit) {
             setAutopayMutation.mutate({
               agreementDocumentId: consentDocumentId,
               paymentInstrumentId: selectedAccount.id,
