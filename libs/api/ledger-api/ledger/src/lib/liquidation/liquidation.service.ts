@@ -297,14 +297,6 @@ export class LiquidationService {
       return;
     }
 
-    await this.ledgerService.incrementLedgerAccount(
-      userId,
-      assetInformation,
-      BigNumber(liquidationRecord.amount)
-        .plus(liquidationRecord.networkFee)
-        .toString(),
-    );
-
     await this.liquidationRepository.update(
       {
         internalTransactionId,
