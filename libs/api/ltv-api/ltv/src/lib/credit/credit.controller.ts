@@ -4,8 +4,8 @@ import { SERVICE_QUEUE_NAME } from '@archie/api/ltv-api/constants';
 import { CreditService } from './credit.service';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
-import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-limit-api/constants';
+import { CreditLineCreatedPayload } from '@archie/api/credit-line-api/data-transfer-objects';
+import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-line-api/constants';
 
 @Controller()
 export class CreditQueueController {

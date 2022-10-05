@@ -7,7 +7,7 @@ import {
   PaymentType,
 } from '@archie/api/peach-api/data-transfer-objects';
 import { LtvCollateral } from '../collateral.entity';
-import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
+import { CreditLineCreatedPayload } from '@archie/api/credit-line-api/data-transfer-objects';
 import { DateTime } from 'luxon';
 import { LtvUpdatedUtilService } from '../utils/ltv_updated.service';
 import { CollateralTransaction } from '../collateral_transactions.entity';
@@ -19,8 +19,6 @@ export class CreditService {
   constructor(
     @InjectRepository(LtvCredit)
     private ltvCreditRepository: Repository<LtvCredit>,
-    @InjectRepository(LtvCollateral)
-    private ltvCollateralRepository: Repository<LtvCollateral>,
     @InjectRepository(CollateralTransaction)
     private collateralTransaction: Repository<CollateralTransaction>,
     private ltvUpdatedUtilService: LtvUpdatedUtilService,

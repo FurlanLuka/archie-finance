@@ -13,8 +13,16 @@ export enum ConfigVariables {
   ASSET_LTV_LIST = 'ASSET_LTV_LIST',
 }
 
+/**
+ * @deprecated
+ */
 export const CREDIT_LINE_CREATED_TOPIC = 'credit_limit.credit_line.created';
+/**
+ * @deprecated
+ */
 export const CREDIT_LIMIT_UPDATED_TOPIC = 'credit_limit.credit_limit.updated';
-
+/**
+ * @deprecated
+ */
 export const CREDIT_LIMIT_PERIODIC_CHECK_REQUESTED =
   'credit_limit.credit_limit_periodic_check.requested';

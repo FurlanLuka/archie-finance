@@ -19,6 +19,6 @@ export const creditLimitUpdatedDataFactory = (
 ): CreditLimitUpdatedPayload => ({
   userId: user.id,
   creditLimit: 100,
-  calculatedAt: Date.now(),
+  calculatedAt: new Date().toISOString(),
   ...override,
 });

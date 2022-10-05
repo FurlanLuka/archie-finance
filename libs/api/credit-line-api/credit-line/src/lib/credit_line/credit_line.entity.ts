@@ -27,8 +27,8 @@ export class CreditLine {
   @Column('float')
   creditLimit: number;
 
-  @Column('numeric')
-  calculatedAt: number;
+  @Column('timestamptz')
+  calculatedAt: string;
 
   @CreateDateColumn({ select: false })
   createdAt: Date;

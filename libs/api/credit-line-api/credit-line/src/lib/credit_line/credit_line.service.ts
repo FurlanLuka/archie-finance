@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects';
 import { LedgerService } from '../ledger/ledger.service';
 import { LedgerAccount } from '../ledger/ledger_account.entity';
@@ -78,6 +78,7 @@ export class CreditLineService {
       this.MINIMUM_COLLATERAL_CHANGE_PERCENTAGE_TO_ADJUST_CREDIT_LIMIT
     ) {
       const updatedCreditLimit = this.calculateCreditLimit(ledgerAccounts);
+      const calculatedAt = new Date().toISOString();
 
       await this.creditLineRepository.update(
         {
@@ -86,6 +87,7 @@ export class CreditLineService {
         {
           creditLimit: updatedCreditLimit,
           calculatedOnLedgerValue: updatedLedgerValue,
+          calculatedAt,
         },
       );
 
@@ -94,7 +96,7 @@ export class CreditLineService {
         {
           userId,
           creditLimit: updatedCreditLimit,
-          calculatedAt: Date.now(),
+          calculatedAt,
         },
       );
     }
@@ -128,7 +130,7 @@ export class CreditLineService {
       });
     }
 
-    const calculatedAt = Date.now();
+    const calculatedAt = new Date().toISOString();
 
     await this.creditLineRepository.save({
       userId,

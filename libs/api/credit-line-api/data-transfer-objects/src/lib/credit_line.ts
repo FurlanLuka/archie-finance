@@ -12,12 +12,12 @@ export interface CreditLine {
 export class CreditLineUpdatedPayload {
   userId: string;
   creditLimit: number;
-  calculatedAt: number;
+  calculatedAt: string;
 }
 
 export class CreditLineCreatedPayload {
   userId: string;
   creditLimit: number;
   ledgerValue: number;
-  calculatedAt: number;
+  calculatedAt: string;
 }
