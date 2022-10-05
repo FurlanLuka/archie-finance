@@ -19,7 +19,7 @@ export const ConnectedAccounts: FC = () => {
 
   if (getConnectedAccountsResponse.state === RequestState.LOADING) {
     return (
-      <Card minHeight="280px">
+      <Card minHeight="200px">
         <Skeleton />
       </Card>
     );
@@ -46,9 +46,9 @@ export const ConnectedAccounts: FC = () => {
 
     return (
       <ConnectedAccountsStyled>
-        <Card column alignItems="flex-start" padding="1.5rem 1.5rem 2rem" minHeight="280px">
-          <TitleS className="title">{t('dashboard_payment.connected_accounts.title')}</TitleS>
-          <div className="account-list">{getAccountsList()}</div>
+        <Card column alignItems="flex-start" padding="1.5rem 1.5rem 2rem" minHeight="200px">
+          <TitleS className="accounts-title">{t('dashboard_payment.connected_accounts.title')}</TitleS>
+          <div className="accounts-list">{getAccountsList()}</div>
           <ButtonOutline small onClick={() => setConnectedAccountModalOpen(true)}>
             {t('dashboard_payment.connected_accounts.btn_add')}
           </ButtonOutline>
