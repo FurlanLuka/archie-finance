@@ -35,7 +35,7 @@ export const DashboardRoute: FC = () => {
 
   return (
     <>
-      <Header maxWidth="100%" />
+      <Header maxWidth="100%" showMobileNav />
       <Page>
         <Navigation />
         <Container column mobileColumn maxWidth="100%">

@@ -142,9 +142,9 @@ export const CollateralizationScreen: FC = () => {
         <Card
           column
           alignItems="center"
-          padding="2.5rem 10% 3.5rem"
-          mobilePadding="2.5rem 1.5rem 3.5rem"
-          minHeight="945px"
+          padding="1.5rem 10% 2.5rem"
+          mobilePadding="1.5rem 1.5rem 2.5rem"
+          minHeight="905px"
         >
           {getContent()}
         </Card>
