@@ -175,7 +175,7 @@ export class PaymentsService {
     if (action?.type !== LedgerActionType.liquidation) {
       return;
     }
-    const liquidationInfo = action.liquidation!;
+    const liquidation = action.liquidation!;
 
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
@@ -205,8 +205,8 @@ export class PaymentsService {
     await this.peachApiService.tryCreatingOneTimePaymentTransaction(
       borrower,
       liquidationInstrumentId,
-      Number(liquidationInfo.usdAmount),
-      liquidationInfo.id,
+      Number(liquidation.usdAmount),
+      liquidation.id,
       PeachOneTimePaymentStatus.succeeded,
     );
 
@@ -221,9 +221,9 @@ export class PaymentsService {
         userId: userId,
         paymentDetails: {
           type: PaymentType.liquidation,
-          amount: liquidationInfo.usdAmount,
+          amount: liquidation.usdAmount,
           asset: 'USD',
-          id: liquidationInfo.id,
+          id: liquidation.id,
         },
       },
     );
