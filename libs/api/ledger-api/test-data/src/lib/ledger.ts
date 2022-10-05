@@ -18,7 +18,7 @@ export const ledgerAccountDataFactory = (
   assetId: 'BTC',
   assetAmount: '1',
   accountValue: '20000',
-  calculatedAt: Date.now(),
+  calculatedAt: new Date().toISOString(),
   ...overrides,
 });
 

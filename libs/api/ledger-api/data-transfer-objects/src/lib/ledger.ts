@@ -9,7 +9,7 @@ export interface LedgerAccountData {
   assetId: string;
   assetAmount: string;
   accountValue: string;
-  calculatedAt: number;
+  calculatedAt: string;
 }
 
 export interface Ledger {

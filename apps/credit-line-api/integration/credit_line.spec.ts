@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, Logger } from '@nestjs/common';
 import { TestingModule } from '@nestjs/testing';
 import {
   cleanUpTestingModule,
@@ -15,6 +15,7 @@ import {
 } from '@archie/api/ledger-api/test-data';
 import { CreditLineQueueController } from '@archie/api/credit-line-api/credit-line';
 import * as request from 'supertest';
+import { DateTime } from 'luxon';
 
 describe('Credit line creation tests', () => {
   let app: INestApplication;
@@ -105,7 +106,7 @@ describe('Credit line creation tests', () => {
     const updatedBitcoinAccountAccount = ledgerAccountDataFactory({
       ...bitcoinLedgerAccount,
       accountValue: '3000',
-      calculatedAt: Date.now() + 3000,
+      calculatedAt: DateTime.now().plus({ minute: 1 }).toISO(),
     });
 
     it('should update the credit line because ledger value increased by 10% and return the overcollateralized response', async () => {
