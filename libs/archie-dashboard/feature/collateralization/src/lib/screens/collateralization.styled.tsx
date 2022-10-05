@@ -26,6 +26,12 @@ export const CollateralizationStyled = styled.div`
     margin-bottom: 1rem;
   }
 
+  .subtitle-margin-call {
+    text-align: center;
+    max-width: 530px;
+    margin-bottom: 3rem;
+  }
+
   .cancel-btn {
     margin-top: 1rem;
   }
