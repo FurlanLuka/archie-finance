@@ -190,6 +190,13 @@ spec:
                 name: archie-ledger-api-service
                 port:
                   number: 80
+          - path: /v1/asset
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-ledger-api-service
+                port:
+                  number: 80
           ## Fireblocks api
           - path: /v1/vault_account
             pathType: Prefix
