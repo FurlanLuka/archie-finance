@@ -34,7 +34,7 @@ export class FireblocksWebhookService {
   private async handleTransactionWebhook(
     payload: FireblocksWebhookPayload,
   ): Promise<void> {
-    Logger.log(payload.data.status);
+    Logger.log(payload.data);
     if (
       payload.data.source.type === PeerType.VAULT_ACCOUNT &&
       payload.data.destination.type === PeerType.VAULT_ACCOUNT &&
@@ -74,7 +74,8 @@ export class FireblocksWebhookService {
         },
       );
     } else if (
-      payload.data.source.type === PeerType.EXTERNAL_WALLET &&
+      (payload.data.source.type === PeerType.EXTERNAL_WALLET ||
+        payload.data.source.type === PeerType.UNKNOWN) &&
       payload.data.destination.type === PeerType.VAULT_ACCOUNT
     ) {
       if (payload.data.sourceAddress === undefined) {
