@@ -30,15 +30,6 @@ export interface PaymentInstrument extends PeachResponse {
   accountType: string;
 }
 
-export interface PaymentInstrumentBalance extends PeachResponse {
-  id: string;
-  availableBalanceAmount: number;
-  lastSuccessfulBalance: {
-    availableBalanceAmount: number;
-    currency: string;
-  };
-}
-
 export interface Document extends PeachResponse {
   id: string;
 }

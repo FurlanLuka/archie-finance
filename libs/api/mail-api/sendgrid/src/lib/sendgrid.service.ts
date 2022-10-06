@@ -6,10 +6,10 @@ import { SendEmailInternalError } from './sendgrid.errors';
 import { EmailDataFactoryService } from '@archie/api/mail-api/utils/email-data-factory';
 import { ContactService, DecryptedContact } from '@archie/api/mail-api/contact';
 import {
-  LtvLimitApproachingPayload,
+  MarginCallLtvLimitApproachingPayload,
   MarginCallCompletedPayload,
   MarginCallStartedPayload,
-} from '@archie/api/margin-api/data-transfer-objects';
+} from '@archie/api/ltv-api/data-transfer-objects';
 import { SalesConnectDto } from '@archie/api/referral-system-api/sales-connect';
 
 @Injectable()
@@ -64,7 +64,7 @@ export class SendgridService {
   }
 
   public async sendLtvLimitApproachingMail(
-    marginCall: LtvLimitApproachingPayload,
+    marginCall: MarginCallLtvLimitApproachingPayload,
   ) {
     const contact: DecryptedContact = await this.contactService.getContact(
       marginCall.userId,

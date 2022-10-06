@@ -21,7 +21,7 @@ export class CollateralWithPrice {
   price: number;
 }
 
-export class LtvLimitApproachingPayload {
+export class MarginCallLtvLimitApproachingPayload {
   userId: string;
   ltv: number;
   priceForMarginCall: number;
