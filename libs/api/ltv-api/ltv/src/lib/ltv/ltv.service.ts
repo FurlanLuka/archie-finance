@@ -16,6 +16,7 @@ import { CreditService } from '../credit/credit.service';
 import { Lock } from '@archie-microservices/api/utils/redis';
 import { MarginService } from '../margin/margin.service';
 import { LedgerAccount } from '../ledger/ledger_account.entity';
+import { LtvMeta } from '../margin/margin.interfaces';
 
 @Injectable()
 export class LtvService {
@@ -28,18 +29,11 @@ export class LtvService {
   ) {}
 
   async getCurrentLtv(userId: string): Promise<LtvDto> {
-    const updatedLedgerAccounts: LedgerAccount[] =
-      await this.ledgerService.getLedgerAccounts(userId);
-    const ledgerValue: number = this.ledgerService.getLedgerValue(
-      updatedLedgerAccounts,
-    );
-    const creditUtilization: number = await this.creditService.getCreditBalance(
-      userId,
-    );
+    const ltvMeta = await this.getNormalizedLtvMeta(userId);
 
     const ltv: number = this.ltvUtilService.calculateLtv(
-      creditUtilization,
-      ledgerValue,
+      ltvMeta.creditUtilization,
+      ltvMeta.ledgerValue,
     );
     const ltvStatus: LtvStatus = this.ltvUtilService.getLtvStatus(ltv);
 
@@ -57,25 +51,13 @@ export class LtvService {
   }: LedgerAccountUpdatedPayload): Promise<void> {
     await this.ledgerService.updateLedgerAccounts(userId, ledgerAccounts);
 
-    if (action?.type === LedgerActionType.liquidation) {
+    if (action.type === LedgerActionType.LIQUIDATION) {
       await this.marginService.acknowledgeLiquidationCollateralBalanceUpdate(
-        action.liquidation!.id,
+        action.liquidation.id,
       );
     }
+    const ltvMeta = await this.getNormalizedLtvMeta(userId);
 
-    const updatedLedgerAccounts: LedgerAccount[] =
-      await this.ledgerService.getLedgerAccounts(userId);
-    const ledgerValue: number = this.ledgerService.getLedgerValue(
-      updatedLedgerAccounts,
-    );
-    const creditUtilization: number = await this.creditService.getCreditBalance(
-      userId,
-    );
-    const ltvMeta = await this.marginService.reducePendingLiquidationAmount(
-      userId,
-      creditUtilization,
-      ledgerValue,
-    );
     const ltv: number = this.ltvUtilService.calculateLtv(
       ltvMeta.creditUtilization,
       ltvMeta.ledgerValue,
@@ -89,25 +71,13 @@ export class LtvService {
     credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
     await this.creditService.updateCreditBalance(credit);
+
     if (credit.paymentDetails?.type === PaymentType.liquidation) {
       await this.marginService.acknowledgeLiquidationCreditBalanceUpdate(
         credit.paymentDetails.id,
       );
     }
-
-    const updatedLedgerAccounts: LedgerAccount[] =
-      await this.ledgerService.getLedgerAccounts(credit.userId);
-    const ledgerValue: number = this.ledgerService.getLedgerValue(
-      updatedLedgerAccounts,
-    );
-    const creditUtilization: number = await this.creditService.getCreditBalance(
-      credit.userId,
-    );
-    const ltvMeta = await this.marginService.reducePendingLiquidationAmount(
-      credit.userId,
-      creditUtilization,
-      ledgerValue,
-    );
+    const ltvMeta = await this.getNormalizedLtvMeta(credit.userId);
     const ltv: number = this.ltvUtilService.calculateLtv(
       ltvMeta.creditUtilization,
       ltvMeta.ledgerValue,
@@ -117,6 +87,23 @@ export class LtvService {
       credit.userId,
       ltv,
       ltvMeta,
+    );
+  }
+
+  private async getNormalizedLtvMeta(userId: string): Promise<LtvMeta> {
+    const updatedLedgerAccounts: LedgerAccount[] =
+      await this.ledgerService.getLedgerAccounts(userId);
+    const ledgerValue: number = this.ledgerService.getLedgerValue(
+      updatedLedgerAccounts,
+    );
+    const creditUtilization: number = await this.creditService.getCreditBalance(
+      userId,
+    );
+
+    return this.marginService.reducePendingLiquidationAmount(
+      userId,
+      creditUtilization,
+      ledgerValue,
     );
   }
 

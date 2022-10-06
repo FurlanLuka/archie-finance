@@ -29,7 +29,10 @@ import {
   WithdrawQueueController,
 } from '@archie/api/ledger-api/ledger';
 import { BigNumber } from 'bignumber.js';
-import { Ledger } from '@archie/api/ledger-api/data-transfer-objects';
+import {
+  Ledger,
+  LedgerActionType,
+} from '@archie/api/ledger-api/data-transfer-objects';
 import { INITIATE_COLLATERAL_WITHDRAWAL_COMMAND } from '@archie/api/fireblocks-api/constants';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
 import { CollateralWithdrawalTransactionUpdatedStatus } from '@archie/api/fireblocks-api/data-transfer-objects';
@@ -275,6 +278,9 @@ describe('Ledger api withdrawal tests', () => {
               calculatedAt: expect.any(String),
             },
           ],
+          action: {
+            type: LedgerActionType.WITHDRAWAL,
+          },
         },
       );
 

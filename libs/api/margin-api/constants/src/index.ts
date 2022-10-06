@@ -18,7 +18,7 @@ export const LIQUIDATION_TARGET_LTV = 60;
 
 export const MARGIN_CALL_LIQUIDATION_AFTER_HOURS = 72;
 
-export const LTV_LIMIT_APPROACHING_TOPIC =
-  'margin.margin_call.ltv_limit_approaching';
-export const MARGIN_CALL_COMPLETED_TOPIC = 'margin.margin_call.completed';
-export const MARGIN_CALL_STARTED_TOPIC = 'margin.margin_call.started';
+export const MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC =
+  'ltv.margin_call_ltv_limit_approaching';
+export const MARGIN_CALL_COMPLETED_TOPIC = 'ltv.margin_call.completed';
+export const MARGIN_CALL_STARTED_TOPIC = 'ltv.margin_call.started';

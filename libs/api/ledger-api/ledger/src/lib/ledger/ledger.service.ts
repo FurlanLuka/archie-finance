@@ -74,7 +74,7 @@ export class LedgerService {
           },
         ],
         action: {
-          type: LedgerActionType.deposit,
+          type: LedgerActionType.DEPOSIT,
         },
       },
     );
@@ -199,7 +199,7 @@ export class LedgerService {
               }),
             ),
             action: {
-              type: LedgerActionType.assetPriceUpdate,
+              type: LedgerActionType.ASSET_PRICE_UPDATE,
             },
           },
         );

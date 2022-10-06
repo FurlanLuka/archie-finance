@@ -32,7 +32,7 @@ export class DepositService {
       assetInformation,
       amount,
       {
-        type: LedgerActionType.deposit,
+        type: LedgerActionType.DEPOSIT,
       },
     );
   }
