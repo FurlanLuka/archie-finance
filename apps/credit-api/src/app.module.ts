@@ -7,10 +7,8 @@ import {
 } from '@archie/api/credit-api/constants';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { HealthModule } from '@archie/api/utils/health';
-import { CollateralModule } from '@archie/api/credit-api/collateral';
 import { RizeModule } from '@archie/api/credit-api/rize';
 import { PlaidModule } from '@archie/api/credit-api/plaid';
-import { CollateralWithdrawalModule } from '@archie/api/credit-api/collateral-withdrawal';
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
 import { CryptoModule } from '@archie/api/utils/crypto';
@@ -75,8 +73,6 @@ import { RedisModule } from '@archie-microservices/api/utils/redis';
     HealthModule,
     RizeModule,
     PlaidModule,
-    CollateralModule,
-    CollateralWithdrawalModule,
     QueueModule.register(),
     RedisModule.register({
       imports: [ConfigModule],

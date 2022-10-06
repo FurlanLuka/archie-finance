@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   CreateTransactionResponse,
   FireblocksSDK,
@@ -6,7 +6,7 @@ import {
   VaultAccountResponse,
   VaultAssetResponse,
 } from 'fireblocks-sdk';
-import { ConfigVariables } from '@archie/api/collateral-api/constants';
+import { ConfigVariables } from '@archie/api/fireblocks-api/constants';
 import { ConfigService } from '@archie/api/utils/config';
 import { CryptoService } from '@archie/api/utils/crypto';
 import {

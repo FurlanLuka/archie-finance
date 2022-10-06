@@ -1,12 +1,6 @@
 {
   "inputs": [
     {
-      "inputFile": "./dist/apps/asset-price-api/target/generated/swagger.json"
-    },
-    {
-      "inputFile": "./dist/apps/collateral-api/target/generated/swagger.json"
-    },
-    {
       "inputFile": "./dist/apps/credit-api/target/generated/swagger.json"
     },
     {
@@ -23,9 +17,6 @@
     },
     {
       "inputFile": "./dist/apps/peach-api/target/generated/swagger.json"
-    },
-    {
-      "inputFile": "./dist/apps/credit-limit-api/target/generated/swagger.json"
     },
     {
       "inputFile": "./dist/apps/ltv-api/target/generated/swagger.json"

@@ -1,5 +1,5 @@
 import { ConfigService } from '@archie/api/utils/config';
-import { ConfigVariables } from '@archie/api/collateral-api/constants';
+import { ConfigVariables } from '@archie/api/fireblocks-api/constants';
 import { Injectable } from '@nestjs/common';
 import { AssetInformation, AssetList } from './assets.interfaces';
 
