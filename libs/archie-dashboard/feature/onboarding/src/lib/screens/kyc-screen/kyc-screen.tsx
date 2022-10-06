@@ -27,7 +27,6 @@ interface KycFormData {
   income: number;
 }
 
-const a = 3;
 export const KycScreen: FC = () => {
   const { t } = useTranslation();
 
