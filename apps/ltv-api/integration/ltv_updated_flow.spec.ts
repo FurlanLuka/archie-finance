@@ -72,7 +72,7 @@ describe('Ltv api tests', () => {
     const afterLiquidationLtv = 60;
     let liquidationId: string;
 
-    it(`should keep ltv at 0 as credit was not created yet`, async () => {
+    it(`should keep ltv at 0 as credit line was not created yet`, async () => {
       await app.get(LtvQueueController).ledgerUpdated(ledgerUpdatedPayload);
       const response = await request(app.getHttpServer())
         .get('/v1/ltv')
@@ -102,7 +102,7 @@ describe('Ltv api tests', () => {
       });
     });
 
-    it(`should straight of liquidate once ltv reaches 90% and create margin call`, async () => {
+    it(`should create margin call and liquidate once ltv reaches 90%`, async () => {
       const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
         utilizationAmount: ledgerValue * 0.9,
       });

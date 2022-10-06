@@ -71,8 +71,6 @@ export class MarginService {
       },
     });
 
-    console.log('liquidations', liquidations);
-
     const pendingLiquidatedCreditUtilization = liquidations.reduce(
       (pendingValue, liquidation) => {
         return !liquidation.isCreditUtilizationUpdated
@@ -88,11 +86,6 @@ export class MarginService {
           : pendingValue;
       },
       '0',
-    );
-    console.log(
-      'pending',
-      pendingLiquidatedCreditUtilization,
-      pendingLiquidatedLedgerValue,
     );
 
     return {
