@@ -213,3 +213,11 @@ spec:
                 name: archie-webhook-api-service
                 port:
                   number: 80
+          ## Credit line
+          - path: /v1/credit_lines
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-credit-line-api-service
+                port:
+                  number: 80
