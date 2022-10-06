@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useSetAutopay } from '@archie-webapps/shared/data-access/archie-api/autopay/hooks/use-set-autopay';
@@ -16,7 +16,7 @@ interface AutopayModalProps {
   onSuccess: VoidFunction;
 }
 
-export const SetupAutopay: FC<AutopayModalProps> = ({ accounts }) => {
+export const SetupAutopay: FC<AutopayModalProps> = ({ accounts, onSuccess }) => {
   const { t } = useTranslation();
   const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
   const [hasConsent, setHasConsent] = useState<boolean>(false);
@@ -36,6 +36,12 @@ export const SetupAutopay: FC<AutopayModalProps> = ({ accounts }) => {
       </SelectOption>
     ));
   }, [accounts]);
+
+  useEffect(() => {
+    if (setAutopayMutation.state === RequestState.SUCCESS) {
+      onSuccess();
+    }
+  }, [onSuccess, setAutopayMutation.state]);
 
   const canSubmit =
     hasConsent &&

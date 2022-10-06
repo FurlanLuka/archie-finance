@@ -10,7 +10,6 @@ interface SetAutopayAPIBody {
   amountType: string;
   paymentInstrumentId: string;
   isAlignedToDueDates: boolean;
-  offsetFromDueDate: number[];
   agreementDocumentId: string;
 }
 
@@ -28,7 +27,6 @@ export const setAutopay = async ({
       agreementDocumentId,
       amountType: 'statementMinimumAmount',
       isAlignedToDueDates: true,
-      offsetFromDueDate: [0],
     },
     {
       headers: {
