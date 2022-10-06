@@ -5,8 +5,8 @@ import ReactTooltip from 'react-tooltip';
 
 import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
-import { useGetDepositAddress } from '@archie-webapps/shared/data-access/archie-api/deposit_address/hooks/use-get-deposit-address';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { useGetDepositAddress } from '@archie-webapps/shared/data-access/archie-api/vault_account/hooks/use-get-deposit-address';
 import { Skeleton, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { QR_CODE } from '@archie-webapps/shared/ui/theme';
