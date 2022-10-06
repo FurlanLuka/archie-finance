@@ -6,115 +6,152 @@ import {
   Draw,
   Person,
 } from '@archie/api/peach-api/borrower';
+import { BaseNock } from '@archie/test/integration';
 
-let baseNock: nock.Scope;
+export class PeachNock extends BaseNock {
+  constructor(baseUrl: string, apiKey: string) {
+    super(baseUrl, apiKey);
+  }
 
-export const setupBaseNock = (baseUrl: string, apiKey: string): nock.Scope => {
-  baseNock = nock(baseUrl).matchHeader('X-API-KEY', apiKey);
+  public setupCreatePersonNock(
+    payload: PeachRequestBody,
+    replyData: Person,
+    replyStatus = 201,
+  ): nock.Interceptor {
+    const interceptor = this.baseNock.post('/people', payload);
+    interceptor.reply(replyStatus, { data: replyData });
+    this.addInterceptor(interceptor);
 
-  return baseNock;
-};
+    return interceptor;
+  }
 
-export const setupCreatePersonNock = (
-  payload: PeachRequestBody,
-  replyData: Person,
-  replyStatus = 201,
-): nock.Scope => {
-  return baseNock
-    .post('/people', payload)
-    .reply(replyStatus, { data: replyData });
-};
+  public setupCreateContactNock(
+    personId: string,
+    payload: PeachRequestBody,
+    replyData: PeachResponse = {},
+    replyStatus = 201,
+  ): nock.Interceptor {
+    const interceptor = this.baseNock.post(
+      `/people/${personId}/contacts`,
+      payload,
+    );
+    interceptor.reply(replyStatus, { data: replyData });
+    this.addInterceptor(interceptor);
 
-export const setupCreateContactNock = (
-  personId: string,
-  payload: PeachRequestBody,
-  replyData: PeachResponse = {},
-  replyStatus = 201,
-): nock.Scope => {
-  return baseNock
-    .post(`/people/${personId}/contacts`, payload)
-    .reply(replyStatus, { data: replyData });
-};
+    return interceptor;
+  }
 
-export const setupCreateUserNock = (
-  companyId: string,
-  payload: PeachRequestBody,
-  replyData: PeachResponse = {},
-  replyStatus = 201,
-): nock.Scope => {
-  return baseNock
-    .post(`/companies/${companyId}/users`, payload)
-    .reply(replyStatus, { data: replyData });
-};
+  public setupCreateUserNock(
+    companyId: string,
+    payload: PeachRequestBody,
+    replyData: PeachResponse = {},
+    replyStatus = 201,
+  ): nock.Interceptor {
+    const interceptor = this.baseNock.post(
+      `/companies/${companyId}/users`,
+      payload,
+    );
+    interceptor.reply(replyStatus, { data: replyData });
+    this.addInterceptor(interceptor);
 
-export const setupCreateLoanNock = (
-  personId: string,
-  payload: PeachRequestBody,
-  replyData: PeachResponse = {},
-  replyStatus = 201,
-): nock.Scope => {
-  return baseNock
-    .post(`/people/${personId}/loans`, payload)
-    .reply(replyStatus, { data: replyData });
-};
+    return interceptor;
+  }
 
-export const setupActivateLoanNock = (
-  personId: string,
-  loanId: string,
-  payload: PeachRequestBody,
-  replyData: PeachResponse = {},
-  replyStatus = 201,
-): nock.Scope => {
-  return baseNock
-    .post(`/people/${personId}/loans/${loanId}/activate`, payload)
-    .reply(replyStatus, { data: replyData });
-};
+  public setupCreateLoanNock(
+    personId: string,
+    payload: PeachRequestBody,
+    replyData: PeachResponse = {},
+    replyStatus = 201,
+  ): nock.Interceptor {
+    const interceptor = this.baseNock.post(
+      `/people/${personId}/loans`,
+      payload,
+    );
+    interceptor.reply(replyStatus, { data: replyData });
+    this.addInterceptor(interceptor);
 
-export const setupCreateDrawNock = (
-  personId: string,
-  loanId: string,
-  payload: PeachRequestBody,
-  replyData: Draw,
-  replyStatus = 201,
-): nock.Scope => {
-  return baseNock
-    .post(`/people/${personId}/loans/${loanId}/draws`, payload)
-    .reply(replyStatus, { data: replyData });
-};
+    return interceptor;
+  }
 
-export const setupActivateDrawNock = (
-  personId: string,
-  loanId: string,
-  drawId: string,
-  replyData: PeachResponse = {},
-  replyStatus = 201,
-): nock.Scope => {
-  return baseNock
-    .post(`/people/${personId}/loans/${loanId}/draws/${drawId}/activate`)
-    .reply(replyStatus, { data: replyData });
-};
+  public setupActivateLoanNock(
+    personId: string,
+    loanId: string,
+    payload: PeachRequestBody,
+    replyData: PeachResponse = {},
+    replyStatus = 201,
+  ): nock.Interceptor {
+    const interceptor = this.baseNock.post(
+      `/people/${personId}/loans/${loanId}/activate`,
+      payload,
+    );
+    interceptor.reply(replyStatus, { data: replyData });
+    this.addInterceptor(interceptor);
 
-export const setupUpdateCreditLimitNock = (
-  personId: string,
-  loanId: string,
-  payload: PeachRequestBody,
-  replyData: CreditLimit,
-  replyStatus = 201,
-  delay = 0,
-): nock.Scope => {
-  return baseNock
-    .post(`/people/${personId}/loans/${loanId}/credit-limit`)
-    .delay(delay)
-    .reply(replyStatus, { data: replyData });
-};
+    return interceptor;
+  }
 
-export const setupGetBalancesNock = (
-  personId: string,
-  loanId: string,
-  replyData: Balances,
-  replyStatus = 200,
-): nock.Scope => {
-  return baseNock
-    .get(`/people/${personId}/loans/${loanId}/balances`)
-    .reply(replyStatus, { data: replyData });
-};
+  public setupCreateDrawNock(
+    personId: string,
+    loanId: string,
+    payload: PeachRequestBody,
+    replyData: Draw,
+    replyStatus = 201,
+  ): nock.Interceptor {
+    const interceptor = this.baseNock.post(
+      `/people/${personId}/loans/${loanId}/draws`,
+      payload,
+    );
+    interceptor.reply(replyStatus, { data: replyData });
+    this.addInterceptor(interceptor);
+
+    return interceptor;
+  }
+
+  public setupActivateDrawNock(
+    personId: string,
+    loanId: string,
+    drawId: string,
+    replyData: PeachResponse = {},
+    replyStatus = 201,
+  ): nock.Interceptor {
+    const interceptor = this.baseNock.post(
+      `/people/${personId}/loans/${loanId}/draws/${drawId}/activate`,
+    );
+    interceptor.reply(replyStatus, { data: replyData });
+    this.addInterceptor(interceptor);
+
+    return interceptor;
+  }
+
+  public setupUpdateCreditLimitNock(
+    personId: string,
+    loanId: string,
+    payload: PeachRequestBody,
+    replyData: CreditLimit,
+    replyStatus = 201,
+    delay = 0,
+  ): nock.Interceptor {
+    const interceptor = this.baseNock.post(
+      `/people/${personId}/loans/${loanId}/credit-limit`,
+    );
+    interceptor.delay(delay).reply(replyStatus, { data: replyData });
+    this.addInterceptor(interceptor);
+
+    return interceptor;
+  }
+
+  public setupGetBalancesNock(
+    personId: string,
+    loanId: string,
+    replyData: Balances,
+    replyStatus = 200,
+  ): nock.Interceptor {
+    const interceptor = this.baseNock.get(
+      `/people/${personId}/loans/${loanId}/balances`,
+    );
+    interceptor.reply(replyStatus, { data: replyData });
+    this.addInterceptor(interceptor);
+
+    return interceptor;
+  }
+}

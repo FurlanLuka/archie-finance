@@ -47,7 +47,8 @@ import {
 } from '@archie/api/peach-api/data-transfer-objects';
 import { LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LastAdjustment } from './lastAdjustment.entity';
+import { LastDebitCardUpdateMeta } from './last_debit_card_update_meta.entity';
+import { Lock } from '@archie-microservices/api/utils/redis';
 
 @Injectable()
 export class RizeService {
@@ -58,8 +59,8 @@ export class RizeService {
     private rizeFactoryService: RizeFactoryService,
     private rizeValidatorService: RizeValidatorService,
     private queueService: QueueService,
-    @InjectRepository(LastAdjustment)
-    private lastAdjustmentRepository: Repository<LastAdjustment>,
+    @InjectRepository(LastDebitCardUpdateMeta)
+    private lastDebitCardUpdateMetaRepository: Repository<LastDebitCardUpdateMeta>,
   ) {
     this.rizeEventListener = this.rizeEventListener.bind(this);
     this.handleTransactionsEvent = this.handleTransactionsEvent.bind(this);
@@ -335,14 +336,15 @@ export class RizeService {
       userId,
     });
 
-    await this.lastAdjustmentRepository.insert({
+    await this.lastDebitCardUpdateMetaRepository.insert({
       userId,
-      availableCreditCalculatedAt: credit.calculatedAt,
+      adjustmentCalculatedAt: credit.calculatedAt,
     });
 
     await this.rizeApiService.loadFunds(customerId, credit.availableCredit);
   }
 
+  @Lock((credit: CreditBalanceUpdatedPayload) => credit.userId)
   public async updateAvailableCredit(
     credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
@@ -350,16 +352,14 @@ export class RizeService {
       return;
     }
 
-    // Properly done - this section (whole handler) would need to be locked otherwise 2 simultaneous events (2nd event with a greater date than the first)
-    // - can still enable both to enter and adjust credit limit. It is very unlikely - OK for POC
     const updateResult: UpdateResult =
-      await this.lastAdjustmentRepository.update(
+      await this.lastDebitCardUpdateMetaRepository.update(
         {
           userId: credit.userId,
-          availableCreditCalculatedAt: LessThanOrEqual(credit.calculatedAt),
+          adjustmentCalculatedAt: LessThanOrEqual(credit.calculatedAt),
         },
         {
-          availableCreditCalculatedAt: credit.calculatedAt,
+          adjustmentCalculatedAt: credit.calculatedAt,
         },
       );
 
@@ -397,7 +397,23 @@ export class RizeService {
     }
   }
 
-  public async unlockCard(userId: string): Promise<void> {
+  @Lock((userId: string) => userId)
+  public async unlockCard(userId: string, unlockAt: string): Promise<void> {
+    const updateResult: UpdateResult =
+      await this.lastDebitCardUpdateMetaRepository.update(
+        {
+          userId: userId,
+          cardStatusChangedAt: LessThanOrEqual(unlockAt),
+        },
+        {
+          cardStatusChangedAt: unlockAt,
+        },
+      );
+
+    if (updateResult.affected === 0) {
+      return;
+    }
+
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
@@ -412,7 +428,23 @@ export class RizeService {
     }
   }
 
-  public async lockCard(userId: string): Promise<void> {
+  @Lock((userId: string) => userId)
+  public async lockCard(userId: string, lockAt: string): Promise<void> {
+    const updateResult: UpdateResult =
+      await this.lastDebitCardUpdateMetaRepository.update(
+        {
+          userId: userId,
+          cardStatusChangedAt: LessThanOrEqual(lockAt),
+        },
+        {
+          cardStatusChangedAt: lockAt,
+        },
+      );
+
+    if (updateResult.affected === 0) {
+      return;
+    }
+
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );

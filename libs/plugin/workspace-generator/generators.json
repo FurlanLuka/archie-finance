@@ -22,6 +22,11 @@
       "factory": "./src/generators/microservice-project-target-generator/generator",
       "schema": "./src/generators/microservice-project-target-generator/schema.json",
       "description": "microservice project target generator"
+    },
+    "test-environment-generator": {
+      "factory": "./src/generators/test-environment-generator/generator",
+      "schema": "./src/generators/test-environment-generator/schema.json",
+      "description": "Test environment generator"
     }
   }
 }

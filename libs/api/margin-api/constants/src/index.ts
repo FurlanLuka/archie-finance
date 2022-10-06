@@ -17,6 +17,11 @@ export const LTV_MARGIN_CALL_LIMIT = 75;
 export const LIQUIDATION_TARGET_LTV = 60;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+export const MARGIN_CALL_LIQUIDATION_AFTER_HOURS = 72;
+
+>>>>>>> collateralization-refactor
 export const LTV_LIMIT_APPROACHING_TOPIC =
   'margin.margin_call.ltv_limit_approaching';
 export const MARGIN_CALL_COMPLETED_TOPIC = 'margin.margin_call.completed';

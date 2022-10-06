@@ -1,4 +1,4 @@
-import { Controller, Get, Logger, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import {
   INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND,
   SERVICE_QUEUE_NAME,

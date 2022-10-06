@@ -37,51 +37,6 @@ jobs:
     outputs:
       affectedProjects: ${{ steps.affected-projects.outputs.affectedProjects }}
       imageTag: ${{ steps.extract-image-tag.outputs.IMAGE_TAG }}
-
-    env:
-      # GLOBAL
-      AUTH0_DOMAIN: auth.dev.archie.finance
-      AUTH0_AUDIENCE: https://api.dev.archie.finance
-
-      TYPEORM_HOST: localhost
-      TYPEORM_USERNAME: postgres
-      TYPEORM_PASSWORD: postgres
-      TYPEORM_DATABASE: postgres
-      TYPEORM_PORT: 5432
-      TZ: UTC
-
-      INTERNAL_API_URL: http://localhost
-      QUEUE_URL: amqp://localhost
-      REDIS_URL: 'redis://localhost:6379'
-
-      ENCRYPTION_KEY: ')J@McQfTjWnZr4u7x!A%D*G-KaPdRgUk'
-
-      # CREDIT API
-      APTO_API_KEY: ''
-      APTO_API_URL: ''
-      APTO_CARD_PROGRAME_ID: ''
-      APTO_PUBLIC_KEY: ''
-      APTO_PRIVATE_KEY: ''
-      APTO_FUNDING_BALANCE_ID: ''
-
-      RIZE_ENVIRONMENT: 'sandbox'
-      RIZE_PROGRAM_ID: 'test'
-      RIZE_HMAC_KEY: 'test'
-      RIZE_MQ_HOST: 'test'
-      RIZE_MQ_TOPIC_PREFIX: 'test'
-      RIZE_MQ_USERNAME: 'test'
-      RIZE_MQ_PASSWORD: 'test'
-
-      ## Peach api
-      PEACH_API_KEY: 'test'
-      PEACH_BASE_URL: 'https://sandboxapi.peach.finance/api'
-      PEACH_COMPANY_ID: 'CP-25K9-4GJ6'
-      PEACH_BORROWER_ROLE_ID: 'RL-G2K6-NLK4'
-      PEACH_LOAN_ID: 'LT-GDB3-WEBO'
-      API_BASE_URL: 'http://localhost'
-
-      # Credit limit api
-      ASSET_LTV_LIST: '{"BTC":{"ltv":"50"},"ETH":{"ltv":"50"},"SOL":{"ltv":"50"},"USDC":{"ltv":"70"}}'
     services:
       postgres:
         image: postgres:alpine
@@ -119,24 +74,20 @@ jobs:
         name: Install dependencies
       - name: Workspace Lint
         run: npx nx workspace-lint
+      - name: Prepare testing environment
+        run: npx nx generate @archie/plugin/workspace-generator:test-environment-generator
       - name: Affected Lint
         if: inputs.BASE_BRANCH_NAME == ''
         run: npx nx affected --target=lint --parallel=3
       - name: Affected Lint
         if: inputs.BASE_BRANCH_NAME != ''
         run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=lint --parallel=3
-      - name: Affected Test
+      - name: Affected Integration Test
         if: inputs.BASE_BRANCH_NAME == ''
-        run: npx nx affected --target=test --parallel=3 --ci --code-coverage
-      - name: Affected Test
+        run: npx nx affected --target=test-integration --parallel=3 --ci --code-coverage
+      - name: Affected Integration Test
         if: inputs.BASE_BRANCH_NAME != ''
-        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test --parallel=3 --ci --code-coverage
-      # - name: Affected Integration Test
-      #   if: inputs.BASE_BRANCH_NAME == ''
-      #   run: npx nx affected --target=test-integration --parallel=3 --ci --code-coverage
-      # - name: Affected Integration Test
-      #   if: inputs.BASE_BRANCH_NAME != ''
-      #   run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test-integration --parallel=3 --ci --code-coverage
+        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test-integration --parallel=3 --ci --code-coverage
       - name: Affected Build
         if: inputs.BASE_BRANCH_NAME == ''
         run: npx nx affected --target=build --parallel=3

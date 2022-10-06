@@ -58,7 +58,7 @@ describe('Ledger api liquidation tests', () => {
   };
 
   const setup = async (): Promise<void> => {
-    testDatabase = await createTestDatabase(true);
+    testDatabase = await createTestDatabase();
 
     module = await createTestingModule({
       imports: [AppModule],
@@ -242,11 +242,13 @@ describe('Ledger api liquidation tests', () => {
               assetId: usdcCollateral.assetId,
               assetAmount: '0',
               accountValue: '0',
+              calculatedAt: expect.any(String),
             },
             {
               assetId: bitcoinCollateral.assetId,
               assetAmount: newBitcoinAmount.toString(),
               accountValue: newBitcoinAccountValue.toString(),
+              calculatedAt: expect.any(String),
             },
           ],
           action: {

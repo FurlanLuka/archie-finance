@@ -157,6 +157,7 @@ describe('Ledger api deposit tests', () => {
               assetId: firstDepositAssetId,
               assetAmount: firstdepositAssetAmount,
               accountValue: firstDepositAccountValue.toString(),
+              calculatedAt: expect.any(String),
             },
           ],
           action: {
@@ -212,6 +213,7 @@ describe('Ledger api deposit tests', () => {
               assetId: secondDepositAssetId,
               assetAmount: secondDepositAssetAmount,
               accountValue: secondDepositAccountValue.toString(),
+              calculatedAt: expect.any(String),
             },
           ],
           action: {

@@ -242,8 +242,12 @@ spec:
               service:
                 name: archie-webhook-api-service
                 port:
-<<<<<<< HEAD
                   number: 80
-=======
+          ## Margin service
+          - path: /v1/margin_calls
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-margin-api-service
+                port:
                   number: 80
->>>>>>> f1666b2... Added ltv api tests covering liquidation flow

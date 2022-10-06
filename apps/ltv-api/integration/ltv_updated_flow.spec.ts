@@ -29,7 +29,7 @@ import {
   LTV_MARGIN_CALL_LIMIT,
   MARGIN_CALL_STARTED_TOPIC,
 } from '@archie/api/ltv-api/constants';
-import { MARGIN_CALL_LIQUIDATION_AFTER_HOURS } from '@archie/api/margin-api/constants';
+import { MARGIN_CALL_LIQUIDATION_AFTER_HOURS } from '@archie/api/ltv-api/constants';
 import { INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND } from '@archie/api/ledger-api/constants';
 import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects';
 import { PaymentType } from '@archie/api/peach-api/data-transfer-objects';

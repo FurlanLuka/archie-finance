@@ -275,6 +275,7 @@ describe('Ledger api withdrawal tests', () => {
               assetId,
               assetAmount: newBitcoinAccountAmount,
               accountValue: newBitcoinAccountValue,
+              calculatedAt: expect.any(String),
             },
           ],
           action: {

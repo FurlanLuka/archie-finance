@@ -18,12 +18,24 @@ export class ContactQueueController {
 
   constructor(private contactService: ContactService) {}
 
-  @Subscribe(KYC_SUBMITTED_TOPIC, ContactQueueController.CONTROLLER_QUEUE_NAME)
+  @Subscribe(
+    KYC_SUBMITTED_TOPIC,
+    ContactQueueController.CONTROLLER_QUEUE_NAME,
+    {
+      logBody: false,
+    },
+  )
   async kycSubmittedHandler(payload: KycSubmittedPayload): Promise<void> {
     await this.contactService.saveFirstName(payload.userId, payload.firstName);
   }
 
-  @Subscribe(EMAIL_VERIFIED_TOPIC, ContactQueueController.CONTROLLER_QUEUE_NAME)
+  @Subscribe(
+    EMAIL_VERIFIED_TOPIC,
+    ContactQueueController.CONTROLLER_QUEUE_NAME,
+    {
+      logBody: false,
+    },
+  )
   async emailVerifiedHandler(payload: EmailVerifiedPayload): Promise<void> {
     await this.contactService.saveEmail(payload.userId, payload.email);
   }

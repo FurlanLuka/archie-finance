@@ -5,7 +5,7 @@ import { RizeApiModule } from './api/rize_api.module';
 import { RizeFactoryModule } from './factory/rize_factory.module';
 import { RizeValidatorModule } from './validator/rize_validator.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { LastAdjustment } from './lastAdjustment.entity';
+import { LastDebitCardUpdateMeta } from './last_debit_card_update_meta.entity';
 
 @Module({
   controllers: [RizeController, RizeQueueController],
@@ -14,7 +14,7 @@ import { LastAdjustment } from './lastAdjustment.entity';
     RizeApiModule,
     RizeFactoryModule,
     RizeValidatorModule,
-    TypeOrmModule.forFeature([LastAdjustment]),
+    TypeOrmModule.forFeature([LastDebitCardUpdateMeta]),
   ],
 })
 export class RizeModule {}

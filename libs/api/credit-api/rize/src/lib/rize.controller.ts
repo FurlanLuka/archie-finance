@@ -87,7 +87,7 @@ export class RizeQueueController {
   async marginCallStartedHandler(
     payload: MarginCallStartedPayload,
   ): Promise<void> {
-    await this.rizeService.lockCard(payload.userId);
+    await this.rizeService.lockCard(payload.userId, payload.startedAt);
   }
 
   @Subscribe(
@@ -97,7 +97,7 @@ export class RizeQueueController {
   async marginCallCompletedHandler(
     payload: MarginCallCompletedPayload,
   ): Promise<void> {
-    await this.rizeService.unlockCard(payload.userId);
+    await this.rizeService.unlockCard(payload.userId, payload.completedAt);
   }
 
   @Subscribe(
