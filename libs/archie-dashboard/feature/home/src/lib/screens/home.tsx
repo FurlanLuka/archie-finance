@@ -77,7 +77,7 @@ export const HomeScreen: FC = () => {
         <div className="section-cards two">
           <CollateralValue />
           <NextPayment withBtn />
-          {/* <MyRewards /> */}
+          {/* <Rewards /> */}
         </div>
         <div className="section-table">
           <RecentTransactions />

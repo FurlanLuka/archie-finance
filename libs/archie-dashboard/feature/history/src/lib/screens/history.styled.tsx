@@ -11,14 +11,24 @@ export const HistoryStyled = styled.div`
     padding: 1.5rem 1rem;
   }
 
-  .title-group {
+  .title {
+    margin-bottom: 1.5rem;
+  }
+
+  .subtitle-group {
     display: flex;
     justify-content: space-between;
     width: 100%;
     margin-bottom: 2.5rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
   }
 
   .load-btn {
-    margin-top: 1.5rem;
+    margin: 1.5rem auto 0;
   }
 `;
