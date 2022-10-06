@@ -108,6 +108,21 @@ spec:
                 secretKeyRef:
                   name: credit-line-api-secrets
                   key: db-database
+            - name: ASSET_LIST
+              valueFrom:
+                secretKeyRef:
+                  name: credit-line-api-secrets
+                  key: asset-list
+            - name: AUTH0_DOMAIN
+              valueFrom:
+                secretKeyRef:
+                  name: auth0-shared-secrets
+                  key: domain
+            - name: AUTH0_AUDIENCE
+              valueFrom:
+                secretKeyRef:
+                  name: auth0-shared-secrets
+                  key: audience
           {{- end }}
       imagePullSecrets:
         - name: regcred
