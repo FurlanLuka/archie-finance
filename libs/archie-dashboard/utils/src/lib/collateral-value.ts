@@ -2,11 +2,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { TARGET_LTV } from '@archie-webapps/archie-dashboard/constants';
 import { CollateralAssets } from '@archie-webapps/shared/constants';
-import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 import { Ledger, LedgerAccountData } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
-
-export const calculateCollateralTotalValue = (collateral: CollateralValue[]): number =>
-  collateral.reduce((sum, collateralEntry) => sum + collateralEntry.price, 0);
 
 export const calculateLedgerCreditValue = (ledger: Ledger): string => {
   const result = ledger.accounts.reduce((sum, ledgerAccount) => {

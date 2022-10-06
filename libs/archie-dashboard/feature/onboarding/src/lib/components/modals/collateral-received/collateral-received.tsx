@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useCreateCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-create-credit-line';
+import { useCreateCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/hooks/use-create-credit-line';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { ButtonPrimary, ButtonOutline, Modal, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 

@@ -10,7 +10,6 @@ export const useCreateCreditLine = (): MutationQueryResponse => {
 
   return useExtendedMutation('credit_line', createCreditLine, {
     onSuccess: () => {
-      console.log('credit line creation successful!!');
       queryClient.invalidateQueries(ONBOARDING_RECORD_QUERY_KEY);
     },
   });
