@@ -1,5 +1,4 @@
 import { LtvMeta } from '../margin.interfaces';
-import { MarginCall } from '../margin_calls.entity';
 
 export enum MarginAction {
   activate_margin_call = 'activate_margin_call',
@@ -14,5 +13,4 @@ export interface MarginActionHandlerPayload {
   userId: string;
   ltv: number;
   ltvMeta: LtvMeta;
-  marginCall: MarginCall | null;
 }

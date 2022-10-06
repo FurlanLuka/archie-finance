@@ -158,7 +158,7 @@ export class LiquidationService {
       userId,
       accountsLiquidationReducerResult.accountsToLiquidate,
       {
-        type: LedgerActionType.LIQUIDATION,
+        type: LedgerActionType.liquidation,
         liquidation: {
           id: liquidationId,
           usdAmount: amount,

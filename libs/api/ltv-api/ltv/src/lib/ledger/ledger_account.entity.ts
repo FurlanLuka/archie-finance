@@ -27,8 +27,8 @@ export class LedgerAccount {
   })
   value: number;
 
-  @Column('timestamptz')
-  calculatedAt: string;
+  @Column('numeric')
+  calculatedAt: number;
 
   @CreateDateColumn({ select: false })
   createdAt: Date;

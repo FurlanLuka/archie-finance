@@ -22,7 +22,6 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
 import { BigNumber } from 'bignumber.js';
 import { initiateLedgerRecalcuationCommandPayloadFactory } from '@archie/api/ledger-api/test-data';
-import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects';
 
 describe('Ledger api deposit tests', () => {
   let app: INestApplication;
@@ -133,9 +132,6 @@ describe('Ledger api deposit tests', () => {
                 calculatedAt: expect.any(String),
               },
             ],
-            action: {
-              type: LedgerActionType.DEPOSIT,
-            },
           },
         );
       });
@@ -186,9 +182,6 @@ describe('Ledger api deposit tests', () => {
                 calculatedAt: expect.any(String),
               },
             ],
-            action: {
-              type: LedgerActionType.ASSET_PRICE_UPDATE,
-            },
           },
         );
       });

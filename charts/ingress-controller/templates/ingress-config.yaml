@@ -204,13 +204,6 @@ spec:
                 name: archie-ltv-api-service
                 port:
                   number: 80
-          - path: /v1/margin_calls
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-ltv-api-service
-                port:
-                  number: 80
           ## Paypal service
           - path: /v1/paypal
             pathType: Prefix
@@ -241,5 +234,13 @@ spec:
             backend:
               service:
                 name: archie-webhook-api-service
+                port:
+                  number: 80
+          ## Margin service
+          - path: /v1/margin_calls
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-margin-api-service
                 port:
                   number: 80

@@ -6,10 +6,9 @@ import { MarginCall } from './margin_calls.entity';
 import { MarginCheck } from './margin_check.entity';
 import { MarginNotification } from './margin_notifications.entity';
 import { Liquidation } from './liquidation.entity';
-import { MarginController } from './margin.controller';
 
 @Module({
-  controllers: [MarginController],
+  controllers: [],
   imports: [
     UtilsModule,
     TypeOrmModule.forFeature([

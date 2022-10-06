@@ -29,7 +29,7 @@ export class MarginCall {
   liquidation: Liquidation | null;
 
   @DeleteDateColumn({ name: 'deleted_at', nullable: true })
-  deletedAt: Date | null;
+  deletedAt?: Date;
 
   @CreateDateColumn()
   createdAt: Date;

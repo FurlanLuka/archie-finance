@@ -17,9 +17,7 @@ export class MarginCallInDangerHandlerService {
     private marginCallPriceFactory: MarginCallPriceFactory,
   ) {}
 
-  public async send(
-    actionPayload: MarginActionHandlerPayload,
-  ): Promise<MarginActionHandlerPayload> {
+  public async send(actionPayload: MarginActionHandlerPayload): Promise<void> {
     this.queueService.publish<LtvLimitApproachingPayload>(
       LTV_LIMIT_APPROACHING_TOPIC,
       {
@@ -40,13 +38,9 @@ export class MarginCallInDangerHandlerService {
         conflictPaths: ['userId'],
       },
     );
-
-    return actionPayload;
   }
 
-  public async reset(
-    actionPayload: MarginActionHandlerPayload,
-  ): Promise<MarginActionHandlerPayload> {
+  public async reset(actionPayload: MarginActionHandlerPayload): Promise<void> {
     await this.marginNotificationsRepository.upsert(
       {
         userId: actionPayload.userId,
@@ -58,7 +52,5 @@ export class MarginCallInDangerHandlerService {
         skipUpdateIfNoValuesChanged: true,
       },
     );
-
-    return actionPayload;
   }
 }

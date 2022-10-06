@@ -12,7 +12,7 @@ export class MarginActionHandlersUtilService {
 
   handlers: Record<
     MarginAction,
-    (ltv: MarginActionHandlerPayload) => Promise<MarginActionHandlerPayload>
+    (ltv: MarginActionHandlerPayload) => Promise<void>
   > = {
     [MarginAction.send_margin_call_in_danger_notification]:
       this.marginCallInDangerService.send.bind(this.marginCallInDangerService),
@@ -34,12 +34,8 @@ export class MarginActionHandlersUtilService {
     actions: MarginAction[],
     payload: MarginActionHandlerPayload,
   ): Promise<void> {
-    let latestMarginActionPayload = payload;
-
     for (const action of actions) {
-      latestMarginActionPayload = await this.handlers[action](
-        latestMarginActionPayload,
-      );
+      await this.handlers[action](payload);
     }
   }
 }

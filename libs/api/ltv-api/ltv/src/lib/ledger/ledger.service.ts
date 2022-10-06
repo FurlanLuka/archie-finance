@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { LedgerAccount } from './ledger_account.entity';
 import { DataSource, Repository } from 'typeorm';
 import { BigNumber } from 'bignumber.js';
-import { DateTime } from 'luxon';
 
 @Injectable()
 export class LedgerService {
@@ -52,10 +51,7 @@ export class LedgerService {
             return;
           }
 
-          if (
-            DateTime.fromISO(ledgerAccount.calculatedAt) >
-            DateTime.fromISO(ledgerAccountData.calculatedAt)
-          ) {
+          if (ledgerAccount.calculatedAt > ledgerAccountData.calculatedAt) {
             return;
           }
 

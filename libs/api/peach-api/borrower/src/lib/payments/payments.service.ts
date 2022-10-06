@@ -168,13 +168,14 @@ export class PaymentsService {
     );
   }
 
-  public async handleCollateralLiquidationEvent({
+  public async handleLedgerAccountUpdatedEvent({
     userId,
     action,
   }: LedgerAccountUpdatedPayload): Promise<void> {
-    if (action.type !== LedgerActionType.LIQUIDATION) {
+    if (action?.type !== LedgerActionType.liquidation) {
       return;
     }
+    const liquidation = action.liquidation!;
 
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
@@ -204,8 +205,8 @@ export class PaymentsService {
     await this.peachApiService.tryCreatingOneTimePaymentTransaction(
       borrower,
       liquidationInstrumentId,
-      Number(action.liquidation.usdAmount),
-      action.liquidation.id,
+      Number(liquidation.usdAmount),
+      liquidation.id,
       PeachOneTimePaymentStatus.succeeded,
     );
 
@@ -220,9 +221,9 @@ export class PaymentsService {
         userId: userId,
         paymentDetails: {
           type: PaymentType.liquidation,
-          amount: action.liquidation.usdAmount,
+          amount: liquidation.usdAmount,
           asset: 'USD',
-          id: action.liquidation.id,
+          id: liquidation.id,
         },
       },
     );
