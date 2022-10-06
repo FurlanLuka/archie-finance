@@ -69,7 +69,11 @@ export const CollateralScreen: FC = () => {
               <Badge statusColor={LTVColor[ltvData.status]}>{LTVText[ltvData.status]}</Badge>
             </div>
           </div>
-          <CollateralInfo collateral={getCollateralValueResponse.data} assetLimits={creditLineData.assetLimits} />
+          <CollateralInfo
+            collateral={getCollateralValueResponse.data}
+            assetLimits={creditLineData.assetLimits}
+            ltvStatus={ltvData.status}
+          />
         </>
       );
     }

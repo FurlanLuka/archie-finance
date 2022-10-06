@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
-export const CollateralReceivedModalStyled = styled.div`
+export const CollateralReceivedStyled = styled.div`
   display: flex;
   gap: 2rem;
 
@@ -24,12 +24,20 @@ export const CollateralReceivedModalStyled = styled.div`
   .content {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    align-items: flex-start;
     width: 86%;
 
     @media (max-width: ${breakpoints.screenSM}) {
       width: 100%;
     }
+  }
+
+  .modal-title {
+    margin-bottom: 0.5rem;
+  }
+
+  .modal-text {
+    margin-bottom: 1rem;
   }
 
   button {
