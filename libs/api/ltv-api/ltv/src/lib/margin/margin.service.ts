@@ -45,7 +45,7 @@ export class MarginService {
 
     const pendingLiquidatedCreditUtilization = liquidations.reduce(
       (pendingValue, liquidation) => {
-        return !liquidation.isCreditBalanceUpdated
+        return !liquidation.isCreditUtilizationUpdated
           ? pendingValue - liquidation.amount
           : pendingValue;
       },
@@ -87,7 +87,7 @@ export class MarginService {
         id: liquidationId,
       },
       {
-        isCreditBalanceUpdated: true,
+        isCreditUtilizationUpdated: true,
       },
     );
   }
@@ -97,15 +97,14 @@ export class MarginService {
     ltv: number,
     ltvMeta: LtvMeta,
   ): Promise<void> {
-    const activeMarginCall: MarginCall | null =
-      await this.marginCallsRepository.findOne({
-        where: {
-          userId,
-        },
-        relations: {
-          liquidation: true,
-        },
-      });
+    const activeMarginCall: MarginCall | null = await this.marginCallsRepository
+      .createQueryBuilder('marginCall')
+      .leftJoinAndSelect('marginCall.liquidation', 'liquidation')
+      .where({
+        userId,
+      })
+      .getOne();
+
     const lastMarginCheck: MarginCheck | null =
       await this.marginCheckRepository.findOneBy({
         userId,

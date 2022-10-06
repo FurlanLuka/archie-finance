@@ -41,7 +41,7 @@ export class MarginActionsCheckUtilService {
 
     if (activeMarginCall !== null && activeMarginCall.liquidation !== null) {
       if (
-        activeMarginCall.liquidation.isCreditBalanceUpdated &&
+        activeMarginCall.liquidation.isCreditUtilizationUpdated &&
         activeMarginCall.liquidation.isLedgerValueUpdated
       ) {
         return [MarginAction.complete_margin_call];

@@ -13,7 +13,7 @@ import { MarginCall } from './margin_calls.entity';
 @Entity({
   name: 'margin_call_liquidation',
 })
-@Index(['isCollateralUpdated', 'isCreditBalanceUpdated', 'marginCall'])
+@Index(['isLedgerValueUpdated', 'isCreditUtilizationUpdated', 'marginCall'])
 export class Liquidation {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -22,12 +22,12 @@ export class Liquidation {
   isLedgerValueUpdated: boolean;
 
   @Column({ type: 'boolean', default: false, nullable: false })
-  isCreditBalanceUpdated: boolean;
+  isCreditUtilizationUpdated: boolean;
 
   @Column('float', { nullable: false })
   amount: number;
 
-  @OneToOne((_) => MarginCall, (marginCall) => marginCall.uuid, {
+  @OneToOne((_) => MarginCall, (marginCall) => marginCall.liquidation, {
     nullable: false,
   })
   @JoinColumn()

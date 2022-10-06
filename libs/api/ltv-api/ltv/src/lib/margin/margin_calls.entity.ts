@@ -23,7 +23,7 @@ export class MarginCall {
   @Column('varchar')
   userId: string;
 
-  @OneToOne((_) => Liquidation, (liquidation) => liquidation.id, {
+  @OneToOne((_) => Liquidation, (liquidation) => liquidation.marginCall, {
     nullable: true,
   })
   liquidation: Liquidation | null;
