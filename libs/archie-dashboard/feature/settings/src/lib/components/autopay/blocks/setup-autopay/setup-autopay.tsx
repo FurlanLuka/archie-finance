@@ -52,8 +52,8 @@ export const SetupAutopay: FC<AutopayModalProps> = ({ accounts, onSuccess }) => 
   return (
     <SetupAutopayStyled>
       <TitleS className="title">{t('autopay_modal.title')}</TitleS>
-      <BodyM weight={600}>Payments are automatically scheduled on each period's due date.</BodyM>
-      <BodyM>Payment will be the full statement balance of each period.</BodyM>
+      <BodyM weight={600}>{t('autopay_modal.schedule_text')}</BodyM>
+      <BodyM>{t('autopay_modal.balance_text')}</BodyM>
       <div className="divider" />
       <BodyM className="select-label" weight={700}>
         {t('autopay_modal.select.label')}
@@ -84,7 +84,7 @@ export const SetupAutopay: FC<AutopayModalProps> = ({ accounts, onSuccess }) => 
         />
       </div>
       <ButtonPrimary
-        disabled={!canSubmit}
+        isDisabled={!canSubmit}
         isLoading={setAutopayMutation.state === RequestState.LOADING}
         onClick={() => {
           if (canSubmit) {

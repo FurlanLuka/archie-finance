@@ -29,8 +29,8 @@ export const AutopayRemoveModal: FC<AutopayRemoveModalProps> = ({ close }) => {
 
   return (
     <AutopayRemoveStyled>
-      <TitleS className="title">{t('autopay_modal.remove.title')}</TitleS>
-      <BodyM>{t('autopay_modal.remove.body')}</BodyM>
+      <TitleS>{t('autopay_modal.remove.title')}</TitleS>
+      <BodyM className="text-body">{t('autopay_modal.remove.body')}</BodyM>
       <ButtonPrimary
         onClick={handleConfirmClick}
         isLoading={removeAutopayMutation.state === RequestState.LOADING}

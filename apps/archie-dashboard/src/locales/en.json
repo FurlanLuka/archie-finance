@@ -334,6 +334,8 @@
   },
   "autopay_modal": {
     "title": "Manage Autopay",
+    "schedule_text": "Payments are automatically scheduled on each period's due date.",
+    "balance_text": "Payment will be the full statement balance of each period.",
     "select": {
       "empty": "Select payment method",
       "label": "Payment method"
