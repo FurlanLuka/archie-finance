@@ -41,6 +41,7 @@ export class MarginCallCompletedPayload {
 
 export class MarginCallStartedPayload {
   userId: string;
+  startedAt: string;
   ltv: number;
   priceForMarginCall: number;
   priceForPartialCollateralSale: number;

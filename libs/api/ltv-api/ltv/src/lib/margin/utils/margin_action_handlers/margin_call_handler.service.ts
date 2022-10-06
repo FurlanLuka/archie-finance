@@ -32,7 +32,7 @@ export class MarginCallHandlerService {
   public async activate(
     actionPayload: MarginActionHandlerPayload,
   ): Promise<void> {
-    await this.marginCallRepository.insert({
+    const marginCall: MarginCall = await this.marginCallRepository.save({
       userId: actionPayload.userId,
     });
 
@@ -40,6 +40,7 @@ export class MarginCallHandlerService {
       MARGIN_CALL_STARTED_TOPIC,
       {
         userId: actionPayload.userId,
+        startedAt: marginCall.createdAt.toISOString(),
         ltv: actionPayload.ltv,
         ...this.marginCallPriceFactory.getMarginCallPrices(
           actionPayload.ltvMeta,
@@ -150,12 +151,14 @@ export class MarginCallHandlerService {
   }
 
   private calculateAmountToReachLtv(
-    loanedBalance: number,
-    collateralBalance: number,
+    creditUtilization: number,
+    ledgerValue: number,
     targetLtv: number,
   ): number {
     const ltv: number = targetLtv / 100;
 
-    return (loanedBalance - ltv * collateralBalance) / (1 - ltv);
+    const amount = (creditUtilization - ltv * ledgerValue) / (1 - ltv);
+
+    return Math.min(amount, ledgerValue);
   }
 }
