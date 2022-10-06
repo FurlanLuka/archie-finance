@@ -22,54 +22,6 @@
       "@archie-microservices/api/utils/redis": [
         "libs/api/utils/redis/src/index.ts"
       ],
-      "@archie/api/asset-price-api/asset-price": [
-        "libs/api/asset-price-api/asset-price/src/index.ts"
-      ],
-      "@archie/api/asset-price-api/coingecko": [
-        "libs/api/asset-price-api/coingecko/src/index.ts"
-      ],
-      "@archie/api/asset-price-api/constants": [
-        "libs/api/asset-price-api/constants/src/index.ts"
-      ],
-      "@archie/api/asset-price-api/data-transfer-objects": [
-        "libs/api/asset-price-api/data-transfer-objects/src/index.ts"
-      ],
-      "@archie/api/asset-price-api/test-data": [
-        "libs/api/asset-price-api/test-data/src/index.ts"
-      ],
-      "@archie/api/collateral-api/asset-information": [
-        "libs/api/collateral-api/asset-information/src/index.ts"
-      ],
-      "@archie/api/collateral-api/constants": [
-        "libs/api/collateral-api/constants/src/index.ts"
-      ],
-      "@archie/api/collateral-api/data-transfer-objects": [
-        "libs/api/collateral-api/data-transfer-objects/src/index.ts"
-      ],
-      "@archie/api/collateral-api/deposit-address": [
-        "libs/api/collateral-api/deposit-address/src/index.ts"
-      ],
-      "@archie/api/collateral-api/fireblocks": [
-        "libs/api/collateral-api/fireblocks/src/index.ts"
-      ],
-      "@archie/api/collateral-api/fireblocks-webhook": [
-        "libs/api/collateral-api/fireblocks-webhook/src/index.ts"
-      ],
-      "@archie/api/collateral-api/omnibus-vault-account": [
-        "libs/api/collateral-api/omnibus-vault-account/src/index.ts"
-      ],
-      "@archie/api/collateral-api/test-data": [
-        "libs/api/collateral-api/test-data/src/index.ts"
-      ],
-      "@archie/api/collateral-api/user-vault-account": [
-        "libs/api/collateral-api/user-vault-account/src/index.ts"
-      ],
-      "@archie/api/credit-api/collateral": [
-        "libs/api/credit-api/collateral/src/index.ts"
-      ],
-      "@archie/api/credit-api/collateral-withdrawal": [
-        "libs/api/credit-api/collateral-withdrawal/src/index.ts"
-      ],
       "@archie/api/credit-api/constants": [
         "libs/api/credit-api/constants/src/index.ts"
       ],
@@ -82,18 +34,6 @@
       "@archie/api/credit-api/rize": ["libs/api/credit-api/rize/src/index.ts"],
       "@archie/api/credit-api/test-data": [
         "libs/api/credit-api/test-data/src/index.ts"
-      ],
-      "@archie/api/credit-limit-api/constants": [
-        "libs/api/credit-limit-api/constants/src/index.ts"
-      ],
-      "@archie/api/credit-limit-api/credit-limit": [
-        "libs/api/credit-limit-api/credit-limit/src/index.ts"
-      ],
-      "@archie/api/credit-limit-api/data-transfer-objects": [
-        "libs/api/credit-limit-api/data-transfer-objects/src/index.ts"
-      ],
-      "@archie/api/credit-limit-api/test-data": [
-        "libs/api/credit-limit-api/test-data/src/index.ts"
       ],
       "@archie/api/credit-line-api/constants": [
         "libs/api/credit-line-api/constants/src/index.ts"
