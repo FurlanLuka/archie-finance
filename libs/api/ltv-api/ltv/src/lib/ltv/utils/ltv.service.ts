@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LtvStatus } from '../ltv/ltv.dto';
+import { LtvStatus } from '../ltv.dto';
 import { LTV_MARGIN_CALL_LIMIT } from '@archie/api/margin-api/constants';
 
 @Injectable()

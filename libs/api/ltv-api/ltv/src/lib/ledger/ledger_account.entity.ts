@@ -6,13 +6,12 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { BigNumberTrimEndingZerosTransformer } from '@archie/api/utils/typeorm-transformers';
 
 @Entity({
-  name: 'ltv_collateral',
+  name: 'ledger_account',
 })
-@Index(['userId', 'asset'], { unique: true })
-export class LtvCollateral {
+@Index(['userId', 'assetId'], { unique: true })
+export class LedgerAccount {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -21,15 +20,15 @@ export class LtvCollateral {
   userId: string;
 
   @Column('varchar', { nullable: false })
-  asset: string;
+  assetId: string;
 
-  @Column('numeric', {
-    nullable: false,
-    precision: 28,
-    scale: 18,
-    transformer: new BigNumberTrimEndingZerosTransformer(),
+  @Column('float', {
+    comment: 'Ledger account value in USD',
   })
-  amount: string;
+  value: number;
+
+  @Column('numeric')
+  calculatedAt: number;
 
   @CreateDateColumn({ select: false })
   createdAt: Date;

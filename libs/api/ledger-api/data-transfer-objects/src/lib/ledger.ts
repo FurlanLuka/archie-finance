@@ -20,6 +20,26 @@ export interface Ledger {
 export interface LedgerAccountUpdatedPayload {
   userId: string;
   ledgerAccounts: LedgerAccountData[];
+  action: LedgerAccountAction;
+}
+
+export enum LedgerActionType {
+  deposit = 'deposit',
+  withdrawal = 'withdrawal',
+  liquidation = 'liquidation',
+  accountCreated = 'accountCreated',
+  assetPriceUpdate = 'assetPriceUpdate',
+  fee = 'fee',
+  withdrawalFailed = 'withdrawalFailed',
+  liquidationFailed = 'liquidationFailed',
+}
+
+export interface LedgerAccountAction {
+  type: LedgerActionType;
+  liquidation?: {
+    id: string;
+    usdAmount: string;
+  };
 }
 
 export interface InitiateLedgerRecalculationCommandPayload {

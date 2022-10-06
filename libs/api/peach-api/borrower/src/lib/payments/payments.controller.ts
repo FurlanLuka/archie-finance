@@ -39,6 +39,8 @@ import {
   InternalCollateralTransactionCompletedPayload,
   InternalCollateralTransactionCreatedPayload,
 } from '@archie/api/collateral-api/data-transfer-objects';
+import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
+import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects';
 
 @Controller('v1/loan_payments')
 export class PaymentsController {
@@ -109,6 +111,14 @@ export class PaymentsQueueController {
     payload: InternalCollateralTransactionCompletedPayload,
   ): Promise<void> {
     await this.paymentsService.handleInternalTransactionCompletedEvent(payload);
+  }
+
+  @Subscribe(
+    LEDGER_ACCOUNT_UPDATED_TOPIC,
+    PaymentsQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async ledgerUpdated(payload: LedgerAccountUpdatedPayload): Promise<void> {
+    return this.paymentsService.handleLedgerAccountUpdatedEvent(payload);
   }
 
   @Subscribe(

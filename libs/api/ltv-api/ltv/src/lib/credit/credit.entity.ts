@@ -11,7 +11,7 @@ import {
   name: 'ltv_credit',
 })
 @Index(['userId', 'calculatedAt'])
-export class LtvCredit {
+export class Credit {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
