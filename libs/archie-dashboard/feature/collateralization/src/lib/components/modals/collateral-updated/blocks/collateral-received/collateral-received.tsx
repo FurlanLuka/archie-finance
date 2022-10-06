@@ -9,8 +9,8 @@ import { CollateralReceivedStyled } from './collateral-received.styled';
 
 interface CollateralReceivedProps {
   onConfirm: () => void;
-  creditValue: number;
-  collateralValue: number;
+  creditValue: string;
+  collateralValue: string;
 }
 
 export const CollateralReceived: FC<CollateralReceivedProps> = ({ onConfirm, creditValue, collateralValue }) => {
@@ -25,8 +25,8 @@ export const CollateralReceived: FC<CollateralReceivedProps> = ({ onConfirm, cre
         <TitleS className="modal-title">{t('dashboard_collateralization.collateral_received_modal.title')}</TitleS>
         <BodyM className="modal-text">
           {t('dashboard_collateralization.collateral_received_modal.text', {
-            collateralValue: collateralValue.toFixed(2),
-            creditValue: creditValue.toFixed(2),
+            collateralValue: collateralValue,
+            creditValue: creditValue,
           })}
         </BodyM>
         <ButtonPrimary onClick={onConfirm}>{t('btn_ok')}</ButtonPrimary>

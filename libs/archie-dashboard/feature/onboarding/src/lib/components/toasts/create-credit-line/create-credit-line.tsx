@@ -7,7 +7,7 @@ import { Toast, ToastList, ButtonLight, BodyM } from '@archie-webapps/shared/ui/
 
 interface CreateCreditLineProps {
   collateralText: string;
-  creditValue: number;
+  creditValue: string;
 }
 
 export const CreateCreditLine: FC<CreateCreditLineProps> = ({ collateralText, creditValue }) => {
@@ -26,7 +26,7 @@ export const CreateCreditLine: FC<CreateCreditLineProps> = ({ collateralText, cr
         <BodyM weight={700}>
           {t('collateral_credit_line_popup.text', {
             collateral: collateralText,
-            creditValue: creditValue.toFixed(2),
+            creditValue: creditValue,
           })}
         </BodyM>
         <div className="btn-group">

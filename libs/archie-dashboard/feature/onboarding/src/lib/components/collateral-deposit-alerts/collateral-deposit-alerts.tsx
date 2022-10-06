@@ -1,11 +1,7 @@
 import { FC, useMemo, useState } from 'react';
 
-import { usePollCollateralDeposit } from '@archie-webapps/archie-dashboard/hooks';
-import {
-  calculateCollateralCreditValue,
-  calculateCollateralTotalValue,
-  formatEntireCollateral,
-} from '@archie-webapps/archie-dashboard/utils';
+import { usePollLedgerChanges } from '@archie-webapps/archie-dashboard/hooks';
+import { calculateLedgerCreditValue, formatLedgerAccountsToString } from '@archie-webapps/archie-dashboard/utils';
 
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';
@@ -17,23 +13,25 @@ import { getCollateralDepositState, CollateralDepositState } from './collateral-
 export const CollateralDepositAlerts: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const onCollateralAmountChange = () => {
+  const onLedgerChange = () => {
     setIsModalOpen(true);
   };
 
-  const { currentCollateral, startPolling } = usePollCollateralDeposit({
-    onCollateralAmountChange,
-    initialCollateral: [], // we don't have any yet
+  const { currentLedger, startPolling } = usePollLedgerChanges({
+    onLedgerChange,
+    initialLedger: {
+      value: '0',
+      accounts: [],
+    }, // we don't have any yet
   });
 
-  const collateralText = useMemo(() => formatEntireCollateral(currentCollateral), [currentCollateral]);
-  const collateralCreditValue = useMemo(() => calculateCollateralCreditValue(currentCollateral), [currentCollateral]);
-  const collateralTotalValue = useMemo(() => calculateCollateralTotalValue(currentCollateral), [currentCollateral]);
+  const collateralText = useMemo(() => formatLedgerAccountsToString(currentLedger.accounts), [currentLedger]);
+  const collateralCreditValue = useMemo(() => calculateLedgerCreditValue(currentLedger), [currentLedger]);
 
   const currentCollateralDepositState = getCollateralDepositState(
     isModalOpen,
     collateralCreditValue,
-    currentCollateral,
+    currentLedger.accounts,
   );
 
   if (currentCollateralDepositState === CollateralDepositState.COLLATERAL_RECEIVED_MODAL) {
@@ -46,7 +44,7 @@ export const CollateralDepositAlerts: FC = () => {
         onConfirm={() => {
           setIsModalOpen(false);
         }}
-        collateralValue={collateralTotalValue}
+        ledgerValue={currentLedger.value}
         creditValue={collateralCreditValue}
       />
     );

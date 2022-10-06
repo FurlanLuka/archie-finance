@@ -2,21 +2,18 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, Navigate } from 'react-router-dom';
 
-import { CollateralValueChart } from '@archie-webapps/archie-dashboard/components';
-import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
-import { TotalCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-total-value';
-import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-total-value';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
+import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import { ButtonOutline, Card, Skeleton, TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
-import { theme } from '@archie-webapps/shared/ui/theme';
 
 export const CollateralValue: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = useGetCollateralTotalValue();
+  const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
 
-  if (getCollateralTotalValueResponse.state === RequestState.LOADING) {
+  if (getLedgerResponse.state === RequestState.LOADING) {
     return (
       <Card>
         <Skeleton />
@@ -24,13 +21,11 @@ export const CollateralValue: FC = () => {
     );
   }
 
-  if (getCollateralTotalValueResponse.state === RequestState.ERROR) {
+  if (getLedgerResponse.state === RequestState.ERROR) {
     return <Navigate to="/error" state={{ prevPath: '/home' }} />;
   }
 
-  if (getCollateralTotalValueResponse.state === RequestState.SUCCESS) {
-    const collateralTotalValue = getCollateralTotalValueResponse.data.value;
-
+  if (getLedgerResponse.state === RequestState.SUCCESS) {
     return (
       <Card column alignItems="flex-start" justifyContent="space-between" padding="1.5rem">
         <div>
@@ -38,7 +33,7 @@ export const CollateralValue: FC = () => {
             {t('collateral_value_card.title')}
           </BodyM>
           <div className="text-group card-info">
-            <TitleM weight={400}>${getFormattedValue(collateralTotalValue)}</TitleM>
+            <TitleM weight={400}>${getLedgerResponse.data.value}</TitleM>
             {/* <BodyM weight={500} color={theme.textSuccess}>
             ↑
           </BodyM> */}

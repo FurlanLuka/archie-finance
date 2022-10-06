@@ -2,16 +2,15 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { calculateCollateralTotalValue, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
-import { LTVText, LTVColor } from '@archie-webapps/shared/constants';
-import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
-import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
-import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
-import { useGetCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit-line';
-import { CreditLineResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit-line';
-import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { MarginCallAlert } from '@archie-webapps/archie-dashboard/components';
+import { LTVText, LTVColor } from '@archie-webapps/shared/constants';
+import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
+import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
+import { CreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/api/get-credit-line';
+import { useGetCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/hooks/use-get-credit-line';
+import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
+import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import { Card, Loader, Badge, TitleM, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -19,45 +18,45 @@ import { CollateralInfo } from '../components/collateral-info/collateral-info';
 
 import { CollateralStyled } from './collateral.styled';
 
+
 export const CollateralScreen: FC = () => {
   const { t } = useTranslation();
 
-  const getCollateralValueResponse: QueryResponse<CollateralValue[]> = useGetCollateralValue();
+  const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
   const getLTVResponse: QueryResponse<LTV> = useGetLTV();
-  const getCreditLine: QueryResponse<CreditLineResponse> = useGetCreditLine();
+  const getCreditLineResponse: QueryResponse<CreditLine> = useGetCreditLine();
 
   const getContent = () => {
     // TODO: Think of optimizing these
     if (
-      getCollateralValueResponse.state === RequestState.LOADING ||
+      getLedgerResponse.state === RequestState.LOADING ||
       getLTVResponse.state === RequestState.LOADING ||
-      getCreditLine.state === RequestState.LOADING
+      getCreditLineResponse.state === RequestState.LOADING
     ) {
       return <Loader />;
     }
 
     if (
-      getCollateralValueResponse.state === RequestState.ERROR ||
+      getLedgerResponse.state === RequestState.ERROR ||
       getLTVResponse.state === RequestState.ERROR ||
-      getCreditLine.state === RequestState.ERROR
+      getCreditLineResponse.state === RequestState.ERROR
     ) {
       return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
     }
 
     if (
-      getCollateralValueResponse.state === RequestState.SUCCESS &&
+      getLedgerResponse.state === RequestState.SUCCESS &&
       getLTVResponse.state === RequestState.SUCCESS &&
-      getCreditLine.state === RequestState.SUCCESS
+      getCreditLineResponse.state === RequestState.SUCCESS
     ) {
       const ltvData = getLTVResponse.data;
-      const creditLineData = getCreditLine.data;
 
       return (
         <>
           <div className="title-group">
             <TitleS className="title">{t('dashboard_collateral.title')}</TitleS>
             <TitleM weight={400} className="total">
-              ${getFormattedValue(calculateCollateralTotalValue(getCollateralValueResponse.data))}
+              ${getLedgerResponse.data.value}
             </TitleM>
             <div className="ltv">
               <div className="ltv-group">
@@ -70,8 +69,8 @@ export const CollateralScreen: FC = () => {
             </div>
           </div>
           <CollateralInfo
-            collateral={getCollateralValueResponse.data}
-            assetLimits={creditLineData.assetLimits}
+            ledger={getLedgerResponse.data}
+            creditLine={getCreditLineResponse.data}
             ltvStatus={ltvData.status}
           />
         </>

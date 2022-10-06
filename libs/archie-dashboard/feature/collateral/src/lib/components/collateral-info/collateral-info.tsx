@@ -1,10 +1,9 @@
+import BigNumber from 'bignumber.js';
 import { FC, useMemo } from 'react';
 
-import { calculateCollateralTotalValue } from '@archie-webapps/archie-dashboard/utils';
-import { getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAssets, CollateralCurrency, LTVStatus } from '@archie-webapps/shared/constants';
-import { AssetLimits } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit-line';
-import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
+import { CreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/api/get-credit-line';
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
 import { Table } from '@archie-webapps/shared/ui/design-system';
 
 import { tableColumns } from '../../fixtures/table-fixture';
@@ -28,39 +27,41 @@ type AssetMap = Record<
 >;
 
 interface CollateralInfoProps {
-  collateral: CollateralValue[];
-  assetLimits: AssetLimits[];
+  ledger: Ledger;
+  creditLine: CreditLine;
   ltvStatus: LTVStatus;
 }
 
-export const CollateralInfo: FC<CollateralInfoProps> = ({ collateral, assetLimits, ltvStatus }) => {
-  const totalValue = calculateCollateralTotalValue(collateral);
+export const CollateralInfo: FC<CollateralInfoProps> = ({ ledger, creditLine, ltvStatus }) => {
   const columns = useMemo(() => tableColumns, []);
   const isInMarginCall = ltvStatus === LTVStatus.MARGIN_CALL;
 
   const assetMap: AssetMap = useMemo(() => {
-    return collateral.reduce(
-      (map, item) => ({
-        ...map,
-        [item.asset]: {
-          collateral_asset: item.asset,
-          balance: `$${getFormattedValue(item.price)}`,
-          holdings: `${item.assetAmount} ${item.asset}`,
-          credit_limit: `$${getFormattedValue(assetLimits.find((i) => i.asset === item.asset)?.limit ?? 0)}`,
+    return ledger.accounts.reduce((previousValue, ledgerAccount) => {
+      const creditLimitAssetAllocation = creditLine.creditLimitAssetAllocation.find((item) => {
+        item.assetId = ledgerAccount.assetId;
+      });
+
+      return {
+        ...previousValue,
+        [ledgerAccount.assetId]: {
+          collateral_asset: ledgerAccount.assetId,
+          balance: `$${ledgerAccount.accountValue}`,
+          holdings: `${ledgerAccount.assetAmount} ${ledgerAccount.assetId}`,
+          credit_limit: `${creditLimitAssetAllocation?.allocationPercentage ?? 0}%`,
           change: {
-            collateral_asset: item.asset,
+            collateral_asset: ledgerAccount.assetId,
           },
-          allocation: (item.price / totalValue) * 100,
+          allocation: BigNumber(ledgerAccount.accountValue).dividedBy(ledger.value).multipliedBy(100),
           actions: {
-            collateral_asset: item.asset,
+            collateral_asset: ledgerAccount.assetId,
             isHolding: true,
             isInMarginCall,
           },
         },
-      }),
-      {} as AssetMap,
-    );
-  }, [collateral, totalValue]);
+      };
+    }, {} as AssetMap);
+  }, [creditLine, ledger]);
 
   const tableData = useMemo(() => {
     const notAddedAssets = Object.values(CollateralAssets).filter((asset) => assetMap[asset.id] === undefined);

@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -10,7 +11,7 @@ import { NotEnoughCollateralModalStyled } from './not-enough-collateral.styled';
 
 interface NotEnoughCollateralModalProps {
   onClose: () => void;
-  creditValue: number;
+  creditValue: string;
 }
 
 export const NotEnoughCollateralModal: FC<NotEnoughCollateralModalProps> = ({ onClose, creditValue }) => {
@@ -26,9 +27,12 @@ export const NotEnoughCollateralModal: FC<NotEnoughCollateralModalProps> = ({ on
           <TitleS className="modal-title">{t('not_enough_collateral_modal.title')}</TitleS>
           <BodyM className="modal-text">
             {t('not_enough_collateral_modal.text', {
-              creditValue: creditValue.toFixed(2),
+              creditValue: creditValue,
               minValue: MIN_LINE_OF_CREDIT,
-              difference: (MIN_LINE_OF_CREDIT - creditValue).toFixed(2),
+              difference: BigNumber(MIN_LINE_OF_CREDIT)
+                .minus(creditValue)
+                .decimalPlaces(2, BigNumber.ROUND_DOWN)
+                .toString(),
             })}
           </BodyM>
           <ButtonPrimary onClick={onClose}>{t('not_enough_collateral_modal.btn')}</ButtonPrimary>

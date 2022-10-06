@@ -6,15 +6,16 @@ import { Navigate } from 'react-router-dom';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
-import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
 import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { calculateCollateralTotalValue, calculateCollateralMinValue } from '@archie-webapps/archie-dashboard/utils';
+import { calculateCollateralMinValue } from '@archie-webapps/archie-dashboard/utils';
 import { Loader, ButtonOutline, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
 
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
 
 import { CollateralizationForm } from './blocks/collaterization-form/collaterization-form';
+import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+import BigNumber from 'bignumber.js';
 
 interface CureMarginCallProps {
   selectedAsset: string;
@@ -25,14 +26,14 @@ export const CureMarginCall: FC<CureMarginCallProps> = ({ selectedAsset }) => {
 
   const assetInfo = CollateralAssets[selectedAsset];
 
-  const getCollateralValueResponse = useGetCollateralValue();
+  const getLedgerResponse = useGetLedger();
   const getAssetPriceResponse = useGetAssetPrice();
   const getCreditQueryResponse = useGetCredit();
   const getLTVResponse = useGetLTV();
 
   // TODO: Definitely think of optimizing these
   if (
-    getCollateralValueResponse.state === RequestState.LOADING ||
+    getLedgerResponse.state === RequestState.LOADING ||
     getAssetPriceResponse.state === RequestState.LOADING ||
     getCreditQueryResponse.state === RequestState.LOADING ||
     getLTVResponse.state === RequestState.LOADING
@@ -41,7 +42,7 @@ export const CureMarginCall: FC<CureMarginCallProps> = ({ selectedAsset }) => {
   }
 
   if (
-    getCollateralValueResponse.state === RequestState.ERROR ||
+    getLedgerResponse.state === RequestState.ERROR ||
     getAssetPriceResponse.state === RequestState.ERROR ||
     getCreditQueryResponse.state === RequestState.ERROR ||
     getLTVResponse.state === RequestState.ERROR
@@ -50,18 +51,20 @@ export const CureMarginCall: FC<CureMarginCallProps> = ({ selectedAsset }) => {
   }
 
   if (
-    getCollateralValueResponse.state === RequestState.SUCCESS &&
+    getLedgerResponse.state === RequestState.SUCCESS &&
     getAssetPriceResponse.state === RequestState.SUCCESS &&
     getCreditQueryResponse.state === RequestState.SUCCESS &&
     getLTVResponse.state === RequestState.SUCCESS
   ) {
-    const initialCollateral = getCollateralValueResponse.data;
+    const ledger = getLedgerResponse.data;
     const assetPrice = getAssetPriceResponse.data.find((p) => p.asset === assetInfo.id);
     const creditData = getCreditQueryResponse.data;
     const ltvData = getLTVResponse.data;
 
-    const collateralTotalValue = calculateCollateralTotalValue(initialCollateral);
-    const collateralMinValue = calculateCollateralMinValue(creditData.utilizationAmount, collateralTotalValue);
+    const collateralMinValue = calculateCollateralMinValue(
+      creditData.utilizationAmount,
+      BigNumber(ledger.value).toNumber(),
+    );
 
     if (!assetPrice) {
       return <Navigate to="/error" state={{ prevPath: '/collateral', description: "Couldn't fetch price" }} />;
@@ -69,7 +72,7 @@ export const CureMarginCall: FC<CureMarginCallProps> = ({ selectedAsset }) => {
 
     return (
       <>
-        <CollateralUpdatedModal initialCollateral={initialCollateral} />
+        <CollateralUpdatedModal initialLedger={ledger} />
         <TitleS className="title">{t('dashboard_collateralization.title', { selectedAsset })}</TitleS>
         <BodyL className="subtitle-margin-call">{t('dashboard_collateralization.subtitle_margin_call')}</BodyL>
         <CollateralizationForm

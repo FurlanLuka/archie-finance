@@ -1,10 +1,11 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
+import { BigNumber } from 'bignumber.js';
 
 import { MakePaymentModal } from '@archie-webapps/archie-dashboard/feature/make-payment';
 import { LoanToValueChart } from '@archie-webapps/archie-dashboard/components';
-import { canUserSchedulePayment, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
+import { canUserSchedulePayment } from '@archie-webapps/archie-dashboard/utils';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
@@ -52,7 +53,7 @@ export const AvailableCredit: FC = () => {
                 {t('available_credit_card.title_1')}
               </BodyM>
               <TitleM weight={400} className="card-info border-active">
-                ${getFormattedValue(creditData.utilizationAmount)}
+                ${BigNumber(creditData.utilizationAmount).decimalPlaces(2, BigNumber.ROUND_DOWN).toString()}
               </TitleM>
               <div className="btn-group">
                 <ButtonOutline
@@ -73,10 +74,12 @@ export const AvailableCredit: FC = () => {
                 {t('available_credit_card.title_2')}
               </BodyM>
               <TitleM weight={400} className="card-info border-default">
-                ${getFormattedValue(creditData.availableCredit)}
+                ${BigNumber(creditData.availableCredit).decimalPlaces(2, BigNumber.ROUND_DOWN).toString()}
               </TitleM>
               <BodyS color={theme.textSecondary} weight={500} className="card-text">
-                {t('available_credit_card.text', { lineOfCredit: getFormattedValue(creditData.totalCredit) })}
+                {t('available_credit_card.text', {
+                  lineOfCredit: BigNumber(creditData.totalCredit).decimalPlaces(2, BigNumber.ROUND_DOWN).toString(),
+                })}
               </BodyS>
             </div>
           </div>
