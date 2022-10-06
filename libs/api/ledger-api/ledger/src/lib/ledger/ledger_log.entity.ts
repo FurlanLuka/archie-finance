@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { BigNumberTrimEndingZerosTransformer } from '@archie/api/utils/typeorm-transformers';
+import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects';
 
 export enum LedgerAction {
   LEDGER_ACCOUNT_CREATED = 'LEDGER_ACCOUNT_CREATED',
@@ -35,14 +36,13 @@ export class LedgerLog {
   amount: string;
 
   @Column({
-    type: 'enum',
-    enum: LedgerAction,
+    type: 'varchar',
     nullable: false,
   })
   action: LedgerAction;
 
-  @Column('varchar', { nullable: true })
-  note: string;
+  @Column('varchar', { nullable: false })
+  actionType: LedgerActionType;
 
   @CreateDateColumn()
   createdAt: Date;

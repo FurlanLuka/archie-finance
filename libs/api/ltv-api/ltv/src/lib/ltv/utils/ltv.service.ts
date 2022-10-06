@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { LtvStatus } from '../ltv.dto';
-import { LTV_MARGIN_CALL_LIMIT } from '@archie/api/margin-api/constants';
+import { LTV_MARGIN_CALL_LIMIT } from '@archie/api/ltv-api/constants';
 
 @Injectable()
 export class LtvUtilService {

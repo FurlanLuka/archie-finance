@@ -5,14 +5,14 @@ export enum MarginCallStatus {
   completed = 'completed',
 }
 
-export class MarginCallsDto {
-  status: MarginCallStatus;
-  automaticLiquidationAt: string;
-  createdAt: string;
-}
-
 export class MarginCallQueryDto {
   @IsOptional()
   @IsEnum(MarginCallStatus)
   status: MarginCallStatus | null = null;
+}
+
+export class MarginCallsDto {
+  status: MarginCallStatus;
+  automaticLiquidationAt: string;
+  createdAt: string;
 }

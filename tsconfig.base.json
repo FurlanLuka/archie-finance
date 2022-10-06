@@ -159,15 +159,6 @@
       "@archie/api/mail-api/utils/email-data-factory": [
         "libs/api/mail-api/utils/email-data-factory/src/index.ts"
       ],
-      "@archie/api/margin-api/constants": [
-        "libs/api/margin-api/constants/src/index.ts"
-      ],
-      "@archie/api/margin-api/data-transfer-objects": [
-        "libs/api/margin-api/data-transfer-objects/src/index.ts"
-      ],
-      "@archie/api/margin-api/margin": [
-        "libs/api/margin-api/margin/src/index.ts"
-      ],
       "@archie/api/onboarding-api/constants": [
         "libs/api/onboarding-api/constants/src/index.ts"
       ],

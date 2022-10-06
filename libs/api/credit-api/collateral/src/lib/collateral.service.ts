@@ -32,7 +32,7 @@ import {
   CollateralDepositCompletedPayload,
   CollateralLiquidationInitiatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
-import { MarginCallCompletedPayload } from '@archie/api/margin-api/data-transfer-objects';
+import { MarginCallCompletedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 import { BigNumber } from 'bignumber.js';
 
 @Injectable()
@@ -174,48 +174,48 @@ export class CollateralService {
   }
 
   public async liquidateAssets(
-    liquidationAssets: MarginCallCompletedPayload,
+    _liquidationAssets: MarginCallCompletedPayload,
   ): Promise<void> {
-    // TODO: Do not handle same events multiple times + check that current collateral balance === balance ltv was calculated on
-    const queryRunner = this.dataSource.createQueryRunner();
-
-    await queryRunner.connect();
-    await queryRunner.startTransaction();
-
-    try {
-      await Promise.all(
-        liquidationAssets.liquidation.map(async (liquidation) => {
-          await this.collateralRepository.decrement(
-            {
-              userId: liquidationAssets.userId,
-              asset: liquidation.asset,
-            },
-            'amount',
-            liquidation.amount,
-          );
-        }),
-      );
-
-      await this.collateralRepository.delete({
-        userId: liquidationAssets.userId,
-        amount: '0',
-      });
-      await queryRunner.commitTransaction();
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-
-      throw error;
-    } finally {
-      await queryRunner.release();
-    }
-
-    this.queueService.publish<CollateralLiquidationInitiatedPayload>(
-      COLLATERAL_LIQUIDATION_INITIATED_TOPIC,
-      {
-        userId: liquidationAssets.userId,
-        collateral: liquidationAssets.liquidation,
-      },
-    );
+    // // TODO: Do not handle same events multiple times + check that current collateral balance === balance ltv was calculated on
+    // const queryRunner = this.dataSource.createQueryRunner();
+    //
+    // await queryRunner.connect();
+    // await queryRunner.startTransaction();
+    //
+    // try {
+    //   await Promise.all(
+    //     liquidationAssets.liquidation.map(async (liquidation) => {
+    //       await this.collateralRepository.decrement(
+    //         {
+    //           userId: liquidationAssets.userId,
+    //           asset: liquidation.asset,
+    //         },
+    //         'amount',
+    //         liquidation.amount,
+    //       );
+    //     }),
+    //   );
+    //
+    //   await this.collateralRepository.delete({
+    //     userId: liquidationAssets.userId,
+    //     amount: '0',
+    //   });
+    //   await queryRunner.commitTransaction();
+    // } catch (error) {
+    //   await queryRunner.rollbackTransaction();
+    //
+    //   throw error;
+    // } finally {
+    //   await queryRunner.release();
+    // }
+    //
+    // this.queueService.publish<CollateralLiquidationInitiatedPayload>(
+    //   COLLATERAL_LIQUIDATION_INITIATED_TOPIC,
+    //   {
+    //     userId: liquidationAssets.userId,
+    //     collateral: liquidationAssets.liquidation,
+    //   },
+    // );
   }
 
   public async getUserCollateral(

@@ -11,7 +11,6 @@
     "build:collateral-api": "nx run collateral-api:build",
     "build:credit-api": "nx run credit-api:build",
     "build:credit-limit-api": "nx run credit-limit-api:build",
-    "build:margin-api": "nx run margin-api:build",
     "build:ltv-api": "nx run ltv-api:build",
     "build:user-api": "nx run user-api:build",
     "build:onboarding-api": "nx run onboarding-api:build",

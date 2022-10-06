@@ -12,7 +12,10 @@ import {
 } from '@archie/test/integration';
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';
-import { Ledger } from '@archie/api/ledger-api/data-transfer-objects';
+import {
+  Ledger,
+  LedgerActionType,
+} from '@archie/api/ledger-api/data-transfer-objects';
 import { collateralDepositTransactionCompletedPayloadFactory } from '@archie/api/fireblocks-api/test-data';
 import { DepositQueueController } from '@archie/api/ledger-api/ledger';
 import { AssetPrices } from '@archie/api/ledger-api/assets';
@@ -157,6 +160,9 @@ describe('Ledger api deposit tests', () => {
               calculatedAt: expect.any(String),
             },
           ],
+          action: {
+            type: LedgerActionType.DEPOSIT,
+          },
         },
       );
     });
@@ -210,6 +216,9 @@ describe('Ledger api deposit tests', () => {
               calculatedAt: expect.any(String),
             },
           ],
+          action: {
+            type: LedgerActionType.DEPOSIT,
+          },
         },
       );
     });
