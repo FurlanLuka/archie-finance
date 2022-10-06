@@ -2,16 +2,16 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
+import { MarginCallAlert } from '@archie-webapps/archie-dashboard/components';
 import { calculateCollateralTotalValue, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { LTVText, LTVColor } from '@archie-webapps/shared/constants';
 import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
-import { useGetCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit-line';
-import { CreditLineResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit-line';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
+import { CreditLineResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit-line';
+import { useGetCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit-line';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { MarginCallAlert } from '@archie-webapps/archie-dashboard/components';
 import { Card, Loader, Badge, TitleM, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
