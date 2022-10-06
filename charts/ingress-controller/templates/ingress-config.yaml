@@ -214,7 +214,7 @@ spec:
                 port:
                   number: 80
           ## Credit line
-          - path: /v1/credit_lines
+          - path: /v2/credit_lines
             pathType: Prefix
             backend:
               service:
