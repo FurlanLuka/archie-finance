@@ -171,7 +171,6 @@ export class WithdrawService {
         {
           type: LedgerActionType.WITHDRAWAL,
         },
-        'Withdrawal decrement',
       );
 
       await queryRunner.commitTransaction();
@@ -297,7 +296,6 @@ export class WithdrawService {
           {
             type: LedgerActionType.FEE,
           },
-          'Network fee decrement',
         );
 
         await this.withdrawalRepository.update(
@@ -364,7 +362,6 @@ export class WithdrawService {
       {
         type: LedgerActionType.WITHDRAWAL_FAILURE,
       },
-      'Transaction failed increment',
     );
 
     await this.withdrawalRepository.update(

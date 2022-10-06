@@ -129,8 +129,6 @@ export class MarginCallHandlerService {
       actionPayload.userId,
     );
 
-    console.log('complete margin call1', marginCall, actionPayload.marginCall);
-
     if (
       marginCall === null ||
       actionPayload.marginCall === null ||

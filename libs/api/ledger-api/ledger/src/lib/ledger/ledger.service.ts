@@ -57,6 +57,7 @@ export class LedgerService {
       assetId: asset.id,
       amount,
     });
+    const ledgerActionType = LedgerActionType.DEPOSIT;
 
     this.queueService.publish<LedgerAccountUpdatedPayload>(
       LEDGER_ACCOUNT_UPDATED_TOPIC,
@@ -74,7 +75,7 @@ export class LedgerService {
           },
         ],
         action: {
-          type: LedgerActionType.DEPOSIT,
+          type: ledgerActionType,
         },
       },
     );
@@ -84,6 +85,7 @@ export class LedgerService {
       amount,
       assetId: asset.id,
       action: LedgerAction.LEDGER_ACCOUNT_CREATED,
+      actionType: ledgerActionType,
     });
 
     await this.ledgerUserRepository.save({
@@ -212,7 +214,6 @@ export class LedgerService {
     asset: AssetInformation,
     amount: string,
     action: LedgerAccountAction,
-    note?: string,
   ): Promise<void> {
     const decrementingAmount = BigNumber(amount).decimalPlaces(
       asset.decimalPlaces,
@@ -283,7 +284,7 @@ export class LedgerService {
       amount,
       assetId: asset.id,
       action: LedgerAction.LEDGER_ACCOUNT_DECREMENTED,
-      note,
+      actionType: action.type,
     });
   }
 
@@ -374,7 +375,6 @@ export class LedgerService {
     asset: AssetInformation,
     amount: string,
     action: LedgerAccountAction,
-    note?: string,
   ): Promise<void> {
     const incrementingAmount = BigNumber(amount).decimalPlaces(
       asset.decimalPlaces,
@@ -430,7 +430,7 @@ export class LedgerService {
       amount: incrementingAmount.toString(),
       assetId: asset.id,
       action: LedgerAction.LEDGER_ACCOUNT_INCREMENTED,
-      note,
+      actionType: action.type,
     });
   }
 }
