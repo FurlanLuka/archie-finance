@@ -24,6 +24,7 @@ import BigNumber from 'bignumber.js';
 import { initiateLedgerAssetLiquidationCommandPayloadFactory } from '@archie/api/ledger-api/test-data';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
 import { INITIATE_COLLATERAL_LIQUIDATION_COMMAND } from '@archie/api/fireblocks-api/constants';
+import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects';
 
 describe('Ledger api liquidation tests', () => {
   let app: INestApplication;
@@ -248,6 +249,13 @@ describe('Ledger api liquidation tests', () => {
               accountValue: newBitcoinAccountValue.toString(),
             },
           ],
+          action: {
+            type: LedgerActionType.LIQUIDATION,
+            liquidation: {
+              id: initiateLedgerAssetLiquidationCommandPayload.liquidationId,
+              usdAmount: initiateLedgerAssetLiquidationCommandPayload.amount,
+            },
+          },
         },
       );
 

@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { MarginCall } from '../../margin_calls.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -31,7 +31,7 @@ export class MarginCallHandlerService {
 
   public async activate(
     actionPayload: MarginActionHandlerPayload,
-  ): Promise<void> {
+  ): Promise<MarginActionHandlerPayload> {
     const marginCall: MarginCall = await this.marginCallRepository.save({
       userId: actionPayload.userId,
     });
@@ -47,21 +47,22 @@ export class MarginCallHandlerService {
         ),
       },
     );
+
+    return {
+      ...actionPayload,
+      marginCall: marginCall,
+    };
   }
 
   public async deactivate(
     actionPayload: MarginActionHandlerPayload,
-  ): Promise<void> {
+  ): Promise<MarginActionHandlerPayload> {
     const marginCall: MarginCall | null = await this.softDeleteMarginCall(
       actionPayload.userId,
     );
 
     if (marginCall === null) {
-      Logger.warn('UNEXPECTED: Margin call is not defined.', {
-        userId: actionPayload.userId,
-      });
-
-      return;
+      throw new Error('Incorrect margin call deactivate handler usage');
     }
 
     this.queueService.publish<MarginCallCompletedPayload>(
@@ -76,11 +77,20 @@ export class MarginCallHandlerService {
         ),
       },
     );
+
+    return {
+      ...actionPayload,
+      marginCall: null,
+    };
   }
 
   public async liquidate(
     actionPayload: MarginActionHandlerPayload,
-  ): Promise<void> {
+  ): Promise<MarginActionHandlerPayload> {
+    if (actionPayload.marginCall === null) {
+      throw new Error('Incorrect liquidation handler usage');
+    }
+
     const loanRepaymentAmount: number = this.calculateAmountToReachLtv(
       actionPayload.ltvMeta.creditUtilization,
       actionPayload.ltvMeta.ledgerValue,
@@ -89,7 +99,7 @@ export class MarginCallHandlerService {
 
     const liquidation: Liquidation = await this.liquidationRepository.save({
       marginCall: {
-        userId: actionPayload.userId,
+        uuid: actionPayload.marginCall.uuid,
       },
       amount: loanRepaymentAmount,
     });
@@ -102,40 +112,50 @@ export class MarginCallHandlerService {
         liquidationId: liquidation.id,
       },
     );
+
+    return {
+      ...actionPayload,
+      marginCall: {
+        ...actionPayload.marginCall,
+        liquidation,
+      },
+    };
   }
 
   public async completeMarginCall(
     actionPayload: MarginActionHandlerPayload,
-  ): Promise<void> {
+  ): Promise<MarginActionHandlerPayload> {
     const marginCall: MarginCall | null = await this.softDeleteMarginCall(
       actionPayload.userId,
     );
 
-    if (marginCall === null) {
-      Logger.warn('UNEXPECTED: Margin call is not defined.', {
-        userId: actionPayload.userId,
-      });
+    console.log('complete margin call1', marginCall, actionPayload.marginCall);
 
-      return;
+    if (
+      marginCall === null ||
+      actionPayload.marginCall === null ||
+      actionPayload.marginCall.liquidation === null
+    ) {
+      throw new Error('Incorrect complete margin call handler usage');
     }
-
-    const liquidation: Liquidation =
-      await this.liquidationRepository.findOneByOrFail({
-        marginCall: { uuid: marginCall.uuid },
-      });
 
     this.queueService.publish<MarginCallCompletedPayload>(
       MARGIN_CALL_COMPLETED_TOPIC,
       {
         completedAt: marginCall.updatedAt.toISOString(),
         userId: actionPayload.userId,
-        liquidationAmount: liquidation.amount,
+        liquidationAmount: actionPayload.marginCall.liquidation.amount,
         ltv: actionPayload.ltv,
         ...this.marginCallPriceFactory.getMarginCallPrices(
           actionPayload.ltvMeta,
         ),
       },
     );
+
+    return {
+      ...actionPayload,
+      marginCall: null,
+    };
   }
 
   private softDeleteMarginCall(userId: string): Promise<MarginCall | null> {

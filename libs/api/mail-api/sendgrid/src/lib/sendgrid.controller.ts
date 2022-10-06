@@ -12,7 +12,7 @@ import {
 import { ConfigService } from '@archie/api/utils/config';
 import { SendgridService } from './sendgrid.service';
 import {
-  LTV_LIMIT_APPROACHING_TOPIC,
+  MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC,
   MARGIN_CALL_COMPLETED_TOPIC,
   MARGIN_CALL_STARTED_TOPIC,
 } from '@archie/api/margin-api/constants';
@@ -85,7 +85,7 @@ export class SendgirdQueueController {
   }
 
   @Subscribe(
-    LTV_LIMIT_APPROACHING_TOPIC,
+    MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC,
     SendgirdQueueController.CONTROLLER_QUEUE_NAME,
   )
   async LtvLimitApproachingHandler(

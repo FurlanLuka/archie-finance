@@ -204,6 +204,13 @@ spec:
                 name: archie-ltv-api-service
                 port:
                   number: 80
+          - path: /v1/margin_calls
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-ltv-api-service
+                port:
+                  number: 80
           ## Paypal service
           - path: /v1/paypal
             pathType: Prefix
@@ -235,4 +242,8 @@ spec:
               service:
                 name: archie-webhook-api-service
                 port:
+<<<<<<< HEAD
                   number: 80
+=======
+                  number: 80
+>>>>>>> f1666b2... Added ltv api tests covering liquidation flow

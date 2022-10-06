@@ -5,7 +5,6 @@ import {
   LedgerActionType,
 } from '@archie/api/ledger-api/data-transfer-objects';
 import { user } from '@archie/test/integration';
-import { v4 } from 'uuid';
 
 export const initiateLedgerRecalcuationCommandPayloadFactory = (
   overrides?: Partial<InitiateLedgerRecalculationCommandPayload>,
@@ -30,11 +29,7 @@ export const ledgerAccountUpdatedPayloadFactory = (
   userId: user.id,
   ledgerAccounts: [ledgerAccountDataFactory()],
   action: {
-    type: LedgerActionType.liquidation,
-    liquidation: {
-      id: v4(),
-      usdAmount: '200.00',
-    },
+    type: LedgerActionType.DEPOSIT,
   },
   ...overrides,
 });

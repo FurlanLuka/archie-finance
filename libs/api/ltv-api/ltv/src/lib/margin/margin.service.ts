@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { MarginCall } from './margin_calls.entity';
 import { MarginCheck } from './margin_check.entity';
 import { MathUtilService } from './utils/math.service';
@@ -10,6 +10,13 @@ import { MarginActionHandlersUtilService } from './utils/margin_action_handlers.
 import { MarginNotification } from './margin_notifications.entity';
 import { LtvMeta } from './margin.interfaces';
 import { Liquidation } from './liquidation.entity';
+import {
+  MarginCallQueryDto,
+  MarginCallsDto,
+  MarginCallStatus,
+} from './margin.dto';
+import { MarginCallFactory } from './utils/margin_call_factory.service';
+import { BigNumber } from 'bignumber.js';
 
 @Injectable()
 export class MarginService {
@@ -25,7 +32,28 @@ export class MarginService {
     private mathUtilService: MathUtilService,
     private marginCheckUtilService: MarginActionsCheckUtilService,
     private marginActionHandlersUtilService: MarginActionHandlersUtilService,
+    private marginCallFactory: MarginCallFactory,
   ) {}
+
+  public async getMarginCalls(
+    userId: string,
+    filters: MarginCallQueryDto,
+  ): Promise<MarginCallsDto[]> {
+    const statusFilter = {
+      [MarginCallStatus.active]: IsNull(),
+      [MarginCallStatus.completed]: Not(IsNull()),
+    };
+    const marginCalls: MarginCall[] = await this.marginCallsRepository.find({
+      where: {
+        userId,
+        deletedAt:
+          filters.status === null ? undefined : statusFilter[filters.status],
+      },
+      withDeleted: true,
+    });
+
+    return marginCalls.map(this.marginCallFactory.create);
+  }
 
   public async reducePendingLiquidationAmount(
     userId: string,
@@ -43,26 +71,37 @@ export class MarginService {
       },
     });
 
+    console.log('liquidations', liquidations);
+
     const pendingLiquidatedCreditUtilization = liquidations.reduce(
       (pendingValue, liquidation) => {
         return !liquidation.isCreditUtilizationUpdated
-          ? pendingValue - liquidation.amount
+          ? BigNumber(pendingValue).plus(liquidation.amount)
           : pendingValue;
       },
-      0,
+      '0',
     );
     const pendingLiquidatedLedgerValue = liquidations.reduce(
       (pendingValue, liquidation) => {
         return !liquidation.isLedgerValueUpdated
-          ? pendingValue - liquidation.amount
+          ? BigNumber(pendingValue).plus(liquidation.amount)
           : pendingValue;
       },
-      0,
+      '0',
+    );
+    console.log(
+      'pending',
+      pendingLiquidatedCreditUtilization,
+      pendingLiquidatedLedgerValue,
     );
 
     return {
-      creditUtilization: creditUtilization - pendingLiquidatedCreditUtilization,
-      ledgerValue: ledgerValue - pendingLiquidatedLedgerValue,
+      creditUtilization: BigNumber(creditUtilization)
+        .minus(pendingLiquidatedCreditUtilization)
+        .toNumber(),
+      ledgerValue: BigNumber(ledgerValue)
+        .minus(pendingLiquidatedLedgerValue)
+        .toNumber(),
     };
   }
 
@@ -97,13 +136,15 @@ export class MarginService {
     ltv: number,
     ltvMeta: LtvMeta,
   ): Promise<void> {
-    const activeMarginCall: MarginCall | null = await this.marginCallsRepository
-      .createQueryBuilder('marginCall')
-      .leftJoinAndSelect('marginCall.liquidation', 'liquidation')
-      .where({
-        userId,
-      })
-      .getOne();
+    const activeMarginCall: MarginCall | null =
+      await this.marginCallsRepository.findOne({
+        where: {
+          userId: userId,
+        },
+        relations: {
+          liquidation: true,
+        },
+      });
 
     const lastMarginCheck: MarginCheck | null =
       await this.marginCheckRepository.findOneBy({
@@ -129,6 +170,7 @@ export class MarginService {
         userId,
         ltv,
         ltvMeta,
+        marginCall: activeMarginCall,
       });
     }
   }

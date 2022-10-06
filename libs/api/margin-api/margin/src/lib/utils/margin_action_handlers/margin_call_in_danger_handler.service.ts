@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { QueueService } from '@archie/api/utils/queue';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { LTV_LIMIT_APPROACHING_TOPIC } from '@archie/api/margin-api/constants';
+import { MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC } from '@archie/api/margin-api/constants';
 import { LtvLimitApproachingPayload } from '@archie/api/margin-api/data-transfer-objects';
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 import { MarginCallPriceFactory } from './margin_call_price.factory';
@@ -19,7 +19,7 @@ export class MarginCallInDangerHandlerService {
 
   public async send(ltv: LtvUpdatedPayload): Promise<void> {
     this.queueService.publish<LtvLimitApproachingPayload>(
-      LTV_LIMIT_APPROACHING_TOPIC,
+      MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC,
       {
         userId: ltv.userId,
         ltv: ltv.ltv,

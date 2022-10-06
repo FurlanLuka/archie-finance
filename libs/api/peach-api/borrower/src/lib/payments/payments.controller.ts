@@ -118,7 +118,7 @@ export class PaymentsQueueController {
     PaymentsQueueController.CONTROLLER_QUEUE_NAME,
   )
   async ledgerUpdated(payload: LedgerAccountUpdatedPayload): Promise<void> {
-    return this.paymentsService.handleLedgerAccountUpdatedEvent(payload);
+    return this.paymentsService.handleCollateralLiquidationEvent(payload);
   }
 
   @Subscribe(

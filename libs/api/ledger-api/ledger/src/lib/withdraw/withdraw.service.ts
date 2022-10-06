@@ -169,7 +169,7 @@ export class WithdrawService {
         assetInformation,
         amount,
         {
-          type: LedgerActionType.withdrawal,
+          type: LedgerActionType.WITHDRAWAL,
         },
         'Withdrawal decrement',
       );
@@ -295,7 +295,7 @@ export class WithdrawService {
           assetInformation,
           networkFee,
           {
-            type: LedgerActionType.fee,
+            type: LedgerActionType.FEE,
           },
           'Network fee decrement',
         );
@@ -362,7 +362,7 @@ export class WithdrawService {
       assetInformation,
       withdrawalAmount.plus(networkFee).toString(),
       {
-        type: LedgerActionType.withdrawalFailed,
+        type: LedgerActionType.WITHDRAWAL_FAILURE,
       },
       'Transaction failed increment',
     );

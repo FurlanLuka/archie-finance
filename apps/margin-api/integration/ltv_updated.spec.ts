@@ -12,7 +12,7 @@ import { MarginNotification } from '../../../libs/api/margin-api/margin/src/lib/
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 import { MarginQueueController } from '../../../libs/api/margin-api/margin/src/lib/margin.controller';
 import {
-  LTV_LIMIT_APPROACHING_TOPIC,
+  MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC,
   MARGIN_CALL_COMPLETED_TOPIC,
   MARGIN_CALL_STARTED_TOPIC,
 } from '@archie/api/margin-api/constants';
@@ -164,13 +164,16 @@ describe('MarginQueueController (e2e)', () => {
       await app.get(MarginQueueController).ltvUpdatedHandler(payload);
 
       expect(queueStub.publish).toBeCalledTimes(1);
-      expect(queueStub.publish).toBeCalledWith(LTV_LIMIT_APPROACHING_TOPIC, {
-        collateralBalance: payload.calculatedOn.collateralBalance,
-        ltv: payload.ltv,
-        priceForMarginCall: 866.6666666666666,
-        priceForPartialCollateralSale: 722.2222222222222,
-        userId,
-      });
+      expect(queueStub.publish).toBeCalledWith(
+        MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC,
+        {
+          collateralBalance: payload.calculatedOn.collateralBalance,
+          ltv: payload.ltv,
+          priceForMarginCall: 866.6666666666666,
+          priceForPartialCollateralSale: 722.2222222222222,
+          userId,
+        },
+      );
     });
   });
 });

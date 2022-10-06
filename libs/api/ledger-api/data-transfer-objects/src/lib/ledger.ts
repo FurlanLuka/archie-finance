@@ -23,25 +23,31 @@ export interface LedgerAccountUpdatedPayload {
   action: LedgerAccountAction;
 }
 
-export enum LedgerActionType {
-  deposit = 'deposit',
-  withdrawal = 'withdrawal',
-  liquidation = 'liquidation',
-  accountCreated = 'accountCreated',
-  assetPriceUpdate = 'assetPriceUpdate',
-  fee = 'fee',
-  withdrawalFailed = 'withdrawalFailed',
-  liquidationFailed = 'liquidationFailed',
+export interface InitiateLedgerRecalculationCommandPayload {
+  userIds: string[];
 }
 
-export interface LedgerAccountAction {
-  type: LedgerActionType;
-  liquidation?: {
+export enum LedgerActionType {
+  DEPOSIT = 'DEPOSIT',
+  WITHDRAWAL = 'WITHDRAWAL',
+  LIQUIDATION = 'LIQUIDATION',
+  ASSET_PRICE_UPDATE = 'ASSET_PRICE_UPDATE',
+  FEE = 'FEE',
+  WITHDRAWAL_FAILURE = 'WITHDRAWAL_FAILURE',
+}
+
+interface LiquidationLedgerAccountAction {
+  type: LedgerActionType.LIQUIDATION;
+  liquidation: {
     id: string;
     usdAmount: string;
   };
 }
 
-export interface InitiateLedgerRecalculationCommandPayload {
-  userIds: string[];
+interface OtherLedgerAccountAction {
+  type: Exclude<LedgerActionType, LedgerActionType.LIQUIDATION>;
 }
+
+export type LedgerAccountAction =
+  | LiquidationLedgerAccountAction
+  | OtherLedgerAccountAction;
