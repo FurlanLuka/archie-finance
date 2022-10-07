@@ -98,7 +98,7 @@ describe('Credit line creation tests', () => {
       const response = await request(app.getHttpServer())
         .post('/v2/credit_lines')
         .set('Authorization', `Bearer ${accessToken}`)
-        .expect(409);
+        .expect(400);
 
       expect(response.body.message).toStrictEqual('CREDIT_LINE_ALREADY_EXISTS');
     });
