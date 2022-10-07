@@ -26,6 +26,7 @@ export enum TransactionType {
   OTHER = 'other',
   REVERSED_TRANSFER = 'reversed_transfer',
   THIRD_PARTY_TRANSFER = 'third_party_transfer',
+  BALANCE_PAYMENT = 'balance_payment', // custom not on the BE (yet)
 }
 
 export interface Transaction {
