@@ -38,6 +38,10 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ ledger, creditLine, lt
 
   const assetMap: AssetMap = useMemo(() => {
     return ledger.accounts.reduce((previousValue, ledgerAccount) => {
+      if (Number(ledgerAccount.assetAmount) === 0) {
+        return previousValue;
+      }
+
       const creditLimitAssetAllocation = creditLine.creditLimitAssetAllocation.find((item) => {
         item.assetId = ledgerAccount.assetId;
       });
@@ -61,7 +65,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ ledger, creditLine, lt
         },
       };
     }, {} as AssetMap);
-  }, [creditLine, ledger]);
+  }, [creditLine.creditLimitAssetAllocation, isInMarginCall, ledger.accounts, ledger.value]);
 
   const tableData = useMemo(() => {
     const notAddedAssets = Object.values(CollateralAssets).filter((asset) => assetMap[asset.id] === undefined);
@@ -83,7 +87,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ ledger, creditLine, lt
         },
       })),
     );
-  }, [assetMap]);
+  }, [assetMap, isInMarginCall]);
 
   return (
     <>
