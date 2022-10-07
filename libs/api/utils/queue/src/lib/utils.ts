@@ -185,7 +185,7 @@ export function TraceEvent(
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {
-      const headers = args[1].properties.headers;
+      const headers: object = args[1]?.properties?.headers;
       Logger.log('event headers', headers);
       await tracer.trace(
         queueName,
