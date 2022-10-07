@@ -6,6 +6,7 @@ export const CardScreenStyled = styled.div`
 
   .title {
     margin-bottom: 0.5rem;
+    text-align: center;
   }
 
   .subtitle {

@@ -35,12 +35,12 @@ export const DashboardRoute: FC = () => {
 
   return (
     <>
-      <Header maxWidth="100%" />
+      <Header maxWidth="100%" showMobileNav />
       <Page>
+        <Navigation />
         <Container column mobileColumn maxWidth="100%">
           {!isMfaSetup && <Setup2faBanner />}
           <Container justifyContent="center" maxWidth="100%">
-            <Navigation />
             <Routes>
               <Route path="/" element={<HomeScreen />} />
               <Route path="/home" element={<HomeScreen />} />

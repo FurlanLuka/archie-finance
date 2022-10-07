@@ -4,11 +4,15 @@ import { breakpoints, HEADER_HEIGHT, HEADER_HEIGHT_MOBILE } from '@archie-webapp
 
 import bgOnboarding from '../../../assets/bg-onboarding.png';
 
-export const Page = styled.div`
+export interface PageProps {
+  hasBgImage?: boolean
+}  
+
+export const Page = styled.div<PageProps>`
   display: flex;
   color: ${({ theme }) => theme.textPrimary};
   background-color: ${({ theme }) => theme.backgroundSecondary};
-  background-image: url(${bgOnboarding});
+  background-image: ${({ hasBgImage }) => hasBgImage && `url(${bgOnboarding})`};
   background-repeat: no-repeat;
   background-size: 100%;
   background-position: bottom;

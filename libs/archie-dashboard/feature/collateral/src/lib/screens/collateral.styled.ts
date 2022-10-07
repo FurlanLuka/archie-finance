@@ -1,42 +1,40 @@
 import styled from 'styled-components';
 
-import { breakpoints, NAV_WIDTH, NAV_WIDTH_TABLET } from '@archie-webapps/shared/ui/theme';
+import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
 export const CollateralStyled = styled.div`
   width: 100%;
   max-width: calc(1000px + 4rem);
-  margin-left: ${NAV_WIDTH};
   padding: 3rem 2rem;
-
-  @media (max-width: ${breakpoints.screenLG}) {
-    margin-left: ${NAV_WIDTH_TABLET};
-  }
-
-  @media (max-width: ${breakpoints.screenMD}) {
-    margin: 0;
-  }
 
   @media (max-width: ${breakpoints.screenSM}) {
     padding: 1.5rem 1rem;
   }
 
-  .title-group {
+  .title {
+    margin-bottom: 1.5rem;
+  }
+
+  .subtitle-group {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
   }
 
-  .title,
+  .subtitle {
+    margin-bottom: 0.5rem;
+  }
+
   .total {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
   }
 
   .ltv {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   .ltv-group {
