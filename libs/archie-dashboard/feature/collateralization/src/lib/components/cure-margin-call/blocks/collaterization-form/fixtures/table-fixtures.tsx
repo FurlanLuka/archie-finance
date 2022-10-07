@@ -1,4 +1,8 @@
+import ReactTooltip from 'react-tooltip';
+
+import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { BodyM } from '@archie-webapps/shared/ui/design-system';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 export const tableColumns = [
   {
@@ -12,10 +16,24 @@ export const tableColumns = [
       {
         Header: 'ETH to add:',
         accessor: 'asset_to_add',
-        Cell: ({ value: { amount, asset } }: any) => (
-          <BodyM weight={500} className="">
-            {amount} {asset}
-          </BodyM>
+        Cell: ({ value: { id, amount, asset } }: any) => (
+          <>
+            <BodyM
+              weight={500}
+              id={id}
+              className="asset-copy"
+              data-tip="Click to copy"
+              onClick={() => copyToClipboard(id, amount)}
+            >
+              {amount} {asset}
+            </BodyM>
+            <ReactTooltip
+              textColor={theme.tooltipText}
+              backgroundColor={theme.tooltipBackground}
+              effect="solid"
+              delayHide={1000}
+            />
+          </>
         ),
       },
       {

@@ -41,6 +41,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
     {
       target_ltv: '50%',
       asset_to_add: {
+        id: 'suggested_collateral',
         amount: getRequiredCollateral(SUGGESTED_LTV),
         asset: assetInfo.short,
       },
@@ -52,6 +53,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
     {
       target_ltv: '74%',
       asset_to_add: {
+        id: 'minimum_collateral',
         amount: getRequiredCollateral(MINIMUM_LTV),
         asset: assetInfo.short,
       },
@@ -73,6 +75,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
         </InputText>
       ),
       asset_to_add: {
+        id: 'custom_collateral',
         amount: getRequiredCollateral(customLtv),
         asset: assetInfo.short,
       },

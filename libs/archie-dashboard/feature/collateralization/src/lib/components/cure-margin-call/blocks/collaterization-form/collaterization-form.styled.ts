@@ -12,6 +12,11 @@ export const CollaterizationFormStyled = styled.div`
     text-align: right;
   }
 
+  .asset-copy {
+    max-width: fit-content;
+    cursor: pointer;
+  }
+
   .custom-ltv {
     position: relative;
     max-width: 3.75rem;
