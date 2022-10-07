@@ -34,11 +34,11 @@ export const CollateralizationScreen: FC = () => {
     if (getLTVResponse.state === RequestState.SUCCESS) {
       const ltvData = getLTVResponse.data;
 
-      if (ltvData.status === LTVStatus.MARGIN_CALL) {
-        return <CureMarginCall selectedAsset={asset} />;
-      }
+      // if (ltvData.status === LTVStatus.MARGIN_CALL) {
+      return <CureMarginCall selectedAsset={asset} />;
+      // }
 
-      return <AddCollateral selectedAsset={asset} />;
+      // return <AddCollateral selectedAsset={asset} />;
     }
 
     return null;
@@ -47,7 +47,7 @@ export const CollateralizationScreen: FC = () => {
   return (
     <CollateralizationStyled>
       <MarginCallAlert />
-      <Card column alignItems="center" padding="2.5rem 1.5rem 3.5rem" minHeight="826px">
+      <Card column alignItems="center" padding="2.5rem 1.5rem" minHeight="762px">
         {getContent()}
       </Card>
     </CollateralizationStyled>

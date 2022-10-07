@@ -1,6 +1,5 @@
 import { BigNumber } from 'bignumber.js';
 
-import { TARGET_LTV } from '@archie-webapps/archie-dashboard/constants';
 import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { Ledger, LedgerAccountData } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
 
@@ -24,8 +23,8 @@ export const calculateLedgerCreditValue = (ledger: Ledger): string => {
   return result.toString();
 };
 
-export const calculateCollateralMinValue = (creditBalance: number, collateralTotalValue: number): number => {
-  const ltv = TARGET_LTV / 100;
+export const calculateCollateralValue = (targetLtv: number, creditBalance: number, collateralTotalValue: number): number => {
+  const ltv = targetLtv / 100;
 
   return (creditBalance - ltv * collateralTotalValue) / (1 - ltv);
 };

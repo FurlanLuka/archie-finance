@@ -1,15 +1,15 @@
 import { FC, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import ReactTooltip from 'react-tooltip';
 
 import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
+import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
-import { BodyL } from '@archie-webapps/shared/ui/design-system';
+import { Table } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
+import { tableColumns } from './fixtures/table-fixtures';
 import { CollaterizationFormStyled } from './collaterization-form.styled';
-import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 
 interface CollateralizationFormProps {
   assetInfo: CollateralAsset;
@@ -24,8 +24,6 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
   currentLtv,
   minCollateral,
 }) => {
-  const { t } = useTranslation();
-
   const [requiredCollateral, setRequiredCollateral] = useState(0);
 
   useEffect(() => {
@@ -35,27 +33,46 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
     setRequiredCollateral(Math.ceil(result * 10000) / 10000);
   }, [minCollateral, assetPrice]);
 
-  const getFormattedCollateral = () => {
-    const value =
-      assetInfo.short === 'USDC'
-        ? Number(requiredCollateral.toFixed(2)) * 1
-        : Number(requiredCollateral.toFixed(4)) * 1;
-
-    return `${value} ${assetInfo.short}`;
-  };
+  const tableData = [
+    {
+      target_ltv: '50%',
+      asset_to_add: {
+        amount: requiredCollateral,
+        asset: assetInfo.short,
+      },
+      info: {
+        text: 'Suggested',
+        color: theme.textSuccess,
+      },
+    },
+    {
+      target_ltv: '74%',
+      asset_to_add: {
+        amount: requiredCollateral,
+        asset: assetInfo.short,
+      },
+      info: {
+        text: 'Minimum',
+        color: theme.textDanger,
+      },
+    },
+    {
+      target_ltv: '50%',
+      asset_to_add: {
+        amount: requiredCollateral,
+        asset: assetInfo.short,
+      },
+      info: {
+        text: 'Calculate target LTV',
+        color: theme.textPrimary,
+      },
+    },
+  ];
 
   return (
     <CollaterizationFormStyled>
       <div className="ltv-info">
-        <BodyL weight={700} color={theme.textDanger}>
-          {t('collateralization_step.margin_call_info.current_ltv', { ltv: currentLtv.toFixed(2) })}
-        </BodyL>
-        <BodyL weight={700} color={theme.textSuccess}>
-          {t('collateralization_step.margin_call_info.suggested_ltv')}
-        </BodyL>
-        <BodyL weight={700}>
-          {t('collateralization_step.margin_call_info.collateral_to_add', { collateral: getFormattedCollateral() })}
-        </BodyL>
+        <Table columns={tableColumns} data={tableData} />
       </div>
       <DepositAddress assetInfo={assetInfo} />
     </CollaterizationFormStyled>

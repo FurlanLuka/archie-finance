@@ -76,7 +76,7 @@ export const WithdrawScreen: FC = () => {
 
   return (
     <WithdrawScreenStyled>
-      <Card column alignItems="center" padding="2.5rem 1.5rem 3.5rem" minHeight="750px">
+      <Card column alignItems="center" padding="2.5rem 1.5rem" minHeight="682px">
         {getContent()}
       </Card>
     </WithdrawScreenStyled>

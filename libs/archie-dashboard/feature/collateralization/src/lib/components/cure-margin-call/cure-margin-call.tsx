@@ -8,7 +8,8 @@ import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { calculateCollateralMinValue } from '@archie-webapps/archie-dashboard/utils';
+import { MINIMUM_LTV } from '@archie-webapps/archie-dashboard/constants';
+import { calculateCollateralValue } from '@archie-webapps/archie-dashboard/utils';
 import { Loader, ButtonOutline, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
 
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
@@ -61,7 +62,8 @@ export const CureMarginCall: FC<CureMarginCallProps> = ({ selectedAsset }) => {
     const creditData = getCreditQueryResponse.data;
     const ltvData = getLTVResponse.data;
 
-    const collateralMinValue = calculateCollateralMinValue(
+    const collateralMinValue = calculateCollateralValue(
+      MINIMUM_LTV,
       creditData.utilizationAmount,
       BigNumber(ledger.value).toNumber(),
     );
