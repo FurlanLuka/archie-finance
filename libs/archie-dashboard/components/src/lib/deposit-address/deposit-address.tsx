@@ -16,7 +16,7 @@ import { DepositAddressStyled } from './deposit-address.styled';
 
 interface DepositAddressProps {
   assetInfo: CollateralAsset;
-  assetAmount: number;
+  assetAmount?: number;
   showTerms?: boolean;
 }
 
@@ -37,7 +37,9 @@ export const DepositAddress: FC<DepositAddressProps> = ({ assetInfo, assetAmount
       {getDepositAddressResponse.state === RequestState.SUCCESS ? (
         <>
           <BodyM weight={700}>
-            {t('collateralization_step.address.title', { required_collateral: `${assetAmount} ${assetInfo.short}` })}
+            {t('collateralization_step.address.title', {
+              required_collateral: `${assetAmount ?? ''} ${assetInfo.short}`,
+            })}
           </BodyM>
           <div className="address-copy">
             <BodyL id="address">
