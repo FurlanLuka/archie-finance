@@ -192,9 +192,17 @@ export function TraceEvent(
         {
           childOf: {
             toTraceId(): string {
+              if (headers === undefined) {
+                return '';
+              }
+
               return headers['trace-id'];
             },
             toSpanId(): string {
+              if (headers === undefined) {
+                return '';
+              }
+
               return headers['span-id'];
             },
           },
