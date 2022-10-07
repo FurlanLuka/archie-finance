@@ -39,7 +39,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
 
   const tableData = [
     {
-      target_ltv: '50%',
+      target_ltv: `${SUGGESTED_LTV}%`,
       asset_to_add: {
         id: 'suggested_collateral',
         amount: getRequiredCollateral(SUGGESTED_LTV),
@@ -51,7 +51,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
       },
     },
     {
-      target_ltv: '74%',
+      target_ltv: `${MINIMUM_LTV}%`,
       asset_to_add: {
         id: 'minimum_collateral',
         amount: getRequiredCollateral(MINIMUM_LTV),
