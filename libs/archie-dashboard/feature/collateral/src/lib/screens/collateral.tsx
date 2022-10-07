@@ -53,7 +53,7 @@ export const CollateralScreen: FC = () => {
       return (
         <>
           <div className="subtitle-group">
-            <TitleS className="subtitle">{t('dashboard_collateral.title')}</TitleS>
+            <TitleS className="subtitle">{t('dashboard_collateral.subtitle')}</TitleS>
             <TitleM weight={400} className="total">
               ${getLedgerResponse.data.value}
             </TitleM>
@@ -82,7 +82,8 @@ export const CollateralScreen: FC = () => {
   return (
     <CollateralStyled>
       <MarginCallAlert />
-      <Card column padding="1.5rem 1.5rem 2rem" minHeight="560px">
+      <TitleM className="title">{t('dashboard_collateral.title')}</TitleM>
+      <Card column padding="1.5rem 1.5rem 2rem" minHeight="528px">
         {getContent()}
       </Card>
     </CollateralStyled>
