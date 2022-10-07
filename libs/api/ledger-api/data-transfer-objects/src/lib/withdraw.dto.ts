@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export interface MaxWithdrawalAmountResponse {
+export class MaxWithdrawalAmountResponse {
   maxAmount: string;
 }
 
@@ -24,6 +24,6 @@ export class WithdrawPayloadDto {
   destinationAddress: string;
 }
 
-export interface WithdrawResponseDto {
+export class WithdrawResponseDto {
   id: string;
 }

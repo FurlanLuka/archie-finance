@@ -1,4 +1,4 @@
-export interface InternalLedgerAccountData {
+export class InternalLedgerAccountData {
   assetId: string;
   assetAmount: string;
   assetPrice: string;
@@ -12,7 +12,7 @@ export interface LedgerAccountData {
   calculatedAt: string;
 }
 
-export interface Ledger {
+export class Ledger {
   value: string;
   accounts: InternalLedgerAccountData[];
 }

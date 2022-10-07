@@ -1,10 +1,10 @@
-export interface CreditLimitAssetAllocation {
+export class CreditLimitAssetAllocation {
   assetId: string;
   allocationPercentage: number;
   allocatedAssetValue: number;
 }
 
-export interface CreditLine {
+export class CreditLine {
   creditLimit: number;
   creditLimitAssetAllocation: CreditLimitAssetAllocation[];
 }

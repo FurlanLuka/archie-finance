@@ -8,12 +8,6 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import {
-  KycDto,
-  CreateKycResponse,
-  GetKycResponse,
-  GetKycPayload,
-} from './kyc.interfaces';
 import { KycService } from './kyc.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
@@ -27,6 +21,12 @@ import {
   GET_USER_KYC_RPC,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/user-api/constants';
+import {
+  CreateKycResponse,
+  GetKycPayload,
+  GetKycResponse,
+  KycDto,
+} from '@archie/api/user-api/data-transfer-objects';
 
 @Controller('v1/kyc')
 export class KycController {

@@ -14,6 +14,7 @@ export enum ConfigVariables {
   PAYPAL_RETURN_URL = 'PAYPAL_RETURN_URL',
   AUTH0_DOMAIN = 'AUTH0_DOMAIN',
   AUTH0_AUDIENCE = 'AUTH0_AUDIENCE',
+  RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
 export const PAYPAL_PAYMENT_RECEIVED_TOPIC = 'paypal.payment.received';

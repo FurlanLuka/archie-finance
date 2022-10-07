@@ -43,7 +43,8 @@ import { AuthModule } from '@archie/api/utils/auth0';
         keepConnectionAlive: true,
         autoLoadEntities: true,
         migrations: migrations,
-        migrationsRun: true,
+        migrationsRun:
+          configService.get(ConfigVariables.RUN_MIGRATIONS) !== 'false',
       }),
       inject: [ConfigService],
     }),

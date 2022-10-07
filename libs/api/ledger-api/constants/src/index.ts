@@ -11,10 +11,13 @@ export enum ConfigVariables {
   TYPEORM_PORT = 'TYPEORM_PORT',
   ASSET_LIST = 'ASSET_LIST',
   QUEUE_URL = 'QUEUE_URL',
-  COINGECKO_API_URI = 'COINGECKO_API_URI'
+  COINGECKO_API_URI = 'COINGECKO_API_URI',
+  RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
 export const LEDGER_ACCOUNT_UPDATED_TOPIC = 'ledger.account.updated';
 
-export const INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND = 'initiate.ledger.asset.liquidation';
-export const INITIATE_LEDGER_RECALCULATION_COMMAND = 'initiate.ledger.recalculation'
+export const INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND =
+  'initiate.ledger.asset.liquidation';
+export const INITIATE_LEDGER_RECALCULATION_COMMAND =
+  'initiate.ledger.recalculation';

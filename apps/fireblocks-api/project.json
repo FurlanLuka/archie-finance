@@ -46,13 +46,13 @@
       }
     },
     "build-openapi": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "command": "npm run build fireblocks-api && node dist/apps/fireblocks-api/main build-swagger"
+        "command": "npm run build fireblocks-api && RUN_MIGRATIONS=false node dist/apps/fireblocks-api/main build-swagger"
       }
     },
     "generate-migration": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "npm run build fireblocks-api && node dist/apps/fireblocks-api/main generate-migration"
       }

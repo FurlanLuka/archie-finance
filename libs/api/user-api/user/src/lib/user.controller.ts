@@ -8,17 +8,9 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import {
-  GetSendEnrollmentTicketResponse,
-  GetEnrollmentResponse,
-  GetEmailVerificationResponse,
-  GetEmailAddressResponse,
-  GetEmailAddressPayload,
-} from './user.interfaces';
 import { UserService } from './user.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
-import { GetMfaEnrollmentResponse } from './user.interfaces';
 import {
   RequestHandler,
   RPCResponse,
@@ -28,6 +20,14 @@ import {
   GET_USER_EMAIL_ADDRESS_RPC,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/user-api/constants';
+import {
+  GetEmailAddressPayload,
+  GetEmailAddressResponse,
+  GetEmailVerificationResponse,
+  GetEnrollmentResponse,
+  GetMfaEnrollmentResponse,
+  GetSendEnrollmentTicketResponse,
+} from '@archie/api/user-api/data-transfer-objects';
 
 @Controller('v1/user')
 export class UserController {

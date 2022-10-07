@@ -11,6 +11,7 @@ export enum ConfigVariables {
   TYPEORM_PORT = 'TYPEORM_PORT',
   QUEUE_URL = 'QUEUE_URL',
   ASSET_LIST = 'ASSET_LIST',
+  RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
 export const CREDIT_LINE_CREATED_TOPIC = 'credit_line.created';

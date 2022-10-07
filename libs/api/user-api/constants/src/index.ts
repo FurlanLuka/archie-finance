@@ -14,6 +14,7 @@ export enum ConfigVariables {
   TYPEORM_PORT = 'TYPEORM_PORT',
   QUEUE_URL = 'QUEUE_URL',
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
+  RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
 export const KYC_SUBMITTED_TOPIC = 'user.kyc.submitted';

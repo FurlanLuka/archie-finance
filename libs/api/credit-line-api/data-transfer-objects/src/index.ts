@@ -1,1 +1,1 @@
-export * from './lib/credit_line';
+export * from './lib/credit_line.dto';
