@@ -9,6 +9,7 @@ import { Options } from 'amqplib';
 import { RPCResponse, RPCResponseType } from './queue.interfaces';
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { RABBIT_RETRY_HANDLER } from './utils';
+import tracer, { Span } from 'dd-trace';
 
 @Injectable()
 export class QueueService implements OnApplicationBootstrap {
@@ -23,7 +24,10 @@ export class QueueService implements OnApplicationBootstrap {
     exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
     options?: Options.Publish,
   ) {
-    this.amqpConnection.publish(exchange, routingKey, message, options);
+    tracer.trace('queue_event_publish', (span: Span) => {
+      span.setTag('eventName', routingKey);
+      this.amqpConnection.publish(exchange, routingKey, message, options);
+    });
   }
 
   public async request<K = object, T extends object = object>(
@@ -32,19 +36,23 @@ export class QueueService implements OnApplicationBootstrap {
     exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
     options?: RequestOptions,
   ): Promise<K> {
-    const response = await this.amqpConnection.request<RPCResponse<K>>({
-      exchange,
-      routingKey,
-      payload: payload,
-      timeout: 10_000,
-      ...options,
+    return tracer.trace('rpc_request', async (span: Span) => {
+      const response = await this.amqpConnection.request<RPCResponse<K>>({
+        exchange,
+        routingKey,
+        payload: payload,
+        timeout: 10_000,
+        ...options,
+      });
+
+      if (response.type === RPCResponseType.ERROR) {
+        span.setTag('error', response.message);
+
+        throw new Error(response.message);
+      }
+
+      return response.data;
     });
-
-    if (response.type === RPCResponseType.ERROR) {
-      throw new Error(response.message);
-    }
-
-    return response.data;
   }
 
   async onApplicationBootstrap() {
