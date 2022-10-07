@@ -36,7 +36,7 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
   if (getLedgerResponse.state === RequestState.SUCCESS && getAssetPriceResponse.state === RequestState.SUCCESS) {
     const ledger = getLedgerResponse.data;
     const currentLedgerAccount = ledger.accounts.find((ledgerAccount) => ledgerAccount.assetId === selectedAsset);
-    const assetPrice = getAssetPriceResponse.data.find((p) => p.asset === assetInfo.id);
+    const assetPrice = getAssetPriceResponse.data.find((asset) => asset.assetId === assetInfo.id);
 
     if (!assetPrice) {
       return <Navigate to="/error" state={{ prevPath: '/collateral', description: "Couldn't fetch price" }} />;

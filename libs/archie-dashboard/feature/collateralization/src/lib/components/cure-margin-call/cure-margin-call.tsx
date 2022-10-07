@@ -57,7 +57,7 @@ export const CureMarginCall: FC<CureMarginCallProps> = ({ selectedAsset }) => {
     getLTVResponse.state === RequestState.SUCCESS
   ) {
     const ledger = getLedgerResponse.data;
-    const assetPrice = getAssetPriceResponse.data.find((p) => p.asset === assetInfo.id);
+    const assetPrice = getAssetPriceResponse.data.find((asset) => asset.assetId === assetInfo.id);
     const creditData = getCreditQueryResponse.data;
     const ltvData = getLTVResponse.data;
 

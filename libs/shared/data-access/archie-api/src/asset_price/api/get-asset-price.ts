@@ -2,7 +2,7 @@ import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
 
 export interface AssetPrice {
-  asset: string;
+  assetId: string;
   price: number;
   dailyChange: number;
   currency: string;
