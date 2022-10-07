@@ -6,6 +6,8 @@ import {
 } from '@golevelup/nestjs-rabbitmq/lib/amqp/errorBehaviors';
 import { Channel, ConsumeMessage } from 'amqplib';
 import { QueueUtilService } from './queue-util.service';
+import tracer, { Span } from 'dd-trace';
+import { spawn } from 'child_process';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type AppliedDecorator = <TFunction extends Function, Y>(
@@ -66,7 +68,7 @@ export function Subscribe(
   };
 
   const decorators: MethodDecorator[] = <MethodDecorator[]>[
-    LogEvent(queue, subscriptionOptions.logBody),
+    TraceEvent(queue, subscriptionOptions.logBody),
     RabbitSubscribe({
       exchange: exchange,
       routingKey: routingKey,
@@ -158,7 +160,10 @@ function pushToDeadLetterQueue(
   return defaultNackErrorHandler(channel, msg, error);
 }
 
-export function LogEvent(queueName: string, logBody: boolean): MethodDecorator {
+export function TraceEvent(
+  queueName: string,
+  logBody: boolean,
+): MethodDecorator {
   return (
     target: any,
     _key?: string | symbol,
@@ -172,12 +177,21 @@ export function LogEvent(queueName: string, logBody: boolean): MethodDecorator {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {
-      Logger.log({
-        message: `New event on queue ${queueName} received`,
-        payload: logBody ? args[0] : null,
-      });
+      await tracer.trace(queueName, async (span: Span) => {
+        const loggedPayload = logBody ? args[0] : null;
+        Logger.log({
+          message: `New event on queue ${queueName} received`,
+          payload: loggedPayload,
+        });
 
-      await originalMethod.apply(this, args);
+        span.setTag('payload', loggedPayload);
+        try {
+          await originalMethod.apply(this, args);
+        } catch (error) {
+          span.setTag('error', error);
+          throw error;
+        }
+      });
     };
   };
 }
