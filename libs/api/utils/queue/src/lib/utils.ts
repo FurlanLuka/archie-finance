@@ -132,12 +132,20 @@ function createErrorHandler(
       const delay: number = headers['x-delay'] ?? INITIAL_DELAY / RETRY_BACKOFF;
 
       if (retryAttempt < MAX_RETRIES) {
+        const span = tracer.scope().active();
+
+        if (span === null) {
+          Logger.warn('Datadog scope is not defined');
+        }
+
         channel.publish(
           QueueUtilService.getRetryExchangeName(exchange),
           queueSpecificRoutingKey,
           msg.content,
           {
             headers: {
+              'trace-id': span?.context().toTraceId(),
+              'span-id': span?.context().toSpanId(),
               'x-delay': delay * RETRY_BACKOFF,
               'x-retry': retryAttempt + 1,
             },
@@ -177,21 +185,36 @@ export function TraceEvent(
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {
-      await tracer.trace(queueName, async (span: Span) => {
-        const loggedPayload = logBody ? args[0] : null;
-        Logger.log({
-          message: `New event on queue ${queueName} received`,
-          payload: loggedPayload,
-        });
+      const headers = args[1].properties.headers;
+      Logger.log('event headers', headers);
+      await tracer.trace(
+        queueName,
+        {
+          childOf: {
+            toTraceId(): string {
+              return headers['trace-id'];
+            },
+            toSpanId(): string {
+              return headers['span-id'];
+            },
+          },
+        },
+        async (span: Span) => {
+          const loggedPayload = logBody ? args[0] : null;
+          Logger.log({
+            message: `New event on queue ${queueName} received`,
+            payload: loggedPayload,
+          });
 
-        span.setTag('payload', loggedPayload);
-        try {
-          await originalMethod.apply(this, args);
-        } catch (error) {
-          span.setTag('error', error);
-          throw error;
-        }
-      });
+          span.setTag('payload', loggedPayload);
+          try {
+            await originalMethod.apply(this, args);
+          } catch (error) {
+            span.setTag('error', error);
+            throw error;
+          }
+        },
+      );
     };
   };
 }
