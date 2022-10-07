@@ -179,7 +179,7 @@ spec:
             command:
             - /bin/sh
             - -c
-            - curl ${INTERNAL_API_URL}/internal/asset/price/fetch
+            - curl -X POST ${INTERNAL_API_URL}/internal/asset/price/fetch
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1
