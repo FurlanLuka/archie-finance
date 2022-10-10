@@ -20,7 +20,7 @@ import {
   CardActivatedPayload,
   CollateralReceivedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
-import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-limit-api/constants';
+import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-line-api/constants';
 
 @Controller('v1/onboarding')
 export class OnboardingController {

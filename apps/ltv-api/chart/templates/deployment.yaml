@@ -118,6 +118,11 @@ spec:
                 secretKeyRef:
                   name: queue-shared-secrets
                   key: queue-url
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: redis-shared-secrets
+                  key: redis-url
           {{- end }}
       imagePullSecrets:
         - name: regcred
@@ -135,35 +140,3 @@ spec:
       targetPort: 80
   selector:
     app: archie-ltv-api
----
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: periodic-ltv-check
-spec:
-  schedule: "0 * * * *"
-  jobTemplate:
-    metadata:
-      name: periodic-ltv-check
-    spec:
-      template:
-        spec:
-          containers:
-            - name: periodic-ltv-check-job
-              image: curlimages/curl
-              imagePullPolicy: IfNotPresent
-              env:
-                - name: INTERNAL_API_URL
-                  {{- if not .Values.local }}
-                  valueFrom:
-                    secretKeyRef:
-                      name: internal-api-shared-secrets
-                      key: internal-api-url
-                  {{- else }}
-                  value: http://host.minikube.internal
-                  {{- end }}
-              command:
-                - /bin/sh
-                - -c
-                - curl -X POST ${INTERNAL_API_URL}/internal/ltv/periodic_check
-          restartPolicy: OnFailure

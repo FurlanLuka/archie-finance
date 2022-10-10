@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
 import {
@@ -17,7 +17,6 @@ import {
   Person,
   PersonStatus,
   Obligations,
-  PaymentInstrumentBalance,
   Document,
   AutopayOptions,
   Autopay,
@@ -602,50 +601,6 @@ export class PeachApiService {
 
       throw error;
     }
-  }
-
-  public async getCachedBalance(
-    personId: string,
-    paymentInstrumentId: string,
-  ): Promise<PaymentInstrumentBalance> {
-    let response: AxiosResponse<PeachResponseData<PaymentInstrumentBalance>>;
-
-    try {
-      response = await this.peachClient.get<
-        PeachResponseData<PaymentInstrumentBalance>
-      >(
-        `/people/${personId}/payment-instruments/${paymentInstrumentId}/balance`,
-      );
-    } catch (e) {
-      const error: PeachErrorResponse = e;
-
-      if (error.status === 404) {
-        response = await this.peachClient.post<
-          PeachResponseData<PaymentInstrumentBalance>
-        >(
-          `/people/${personId}/payment-instruments/${paymentInstrumentId}/balance`,
-          {},
-        );
-      } else {
-        throw error;
-      }
-    }
-
-    return response.data.data;
-  }
-
-  public async getRefreshedBalance(
-    personId: string,
-    paymentInstrumentId: string,
-  ): Promise<PaymentInstrumentBalance> {
-    const response = await this.peachClient.post<
-      PeachResponseData<PaymentInstrumentBalance>
-    >(
-      `/people/${personId}/payment-instruments/${paymentInstrumentId}/balance`,
-      {},
-    );
-
-    return response.data.data;
   }
 
   public async createAutopayAgreementDocument(

@@ -22,54 +22,6 @@
       "@archie-microservices/api/utils/redis": [
         "libs/api/utils/redis/src/index.ts"
       ],
-      "@archie/api/asset-price-api/asset-price": [
-        "libs/api/asset-price-api/asset-price/src/index.ts"
-      ],
-      "@archie/api/asset-price-api/coingecko": [
-        "libs/api/asset-price-api/coingecko/src/index.ts"
-      ],
-      "@archie/api/asset-price-api/constants": [
-        "libs/api/asset-price-api/constants/src/index.ts"
-      ],
-      "@archie/api/asset-price-api/data-transfer-objects": [
-        "libs/api/asset-price-api/data-transfer-objects/src/index.ts"
-      ],
-      "@archie/api/asset-price-api/test-data": [
-        "libs/api/asset-price-api/test-data/src/index.ts"
-      ],
-      "@archie/api/collateral-api/asset-information": [
-        "libs/api/collateral-api/asset-information/src/index.ts"
-      ],
-      "@archie/api/collateral-api/constants": [
-        "libs/api/collateral-api/constants/src/index.ts"
-      ],
-      "@archie/api/collateral-api/data-transfer-objects": [
-        "libs/api/collateral-api/data-transfer-objects/src/index.ts"
-      ],
-      "@archie/api/collateral-api/deposit-address": [
-        "libs/api/collateral-api/deposit-address/src/index.ts"
-      ],
-      "@archie/api/collateral-api/fireblocks": [
-        "libs/api/collateral-api/fireblocks/src/index.ts"
-      ],
-      "@archie/api/collateral-api/fireblocks-webhook": [
-        "libs/api/collateral-api/fireblocks-webhook/src/index.ts"
-      ],
-      "@archie/api/collateral-api/omnibus-vault-account": [
-        "libs/api/collateral-api/omnibus-vault-account/src/index.ts"
-      ],
-      "@archie/api/collateral-api/test-data": [
-        "libs/api/collateral-api/test-data/src/index.ts"
-      ],
-      "@archie/api/collateral-api/user-vault-account": [
-        "libs/api/collateral-api/user-vault-account/src/index.ts"
-      ],
-      "@archie/api/credit-api/collateral": [
-        "libs/api/credit-api/collateral/src/index.ts"
-      ],
-      "@archie/api/credit-api/collateral-withdrawal": [
-        "libs/api/credit-api/collateral-withdrawal/src/index.ts"
-      ],
       "@archie/api/credit-api/constants": [
         "libs/api/credit-api/constants/src/index.ts"
       ],
@@ -83,17 +35,50 @@
       "@archie/api/credit-api/test-data": [
         "libs/api/credit-api/test-data/src/index.ts"
       ],
-      "@archie/api/credit-limit-api/constants": [
-        "libs/api/credit-limit-api/constants/src/index.ts"
+      "@archie/api/credit-line-api/constants": [
+        "libs/api/credit-line-api/constants/src/index.ts"
       ],
-      "@archie/api/credit-limit-api/credit-limit": [
-        "libs/api/credit-limit-api/credit-limit/src/index.ts"
+      "@archie/api/credit-line-api/credit-line": [
+        "libs/api/credit-line-api/credit-line/src/index.ts"
       ],
-      "@archie/api/credit-limit-api/data-transfer-objects": [
-        "libs/api/credit-limit-api/data-transfer-objects/src/index.ts"
+      "@archie/api/credit-line-api/data-transfer-objects": [
+        "libs/api/credit-line-api/data-transfer-objects/src/index.ts"
       ],
-      "@archie/api/credit-limit-api/test-data": [
-        "libs/api/credit-limit-api/test-data/src/index.ts"
+      "@archie/api/credit-line-api/test-data": [
+        "libs/api/credit-line-api/test-data/src/index.ts"
+      ],
+      "@archie/api/fireblocks-api/assets": [
+        "libs/api/fireblocks-api/assets/src/index.ts"
+      ],
+      "@archie/api/fireblocks-api/constants": [
+        "libs/api/fireblocks-api/constants/src/index.ts"
+      ],
+      "@archie/api/fireblocks-api/data-transfer-objects": [
+        "libs/api/fireblocks-api/data-transfer-objects/src/index.ts"
+      ],
+      "@archie/api/fireblocks-api/fireblocks": [
+        "libs/api/fireblocks-api/fireblocks/src/index.ts"
+      ],
+      "@archie/api/fireblocks-api/ledger": [
+        "libs/api/fireblocks-api/ledger/src/index.ts"
+      ],
+      "@archie/api/fireblocks-api/test-data": [
+        "libs/api/fireblocks-api/test-data/src/index.ts"
+      ],
+      "@archie/api/ledger-api/assets": [
+        "libs/api/ledger-api/assets/src/index.ts"
+      ],
+      "@archie/api/ledger-api/constants": [
+        "libs/api/ledger-api/constants/src/index.ts"
+      ],
+      "@archie/api/ledger-api/data-transfer-objects": [
+        "libs/api/ledger-api/data-transfer-objects/src/index.ts"
+      ],
+      "@archie/api/ledger-api/ledger": [
+        "libs/api/ledger-api/ledger/src/index.ts"
+      ],
+      "@archie/api/ledger-api/test-data": [
+        "libs/api/ledger-api/test-data/src/index.ts"
       ],
       "@archie/api/ltv-api/constants": [
         "libs/api/ltv-api/constants/src/index.ts"
@@ -113,15 +98,6 @@
       ],
       "@archie/api/mail-api/utils/email-data-factory": [
         "libs/api/mail-api/utils/email-data-factory/src/index.ts"
-      ],
-      "@archie/api/margin-api/constants": [
-        "libs/api/margin-api/constants/src/index.ts"
-      ],
-      "@archie/api/margin-api/data-transfer-objects": [
-        "libs/api/margin-api/data-transfer-objects/src/index.ts"
-      ],
-      "@archie/api/margin-api/margin": [
-        "libs/api/margin-api/margin/src/index.ts"
       ],
       "@archie/api/onboarding-api/constants": [
         "libs/api/onboarding-api/constants/src/index.ts"
@@ -189,6 +165,9 @@
       ],
       "@archie/api/webhook-api/data-transfer-objects": [
         "libs/api/webhook-api/data-transfer-objects/src/index.ts"
+      ],
+      "@archie/api/webhook-api/fireblocks": [
+        "libs/api/webhook-api/fireblocks/src/index.ts"
       ],
       "@archie/api/webhook-api/peach": [
         "libs/api/webhook-api/peach/src/index.ts"

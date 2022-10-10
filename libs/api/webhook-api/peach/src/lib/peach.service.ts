@@ -6,7 +6,7 @@ import { PeachEvent } from './peach_events.entity';
 import { EventsResponse, Payment } from './api/peach_api.interfaces';
 import { QueueService } from '@archie/api/utils/queue';
 import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
-import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { PeachWebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 
 @Injectable()
 export class PeachWebhookService {
@@ -19,8 +19,8 @@ export class PeachWebhookService {
     private queueService: QueueService,
   ) {}
 
-  public async publishPaymentConfirmedEvent(body: WebhookPaymentPayload) {
-    this.queueService.publish<WebhookPaymentPayload>(
+  public async publishPaymentConfirmedEvent(body: PeachWebhookPaymentPayload) {
+    this.queueService.publish<PeachWebhookPaymentPayload>(
       WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC,
       body,
     );
@@ -40,7 +40,7 @@ export class PeachWebhookService {
       );
 
     paymentEvents.data.forEach((event: Payment) => {
-      this.queueService.publish<WebhookPaymentPayload>(
+      this.queueService.publish<PeachWebhookPaymentPayload>(
         WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC,
         {
           ...event,

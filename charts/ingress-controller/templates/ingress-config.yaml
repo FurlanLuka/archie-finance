@@ -36,14 +36,6 @@ spec:
       http:
     {{- end }}
         paths:
-          ## Asset price api service
-          - path: /v1/asset_price
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-asset-price-api-service
-                port:
-                  number: 80
           ## User api service
           - path: /v1/email_waitlist
             pathType: Prefix
@@ -66,34 +58,12 @@ spec:
                 name: archie-user-api-service
                 port:
                   number: 80
-          ## Collateral api service
-          - path: /v1/deposit_address
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-collateral-api-service
-                port:
-                  number: 80
-          - path: /v1/fireblocks/webhook
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-collateral-api-service
-                port:
-                  number: 80
           ## Onboarding api service
           - path: /v1/onboarding
             pathType: Prefix
             backend:
               service:
                 name: archie-onboarding-api-service
-                port:
-                  number: 80
-          - path: /v1/collateral
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-credit-api-service
                 port:
                   number: 80
           - path: /v1/rize/users
@@ -189,15 +159,15 @@ spec:
                 name: archie-peach-api-service
                 port:
                   number: 80
-          - path: /v1/credit_limits
+          ## Ltv api
+          - path: /v1/ltv
             pathType: Prefix
             backend:
               service:
-                name: archie-credit-limit-api-service
+                name: archie-ltv-api-service
                 port:
                   number: 80
-          # Ltv api
-          - path: /v1/ltv
+          - path: /v1/margin_calls
             pathType: Prefix
             backend:
               service:
@@ -212,11 +182,42 @@ spec:
                 name: archie-paypal-api-service
                 port:
                   number: 80
-          ## Margin service
-          - path: /v1/margin_calls
+          ## Ledger api
+          - path: /v1/ledger
             pathType: Prefix
             backend:
               service:
-                name: archie-margin-api-service
+                name: archie-ledger-api-service
+                port:
+                  number: 80
+          - path: /v1/asset
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-ledger-api-service
+                port:
+                  number: 80
+          ## Fireblocks api
+          - path: /v1/vault_account
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-fireblocks-api-service
+                port:
+                  number: 80
+          ## Webhook api
+          - path: /v1/webhook
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-webhook-api-service
+                port:
+                  number: 80
+          ## Credit line
+          - path: /v2/credit_lines
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-credit-line-api-service
                 port:
                   number: 80

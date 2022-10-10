@@ -7,7 +7,7 @@ import {
   COLLATERAL_SALE_LTV_LIMIT,
   LIQUIDATION_TARGET_LTV,
   LTV_MARGIN_CALL_LIMIT,
-} from '@archie/api/margin-api/constants';
+} from '@archie/api/ltv-api/constants';
 
 @Injectable()
 export class EmailDataFactoryService {

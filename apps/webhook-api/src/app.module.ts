@@ -9,6 +9,7 @@ import {
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
 import { HealthModule } from '@archie/api/utils/health';
+import { FireblocksWebhookModule } from '@archie/api/webhook-api/fireblocks';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { HealthModule } from '@archie/api/utils/health';
         ConfigVariables.QUEUE_URL,
         ConfigVariables.PEACH_BASE_URL,
         ConfigVariables.PEACH_API_KEY,
+        ConfigVariables.FIREBLOCKS_PUBLIC_KEY,
       ],
     }),
     TypeOrmModule.forRootAsync({
@@ -43,6 +45,7 @@ import { HealthModule } from '@archie/api/utils/health';
     }),
     QueueModule.register(),
     PeachWebhookModule,
+    FireblocksWebhookModule,
     HealthModule,
   ],
   controllers: [],

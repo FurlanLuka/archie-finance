@@ -19,9 +19,9 @@ import {
   kycSubmittedDataFactory,
 } from '@archie/api/user-api/test-data';
 import {
-  creditLimitUpdatedDataFactory,
+  creditLineUpdatedDataFactory,
   creditLineCreatedDataFactory,
-} from '@archie/api/credit-limit-api/test-data';
+} from '@archie/api/credit-line-api/test-data';
 import * as nock from 'nock';
 import { ConfigService } from '@archie/api/utils/config';
 import {
@@ -56,6 +56,7 @@ import {
   PeachNock,
 } from '@archie-microservices/api/peach-api/test-data';
 import { LockedResourceError } from '@archie-microservices/api/utils/redis';
+import { DateTime } from 'luxon';
 
 describe('Peach service tests', () => {
   let app: INestApplication;
@@ -112,12 +113,12 @@ describe('Peach service tests', () => {
     });
 
     it('Should throw borrower not found and retry credit limit updated event', async () => {
-      const creditLimitUpdatedPayload = creditLimitUpdatedDataFactory();
+      const creditLimitUpdatedPayload = creditLineUpdatedDataFactory();
 
       await expect(
         app
           .get(PeachBorrowerQueueController)
-          .creditLimitUpdatedHandler(creditLimitUpdatedPayload),
+          .creditLineUpdatedHandler(creditLimitUpdatedPayload),
       ).rejects.toBeInstanceOf(BorrowerNotFoundError);
     });
   });
@@ -205,12 +206,12 @@ describe('Peach service tests', () => {
 
     describe('Credit line is not defined', () => {
       it('Should throw credit line not found error on the credit limit updated handler and retry', async () => {
-        const creditLimitUpdatedPayload = creditLimitUpdatedDataFactory();
+        const creditLimitUpdatedPayload = creditLineUpdatedDataFactory();
 
         await expect(
           app
             .get(PeachBorrowerQueueController)
-            .creditLimitUpdatedHandler(creditLimitUpdatedPayload),
+            .creditLineUpdatedHandler(creditLimitUpdatedPayload),
         ).rejects.toBeInstanceOf(CreditLineNotFoundError);
       });
     });
@@ -286,10 +287,10 @@ describe('Peach service tests', () => {
     describe('Credit limit updates', () => {
       const creditLimit: CreditLimit = creditLimitFactory();
       const balances: Balances = balancesFactory();
-      let firstCreditLimitUpdatedPayload;
+      let firstCreditLineUpdatedPayload;
 
       beforeAll(() => {
-        firstCreditLimitUpdatedPayload = creditLimitUpdatedDataFactory();
+        firstCreditLineUpdatedPayload = creditLineUpdatedDataFactory();
       });
 
       it('Should update the credit limit', async () => {
@@ -297,7 +298,7 @@ describe('Peach service tests', () => {
           person.id,
           creditLine.id,
           creditLimitUpdateRequestBodyFactory(
-            firstCreditLimitUpdatedPayload.creditLimit,
+            firstCreditLineUpdatedPayload.creditLimit,
           ),
           creditLimit,
         );
@@ -305,7 +306,7 @@ describe('Peach service tests', () => {
 
         await app
           .get(PeachBorrowerQueueController)
-          .creditLimitUpdatedHandler(firstCreditLimitUpdatedPayload);
+          .creditLineUpdatedHandler(firstCreditLineUpdatedPayload);
 
         expect(peachNock.areAllDone()).toEqual(true);
         expect(queueStub.publish).toHaveBeenCalledWith(
@@ -329,13 +330,10 @@ describe('Peach service tests', () => {
         );
         peachNock.setupGetBalancesNock(person.id, creditLine.id, balances);
 
-        await app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler(
-          creditLimitUpdatedDataFactory({
-            ...firstCreditLimitUpdatedPayload,
-            calculatedAt: new Date(
-              new Date(firstCreditLimitUpdatedPayload.calculatedAt).getTime() -
-                1000,
-            ).toISOString(),
+        await app.get(PeachBorrowerQueueController).creditLineUpdatedHandler(
+          creditLineUpdatedDataFactory({
+            ...firstCreditLineUpdatedPayload,
+            calculatedAt: DateTime.local().minus({ minutes: 1 }).toISO(),
           }),
         );
 
@@ -357,9 +355,9 @@ describe('Peach service tests', () => {
           Promise.allSettled([
             app
               .get(PeachBorrowerQueueController)
-              .creditLimitUpdatedHandler(creditLimitUpdatedDataFactory()),
-            app.get(PeachBorrowerQueueController).creditLimitUpdatedHandler(
-              creditLimitUpdatedDataFactory({
+              .creditLineUpdatedHandler(creditLineUpdatedDataFactory()),
+            app.get(PeachBorrowerQueueController).creditLineUpdatedHandler(
+              creditLineUpdatedDataFactory({
                 creditLimit: 20,
               }),
             ),

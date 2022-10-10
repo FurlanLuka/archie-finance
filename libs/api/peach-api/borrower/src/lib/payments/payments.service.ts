@@ -14,7 +14,7 @@ import {
   ScheduleTransactionDto,
 } from './payments.dto';
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
-import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { PeachWebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import {
   CreditBalanceUpdatedPayload,
   PaymentType,
@@ -25,9 +25,9 @@ import { BorrowerValidation } from '../utils/borrower.validation';
 import { Injectable } from '@nestjs/common';
 import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
 import {
-  InternalCollateralTransactionCompletedPayload,
-  InternalCollateralTransactionCreatedPayload,
-} from '@archie/api/collateral-api/data-transfer-objects';
+  LedgerAccountUpdatedPayload,
+  LedgerActionType,
+} from '@archie/api/ledger-api/data-transfer-objects';
 
 @Injectable()
 export class PaymentsService {
@@ -67,17 +67,6 @@ export class PaymentsService {
     });
     this.borrowerValidation.isBorrowerDrawDefined(borrower);
 
-    // TODO: uncomment once we get response from peach
-    // const balance: PaymentInstrumentBalance =
-    //   await this.peachApiService.getRefreshedBalance(
-    //     borrower.personId,
-    //     transaction.paymentInstrumentId,
-    //   );
-    //
-    // if (transaction.amount > balance.availableBalanceAmount) {
-    //   throw new AmountExceedsAvailableBalanceError();
-    // }
-
     await this.peachApiService.createOneTimeTransaction(
       borrower,
       transaction.amount,
@@ -87,7 +76,7 @@ export class PaymentsService {
   }
 
   public async handlePaymentConfirmedEvent(
-    payment: WebhookPaymentPayload,
+    payment: PeachWebhookPaymentPayload,
   ): Promise<void> {
     const credit: Credit = await this.peachApiService.getCreditBalance(
       payment.personId,
@@ -109,11 +98,16 @@ export class PaymentsService {
     );
   }
 
-  public async handleInternalTransactionCreatedEvent(
-    transaction: InternalCollateralTransactionCreatedPayload,
-  ): Promise<void> {
+  public async handleCollateralLiquidationEvent({
+    userId,
+    action,
+  }: LedgerAccountUpdatedPayload): Promise<void> {
+    if (action.type !== LedgerActionType.LIQUIDATION) {
+      return;
+    }
+
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId: transaction.userId,
+      userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
@@ -129,7 +123,7 @@ export class PaymentsService {
 
       await this.borrowerRepository.update(
         {
-          userId: transaction.userId,
+          userId: userId,
         },
         {
           liquidationInstrumentId,
@@ -140,9 +134,9 @@ export class PaymentsService {
     await this.peachApiService.tryCreatingOneTimePaymentTransaction(
       borrower,
       liquidationInstrumentId,
-      transaction.price,
-      transaction.id,
-      PeachOneTimePaymentStatus.pending,
+      Number(action.liquidation.usdAmount),
+      action.liquidation.id,
+      PeachOneTimePaymentStatus.succeeded,
     );
 
     const credit: Credit = await this.peachApiService.getCreditBalance(
@@ -153,28 +147,14 @@ export class PaymentsService {
       CREDIT_BALANCE_UPDATED_TOPIC,
       {
         ...credit,
-        userId: transaction.userId,
+        userId: userId,
         paymentDetails: {
           type: PaymentType.liquidation,
-          amount: transaction.amount,
-          asset: transaction.asset,
-          id: transaction.id,
+          amount: action.liquidation.usdAmount,
+          asset: 'USD',
+          id: action.liquidation.id,
         },
       },
-    );
-  }
-
-  public async handleInternalTransactionCompletedEvent(
-    transaction: InternalCollateralTransactionCompletedPayload,
-  ): Promise<void> {
-    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
-      userId: transaction.userId,
-    });
-    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
-
-    await this.peachApiService.completeTransaction(
-      borrower,
-      transaction.transactionId,
     );
   }
 
@@ -234,6 +214,4 @@ export class PaymentsService {
       },
     );
   }
-
-  // TODO: Handle failed transaction
 }
