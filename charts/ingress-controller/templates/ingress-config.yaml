@@ -26,7 +26,23 @@ metadata:
     {{- end }}
 spec:
   rules:
+    { { - if .Values.local } }
+    - http:
+    { { - else if eq .Values.environment "production" } }
+    - host: 'ws.archie.finance'
+      http:
+    { { - else } }
+    - host: 'ws.dev.archie.finance'
+      http:
+    { { - end } }
     {{- if .Values.local }}
+        paths:
+          ## Websocket api
+          - backend:
+            service:
+              name: archie-websocket-service
+              port:
+                number: 80
     - http:
     {{- else if eq .Values.environment "production" }}
     - host: 'api.archie.finance'
@@ -219,5 +235,13 @@ spec:
             backend:
               service:
                 name: archie-credit-line-api-service
+                port:
+                  number: 80
+          ## Websocket api
+          - path: /v1/ws_auth
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-websocket-service
                 port:
                   number: 80

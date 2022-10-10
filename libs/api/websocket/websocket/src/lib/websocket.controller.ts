@@ -4,7 +4,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthTokenDto } from '../../../data-transfer-objects/src/lib/auth.dto';
 import { WebsocketService } from './websocket.service';
 
-@Controller('v1/ws_auth_tokens')
+@Controller('v1/ws_auth')
 export class WebsocketController {
   constructor(private websocketService: WebsocketService) {}
 
