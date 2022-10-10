@@ -183,24 +183,27 @@ export function TraceEvent(
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {
-      const headers: object = args[1]?.properties?.headers;
+      const requestMeta = args[1];
+      const requestPayload = args[0];
+      const headers: object | undefined = requestMeta?.properties?.headers;
       const childOf = tracer.extract('text_map', headers);
 
-      await tracer.trace(
+      return await tracer.trace(
         queueName,
         {
           childOf: childOf ?? undefined,
         },
         async (span: Span) => {
-          const loggedPayload = logBody ? args[0] : null;
+          const payloadToLog = logBody ? requestPayload : null;
           Logger.log({
             message: `New event on queue ${queueName} received`,
-            payload: loggedPayload,
+            payload: payloadToLog,
           });
 
-          span.setTag('payload', loggedPayload);
+          span.setTag('payload', payloadToLog);
           try {
-            await originalMethod.apply(this, args);
+            const response = await originalMethod.apply(this, args);
+            return response;
           } catch (error) {
             span.setTag('error', error);
             throw error;
