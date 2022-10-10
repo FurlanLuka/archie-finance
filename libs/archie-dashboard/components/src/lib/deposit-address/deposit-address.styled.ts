@@ -24,6 +24,7 @@ export const DepositAddressStyled = styled.div<{ showTerms?: boolean; }>`
 
     p {
       max-width: 85%;
+      cursor: pointer;
 
       @media (max-width: ${breakpoints.screenXS}) {
         max-width: 12rem;

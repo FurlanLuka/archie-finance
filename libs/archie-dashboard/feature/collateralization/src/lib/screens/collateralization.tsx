@@ -47,7 +47,7 @@ export const CollateralizationScreen: FC = () => {
   return (
     <CollateralizationStyled>
       <MarginCallAlert />
-      <Card column alignItems="center" padding="2.5rem 1.5rem 3.5rem" minHeight="826px">
+      <Card column alignItems="center" padding="2.5rem 1.5rem" minHeight="762px">
         {getContent()}
       </Card>
     </CollateralizationStyled>

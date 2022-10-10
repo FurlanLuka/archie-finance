@@ -16,7 +16,7 @@ import {
 import { BodyL, BodyM, BodyS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { getRowDescription } from './table-fixture.helpers';
+import { getRowDescription } from './table-fixtures.helpers';
 
 interface DateCellProps {
   date: string;

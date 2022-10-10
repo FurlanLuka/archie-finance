@@ -6,7 +6,7 @@ import { CreditLine } from '@archie-webapps/shared/data-access/archie-api/credit
 import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
 import { Table } from '@archie-webapps/shared/ui/design-system';
 
-import { tableColumns } from '../../fixtures/table-fixture';
+import { tableColumns } from '../../fixtures/table-fixtures';
 import { AssetsAllocation } from '../assets-allocation/assets-allocation';
 
 type AssetMap = Record<

@@ -2,7 +2,7 @@ import { FC, useMemo } from 'react';
 
 import { Table } from '@archie-webapps/shared/ui/design-system';
 
-import { tableColumns } from './fixtures/table-fixture';
+import { tableColumns } from './fixtures/table-fixtures';
 
 export interface TransactionsTableProps {
   data: Record<string, any>[];

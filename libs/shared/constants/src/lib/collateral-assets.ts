@@ -24,7 +24,7 @@ export const CollateralAssets: Record<CollateralCurrency | string, CollateralAss
     short: 'BTC',
     icon: 'bitcoin',
     loan_to_value: 65,
-    interest_rate: 15,
+    interest_rate: 16,
     url: 'https://www.blockchain.com/btc/address',
   },
   [CollateralCurrency.ETH]: {
@@ -33,7 +33,7 @@ export const CollateralAssets: Record<CollateralCurrency | string, CollateralAss
     short: 'ETH',
     icon: 'ethereum',
     loan_to_value: 60,
-    interest_rate: 15,
+    interest_rate: 16,
     url: 'https://etherscan.io/address',
   },
   [CollateralCurrency.SOL]: {
@@ -42,7 +42,7 @@ export const CollateralAssets: Record<CollateralCurrency | string, CollateralAss
     short: 'SOL',
     icon: 'solana',
     loan_to_value: 50,
-    interest_rate: 15,
+    interest_rate: 16,
     url: 'https://explorer.solana.com/address',
   },
   [CollateralCurrency.USDC]: {
@@ -51,7 +51,7 @@ export const CollateralAssets: Record<CollateralCurrency | string, CollateralAss
     short: 'USDC',
     icon: 'usdcoin',
     loan_to_value: 70,
-    interest_rate: 15,
+    interest_rate: 16,
     url: 'https://etherscan.io/address',
   },
 };
