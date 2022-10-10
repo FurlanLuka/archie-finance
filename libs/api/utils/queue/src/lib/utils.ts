@@ -187,25 +187,12 @@ export function TraceEvent(
     descriptor.value = async function (...args: any[]) {
       const headers: object = args[1]?.properties?.headers;
       Logger.log('event headers', headers);
+      const childOf = tracer.extract('text_map', headers);
+
       await tracer.trace(
         queueName,
         {
-          childOf: {
-            toTraceId(): string {
-              if (headers === undefined) {
-                return '';
-              }
-
-              return headers['trace-id'];
-            },
-            toSpanId(): string {
-              if (headers === undefined) {
-                return '';
-              }
-
-              return headers['span-id'];
-            },
-          },
+          childOf: childOf ?? undefined,
         },
         async (span: Span) => {
           const loggedPayload = logBody ? args[0] : null;

@@ -26,13 +26,12 @@ export class QueueService implements OnApplicationBootstrap {
   ) {
     tracer.trace('queue_event_publish', (span: Span) => {
       span.setTag('eventName', routingKey);
+      const headers = options?.headers !== undefined ? options.headers : {};
+      tracer.inject(span, 'text_map', headers);
+
       this.amqpConnection.publish(exchange, routingKey, message, {
         ...options,
-        headers: {
-          ...(options?.headers !== undefined ? options.headers : {}),
-          'trace-id': span.context().toTraceId(),
-          'span-id': span.context().toSpanId(),
-        },
+        headers,
       });
     });
   }
