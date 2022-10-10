@@ -5,6 +5,7 @@ import * as winston from 'winston';
 import { Openapi } from '@archie/api/utils/openapi';
 import { AllExceptionsFilter } from '@archie/api/utils/tracing';
 import { BigNumber } from 'bignumber.js';
+import { WsAdapter } from '@nestjs/platform-ws';
 
 export async function startService(
   _name: string,
@@ -36,6 +37,8 @@ export async function startService(
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.enableCors();
+
+  app.useWebSocketAdapter(new WsAdapter(app));
 
   await app.listen(process.env.PORT ?? 80);
 
