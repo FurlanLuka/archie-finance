@@ -26,23 +26,25 @@ metadata:
     {{- end }}
 spec:
   rules:
-    { { - if .Values.local } }
+    {{- if .Values.local }}
     - http:
-    { { - else if eq .Values.environment "production" } }
+    {{- else if eq .Values.environment "production" }}
     - host: 'ws.archie.finance'
       http:
-    { { - else } }
+    {{- else }}
     - host: 'ws.dev.archie.finance'
       http:
-    { { - end } }
-    {{- if .Values.local }}
+    {{- end }}
         paths:
           ## Websocket api
-          - backend:
-            service:
-              name: archie-websocket-service
-              port:
-                number: 80
+          - path: '/'
+            pathType: Prefix
+            backend:
+              service:
+                name: archie-websocket-service
+                port:
+                  number: 80
+    {{- if .Values.local }}
     - http:
     {{- else if eq .Values.environment "production" }}
     - host: 'api.archie.finance'
