@@ -23,10 +23,11 @@ export const calculateLedgerCreditValue = (ledger: Ledger): string => {
   return result.toString();
 };
 
-export const calculateCollateralValue = (targetLtv: number, creditBalance: number, collateralTotalValue: number): number => {
+export const calculateCollateralValue = (targetLtv: number, creditBalance: number, collateralTotalValue: number) => {
   const ltv = targetLtv / 100;
+  const requiredCollateral = creditBalance / ltv;
 
-  return (creditBalance - ltv * collateralTotalValue) / (1 - ltv);
+  return requiredCollateral - collateralTotalValue;
 };
 
 export const formatLedgerAccountsToString = (ledgerAccounts: LedgerAccountData[]): string =>
