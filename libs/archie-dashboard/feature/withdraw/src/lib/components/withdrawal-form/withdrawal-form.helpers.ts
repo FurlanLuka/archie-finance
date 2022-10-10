@@ -1,36 +1,46 @@
-import { calculateCollateralCreditValue, calculateCollateralTotalValue } from '@archie-webapps/archie-dashboard/utils';
-import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
-import { BigNumber } from 'bignumber.js'
+import { BigNumber } from 'bignumber.js';
+
+import { calculateLedgerCreditValue } from '@archie-webapps/archie-dashboard/utils';
+import { Ledger, LedgerAccountData } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
 
 interface GetUpdatedCreditAndTotalResult {
-  updatedCreditValue: number;
-  updatedCollateralValue: number;
+  updatedCreditValue: string;
+  updatedLedgerValue: string;
 }
 
 export function getUpdatedCreditAndTotal({
   asset,
   withdrawalAmount,
-  collateral,
+  ledgerAccounts,
 }: {
   asset: string;
   withdrawalAmount: string;
-  collateral: CollateralValue[];
+  ledgerAccounts: LedgerAccountData[];
 }): GetUpdatedCreditAndTotalResult {
-  const updatedCollateral = collateral.map((collateralEntry) => {
-    if (collateralEntry.asset !== asset) {
-      return collateralEntry;
+  const updatedLedgerAccounts = ledgerAccounts.map((ledgerAccount) => {
+    if (ledgerAccount.assetId !== asset) {
+      return ledgerAccount;
     }
-    const newAmount = BigNumber(collateralEntry.assetAmount).minus(withdrawalAmount);
+    const newAmount = BigNumber(ledgerAccount.assetAmount).minus(withdrawalAmount);
 
     return {
-      ...collateralEntry,
-      amount: newAmount,
-      price: newAmount.multipliedBy(collateralEntry.price).dividedBy(collateralEntry.assetAmount).toNumber()
+      ...ledgerAccount,
+      assetAmount: newAmount,
+      accountValue: newAmount.multipliedBy(ledgerAccount.assetPrice).decimalPlaces(2, BigNumber.ROUND_DOWN).toString(),
     };
   });
 
+  const updatedLedger: Ledger = {
+    value: updatedLedgerAccounts
+      .reduce((sum, ledgerAccount) => {
+        return sum.plus(ledgerAccount.assetPrice);
+      }, BigNumber(0))
+      .toString(),
+    accounts: ledgerAccounts,
+  };
+
   return {
-    updatedCreditValue: calculateCollateralCreditValue(updatedCollateral),
-    updatedCollateralValue: calculateCollateralTotalValue(updatedCollateral),
+    updatedCreditValue: calculateLedgerCreditValue(updatedLedger),
+    updatedLedgerValue: updatedLedger.value,
   };
 }

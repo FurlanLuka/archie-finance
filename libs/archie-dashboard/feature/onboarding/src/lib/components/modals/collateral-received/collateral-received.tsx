@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useCreateCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-create-credit-line';
+import { useCreateCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/hooks/use-create-credit-line';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { ButtonPrimary, ButtonOutline, Modal, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 
@@ -12,15 +12,15 @@ import { CollateralReceivedModalStyled } from './collateral-received.styled';
 interface CollateralReceivedModalProps {
   onClose: () => void;
   onConfirm: () => void;
-  creditValue: number;
-  collateralValue: number;
+  creditValue: string;
+  ledgerValue: string;
 }
 
 export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
   onClose,
   onConfirm,
   creditValue,
-  collateralValue,
+  ledgerValue,
 }) => {
   const { t } = useTranslation();
   const createCreditLine = useCreateCreditLine();
@@ -42,8 +42,8 @@ export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
           <TitleS className="modal-title">{t('collateral_received_modal.title')}</TitleS>
           <BodyM className="modal-text">
             {t('collateral_received_modal.text', {
-              collateralValue: collateralValue.toFixed(2),
-              creditValue: creditValue.toFixed(2),
+              collateralValue: ledgerValue,
+              creditValue: creditValue,
             })}
           </BodyM>
           <div className="btn-group">

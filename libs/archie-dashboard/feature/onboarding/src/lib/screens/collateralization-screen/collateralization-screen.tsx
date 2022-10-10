@@ -30,7 +30,7 @@ export const CollateralizationScreen: FC = () => {
   useEffect(() => {
     if (getAssetPriceResponse.state === RequestState.SUCCESS) {
       if (selectedCollateralAsset) {
-        const asset = getAssetPriceResponse.data.find((asset) => asset.asset === selectedCollateralAsset.id);
+        const asset = getAssetPriceResponse.data.find((asset) => asset.assetId === selectedCollateralAsset.id);
 
         if (asset) {
           const assetPrice = 1 / asset.price;

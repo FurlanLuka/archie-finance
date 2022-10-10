@@ -6,13 +6,12 @@ import { Navigate } from 'react-router-dom';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
-import { useGetCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-value';
-import { calculateCollateralTotalValue, getFormattedValue } from '@archie-webapps/archie-dashboard/utils';
 import { Loader, ButtonOutline, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
 
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
 
 import { CollateralizationForm } from './blocks/collaterization-form/collaterization-form';
+import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 
 interface AddCollateralProps {
   selectedAsset: string;
@@ -23,28 +22,21 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
 
   const assetInfo = CollateralAssets[selectedAsset];
 
-  const getCollateralValueResponse = useGetCollateralValue();
+  const getLedgerResponse = useGetLedger();
   const getAssetPriceResponse = useGetAssetPrice();
 
-  if (
-    getCollateralValueResponse.state === RequestState.LOADING ||
-    getAssetPriceResponse.state === RequestState.LOADING
-  ) {
+  if (getLedgerResponse.state === RequestState.LOADING || getAssetPriceResponse.state === RequestState.LOADING) {
     return <Loader marginAuto />;
   }
 
-  if (getCollateralValueResponse.state === RequestState.ERROR || getAssetPriceResponse.state === RequestState.ERROR) {
+  if (getLedgerResponse.state === RequestState.ERROR || getAssetPriceResponse.state === RequestState.ERROR) {
     return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
   }
 
-  if (
-    getCollateralValueResponse.state === RequestState.SUCCESS &&
-    getAssetPriceResponse.state === RequestState.SUCCESS
-  ) {
-    const initialCollateral = getCollateralValueResponse.data;
-    const collateralTotalValue = calculateCollateralTotalValue(initialCollateral);
-    const currentAsset = initialCollateral.find((c) => c.asset === selectedAsset);
-    const assetPrice = getAssetPriceResponse.data.find((p) => p.asset === assetInfo.id);
+  if (getLedgerResponse.state === RequestState.SUCCESS && getAssetPriceResponse.state === RequestState.SUCCESS) {
+    const ledger = getLedgerResponse.data;
+    const currentLedgerAccount = ledger.accounts.find((ledgerAccount) => ledgerAccount.assetId === selectedAsset);
+    const assetPrice = getAssetPriceResponse.data.find((asset) => asset.assetId === assetInfo.id);
 
     if (!assetPrice) {
       return <Navigate to="/error" state={{ prevPath: '/collateral', description: "Couldn't fetch price" }} />;
@@ -52,19 +44,19 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
 
     return (
       <>
-        <CollateralUpdatedModal initialCollateral={initialCollateral} />
+        <CollateralUpdatedModal initialLedger={ledger} />
         <TitleS className="title">{t('dashboard_collateralization.title', { selectedAsset })}</TitleS>
         <BodyL className="subtitle-credit">
           {t('dashboard_collateralization.subtitle_credit', {
-            collateralTotalValue: getFormattedValue(collateralTotalValue),
+            collateralTotalValue: ledger.value,
           })}
         </BodyL>
-        {currentAsset && (
+        {currentLedgerAccount && (
           <BodyL className="subtitle-asset">
             {t('dashboard_collateralization.subtitle_asset', {
-              collateral: currentAsset.assetAmount,
-              collateralAsset: currentAsset.asset,
-              collateralValue: currentAsset.price.toFixed(2),
+              collateral: currentLedgerAccount.assetAmount,
+              collateralAsset: currentLedgerAccount.assetId,
+              collateralValue: currentLedgerAccount.assetPrice,
             })}
           </BodyL>
         )}

@@ -36,7 +36,7 @@ const ChangeCell: FC<ChangeCellProps> = ({ id }) => {
 
   const getAssetDailyChange = () => {
     if (getAssetPriceResponse.state === RequestState.SUCCESS) {
-      const asset = getAssetPriceResponse.data.find((asset) => asset.asset === id);
+      const asset = getAssetPriceResponse.data.find((asset) => asset.assetId === id);
 
       if (asset) {
         return asset.dailyChange;

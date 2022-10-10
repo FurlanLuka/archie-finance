@@ -3,8 +3,6 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 import { OnboardingStep } from '@archie-webapps/archie-dashboard/constants';
-import { TotalCollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-total-value';
-import { useGetCollateralTotalValue } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-collateral-total-value';
 import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
 import { useCreateRizeUser } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
 import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
@@ -13,6 +11,8 @@ import {
   QueryResponse,
   RequestState,
 } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
+import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import { ButtonPrimary, Container, Card, Loader, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import imgCardReady from '../../../assets/img-card-ready.png';
@@ -34,7 +34,7 @@ export const CardScreen: FC = () => {
 
   const createUserQuery: MutationQueryResponse = useCreateRizeUser();
   const getCreditQueryResponse: QueryResponse<GetCreditResponse> = useGetCredit();
-  const getCollateralTotalValueResponse: QueryResponse<TotalCollateralValue> = useGetCollateralTotalValue();
+  const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
 
   useEffect(() => {
     if (stage === Stage.CREATE_USER) {
@@ -58,8 +58,8 @@ export const CardScreen: FC = () => {
   };
 
   const getCollateralTotalValue = () => {
-    if (getCollateralTotalValueResponse.state === RequestState.SUCCESS && stage === Stage.COMPLETE) {
-      return getCollateralTotalValueResponse.data.value;
+    if (getLedgerResponse.state === RequestState.SUCCESS && stage === Stage.COMPLETE) {
+      return getLedgerResponse.data.value;
     }
 
     return 0;
@@ -74,24 +74,15 @@ export const CardScreen: FC = () => {
   };
 
   const getContent = () => {
-    if (
-      getCreditQueryResponse.state === RequestState.LOADING ||
-      getCollateralTotalValueResponse.state === RequestState.LOADING
-    ) {
+    if (getCreditQueryResponse.state === RequestState.LOADING || getLedgerResponse.state === RequestState.LOADING) {
       return <Loader marginAuto />;
     }
 
-    if (
-      getCreditQueryResponse.state === RequestState.ERROR ||
-      getCollateralTotalValueResponse.state === RequestState.ERROR
-    ) {
+    if (getCreditQueryResponse.state === RequestState.ERROR || getLedgerResponse.state === RequestState.ERROR) {
       return <Navigate to="/onboarding/error" state={{ prevPath: '/onboarding' }} />;
     }
 
-    if (
-      getCreditQueryResponse.state === RequestState.SUCCESS &&
-      getCollateralTotalValueResponse.state === RequestState.SUCCESS
-    ) {
+    if (getCreditQueryResponse.state === RequestState.SUCCESS && getLedgerResponse.state === RequestState.SUCCESS) {
       return (
         <>
           <TitleL className="title">{getTitle()}</TitleL>
@@ -99,7 +90,7 @@ export const CardScreen: FC = () => {
             {stage === Stage.COMPLETE && (
               <Trans
                 components={{ br: <br /> }}
-                values={{ total_value: getCollateralTotalValue().toFixed(2), credit_value: getCreditValue() }}
+                values={{ total_value: getLedgerResponse.data.value, credit_value: getCreditValue() }}
               >
                 card_step.subtitle
               </Trans>
