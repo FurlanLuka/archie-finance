@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { RedisService } from '@archie-microservices/api/utils/redis';
 import { CryptoService } from '@archie/api/utils/crypto';
-import { AuthTokenDto } from '../../../data-transfer-objects/src/lib/auth.dto';
+import { AuthTokenDto } from '@archie/api/websocket/data-transfer-objects';
 import { Client } from '@nestjs/microservices/external/nats-client.interface';
 
 @Injectable()
