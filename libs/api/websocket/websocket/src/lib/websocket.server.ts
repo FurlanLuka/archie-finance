@@ -2,22 +2,43 @@ import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server } from '@nestjs/microservices';
 import { NestGateway } from '@nestjs/websockets/interfaces/nest-gateway.interface';
 import { Client } from '@nestjs/microservices/external/nats-client.interface';
+import { IncomingMessage } from 'http';
+import { WebsocketService } from './websocket.service';
+import * as queryString from 'query-string';
+import { Logger } from '@nestjs/common';
 
 @WebSocketGateway({
   transports: ['websocket'],
 })
 export class WebsocketServer implements NestGateway {
+  constructor(private websocketService: WebsocketService) {}
+
   @WebSocketServer()
   server: Server;
 
-  afterInit(server: Server) {
-    console.log(server);
-  }
-  handleDisconnect(client: Client) {
-    console.log('client disconnect', client);
-  }
+  afterInit(server: Server): void {}
+  handleDisconnect(client: Client): void {}
 
-  handleConnection(client: any, ...args: any[]) {
-    console.log('client connect', client.id, client.user);
+  async handleConnection(
+    client: Client,
+    message: IncomingMessage,
+    ..._args: any[]
+  ): Promise<void> {
+    const parsedUrl = message.url ?? ''.replace('/', '').replace('?', '');
+    const queryParams = queryString.parse(parsedUrl);
+
+    if (
+      queryParams.authToken === undefined ||
+      typeof queryParams.authToken !== 'string'
+    ) {
+      Logger.warn('Invalid websocket connection request');
+      await client.close();
+      return;
+    }
+
+    await this.websocketService.handleWsConnectionRequest(
+      queryParams.authToken,
+      client,
+    );
   }
 }

@@ -175,6 +175,9 @@
       "@archie/api/websocket/constants": [
         "libs/api/websocket/constants/src/index.ts"
       ],
+      "@archie/api/websocket/data-transfer-objects": [
+        "libs/api/websocket/data-transfer-objects/src/index.ts"
+      ],
       "@archie/api/websocket/websocket": [
         "libs/api/websocket/websocket/src/index.ts"
       ],

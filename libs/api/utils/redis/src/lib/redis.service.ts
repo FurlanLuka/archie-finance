@@ -22,6 +22,22 @@ export class RedisService implements OnModuleInit {
     });
   }
 
+  public async setWithExpiry(
+    key: string,
+    value: string,
+    expirySeconds = 30,
+  ): Promise<void> {
+    const prefixedKey = `${this.options.keyPrefix}_${key}`;
+
+    await this.redisClient.setex(prefixedKey, expirySeconds, value);
+  }
+
+  public async getOnce(key: string): Promise<string | null> {
+    const prefixedKey = `${this.options.keyPrefix}_${key}`;
+
+    return this.redisClient.getdel(prefixedKey);
+  }
+
   public async acquireLock(
     resource: string,
     duration = this.DEFAULT_MAX_LOCK_DURATION_IN_MS,
