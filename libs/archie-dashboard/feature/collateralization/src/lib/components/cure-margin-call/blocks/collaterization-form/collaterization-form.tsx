@@ -1,92 +1,97 @@
-import { FC, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import ReactTooltip from 'react-tooltip';
+import { FC, useState, useMemo } from 'react';
 
-import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
+import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
-import { TitleL, BodyM, BodyL } from '@archie-webapps/shared/ui/design-system';
+import { MINIMUM_LTV, SUGGESTED_LTV } from '@archie-webapps/archie-dashboard/constants';
+import { calculateCollateralValue } from '@archie-webapps/archie-dashboard/utils';
+import { Table, InputText } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
+import { tableColumns } from './fixtures/table-fixtures';
 import { CollaterizationFormStyled } from './collaterization-form.styled';
-import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 
 interface CollateralizationFormProps {
   assetInfo: CollateralAsset;
   assetPrice: AssetPrice;
-  currentLtv: number;
-  minCollateral: number;
+  creditBalance: number;
+  collateralTotalValue: number;
 }
 
 export const CollateralizationForm: FC<CollateralizationFormProps> = ({
   assetInfo,
   assetPrice,
-  currentLtv,
-  minCollateral,
+  creditBalance,
+  collateralTotalValue,
 }) => {
-  const { t } = useTranslation();
+  const [customLtv, setCustomLtv] = useState(SUGGESTED_LTV);
 
-  const [requiredCollateral, setRequiredCollateral] = useState(0);
+  const getRequiredCollateral = (targetLtv: number) => {
+    const collateral = calculateCollateralValue(targetLtv, creditBalance, collateralTotalValue);
 
-  useEffect(() => {
     const price = 1 / assetPrice.price;
-    const result = (minCollateral / (assetInfo.loan_to_value / 100)) * price;
+    const result = (collateral / (assetInfo.loan_to_value / 100)) * price;
 
-    setRequiredCollateral(Math.ceil(result * 10000) / 10000);
-  }, [minCollateral, assetPrice]);
-
-  const getFormattedCollateral = () => {
-    const value =
-      assetInfo.short === 'USDC'
-        ? Number(requiredCollateral.toFixed(2)) * 1
-        : Number(requiredCollateral.toFixed(4)) * 1;
-
-    return `${value} ${assetInfo.short}`;
+    return Math.ceil(result * 10000) / 10000;
   };
+
+  const tableData = useMemo(() => {
+    return [
+      {
+        target_ltv: `${SUGGESTED_LTV}%`,
+        asset_to_add: {
+          id: 'suggested_collateral',
+          amount: getRequiredCollateral(SUGGESTED_LTV),
+          asset: assetInfo.short,
+        },
+        info: {
+          text: 'Suggested',
+          color: theme.textSuccess,
+        },
+      },
+      {
+        target_ltv: `${MINIMUM_LTV}%`,
+        asset_to_add: {
+          id: 'minimum_collateral',
+          amount: getRequiredCollateral(MINIMUM_LTV),
+          asset: assetInfo.short,
+        },
+        info: {
+          text: 'Minimum',
+          color: theme.textDanger,
+        },
+      },
+      {
+        target_ltv: (
+          <InputText small className="custom-ltv">
+            <input
+              type="number"
+              // prevent value change on scroll
+              onWheel={(e) => e.currentTarget.blur()}
+              value={customLtv}
+              onChange={(e) => setCustomLtv(e.target.valueAsNumber)}
+            />
+          </InputText>
+        ),
+        asset_to_add: {
+          id: 'custom_collateral',
+          amount: getRequiredCollateral(customLtv),
+          asset: assetInfo.short,
+        },
+        info: {
+          text: 'Calculate target LTV',
+          color: theme.textPrimary,
+        },
+      },
+    ];
+  }, [customLtv]);
 
   return (
     <CollaterizationFormStyled>
       <div className="ltv-info">
-        <BodyL weight={700} color={theme.textDanger}>
-          {t('collateralization_step.margin_call_info.current_ltv', { ltv: currentLtv.toFixed(2) })}
-        </BodyL>
-        <BodyL weight={700} color={theme.textSuccess}>
-          {t('collateralization_step.margin_call_info.suggested_ltv')}
-        </BodyL>
-        <BodyL weight={700}>
-          {t('collateralization_step.margin_call_info.collateral_to_add', { collateral: getFormattedCollateral() })}
-        </BodyL>
+        <Table columns={tableColumns(assetInfo.short)} data={tableData} />
       </div>
-      <hr className="divider" />
-      <div className="result">
-        <div className="result-item">
-          <BodyM weight={700}>{t('collateralization_step.result.first')}</BodyM>
-          <TitleL weight={400} id="collateral">
-            <span
-              className="clickable"
-              data-tip="Click to copy"
-              onClick={() => copyToClipboard('collateral', requiredCollateral.toString())}
-            >
-              {getFormattedCollateral()}
-            </span>
-          </TitleL>
-          <ReactTooltip
-            textColor={theme.tooltipText}
-            backgroundColor={theme.tooltipBackground}
-            effect="solid"
-            delayHide={1000}
-          />
-        </div>
-        <div className="result-item">
-          <BodyM weight={700}>{t('collateralization_step.result.second')}</BodyM>
-          <TitleL weight={400}>{assetInfo.loan_to_value}%</TitleL>
-        </div>
-        <div className="result-item">
-          <BodyM weight={700}>{t('collateralization_step.result.third')}</BodyM>
-          <TitleL weight={400}>{assetInfo.interest_rate}%</TitleL>
-        </div>
-      </div>
-      <DepositAddress assetInfo={assetInfo} assetAmount={requiredCollateral} />
+      <DepositAddress assetInfo={assetInfo} />
     </CollaterizationFormStyled>
   );
 };

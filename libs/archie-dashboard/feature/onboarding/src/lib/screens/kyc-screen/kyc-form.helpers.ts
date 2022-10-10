@@ -52,3 +52,18 @@ export const parseDate = (value: string) => {
   const timezoneOffset = -date.getTimezoneOffset()
   return new Date(date.getTime() + timezoneOffset * TO_SECONDS * TO_MS);
 };
+
+export const formatIncome = (value?: number) => 
+  value ? 
+    value.toLocaleString(undefined, { maximumFractionDigits: 2 }) 
+    : '';
+
+export const getFormatTemplate = (value?: string) =>
+  value ? 
+    value.split('').reverse().reduce((entry, _, i) => {
+      if ((i + 1) % 3 === 0 && i !== value.length - 1) {
+        return `${entry}x,`;
+      }
+      return `${entry}x`;
+    }, '').split('').reverse().join('')
+    : '';

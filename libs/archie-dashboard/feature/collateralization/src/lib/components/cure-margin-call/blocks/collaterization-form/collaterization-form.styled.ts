@@ -1,115 +1,45 @@
-import styled, { keyframes } from 'styled-components';
-
-import { breakpoints } from '@archie-webapps/shared/ui/theme';
-
-const hide = keyframes`
-  0% {
-    visibility: visible;
-  }
-  100% {
-    visibility: hidden;
-  }
-`;
-
-const fadeOut = keyframes`
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-`;
+import styled from 'styled-components';
 
 export const CollaterizationFormStyled = styled.div`
   width: 100%;
   max-width: 730px;
 
   .ltv-info {
-    margin-bottom: 2rem;
-
-    p {
-      margin-bottom: 0.25rem;
-    }
+    margin-bottom: 2.5rem;
   }
 
-  .divider {
-    height: 1px;
-    width: 100%;
-    background-color: ${({ theme }) => theme.borderPrimary};
-    border: 0;
-    margin-bottom: 2rem;
+  .align-right {
+    text-align: right;
   }
 
-  .credit-slider {
-    width: 100%;
-    margin-bottom: 4rem;
+  .asset-copy {
+    max-width: fit-content;
+    cursor: pointer;
   }
 
-  .result {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    margin-bottom: 1.5rem;
+  .custom-ltv {
+    position: relative;
+    max-width: 3.75rem;
+    margin: 0;
 
-    @media (max-width: ${breakpoints.screenSM}) {
-      flex-direction: column;
-    }
-  }
-
-  .result-item {
-    display: flex;
-    flex-direction: column;
-    width: 33.33%;
-    padding-right: 0.5rem;
-
-    @media (max-width: ${breakpoints.screenMD}) {
-      width: 36%;
+    :after {
+      content: '%';
+      position: absolute;
+      top: 0.4rem;
+      right: 0.5rem;
+      line-height: 1;
     }
 
-    @media (max-width: ${breakpoints.screenSM}) {
-      width: 100%;
-      margin-bottom: 1rem;
-    }
+    input {
+      padding-right: 1.25rem;
+      margin: 0;
+      -moz-appearance: textfield;
 
-    :nth-child(2) {
-      max-width: 186px;
-    }
-
-    :nth-child(3) {
-      max-width: 96px;
-    }
-
-    h4 {
-      white-space: nowrap;
-
-      @media (max-width: ${breakpoints.screenMD}) {
-        white-space: normal;
+      ::-webkit-outer-spin-button,
+      ::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
       }
     }
-
-    p {
-      margin-bottom: 0.5rem;
-    }
-  }
-
-  .placeholder {
-    position: absolute;
-    top: -5%;
-    display: flex;
-    justify-content: flex-start;
-    color: ${({ theme }) => theme.textDisabled};
-    background-color: ${({ theme }) => theme.backgroundPrimary};
-    height: 110%;
-    width: 100%;
-
-    &.fade-out {
-      animation: ${fadeOut} 0.4s ease-out 2s forwards, ${hide} 0s linear 2s forwards;
-    }
-  }
-
-  .data {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
   }
 `;
