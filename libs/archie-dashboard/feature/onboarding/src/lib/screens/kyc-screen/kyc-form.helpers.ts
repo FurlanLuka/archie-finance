@@ -58,7 +58,7 @@ export const formatIncome = (value?: number) =>
     value.toLocaleString(undefined, { maximumFractionDigits: 2 }) 
     : '';
 
-export const getFormatTempalte = (value?: string) =>
+export const getFormatTemplate = (value?: string) =>
   value ? 
     value.split('').reverse().reduce((entry, _, i) => {
       if ((i + 1) % 3 === 0 && i !== value.length - 1) {

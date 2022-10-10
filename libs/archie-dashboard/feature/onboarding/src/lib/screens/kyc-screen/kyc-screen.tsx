@@ -12,7 +12,7 @@ import { ButtonPrimary, Card, InputText, TitleL, BodyL, BodyM } from '@archie-we
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { parseDate, addAddress, getAddressError, Address, formatIncome, getFormatTempalte } from './kyc-form.helpers';
+import { parseDate, addAddress, getAddressError, Address, formatIncome, getFormatTemplate } from './kyc-form.helpers';
 import { KycSchema } from './kyc-form.schema';
 import { KycScreenStyled } from './kyc-screen.styled';
 
@@ -210,7 +210,7 @@ export const KycScreen: FC = () => {
                   parse={parseDigit}
                   format={(value) => ({
                     text: formatIncome(Number(value)),
-                    template: getFormatTempalte(value),
+                    template: getFormatTemplate(value),
                   })}
                 />
               )}
