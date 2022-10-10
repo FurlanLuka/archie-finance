@@ -51,11 +51,11 @@ export const SettingsScreen: FC = () => {
   };
 
   return (
-      <SettingsStyled>
-        <TitleM className="title">{t('dashboard_settings.title')}</TitleM>
-        <Card column alignItems="flex-start" padding="1.5rem 1.5rem 2rem" minHeight="615px">
-          {getContent()}
-        </Card>
-      </SettingsStyled>
+    <SettingsStyled>
+      <TitleM className="title">{t('dashboard_settings.title')}</TitleM>
+      <Card column alignItems="flex-start" padding="1.5rem 1.5rem 2rem" minHeight="615px">
+        {getContent()}
+      </Card>
+    </SettingsStyled>
   );
 };

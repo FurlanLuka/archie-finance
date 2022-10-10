@@ -11,6 +11,10 @@ export const SettingsStyled = styled.div`
     padding: 1.5rem 1rem;
   }
 
+  .title {
+    margin-bottom: 1.5rem;
+  }
+
   .section-title {
     display: flex;
     flex-direction: column;
