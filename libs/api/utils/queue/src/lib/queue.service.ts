@@ -29,7 +29,7 @@ export class QueueService implements OnApplicationBootstrap {
       this.amqpConnection.publish(exchange, routingKey, message, {
         ...options,
         headers: {
-          ...options.headers,
+          ...(options?.headers !== undefined ? options.headers : {}),
           'trace-id': span.context().toTraceId(),
           'span-id': span.context().toSpanId(),
         },
