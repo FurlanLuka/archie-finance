@@ -73,6 +73,11 @@
   "collateralization_step": {
     "title": "Create your credit line",
     "subtitle": "Select the crypto asset you'd like to collateralize and your desired credit limit",
+    "margin_call_info": {
+      "current_ltv": "Current LTV: {{ltv}}%",
+      "suggested_ltv": "Suggested LTV: 50%",
+      "collateral_to_add": "Collateral to add: {{collateral}}"
+    },
     "inputs": {
       "input_range_label": "Credit amount",
       "input_select_label": "Collateral",
@@ -81,7 +86,7 @@
     },
     "result": {
       "first": "Collateral Required",
-      "second": "Suggested Loan-to-Value",
+      "second": "Credit Limit Ratio",
       "third": "Interest Rate"
     },
     "address": {
@@ -105,7 +110,7 @@
     },
     "subtitle": "You have submitted ${{total_value}} worth of collateral and have a ${{credit_value}} credit limit. Make sure <br /> your email is verified before continuing.",
     "img_alt": "Your Archie Card is ready",
-    "btn": "Go to my dashboard"
+    "btn": "Go to dashboard"
   },
   "error_indicator": {
     "title": "Something went wrong",
@@ -148,8 +153,9 @@
     "btn": "Cure"
   },
   "margin_call_alert": {
-    "title": "You have reached margin call",
-    "text": "The value of your ArchCredit collateral has dropped and you have reached an LTV rate above 75%. Action is required to prevent liquidiating a portion of your collateral. We recommend sending more collateral to your ArchCredit; paying down your balance through your bank may take up to 3 days. Archie will automatically undergo a partial lidquidation if your LTV reaches 90%.",
+    "title": "Margin Call - Action Required",
+    "text_1": "Your LTV is {{ltv}}%, which exceeds the 75% margin call threshold, as the value of your collateral has declined. To avoid liquidation, please send at least ${{minCollateral}} collateral to restore your LTV to below 75% before <b>{{date}}</b>.",
+    "text_2": "Note that Archie may liquidate some of your collateral if your LTV exceeds 90% at any time, even if it is before the above date.",
     "btn": "Cure"
   },
   "available_credit_card": {
@@ -164,8 +170,8 @@
   "interest_rate_card": {
     "title": "Interest Rate"
   },
-  "my_rewards_card": {
-    "title": "My Rewards",
+  "rewards_card": {
+    "title": "Rewards",
     "note_1": "Points",
     "note_2": "Projected Value"
   },
@@ -183,14 +189,15 @@
     "available_credit": {},
     "collateral_value": {},
     "next_payment": {},
-    "my_rewards": {},
+    "rewards": {},
     "recent_transactions": {
       "title": "Recent Transactions",
       "btn": "View More"
     }
   },
   "dashboard_collateral": {
-    "title": "My Wallet"
+    "title": "Collateral",
+    "subtitle": "Wallet"
   },
   "dashboard_withdraw": {
     "title": "Withdraw {{currentAsset}}",
@@ -221,9 +228,10 @@
     "btn": "Withdraw Collateral"
   },
   "dashboard_collateralization": {
-    "title": "Send {{asset}} to your Collateral Wallet",
+    "title": "Send {{selectedAsset}} to your Collateral Wallet",
     "subtitle_asset": "You currently have {{collateral}} {{collateralAsset}} (~${{collateralValue}}).",
     "subtitle_credit": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it.",
+    "subtitle_margin_call": "To exit a margin call, you must bring your LTV below 75%. We suggest adding enough collateral to bring your LTV to 50% or below.",
     "collateral_received_modal": {
       "title": "We received your collateral!",
       "text": "Your collateral is now worth ${{collateralValue}}, giving you an initial credit line of ${{creditValue}}."
@@ -234,13 +242,13 @@
     "btn_pay": "Make a Payment",
     "auto_payments": "auto payments:",
     "connected_accounts": {
-      "title": "Your accounts",
+      "title": "Accounts",
       "no_accounts": "No accounts have been added yet. Connect to your Plaid account to start making payments.",
       "btn_add": "Add account",
       "btn_disconnect": "Disconnect"
     },
     "account_select": {
-      "label": "Your accounts",
+      "label": "Accounts",
       "empty": "Select an account to connect",
       "btn_connect": "Connect to Archie"
     },
@@ -254,7 +262,8 @@
     "title": ""
   },
   "dashboard_history": {
-    "title": "Recent Transactions",
+    "title": "History",
+    "subtitle": "Recent Transactions",
     "btn_load_more": "Load more",
     "btn_statements": "Download Statement",
     "fetch_statements": "Fetching statements...",
@@ -285,7 +294,7 @@
     "credit_for": "ArchCredit for {{name}}",
     "interest_owed": "Interest owed: ${{interestOwed}}",
     "select_account": {
-      "label": "Your accounts",
+      "label": "Accounts",
       "empty": "Select account to pay with",
       "balance_subtext": "Funds available",
       "btn_confirm": "Confirm"

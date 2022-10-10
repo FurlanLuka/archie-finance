@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 export const ConnectedAccountsStyled = styled.div`
-  .title {
-    margin-bottom: 1rem;
+  .accounts-title {
+    margin-bottom: 1.5rem;
   }
 
-  .account-list {
+  .accounts-list {
     width: 100%;
     margin-bottom: 1rem;
   }

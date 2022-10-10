@@ -1,1 +1,1 @@
-export { usePollCollateralDeposit } from './lib/use-poll-collateral-deposit';
+export { usePollLedgerChanges } from './lib/use-poll-ledger-changes';

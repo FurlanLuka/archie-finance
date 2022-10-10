@@ -14,7 +14,7 @@ export const Warning: FC<WarningProps> = ({ withButton }) => {
   const navigate = useNavigate();
 
   return (
-    <>
+    <div className="content">
       <BodyL weight={800} color={theme.textLight}>
         {t('close_to_margin_call_alert.title')}
       </BodyL>
@@ -24,6 +24,6 @@ export const Warning: FC<WarningProps> = ({ withButton }) => {
           {t('close_to_margin_call_alert.btn')}
         </ButtonLight>
       )}
-    </>
+    </div>
   );
 };

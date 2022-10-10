@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -5,7 +6,7 @@ import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
 import { Toast, ToastList, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 interface NotEnoughCollateralProps {
-  creditValue: number;
+  creditValue: string;
 }
 
 export const NotEnoughCollateral: FC<NotEnoughCollateralProps> = ({ creditValue }) => {
@@ -16,8 +17,11 @@ export const NotEnoughCollateral: FC<NotEnoughCollateralProps> = ({ creditValue 
       <Toast>
         <BodyM weight={700}>
           {t('not_enough_collateral_popup.text', {
-            creditValue: creditValue.toFixed(2),
-            difference: (MIN_LINE_OF_CREDIT - creditValue).toFixed(2),
+            creditValue: creditValue,
+            difference: BigNumber(MIN_LINE_OF_CREDIT)
+              .minus(creditValue)
+              .decimalPlaces(2, BigNumber.ROUND_DOWN)
+              .toString(),
           })}
         </BodyM>
       </Toast>

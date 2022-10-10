@@ -10,14 +10,12 @@ import { HeaderStyled, MobileNav } from './header.styled';
 
 export interface HeaderProps {
   maxWidth?: string;
+  showMobileNav?: boolean;
 }
 
-export const Header: FC<HeaderProps> = ({ maxWidth }) => {
+export const Header: FC<HeaderProps> = ({ maxWidth, showMobileNav }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const { logout } = useAuthenticatedSession();
-
-  const isOnboarding = location.pathname === '/onboarding';
 
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
@@ -41,7 +39,7 @@ export const Header: FC<HeaderProps> = ({ maxWidth }) => {
       <HeaderStyled isOpen={mobileNavOpen}>
         <Container alignItems="center" justifyContent="space-between" maxWidth={maxWidth}>
           <Icon name="logo" className="logo" />
-          {!isOnboarding && (
+          {showMobileNav && (
             <button className="menu-button hide-lg" onClick={toggleMobileNav}>
               <div className="line one"></div>
               <div className="line two"></div>

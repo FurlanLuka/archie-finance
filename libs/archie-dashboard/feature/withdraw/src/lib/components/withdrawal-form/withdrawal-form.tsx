@@ -1,16 +1,17 @@
 import { yupResolver } from '@hookform/resolvers/yup';
+import { BigNumber } from 'bignumber.js';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
-import { calculateCollateralCreditValue, calculateCollateralTotalValue } from '@archie-webapps/archie-dashboard/utils';
+import { calculateLedgerCreditValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAssets } from '@archie-webapps/shared/constants';
-import { CollateralValue } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-collateral-value';
-import { useCreateWithdrawal } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-create-withdrawal';
-import { getMaxWithdrawalAmountQueryKey } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-max-withdrawal-amount';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
+import { useCreateWithdrawal } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-create-withdrawal';
+import { getMaxWithdrawalAmountQueryKey } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-max-withdrawal-amount';
 import { ButtonOutline, ButtonPrimary, InputText, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -19,7 +20,6 @@ import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/suc
 import { getUpdatedCreditAndTotal } from './withdrawal-form.helpers';
 import { getWithdrawSchema } from './withdrawal-form.schema';
 import { WithdrawalFormStyled } from './withdrawal-form.styled';
-import { BigNumber } from 'bignumber.js'
 
 interface WithdrawFormData {
   withdrawAmount: string;
@@ -28,16 +28,16 @@ interface WithdrawFormData {
 
 interface WithdrawalFormProps {
   currentAsset: string;
-  collateral: CollateralValue[];
+  ledger: Ledger;
   maxAmount: string;
 }
 
-export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collateral, maxAmount }) => {
+export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, ledger, maxAmount }) => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
   const createWithdrawal = useCreateWithdrawal();
-  const maxAmountBN = BigNumber(maxAmount)
+  const maxAmountBN = BigNumber(maxAmount);
   const WithdrawSchema = getWithdrawSchema(maxAmountBN);
   const queryClient = useQueryClient();
 
@@ -69,20 +69,19 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
   const withdrawalAmount = watch('withdrawAmount');
   const depositAddress = watch('withdrawAddress');
 
-  const initialCreditValue = calculateCollateralCreditValue(collateral);
-  const initialCollateralValue = calculateCollateralTotalValue(collateral);
+  const initialCreditValue = calculateLedgerCreditValue(ledger);
 
-  const { updatedCollateralValue, updatedCreditValue } = getUpdatedCreditAndTotal({
+  const { updatedLedgerValue, updatedCreditValue } = getUpdatedCreditAndTotal({
     asset: currentAsset,
-    collateral,
+    ledgerAccounts: ledger.accounts,
     withdrawalAmount,
   });
 
   const onSubmit = handleSubmit((data) => {
     if (createWithdrawal.state === RequestState.IDLE) {
       createWithdrawal.mutate({
-        asset: currentAsset,
-        withdrawalAmount: data.withdrawAmount,
+        assetId: currentAsset,
+        amount: data.withdrawAmount,
         destinationAddress: data.withdrawAddress,
       });
     }
@@ -113,10 +112,10 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, collater
           {maxAmountBN.isGreaterThan(0) && maxAmountBN.isGreaterThanOrEqualTo(withdrawalAmount) && (
             <BodyM color={theme.textSecondary} weight={500} className="credit-limit">
               {t('dashboard_withdraw.form.credit_change', {
-                initialCollateralValue: initialCollateralValue.toFixed(2),
-                initialCreditValue: initialCreditValue.toFixed(2),
-                updatedCollateralValue: updatedCollateralValue.toFixed(2),
-                updatedCreditValue: updatedCreditValue.toFixed(2),
+                initialCollateralValue: ledger.value,
+                initialCreditValue: initialCreditValue,
+                updatedCollateralValue: updatedLedgerValue,
+                updatedCreditValue: updatedCreditValue,
               })}
             </BodyM>
           )}
