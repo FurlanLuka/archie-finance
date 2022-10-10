@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useState, useMemo } from 'react';
 
 import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
@@ -35,54 +35,56 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
     return Math.ceil(result * 10000) / 10000;
   };
 
-  const tableData = [
-    {
-      target_ltv: `${SUGGESTED_LTV}%`,
-      asset_to_add: {
-        id: 'suggested_collateral',
-        amount: getRequiredCollateral(SUGGESTED_LTV),
-        asset: assetInfo.short,
+  const tableData = useMemo(() => {
+    return [
+      {
+        target_ltv: `${SUGGESTED_LTV}%`,
+        asset_to_add: {
+          id: 'suggested_collateral',
+          amount: getRequiredCollateral(SUGGESTED_LTV),
+          asset: assetInfo.short,
+        },
+        info: {
+          text: 'Suggested',
+          color: theme.textSuccess,
+        },
       },
-      info: {
-        text: 'Suggested',
-        color: theme.textSuccess,
+      {
+        target_ltv: `${MINIMUM_LTV}%`,
+        asset_to_add: {
+          id: 'minimum_collateral',
+          amount: getRequiredCollateral(MINIMUM_LTV),
+          asset: assetInfo.short,
+        },
+        info: {
+          text: 'Minimum',
+          color: theme.textDanger,
+        },
       },
-    },
-    {
-      target_ltv: `${MINIMUM_LTV}%`,
-      asset_to_add: {
-        id: 'minimum_collateral',
-        amount: getRequiredCollateral(MINIMUM_LTV),
-        asset: assetInfo.short,
+      {
+        target_ltv: (
+          <InputText small className="custom-ltv">
+            <input
+              type="number"
+              // prevent value change on scroll
+              onWheel={(e) => e.currentTarget.blur()}
+              value={customLtv}
+              onChange={(e) => setCustomLtv(e.target.valueAsNumber)}
+            />
+          </InputText>
+        ),
+        asset_to_add: {
+          id: 'custom_collateral',
+          amount: getRequiredCollateral(customLtv),
+          asset: assetInfo.short,
+        },
+        info: {
+          text: 'Calculate target LTV',
+          color: theme.textPrimary,
+        },
       },
-      info: {
-        text: 'Minimum',
-        color: theme.textDanger,
-      },
-    },
-    {
-      target_ltv: (
-        <InputText small className="custom-ltv">
-          <input
-            type="number"
-            // prevent value change on scroll
-            onWheel={(e) => e.currentTarget.blur()}
-            value={customLtv}
-            onChange={(e) => setCustomLtv(e.target.valueAsNumber)}
-          />
-        </InputText>
-      ),
-      asset_to_add: {
-        id: 'custom_collateral',
-        amount: getRequiredCollateral(customLtv),
-        asset: assetInfo.short,
-      },
-      info: {
-        text: 'Calculate target LTV',
-        color: theme.textPrimary,
-      },
-    },
-  ];
+    ];
+  }, [customLtv]);
 
   return (
     <CollaterizationFormStyled>
