@@ -4,7 +4,7 @@ import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-export const tableColumns = [
+export const tableColumns = (currentAsset: string) => [
   {
     Header: '',
     id: 'hidden',
@@ -14,7 +14,7 @@ export const tableColumns = [
         accessor: 'target_ltv',
       },
       {
-        Header: 'ETH to add:',
+        Header: `${currentAsset} to add:`,
         accessor: 'asset_to_add',
         Cell: ({ value: { id, amount, asset } }: any) => (
           <>

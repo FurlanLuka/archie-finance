@@ -89,7 +89,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
   return (
     <CollaterizationFormStyled>
       <div className="ltv-info">
-        <Table columns={tableColumns} data={tableData} />
+        <Table columns={tableColumns(assetInfo.short)} data={tableData} />
       </div>
       <DepositAddress assetInfo={assetInfo} />
     </CollaterizationFormStyled>
