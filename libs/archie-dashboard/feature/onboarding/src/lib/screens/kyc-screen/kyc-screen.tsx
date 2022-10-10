@@ -1,8 +1,8 @@
+import { FC } from 'react';
+import ReactInput from 'input-format/react';
+import Autocomplete from 'react-google-autocomplete';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { templateFormatter, templateParser, parseDigit } from 'input-format';
-import ReactInput from 'input-format/react';
-import { FC } from 'react';
-import Autocomplete from 'react-google-autocomplete';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +12,7 @@ import { ButtonPrimary, Card, InputText, TitleL, BodyL, BodyM } from '@archie-we
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { parseDate, addAddress, getAddressError, Address } from './kyc-form.helpers';
+import { parseDate, addAddress, getAddressError, Address, formatIncome, getFormatTempalte } from './kyc-form.helpers';
 import { KycSchema } from './kyc-form.schema';
 import { KycScreenStyled } from './kyc-screen.styled';
 
@@ -24,7 +24,7 @@ interface KycFormData {
   aptUnit: string;
   phoneNumber: string;
   ssn: string;
-  income: number;
+  income: string;
 }
 
 export const KycScreen: FC = () => {
@@ -48,7 +48,7 @@ export const KycScreen: FC = () => {
       aptUnit: '',
       phoneNumber: '',
       ssn: '',
-      income: undefined,
+      income: '',
     },
     resolver: yupResolver(KycSchema),
   });
@@ -57,7 +57,7 @@ export const KycScreen: FC = () => {
 
   const onSubmit = handleSubmit((data) => {
     if (mutationRequest.state === RequestState.IDLE) {
-      mutationRequest.mutate({
+      const payload = {
         firstName: data.firstName,
         lastName: data.lastName,
         dateOfBirth: parseDate(data.dateOfBirth).toISOString(),
@@ -66,8 +66,22 @@ export const KycScreen: FC = () => {
         phoneNumberCountryCode,
         phoneNumber: data.phoneNumber,
         ssn: data.ssn,
-        income: data.income,
-      });
+        income: Number(data.income),
+      };
+
+      console.log(payload);
+
+      // mutationRequest.mutate({
+      //   firstName: data.firstName,
+      //   lastName: data.lastName,
+      //   dateOfBirth: parseDate(data.dateOfBirth).toISOString(),
+      //   ...data.address,
+      //   aptUnit: data.aptUnit,
+      //   phoneNumberCountryCode,
+      //   phoneNumber: data.phoneNumber,
+      //   ssn: data.ssn,
+      //   income: Number(data.income),
+      // });
     }
   });
 
@@ -199,13 +213,21 @@ export const KycScreen: FC = () => {
           </InputText>
           <InputText>
             {t('kyc_step.label.income')}
-            <input
-              type="number"
-              placeholder={t('kyc_step.placeholder.income')}
-              // prevent value change on scroll
-              onWheel={(e) => e.currentTarget.blur()}
-              className="income"
-              {...register('income')}
+            <Controller
+              control={control}
+              name="income"
+              render={({ field: { onChange, value } }) => (
+                <ReactInput
+                  value={value}
+                  onChange={onChange}
+                  placeholder={t('kyc_step.placeholder.income')}
+                  parse={parseDigit}
+                  format={(value) => ({
+                    text: formatIncome(Number(value)),
+                    template: getFormatTempalte(value),
+                  })}
+                />
+              )}
             />
             {errors.income?.message && (
               <BodyM className="error" color={theme.textDanger}>

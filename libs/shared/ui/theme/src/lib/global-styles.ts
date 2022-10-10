@@ -4,7 +4,7 @@ import { breakpoints } from './breakpoints';
 
 const scale = keyframes`
   0% {
-    transform: scale(0.99);
+    transform: scale(0.98);
   }
   100% {
     transform: scale(1);

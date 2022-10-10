@@ -1,7 +1,5 @@
 import { FC, useState } from 'react';
-import ReactTooltip from 'react-tooltip';
 
-import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
