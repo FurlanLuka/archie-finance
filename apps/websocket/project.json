@@ -1,0 +1,89 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/websocket/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/websocket",
+        "main": "apps/websocket/src/main.ts",
+        "tsConfig": "apps/websocket/tsconfig.app.json",
+        "assets": [
+          "apps/websocket/src/assets"
+        ],
+        "tsPlugins": [
+          "@nestjs/swagger/plugin"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/websocket/src/environments/environment.ts",
+              "with": "apps/websocket/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "websocket:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "websocket:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/websocket/**/*.ts"
+        ]
+      }
+    },
+    "build-openapi": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build websocket && node dist/apps/websocket/main build-swagger"
+      }
+    },
+    "generate-migration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build websocket && node dist/apps/websocket/main generate-migration"
+      }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "test-integration": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/websocket"
+      ],
+      "options": {
+        "jestConfig": "apps/websocket/jest.config.ts",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
+    }
+  },
+  "tags": []
+}

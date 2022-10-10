@@ -62,6 +62,7 @@
     "api-webhook-api-data-transfer-objects": "libs/api/webhook-api/data-transfer-objects",
     "api-webhook-api-fireblocks": "libs/api/webhook-api/fireblocks",
     "api-webhook-api-peach": "libs/api/webhook-api/peach",
+    "api-websocket-constants": "libs/api/websocket/constants",
     "credit-api": "apps/credit-api",
     "credit-line-api": "apps/credit-line-api",
     "fireblocks-api": "apps/fireblocks-api",
@@ -77,6 +78,7 @@
     "plugin-workspace-generator": "libs/plugin/workspace-generator",
     "referral-system-api": "apps/referral-system-api",
     "user-api": "apps/user-api",
-    "webhook-api": "apps/webhook-api"
+    "webhook-api": "apps/webhook-api",
+    "websocket": "apps/websocket"
   }
 }
