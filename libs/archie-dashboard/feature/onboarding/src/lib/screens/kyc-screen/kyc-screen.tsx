@@ -57,7 +57,7 @@ export const KycScreen: FC = () => {
 
   const onSubmit = handleSubmit((data) => {
     if (mutationRequest.state === RequestState.IDLE) {
-      const payload = {
+      mutationRequest.mutate({
         firstName: data.firstName,
         lastName: data.lastName,
         dateOfBirth: parseDate(data.dateOfBirth).toISOString(),
@@ -67,21 +67,7 @@ export const KycScreen: FC = () => {
         phoneNumber: data.phoneNumber,
         ssn: data.ssn,
         income: Number(data.income),
-      };
-
-      console.log(payload);
-
-      // mutationRequest.mutate({
-      //   firstName: data.firstName,
-      //   lastName: data.lastName,
-      //   dateOfBirth: parseDate(data.dateOfBirth).toISOString(),
-      //   ...data.address,
-      //   aptUnit: data.aptUnit,
-      //   phoneNumberCountryCode,
-      //   phoneNumber: data.phoneNumber,
-      //   ssn: data.ssn,
-      //   income: Number(data.income),
-      // });
+      });
     }
   });
 
