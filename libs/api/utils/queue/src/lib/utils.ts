@@ -188,7 +188,7 @@ export function TraceEvent(
       const headers: object | undefined = requestMeta?.properties?.headers;
       const childOf = tracer.extract('text_map', headers);
 
-      return await tracer.trace(
+      return tracer.trace(
         queueName,
         {
           childOf: childOf ?? undefined,
