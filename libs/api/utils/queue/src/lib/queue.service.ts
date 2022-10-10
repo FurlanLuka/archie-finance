@@ -43,12 +43,17 @@ export class QueueService implements OnApplicationBootstrap {
     options?: RequestOptions,
   ): Promise<K> {
     return tracer.trace('rpc_request', async (span: Span) => {
+      span.setTag('eventName', routingKey);
+      const headers = options?.headers !== undefined ? options.headers : {};
+      tracer.inject(span, 'text_map', headers);
+
       const response = await this.amqpConnection.request<RPCResponse<K>>({
         exchange,
         routingKey,
         payload: payload,
         timeout: 10_000,
         ...options,
+        headers,
       });
 
       if (response.type === RPCResponseType.ERROR) {

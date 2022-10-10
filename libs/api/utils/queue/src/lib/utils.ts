@@ -7,7 +7,6 @@ import {
 import { Channel, ConsumeMessage } from 'amqplib';
 import { QueueUtilService } from './queue-util.service';
 import tracer, { Span } from 'dd-trace';
-import { spawn } from 'child_process';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type AppliedDecorator = <TFunction extends Function, Y>(
@@ -95,6 +94,7 @@ export function RequestHandler(
   const fullQueueName = `${queueName}-${exchange}_${routingKey}`;
 
   return applyDecorators(
+    TraceEvent(fullQueueName, false),
     RabbitRPC({
       exchange,
       createQueueIfNotExists: true,
@@ -133,9 +133,12 @@ function createErrorHandler(
 
       if (retryAttempt < MAX_RETRIES) {
         const span = tracer.scope().active();
-
-        if (span === null) {
-          Logger.warn('Datadog scope is not defined');
+        const headers = {
+          'x-delay': delay * RETRY_BACKOFF,
+          'x-retry': retryAttempt + 1,
+        };
+        if (span !== null) {
+          tracer.inject(span, 'text_map', headers);
         }
 
         channel.publish(
@@ -143,12 +146,7 @@ function createErrorHandler(
           queueSpecificRoutingKey,
           msg.content,
           {
-            headers: {
-              'trace-id': span?.context().toTraceId(),
-              'span-id': span?.context().toSpanId(),
-              'x-delay': delay * RETRY_BACKOFF,
-              'x-retry': retryAttempt + 1,
-            },
+            headers,
           },
         );
       } else {
@@ -186,7 +184,6 @@ export function TraceEvent(
 
     descriptor.value = async function (...args: any[]) {
       const headers: object = args[1]?.properties?.headers;
-      Logger.log('event headers', headers);
       const childOf = tracer.extract('text_map', headers);
 
       await tracer.trace(
