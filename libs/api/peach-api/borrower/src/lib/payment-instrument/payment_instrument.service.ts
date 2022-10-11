@@ -9,9 +9,12 @@ import {
   PaymentInstrumentDto,
 } from './payment_instruments.dto';
 import { BorrowerValidation } from '../utils/borrower.validation';
-import { GetKycPayload, GetKycResponse } from '@archie/api/user-api/kyc';
 import { GET_USER_KYC_RPC } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
+import {
+  GetKycPayload,
+  GetKycResponse,
+} from '@archie/api/user-api/data-transfer-objects';
 
 @Injectable()
 export class PeachPaymentInstrumentsService {

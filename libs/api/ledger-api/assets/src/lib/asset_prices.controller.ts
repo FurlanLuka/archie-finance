@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Post } from '@nestjs/common';
-import { AssetPrice } from './asset_prices.interfaces';
 import { AssetPricesService } from './asset_prices.service';
+import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects';
 
 @Controller('/v1/asset/price')
 export class AssetPricesController {

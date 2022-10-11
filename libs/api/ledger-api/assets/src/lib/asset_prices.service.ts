@@ -6,8 +6,8 @@ import { CoingeckoAssetInformationResponse } from './api/coingecko.interfaces';
 import { CoingeckoApiService } from './api/coingecko.service';
 import { AssetsService } from './assets.service';
 import { AssetInformation, AssetList } from './assets.interfaces';
-import { AssetPrice } from './asset_prices.interfaces';
 import { AssetNotFoundError } from './asset_prices.errors';
+import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects';
 
 @Injectable()
 export class AssetPricesService {

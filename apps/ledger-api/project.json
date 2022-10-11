@@ -15,9 +15,7 @@
         "assets": [
           "apps/ledger-api/src/assets"
         ],
-        "tsPlugins": [
-          "@nestjs/swagger/plugin"
-        ]
+        "tsPlugins": ["@nestjs/swagger/plugin"]
       },
       "configurations": {
         "production": {
@@ -56,13 +54,13 @@
       }
     },
     "build-openapi": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "command": "npm run build ledger-api && node dist/apps/ledger-api/main build-swagger"
+        "command": "npm run build ledger-api && RUN_MIGRATIONS=false node dist/apps/ledger-api/main build-swagger"
       }
     },
     "generate-migration": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "npm run build ledger-api && node dist/apps/ledger-api/main generate-migration"
       }

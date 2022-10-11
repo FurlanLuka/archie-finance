@@ -45,7 +45,8 @@ import { seeds } from './seeds';
         synchronize: false,
         autoLoadEntities: true,
         keepConnectionAlive: true,
-        migrationsRun: true,
+        migrationsRun:
+          configService.get(ConfigVariables.RUN_MIGRATIONS) !== 'false',
         migrationsTableName: `${SERVICE_NAME}-migrations`,
         migrations: [...migrations, ...seeds],
       }),
