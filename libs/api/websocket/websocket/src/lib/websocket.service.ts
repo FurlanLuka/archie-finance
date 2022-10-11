@@ -3,7 +3,7 @@ import { RedisService } from '@archie-microservices/api/utils/redis';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { AuthTokenDto } from '@archie/api/websocket/data-transfer-objects';
 import { Client } from '@nestjs/microservices/external/nats-client.interface';
-import { ActiveClient } from './websocket.interfaces';
+import { ActiveClient, WsEvent } from './websocket.interfaces';
 
 @Injectable()
 export class WebsocketService {
@@ -51,5 +51,18 @@ export class WebsocketService {
     }
 
     this.activeClients.push({ userId, client });
+  }
+
+  public handlePublish(userId: string, event: WsEvent): void {
+    const userClient = this.activeClients.find((c) => c.userId === userId);
+
+    if (!userClient) {
+      return;
+    }
+
+    userClient.client.publish(
+      event.subject,
+      Buffer.from(JSON.stringify(event.data)),
+    );
   }
 }

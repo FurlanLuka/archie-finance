@@ -6,6 +6,7 @@ import { IncomingMessage } from 'http';
 import { WebsocketService } from './websocket.service';
 import * as queryString from 'query-string';
 import { Logger } from '@nestjs/common';
+import { WsEvent } from './websocket.interfaces';
 
 @WebSocketGateway({
   transports: ['websocket'],
@@ -43,5 +44,9 @@ export class WebsocketServer implements NestGateway {
       queryParams.authToken,
       client,
     );
+  }
+
+  publishToClient(userId: string, event: WsEvent): void {
+    this.websocketService.handlePublish(userId, event);
   }
 }
