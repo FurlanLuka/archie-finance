@@ -8,7 +8,7 @@ import { QueueUtilService } from './queue-util.service';
 import { Options } from 'amqplib';
 import { RPCResponse, RPCResponseType } from './queue.interfaces';
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
-import { RABBIT_RETRY_HANDLER } from './utils';
+import { RABBIT_RETRY_HANDLER } from '../utils';
 
 @Injectable()
 export class QueueService implements OnApplicationBootstrap {
@@ -24,7 +24,9 @@ export class QueueService implements OnApplicationBootstrap {
     options?: Options.Publish,
   ) {
     this.amqpConnection.publish(exchange, routingKey, message, options);
+    // save to dynamodb
   }
+
 
   public async request<K = object, T extends object = object>(
     routingKey: string,

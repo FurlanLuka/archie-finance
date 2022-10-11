@@ -56,6 +56,7 @@
     "api-utils-openapi": "libs/api/utils/openapi",
     "api-utils-queue": "libs/api/utils/queue",
     "api-utils-redis": "libs/api/utils/redis",
+    "api-utils-dynamodb": "libs/api/utils/dynamodb",
     "api-utils-tracing": "libs/api/utils/tracing",
     "api-utils-typeorm-transformers": "libs/api/utils/typeorm-transformers",
     "api-webhook-api-constants": "libs/api/webhook-api/constants",

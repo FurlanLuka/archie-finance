@@ -1,11 +1,13 @@
 import { RabbitRPC, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
-import { applyDecorators, Logger, SetMetadata } from '@nestjs/common';
+import { applyDecorators, Inject, Logger, SetMetadata } from '@nestjs/common';
 import {
   ackErrorHandler,
   defaultNackErrorHandler,
 } from '@golevelup/nestjs-rabbitmq/lib/amqp/errorBehaviors';
 import { Channel, ConsumeMessage } from 'amqplib';
-import { QueueUtilService } from './queue-util.service';
+import { QueueUtilService } from './queue/queue-util.service';
+import { DynamodbService } from '@archie-microservices/api/utils/dynamodb';
+import { Injector } from '@nestjs/core/injector/injector';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type AppliedDecorator = <TFunction extends Function, Y>(
@@ -23,11 +25,13 @@ export const RABBIT_RETRY_HANDLER = 'RABBIT_RETRY_HANDLER';
 interface SubscriptionOptions {
   logBody?: boolean;
   requeueOnError?: boolean;
+  idempotent?: boolean;
 }
 
 interface DefinedSubscriptionOptions {
   logBody: boolean;
   requeueOnError: boolean;
+  idempotent: boolean;
 }
 
 export function Subscribe(
@@ -36,12 +40,14 @@ export function Subscribe(
   options: SubscriptionOptions = {
     logBody: true,
     requeueOnError: true,
+    idempotent: false,
   },
   exchange = QueueUtilService.GLOBAL_EXCHANGE.name,
 ): AppliedDecorator {
   const subscriptionOptions: DefinedSubscriptionOptions = {
     logBody: options.logBody ?? true,
     requeueOnError: options.requeueOnError ?? true,
+    idempotent: options.idempotent ?? false,
   };
 
   const queueSpecificRoutingKey = `${queueName}-${routingKey}`;
@@ -72,6 +78,9 @@ export function Subscribe(
       routingKey: routingKey,
       ...baseQueueOptions,
     }),
+    subscriptionOptions.idempotent
+      ? Idempotent(routingKey, queueName)
+      : undefined,
     subscriptionOptions.requeueOnError
       ? SetMetadata(RABBIT_RETRY_HANDLER, {
           type: 'subscribe',
@@ -178,6 +187,30 @@ export function LogEvent(queueName: string, logBody: boolean): MethodDecorator {
       });
 
       await originalMethod.apply(this, args);
+    };
+  };
+}
+
+function Idempotent(routingKey: string, queueName: string): MethodDecorator {
+  // const injector = Inject(DynamodbService)
+
+  return (
+    target: any,
+    _key?: string | symbol,
+    descriptor?: TypedPropertyDescriptor<any>,
+  ) => {
+    if (descriptor === undefined) {
+      Logger.warn('Incorrect decorator usage, descriptor is undefined');
+      return;
+    }
+
+    // injector(target, 'dynamodbService');
+
+    const originalMethod = descriptor.value;
+
+    descriptor.value = async function (...args: any[]) {
+      throw new Error('errr');
+      await originalMethod.apply(this, args[0]);
     };
   };
 }

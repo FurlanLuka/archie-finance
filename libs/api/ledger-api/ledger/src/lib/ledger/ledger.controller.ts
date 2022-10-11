@@ -41,6 +41,9 @@ export class LedgerQueueController {
   @Subscribe(
     INITIATE_LEDGER_RECALCULATION_COMMAND,
     LedgerQueueController.CONTROLLER_QUEUE_NAME,
+    {
+      idempotent: true,
+    }
   )
   async recalculationCommandHandler(
     payload: InitiateLedgerRecalculationCommandPayload,

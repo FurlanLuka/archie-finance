@@ -22,6 +22,9 @@
       "@archie-microservices/api/utils/redis": [
         "libs/api/utils/redis/src/index.ts"
       ],
+      "@archie-microservices/api/utils/dynamodb": [
+        "libs/api/utils/dynamodb/src/index.ts"
+      ],
       "@archie/api/credit-api/constants": [
         "libs/api/credit-api/constants/src/index.ts"
       ],
