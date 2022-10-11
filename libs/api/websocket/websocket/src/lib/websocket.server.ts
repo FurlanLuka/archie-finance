@@ -24,7 +24,7 @@ export class WebsocketServer implements NestGateway {
   }
 
   async handleConnection(
-    client: Client,
+    client: any,
     message: IncomingMessage,
     ..._args: any[]
   ): Promise<void> {

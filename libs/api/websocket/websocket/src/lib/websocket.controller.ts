@@ -12,6 +12,6 @@ export class WebsocketController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   public createAuthToken(@Request() req): Promise<AuthTokenDto> {
-    return this.websocketService.createAuthToken(req.user.id);
+    return this.websocketService.createAuthToken(req.user.sub);
   }
 }
