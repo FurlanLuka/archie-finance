@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { RedisService } from '@archie-microservices/api/utils/redis';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { AuthTokenDto } from '@archie/api/websocket/data-transfer-objects';
-import { Client } from '@nestjs/microservices/external/nats-client.interface';
 import { ActiveClient } from './websocket.interfaces';
+import { WebSocket } from 'ws';
 
 @Injectable()
 export class WebsocketService {
@@ -13,20 +13,7 @@ export class WebsocketService {
   constructor(
     private redisService: RedisService,
     private cryptoService: CryptoService,
-  ) {
-    setInterval(
-      function ping() {
-        this.activeClients.forEach(function each(ws) {
-          console.log('periodic', ws);
-          if (ws.client.isAlive === false) return ws.client.terminate();
-
-          ws.client.isAlive = false;
-          ws.client.ping();
-        });
-      }.bind(this),
-      20_000,
-    );
-  }
+  ) {}
 
   public async createAuthToken(userId: string): Promise<AuthTokenDto> {
     const authToken = this.cryptoService
@@ -40,7 +27,7 @@ export class WebsocketService {
     };
   }
 
-  public async handleWsConnectionDisconnect(client: Client): Promise<void> {
+  public handleWsConnectionDisconnect(client: WebSocket): void {
     this.activeClients = this.activeClients.filter(
       (activeClient: ActiveClient) => activeClient.client !== client,
     );
@@ -50,7 +37,7 @@ export class WebsocketService {
 
   public async handleWsConnectionRequest(
     authToken: string,
-    client: any,
+    client: WebSocket,
   ): Promise<void> {
     const userId: string | null = await this.redisService.getAndDelete(
       authToken,
@@ -58,20 +45,12 @@ export class WebsocketService {
 
     if (userId === null) {
       Logger.warn('Invalid websocket connection token');
-      await client.close();
+      client.terminate();
 
       return;
     }
 
     this.activeClients.push({ userId, client });
-
-    client.on('ping', (a) => {
-      console.log('ping', a);
-    });
-    client.on('pong', (a) => {
-      console.log('pong');
-      client.isAlive = true;
-    });
 
     Logger.log(`Number of active clients: ${this.activeClients.length}`);
   }

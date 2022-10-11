@@ -5,7 +5,7 @@ import * as winston from 'winston';
 import { Openapi } from '@archie/api/utils/openapi';
 import { AllExceptionsFilter } from '@archie/api/utils/tracing';
 import { BigNumber } from 'bignumber.js';
-import { WsAdapter } from '@nestjs/platform-ws';
+import { WsAdapter } from '@archie/api/websocket/websocket';
 
 export async function startService(
   _name: string,
