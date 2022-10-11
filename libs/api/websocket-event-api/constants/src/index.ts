@@ -1,4 +1,4 @@
-export const SERVICE_NAME = 'websocket';
+export const SERVICE_NAME = 'websocket-event-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
 export enum ConfigVariables {

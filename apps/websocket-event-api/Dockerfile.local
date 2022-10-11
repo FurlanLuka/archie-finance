@@ -8,8 +8,8 @@ COPY . /service
 ENV NX_DAEMON=false
 
 RUN npm i
-RUN nx run websocket:build --skip-nx-cache
-RUN if [ "$LOCAL" != "" ] ; then cp apps/websocket/.env dist/apps/websocket ; fi
+RUN nx run websocket-event-api:build --skip-nx-cache
+RUN if [ "$LOCAL" != "" ] ; then cp apps/websocket-event-api/.env dist/apps/websocket-event-api ; fi
 RUN npm prune --production
 
 FROM node:16-alpine

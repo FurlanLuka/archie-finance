@@ -41,7 +41,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: archie-websocket-service
+                name: archie-websocket-event-api-service
                 port:
                   number: 80
     {{- if .Values.local }}
@@ -244,6 +244,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: archie-websocket-service
+                name: archie-websocket-event-api-service
                 port:
                   number: 80

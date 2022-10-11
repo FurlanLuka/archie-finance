@@ -1,7 +1,7 @@
 import { Controller, Post, UseGuards, Request } from '@nestjs/common';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { AuthTokenDto } from '@archie/api/websocket/data-transfer-objects';
+import { AuthTokenDto } from '@archie/api/websocket-event-api/data-transfer-objects';
 import { WebsocketService } from './websocket.service';
 
 @Controller('v1/ws_auth')

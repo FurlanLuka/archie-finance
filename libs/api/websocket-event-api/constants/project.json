@@ -1,21 +1,20 @@
 {
-  "name": "api-websocket-data-transfer-objects",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/api/websocket/data-transfer-objects/src",
+  "sourceRoot": "libs/api/websocket-event-api/constants/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/api/websocket/data-transfer-objects/**/*.ts"]
+        "lintFilePatterns": ["libs/api/websocket-event-api/constants/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/websocket/data-transfer-objects"],
+      "outputs": ["coverage/libs/api/websocket-event-api/constants"],
       "options": {
-        "jestConfig": "libs/api/websocket/data-transfer-objects/jest.config.ts",
+        "jestConfig": "libs/api/websocket-event-api/constants/jest.config.ts",
         "passWithNoTests": true
       }
     }

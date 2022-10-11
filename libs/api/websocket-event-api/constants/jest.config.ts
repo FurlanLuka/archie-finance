@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'api-websocket-data-transfer-objects',
+  displayName: 'api-websocket-event-api-constants',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -13,5 +13,5 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory:
-    '../../../../coverage/libs/api/websocket/data-transfer-objects',
+    '../../../../coverage/libs/api/websocket-event-api/constants',
 };

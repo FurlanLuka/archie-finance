@@ -62,9 +62,9 @@
     "api-webhook-api-data-transfer-objects": "libs/api/webhook-api/data-transfer-objects",
     "api-webhook-api-fireblocks": "libs/api/webhook-api/fireblocks",
     "api-webhook-api-peach": "libs/api/webhook-api/peach",
-    "api-websocket-constants": "libs/api/websocket/constants",
-    "api-websocket-data-transfer-objects": "libs/api/websocket/data-transfer-objects",
-    "api-websocket-websocket": "libs/api/websocket/websocket",
+    "api-websocket-event-api-constants": "libs/api/websocket-event-api/constants",
+    "api-websocket-event-api-data-transfer-objects": "libs/api/websocket-event-api/data-transfer-objects",
+    "api-websocket-event-api-websocket": "libs/api/websocket-event-api/websocket",
     "credit-api": "apps/credit-api",
     "credit-line-api": "apps/credit-line-api",
     "fireblocks-api": "apps/fireblocks-api",
@@ -81,6 +81,6 @@
     "referral-system-api": "apps/referral-system-api",
     "user-api": "apps/user-api",
     "webhook-api": "apps/webhook-api",
-    "websocket": "apps/websocket"
+    "websocket-event-api": "apps/websocket-event-api"
   }
 }

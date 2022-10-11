@@ -1,21 +1,21 @@
 {
-  "name": "api-websocket-websocket",
+  "name": "api-websocket-event-api-websocket",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/api/websocket/websocket/src",
+  "sourceRoot": "libs/api/websocket-event-api/websocket/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/api/websocket/websocket/**/*.ts"]
+        "lintFilePatterns": ["libs/api/websocket-event-api/websocket/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/websocket/websocket"],
+      "outputs": ["coverage/libs/api/websocket-event-api/websocket"],
       "options": {
-        "jestConfig": "libs/api/websocket/websocket/jest.config.ts",
+        "jestConfig": "libs/api/websocket-event-api/websocket/jest.config.ts",
         "passWithNoTests": true
       }
     }

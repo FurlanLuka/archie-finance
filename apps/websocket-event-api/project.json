@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/websocket/src",
+  "sourceRoot": "apps/websocket-event-api/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -10,10 +10,10 @@
       ],
       "options": {
         "outputPath": "dist/apps/websocket",
-        "main": "apps/websocket/src/main.ts",
-        "tsConfig": "apps/websocket/tsconfig.app.json",
+        "main": "apps/websocket-event-api/src/main.ts",
+        "tsConfig": "apps/websocket-event-api/tsconfig.app.json",
         "assets": [
-          "apps/websocket/src/assets"
+          "apps/websocket-event-api/src/assets"
         ],
         "tsPlugins": [
           "@nestjs/swagger/plugin"
@@ -26,8 +26,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/websocket/src/environments/environment.ts",
-              "with": "apps/websocket/src/environments/environment.prod.ts"
+              "replace": "apps/websocket-event-api/src/environments/environment.ts",
+              "with": "apps/websocket-event-api/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -51,20 +51,20 @@
       ],
       "options": {
         "lintFilePatterns": [
-          "apps/websocket/**/*.ts"
+          "apps/websocket-event-api/**/*.ts"
         ]
       }
     },
     "build-openapi": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "npm run build websocket && node dist/apps/websocket/main build-swagger"
+        "command": "npm run build websocket-event-api && node dist/apps/websocket-event-api/main build-swagger"
       }
     },
     "generate-migration": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
-        "command": "npm run build websocket && node dist/apps/websocket/main generate-migration"
+        "command": "npm run build websocket-event-api && node dist/apps/websocket-event-api/main generate-migration"
       }
     },
     "build-docker": {
@@ -76,7 +76,7 @@
         "coverage/apps/websocket"
       ],
       "options": {
-        "jestConfig": "apps/websocket/jest.config.ts",
+        "jestConfig": "apps/websocket-event-api/jest.config.ts",
         "passWithNoTests": true,
         "runInBand": true
       }
