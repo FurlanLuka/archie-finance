@@ -16,7 +16,6 @@ import {
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
 import { PeachWebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import {
-  CreditBalanceUpdatedPayload,
   PaymentType,
 } from '@archie/api/peach-api/data-transfer-objects';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';

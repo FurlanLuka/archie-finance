@@ -12,7 +12,6 @@ import {
 } from '@archie/api/user-api/data-transfer-objects';
 import { BorrowerWithHomeAddress } from '../utils/borrower.validation.interfaces';
 import { Credit, Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
-import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { LastCreditLimitUpdate } from '../last_credit_limit_update.entity';
 import { Lock } from '@archie-microservices/api/utils/redis';
