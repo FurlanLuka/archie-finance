@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { PropsWithChildren, useEffect, useState } from 'react';
-
+import { websocketInstance } from '@archie-webapps/shared/data-access/websocket-instance';
 import { SessionContext, SessionState } from './session-context';
 
 interface SessionProviderProps {
@@ -21,6 +21,7 @@ export const SessionContextProvider: React.FC<PropsWithChildren<SessionProviderP
         .then((accessToken) => {
           setAccessToken(accessToken);
           setSessionState(SessionState.AUTHENTICATED);
+          websocketInstance.setToken(accessToken);
         })
         .catch(() => {
           setSessionState(SessionState.NOT_AUTHENTICATED);
