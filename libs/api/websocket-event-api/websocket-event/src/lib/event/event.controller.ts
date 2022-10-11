@@ -1,7 +1,6 @@
 import { Controller } from '@nestjs/common';
-import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
 import { SERVICE_NAME } from '@archie/api/websocket-event-api/constants';
-import { QueueUtilService, Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
 import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects';
 import { EventService } from './event.service';
@@ -33,11 +32,11 @@ export class EventQueueController {
   )
   async ledgerAccountUpdatedHandler({
     userId,
-    ...eventPayload
+    ...payload
   }: LedgerAccountUpdatedPayload) {
     this.eventService.publishToClient(userId, {
       subject: LEDGER_ACCOUNT_UPDATED_TOPIC,
-      data: eventPayload,
+      data: payload,
     });
   }
 
@@ -48,11 +47,11 @@ export class EventQueueController {
   )
   async creditBalanceUpdatedHandler({
     userId,
-    ...eventPayload
+    ...payload
   }: CreditBalanceUpdatedPayload) {
     this.eventService.publishToClient(userId, {
       subject: CREDIT_BALANCE_UPDATED_TOPIC,
-      data: eventPayload,
+      data: payload,
     });
   }
 
@@ -63,11 +62,11 @@ export class EventQueueController {
   )
   async marginCallStartedHandler({
     userId,
-    ...eventPayload
+    ...payload
   }: MarginCallStartedPayload) {
     this.eventService.publishToClient(userId, {
       subject: MARGIN_CALL_STARTED_TOPIC,
-      data: eventPayload,
+      data: payload,
     });
   }
 
@@ -78,11 +77,11 @@ export class EventQueueController {
   )
   async marginCallCompletedHandler({
     userId,
-    ...eventPayload
+    ...payload
   }: MarginCallCompletedPayload) {
     this.eventService.publishToClient(userId, {
       subject: MARGIN_CALL_STARTED_TOPIC,
-      data: eventPayload,
+      data: payload,
     });
   }
 }

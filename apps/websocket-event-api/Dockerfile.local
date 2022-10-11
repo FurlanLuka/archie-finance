@@ -20,7 +20,7 @@ WORKDIR /service
 
 COPY --from=builder /service/package*.json /service/
 COPY --from=builder /service/node_modules/ /service/node_modules/
-COPY --from=builder /service/dist/apps/websocket /service/dist/
+COPY --from=builder /service/dist/apps/websocket-event-api /service/dist/
 
 RUN if [ "$LOCAL" != "" ] ; then cp ./dist/.env ./ ; fi
 

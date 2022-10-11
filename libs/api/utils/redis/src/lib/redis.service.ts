@@ -25,7 +25,7 @@ export class RedisService implements OnModuleInit {
   public async setWithExpiry(
     key: string,
     value: string,
-    expirySeconds = 30,
+    expirySeconds: number,
   ): Promise<void> {
     const prefixedKey = `${this.options.keyPrefix}_${key}`;
 

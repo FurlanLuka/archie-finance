@@ -8,6 +8,7 @@ import { WebSocket } from 'ws';
 @Injectable()
 export class WebsocketService {
   AUTH_TOKEN_BYTE_SIZE = 16;
+  AUTH_EXPIRY_SECONDS = 30;
   activeClients: ActiveClient[] = [];
 
   constructor(
@@ -20,7 +21,11 @@ export class WebsocketService {
       .randomBytes(this.AUTH_TOKEN_BYTE_SIZE)
       .toString('hex');
 
-    await this.redisService.setWithExpiry(authToken, userId);
+    await this.redisService.setWithExpiry(
+      authToken,
+      userId,
+      this.AUTH_EXPIRY_SECONDS,
+    );
 
     return {
       authToken,
