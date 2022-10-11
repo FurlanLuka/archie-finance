@@ -179,7 +179,7 @@ export class LiquidationService {
             status: LiquidationStatus.INITIATED,
           });
 
-          this.queueService.publishEvent<InitiateCollateralLiquidationCommandPayload>(
+          this.queueService.publishEvent(
             INITIATE_COLLATERAL_LIQUIDATION_COMMAND,
             {
               userId,

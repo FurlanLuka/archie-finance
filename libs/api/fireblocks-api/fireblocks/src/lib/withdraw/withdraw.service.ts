@@ -12,10 +12,7 @@ import {
 import { VaultAccountService } from '../vault-account/vault_account.service';
 import { VaultAccount } from '../vault-account/vault_account.entity';
 import {
-  CollateralWithdrawalTransactionErrorPayload,
   CollateralWithdrawalTransactionUpdatedStatus,
-  CollateralWithdrawalTransactionSubmittedPayload,
-  CollateralWithdrawalTransactionUpdatedPayload,
   InitiateCollateralWithdrawalCommandPayload,
 } from '@archie/api/fireblocks-api/data-transfer-objects';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -58,7 +55,7 @@ export class WithdrawService {
           internalTransactionId,
         );
 
-      this.queueService.publishEvent<CollateralWithdrawalTransactionSubmittedPayload>(
+      this.queueService.publishEvent(
         COLLATERAL_WITHDRAWAL_TRANSACTION_SUBMITTED_TOPIC,
         {
           userId,
@@ -69,7 +66,7 @@ export class WithdrawService {
         },
       );
     } catch (error) {
-      this.queueService.publishEvent<CollateralWithdrawalTransactionErrorPayload>(
+      this.queueService.publishEvent(
         COLLATERAL_WITHDRAWAL_TRANSACTION_ERROR_TOPIC,
         {
           userId,
@@ -120,7 +117,7 @@ export class WithdrawService {
     });
 
     if (status === TransactionStatus.COMPLETED) {
-      this.queueService.publishEvent<CollateralWithdrawalTransactionUpdatedPayload>(
+      this.queueService.publishEvent(
         COLLATERAL_WITHDRAWAL_TRANSACTION_UPDATED_TOPIC,
         {
           userId: vaultAccount.userId,
@@ -133,7 +130,7 @@ export class WithdrawService {
         },
       );
     } else if (status === TransactionStatus.BROADCASTING) {
-      this.queueService.publishEvent<CollateralWithdrawalTransactionUpdatedPayload>(
+      this.queueService.publishEvent(
         COLLATERAL_WITHDRAWAL_TRANSACTION_UPDATED_TOPIC,
         {
           userId: vaultAccount.userId,
@@ -151,7 +148,7 @@ export class WithdrawService {
       status === TransactionStatus.REJECTED ||
       status === TransactionStatus.FAILED
     ) {
-      this.queueService.publishEvent<CollateralWithdrawalTransactionErrorPayload>(
+      this.queueService.publishEvent(
         COLLATERAL_WITHDRAWAL_TRANSACTION_ERROR_TOPIC,
         {
           userId: vaultAccount.userId,

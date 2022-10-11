@@ -64,7 +64,7 @@ export class DepositService {
       fee: networkFee.toString(),
     });
 
-    this.queueService.publishEvent<CollateralDepositTransactionCompletedPayload>(
+    this.queueService.publishEvent(
       COLLATERAL_DEPOSIT_TRANSACTION_COMPLETED_TOPIC,
       {
         userId,

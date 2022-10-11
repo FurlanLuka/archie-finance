@@ -36,7 +36,7 @@ export class MarginCallHandlerService {
       userId: actionPayload.userId,
     });
 
-    this.queueService.publishEvent<MarginCallStartedPayload>(
+    this.queueService.publishEvent(
       MARGIN_CALL_STARTED_TOPIC,
       {
         userId: actionPayload.userId,
@@ -65,7 +65,7 @@ export class MarginCallHandlerService {
       throw new Error('Incorrect margin call deactivate handler usage');
     }
 
-    this.queueService.publishEvent<MarginCallCompletedPayload>(
+    this.queueService.publishEvent(
       MARGIN_CALL_COMPLETED_TOPIC,
       {
         completedAt: marginCall.updatedAt.toISOString(),
@@ -104,7 +104,7 @@ export class MarginCallHandlerService {
       amount: loanRepaymentAmount,
     });
 
-    this.queueService.publishEvent<InitiateLedgerAssetLiquidationCommandPayload>(
+    this.queueService.publishEvent(
       INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND,
       {
         userId: actionPayload.userId,
@@ -137,7 +137,7 @@ export class MarginCallHandlerService {
       throw new Error('Incorrect complete margin call handler usage');
     }
 
-    this.queueService.publishEvent<MarginCallCompletedPayload>(
+    this.queueService.publishEvent(
       MARGIN_CALL_COMPLETED_TOPIC,
       {
         completedAt: marginCall.updatedAt.toISOString(),
