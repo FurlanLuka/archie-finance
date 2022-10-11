@@ -8,6 +8,6 @@ export class SalesConnectService {
   constructor(private queueService: QueueService) {}
 
   public connect(dto: SalesConnectDto) {
-    this.queueService.publish<SalesConnectDto>(SALES_CONNECT_TOPIC, dto);
+    this.queueService.publishEvent(SALES_CONNECT_TOPIC, dto);
   }
 }

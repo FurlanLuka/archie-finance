@@ -58,7 +58,7 @@ export class WithdrawService {
           internalTransactionId,
         );
 
-      this.queueService.publish<CollateralWithdrawalTransactionSubmittedPayload>(
+      this.queueService.publishEvent<CollateralWithdrawalTransactionSubmittedPayload>(
         COLLATERAL_WITHDRAWAL_TRANSACTION_SUBMITTED_TOPIC,
         {
           userId,
@@ -69,7 +69,7 @@ export class WithdrawService {
         },
       );
     } catch (error) {
-      this.queueService.publish<CollateralWithdrawalTransactionErrorPayload>(
+      this.queueService.publishEvent<CollateralWithdrawalTransactionErrorPayload>(
         COLLATERAL_WITHDRAWAL_TRANSACTION_ERROR_TOPIC,
         {
           userId,
@@ -120,7 +120,7 @@ export class WithdrawService {
     });
 
     if (status === TransactionStatus.COMPLETED) {
-      this.queueService.publish<CollateralWithdrawalTransactionUpdatedPayload>(
+      this.queueService.publishEvent<CollateralWithdrawalTransactionUpdatedPayload>(
         COLLATERAL_WITHDRAWAL_TRANSACTION_UPDATED_TOPIC,
         {
           userId: vaultAccount.userId,
@@ -133,7 +133,7 @@ export class WithdrawService {
         },
       );
     } else if (status === TransactionStatus.BROADCASTING) {
-      this.queueService.publish<CollateralWithdrawalTransactionUpdatedPayload>(
+      this.queueService.publishEvent<CollateralWithdrawalTransactionUpdatedPayload>(
         COLLATERAL_WITHDRAWAL_TRANSACTION_UPDATED_TOPIC,
         {
           userId: vaultAccount.userId,
@@ -151,7 +151,7 @@ export class WithdrawService {
       status === TransactionStatus.REJECTED ||
       status === TransactionStatus.FAILED
     ) {
-      this.queueService.publish<CollateralWithdrawalTransactionErrorPayload>(
+      this.queueService.publishEvent<CollateralWithdrawalTransactionErrorPayload>(
         COLLATERAL_WITHDRAWAL_TRANSACTION_ERROR_TOPIC,
         {
           userId: vaultAccount.userId,

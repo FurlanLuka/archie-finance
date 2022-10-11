@@ -25,7 +25,7 @@ import {
   PaymentsResponseDto,
   ScheduleTransactionDto,
 } from './payments.dto';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
 import { PeachWebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { SERVICE_QUEUE_NAME } from '@archie/api/peach-api/constants';

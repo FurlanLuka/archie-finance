@@ -13,10 +13,8 @@ import { Event } from '../event/event';
 
 interface SubscriptionOptions {
   useTracer: boolean;
-  logBody: boolean;
   requeueOnError: boolean;
   useIdempotency: boolean;
-  useEventSourcing: boolean;
   exchange: string;
 }
 
@@ -40,14 +38,12 @@ export function Subscribe(
 ): AppliedDecorator {
   const subscriptionOptions: SubscriptionOptions = {
     useTracer: options?.useTracer ?? true,
-    logBody: options?.logBody ?? true,
     requeueOnError: options?.requeueOnError ?? true,
     useIdempotency: options?.useIdempotency ?? true,
-    useEventSourcing: options?.useEventSourcing ?? false,
     exchange: options?.exchange ?? QueueUtilService.GLOBAL_EXCHANGE.name,
   };
 
-  const routingKey = event.getRoutingKey()
+  const routingKey = event.getRoutingKey();
   const queueSpecificRoutingKey = `${queueName}-${routingKey}`;
   const fullQueueName = `${queueName}-${subscriptionOptions.exchange}_${routingKey}`;
 
@@ -58,6 +54,7 @@ export function Subscribe(
       queueSpecificRoutingKey,
       subscriptionOptions,
       subscriptionOptions.exchange,
+      event.getOptions().isSensitive,
     ),
     queueOptions: {
       durable: true,
@@ -79,7 +76,7 @@ export function Subscribe(
   ];
 
   if (subscriptionOptions.useTracer) {
-    decorators.push(TraceEvent(fullQueueName, subscriptionOptions.logBody));
+    decorators.push(TraceEvent(fullQueueName, event.getOptions().isSensitive));
   }
 
   if (subscriptionOptions.useIdempotency) {
@@ -106,6 +103,7 @@ function createErrorHandler(
   queueSpecificRoutingKey: string,
   options: SubscriptionOptions,
   exchange: string,
+  isSensitive: boolean,
 ): (
   channel: Channel,
   msg: ConsumeMessage,
@@ -117,21 +115,22 @@ function createErrorHandler(
 
     Logger.error({
       message: `Event handling failed for routing key "${queueSpecificRoutingKey}"`,
-      payload: options.logBody ? msg.content.toString() : undefined,
+      payload: isSensitive ? msg.content.toString() : undefined,
       error,
       requeue: options.requeueOnError,
       retryAttempt,
     });
 
     if (options.requeueOnError) {
-      const delay: number = messageHeaders['x-delay'] ?? INITIAL_DELAY / RETRY_BACKOFF;
+      const delay: number =
+        messageHeaders['x-delay'] ?? INITIAL_DELAY / RETRY_BACKOFF;
 
       if (retryAttempt < MAX_RETRIES) {
         const span = tracer.scope().active();
         const headers = {
           'x-delay': delay * RETRY_BACKOFF,
           'x-retry': retryAttempt + 1,
-          'event-id': messageHeaders['event-id']
+          'event-id': messageHeaders['event-id'],
         };
 
         if (span !== null) {

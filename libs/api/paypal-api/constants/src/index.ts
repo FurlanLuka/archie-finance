@@ -1,3 +1,6 @@
+import { Event } from '@archie/api/utils/queue';
+import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
+
 export const SERVICE_NAME = 'paypal-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
@@ -16,6 +19,7 @@ export enum ConfigVariables {
   AUTH0_AUDIENCE = 'AUTH0_AUDIENCE',
 }
 
-export const PAYPAL_PAYMENT_RECEIVED_TOPIC = 'paypal.payment.received';
+export const PAYPAL_PAYMENT_RECEIVED_TOPIC =
+  new Event<PaypalPaymentReceivedPayload>('paypal.payment.received', 1);
 
 export const PAYPAL_PAYMENT_CURRENCY = 'USD';

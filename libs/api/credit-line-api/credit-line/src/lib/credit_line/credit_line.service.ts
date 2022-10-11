@@ -91,7 +91,7 @@ export class CreditLineService {
         },
       );
 
-      this.queueService.publish<CreditLineUpdatedPayload>(
+      this.queueService.publishEvent<CreditLineUpdatedPayload>(
         CREDIT_LINE_UPDATED_TOPIC,
         {
           userId,
@@ -139,7 +139,7 @@ export class CreditLineService {
       creditLimit,
     });
 
-    this.queueService.publish<CreditLineCreatedPayload>(
+    this.queueService.publishEvent<CreditLineCreatedPayload>(
       CREDIT_LINE_CREATED_TOPIC,
       {
         userId,

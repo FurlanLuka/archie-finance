@@ -83,7 +83,7 @@ export class PaymentsService {
       payment.loanId,
     );
 
-    this.queueService.publish<CreditBalanceUpdatedPayload>(
+    this.queueService.publishEvent(
       CREDIT_BALANCE_UPDATED_TOPIC,
       {
         ...credit,
@@ -143,7 +143,7 @@ export class PaymentsService {
       borrower.personId,
       borrower.creditLineId,
     );
-    this.queueService.publish<CreditBalanceUpdatedPayload>(
+    this.queueService.publishEvent(
       CREDIT_BALANCE_UPDATED_TOPIC,
       {
         ...credit,
@@ -200,7 +200,7 @@ export class PaymentsService {
       borrower.creditLineId,
     );
 
-    this.queueService.publish<CreditBalanceUpdatedPayload>(
+    this.queueService.publishEvent(
       CREDIT_BALANCE_UPDATED_TOPIC,
       {
         ...credit,

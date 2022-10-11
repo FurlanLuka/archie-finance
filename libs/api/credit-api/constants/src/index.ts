@@ -1,3 +1,9 @@
+import { Event } from '@archie/api/utils/queue';
+import {
+  CardActivatedPayload,
+  TransactionUpdatedPayload,
+} from '@archie/api/credit-api/data-transfer-objects';
+
 export const SERVICE_NAME = 'credit-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
@@ -25,28 +31,12 @@ export enum ConfigVariables {
   REDIS_URL = 'REDIS_URL',
 }
 
-export const COLLATERAL_RECEIVED_TOPIC = 'credit.collateral.received';
+export const CARD_ACTIVATED_TOPIC = new Event<CardActivatedPayload>(
+  'credit.card.activated',
+  1,
+);
 
-export const CARD_ACTIVATED_TOPIC = 'credit.card.activated';
-
-export const COLLATERAL_DEPOSITED_TOPIC = 'credit.collateral.deposited';
-
-export const COLLATERAL_DEPOSIT_COMPLETED_TOPIC =
-  'credit.collateral_deposit.completed';
-
-export const COLLATERAL_LIQUIDATION_INITIATED_TOPIC =
-  'credit.collateral_liquidation.initiated';
-
-export const COLLATERAL_WITHDRAW_INITIALIZED_TOPIC =
-  'credit.collateral.withdraw.initialized';
-
-export const COLLATERAL_WITHDRAW_TRANSACTION_CREATED_TOPIC =
-  'credit.collateral.withdraw.transaction.created';
-
-export const COLLATERAL_WITHDRAW_COMPLETED_TOPIC =
-  'credit.collateral.withdraw.completed';
-
-export const TRANSACTION_UPDATED_TOPIC = 'credit.transaction.updated';
-
-export const GET_COLLATERAL_RPC = 'get.collateral.rpc';
-export const GET_COLLATERAL_VALUE_RPC = 'get.collateral.value.rpc';
+export const TRANSACTION_UPDATED_TOPIC = new Event<TransactionUpdatedPayload>(
+  'credit.transaction.updated',
+  1,
+);

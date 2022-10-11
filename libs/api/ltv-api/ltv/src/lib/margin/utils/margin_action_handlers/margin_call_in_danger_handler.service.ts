@@ -20,7 +20,7 @@ export class MarginCallInDangerHandlerService {
   public async send(
     actionPayload: MarginActionHandlerPayload,
   ): Promise<MarginActionHandlerPayload> {
-    this.queueService.publish<MarginCallLtvLimitApproachingPayload>(
+    this.queueService.publishEvent<MarginCallLtvLimitApproachingPayload>(
       MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC,
       {
         userId: actionPayload.userId,

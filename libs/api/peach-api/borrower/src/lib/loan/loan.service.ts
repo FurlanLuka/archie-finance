@@ -205,7 +205,7 @@ export class PeachBorrowerService {
         borrower.creditLineId,
       );
 
-      this.queueService.publish<CreditBalanceUpdatedPayload>(
+      this.queueService.publishEvent(
         CREDIT_BALANCE_UPDATED_TOPIC,
         {
           ...credit,

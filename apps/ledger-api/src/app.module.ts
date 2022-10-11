@@ -63,9 +63,7 @@ import { SERVICE_NAME } from '@archie/api/credit-api/constants';
       }),
       inject: [ConfigService],
     }),
-    QueueModule.register({
-      useEventLog: true,
-    }),
+    QueueModule.register(),
     HealthModule,
     DepositModule,
     LiquidationModule,

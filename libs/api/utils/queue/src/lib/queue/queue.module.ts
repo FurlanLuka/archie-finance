@@ -67,7 +67,7 @@ export class QueueModule {
       })],
       providers: [{
         provide: 'USE_EVENT_LOG',
-        useValue: options?.useEventLog ?? false,
+        useValue: options?.useEventLog ?? true,
       },QueueService],
       exports: [RabbitMQModule, QueueService],
       global: true,
