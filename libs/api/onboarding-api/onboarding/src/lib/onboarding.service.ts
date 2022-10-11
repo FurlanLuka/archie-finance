@@ -3,12 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Onboarding } from './onboarding.entity';
 import { GetOnboardingResponse } from './onboarding.interfaces';
+import { QueueService } from '@archie/api/utils/queue';
+import { ONBOARDING_UPDATED_TOPIC } from '@archie/api/onboarding-api/constants';
+import { OnboardingUpdatedPayload } from '@archie/api/onboarding-api/data-transfer-objects';
 
 @Injectable()
 export class OnboardingService {
   constructor(
     @InjectRepository(Onboarding)
     private onboardingRepository: Repository<Onboarding>,
+    private queueService: QueueService,
   ) {}
 
   async getOrCreateOnboardingRecord(
@@ -72,9 +76,16 @@ export class OnboardingService {
       },
     );
 
-    return {
+    const onboarding: Onboarding = {
       ...updatedOnboardingRecord,
       completed: isFinalRequiredOnboardingStep,
     };
+
+    this.queueService.publish<OnboardingUpdatedPayload>(
+      ONBOARDING_UPDATED_TOPIC,
+      onboarding,
+    );
+
+    return onboarding;
   }
 }

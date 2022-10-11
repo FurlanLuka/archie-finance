@@ -6,14 +6,12 @@ import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfe
 import { EventService } from './event.service';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import {
-  MARGIN_CALL_COMPLETED_TOPIC,
-  MARGIN_CALL_STARTED_TOPIC,
-} from '@archie/api/ltv-api/constants';
-import {
-  MarginCallCompletedPayload,
-  MarginCallStartedPayload,
-} from '@archie/api/ltv-api/data-transfer-objects';
+import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
+import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
+import { ONBOARDING_UPDATED_TOPIC } from '@archie/api/onboarding-api/constants';
+import { OnboardingUpdatedPayload } from '@archie/api/onboarding-api/data-transfer-objects';
+import { TRANSACTION_UPDATED_TOPIC } from '@archie/api/credit-api/constants';
+import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
 
 @Controller()
 export class EventQueueController {
@@ -56,31 +54,43 @@ export class EventQueueController {
   }
 
   @Subscribe(
-    MARGIN_CALL_STARTED_TOPIC,
+    ONBOARDING_UPDATED_TOPIC,
     EventQueueController.CONTROLLER_QUEUE_NAME,
     EventQueueController.CONTROLLER_QUEUE_SETTINGS,
   )
-  async marginCallStartedHandler({
+  async onboardingUpdatedHandler({
     userId,
     ...payload
-  }: MarginCallStartedPayload) {
+  }: OnboardingUpdatedPayload) {
     this.eventService.publishToClient(userId, {
-      subject: MARGIN_CALL_STARTED_TOPIC,
+      subject: ONBOARDING_UPDATED_TOPIC,
       data: payload,
     });
   }
 
   @Subscribe(
-    MARGIN_CALL_COMPLETED_TOPIC,
+    LTV_UPDATED_TOPIC,
     EventQueueController.CONTROLLER_QUEUE_NAME,
     EventQueueController.CONTROLLER_QUEUE_SETTINGS,
   )
-  async marginCallCompletedHandler({
+  async ltvUpdatedHandler({ userId, ...payload }: LtvUpdatedPayload) {
+    this.eventService.publishToClient(userId, {
+      subject: LTV_UPDATED_TOPIC,
+      data: payload,
+    });
+  }
+
+  @Subscribe(
+    TRANSACTION_UPDATED_TOPIC,
+    EventQueueController.CONTROLLER_QUEUE_NAME,
+    EventQueueController.CONTROLLER_QUEUE_SETTINGS,
+  )
+  async transactionUpdatedHandler({
     userId,
     ...payload
-  }: MarginCallCompletedPayload) {
+  }: TransactionUpdatedPayload) {
     this.eventService.publishToClient(userId, {
-      subject: MARGIN_CALL_STARTED_TOPIC,
+      subject: TRANSACTION_UPDATED_TOPIC,
       data: payload,
     });
   }

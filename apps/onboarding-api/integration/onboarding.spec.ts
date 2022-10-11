@@ -6,7 +6,9 @@ import {
   createTestingModule,
   generateUserAccessToken,
   initializeTestingModule,
+  queueStub,
   TestDatabase,
+  user,
 } from '@archie/test/integration';
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';
@@ -18,6 +20,7 @@ import {
 import { OnboardingQueueController } from '@archie/api/onboarding-api/onboarding';
 import { creditLineCreatedDataFactory } from '@archie/api/credit-line-api/test-data';
 import { cardActivatedDataFactory } from '@archie/api/credit-api/test-data';
+import { ONBOARDING_UPDATED_TOPIC } from '@archie/api/onboarding-api/constants';
 
 describe('Onboarding service tests', () => {
   let app: INestApplication;
@@ -43,6 +46,9 @@ describe('Onboarding service tests', () => {
   describe('Create and update onboarding record for user', () => {
     beforeAll(setup);
     afterAll(cleanup);
+    afterEach(() => {
+      queueStub.publish.mockReset();
+    });
 
     it('should throw an error because onboarding record was not created yet', async () => {
       const kycSubmittedPayload = kycSubmittedDataFactory();
@@ -76,6 +82,17 @@ describe('Onboarding service tests', () => {
       await app
         .get(OnboardingQueueController)
         .kycSubmittedEventHandler(kycSubmittedPayload);
+
+      // TODO: add factory and more tests -- also for ltv api
+      expect(queueStub.publish).toHaveBeenCalledWith(ONBOARDING_UPDATED_TOPIC, {
+        userId: user.id,
+        kycStage: true,
+        emailVerificationStage: false,
+        collateralizationStage: false,
+        cardActivationStage: false,
+        mfaEnrollmentStage: false,
+        completed: false,
+      });
     });
 
     it('should onboarding record with kyc stage completed', async () => {

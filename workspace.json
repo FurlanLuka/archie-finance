@@ -30,6 +30,7 @@
     "api-mail-api-sendgrid": "libs/api/mail-api/sendgrid",
     "api-mail-api-utils-email-data-factory": "libs/api/mail-api/utils/email-data-factory",
     "api-onboarding-api-constants": "libs/api/onboarding-api/constants",
+    "api-onboarding-api-data-transfer-objects": "libs/api/onboarding-api/data-transfer-objects",
     "api-onboarding-api-onboarding": "libs/api/onboarding-api/onboarding",
     "api-paypal-api-constants": "libs/api/paypal-api/constants",
     "api-paypal-api-paypal": "libs/api/paypal-api/paypal",
