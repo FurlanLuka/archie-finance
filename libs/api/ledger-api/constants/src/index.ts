@@ -13,6 +13,7 @@ export enum ConfigVariables {
   QUEUE_URL = 'QUEUE_URL',
   COINGECKO_API_URI = 'COINGECKO_API_URI',
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
+  REDIS_URL = 'REDIS_URL',
 }
 
 export const LEDGER_ACCOUNT_UPDATED_TOPIC = 'ledger.account.updated';
