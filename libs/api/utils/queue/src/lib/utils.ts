@@ -6,6 +6,7 @@ import {
 } from '@golevelup/nestjs-rabbitmq/lib/amqp/errorBehaviors';
 import { Channel, ConsumeMessage } from 'amqplib';
 import { QueueUtilService } from './queue/queue-util.service';
+import tracer, { Span } from 'dd-trace';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type AppliedDecorator = <TFunction extends Function, Y>(
@@ -66,7 +67,7 @@ export function Subscribe(
   };
 
   const decorators: MethodDecorator[] = <MethodDecorator[]>[
-    LogEvent(queue, subscriptionOptions.logBody),
+    TraceEvent(queue, subscriptionOptions.logBody),
     RabbitSubscribe({
       exchange: exchange,
       routingKey: routingKey,
@@ -93,6 +94,7 @@ export function RequestHandler(
   const fullQueueName = `${queueName}-${exchange}_${routingKey}`;
 
   return applyDecorators(
+    TraceEvent(fullQueueName, false),
     RabbitRPC({
       exchange,
       createQueueIfNotExists: true,
@@ -130,15 +132,21 @@ function createErrorHandler(
       const delay: number = headers['x-delay'] ?? INITIAL_DELAY / RETRY_BACKOFF;
 
       if (retryAttempt < MAX_RETRIES) {
+        const span = tracer.scope().active();
+        const headers = {
+          'x-delay': delay * RETRY_BACKOFF,
+          'x-retry': retryAttempt + 1,
+        };
+        if (span !== null) {
+          tracer.inject(span, 'text_map', headers);
+        }
+
         channel.publish(
           QueueUtilService.getRetryExchangeName(exchange),
           queueSpecificRoutingKey,
           msg.content,
           {
-            headers: {
-              'x-delay': delay * RETRY_BACKOFF,
-              'x-retry': retryAttempt + 1,
-            },
+            headers,
           },
         );
       } else {
@@ -158,7 +166,10 @@ function pushToDeadLetterQueue(
   return defaultNackErrorHandler(channel, msg, error);
 }
 
-export function LogEvent(queueName: string, logBody: boolean): MethodDecorator {
+export function TraceEvent(
+  queueName: string,
+  logBody: boolean,
+): MethodDecorator {
   return (
     target: any,
     _key?: string | symbol,
@@ -172,12 +183,33 @@ export function LogEvent(queueName: string, logBody: boolean): MethodDecorator {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {
-      Logger.log({
-        message: `New event on queue ${queueName} received`,
-        payload: logBody ? args[0] : null,
-      });
+      const requestMeta = args[1];
+      const requestPayload = args[0];
+      const headers: object | undefined = requestMeta?.properties?.headers;
+      const childOf = tracer.extract('text_map', headers);
 
-      await originalMethod.apply(this, args);
+      return tracer.trace(
+        queueName,
+        {
+          childOf: childOf ?? undefined,
+        },
+        async (span: Span) => {
+          const payloadToLog = logBody ? requestPayload : null;
+          Logger.log({
+            message: `New event on queue ${queueName} received`,
+            payload: payloadToLog,
+          });
+
+          span.setTag('payload', payloadToLog);
+          try {
+            const response = await originalMethod.apply(this, args);
+            return response;
+          } catch (error) {
+            span.setTag('error', error);
+            throw error;
+          }
+        },
+      );
     };
   };
 }

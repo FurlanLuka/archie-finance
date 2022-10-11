@@ -9,6 +9,7 @@ import { Options } from 'amqplib';
 import { RPCResponse, RPCResponseType } from './queue.interfaces';
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { RABBIT_RETRY_HANDLER } from '../utils';
+import tracer, { Span } from 'dd-trace';
 
 @Injectable()
 export class QueueService implements OnApplicationBootstrap {
@@ -23,8 +24,16 @@ export class QueueService implements OnApplicationBootstrap {
     exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
     options?: Options.Publish,
   ) {
-    this.amqpConnection.publish(exchange, routingKey, message, options);
-    // save to dynamodb
+    tracer.trace('queue_event_publish', (span: Span) => {
+      span.setTag('eventName', routingKey);
+      const headers = options?.headers !== undefined ? options.headers : {};
+      tracer.inject(span, 'text_map', headers);
+
+      this.amqpConnection.publish(exchange, routingKey, message, {
+        ...options,
+        headers,
+      });
+    });
   }
 
 
@@ -34,19 +43,28 @@ export class QueueService implements OnApplicationBootstrap {
     exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
     options?: RequestOptions,
   ): Promise<K> {
-    const response = await this.amqpConnection.request<RPCResponse<K>>({
-      exchange,
-      routingKey,
-      payload: payload,
-      timeout: 10_000,
-      ...options,
+    return tracer.trace('rpc_request', async (span: Span) => {
+      span.setTag('eventName', routingKey);
+      const headers = options?.headers !== undefined ? options.headers : {};
+      tracer.inject(span, 'text_map', headers);
+
+      const response = await this.amqpConnection.request<RPCResponse<K>>({
+        exchange,
+        routingKey,
+        payload: payload,
+        timeout: 10_000,
+        ...options,
+        headers,
+      });
+
+      if (response.type === RPCResponseType.ERROR) {
+        span.setTag('error', response.message);
+
+        throw new Error(response.message);
+      }
+
+      return response.data;
     });
-
-    if (response.type === RPCResponseType.ERROR) {
-      throw new Error(response.message);
-    }
-
-    return response.data;
   }
 
   async onApplicationBootstrap() {

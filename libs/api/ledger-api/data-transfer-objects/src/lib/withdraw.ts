@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsString, Matches } from 'class-validator';
 
 export interface MaxWithdrawalAmountResponse {
   maxAmount: string;
@@ -17,7 +17,7 @@ export class WithdrawPayloadDto {
   @IsString()
   assetId: string;
 
-  @IsString()
+  @Matches(/^\d+((.)|(.\d{0,18})?)$/)
   amount: string;
 
   @IsString()
