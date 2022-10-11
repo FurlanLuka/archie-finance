@@ -28,11 +28,11 @@ export class WebsocketService {
   }
 
   public async handleWsConnectionDisconnect(client: Client): Promise<void> {
-    Logger.log('active clients before disconnect', this.activeClients);
     this.activeClients = this.activeClients.filter(
       (activeClient: ActiveClient) => activeClient.client !== client,
     );
-    Logger.log('active clients after disconnect', this.activeClients);
+
+    Logger.log('Number of active clients', this.activeClients.length);
   }
 
   public async handleWsConnectionRequest(
@@ -51,5 +51,7 @@ export class WebsocketService {
     }
 
     this.activeClients.push({ userId, client });
+
+    Logger.log('Number of active clients', this.activeClients.length);
   }
 }
