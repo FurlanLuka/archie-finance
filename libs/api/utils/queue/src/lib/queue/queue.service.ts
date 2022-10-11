@@ -13,7 +13,7 @@ import { QueueUtilService } from './queue-util.service';
 import { Options } from 'amqplib';
 import { RPCResponse, RPCResponseType } from './queue.interfaces';
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
-import { RABBIT_RETRY_HANDLER } from '../utils';
+import { RABBIT_RETRY_HANDLER } from '../decorators/subscribe';
 import tracer, { Span } from 'dd-trace';
 import { v4 } from 'uuid';
 import { DynamodbService } from '@archie-microservices/api/utils/dynamodb';

@@ -10,9 +10,11 @@ import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import {
   RequestHandler,
+} from '@archie/api/utils/queue/decorators/request_handler';
+import {
   RPCResponse,
   RPCResponseType,
-} from '@archie/api/utils/queue';
+} from '@archie/api/utils/queue'
 import {
   Controller,
   Get,
