@@ -4,6 +4,7 @@ import { IncomingMessage } from 'http';
 import { WebsocketService } from './websocket.service';
 import * as queryString from 'query-string';
 import { Logger } from '@nestjs/common';
+import { WsEvent } from './websocket.interfaces';
 import { WebSocket, WebSocketServer } from 'ws';
 
 const PING_INTERVAL_IN_MS = 25_000;
@@ -42,5 +43,9 @@ export class WebsocketGateway implements NestGateway {
       queryParams.authToken,
       client,
     );
+  }
+
+  publishToClient(userId: string, event: WsEvent): void {
+    this.websocketService.handlePublish(userId, event);
   }
 }
