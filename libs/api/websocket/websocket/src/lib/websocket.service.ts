@@ -35,7 +35,7 @@ export class WebsocketService {
     );
 
     if (userId === null) {
-      Logger.warn('Invalid token');
+      Logger.warn('Invalid websocket connection token');
       await client.close();
 
       return;

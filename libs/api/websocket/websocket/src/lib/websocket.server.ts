@@ -29,6 +29,8 @@ export class WebsocketServer implements NestGateway {
     const parsedUrl = message.url ?? ''.replace('/', '').replace('?', '');
     const queryParams = queryString.parse(parsedUrl);
 
+    console.log('params', queryParams, 'message url', message.url);
+
     if (
       queryParams.authToken === undefined ||
       typeof queryParams.authToken !== 'string'

@@ -12,7 +12,12 @@ import { AuthModule } from '@archie/api/utils/auth0';
 @Module({
   imports: [
     ConfigModule.register({
-      requiredEnvironmentVariables: [ConfigVariables.QUEUE_URL],
+      requiredEnvironmentVariables: [
+        ConfigVariables.AUTH0_AUDIENCE,
+        ConfigVariables.AUTH0_DOMAIN,
+        ConfigVariables.QUEUE_URL,
+        ConfigVariables.REDIS_URL,
+      ],
     }),
     QueueModule.register(),
     HealthModule,
