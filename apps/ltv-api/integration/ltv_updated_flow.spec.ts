@@ -34,7 +34,7 @@ import { INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND } from '@archie/api/ledger-ap
 import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects';
 import { PaymentType } from '@archie/api/peach-api/data-transfer-objects';
 
-describe('Ltv api tests', () => {
+describe.skip('Ltv api tests', () => {
   let app: INestApplication;
   let module: TestingModule;
   let testDatabase: TestDatabase;
