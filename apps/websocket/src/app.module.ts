@@ -7,6 +7,7 @@ import { WebsocketModule } from '@archie/api/websocket/websocket';
 import { RedisModule } from '@archie-microservices/api/utils/redis';
 import { SERVICE_NAME } from '@archie/api/credit-api/constants';
 import { CryptoModule } from '@archie/api/utils/crypto';
+import { AuthModule } from '@archie/api/utils/auth0';
 
 @Module({
   imports: [
@@ -17,6 +18,14 @@ import { CryptoModule } from '@archie/api/utils/crypto';
     HealthModule,
     WebsocketModule,
     CryptoModule.register(),
+    AuthModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        domain: configService.get(ConfigVariables.AUTH0_DOMAIN),
+        audience: configService.get(ConfigVariables.AUTH0_AUDIENCE),
+      }),
+      inject: [ConfigService],
+    }),
     RedisModule.register({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({

@@ -16,8 +16,10 @@ export class WebsocketServer implements NestGateway {
   @WebSocketServer()
   server: Server;
 
-  afterInit(server: Server): void {}
-  handleDisconnect(client: Client): void {}
+  afterInit(_server: Server): void {}
+  handleDisconnect(client: Client): void {
+    Logger.log('Client disconnected', client, 'client info', client.info);
+  }
 
   async handleConnection(
     client: Client,

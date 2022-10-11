@@ -32,7 +32,7 @@ export class RedisService implements OnModuleInit {
     await this.redisClient.setex(prefixedKey, expirySeconds, value);
   }
 
-  public async getOnce(key: string): Promise<string | null> {
+  public async getAndDelete(key: string): Promise<string | null> {
     const prefixedKey = `${this.options.keyPrefix}_${key}`;
 
     return this.redisClient.getdel(prefixedKey);

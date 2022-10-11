@@ -30,7 +30,9 @@ export class WebsocketService {
     authToken: string,
     client: Client,
   ): Promise<void> {
-    const userId: string | null = await this.redisService.getOnce(authToken);
+    const userId: string | null = await this.redisService.getAndDelete(
+      authToken,
+    );
 
     if (userId === null) {
       Logger.warn('Invalid token');
