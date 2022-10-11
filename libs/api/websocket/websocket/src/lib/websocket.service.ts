@@ -3,11 +3,12 @@ import { RedisService } from '@archie-microservices/api/utils/redis';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { AuthTokenDto } from '@archie/api/websocket/data-transfer-objects';
 import { Client } from '@nestjs/microservices/external/nats-client.interface';
+import { ActiveClient } from './websocket.interfaces';
 
 @Injectable()
 export class WebsocketService {
-  AUTH_TOKEN_SIZE = 32;
-  activeClients: Record<string, Client>[] = [];
+  AUTH_TOKEN_BYTE_SIZE = 16;
+  activeClients: ActiveClient[] = [];
 
   constructor(
     private redisService: RedisService,
@@ -16,14 +17,22 @@ export class WebsocketService {
 
   public async createAuthToken(userId: string): Promise<AuthTokenDto> {
     const authToken = this.cryptoService
-      .randomBytes(this.AUTH_TOKEN_SIZE)
-      .toString();
+      .randomBytes(this.AUTH_TOKEN_BYTE_SIZE)
+      .toString('hex');
 
     await this.redisService.setWithExpiry(authToken, userId);
 
     return {
       authToken,
     };
+  }
+
+  public async handleWsConnectionDisconnect(client: Client): Promise<void> {
+    Logger.log('active clients before disconnect', this.activeClients);
+    this.activeClients = this.activeClients.filter(
+      (activeClient: ActiveClient) => activeClient.client !== client,
+    );
+    Logger.log('active clients after disconnect', this.activeClients);
   }
 
   public async handleWsConnectionRequest(
@@ -41,6 +50,6 @@ export class WebsocketService {
       return;
     }
 
-    this.activeClients.push({ [userId]: client });
+    this.activeClients.push({ userId, client });
   }
 }

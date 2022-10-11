@@ -17,8 +17,9 @@ export class WebsocketServer implements NestGateway {
   server: Server;
 
   afterInit(_server: Server): void {}
-  handleDisconnect(client: Client): void {
-    Logger.log('Client disconnected', client, 'client info', client.info);
+
+  async handleDisconnect(client: Client): Promise<void> {
+    await this.websocketService.handleWsConnectionDisconnect(client);
   }
 
   async handleConnection(
@@ -26,10 +27,8 @@ export class WebsocketServer implements NestGateway {
     message: IncomingMessage,
     ..._args: any[]
   ): Promise<void> {
-    const parsedUrl = message.url ?? ''.replace('/', '').replace('?', '');
+    const parsedUrl = (<string>message.url).replace('/', '').replace('?', '');
     const queryParams = queryString.parse(parsedUrl);
-
-    console.log('params', queryParams, 'message url', message.url);
 
     if (
       queryParams.authToken === undefined ||
