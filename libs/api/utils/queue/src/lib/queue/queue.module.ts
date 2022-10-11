@@ -17,8 +17,9 @@ export class QueueModule {
   static register(options?: QueueOptions): DynamicModule {
     const exchanges: RabbitMQExchangeConfig[] = options?.exchanges ?? [];
 
-    const imports = [
-      RabbitMQModule.forRootAsync(RabbitMQModule, {
+    return {
+      module: QueueModule,
+      imports: [RabbitMQModule.forRootAsync(RabbitMQModule, {
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => {
@@ -40,41 +41,34 @@ export class QueueModule {
           };
         },
       }),
-    ];
+      DynamodbModule.register({
+        imports: [],
+        inject: [ConfigService],
+        useFactory: (configService: ConfigService): DynamodbConfig => {
+          const accessKeyId = configService.get('DYNAMO_ACCESS_KEY_ID');
+          const region = configService.get('DYNAMO_REGION');
+          const accessKeySecret = configService.get(
+            'DYNAMO_ACCESS_KEY_SECRET',
+          );
 
-    if (options?.includeDynamoDB) {
-      imports.push(
-        DynamodbModule.register({
-          imports: [],
-          inject: [ConfigService],
-          useFactory: (configService: ConfigService): DynamodbConfig => {
-            const accessKeyId = configService.get('DYNAMO_ACCESS_KEY_ID');
-            const region = configService.get('DYNAMO_REGION');
-            const accessKeySecret = configService.get(
-              'DYNAMO_ACCESS_KEY_SECRET',
-            );
-
-            if (
-              accessKeyId === undefined ||
-              accessKeySecret === undefined ||
-              region === undefined
-            ) {
-              throw new Error('REQUIRED_QUEUE_DYNAMODB_VARIABLES_MISSING');
-            }
-            return {
-              accessKeyId,
-              accessKeySecret,
-              region,
-            };
-          },
-        }),
-      );
-    }
-
-    return {
-      module: QueueModule,
-      imports: [...imports],
-      providers: [QueueService],
+          if (
+            accessKeyId === undefined ||
+            accessKeySecret === undefined ||
+            region === undefined
+          ) {
+            throw new Error('REQUIRED_QUEUE_DYNAMODB_VARIABLES_MISSING');
+          }
+          return {
+            accessKeyId,
+            accessKeySecret,
+            region,
+          };
+        },
+      })],
+      providers: [{
+        provide: 'USE_EVENT_LOG',
+        useValue: options?.useEventLog ?? false,
+      },QueueService],
       exports: [RabbitMQModule, QueueService],
       global: true,
     };

@@ -31,6 +31,9 @@ interface DefinedSubscriptionOptions {
   requeueOnError: boolean;
 }
 
+/**
+ * @deprecated
+ */
 export function Subscribe(
   routingKey: string,
   queueName: string,

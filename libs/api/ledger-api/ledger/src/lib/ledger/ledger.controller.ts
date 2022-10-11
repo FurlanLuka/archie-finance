@@ -5,11 +5,13 @@ import {
   InitiateLedgerRecalculationCommandPayload,
   Ledger,
 } from '@archie/api/ledger-api/data-transfer-objects';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import {
   INITIATE_LEDGER_RECALCULATION_COMMAND,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/ledger-api/constants';
+import { QueueService } from '@archie/api/utils/queue';
+import { Logger } from '@nestjs/common';
 
 @Controller('v1/ledger')
 export class LedgerController {
@@ -24,11 +26,18 @@ export class LedgerController {
 
 @Controller('internal/ledger')
 export class InternalLedgerController {
-  constructor(private ledgerService: LedgerService) {}
+  constructor(private ledgerService: LedgerService, private queueService: QueueService) {}
 
   @Post('recalculate')
   async recaltulateLedgers(): Promise<void> {
     return this.ledgerService.initiateLedgerRecalculation();
+  }
+
+  @Get()
+  async test(): Promise<void> {
+    this.queueService.publishEvent(INITIATE_LEDGER_RECALCULATION_COMMAND, {
+      userIds: []
+    })
   }
 }
 
@@ -42,12 +51,13 @@ export class LedgerQueueController {
     INITIATE_LEDGER_RECALCULATION_COMMAND,
     LedgerQueueController.CONTROLLER_QUEUE_NAME,
     {
-      idempotent: true,
-    }
+      useIdempotency: true,
+    },
   )
   async recalculationCommandHandler(
     payload: InitiateLedgerRecalculationCommandPayload,
   ): Promise<void> {
+    Logger.log('sup bitchessss')
     return this.ledgerService.initiateLedgerRecalcuationCommandHandler(payload);
   }
 }

@@ -1,19 +1,7 @@
 import { RabbitMQExchangeConfig } from '@golevelup/nestjs-rabbitmq';
 
-interface DynamoLogOptions {
-  region: string;
-  accessKeyId: string;
-  accessKeySecret: string;
-  idempotencyTableName: string;
-  eventLogTableName: string;
-}
-
-export interface QueueConfig {
-  dynamoLogOptions?: DynamoLogOptions;
-}
-
 export interface QueueOptions {
-  includeDynamoDB?: boolean;
+  useEventLog?: boolean;
   exchanges?: RabbitMQExchangeConfig[];
 }
 

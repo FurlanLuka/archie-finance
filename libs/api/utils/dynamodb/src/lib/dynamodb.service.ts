@@ -14,8 +14,6 @@ export class DynamodbService {
         secretAccessKey: config.accessKeySecret,
       },
     });
-
-    void this.read('event-idempotency-table', 'item');
   }
 
   public async write(tableName: string, item: object): Promise<void> {
@@ -25,6 +23,20 @@ export class DynamodbService {
         Item: item,
       })
       .promise();
+  }
+
+  public writeSync(
+    tableName: string,
+    item: object,
+    err: (error) => void,
+  ): void {
+    this.documentClient.put(
+      {
+        TableName: tableName,
+        Item: item,
+      },
+      err,
+    );
   }
 
   public async read(tableName: string, itemId: string): Promise<any> {

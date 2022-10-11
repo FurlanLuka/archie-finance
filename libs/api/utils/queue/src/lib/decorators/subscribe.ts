@@ -6,11 +6,13 @@ import {
 } from '@golevelup/nestjs-rabbitmq/lib/amqp/errorBehaviors';
 import { Channel, ConsumeMessage } from 'amqplib';
 import { QueueUtilService } from '../queue/queue-util.service';
-import { LogEvent } from './log_event';
+import { TraceEvent } from './trace_event';
 import { Idempotent } from './idempotent';
+import tracer from 'dd-trace';
+import { Event } from '../event/event';
 
 interface SubscriptionOptions {
-  useLogger: boolean;
+  useTracer: boolean;
   logBody: boolean;
   requeueOnError: boolean;
   useIdempotency: boolean;
@@ -32,12 +34,12 @@ const RETRY_BACKOFF = 2;
 export const RABBIT_RETRY_HANDLER = 'RABBIT_RETRY_HANDLER';
 
 export function Subscribe(
-  routingKey: string,
+  event: Event<any>,
   queueName: string,
   options?: Partial<SubscriptionOptions>,
 ): AppliedDecorator {
   const subscriptionOptions: SubscriptionOptions = {
-    useLogger: options?.useLogger ?? true,
+    useTracer: options?.useTracer ?? true,
     logBody: options?.logBody ?? true,
     requeueOnError: options?.requeueOnError ?? true,
     useIdempotency: options?.useIdempotency ?? true,
@@ -45,6 +47,7 @@ export function Subscribe(
     exchange: options?.exchange ?? QueueUtilService.GLOBAL_EXCHANGE.name,
   };
 
+  const routingKey = event.getRoutingKey()
   const queueSpecificRoutingKey = `${queueName}-${routingKey}`;
   const fullQueueName = `${queueName}-${subscriptionOptions.exchange}_${routingKey}`;
 
@@ -75,8 +78,8 @@ export function Subscribe(
     }),
   ];
 
-  if (subscriptionOptions.useLogger) {
-    decorators.push(LogEvent(fullQueueName, subscriptionOptions.logBody));
+  if (subscriptionOptions.useTracer) {
+    decorators.push(TraceEvent(fullQueueName, subscriptionOptions.logBody));
   }
 
   if (subscriptionOptions.useIdempotency) {
@@ -109,30 +112,38 @@ function createErrorHandler(
   error: unknown,
 ) => void | Promise<void> {
   return (channel: Channel, msg: ConsumeMessage, error) => {
-    const headers = msg.properties.headers;
-    const retryAttempt: number = headers['x-retry'] ?? 0;
+    const messageHeaders = msg.properties.headers;
+    const retryAttempt: number = messageHeaders['x-retry'] ?? 0;
 
     Logger.error({
       message: `Event handling failed for routing key "${queueSpecificRoutingKey}"`,
-      payload: options.useLogger ? msg.content.toString() : undefined,
+      payload: options.logBody ? msg.content.toString() : undefined,
       error,
       requeue: options.requeueOnError,
       retryAttempt,
     });
 
     if (options.requeueOnError) {
-      const delay: number = headers['x-delay'] ?? INITIAL_DELAY / RETRY_BACKOFF;
+      const delay: number = messageHeaders['x-delay'] ?? INITIAL_DELAY / RETRY_BACKOFF;
 
       if (retryAttempt < MAX_RETRIES) {
+        const span = tracer.scope().active();
+        const headers = {
+          'x-delay': delay * RETRY_BACKOFF,
+          'x-retry': retryAttempt + 1,
+          'event-id': messageHeaders['event-id']
+        };
+
+        if (span !== null) {
+          tracer.inject(span, 'text_map', headers);
+        }
+
         channel.publish(
           QueueUtilService.getRetryExchangeName(exchange),
           queueSpecificRoutingKey,
           msg.content,
           {
-            headers: {
-              'x-delay': delay * RETRY_BACKOFF,
-              'x-retry': retryAttempt + 1,
-            },
+            headers,
           },
         );
       } else {

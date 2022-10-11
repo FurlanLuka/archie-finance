@@ -5,3 +5,5 @@ export * from './lib/queue/queue.module';
 export * from './lib/queue/queue.service';
 
 export * from './lib/queue/queue.interfaces';
+
+export * from './lib/event/event'

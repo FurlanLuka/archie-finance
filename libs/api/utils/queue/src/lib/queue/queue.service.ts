@@ -1,4 +1,9 @@
-import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import {
   AmqpConnection,
   RabbitHandlerConfig,
@@ -10,32 +15,121 @@ import { RPCResponse, RPCResponseType } from './queue.interfaces';
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { RABBIT_RETRY_HANDLER } from '../utils';
 import tracer, { Span } from 'dd-trace';
+import { v4 } from 'uuid';
+import { DynamodbService } from '@archie-microservices/api/utils/dynamodb';
+import { Event } from '../event/event';
 
 @Injectable()
 export class QueueService implements OnApplicationBootstrap {
   constructor(
     private amqpConnection: AmqpConnection,
     private discover: DiscoveryService,
+    private dynamo: DynamodbService,
+    @Inject('USE_EVENT_LOG') private useEventLog: boolean,
   ) {}
 
+  public publishEvent<T>(
+    event: Event<T>,
+    message: T,
+    exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
+    options?: Options.Publish,
+  ): void {
+    const eventId = v4();
+
+    const headers = {
+      'event-id': eventId,
+      ...options?.headers,
+    };
+
+    try {
+      tracer.trace('queue_event_publish', (span: Span) => {
+        span.setTag('eventName', event.getRoutingKey());
+
+        tracer.inject(span, 'text_map', headers);
+      });
+    } catch (error) {
+      Logger.error('Failed adding event trace');
+    }
+
+    this.amqpConnection.publish(exchange, event.getRoutingKey(), message, {
+      ...options,
+      headers,
+    });
+
+    if (this.useEventLog) {
+      const eventLogId = `${event.getRoutingKey()}-${eventId}-${exchange}`;
+
+      this.dynamo.writeSync(
+        'event-log',
+        {
+          id: eventLogId,
+          message: JSON.stringify(message),
+        },
+        (error) => {
+          Logger.error({
+            message: 'FAILED_WRITING_EVENT_LOG',
+            metadata: {
+              eventLogId,
+              message,
+            },
+          });
+        },
+      );
+    }
+  }
+
+  /**
+   * @deprecated
+   */
   public publish<T>(
     routingKey: string,
     message: T,
     exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
     options?: Options.Publish,
   ) {
-    tracer.trace('queue_event_publish', (span: Span) => {
-      span.setTag('eventName', routingKey);
-      const headers = options?.headers !== undefined ? options.headers : {};
-      tracer.inject(span, 'text_map', headers);
+    const eventId = v4();
 
-      this.amqpConnection.publish(exchange, routingKey, message, {
-        ...options,
-        headers,
+    const headers = {
+      'event-id': eventId,
+      ...options?.headers,
+    };
+
+    try {
+      tracer.trace('queue_event_publish', (span: Span) => {
+        span.setTag('eventName', routingKey);
+
+        tracer.inject(span, 'text_map', headers);
       });
-    });
-  }
+    } catch (error) {
+      Logger.error('Failed adding event trace');
+    }
 
+    this.amqpConnection.publish(exchange, routingKey, message, {
+      ...options,
+      headers,
+    });
+
+    if (this.useEventLog) {
+      const eventLogId = `${routingKey}-${eventId}-${exchange}`;
+
+      this.dynamo.writeSync(
+        'event-log',
+        {
+          id: eventLogId,
+          message: JSON.stringify(message),
+        },
+        (error) => {
+          Logger.error({
+            message: 'FAILED_WRITING_EVENT_LOG',
+            metadata: {
+              eventLogId,
+              message,
+            },
+          });
+        },
+      );
+    }
+  }
 
   public async request<K = object, T extends object = object>(
     routingKey: string,

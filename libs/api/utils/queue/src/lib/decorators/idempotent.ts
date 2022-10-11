@@ -1,7 +1,11 @@
-import { Logger } from "@nestjs/common";
+import { Inject, Logger } from '@nestjs/common';
+import { DynamodbService } from '@archie-microservices/api/utils/dynamodb';
 
-export function Idempotent(routingKey: string, queueName: string): MethodDecorator {
-  // const injector = Inject(DynamodbService)
+export function Idempotent(
+  routingKey: string,
+  queueName: string,
+): MethodDecorator {
+  const injector = Inject(DynamodbService);
 
   return (
     target: any,
@@ -13,13 +17,51 @@ export function Idempotent(routingKey: string, queueName: string): MethodDecorat
       return;
     }
 
-    // injector(target, 'dynamodbService');
+    injector(target, 'dynamodbService');
 
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (...args: any[]) {
-      throw new Error('errr');
-      await originalMethod.apply(this, args[0]);
+      const requestMeta = args[1];
+      const headers: object | undefined = requestMeta?.properties?.headers;
+      const eventId: string | undefined = headers
+        ? headers['event-id']
+        : undefined;
+
+      if (eventId) {
+        try {
+          const readRes = await this.dynamodbService.read(
+            'event-idempotency',
+            `${queueName}-${routingKey}-${eventId}`,
+          );
+
+          Logger.log(readRes);
+
+          if (readRes === undefined) {
+            await originalMethod.apply(this, args);
+          } else {
+            Logger.error(
+              `Duplicate event detected for id: ${queueName}-${routingKey}-${eventId}`,
+            );
+          }
+        } catch (err) {
+          await originalMethod.apply(this, args);
+        }
+      } else {
+        await originalMethod.apply(this, args);
+      }
+
+      if (eventId) {
+        try {
+          await this.dynamodbService.write('event-idempotency', {
+            id: `${queueName}-${routingKey}-${eventId}`,
+          });
+        } catch (error) {
+          Logger.error(
+            `Failed writing idempotency key for id: ${queueName}-${routingKey}-${eventId}`,
+          );
+        }
+      }
     };
   };
 }
