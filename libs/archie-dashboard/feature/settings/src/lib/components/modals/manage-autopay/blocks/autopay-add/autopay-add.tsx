@@ -1,30 +1,26 @@
 import { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 
+import { ConnectAccountModal } from '@archie-webapps/archie-dashboard/feature/make-payment';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
-import { Modal, Loader } from '@archie-webapps/shared/ui/design-system';
+import { Loader } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectAccountModal } from '../connect-account/connect-acount';
-import { SchedulePaymentModal } from '../schedule-payment/schedule-payment';
+import { SetupAutopay } from './blocks/setup-autopay/setup-autopay';
 
-interface MakePaymentModalProps {
-  close: VoidFunction;
+interface AutopayAddProps {
+  close: () => void;
 }
 
-export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
+export const AutopayAdd: FC<AutopayAddProps> = ({ close }) => {
   const getConnectedAccountsResponse = useGetConnectedAccounts();
 
   if (getConnectedAccountsResponse.state === RequestState.LOADING) {
-    return (
-      <Modal maxWidth="780px" isOpen close={close}>
-        <Loader marginAuto />
-      </Modal>
-    );
+    return <Loader marginAuto />;
   }
 
   if (getConnectedAccountsResponse.state === RequestState.ERROR) {
-    return <Navigate to="/error" state={{ prevPath: '/payment' }} />;
+    return <Navigate to="/error" state={{ prevPath: '/settings' }} />;
   }
 
   if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
@@ -32,7 +28,7 @@ export const MakePaymentModal: FC<MakePaymentModalProps> = ({ close }) => {
       return <ConnectAccountModal close={close} />;
     }
 
-    return <SchedulePaymentModal close={close} />;
+    return <SetupAutopay accounts={getConnectedAccountsResponse.data} onSuccess={close} />;
   }
 
   return <></>;

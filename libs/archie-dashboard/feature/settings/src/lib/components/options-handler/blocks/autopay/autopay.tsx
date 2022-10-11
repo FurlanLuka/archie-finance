@@ -5,23 +5,25 @@ import { useGetAutopay } from '@archie-webapps/shared/data-access/archie-api/aut
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 
 import { ManageAutopayModal } from '../../../modals/manage-autopay/manage-autopay';
-import { OptionsItem } from '../options-item/options-item';
+import { OptionsItem } from '../../../options-item/options-item';
 
-export const AutopayItem: FC = () => {
+export const Autopay: FC = () => {
   const { t } = useTranslation();
+
   const [manageAutopayModalOpen, setManageAutopayModalOpen] = useState(false);
+
   const getAutopayResponse = useGetAutopay();
 
-  function getAutopayText() {
+  const getAutopayText = () => {
     if (getAutopayResponse.state === RequestState.SUCCESS) {
       if (getAutopayResponse.data === null) {
-        return 'off';
+        return t('off');
       }
-      return 'on';
+      return t('on');
     }
 
-    return '...';
-  }
+    return t('off');
+  };
 
   return (
     <>

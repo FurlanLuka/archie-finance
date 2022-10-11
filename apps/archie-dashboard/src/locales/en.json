@@ -11,6 +11,10 @@
   "ltv": "LTV",
   "on": "on",
   "off": "off",
+  "error": {
+    "try_again": "Something went wrong, please try again",
+    "refresh_page": "Something went wrong, try refreshing the page"
+  },
   "steps_indicator": {
     "first": "Sign up",
     "second": "Collateralize",
@@ -323,8 +327,7 @@
       "title": "Confirm payment",
       "credit_for": "ArchCredit for {{name}}",
       "balance_note": "Pay balance owed:",
-      "time_note": "This payment will be processed today and will take 2-4 business days to settle.",
-      "error": "Something went wrong, please try again"
+      "time_note": "This payment will be processed today and will take 2-4 business days to settle."
     },
     "payment_scheduled": {
       "title": "Payment scheduled",

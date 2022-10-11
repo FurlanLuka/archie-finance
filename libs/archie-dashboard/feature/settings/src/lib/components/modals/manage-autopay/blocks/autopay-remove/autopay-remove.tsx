@@ -7,11 +7,11 @@ import { BodyM, ButtonPrimary, TitleS } from '@archie-webapps/shared/ui/design-s
 
 import { AutopayRemoveStyled } from './autopay-remove.styled';
 
-interface AutopayRemoveModalProps {
+interface AutopayRemoveProps {
   close: VoidFunction;
 }
 
-export const AutopayRemoveModal: FC<AutopayRemoveModalProps> = ({ close }) => {
+export const AutopayRemove: FC<AutopayRemoveProps> = ({ close }) => {
   const { t } = useTranslation();
   const removeAutopayMutation = useRemoveAutopay();
 

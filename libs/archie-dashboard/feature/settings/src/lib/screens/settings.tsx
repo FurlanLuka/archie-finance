@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
@@ -10,12 +10,13 @@ import { useGetEmailVerification } from '@archie-webapps/shared/data-access/arch
 import { Card, TitleM, TitleS, BodyM, Loader } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { Options } from '../components/options/options';
+import { OptionsHandler } from '../components/options-handler/options-handler';
 
 import { SettingsStyled } from './settings.styled';
 
 export const SettingsScreen: FC = () => {
   const { t } = useTranslation();
+
   const getKycResponse: QueryResponse<Kyc> = useGetKyc();
   const getEmailVerificationResponse: QueryResponse<EmailVerificationResponse> = useGetEmailVerification();
 
@@ -42,7 +43,7 @@ export const SettingsScreen: FC = () => {
               {emailVerificationData.email}
             </BodyM>
           </div>
-          <Options />
+          <OptionsHandler />
         </>
       );
     }
