@@ -178,8 +178,8 @@
       "@archie/api/websocket-event-api/data-transfer-objects": [
         "libs/api/websocket-event-api/data-transfer-objects/src/index.ts"
       ],
-      "@archie/api/websocket-event-api/websocket": [
-        "libs/api/websocket-event-api/websocket/src/index.ts"
+      "@archie/api/websocket-event-api/websocket-event": [
+        "libs/api/websocket-event-api/websocket-event/src/index.ts"
       ],
       "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"],
       "@archie/plugin/migration-generator": [

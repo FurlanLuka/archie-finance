@@ -64,7 +64,7 @@
     "api-webhook-api-peach": "libs/api/webhook-api/peach",
     "api-websocket-event-api-constants": "libs/api/websocket-event-api/constants",
     "api-websocket-event-api-data-transfer-objects": "libs/api/websocket-event-api/data-transfer-objects",
-    "api-websocket-event-api-websocket": "libs/api/websocket-event-api/websocket",
+    "api-websocket-event-api-websocket-event": "libs/api/websocket-event-api/websocket-event",
     "credit-api": "apps/credit-api",
     "credit-line-api": "apps/credit-line-api",
     "fireblocks-api": "apps/fireblocks-api",

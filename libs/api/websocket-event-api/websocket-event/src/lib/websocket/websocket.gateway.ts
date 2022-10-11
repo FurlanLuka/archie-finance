@@ -44,8 +44,4 @@ export class WebsocketGateway implements NestGateway {
       client,
     );
   }
-
-  publishToClient(userId: string, event: WsEvent): void {
-    this.websocketService.handlePublish(userId, event);
-  }
 }

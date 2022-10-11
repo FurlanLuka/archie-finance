@@ -36,7 +36,7 @@ spec:
       http:
     {{- end }}
         paths:
-          ## Websocket api
+          ## Websocket event api
           - path: '/'
             pathType: Prefix
             backend:
@@ -239,7 +239,7 @@ spec:
                 name: archie-credit-line-api-service
                 port:
                   number: 80
-          ## Websocket api
+          ## Websocket event api
           - path: /v1/ws_auth
             pathType: Prefix
             backend:

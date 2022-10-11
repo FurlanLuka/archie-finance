@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { RedisService } from '@archie-microservices/api/utils/redis';
 import { CryptoService } from '@archie/api/utils/crypto';
-import { AuthTokenDto } from '@archie/api/websocket/data-transfer-objects';
+import { AuthTokenDto } from '@archie/api/websocket-event-api/data-transfer-objects';
 import { ActiveClient, WsEvent } from './websocket.interfaces';
 import { WebSocket } from 'ws';
 
@@ -55,7 +55,7 @@ export class WebsocketService {
     Logger.log(`Number of active clients: ${this.activeClients.length}`);
   }
 
-  public handleWsPublish(userId: string, event: WsEvent): void {
+  public publish(userId: string, event: WsEvent): void {
     const userClient = this.activeClients.find((c) => c.userId === userId);
 
     if (!userClient) {

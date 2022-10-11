@@ -3,7 +3,7 @@ import { HealthModule } from '@archie/api/utils/health';
 import { Module } from '@nestjs/common';
 import { ConfigVariables } from '@archie/api/websocket-event-api/constants';
 import { QueueModule } from '@archie/api/utils/queue';
-import { WebsocketModule } from '@archie/api/websocket-event-api/websocket';
+import { WebsocketModule } from '@archie/api/websocket-event-api/websocket-event';
 import { RedisModule } from '@archie-microservices/api/utils/redis';
 import { SERVICE_NAME } from '@archie/api/credit-api/constants';
 import { CryptoModule } from '@archie/api/utils/crypto';

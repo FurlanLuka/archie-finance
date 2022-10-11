@@ -13,5 +13,5 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory:
-    '../../../../coverage/libs/api/websocket-event-api/websocket',
+    '../../../../coverage/libs/api/websocket-event-api/websocket-event',
 };
