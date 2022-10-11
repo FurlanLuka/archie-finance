@@ -7,15 +7,8 @@ import { WebsocketService } from './websocket.service';
 import * as queryString from 'query-string';
 import { Logger } from '@nestjs/common';
 
-const PING_INTERVAL_IN_MS = 30000;
-const PING_TIMEOUT_IN_MS = 5000;
-
 @WebSocketGateway({
   transports: ['websocket'],
-  pingInterval: PING_INTERVAL_IN_MS,
-  pingTimeout: PING_TIMEOUT_IN_MS,
-  httpCompression: true,
-  // cors: {},
 })
 export class WebsocketServer implements NestGateway {
   constructor(private websocketService: WebsocketService) {}
@@ -30,7 +23,7 @@ export class WebsocketServer implements NestGateway {
   }
 
   async handleConnection(
-    client: Client,
+    client: any,
     message: IncomingMessage,
     ..._args: any[]
   ): Promise<void> {
