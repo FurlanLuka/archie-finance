@@ -77,11 +77,13 @@ export class WebsocketService {
   }
 
   public handlePublish(userId: string, event: WsEvent): void {
+    console.log('pabalishi', userId, event);
     const userClient = this.activeClients.find((c) => c.userId === userId);
 
     if (!userClient) {
       return;
     }
+    console.log('klajent', userClient);
 
     userClient.client.publish(
       event.subject,
