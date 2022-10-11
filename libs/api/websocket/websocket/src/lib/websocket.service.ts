@@ -55,18 +55,13 @@ export class WebsocketService {
     Logger.log(`Number of active clients: ${this.activeClients.length}`);
   }
 
-  public handlePublish(userId: string, event: WsEvent): void {
-    console.log('pabalishi', userId, event);
+  public handleWsPublish(userId: string, event: WsEvent): void {
     const userClient = this.activeClients.find((c) => c.userId === userId);
 
     if (!userClient) {
       return;
     }
-    console.log('klajent', userClient);
 
-    userClient.client.send(
-      event.subject,
-      Buffer.from(JSON.stringify(event.data)),
-    );
+    userClient.client.send(JSON.stringify(event.data));
   }
 }

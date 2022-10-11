@@ -14,17 +14,4 @@ export class WebsocketController {
   public createAuthToken(@Request() req): Promise<AuthTokenDto> {
     return this.websocketService.createAuthToken(req.user.sub);
   }
-
-  @Post('/test')
-  @UseGuards(AuthGuard)
-  @ApiBearerAuth()
-  public test(@Request() req): void {
-    return this.websocketService.handlePublish(req.user.sub, {
-      subject: 'test',
-      data: {
-        a: 1,
-        b: 2,
-      },
-    });
-  }
 }
