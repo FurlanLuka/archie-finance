@@ -1,8 +1,8 @@
-import { Client } from '@nestjs/microservices/external/nats-client.interface';
+import { WebSocket } from 'ws';
 
 export interface ActiveClient {
   userId: string;
-  client: Client;
+  client: WebSocket;
 }
 
 export interface WsEvent {
