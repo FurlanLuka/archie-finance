@@ -31,6 +31,7 @@ import {
 import { INITIATE_COLLATERAL_WITHDRAWAL_COMMAND } from '@archie/api/fireblocks-api/constants';
 import { v4 } from 'uuid';
 import { AssetInformation, AssetsService } from '@archie/api/ledger-api/assets';
+import { Lock } from '@archie-microservices/api/utils/redis';
 
 @Injectable()
 export class WithdrawService {
@@ -90,26 +91,7 @@ export class WithdrawService {
     };
   }
 
-  public async getWithdrawalRecord(
-    userId: string,
-    internalTransactionId: string,
-  ): Promise<WithdrawalRecord> {
-    const withdrawalRecord: WithdrawalRecord | null =
-      await this.withdrawalRepository.findOneBy({
-        userId,
-        internalTransactionId,
-      });
-
-    if (withdrawalRecord === null) {
-      throw new WithdrawalRecordNotFoundError({
-        userId,
-        internalTransactionId,
-      });
-    }
-
-    return withdrawalRecord;
-  }
-
+  @Lock((userId: string, ..._) => userId)
   public async withdraw(
     userId: string,
     assetId: string,
