@@ -9,7 +9,7 @@
         "{options.outputPath}"
       ],
       "options": {
-        "outputPath": "dist/apps/websocket",
+        "outputPath": "dist/apps/websocket-event-api",
         "main": "apps/websocket-event-api/src/main.ts",
         "tsConfig": "apps/websocket-event-api/tsconfig.app.json",
         "assets": [
@@ -36,11 +36,11 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "websocket:build"
+        "buildTarget": "websocket-event-api:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "websocket:build:production"
+          "buildTarget": "websocket-event-api:build:production"
         }
       }
     },
@@ -73,7 +73,7 @@
     "test-integration": {
       "executor": "@nrwl/jest:jest",
       "outputs": [
-        "coverage/apps/websocket"
+        "coverage/apps/websocket-event-api"
       ],
       "options": {
         "jestConfig": "apps/websocket-event-api/jest.config.ts",
