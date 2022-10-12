@@ -72,6 +72,7 @@ export class QueueService implements OnApplicationBootstrap {
               metadata: {
                 eventLogId,
                 message,
+                error,
               },
             });
           }
