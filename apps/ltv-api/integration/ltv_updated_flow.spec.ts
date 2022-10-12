@@ -108,6 +108,7 @@ describe('Ltv api tests', () => {
     });
 
     it(`should create margin call and liquidate once ltv reaches 90%`, async () => {
+      const expectedLiquidationCommandPublishSequence = 3;
       const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
         utilizationAmount: ledgerValue * 0.9,
       });
@@ -159,7 +160,7 @@ describe('Ltv api tests', () => {
         collateralBalance: ledgerValue,
       });
       expect(queueStub.publish).nthCalledWith(
-        3,
+        expectedLiquidationCommandPublishSequence,
         INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND,
         {
           userId: user.id,
@@ -167,7 +168,14 @@ describe('Ltv api tests', () => {
           liquidationId: expect.any(String),
         },
       );
-      liquidationId = queueStub.publish.mock.calls[1][1].liquidationId;
+      liquidationId =
+        queueStub.publish.mock.calls[
+          expectedLiquidationCommandPublishSequence - 1
+        ][1].liquidationId;
+
+      if (liquidationId === undefined) {
+        throw new Error('Liquidation id is not found');
+      }
     });
 
     it(`should not mark margin call as completed if only collateral balance update is received`, async () => {
