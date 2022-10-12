@@ -43,7 +43,8 @@ class WebsocketInstance {
     }
   }
 
-  public addHandler(event: WsEventTopic, handler: (event: WsEvent) => void): void {
+  // TODO figure out wtf is going on with event typing
+  public addHandler(event: WsEventTopic, handler: (event: any) => void): void {
     this.handlers.set(event, handler);
   }
 

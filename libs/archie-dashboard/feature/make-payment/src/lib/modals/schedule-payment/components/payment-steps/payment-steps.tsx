@@ -6,12 +6,13 @@ import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-k
 import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-obligations';
 
 import { ChooseAccount } from '../choose-account/choose-account';
-import { PayWithPaypalForm } from '../pay-with-paypal-form/pay-with-paypal-form';
 import { PayWithPaypalConfirm } from '../pay-with-paypal-confirm/pay-with-paypal-confirm';
+import { PayWithPaypalForm } from '../pay-with-paypal-form/pay-with-paypal-form';
 import { PayWithPaypalScheduled } from '../pay-with-paypal-scheduled/pay-with-paypal-scheduled';
-import { PaymentScheduleForm } from '../payment-schedule-form/payment-schedule-form';
 import { PaymentConfirm } from '../payment-confirm/payment-confirm';
+import { PaymentScheduleForm } from '../payment-schedule-form/payment-schedule-form';
 import { PaymentScheduled } from '../payment-scheduled/payment-scheduled';
+
 import { initalPaymentStepsState, PaymentStepsActionType, paymentStepsReducer } from './payment-steps.reducer';
 
 interface PaymentStepsProps {
