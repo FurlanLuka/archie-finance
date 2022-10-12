@@ -3,7 +3,6 @@ import {
   AppliedToWaitlistPayload,
   JoinedToWaitlistPayload,
 } from '@archie/api/referral-system-api/data-transfer-objects';
-import { SalesConnectDto } from '@archie/api/referral-system-api/sales-connect';
 
 export const SERVICE_NAME = 'referral-system-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
@@ -30,7 +29,7 @@ export const JOINED_WAITLIST_TOPIC = new Event<JoinedToWaitlistPayload>(
   1,
 );
 
-export const SALES_CONNECT_TOPIC = new Event<SalesConnectDto>(
+export const SALES_CONNECT_TOPIC = new Event(
   'sales.connect',
   1,
 );
