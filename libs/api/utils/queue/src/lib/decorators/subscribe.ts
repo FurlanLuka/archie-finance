@@ -67,13 +67,7 @@ export function Subscribe(
     },
   };
 
-  const decorators: MethodDecorator[] = [
-    RabbitSubscribe({
-      exchange: subscriptionOptions.exchange,
-      routingKey: routingKey,
-      ...baseQueueOptions,
-    }),
-  ];
+  const decorators: MethodDecorator[] = [];
 
   if (subscriptionOptions.useTracer) {
     decorators.push(TraceEvent(fullQueueName, event.getOptions().isSensitive));
@@ -82,6 +76,14 @@ export function Subscribe(
   if (subscriptionOptions.useIdempotency) {
     decorators.push(Idempotent(routingKey, fullQueueName));
   }
+
+  decorators.push(
+    RabbitSubscribe({
+      exchange: subscriptionOptions.exchange,
+      routingKey: routingKey,
+      ...baseQueueOptions,
+    }),
+  );
 
   if (subscriptionOptions.requeueOnError) {
     decorators.push(
