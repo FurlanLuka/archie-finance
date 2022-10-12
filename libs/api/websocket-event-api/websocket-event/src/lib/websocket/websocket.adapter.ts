@@ -1,9 +1,19 @@
 import { WsAdapter as BaseWsAdapter } from '@nestjs/platform-ws';
 import { WebSocket, WebSocketServer } from 'ws';
+import { IncomingMessage } from 'http';
+
+interface WebsocketWithPingIntervals extends WebSocket {
+  pingIntervalTimer: NodeJS.Timer;
+  pingTimeoutTimer: NodeJS.Timer;
+}
 
 export class WsAdapter extends BaseWsAdapter {
-  private wsServer;
   DEFAULT_PING_INTERVAL_IN_MS = 25_000;
+  DEFAULT_PING_TIMEOUT_IN_MS = 20_000;
+  private pingOptions: {
+    interval: number;
+    timeout: number;
+  };
 
   public create(
     port: number,
@@ -11,42 +21,66 @@ export class WsAdapter extends BaseWsAdapter {
       namespace?: string;
       server?: any;
       pingInterval?: number;
+      pingTimeout?: number;
     },
   ): WebSocketServer {
-    this.wsServer = super.create(port, options);
+    this.pingOptions = {
+      interval: options?.pingInterval ?? this.DEFAULT_PING_INTERVAL_IN_MS,
+      timeout: options?.pingTimeout ?? this.DEFAULT_PING_TIMEOUT_IN_MS,
+    };
 
-    setInterval(
-      this.pingAll.bind(this),
-      options?.pingInterval ?? this.DEFAULT_PING_INTERVAL_IN_MS,
-    );
-
-    return this.wsServer;
-  }
-
-  public bindErrorHandler(server: any): void {
-    return super.bindErrorHandler(server);
+    return super.create(port, options);
   }
 
   public bindClientConnect(
     server: any,
-    callback: (client: WebSocket, ...args: any) => void,
+    callback: (
+      client: WebSocket,
+      message: IncomingMessage,
+      ...args: any
+    ) => void,
   ): void {
-    return super.bindClientConnect(server, (client, ...args) => {
-      client.isAlive = true;
-      client.on('pong', () => {
-        client.isAlive = true;
-      });
+    return super.bindClientConnect(
+      server,
+      (
+        client: WebsocketWithPingIntervals,
+        message: IncomingMessage,
+        ...args
+      ) => {
+        this.setPingInterval(client);
 
-      callback(client, ...args);
-    });
+        client.on('pong', () => {
+          this.setPingInterval(client);
+        });
+
+        callback(client, message, ...args);
+      },
+    );
   }
 
-  private pingAll(): void {
-    this.wsServer.clients.forEach((client) => {
-      if (client.isAlive === false) return client.terminate();
+  private setPingInterval(client: WebsocketWithPingIntervals): void {
+    this.clearPingTimeout(client);
 
-      client.isAlive = false;
+    client.pingIntervalTimer = setTimeout(() => {
       client.ping();
-    });
+      this.resetPingTimeout(client);
+    }, this.pingOptions.interval);
+  }
+
+  private resetPingTimeout(client: WebsocketWithPingIntervals): void {
+    this.clearPingTimeout(client);
+
+    client.pingTimeoutTimer = setTimeout(() => {
+      if (
+        client.readyState !== client.CLOSING &&
+        client.readyState !== client.CLOSED
+      ) {
+        client.terminate();
+      }
+    }, this.pingOptions.timeout);
+  }
+
+  private clearPingTimeout(client: WebsocketWithPingIntervals): void {
+    clearTimeout(client.pingTimeoutTimer);
   }
 }

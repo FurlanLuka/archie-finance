@@ -7,10 +7,12 @@ import { Logger } from '@nestjs/common';
 import { WebSocket, WebSocketServer } from 'ws';
 
 const PING_INTERVAL_IN_MS = 25_000;
+const PING_TIMEOUT_IN_MS = 15_000;
 
 @WebSocketGateway({
   transports: ['websocket'],
   pingInterval: PING_INTERVAL_IN_MS,
+  pingTimeout: PING_TIMEOUT_IN_MS,
 })
 export class WebsocketGateway implements NestGateway {
   constructor(private websocketService: WebsocketService) {}
