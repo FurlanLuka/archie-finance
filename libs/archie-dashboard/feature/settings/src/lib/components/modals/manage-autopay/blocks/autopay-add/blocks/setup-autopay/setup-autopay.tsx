@@ -7,7 +7,7 @@ import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/p
 import { TitleS, BodyM, SelectOption, Select, ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectedAccountItem } from '../connected-account-item/connected-account-item';
-import { ConsentCheckbox } from '../consent-checkbox/consent-checkbox';
+import { ConsentCheck } from '../consent-check/consent-check';
 
 import { SetupAutopayStyled } from './setup-autopay.styled';
 
@@ -18,10 +18,12 @@ interface AutopayModalProps {
 
 export const SetupAutopay: FC<AutopayModalProps> = ({ accounts, onSuccess }) => {
   const { t } = useTranslation();
+
+  const setAutopayMutation = useSetAutopay();
+
   const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
   const [hasConsent, setHasConsent] = useState<boolean>(false);
   const [consentDocumentId, setConsentDocumentId] = useState<string | null>(null);
-  const setAutopayMutation = useSetAutopay();
 
   const header = selectedAccount ? (
     <ConnectedAccountItem account={selectedAccount} />
@@ -72,7 +74,7 @@ export const SetupAutopay: FC<AutopayModalProps> = ({ accounts, onSuccess }) => 
         {options}
       </Select>
       <div className="consent-check">
-        <ConsentCheckbox
+        <ConsentCheck
           hasConsent={hasConsent}
           onChange={(val) => {
             setHasConsent(val);
@@ -84,6 +86,7 @@ export const SetupAutopay: FC<AutopayModalProps> = ({ accounts, onSuccess }) => 
         />
       </div>
       <ButtonPrimary
+        maxWidth="16rem"
         isDisabled={!canSubmit}
         isLoading={setAutopayMutation.state === RequestState.LOADING}
         onClick={() => {

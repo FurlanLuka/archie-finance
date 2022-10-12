@@ -5,7 +5,11 @@ export const AutopayRemoveStyled = styled.div`
   flex-direction: column;
   align-items: flex-start;
 
-  .text-body {
-    margin: 1.5rem 0;
+  .modal-title {
+    margin-bottom: 1rem;
+  }
+
+  .modal-text {
+    margin-bottom: 2rem;
   }
 `;
