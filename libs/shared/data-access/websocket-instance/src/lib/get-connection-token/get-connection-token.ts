@@ -8,7 +8,7 @@ interface ConnectionTokenResponse {
 
 export const getConnectionToken = async (apiToken: string): Promise<ConnectionTokenResponse> => {
   const response: AxiosResponse<ConnectionTokenResponse> = await axios.post(
-    `${API_URL}/v1/user/email-verification/resend`,
+    `${API_URL}/v1/ws_auth`,
     {},
     {
       headers: {
