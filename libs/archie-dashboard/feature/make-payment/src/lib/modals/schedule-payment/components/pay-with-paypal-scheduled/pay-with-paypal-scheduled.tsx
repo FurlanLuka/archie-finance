@@ -21,7 +21,7 @@ export const PayWithPaypalScheduled: FC<PayWithPaypalScheduledProps> = ({ onConf
       <BodyM weight={600}>{t('payment_modal.pay_with_paypal_form.email_note')}</BodyM>
       <BodyM>{t('payment_modal.pay_with_paypal_form.time_note')}</BodyM>
       <div className="btn-group">
-        <ButtonPrimary maxWidth="250px" onClick={onConfirm}>
+        <ButtonPrimary width="250px" onClick={onConfirm}>
           {t('btn_ok')}
         </ButtonPrimary>
       </div>

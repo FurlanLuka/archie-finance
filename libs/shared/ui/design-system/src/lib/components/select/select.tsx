@@ -12,13 +12,13 @@ export interface SelectProps<T> {
   onChange: (value: T) => void;
   isLoading?: boolean;
   isDisabled?: boolean;
-  maxWidth?: string;
+  width?: string;
   small?: boolean;
   children: ReactElement<SelectOptionProps<T>>[];
 }
 
 // TODO: Refactor Select component to nest styled header and options and prevent passing many props
-export function Select<T>({ id, header, onChange, isLoading, isDisabled, maxWidth, small, children }: SelectProps<T>) {
+export function Select<T>({ id, header, onChange, isLoading, isDisabled, width, small, children }: SelectProps<T>) {
   const [selectOpen, setSelectOpen] = useState(false);
 
   const handleSelect = (value: T) => {
@@ -27,7 +27,7 @@ export function Select<T>({ id, header, onChange, isLoading, isDisabled, maxWidt
   };
 
   return (
-    <SelectStyled id={id} isLoading={isLoading} isDisabled={isDisabled} maxWidth={maxWidth} small={small}>
+    <SelectStyled id={id} isLoading={isLoading} isDisabled={isDisabled} width={width} small={small}>
       <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
         {header}
         <Icon

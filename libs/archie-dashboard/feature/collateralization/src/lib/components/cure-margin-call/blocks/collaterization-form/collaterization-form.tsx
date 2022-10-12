@@ -35,6 +35,15 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
     return Math.ceil(result * 10000) / 10000;
   };
 
+  const handleInputChange = (value: number) => {
+    if (!value) {
+      setCustomLtv(1);
+    }
+    if (value > 0 && value <= 100) {
+      setCustomLtv(value);
+    }
+  };
+
   const tableData = useMemo(() => {
     return [
       {
@@ -69,11 +78,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
               // prevent value change on scroll
               onWheel={(e) => e.currentTarget.blur()}
               value={customLtv}
-              onChange={(e) => {
-                if (e.target.valueAsNumber > 0 && e.target.valueAsNumber <= 100) {
-                  setCustomLtv(e.target.valueAsNumber);
-                }
-              }}
+              onChange={(e) => handleInputChange(e.target.valueAsNumber)}
             />
           </InputText>
         ),

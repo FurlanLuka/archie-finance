@@ -91,7 +91,7 @@ export const VerifyEmailScreen: FC = () => {
           <hr className="divider" />
           <ButtonPrimary
             type="submit"
-            maxWidth="100%"
+            width="100%"
             className="resend-btn"
             isDisabled={btnDisabled}
             onClick={handleResend}

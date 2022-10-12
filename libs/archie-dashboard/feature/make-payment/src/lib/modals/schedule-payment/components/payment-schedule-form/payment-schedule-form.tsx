@@ -156,7 +156,7 @@ export const PaymentScheduleForm: FC<PaymentScheduleFormProps> = ({ obligations,
           </div>
         </div>
         <div className="btn-group">
-          <ButtonPrimary type="submit" maxWidth="250px" isDisabled={!isFormValid}>
+          <ButtonPrimary type="submit" width="250px" isDisabled={!isFormValid}>
             {t('btn_next')}
           </ButtonPrimary>
         </div>
