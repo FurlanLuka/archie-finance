@@ -11,11 +11,11 @@ class WebsocketInstance {
   public connected = false;
   private handlers: Map<EventType, VoidFunction> = new Map();
 
-  public setToken(accessToken: string) {
+  public setToken(accessToken: string): void {
     this.accessToken = accessToken;
   }
 
-  public async connect(onConnect: VoidFunction) {
+  public async connect(): Promise<void> {
     if (this.accessToken === undefined) {
       console.warn('Access token not set yet');
       return;
@@ -27,23 +27,20 @@ class WebsocketInstance {
       this.connection = new WebSocket(`${WS_URL}?authToken=${authToken}`);
       this.connected = true;
 
-      this.connection.onmessage = (event) => {
-        console.log('bruh', event, this.handlers);
+      this.connection.onmessage = (message) => {
+        console.log('bruh', message.data, this.handlers);
       };
-
-      onConnect();
     } catch (error: any) {
-      console.error('Error while trying to set up WS connection');
+      console.error('Error while trying to set up WS connection', error);
       // Wat do, graciously fail?
-      onConnect();
     }
   }
 
-  public addHandler(event: EventType, handler: VoidFunction) {
+  public addHandler(event: EventType, handler: VoidFunction): void {
     this.handlers.set(event, handler);
   }
 
-  public removeHandler(event: EventType) {
+  public removeHandler(event: EventType): void {
     this.handlers.delete(event);
   }
 }
