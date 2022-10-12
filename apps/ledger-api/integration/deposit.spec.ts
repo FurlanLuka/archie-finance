@@ -147,7 +147,7 @@ describe('Ledger api deposit tests', () => {
         ],
       });
 
-      expect(queueStub.publish).toHaveBeenNthCalledWith(
+      expect(queueStub.publishEvent).toHaveBeenNthCalledWith(
         1,
         LEDGER_ACCOUNT_UPDATED_TOPIC,
         {
@@ -203,7 +203,7 @@ describe('Ledger api deposit tests', () => {
         ],
       });
 
-      expect(queueStub.publish).toHaveBeenNthCalledWith(
+      expect(queueStub.publishEvent).toHaveBeenNthCalledWith(
         2,
         LEDGER_ACCOUNT_UPDATED_TOPIC,
         {
