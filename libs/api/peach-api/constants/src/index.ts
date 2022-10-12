@@ -18,6 +18,7 @@ export enum ConfigVariables {
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
   API_BASE_URL = 'API_BASE_URL',
   REDIS_URL = 'REDIS_URL',
+  RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
 export const CREDIT_BALANCE_UPDATED_TOPIC = 'peach.credit_balance.updated';

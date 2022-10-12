@@ -25,6 +25,9 @@
       "inputFile": "./dist/apps/paypal-api/target/generated/swagger.json"
     },
     {
+      "inputFile": "./dist/apps/ledger-api/target/generated/swagger.json"
+    },
+    {
       "inputFile": "./dist/apps/fireblocks-api/target/generated/swagger.json"
     },
     {

@@ -10,10 +10,11 @@ export enum ConfigVariables {
   ARCHIE_MARKETING_WEBSITE_URL = 'ARCHIE_MARKETING_WEBSITE_URL',
   QUEUE_URL = 'QUEUE_URL',
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
+  RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
 export const APPLIED_TO_WAITLIST_TOPIC = 'waitlist.joined';
 
 export const JOINED_WAITLIST_TOPIC = 'waitlist.joined';
 
-export const SALES_CONNECT_TOPIC = 'sales.connect'
+export const SALES_CONNECT_TOPIC = 'sales.connect';

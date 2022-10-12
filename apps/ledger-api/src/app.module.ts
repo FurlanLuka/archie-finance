@@ -12,6 +12,8 @@ import {
   WithdrawModule,
 } from '@archie/api/ledger-api/ledger';
 import { AuthModule } from '@archie/api/utils/auth0';
+import { RedisModule } from '@archie-microservices/api/utils/redis';
+import { SERVICE_NAME } from '@archie/api/credit-api/constants';
 
 @Module({
   imports: [
@@ -49,7 +51,8 @@ import { AuthModule } from '@archie/api/utils/auth0';
         keepConnectionAlive: true,
         autoLoadEntities: true,
         migrations: migrations,
-        migrationsRun: true,
+        migrationsRun:
+          configService.get(ConfigVariables.RUN_MIGRATIONS) !== 'false',
       }),
       inject: [ConfigService],
     }),
@@ -67,6 +70,14 @@ import { AuthModule } from '@archie/api/utils/auth0';
     LiquidationModule,
     LedgerModule,
     WithdrawModule,
+    RedisModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        url: configService.get(ConfigVariables.REDIS_URL),
+        keyPrefix: SERVICE_NAME,
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [],
   providers: [],

@@ -11,6 +11,7 @@ export enum ConfigVariables {
   TYPEORM_PORT = 'TYPEORM_PORT',
   QUEUE_URL = 'QUEUE_URL',
   REDIS_URL = 'REDIS_URL',
+  RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
 export const COLLATERAL_SALE_LTV_LIMIT = 90;
