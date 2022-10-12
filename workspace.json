@@ -18,6 +18,7 @@
     "archie-dashboard-utils": "libs/archie-dashboard/utils",
     "shared-constants": "libs/shared/constants",
     "shared-data-access-archie-api": "libs/shared/data-access/archie-api",
+    "shared-data-access-query-client": "libs/shared/data-access/query-client",
     "shared-data-access-session": "libs/shared/data-access/session",
     "shared-data-access-websocket-instance": "libs/shared/data-access/websocket-instance",
     "shared-ui-design-system": "libs/shared/ui/design-system",

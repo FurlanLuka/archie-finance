@@ -1,6 +1,6 @@
 import { WS_URL } from '@archie-webapps/shared/constants';
 
-import { EventType } from './events';
+import { WsEventType } from './events';
 import { getConnectionToken } from './get-connection-token/get-connection-token';
 
 // TODO: Map of handlers for events
@@ -9,7 +9,7 @@ class WebsocketInstance {
   private connection: WebSocket | undefined = undefined;
   private accessToken: string | undefined = undefined;
   public connected = false;
-  private handlers: Map<EventType, VoidFunction> = new Map();
+  private handlers: Map<WsEventType, VoidFunction> = new Map();
 
   public setToken(accessToken: string): void {
     this.accessToken = accessToken;
@@ -36,11 +36,11 @@ class WebsocketInstance {
     }
   }
 
-  public addHandler(event: EventType, handler: VoidFunction): void {
+  public addHandler(event: WsEventType, handler: VoidFunction): void {
     this.handlers.set(event, handler);
   }
 
-  public removeHandler(event: EventType): void {
+  public removeHandler(event: WsEventType): void {
     this.handlers.delete(event);
   }
 }

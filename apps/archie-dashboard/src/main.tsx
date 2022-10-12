@@ -1,16 +1,15 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { ThemeProvider } from 'styled-components';
 
+import { queryClient } from '@archie-webapps/shared/data-access/query-client';
 import { SessionProvider } from '@archie-webapps/shared/data-access/session';
 import { GlobalStyles, theme } from '@archie-webapps/shared/ui/theme';
 
 import { App } from './app/app';
 import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants/auth';
-
-const queryClient: QueryClient = new QueryClient();
 
 ReactDOM.render(
   <>
