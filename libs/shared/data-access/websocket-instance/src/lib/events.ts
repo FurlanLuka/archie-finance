@@ -1,4 +1,4 @@
-export enum WsEventType {
+export enum WsEventTopic {
   ONBOARDING_UPDATED_TOPIC = 'onboarding.onboarding.updated',
   LTV_UPDATED_TOPIC = 'ltv.ltv.updated',
 }
@@ -14,7 +14,7 @@ export interface OnboardingUpdatedPayload {
 }
 
 export interface OnboardingUpdatedWsEvent {
-  topic: WsEventType.ONBOARDING_UPDATED_TOPIC;
+  topic: WsEventTopic.ONBOARDING_UPDATED_TOPIC;
   data: OnboardingUpdatedPayload;
 }
 

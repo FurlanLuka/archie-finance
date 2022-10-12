@@ -1,10 +1,11 @@
-import { OnboardingUpdatedWsEvent, WsEvent, WsEventType } from '../events';
+import { OnboardingUpdatedWsEvent, WsEvent, WsEventTopic } from '../events';
 
 const isOnboardingUpdatedWsEvent = (event: any): event is OnboardingUpdatedWsEvent => {
-  return event?.topic === WsEventType.LTV_UPDATED_TOPIC && event.data !== undefined;
+  return event?.topic === WsEventTopic.LTV_UPDATED_TOPIC && event.data !== undefined;
 };
 
-export const parseEvent = (event: any): WsEvent | undefined => {
+export const parseWsEvent = (event: any): WsEvent | undefined => {
+  console.log('Handling event', event);
   if (!event?.topic) {
     console.warn('No topic on event');
     return;
@@ -12,7 +13,7 @@ export const parseEvent = (event: any): WsEvent | undefined => {
 
   // TODO make this nicer, check by topic and then typeguard is an if?? kinda fugly
   switch (event.topic) {
-    case WsEventType.ONBOARDING_UPDATED_TOPIC:
+    case WsEventTopic.ONBOARDING_UPDATED_TOPIC:
       if (isOnboardingUpdatedWsEvent(event)) {
         return event;
       }

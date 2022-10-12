@@ -1,7 +1,8 @@
 import { WS_URL } from '@archie-webapps/shared/constants';
 
-import { WsEventType } from './events';
+import { WsEvent, WsEventTopic } from './events';
 import { getConnectionToken } from './get-connection-token/get-connection-token';
+import { parseWsEvent } from './helpers/event-handler';
 
 // TODO: Map of handlers for events
 // TODO: Reconnect on token rotate?
@@ -9,7 +10,7 @@ class WebsocketInstance {
   private connection: WebSocket | undefined = undefined;
   private accessToken: string | undefined = undefined;
   public connected = false;
-  private handlers: Map<WsEventType, VoidFunction> = new Map();
+  private handlers: Map<WsEventTopic, (event: WsEvent) => void> = new Map();
 
   public setToken(accessToken: string): void {
     this.accessToken = accessToken;
@@ -28,6 +29,13 @@ class WebsocketInstance {
       this.connected = true;
 
       this.connection.onmessage = (message) => {
+        const parsedEvent = parseWsEvent(JSON.parse(message.data));
+
+        if (parsedEvent !== undefined) {
+          const eventHandler = this.handlers.get(parsedEvent.topic);
+          console.log('hendl', eventHandler);
+          eventHandler?.(parsedEvent);
+        }
         console.log('bruh', message.data, this.handlers);
       };
     } catch (error: any) {
@@ -36,11 +44,11 @@ class WebsocketInstance {
     }
   }
 
-  public addHandler(event: WsEventType, handler: VoidFunction): void {
+  public addHandler(event: WsEventTopic, handler: (event: WsEvent) => void): void {
     this.handlers.set(event, handler);
   }
 
-  public removeHandler(event: WsEventType): void {
+  public removeHandler(event: WsEventTopic): void {
     this.handlers.delete(event);
   }
 }
