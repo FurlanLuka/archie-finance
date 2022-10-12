@@ -71,7 +71,7 @@ describe('Ltv api tests', () => {
     );
     const liquidationAmount = '15000';
     const afterLiquidationLtv = 60;
-    let liquidationId: string;
+    let liquidationId: string | undefined;
 
     it(`should keep ltv at 0 as credit line was not created yet`, async () => {
       await app.get(LtvQueueController).ledgerUpdated(ledgerUpdatedPayload);
@@ -172,13 +172,12 @@ describe('Ltv api tests', () => {
         queueStub.publish.mock.calls[
           expectedLiquidationCommandPublishSequence - 1
         ][1].liquidationId;
-
-      if (liquidationId === undefined) {
-        throw new Error('Liquidation id is not found');
-      }
     });
 
     it(`should not mark margin call as completed if only collateral balance update is received`, async () => {
+      if (liquidationId === undefined) {
+        throw new Error('Liquidation id is not found');
+      }
       const ledgerUpdatedDueToLiquidationEvent =
         ledgerAccountUpdatedPayloadFactory({
           action: {
@@ -204,6 +203,9 @@ describe('Ltv api tests', () => {
     });
 
     it(`should mark margin call as completed after also credit balance update is received`, async () => {
+      if (liquidationId === undefined) {
+        throw new Error('Liquidation id is not found');
+      }
       const creditUtilizationUpdatedDueToLiquidationEvent =
         creditBalanceUpdatedFactory({
           paymentDetails: {
