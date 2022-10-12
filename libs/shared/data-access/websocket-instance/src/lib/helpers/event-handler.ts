@@ -1,6 +1,10 @@
-import { OnboardingUpdatedWsEvent, WsEvent, WsEventTopic } from '../events';
+import { LtvUpdatedWsEvent, OnboardingUpdatedWsEvent, WsEvent, WsEventTopic } from '../events';
 
 const isOnboardingUpdatedWsEvent = (event: any): event is OnboardingUpdatedWsEvent => {
+  return event?.topic === WsEventTopic.ONBOARDING_UPDATED_TOPIC && event.data !== undefined;
+};
+
+const isLtvUpdatedWsEvent = (event: any): event is LtvUpdatedWsEvent => {
   return event?.topic === WsEventTopic.LTV_UPDATED_TOPIC && event.data !== undefined;
 };
 
@@ -15,6 +19,12 @@ export const parseWsEvent = (event: any): WsEvent | undefined => {
   switch (event.topic) {
     case WsEventTopic.ONBOARDING_UPDATED_TOPIC:
       if (isOnboardingUpdatedWsEvent(event)) {
+        return event;
+      }
+
+      return;
+    case WsEventTopic.LTV_UPDATED_TOPIC:
+      if (isLtvUpdatedWsEvent(event)) {
         return event;
       }
 

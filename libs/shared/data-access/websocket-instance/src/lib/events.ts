@@ -13,9 +13,19 @@ export interface OnboardingUpdatedPayload {
   completed: boolean;
 }
 
+export interface LtvUpdatedPayload {
+  userId: string;
+  ltv: number;
+}
+
 export interface OnboardingUpdatedWsEvent {
   topic: WsEventTopic.ONBOARDING_UPDATED_TOPIC;
   data: OnboardingUpdatedPayload;
 }
 
-export type WsEvent = OnboardingUpdatedWsEvent;
+export interface LtvUpdatedWsEvent {
+  topic: WsEventTopic.LTV_UPDATED_TOPIC;
+  data: LtvUpdatedPayload;
+}
+
+export type WsEvent = OnboardingUpdatedWsEvent | LtvUpdatedWsEvent;

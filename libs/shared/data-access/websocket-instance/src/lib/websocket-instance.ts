@@ -33,7 +33,6 @@ class WebsocketInstance {
 
         if (parsedEvent !== undefined) {
           const eventHandler = this.handlers.get(parsedEvent.topic);
-          console.log('hendl', eventHandler);
           eventHandler?.(parsedEvent);
         }
         console.log('bruh', message.data, this.handlers);
