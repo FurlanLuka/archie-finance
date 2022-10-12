@@ -23,6 +23,7 @@ import { SERVICE_NAME } from '@archie/api/credit-api/constants';
         ConfigVariables.ASSET_LIST,
         ConfigVariables.AUTH0_AUDIENCE,
         ConfigVariables.AUTH0_DOMAIN,
+        ConfigVariables.REDIS_URL,
       ],
       parse: (configVariable, value) => {
         if (configVariable === ConfigVariables.ASSET_LIST) {
