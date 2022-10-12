@@ -138,6 +138,21 @@ spec:
                 secretKeyRef:
                   name: paypal-api-secrets
                   key: return-url
+            - name: DYNAMO_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: dynamodb-shared-secrets
+                  key: region
+            - name: DYNAMO_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: dynamodb-shared-secrets
+                  key: access-key-id
+            - name: DYNAMO_ACCESS_KEY_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: dynamodb-shared-secrets
+                  key: access-key-secret
           {{- end }}
       imagePullSecrets:
         - name: regcred

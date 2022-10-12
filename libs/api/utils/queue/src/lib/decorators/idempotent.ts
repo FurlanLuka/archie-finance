@@ -35,8 +35,6 @@ export function Idempotent(
             `${queueName}-${routingKey}-${eventId}`,
           );
 
-          Logger.log(readRes);
-
           if (readRes === undefined) {
             await originalMethod.apply(this, args);
           } else {
