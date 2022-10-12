@@ -21,7 +21,7 @@ import { OnboardingQueueController } from '@archie/api/onboarding-api/onboarding
 import { creditLineCreatedDataFactory } from '@archie/api/credit-line-api/test-data';
 import { cardActivatedDataFactory } from '@archie/api/credit-api/test-data';
 import { ONBOARDING_UPDATED_TOPIC } from '@archie/api/onboarding-api/constants';
-import { onboardingUpdatedPayloadFactory } from '../../../libs/api/onboarding-api/test-data/src/lib/onboarding';
+import { onboardingUpdatedPayloadFactory } from '@archie/api/onboarding-api/test-data';
 
 describe('Onboarding service tests', () => {
   let app: INestApplication;
