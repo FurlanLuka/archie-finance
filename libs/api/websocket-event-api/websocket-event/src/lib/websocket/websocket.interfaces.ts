@@ -6,6 +6,6 @@ export interface ActiveClient {
 }
 
 export interface WsEvent {
-  subject: string;
+  topic: string;
   data: unknown;
 }

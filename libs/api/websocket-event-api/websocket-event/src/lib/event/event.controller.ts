@@ -33,7 +33,7 @@ export class EventQueueController {
     ...payload
   }: LedgerAccountUpdatedPayload) {
     this.eventService.publishToClient(userId, {
-      subject: LEDGER_ACCOUNT_UPDATED_TOPIC,
+      topic: LEDGER_ACCOUNT_UPDATED_TOPIC,
       data: payload,
     });
   }
@@ -48,7 +48,7 @@ export class EventQueueController {
     ...payload
   }: CreditBalanceUpdatedPayload) {
     this.eventService.publishToClient(userId, {
-      subject: CREDIT_BALANCE_UPDATED_TOPIC,
+      topic: CREDIT_BALANCE_UPDATED_TOPIC,
       data: payload,
     });
   }
@@ -63,7 +63,7 @@ export class EventQueueController {
     ...payload
   }: OnboardingUpdatedPayload) {
     this.eventService.publishToClient(userId, {
-      subject: ONBOARDING_UPDATED_TOPIC,
+      topic: ONBOARDING_UPDATED_TOPIC,
       data: payload,
     });
   }
@@ -75,7 +75,7 @@ export class EventQueueController {
   )
   async ltvUpdatedHandler({ userId, ...payload }: LtvUpdatedPayload) {
     this.eventService.publishToClient(userId, {
-      subject: LTV_UPDATED_TOPIC,
+      topic: LTV_UPDATED_TOPIC,
       data: payload,
     });
   }
@@ -90,7 +90,7 @@ export class EventQueueController {
     ...payload
   }: TransactionUpdatedPayload) {
     this.eventService.publishToClient(userId, {
-      subject: TRANSACTION_UPDATED_TOPIC,
+      topic: TRANSACTION_UPDATED_TOPIC,
       data: payload,
     });
   }

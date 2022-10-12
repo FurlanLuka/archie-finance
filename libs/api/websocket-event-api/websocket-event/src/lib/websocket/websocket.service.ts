@@ -67,6 +67,6 @@ export class WebsocketService {
       return;
     }
 
-    userClient.client.send(JSON.stringify(event.data));
+    userClient.client.send(JSON.stringify(event));
   }
 }
