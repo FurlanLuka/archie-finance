@@ -123,6 +123,11 @@ spec:
                 secretKeyRef:
                   name: auth0-shared-secrets
                   key: audience
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: redis-shared-secrets
+                  key: redis-url
           {{- end }}
       imagePullSecrets:
         - name: regcred
