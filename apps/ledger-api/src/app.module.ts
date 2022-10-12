@@ -51,7 +51,8 @@ import { SERVICE_NAME } from '@archie/api/credit-api/constants';
         keepConnectionAlive: true,
         autoLoadEntities: true,
         migrations: migrations,
-        migrationsRun: true,
+        migrationsRun:
+          configService.get(ConfigVariables.RUN_MIGRATIONS) !== 'false',
       }),
       inject: [ConfigService],
     }),

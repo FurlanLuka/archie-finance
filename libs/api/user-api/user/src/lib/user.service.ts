@@ -6,17 +6,15 @@ import {
 import { Enrollment, SendEnrollmentTicketResponse, User } from 'auth0';
 import { Auth0Service } from '@archie/api/user-api/auth0';
 import {
-  GetEmailVerificationResponse,
-  GetMfaEnrollmentResponse,
-} from './user.interfaces';
-import { GetEmailAddressResponse } from './user.interfaces';
-import {
   EMAIL_VERIFIED_TOPIC,
   MFA_ENROLLED_TOPIC,
 } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import {
   EmailVerifiedPayload,
+  GetEmailAddressResponse,
+  GetEmailVerificationResponse,
+  GetMfaEnrollmentResponse,
   MfaEnrolledPayload,
 } from '@archie/api/user-api/data-transfer-objects';
 

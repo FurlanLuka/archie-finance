@@ -1,7 +1,6 @@
 /* eslint-disable */
 
 import { Injectable, Logger } from '@nestjs/common';
-import { GetKycPayload, GetKycResponse } from '@archie/api/user-api/kyc';
 import { RizeApiService } from './api/rize_api.service';
 import {
   ComplianceDocumentAcknowledgementRequest,
@@ -30,10 +29,6 @@ import {
   GET_USER_KYC_RPC,
 } from '@archie/api/user-api/constants';
 import {
-  GetEmailAddressPayload,
-  GetEmailAddressResponse,
-} from '@archie/api/user-api/user';
-import {
   CardActivatedPayload,
   TransactionUpdatedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
@@ -49,6 +44,12 @@ import { LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LastDebitCardUpdateMeta } from './last_debit_card_update_meta.entity';
 import { Lock } from '@archie-microservices/api/utils/redis';
+import {
+  GetEmailAddressPayload,
+  GetEmailAddressResponse,
+  GetKycPayload,
+  GetKycResponse,
+} from '@archie/api/user-api/data-transfer-objects';
 
 @Injectable()
 export class RizeService {

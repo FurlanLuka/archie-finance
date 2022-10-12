@@ -37,7 +37,8 @@ import { SalesConnectModule } from '@archie/api/referral-system-api/sales-connec
         synchronize: false,
         autoLoadEntities: true,
         keepConnectionAlive: true,
-        migrationsRun: true,
+        migrationsRun:
+          configService.get(ConfigVariables.RUN_MIGRATIONS) !== 'false',
         migrationsTableName: `${SERVICE_NAME}-migrations`,
         migrations: migrations,
       }),

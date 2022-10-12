@@ -34,13 +34,13 @@
       }
     },
     "build-openapi": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "command": "npm run build onboarding-api && node dist/apps/onboarding-api/main build-swagger"
+        "command": "npm run build onboarding-api && RUN_MIGRATIONS=false node dist/apps/onboarding-api/main build-swagger"
       }
     },
     "generate-migration": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "npm run build onboarding-api && node dist/apps/onboarding-api/main generate-migration"
       }

@@ -29,6 +29,7 @@ export enum ConfigVariables {
   QUEUE_URL = 'QUEUE_URL',
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
   REDIS_URL = 'REDIS_URL',
+  RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
 export const CARD_ACTIVATED_TOPIC = new Event<CardActivatedPayload>(

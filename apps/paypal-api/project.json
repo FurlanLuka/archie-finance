@@ -51,13 +51,13 @@
       }
     },
     "build-openapi": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "command": "npm run build paypal-api && node dist/apps/paypal-api/main build-swagger"
+        "command": "npm run build paypal-api && RUN_MIGRATIONS=false node dist/apps/paypal-api/main build-swagger"
       }
     },
     "generate-migration": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "npm run build paypal-api && node dist/apps/paypal-api/main generate-migration"
       }

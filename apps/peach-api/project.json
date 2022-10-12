@@ -51,13 +51,13 @@
       }
     },
     "build-openapi": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
-        "command": "npm run build peach-api && node dist/apps/peach-api/main build-swagger"
+        "command": "npm run build peach-api && RUN_MIGRATIONS=false node dist/apps/peach-api/main build-swagger"
       }
     },
     "generate-migration": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "npm run build peach-api && node dist/apps/peach-api/main generate-migration"
       }

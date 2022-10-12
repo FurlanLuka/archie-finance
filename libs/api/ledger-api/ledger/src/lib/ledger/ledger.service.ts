@@ -7,11 +7,11 @@ import { LedgerAction, LedgerLog } from './ledger_log.entity';
 import { LedgerAccountNotFoundError } from './ledger.errors';
 import {
   AssetInformation,
-  AssetPrice,
   AssetPricesService,
   AssetsService,
 } from '@archie/api/ledger-api/assets';
 import {
+  AssetPrice,
   InitiateLedgerRecalculationCommandPayload,
   InternalLedgerAccountData,
   Ledger,

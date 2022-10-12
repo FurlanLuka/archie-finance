@@ -26,6 +26,7 @@ export enum ConfigVariables {
   QUEUE_URL = 'QUEUE_URL',
   AUTH0_AUDIENCE = 'AUTH0_AUDIENCE',
   AUTH0_DOMAIN = 'AUTH0_DOMAIN',
+  RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
 /**

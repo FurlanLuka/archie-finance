@@ -4,7 +4,7 @@ export interface InitiateLedgerAssetLiquidationCommandPayload {
   liquidationId: string;
 }
 
-export interface Liquidation {
+export class Liquidation {
   status: string;
   assetId: string;
   amount: string;

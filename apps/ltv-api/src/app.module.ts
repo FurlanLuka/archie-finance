@@ -32,7 +32,8 @@ import { RedisModule } from '@archie-microservices/api/utils/redis';
         synchronize: false,
         autoLoadEntities: true,
         keepConnectionAlive: true,
-        migrationsRun: true,
+        migrationsRun:
+          configService.get(ConfigVariables.RUN_MIGRATIONS) !== 'false',
         migrationsTableName: `${SERVICE_NAME}-migrations`,
         migrations: migrations,
       }),

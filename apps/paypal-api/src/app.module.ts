@@ -7,7 +7,7 @@ import {
 } from '@archie/api/paypal-api/constants';
 import { QueueModule } from '@archie/api/utils/queue';
 import { HealthModule } from '@archie/api/utils/health';
-import { PaypalModule } from '@archie/api/paypal-api/paypal'
+import { PaypalModule } from '@archie/api/paypal-api/paypal';
 import { migrations } from './migrations';
 import { AuthModule } from '@archie/api/utils/auth0';
 
@@ -23,7 +23,7 @@ import { AuthModule } from '@archie/api/utils/auth0';
         ConfigVariables.PAYPAL_CLIENT_ID,
         ConfigVariables.PAYPAL_CLIENT_SECRET,
         ConfigVariables.PAYPAL_API_URL,
-        ConfigVariables.PAYPAL_RETURN_URL
+        ConfigVariables.PAYPAL_RETURN_URL,
       ],
     }),
     TypeOrmModule.forRootAsync({
@@ -38,9 +38,10 @@ import { AuthModule } from '@archie/api/utils/auth0';
         synchronize: false,
         autoLoadEntities: true,
         keepConnectionAlive: true,
-        migrationsRun: true,
+        migrationsRun:
+          configService.get(ConfigVariables.RUN_MIGRATIONS) !== 'false',
         migrationsTableName: `${SERVICE_NAME}-migrations`,
-        migrations: migrations
+        migrations: migrations,
       }),
       inject: [ConfigService],
     }),

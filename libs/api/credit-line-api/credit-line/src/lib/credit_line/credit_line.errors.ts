@@ -1,4 +1,8 @@
-import { BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  NotFoundException,
+} from '@nestjs/common';
 
 export class NotEnoughCollateralError extends BadRequestException {
   metadata: object;
@@ -9,7 +13,7 @@ export class NotEnoughCollateralError extends BadRequestException {
   }
 }
 
-export class CreditLineAlreadyExistsError extends BadRequestException {
+export class CreditLineAlreadyExistsError extends ConflictException {
   metadata: object;
 
   constructor(metadata: object) {
