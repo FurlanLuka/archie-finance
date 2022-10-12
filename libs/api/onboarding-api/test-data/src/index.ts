@@ -1,1 +1,1 @@
-console.log("hey there!");
+export * from './lib/onboarding';
