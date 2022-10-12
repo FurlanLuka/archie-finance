@@ -4,7 +4,6 @@ import { IncomingMessage } from 'http';
 import { WebsocketService } from './websocket.service';
 import * as queryString from 'query-string';
 import { Logger } from '@nestjs/common';
-import { WsEvent } from './websocket.interfaces';
 import { WebSocket, WebSocketServer } from 'ws';
 
 const PING_INTERVAL_IN_MS = 25_000;
@@ -16,7 +15,9 @@ const PING_INTERVAL_IN_MS = 25_000;
 export class WebsocketGateway implements NestGateway {
   constructor(private websocketService: WebsocketService) {}
 
-  afterInit(_server: WebSocketServer): void {}
+  afterInit(_server: WebSocketServer): void {
+    // Nothing to do
+  }
 
   handleDisconnect(client: WebSocket): void {
     this.websocketService.handleWsConnectionDisconnect(client);
