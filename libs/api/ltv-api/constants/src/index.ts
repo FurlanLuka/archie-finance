@@ -1,5 +1,6 @@
 import { Event } from '@archie/api/utils/queue';
 import {
+  LtvUpdatedPayload,
   MarginCallCompletedPayload,
   MarginCallLtvLimitApproachingPayload,
   MarginCallStartedPayload,
@@ -35,5 +36,10 @@ export const MARGIN_CALL_COMPLETED_TOPIC =
   new Event<MarginCallCompletedPayload>('margin.margin_call.completed', 1);
 export const MARGIN_CALL_STARTED_TOPIC = new Event<MarginCallStartedPayload>(
   'margin.margin_call.started',
+  1,
+);
+
+export const LTV_UPDATED_TOPIC = new Event<LtvUpdatedPayload>(
+  'ltv.ltv.updated',
   1,
 );
