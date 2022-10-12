@@ -27,6 +27,7 @@ import { DateTime } from 'luxon';
 import {
   COLLATERAL_SALE_LTV_LIMIT,
   LTV_MARGIN_CALL_LIMIT,
+  LTV_UPDATED_TOPIC,
   MARGIN_CALL_STARTED_TOPIC,
 } from '@archie/api/ltv-api/constants';
 import { MARGIN_CALL_LIQUIDATION_AFTER_HOURS } from '@archie/api/ltv-api/constants';
@@ -34,7 +35,7 @@ import { INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND } from '@archie/api/ledger-ap
 import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects';
 import { PaymentType } from '@archie/api/peach-api/data-transfer-objects';
 
-describe.skip('Ltv api tests', () => {
+describe('Ltv api tests', () => {
   let app: INestApplication;
   let module: TestingModule;
   let testDatabase: TestDatabase;
@@ -79,6 +80,10 @@ describe.skip('Ltv api tests', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
+      expect(queueStub.publish).toHaveBeenCalledWith(LTV_UPDATED_TOPIC, {
+        userId: user.id,
+        ltv: 0,
+      });
       expect(response.body).toStrictEqual<LtvDto>({
         ltv: 0,
         status: LtvStatus.good,
@@ -137,7 +142,11 @@ describe.skip('Ltv api tests', () => {
           createdAt: expect.any(String),
         },
       ]);
-      expect(queueStub.publish).nthCalledWith(1, MARGIN_CALL_STARTED_TOPIC, {
+      expect(queueStub.publish).nthCalledWith(1, LTV_UPDATED_TOPIC, {
+        userId: user.id,
+        ltv: 90,
+      });
+      expect(queueStub.publish).nthCalledWith(2, MARGIN_CALL_STARTED_TOPIC, {
         userId: user.id,
         startedAt: expect.any(String),
         ltv: 90,
@@ -150,7 +159,7 @@ describe.skip('Ltv api tests', () => {
         collateralBalance: ledgerValue,
       });
       expect(queueStub.publish).nthCalledWith(
-        2,
+        3,
         INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND,
         {
           userId: user.id,

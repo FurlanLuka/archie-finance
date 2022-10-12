@@ -95,7 +95,7 @@ describe('Onboarding service tests', () => {
       });
     });
 
-    it('should onboarding record with kyc stage completed', async () => {
+    it('should update onboarding record with kyc stage completed', async () => {
       const response = await request(app.getHttpServer())
         .get('/v1/onboarding')
         .set('Authorization', `Bearer ${accessToken}`)
