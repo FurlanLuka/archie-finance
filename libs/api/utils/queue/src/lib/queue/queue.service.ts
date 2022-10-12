@@ -66,13 +66,15 @@ export class QueueService implements OnApplicationBootstrap {
           message: JSON.stringify(message),
         },
         (error) => {
-          Logger.error({
-            message: 'FAILED_WRITING_EVENT_LOG',
-            metadata: {
-              eventLogId,
-              message,
-            },
-          });
+          if (error) {
+            Logger.error({
+              message: 'FAILED_WRITING_EVENT_LOG',
+              metadata: {
+                eventLogId,
+                message,
+              },
+            });
+          }
         },
       );
     }
