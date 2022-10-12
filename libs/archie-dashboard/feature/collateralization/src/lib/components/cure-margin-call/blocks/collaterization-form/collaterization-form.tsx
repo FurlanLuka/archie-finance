@@ -3,7 +3,7 @@ import { FC, useState, useMemo } from 'react';
 import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
-import { MINIMUM_LTV, SUGGESTED_LTV } from '@archie-webapps/archie-dashboard/constants';
+import { MINIMUM_LTV, OK_LTV, SUGGESTED_LTV } from '@archie-webapps/archie-dashboard/constants';
 import { calculateCollateralValue } from '@archie-webapps/archie-dashboard/utils';
 import { Table, InputText } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
@@ -24,7 +24,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
   creditBalance,
   collateralTotalValue,
 }) => {
-  const [customLtv, setCustomLtv] = useState(SUGGESTED_LTV);
+  const [customLtv, setCustomLtv] = useState(OK_LTV);
 
   const getRequiredCollateral = (targetLtv: number) => {
     const collateral = calculateCollateralValue(targetLtv, creditBalance, collateralTotalValue);
@@ -69,7 +69,11 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
               // prevent value change on scroll
               onWheel={(e) => e.currentTarget.blur()}
               value={customLtv}
-              onChange={(e) => setCustomLtv(e.target.valueAsNumber)}
+              onChange={(e) => {
+                if (e.target.valueAsNumber > 0 && e.target.valueAsNumber <= 100) {
+                  setCustomLtv(e.target.valueAsNumber);
+                }
+              }}
             />
           </InputText>
         ),
