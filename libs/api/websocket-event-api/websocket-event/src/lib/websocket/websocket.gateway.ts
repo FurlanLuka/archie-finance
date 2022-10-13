@@ -5,6 +5,7 @@ import { WebsocketService } from './websocket.service';
 import * as queryString from 'query-string';
 import { Logger } from '@nestjs/common';
 import { WebSocket, WebSocketServer } from 'ws';
+import { ExtendedWebSocket } from './websocket.interfaces';
 
 const PING_INTERVAL_IN_MS = 25_000;
 const PING_TIMEOUT_IN_MS = 15_000;
@@ -21,12 +22,12 @@ export class WebsocketGateway implements NestGateway {
     // Nothing to do
   }
 
-  handleDisconnect(client: WebSocket): void {
+  handleDisconnect(client: ExtendedWebSocket): void {
     this.websocketService.handleWsConnectionDisconnect(client);
   }
 
   async handleConnection(
-    client: WebSocket,
+    client: ExtendedWebSocket,
     message: IncomingMessage,
     ..._args: any[]
   ): Promise<void> {

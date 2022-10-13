@@ -2,17 +2,18 @@ import { Injectable, Logger } from '@nestjs/common';
 import { RedisService } from '@archie-microservices/api/utils/redis';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { AuthTokenDto } from '@archie/api/websocket-event-api/data-transfer-objects';
-import { ActiveClient, WsEvent } from './websocket.interfaces';
-import { WebSocket } from 'ws';
+import { ExtendedWebSocket, WsEvent } from './websocket.interfaces';
 import { SERVICE_INSTANCE_ID } from '@archie/api/websocket-event-api/constants';
 
 @Injectable()
 export class WebsocketService {
   AUTH_TOKEN_BYTE_SIZE = 16;
   AUTH_EXPIRY_SECONDS = 30;
-  activeClients: ActiveClient[] = [];
-  clientToUserId: Map<WebSocket, string>;
-  userToClient: Map<string, WebSocket>;
+  userClients: Map<string, ExtendedWebSocket[]> = new Map<
+    string,
+    ExtendedWebSocket[]
+  >();
+  clientUser: Map<string, string> = new Map<string, string>();
 
   constructor(
     private redisService: RedisService,
@@ -35,23 +36,38 @@ export class WebsocketService {
     };
   }
 
-  public handleWsConnectionDisconnect(client: WebSocket): void {
-    const userId = this.clientToUserId.get(client);
-    this.clientToUserId.delete(client);
-    if (userId !== undefined) this.userToClient.delete(userId);
+  public handleWsConnectionDisconnect(client: ExtendedWebSocket): void {
+    const userId: string | undefined = this.clientUser.get(client.id);
+    this.clientUser.delete(client.id);
+
+    if (userId !== undefined) {
+      const userClients: ExtendedWebSocket[] =
+        this.userClients.get(userId) ?? [];
+
+      const activeUserClients: ExtendedWebSocket[] = userClients.filter(
+        (userClient) => userClient.id !== client.id,
+      );
+
+      if (activeUserClients.length === 0) {
+        this.userClients.delete(userId);
+      } else {
+        this.userClients.set(userId, activeUserClients);
+      }
+    }
 
     Logger.log({
       serviceInstanceId: SERVICE_INSTANCE_ID,
-      message: `Number of active clients: ${this.activeClients.length}`,
+      message: `Number of active clients: ${this.clientUser.size}`,
     });
   }
 
   public async handleWsConnectionRequest(
     authToken: string,
-    client: WebSocket,
+    client: ExtendedWebSocket,
   ): Promise<void> {
-    const userId: string | null =
-      (await this.redisService.getAndDelete(authToken)) ?? 'dummy';
+    const userId: string | null = await this.redisService.getAndDelete(
+      authToken,
+    );
 
     if (userId === null) {
       Logger.warn('Invalid websocket connection token');
@@ -60,23 +76,28 @@ export class WebsocketService {
       return;
     }
 
-    this.userToClient.set(userId, client);
-    this.clientToUserId.set(client, userId);
+    this.addNewActiveClient(userId, client);
 
     Logger.log({
       serviceInstanceId: SERVICE_INSTANCE_ID,
-      message: `Number of active clients: ${this.activeClients.length}`,
+      message: `Number of active clients: ${this.clientUser.size}`,
     });
   }
 
+  private addNewActiveClient(userId: string, client: ExtendedWebSocket): void {
+    const existingUserClients: ExtendedWebSocket[] =
+      this.userClients.get(userId) ?? [];
+
+    this.userClients.set(userId, [...existingUserClients, client]);
+    this.clientUser.set(client.id, userId);
+  }
+
   public publish(userId: string, event: WsEvent): void {
-    const userClient: WebSocket | undefined = this.userToClient.get(userId);
+    const userClients: ExtendedWebSocket[] = this.userClients.get(userId) ?? [];
 
-    if (userClient === undefined) {
-      return;
-    }
-
-    userClient.send(JSON.stringify(event));
-    userClient.emit('event_sent');
+    userClients.forEach((client) => {
+      client.send(JSON.stringify(event));
+      client.emit('event_sent');
+    });
   }
 }

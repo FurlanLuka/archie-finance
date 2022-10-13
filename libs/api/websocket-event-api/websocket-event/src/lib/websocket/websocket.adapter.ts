@@ -1,11 +1,8 @@
 import { WsAdapter as BaseWsAdapter } from '@nestjs/platform-ws';
-import { WebSocket, WebSocketServer } from 'ws';
+import { WebSocketServer } from 'ws';
 import { IncomingMessage } from 'http';
-
-interface WebsocketWithPingIntervals extends WebSocket {
-  pingIntervalTimer: NodeJS.Timer;
-  pingTimeoutTimer: NodeJS.Timer;
-}
+import { ExtendedWebSocket } from './websocket.interfaces';
+import { v4 } from 'uuid';
 
 export class WsAdapter extends BaseWsAdapter {
   DEFAULT_PING_INTERVAL_IN_MS = 25_000;
@@ -35,18 +32,15 @@ export class WsAdapter extends BaseWsAdapter {
   public bindClientConnect(
     server: any,
     callback: (
-      client: WebSocket,
+      client: ExtendedWebSocket,
       message: IncomingMessage,
       ...args: any
     ) => void,
   ): void {
     return super.bindClientConnect(
       server,
-      (
-        client: WebsocketWithPingIntervals,
-        message: IncomingMessage,
-        ...args
-      ) => {
+      (client: ExtendedWebSocket, message: IncomingMessage, ...args) => {
+        client.id = v4();
         this.setPingInterval(client);
 
         client.on('pong', () => {
@@ -62,7 +56,7 @@ export class WsAdapter extends BaseWsAdapter {
     );
   }
 
-  private setPingInterval(client: WebsocketWithPingIntervals): void {
+  private setPingInterval(client: ExtendedWebSocket): void {
     this.clearPingTimeout(client);
 
     client.pingIntervalTimer = setTimeout(() => {
@@ -71,7 +65,7 @@ export class WsAdapter extends BaseWsAdapter {
     }, this.pingOptions.interval);
   }
 
-  private resetPingTimeout(client: WebsocketWithPingIntervals): void {
+  private resetPingTimeout(client: ExtendedWebSocket): void {
     this.clearPingTimeout(client);
 
     client.pingTimeoutTimer = setTimeout(() => {
@@ -84,10 +78,10 @@ export class WsAdapter extends BaseWsAdapter {
     }, this.pingOptions.timeout);
   }
 
-  private clearPingInterval(client: WebsocketWithPingIntervals): void {
+  private clearPingInterval(client: ExtendedWebSocket): void {
     clearTimeout(client.pingIntervalTimer);
   }
-  private clearPingTimeout(client: WebsocketWithPingIntervals): void {
+  private clearPingTimeout(client: ExtendedWebSocket): void {
     clearTimeout(client.pingTimeoutTimer);
   }
 }
