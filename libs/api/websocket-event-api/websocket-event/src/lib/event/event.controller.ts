@@ -19,8 +19,8 @@ export class EventQueueController {
 
   static CONTROLLER_QUEUE_NAME = `${SERVICE_NAME}-event`;
   static CONTROLLER_QUEUE_SETTINGS = {
-    logBody: false,
     requeueOnError: false,
+    useIdempotency: false,
   };
 
   @Subscribe(

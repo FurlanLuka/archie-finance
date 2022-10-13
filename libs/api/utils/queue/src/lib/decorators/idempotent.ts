@@ -50,16 +50,10 @@ export function Idempotent(
       }
 
       if (eventId) {
-        try {
-          await this.dynamodbService.write('event-idempotency', {
-            id: `${queueName}-${routingKey}-${eventId}`,
-            timestamp: Date.now(),
-          });
-        } catch (error) {
-          Logger.error(
-            `Failed writing idempotency key for id: ${queueName}-${routingKey}-${eventId}`,
-          );
-        }
+        void this.dynamodbService.write('event-idempotency', {
+          id: `${queueName}-${routingKey}-${eventId}`,
+          timestamp: Date.now(),
+        });
       }
     };
   };

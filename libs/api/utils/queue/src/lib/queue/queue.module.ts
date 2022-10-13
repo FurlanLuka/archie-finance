@@ -50,6 +50,9 @@ export class QueueModule {
           const accessKeySecret = configService.get(
             'DYNAMO_ACCESS_KEY_SECRET',
           );
+          const endpoint = configService.get(
+            'DYNAMO_ENDPOINT',
+          );
 
           if (
             accessKeyId === undefined ||
@@ -62,6 +65,7 @@ export class QueueModule {
             accessKeyId,
             accessKeySecret,
             region,
+            endpoint,
           };
         },
       })],

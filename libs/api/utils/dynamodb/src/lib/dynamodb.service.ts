@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DynamodbConfig } from './dynamodb.interfaces';
 import * as AWS from 'aws-sdk';
 
@@ -13,30 +13,28 @@ export class DynamodbService {
         accessKeyId: config.accessKeyId,
         secretAccessKey: config.accessKeySecret,
       },
+      endpoint: config.endpoint,
     });
   }
 
   public async write(tableName: string, item: object): Promise<void> {
-    await this.documentClient
-      .put({
-        TableName: tableName,
-        Item: item,
-      })
-      .promise();
-  }
-
-  public writeSync(
-    tableName: string,
-    item: object,
-    err: (error) => void,
-  ): void {
-    this.documentClient.put(
-      {
-        TableName: tableName,
-        Item: item,
-      },
-      err,
-    );
+    try {
+      await this.documentClient
+        .put({
+          TableName: tableName,
+          Item: item,
+        })
+        .promise();
+    } catch (error) {
+      Logger.error({
+        message: 'FAILED_WRITING_EVENT_LOG',
+        metadata: {
+          tableName,
+          item,
+          error
+        },
+      });
+    }
   }
 
   public async read(tableName: string, itemId: string): Promise<any> {
