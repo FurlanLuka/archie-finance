@@ -3,9 +3,7 @@ import { FC, useEffect, useState } from 'react';
 import { OnboardingStep } from '@archie-webapps/archie-dashboard/constants';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
-import { handleOnboardingUpdatedEvent } from '@archie-webapps/shared/data-access/archie-api/onboarding/event-handlers/handle-onboarding-updated';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
-import { websocketInstance, WsEventTopic } from '@archie-webapps/shared/data-access/websocket-instance';
 import { LoaderFullScreen } from '@archie-webapps/shared/ui/design-system';
 
 import { CardScreen } from '../card-screen/card-screen';
@@ -30,22 +28,8 @@ function getCurrentStep(step: OnboardingStep) {
   }
 }
 
-const ONBOARDING_UPDATED_HANDLER_ID = 'OnboardingHandler.onboarding-updated';
-
 export const OnboardingHandler: FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
-
-  useEffect(() => {
-    websocketInstance.addHandler(
-      WsEventTopic.ONBOARDING_UPDATED_TOPIC,
-      ONBOARDING_UPDATED_HANDLER_ID,
-      handleOnboardingUpdatedEvent,
-    );
-
-    return () => {
-      websocketInstance.removeHandler(WsEventTopic.ONBOARDING_UPDATED_TOPIC);
-    };
-  }, []);
 
   const [currentStep, setCurrentStep] = useState<OnboardingStep>();
 

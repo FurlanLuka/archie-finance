@@ -25,6 +25,7 @@ export const VerifyEmailScreen: FC = () => {
 
   const getEmailVerificationResponse: QueryResponse<EmailVerificationResponse> = useGetEmailVerification();
   const mutationResponse = useResendEmailVerification();
+  usePollEmailVerification();
 
   useEffect(() => {
     return () => {

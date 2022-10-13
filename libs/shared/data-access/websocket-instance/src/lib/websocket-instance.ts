@@ -48,8 +48,10 @@ class WebsocketInstance {
     this.handlers.set(event, [...eventHandlers, { id, handler }]);
   }
 
-  public removeHandler(event: WsEventTopic): void {
-    this.handlers.delete(event);
+  public removeHandler(event: WsEventTopic, id: string): void {
+    const updatedHandlers = (this.handlers.get(event) || []).filter((h) => h.id !== id);
+
+    this.handlers.set(event, updatedHandlers);
   }
 }
 
