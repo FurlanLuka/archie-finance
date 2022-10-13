@@ -76,12 +76,12 @@ jobs:
         run: npx nx workspace-lint
       - name: Prepare testing environment
         run: npx nx generate @archie/plugin/workspace-generator:test-environment-generator
-      - name: Affected Lint
-        if: inputs.BASE_BRANCH_NAME == ''
-        run: npx nx affected --target=lint --parallel=3
-      - name: Affected Lint
-        if: inputs.BASE_BRANCH_NAME != ''
-        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=lint --parallel=3
+      # - name: Affected Lint
+      #   if: inputs.BASE_BRANCH_NAME == ''
+      #   run: npx nx affected --target=lint --parallel=3
+      # - name: Affected Lint
+      #   if: inputs.BASE_BRANCH_NAME != ''
+      #   run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=lint --parallel=3
       - name: Affected Integration Test
         if: inputs.BASE_BRANCH_NAME == ''
         run: npx nx affected --target=test-integration --parallel=3 --ci --code-coverage
