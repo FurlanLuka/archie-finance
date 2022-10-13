@@ -3,6 +3,7 @@ import {
   Injectable,
   Logger,
   OnApplicationBootstrap,
+  Optional,
 } from '@nestjs/common';
 import {
   AmqpConnection,
@@ -16,19 +17,19 @@ import { DiscoveryService } from '@golevelup/nestjs-discovery';
 import { RABBIT_RETRY_HANDLER } from '../decorators/subscribe';
 import tracer, { Span } from 'dd-trace';
 import { v4 } from 'uuid';
-import { DynamodbService } from '@archie-microservices/api/utils/dynamodb';
 import { Event } from '../event/event';
+import { LogService } from '../log/log.service';
 
 @Injectable()
 export class QueueService implements OnApplicationBootstrap {
   constructor(
     private amqpConnection: AmqpConnection,
     private discover: DiscoveryService,
-    private dynamo: DynamodbService,
     @Inject('USE_EVENT_LOG') private useEventLog: boolean,
+    @Optional() private logService?: LogService,
   ) {}
 
-  public publishEvent<T>(
+  public publishEvent<T extends object>(
     event: Event<T>,
     message: T,
     exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
@@ -59,14 +60,7 @@ export class QueueService implements OnApplicationBootstrap {
     if (this.useEventLog) {
       const eventLogId = `${event.getRoutingKey()}-${eventId}-${exchange}`;
 
-      void this.dynamo.write(
-        'event-log',
-        {
-          id: eventLogId,
-          timestamp: Date.now(),
-          message: JSON.stringify(message),
-        },
-      );
+      void this.logService?.writeEventLog(eventLogId, message);
     }
   }
 

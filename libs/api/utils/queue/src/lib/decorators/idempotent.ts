@@ -1,11 +1,11 @@
 import { Inject, Logger } from '@nestjs/common';
-import { DynamodbService } from '@archie-microservices/api/utils/dynamodb';
+import { LogService } from '../log/log.service';
 
 export function Idempotent(
   routingKey: string,
   queueName: string,
 ): MethodDecorator {
-  const injector = Inject(DynamodbService);
+  const injector = Inject(LogService);
 
   return (
     target: any,
@@ -17,7 +17,7 @@ export function Idempotent(
       return;
     }
 
-    injector(target, 'dynamodbService');
+    injector(target, 'logService');
 
     const originalMethod = descriptor.value;
 
@@ -28,14 +28,17 @@ export function Idempotent(
         ? headers['event-id']
         : undefined;
 
+      let keyExists = false;
+
       if (eventId) {
         try {
-          const readRes = await this.dynamodbService.read(
-            'event-idempotency',
+          keyExists = await this.logService.idempotencyKeyExists(
             `${queueName}-${routingKey}-${eventId}`,
           );
 
-          if (readRes === undefined) {
+          Logger.log(keyExists)
+
+          if (!keyExists) {
             await originalMethod.apply(this, args);
           } else {
             Logger.error(
@@ -49,11 +52,10 @@ export function Idempotent(
         await originalMethod.apply(this, args);
       }
 
-      if (eventId) {
-        void this.dynamodbService.write('event-idempotency', {
-          id: `${queueName}-${routingKey}-${eventId}`,
-          timestamp: Date.now(),
-        });
+      if (eventId && !keyExists) {
+        void this.logService.writeIdempotencyKey(
+          `${queueName}-${routingKey}-${eventId}`,
+        );
       }
     };
   };

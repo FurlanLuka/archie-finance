@@ -1,4 +1,4 @@
-import { DynamicModule, Logger, Module } from '@nestjs/common';
+import { DynamicModule, Logger, Module, Provider } from '@nestjs/common';
 import {
   RabbitMQExchangeConfig,
   RabbitMQModule,
@@ -7,19 +7,19 @@ import { ConfigModule, ConfigService } from '@archie/api/utils/config';
 import { QueueUtilService } from './queue-util.service';
 import { QueueOptions } from './queue.interfaces';
 import { QueueService } from './queue.service';
-import {
-  DynamodbConfig,
-  DynamodbModule,
-} from '@archie-microservices/api/utils/dynamodb';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Idempotency } from '../log/event_idempotency.entity';
+import { EventLog } from '../log/event_log.entity';
+import { LogService } from '../log/log.service';
 
 @Module({})
 export class QueueModule {
   static register(options?: QueueOptions): DynamicModule {
     const exchanges: RabbitMQExchangeConfig[] = options?.exchanges ?? [];
+    const useEventLog = options?.useEventLog ?? true;
 
-    return {
-      module: QueueModule,
-      imports: [RabbitMQModule.forRootAsync(RabbitMQModule, {
+    const imports = [
+      RabbitMQModule.forRootAsync(RabbitMQModule, {
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => {
@@ -41,39 +41,29 @@ export class QueueModule {
           };
         },
       }),
-      DynamodbModule.register({
-        imports: [],
-        inject: [ConfigService],
-        useFactory: (configService: ConfigService): DynamodbConfig => {
-          const accessKeyId = configService.get('DYNAMO_ACCESS_KEY_ID');
-          const region = configService.get('DYNAMO_REGION');
-          const accessKeySecret = configService.get(
-            'DYNAMO_ACCESS_KEY_SECRET',
-          );
-          const endpoint = configService.get(
-            'DYNAMO_ENDPOINT',
-          );
+    ];
 
-          if (
-            accessKeyId === undefined ||
-            accessKeySecret === undefined ||
-            region === undefined
-          ) {
-            throw new Error('REQUIRED_QUEUE_DYNAMODB_VARIABLES_MISSING');
-          }
-          return {
-            accessKeyId,
-            accessKeySecret,
-            region,
-            endpoint,
-          };
-        },
-      })],
-      providers: [{
+    const providers: Provider<any>[] = [
+      {
         provide: 'USE_EVENT_LOG',
-        useValue: options?.useEventLog ?? true,
-      },QueueService],
-      exports: [RabbitMQModule, QueueService],
+        useValue: useEventLog,
+      },
+      QueueService,
+    ];
+
+    const exports: any[] = [RabbitMQModule, QueueService];
+
+    if (useEventLog) {
+      imports.push(TypeOrmModule.forFeature([EventLog, Idempotency]));
+      providers.push(LogService);
+      exports.push(LogService);
+    }
+
+    return {
+      module: QueueModule,
+      imports,
+      providers,
+      exports,
       global: true,
     };
   }
