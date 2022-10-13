@@ -41,8 +41,8 @@ export const Container = styled.div<ContainerProps>`
   flex-direction: ${({ column }) => (column ? 'column' : 'row')};
   justify-content: ${({ justifyContent }) => justifyContent};
   align-items: ${({ alignItems }) => alignItems};
-  max-width: ${({ maxWidth }) => maxWidth ?? '1400px'};
   width: 100%;
+  max-width: ${({ maxWidth }) => maxWidth ?? '1400px'};
   margin: 0 auto;
 
   @media (max-width: ${breakpoints.screenMD}) {
