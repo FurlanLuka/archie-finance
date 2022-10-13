@@ -1340,6 +1340,29 @@
           }
         ]
       }
+    },
+    "/v1/ws_auth": {
+      "post": {
+        "operationId": "WebsocketController_createAuthToken",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokenDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
@@ -2908,7 +2931,8 @@
             "type": "string"
           },
           "amount": {
-            "type": "string"
+            "type": "string",
+            "pattern": "/^\\d+((.)|(.\\d{0,18})?)$/"
           },
           "destinationAddress": {
             "type": "string"
@@ -2992,6 +3016,17 @@
         "required": [
           "creditLimit",
           "creditLimitAssetAllocation"
+        ]
+      },
+      "AuthTokenDto": {
+        "type": "object",
+        "properties": {
+          "authToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "authToken"
         ]
       }
     },

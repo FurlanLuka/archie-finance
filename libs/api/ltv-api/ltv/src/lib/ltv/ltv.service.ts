@@ -17,6 +17,8 @@ import { Lock } from '@archie-microservices/api/utils/redis';
 import { MarginService } from '../margin/margin.service';
 import { LedgerAccount } from '../ledger/ledger_account.entity';
 import { LtvMeta } from '../margin/margin.interfaces';
+import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
+import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 
 @Injectable()
 export class LtvService {
@@ -63,6 +65,11 @@ export class LtvService {
       ltvMeta.ledgerValue,
     );
 
+    this.queueService.publish<LtvUpdatedPayload>(LTV_UPDATED_TOPIC, {
+      userId,
+      ltv,
+    });
+
     await this.marginService.executeMarginCallCheck(userId, ltv, ltvMeta);
   }
 
@@ -82,6 +89,11 @@ export class LtvService {
       ltvMeta.creditUtilization,
       ltvMeta.ledgerValue,
     );
+
+    this.queueService.publish<LtvUpdatedPayload>(LTV_UPDATED_TOPIC, {
+      userId: credit.userId,
+      ltv,
+    });
 
     await this.marginService.executeMarginCallCheck(
       credit.userId,

@@ -12,3 +12,5 @@ export enum ConfigVariables {
   QUEUE_URL = 'QUEUE_URL',
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
+
+export const ONBOARDING_UPDATED_TOPIC = 'onboarding.onboarding.updated';

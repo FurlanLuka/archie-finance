@@ -11,6 +11,10 @@ import { CryptoConfig } from './crypto.interfaces';
 export class CryptoService {
   constructor(@Inject('CRYPTO_OPTIONS') private cryptoConfig: CryptoConfig) {}
 
+  public randomBytes(size: number): Buffer {
+    return crypto.randomBytes(size);
+  }
+
   public sha256(data: crypto.BinaryLike): string {
     return crypto.createHash('sha256').update(data).digest('hex');
   }
@@ -29,7 +33,7 @@ export class CryptoService {
     }
 
     try {
-      const iv = crypto.randomBytes(16);
+      const iv = this.randomBytes(16);
       const cipher = crypto.createCipheriv(
         'aes-256-gcm',
         this.cryptoConfig.encryptionKey,

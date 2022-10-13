@@ -23,3 +23,5 @@ export const MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC =
   'margin.margin_call.ltv_limit_approaching';
 export const MARGIN_CALL_COMPLETED_TOPIC = 'margin.margin_call.completed';
 export const MARGIN_CALL_STARTED_TOPIC = 'margin.margin_call.started';
+
+export const LTV_UPDATED_TOPIC = 'ltv.ltv.updated';
