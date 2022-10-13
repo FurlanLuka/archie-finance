@@ -107,12 +107,5 @@ export const ConsentCheck: FC<ConsentCheckProps> = ({ hasConsent, onChange, sele
     );
   }
 
-  return (
-    <InputCheckbox>
-      <input type="checkbox" checked={false} disabled />
-      <BodyL>
-        <Trans components={{ btn: <span /> }}>autopay_modal.consent_text</Trans>
-      </BodyL>
-    </InputCheckbox>
-  );
+  return <></>;
 };
