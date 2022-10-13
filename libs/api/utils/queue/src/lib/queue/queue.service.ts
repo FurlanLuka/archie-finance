@@ -63,6 +63,7 @@ export class QueueService implements OnApplicationBootstrap {
         'event-log',
         {
           id: eventLogId,
+          timestamp: Date.now(),
           message: JSON.stringify(message),
         },
         (error) => {
@@ -76,59 +77,6 @@ export class QueueService implements OnApplicationBootstrap {
               },
             });
           }
-        },
-      );
-    }
-  }
-
-  /**
-   * @deprecated
-   */
-  public publish<T>(
-    routingKey: string,
-    message: T,
-    exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
-    options?: Options.Publish,
-  ) {
-    const eventId = v4();
-
-    const headers = {
-      'event-id': eventId,
-      ...options?.headers,
-    };
-
-    try {
-      tracer.trace('queue_event_publish', (span: Span) => {
-        span.setTag('eventName', routingKey);
-
-        tracer.inject(span, 'text_map', headers);
-      });
-    } catch (error) {
-      Logger.error('Failed adding event trace');
-    }
-
-    this.amqpConnection.publish(exchange, routingKey, message, {
-      ...options,
-      headers,
-    });
-
-    if (this.useEventLog) {
-      const eventLogId = `${routingKey}-${eventId}-${exchange}`;
-
-      this.dynamo.writeSync(
-        'event-log',
-        {
-          id: eventLogId,
-          message: JSON.stringify(message),
-        },
-        (error) => {
-          Logger.error({
-            message: 'FAILED_WRITING_EVENT_LOG',
-            metadata: {
-              eventLogId,
-              message,
-            },
-          });
         },
       );
     }

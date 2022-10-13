@@ -53,6 +53,7 @@ export function Idempotent(
         try {
           await this.dynamodbService.write('event-idempotency', {
             id: `${queueName}-${routingKey}-${eventId}`,
+            timestamp: Date.now(),
           });
         } catch (error) {
           Logger.error(
