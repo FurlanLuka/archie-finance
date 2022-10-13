@@ -15,12 +15,6 @@ export class DynamodbService {
         secretAccessKey: config.accessKeySecret,
       },
       endpoint: config.endpoint,
-      httpOptions: {
-        agent: new Agent({
-          keepAlive: true,
-          maxSockets: Infinity,
-        }),
-      },
     });
   }
 
