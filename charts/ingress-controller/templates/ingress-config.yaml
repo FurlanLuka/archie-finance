@@ -240,7 +240,7 @@ spec:
                 port:
                   number: 80
           ## Websocket event api
-          - path: /v1/ws_auth
+          - path: /v1/websockets
             pathType: Prefix
             backend:
               service:
