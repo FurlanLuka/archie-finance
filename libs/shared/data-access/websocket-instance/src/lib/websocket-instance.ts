@@ -10,7 +10,7 @@ class WebsocketInstance {
   private connection: WebSocket | undefined = undefined;
   private accessToken: string | undefined = undefined;
   public connected = false;
-  private handlers: Map<WsEventTopic, Array<(event: WsEvent) => void>> = new Map();
+  private handlers: Map<WsEventTopic, Array<{ id: string; handler: (event: WsEvent) => void }>> = new Map();
 
   public setToken(accessToken: string): void {
     this.accessToken = accessToken;
@@ -33,7 +33,7 @@ class WebsocketInstance {
 
         if (parsedEvent !== undefined) {
           const eventHandlers = this.handlers.get(parsedEvent.topic);
-          eventHandlers?.forEach((handler) => handler(parsedEvent));
+          eventHandlers?.forEach(({ handler }) => handler(parsedEvent));
         }
       };
     } catch (error: any) {
@@ -43,9 +43,9 @@ class WebsocketInstance {
   }
 
   // TODO figure out wtf is going on with event typing
-  public addHandler(event: WsEventTopic, handler: (event: any) => void): void {
+  public addHandler(event: WsEventTopic, id: string, handler: (event: any) => void): void {
     const eventHandlers = this.handlers.get(event) || [];
-    this.handlers.set(event, [...eventHandlers, handler]);
+    this.handlers.set(event, [...eventHandlers, { id, handler }]);
   }
 
   public removeHandler(event: WsEventTopic): void {

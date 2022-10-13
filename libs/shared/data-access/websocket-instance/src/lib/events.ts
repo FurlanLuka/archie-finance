@@ -1,6 +1,6 @@
 export enum WsEventTopic {
-  ONBOARDING_UPDATED_TOPIC = 'onboarding.onboarding.updated',
-  LTV_UPDATED_TOPIC = 'ltv.ltv.updated',
+  ONBOARDING_UPDATED_TOPIC = 'onboarding.onboarding.updated.v1',
+  LTV_UPDATED_TOPIC = 'ltv.ltv.updated.v1',
 }
 
 export interface OnboardingUpdatedPayload {

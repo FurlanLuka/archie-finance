@@ -30,11 +30,17 @@ function getCurrentStep(step: OnboardingStep) {
   }
 }
 
+const ONBOARDING_UPDATED_HANDLER_ID = 'OnboardingHandler.onboarding-updated';
+
 export const OnboardingHandler: FC = () => {
   const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
 
   useEffect(() => {
-    websocketInstance.addHandler(WsEventTopic.ONBOARDING_UPDATED_TOPIC, handleOnboardingUpdatedEvent);
+    websocketInstance.addHandler(
+      WsEventTopic.ONBOARDING_UPDATED_TOPIC,
+      ONBOARDING_UPDATED_HANDLER_ID,
+      handleOnboardingUpdatedEvent,
+    );
 
     return () => {
       websocketInstance.removeHandler(WsEventTopic.ONBOARDING_UPDATED_TOPIC);
