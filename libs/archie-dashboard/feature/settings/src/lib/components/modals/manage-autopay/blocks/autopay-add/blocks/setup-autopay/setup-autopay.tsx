@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { useSetAutopay } from '@archie-webapps/shared/data-access/archie-api/autopay/hooks/use-set-autopay';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { ConnectedAccountItem } from '@archie-webapps/archie-dashboard/components';
 import { TitleS, BodyM, SelectOption, Select, ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectedAccountItem } from '../connected-account-item/connected-account-item';
 import { ConsentCheck } from '../consent-check/consent-check';
 
 import { SetupAutopayStyled } from './setup-autopay.styled';

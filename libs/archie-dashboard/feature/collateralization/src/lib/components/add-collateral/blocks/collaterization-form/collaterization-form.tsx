@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactTooltip from 'react-tooltip';
 
+import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 import { MAX_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
 import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
@@ -10,7 +11,6 @@ import { InputRange, TitleL, BodyM } from '@archie-webapps/shared/ui/design-syst
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollaterizationFormStyled } from './collaterization-form.styled';
-import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 
 interface CollateralizationFormProps {
   assetInfo: CollateralAsset;

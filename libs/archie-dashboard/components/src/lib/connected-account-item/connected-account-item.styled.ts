@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 
-export const ConnectableAccountItemStyled = styled.div`
+export const ConnectedAccountItemStyled = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: flex-start;
 
@@ -18,10 +17,6 @@ export const ConnectableAccountItemStyled = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .subtitle {
-    color: ${({ theme }) => theme.textSecondary};
   }
 
   p {

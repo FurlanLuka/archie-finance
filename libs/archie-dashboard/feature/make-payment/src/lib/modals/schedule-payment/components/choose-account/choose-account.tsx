@@ -5,9 +5,9 @@ import { Navigate } from 'react-router-dom';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
+import { ConnectedAccountItem } from '@archie-webapps/archie-dashboard/components';
 import { ButtonPrimary, Loader, TitleS, BodyM, Select, SelectOption } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectedAccountItem } from './blocks/connected-account-item/connected-account-item';
 import { ChooseAccountStyled } from './choose-account.styled';
 
 interface ChooseAccountProps {
