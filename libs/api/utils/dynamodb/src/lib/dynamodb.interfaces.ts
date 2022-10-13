@@ -4,6 +4,7 @@ export interface DynamodbConfig {
   region: string;
   accessKeyId: string;
   accessKeySecret: string;
+  endpoint?: string;
 }
 
 export interface DynamodbOptions {

@@ -22,9 +22,9 @@ export class EventQueueController {
 
   static CONTROLLER_QUEUE_NAME = `${SERVICE_NAME}-event-${SERVICE_INSTANCE_ID}`;
   static CONTROLLER_QUEUE_SETTINGS = {
-    logBody: false,
     requeueOnError: false,
     autoDelete: true,
+    useIdempotency: false,
   };
 
   @Subscribe(

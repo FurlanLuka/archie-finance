@@ -59,24 +59,12 @@ export class QueueService implements OnApplicationBootstrap {
     if (this.useEventLog) {
       const eventLogId = `${event.getRoutingKey()}-${eventId}-${exchange}`;
 
-      this.dynamo.writeSync(
+      void this.dynamo.write(
         'event-log',
         {
           id: eventLogId,
           timestamp: Date.now(),
           message: JSON.stringify(message),
-        },
-        (error) => {
-          if (error) {
-            Logger.error({
-              message: 'FAILED_WRITING_EVENT_LOG',
-              metadata: {
-                eventLogId,
-                message,
-                error,
-              },
-            });
-          }
         },
       );
     }
