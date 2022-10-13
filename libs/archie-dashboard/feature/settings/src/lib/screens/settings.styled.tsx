@@ -15,8 +15,27 @@ export const SettingsStyled = styled.div`
     margin-bottom: 1.5rem;
   }
 
-  .name {
-    margin-bottom: 0.5rem;
+  .section-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 68px;
+    margin-bottom: 1.5rem;
+
+    @media (max-width: ${breakpoints.screenSM}) {
+      min-height: 58px;
+    }
+  }
+
+  .subtitle {
+    letter-spacing: 0.02em;
+  }
+
+  .btn-autopay {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
   }
 
   .email {

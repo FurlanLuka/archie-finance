@@ -34,10 +34,10 @@ export const Default: Story<ModalProps> = (props) => {
           <TitleS>Show card details?</TitleS>
           <BodyM>Are you sure you want to display your card details?</BodyM>
           <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1.5rem' }}>
-            <ButtonOutline maxWidth="100%" onClick={() => setModalOpen(false)}>
+            <ButtonOutline width="100%" onClick={() => setModalOpen(false)}>
               Close
             </ButtonOutline>
-            <ButtonPrimary maxWidth="100%" onClick={handleConfirm}>
+            <ButtonPrimary width="100%" onClick={handleConfirm}>
               Confirm
             </ButtonPrimary>
           </div>

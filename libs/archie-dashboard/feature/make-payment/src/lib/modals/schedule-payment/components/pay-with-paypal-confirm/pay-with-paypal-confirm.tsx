@@ -68,9 +68,7 @@ export const PayWithPaypalConfirm: FC<PayWithPaypalConfirmProps> = ({
         ${paymentAmount}
       </TitleM>
       <BodyM>{t('payment_modal.pay_with_paypal_form.time_note')}</BodyM>
-      {payWithPaypalMutation.state === RequestState.ERROR && (
-        <FormError>{t('payment_modal.payment_confirm.error')}</FormError>
-      )}
+      {payWithPaypalMutation.state === RequestState.ERROR && <FormError>{t('error.try_again')}</FormError>}
       <div className="btn-group">
         <ButtonPrimary width="100%" onClick={handleConfirm}>
           {t('payment_modal.pay_with_paypal_form.btn')}

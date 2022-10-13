@@ -1,10 +1,10 @@
 import { ReactElement, useState } from 'react';
 
 import { Icon } from '@archie-webapps/shared/ui/icons';
+import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { SelectOptionProps } from './select-option';
 import { SelectStyled } from './select.styled';
-import { theme } from '@archie-webapps/shared/ui/theme';
 
 export interface SelectProps<T> {
   id: string;

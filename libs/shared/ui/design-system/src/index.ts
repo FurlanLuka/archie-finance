@@ -3,6 +3,7 @@ export * from './lib/components/button/button.styled';
 export * from './lib/components/card/card.styled';
 export * from './lib/components/collateral-currency/collateral-currency';
 export * from './lib/components/error/error';
+export * from './lib/components/input-checkbox/input-checkbox.styled';
 export * from './lib/components/input-radio/input-radio.styled';
 export * from './lib/components/input-range/input-range';
 export * from './lib/components/input-text/input-text.styled';
