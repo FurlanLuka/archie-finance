@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DynamodbConfig } from './dynamodb.interfaces';
 import * as AWS from 'aws-sdk';
+import { Agent } from 'http';
 
 @Injectable()
 export class DynamodbService {
@@ -14,6 +15,12 @@ export class DynamodbService {
         secretAccessKey: config.accessKeySecret,
       },
       endpoint: config.endpoint,
+      httpOptions: {
+        agent: new Agent({
+          keepAlive: true,
+          maxSockets: Infinity,
+        }),
+      },
     });
   }
 
@@ -31,7 +38,7 @@ export class DynamodbService {
         metadata: {
           tableName,
           item,
-          error
+          error,
         },
       });
     }
