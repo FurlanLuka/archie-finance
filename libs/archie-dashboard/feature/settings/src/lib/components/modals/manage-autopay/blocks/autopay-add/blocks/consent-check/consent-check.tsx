@@ -93,7 +93,7 @@ export const ConsentCheck: FC<ConsentCheckProps> = ({ hasConsent, onChange, sele
               }}
             />
             <ButtonPrimary
-              maxWidth="12rem"
+              width="12rem"
               onClick={() => {
                 setShowDocument(false);
                 onChange(true);

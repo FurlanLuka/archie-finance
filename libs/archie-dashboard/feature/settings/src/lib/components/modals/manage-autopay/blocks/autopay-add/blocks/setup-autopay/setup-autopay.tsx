@@ -86,7 +86,7 @@ export const SetupAutopay: FC<AutopayModalProps> = ({ accounts, onSuccess }) => 
         />
       </div>
       <ButtonPrimary
-        maxWidth="16rem"
+        width="16rem"
         isDisabled={!canSubmit}
         isLoading={setAutopayMutation.state === RequestState.LOADING}
         onClick={() => {
