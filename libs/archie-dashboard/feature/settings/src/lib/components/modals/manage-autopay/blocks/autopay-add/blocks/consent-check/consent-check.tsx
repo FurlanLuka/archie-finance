@@ -51,7 +51,6 @@ export const ConsentCheck: FC<ConsentCheckProps> = ({ hasConsent, onChange, sele
         <BodyL>
           <Trans components={{ btn: <span /> }}>autopay_modal.consent_text</Trans>
         </BodyL>
-        <Loader />
       </InputCheckbox>
     );
   }
