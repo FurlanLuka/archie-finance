@@ -35,7 +35,6 @@ class WebsocketInstance {
           const eventHandlers = this.handlers.get(parsedEvent.topic);
           eventHandlers?.forEach((handler) => handler(parsedEvent));
         }
-        console.log('bruh', message.data, this.handlers);
       };
     } catch (error: any) {
       console.error('Error while trying to set up WS connection', error);

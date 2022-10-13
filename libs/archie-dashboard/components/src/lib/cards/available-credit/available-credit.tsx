@@ -1,10 +1,8 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 import { BigNumber } from 'bignumber.js';
 
-import { handleLtvUpdatedEvent } from '@archie-webapps/shared/data-access/archie-api/collateral/event-handlers/handle-ltv-updated';
-import { websocketInstance, WsEventTopic } from '@archie-webapps/shared/data-access/websocket-instance';
 import { MakePaymentModal } from '@archie-webapps/archie-dashboard/feature/make-payment';
 import { LoanToValueChart } from '@archie-webapps/archie-dashboard/components';
 import { canUserSchedulePayment } from '@archie-webapps/archie-dashboard/utils';
@@ -25,14 +23,6 @@ export const AvailableCredit: FC = () => {
   const getCreditQueryResponse: QueryResponse<GetCreditResponse> = useGetCredit();
   const getLTVResponse: QueryResponse<LTV> = useGetLTV();
   const getObligationsResponse = useGetObligations();
-
-  useEffect(() => {
-    websocketInstance.addHandler(WsEventTopic.LTV_UPDATED_TOPIC, handleLtvUpdatedEvent);
-
-    return () => {
-      websocketInstance.removeHandler(WsEventTopic.LTV_UPDATED_TOPIC);
-    };
-  }, []);
 
   if (
     getCreditQueryResponse.state === RequestState.LOADING ||
