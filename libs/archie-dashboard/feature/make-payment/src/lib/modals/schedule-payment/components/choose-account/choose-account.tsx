@@ -69,7 +69,7 @@ export const ChooseAccount: FC<ChooseAccountProps> = ({ onConfirm }) => {
               {options}
             </Select>
           </div>
-          <ButtonPrimary onClick={handleConfirmClick} maxWidth="fit-content" disabled={!selectedAccount}>
+          <ButtonPrimary onClick={handleConfirmClick} width="fit-content" disabled={!selectedAccount}>
             {t('payment_modal.select_account.btn_confirm')}
           </ButtonPrimary>
         </>

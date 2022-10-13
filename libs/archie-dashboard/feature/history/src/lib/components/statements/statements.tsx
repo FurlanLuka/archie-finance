@@ -22,7 +22,7 @@ export const Statements: FC = () => {
           <Select
             id="statements"
             small
-            maxWidth="220px"
+            width="220px"
             isDisabled
             header={
               <BodyS weight={600} color={theme.textDisabled}>
@@ -33,7 +33,7 @@ export const Statements: FC = () => {
           >
             {[]}
           </Select>
-          <ButtonOutline small maxWidth="175px" isLoading>
+          <ButtonOutline small width="175px" isLoading>
             {t('dashboard_history.btn_statements')} <Icon name="download" fill={theme.textDisabled} />
           </ButtonOutline>
         </>
@@ -47,7 +47,7 @@ export const Statements: FC = () => {
             <Select
               id="statements"
               small
-              maxWidth="220px"
+              width="220px"
               isDisabled
               header={
                 <BodyS weight={600} color={theme.textDisabled}>
@@ -58,7 +58,7 @@ export const Statements: FC = () => {
             >
               {[]}
             </Select>
-            <ButtonOutline small maxWidth="175px" isDisabled>
+            <ButtonOutline small width="175px" isDisabled>
               {t('dashboard_history.btn_statements')} <Icon name="download" fill={theme.textDisabled} />
             </ButtonOutline>
           </>

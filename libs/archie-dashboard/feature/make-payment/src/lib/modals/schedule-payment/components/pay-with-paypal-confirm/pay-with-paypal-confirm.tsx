@@ -70,11 +70,11 @@ export const PayWithPaypalConfirm: FC<PayWithPaypalConfirmProps> = ({
       <BodyM>{t('payment_modal.pay_with_paypal_form.time_note')}</BodyM>
       {payWithPaypalMutation.state === RequestState.ERROR && <FormError>{t('error.try_again')}</FormError>}
       <div className="btn-group">
-        <ButtonPrimary maxWidth="100%" onClick={handleConfirm}>
+        <ButtonPrimary width="100%" onClick={handleConfirm}>
           {t('payment_modal.pay_with_paypal_form.btn')}
         </ButtonPrimary>
         <ButtonOutline
-          maxWidth="100%"
+          width="100%"
           onClick={handleBack}
           isDisabled={payWithPaypalMutation.state === RequestState.LOADING}
         >

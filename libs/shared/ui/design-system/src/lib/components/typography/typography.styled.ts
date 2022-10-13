@@ -77,7 +77,7 @@ export const TitleS = styled.h6<TypographyProps>`
   font-weight: ${({ weight }) => weight ?? 800};
 
   @media (max-width: ${breakpoints.screenLG}) {
-    font-size: 1rem; //16
+    font-size: 1.25rem; //20
     line-height: 1.5;
   }
 `;

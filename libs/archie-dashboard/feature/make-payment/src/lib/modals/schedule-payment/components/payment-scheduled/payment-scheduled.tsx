@@ -37,7 +37,7 @@ export const PaymentScheduled: FC<PaymentScheduledProps> = ({ onConfirm, obligat
       <BodyM weight={600}>{t('payment_modal.payment_scheduled.email_note')}</BodyM>
       <BodyM>{t('payment_modal.payment_scheduled.time_note')}</BodyM>
       <div className="btn-group">
-        <ButtonPrimary maxWidth="250px" onClick={handleConfirm}>
+        <ButtonPrimary width="250px" onClick={handleConfirm}>
           {t('btn_ok')}
         </ButtonPrimary>
       </div>

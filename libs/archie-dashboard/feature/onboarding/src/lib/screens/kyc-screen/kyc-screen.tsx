@@ -222,7 +222,7 @@ export const KycScreen: FC = () => {
             )}
           </InputText>
           <hr className="divider" />
-          <ButtonPrimary type="submit" maxWidth="100%" isLoading={mutationRequest.state === RequestState.LOADING}>
+          <ButtonPrimary type="submit" width="100%" isLoading={mutationRequest.state === RequestState.LOADING}>
             {t('btn_next')}
             <Icon name="arrow-right" fill={theme.textLight} />
           </ButtonPrimary>
