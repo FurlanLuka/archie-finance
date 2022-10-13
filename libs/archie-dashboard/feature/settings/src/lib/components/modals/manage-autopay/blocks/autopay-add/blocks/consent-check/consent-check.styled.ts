@@ -5,6 +5,7 @@ export const ConsentCheckStyled = styled.div`
     color: ${({ theme }) => theme.textHighlight};
     font-size: inherit;
     font-weight: inherit;
+    letter-spacing: 0.03em;
     background: none;
     border: 0;
     padding: 0;
