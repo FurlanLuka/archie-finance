@@ -117,8 +117,8 @@ function createErrorHandler(
   error: unknown,
 ) => void | Promise<void> {
   return (channel: Channel, msg: ConsumeMessage, error) => {
-    const headers = msg.properties.headers;
-    const retryAttempt: number = headers['x-retry'] ?? 0;
+    const originalHeaders = msg.properties.headers;
+    const retryAttempt: number = originalHeaders['x-retry'] ?? 0;
 
     Logger.error({
       message: `Event handling failed for routing key "${queueSpecificRoutingKey}"`,
@@ -129,24 +129,22 @@ function createErrorHandler(
     });
 
     if (options.requeueOnError) {
-      const delay: number = headers['x-delay'] ?? INITIAL_DELAY / RETRY_BACKOFF;
+      const delay: number =
+        originalHeaders['x-delay'] ?? INITIAL_DELAY / RETRY_BACKOFF;
 
       if (retryAttempt < MAX_RETRIES) {
-        const span = tracer.scope().active();
-        const headers = {
+        const retryHeaders = {
+          ...originalHeaders,
           'x-delay': delay * RETRY_BACKOFF,
           'x-retry': retryAttempt + 1,
         };
-        if (span !== null) {
-          tracer.inject(span, 'text_map', headers);
-        }
 
         channel.publish(
           QueueUtilService.getRetryExchangeName(exchange),
           queueSpecificRoutingKey,
           msg.content,
           {
-            headers,
+            headers: retryHeaders,
           },
         );
       } else {
