@@ -4,10 +4,9 @@ import { QueueService } from '@archie/api/utils/queue';
 
 @Injectable()
 export class PeachWebhookService {
-  constructor(
-    private peachApi: PeachApiService,
-    private queueService: QueueService,
-  ) {}
+  constructor() // private peachApi: PeachApiService,
+  // private queueService: QueueService,
+  {}
 
   public async handlePaymentConfirmedEvent(): Promise<void> {}
 }
