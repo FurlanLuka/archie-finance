@@ -40,3 +40,4 @@ export const WEBHOOK_FIREBLOCKS_INTERNAL_TRANSACTION_TOPIC =
     'webhook.fireblocks.internal.transaction',
     1,
   );
+
