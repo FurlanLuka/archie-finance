@@ -1,12 +1,12 @@
 import { PlaidAccount } from 'react-plaid-link';
 
-import { ConnectableAccount } from '../../../../connect-acount.interfaces';
+import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 
-export const transformAccounts = (accountsBase: PlaidAccount[]): ConnectableAccount[] => 
+export const transformAccounts = (accountsBase: PlaidAccount[]): AccountResponse[] => 
   accountsBase.map((account) => ({
     id: account.id,
     name: account.name,
     mask: account.mask,
-    type: account.type,
+    subtype: account.subtype,
   }));
 

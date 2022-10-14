@@ -33,86 +33,82 @@ export const ConsentCheck: FC<ConsentCheckProps> = ({ hasConsent, onChange, sele
     }
   }, [createAutopayDocumentMutation, setDocumentId]);
 
-  if (!selectedAccount) {
-    return (
-      <InputCheckbox>
-        <input type="checkbox" checked={false} disabled />
-        <BodyL>
-          <Trans components={{ btn: <span /> }}>autopay_modal.consent_text</Trans>
-        </BodyL>
-      </InputCheckbox>
-    );
-  }
-
-  if (createAutopayDocumentMutation.state === RequestState.LOADING) {
-    return (
-      <InputCheckbox>
-        <input type="checkbox" checked={false} disabled />
-        <BodyL>
-          <Trans components={{ btn: <span /> }}>autopay_modal.consent_text</Trans>
-        </BodyL>
-        <Loader />
-      </InputCheckbox>
-    );
-  }
-
-  if (createAutopayDocumentMutation.state === RequestState.SUCCESS) {
-    return (
-      <ConsentCheckStyled>
+  const getContent = () => {
+    if (!selectedAccount) {
+      return (
         <InputCheckbox>
-          <input
-            type="checkbox"
-            checked={hasConsent}
-            onChange={(e) => {
-              onChange(e.target.checked);
-            }}
-          />
+          <input type="checkbox" checked={false} disabled />
           <BodyL>
-            <Trans
-              components={{
-                btn: (
-                  <button
-                    className="radio-label-btn"
-                    onClick={() => {
-                      setShowDocument(true);
-                    }}
-                  />
-                ),
-              }}
-            >
-              autopay_modal.consent_text
-            </Trans>
+            <Trans components={{ btn: <span /> }}>autopay_modal.consent_text</Trans>
           </BodyL>
         </InputCheckbox>
-        {showDocument && (
-          <Modal maxWidth="780px" isOpen close={() => setShowDocument(false)}>
-            <div
-              className="document-inner"
-              dangerouslySetInnerHTML={{
-                __html: createAutopayDocumentMutation.data.document,
+      );
+    }
+
+    if (createAutopayDocumentMutation.state === RequestState.LOADING) {
+      return (
+        <InputCheckbox>
+          <input type="checkbox" checked={false} disabled />
+          <BodyL>
+            <Trans components={{ btn: <span /> }}>autopay_modal.consent_text</Trans>
+          </BodyL>
+        </InputCheckbox>
+      );
+    }
+
+    if (createAutopayDocumentMutation.state === RequestState.SUCCESS) {
+      return (
+        <>
+          <InputCheckbox>
+            <input
+              type="checkbox"
+              checked={hasConsent}
+              onChange={(e) => {
+                onChange(e.target.checked);
               }}
             />
-            <ButtonPrimary
-              width="12rem"
-              onClick={() => {
-                setShowDocument(false);
-                onChange(true);
-              }}
-            >
-              {t('autopay_modal.document_agree')}
-            </ButtonPrimary>
-          </Modal>
-        )}
-      </ConsentCheckStyled>
-    );
-  }
+            <BodyL>
+              <Trans
+                components={{
+                  btn: (
+                    <button
+                      className="radio-label-btn"
+                      onClick={() => {
+                        setShowDocument(true);
+                      }}
+                    />
+                  ),
+                }}
+              >
+                autopay_modal.consent_text
+              </Trans>
+            </BodyL>
+          </InputCheckbox>
+          {showDocument && (
+            <Modal maxWidth="780px" isOpen close={() => setShowDocument(false)}>
+              <div
+                className="document-inner"
+                dangerouslySetInnerHTML={{
+                  __html: createAutopayDocumentMutation.data.document,
+                }}
+              />
+              <ButtonPrimary
+                width="12rem"
+                onClick={() => {
+                  setShowDocument(false);
+                  onChange(true);
+                }}
+              >
+                {t('autopay_modal.document_agree')}
+              </ButtonPrimary>
+            </Modal>
+          )}
+        </>
+      );
+    }
 
-  return (
-    <InputCheckbox>
-      <input type="checkbox" checked={false} disabled />
-      <BodyL>
-        <Trans components={{ btn: <span /> }}>autopay_modal.consent_text</Trans>
-      </BodyL>
-    </InputCheckbox>
-  );
+    return <></>;
+  };
+
+  return <ConsentCheckStyled>{getContent()}</ConsentCheckStyled>;
 };

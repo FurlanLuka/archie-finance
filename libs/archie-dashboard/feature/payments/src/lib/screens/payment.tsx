@@ -6,6 +6,7 @@ import { MakePaymentModal } from '@archie-webapps/archie-dashboard/feature/make-
 import { canUserSchedulePayment } from '@archie-webapps/archie-dashboard/utils';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
+import { useGetAutopay } from '@archie-webapps/shared/data-access/archie-api/autopay/hooks/use-get-autopay';
 import { ButtonPrimary, Status, StatusCircle, TitleM, BodyS } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectedAccounts } from '../components/connected-accounts/connected-accounts';
@@ -15,8 +16,20 @@ import { PaymentScreenStyled } from './payment.styled';
 export const PaymentScreen: FC = () => {
   const { t } = useTranslation();
   const getObligationsResponse = useGetObligations();
+  const getAutopayResponse = useGetAutopay();
 
   const [makePaymentModalOpen, setMakePaymentModalOpen] = useState(false);
+
+  const isAutopayOn = () => {
+    if (getAutopayResponse.state === RequestState.SUCCESS) {
+      if (getAutopayResponse.data === null) {
+        return false;
+      }
+      return true;
+    }
+
+    return false;
+  };
 
   return (
     <PaymentScreenStyled>
@@ -38,10 +51,10 @@ export const PaymentScreen: FC = () => {
         >
           {t('dashboard_payment.btn_pay')}
         </ButtonPrimary>
-        <Status isOn>
+        <Status isOn={isAutopayOn()}>
           <StatusCircle />
           <BodyS weight={700}>
-            {t('dashboard_payment.auto_payments')} {t('on')} {/* TBD */}
+            {t('dashboard_payment.auto_payments')} {t(isAutopayOn() ? 'on' : 'off')}
           </BodyS>
         </Status>
       </div>

@@ -3,17 +3,17 @@ import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { useCreateLinkToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
 import { TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectableAccount } from '../../connect-acount.interfaces';
 import { PlaidConnect } from './blocks/plaid-connect/plaid-connect';
 import { PlaidConnectLoading } from './blocks/plaid-connect-loading/plaid-connect-loading';
 import { PlaidLinkStyled } from './plaid-link.styled';
 
 // TODO 2 layer prop passing isn't optimal, rework if the flow becomes more complex
 interface PlaidLinkProps {
-  onLinkSuccess: (publicToken: string, availableAccounts: ConnectableAccount[]) => void;
+  onLinkSuccess: (publicToken: string, availableAccounts: AccountResponse[]) => void;
 }
 
 export const PlaidLink: FC<PlaidLinkProps> = ({ onLinkSuccess }) => {

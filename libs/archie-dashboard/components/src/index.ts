@@ -10,9 +10,10 @@ export * from './lib/charts/loan-to-value/loan-to-value';
 export * from './lib/charts/next-payment/next-payment';
 export * from './lib/charts/next-payment/next-payment.styled';
 export * from './lib/collateral-asset-select/collateral-asset-select';
+export * from './lib/connected-account-item/connected-account-item'
+export * from './lib/deposit-address/deposit-address';
 export * from './lib/error-screen/error-screen';
 export * from './lib/header/header';
 export * from './lib/modals/reveal-card/reveal-card';
 export * from './lib/navigation/navigation';
 export * from './lib/transactions-table/transactions-table';
-export * from './lib/deposit-address/deposit-address';
