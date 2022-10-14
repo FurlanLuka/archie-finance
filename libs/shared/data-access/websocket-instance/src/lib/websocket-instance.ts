@@ -44,6 +44,7 @@ class WebsocketInstance {
 
           if (parsedEvent !== undefined) {
             const eventHandlers = this.handlers.get(parsedEvent.topic);
+            console.log('ma hendlerji', eventHandlers);
             eventHandlers?.forEach(({ handler }) => handler(parsedEvent));
           }
         };

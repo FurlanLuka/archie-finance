@@ -4,7 +4,7 @@
 export enum WsEventTopic {
   ONBOARDING_UPDATED_TOPIC = 'onboarding.onboarding.updated.v1',
   LTV_UPDATED_TOPIC = 'ltv.ltv.updated.v1',
-  LEDGER_UPDATED_TOPIC = 'ledger.account.updated',
+  LEDGER_UPDATED_TOPIC = 'ledger.account.updated.v1',
 }
 
 export interface OnboardingUpdatedPayload {

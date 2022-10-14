@@ -5,6 +5,8 @@ import { LedgerUpdatedWsEvent } from '@archie-webapps/shared/data-access/websock
 import { Ledger, LedgerAccountData } from '../api/get-ledger';
 import { LEDGER_QUERY_KEY } from '../hooks/use-poll-ledger';
 
+// TODO handle new asset by doing some mergerino shennangerino
+// TODO move total sum to helper
 export const handleLedgerUpdatedEvent = (event: LedgerUpdatedWsEvent): void => {
   queryClient.setQueryData<Ledger | undefined>(LEDGER_QUERY_KEY, (data): Ledger | undefined => {
     if (data !== undefined) {
@@ -32,7 +34,7 @@ export const handleLedgerUpdatedEvent = (event: LedgerUpdatedWsEvent): void => {
       return {
         ...data,
         accounts: updatedAccounts,
-        value: calculateLedgerCreditValue(updatedAccounts),
+        value: updatedAccounts.reduce((sum, account): number => sum + Number(account.accountValue), 0).toString(),
       };
     }
     return undefined;
