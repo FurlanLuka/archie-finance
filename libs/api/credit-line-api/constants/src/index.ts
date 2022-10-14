@@ -18,6 +18,7 @@ export enum ConfigVariables {
   QUEUE_URL = 'QUEUE_URL',
   ASSET_LIST = 'ASSET_LIST',
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
+  REDIS_URL = 'REDIS_URL',
 }
 
 export const CREDIT_LINE_CREATED_TOPIC = new Event<CreditLineCreatedPayload>(

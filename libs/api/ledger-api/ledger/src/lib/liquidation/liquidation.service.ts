@@ -26,6 +26,7 @@ import {
   InitiateCollateralLiquidationCommandPayload,
 } from '@archie/api/fireblocks-api/data-transfer-objects';
 import BigNumber from 'bignumber.js';
+import { Lock } from '@archie-microservices/api/utils/redis';
 
 interface LiquidatedAccounts {
   asset: AssetInformation;
@@ -65,6 +66,9 @@ export class LiquidationService {
     );
   }
 
+  @Lock(
+    (payload: InitiateLedgerAssetLiquidationCommandPayload) => payload.userId,
+  )
   public async initiateLedgerAssetLiquidation({
     userId,
     amount,
