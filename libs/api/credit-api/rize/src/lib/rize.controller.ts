@@ -21,7 +21,7 @@ import {
   GetTransactionsQueryDto,
   TransactionResponseDto,
 } from './rize.dto';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
 import {
   MARGIN_CALL_COMPLETED_TOPIC,

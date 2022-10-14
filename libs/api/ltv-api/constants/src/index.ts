@@ -1,3 +1,11 @@
+import { Event } from '@archie/api/utils/queue';
+import {
+  LtvUpdatedPayload,
+  MarginCallCompletedPayload,
+  MarginCallLtvLimitApproachingPayload,
+  MarginCallStartedPayload,
+} from '@archie/api/ltv-api/data-transfer-objects';
+
 export const SERVICE_NAME = 'ltv-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
@@ -20,6 +28,18 @@ export const LIQUIDATION_TARGET_LTV = 60;
 export const MARGIN_CALL_LIQUIDATION_AFTER_HOURS = 72;
 
 export const MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC =
-  'margin.margin_call.ltv_limit_approaching';
-export const MARGIN_CALL_COMPLETED_TOPIC = 'margin.margin_call.completed';
-export const MARGIN_CALL_STARTED_TOPIC = 'margin.margin_call.started';
+  new Event<MarginCallLtvLimitApproachingPayload>(
+    'margin.margin_call.ltv_limit_approaching',
+    1,
+  );
+export const MARGIN_CALL_COMPLETED_TOPIC =
+  new Event<MarginCallCompletedPayload>('margin.margin_call.completed', 1);
+export const MARGIN_CALL_STARTED_TOPIC = new Event<MarginCallStartedPayload>(
+  'margin.margin_call.started',
+  1,
+);
+
+export const LTV_UPDATED_TOPIC = new Event<LtvUpdatedPayload>(
+  'ltv.ltv.updated',
+  1,
+);

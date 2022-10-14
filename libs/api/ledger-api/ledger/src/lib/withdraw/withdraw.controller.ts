@@ -19,7 +19,7 @@ import {
   CollateralWithdrawalTransactionSubmittedPayload,
   CollateralWithdrawalTransactionUpdatedPayload,
 } from '@archie/api/fireblocks-api/data-transfer-objects';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   WithdrawPayloadDto,

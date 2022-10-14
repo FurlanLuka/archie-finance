@@ -56,7 +56,7 @@ export class LiquidationService {
           internalTransactionId,
         );
 
-      this.queueService.publish<CollateralLiquidationTransactionSubmittedPayload>(
+      this.queueService.publishEvent(
         COLLATERAL_LIQUIDATION_TRANSACTION_SUBMITTED_TOPIC,
         {
           userId,
@@ -67,7 +67,7 @@ export class LiquidationService {
         },
       );
     } catch (error) {
-      this.queueService.publish<CollateralLiquidationTransactionErrorPayload>(
+      this.queueService.publishEvent(
         COLLATERAL_LIQUIDATION_TRANSACTION_ERROR_TOPIC,
         {
           userId,
@@ -118,7 +118,7 @@ export class LiquidationService {
     });
 
     if (status === TransactionStatus.COMPLETED) {
-      this.queueService.publish<CollateralLiquidationTransactionUpdatedPayload>(
+      this.queueService.publishEvent(
         COLLATERAL_LIQUIDATION_TRANSACTION_UPDATED_TOPIC,
         {
           userId: vaultAccount.userId,
@@ -131,7 +131,7 @@ export class LiquidationService {
         },
       );
     } else if (status === TransactionStatus.BROADCASTING) {
-      this.queueService.publish<CollateralLiquidationTransactionUpdatedPayload>(
+      this.queueService.publishEvent(
         COLLATERAL_LIQUIDATION_TRANSACTION_UPDATED_TOPIC,
         {
           userId: vaultAccount.userId,
@@ -149,7 +149,7 @@ export class LiquidationService {
       status === TransactionStatus.REJECTED ||
       status === TransactionStatus.FAILED
     ) {
-      this.queueService.publish<CollateralLiquidationTransactionErrorPayload>(
+      this.queueService.publishEvent(
         COLLATERAL_LIQUIDATION_TRANSACTION_ERROR_TOPIC,
         {
           userId: vaultAccount.userId,

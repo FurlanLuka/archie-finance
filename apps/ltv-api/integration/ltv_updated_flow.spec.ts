@@ -27,6 +27,7 @@ import { DateTime } from 'luxon';
 import {
   COLLATERAL_SALE_LTV_LIMIT,
   LTV_MARGIN_CALL_LIMIT,
+  LTV_UPDATED_TOPIC,
   MARGIN_CALL_STARTED_TOPIC,
 } from '@archie/api/ltv-api/constants';
 import { MARGIN_CALL_LIQUIDATION_AFTER_HOURS } from '@archie/api/ltv-api/constants';
@@ -59,7 +60,7 @@ describe('Ltv api tests', () => {
     beforeAll(setup);
     afterAll(cleanup);
     afterEach(() => {
-      queueStub.publish.mockReset();
+      queueStub.publishEvent.mockReset();
     });
 
     const ledgerUpdatedPayload = ledgerAccountUpdatedPayloadFactory();
@@ -70,7 +71,7 @@ describe('Ltv api tests', () => {
     );
     const liquidationAmount = '15000';
     const afterLiquidationLtv = 60;
-    let liquidationId: string;
+    let liquidationId: string | undefined;
 
     it(`should keep ltv at 0 as credit line was not created yet`, async () => {
       await app.get(LtvQueueController).ledgerUpdated(ledgerUpdatedPayload);
@@ -79,6 +80,10 @@ describe('Ltv api tests', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
+      expect(queueStub.publishEvent).toHaveBeenCalledWith(LTV_UPDATED_TOPIC, {
+        userId: user.id,
+        ltv: 0,
+      });
       expect(response.body).toStrictEqual<LtvDto>({
         ltv: 0,
         status: LtvStatus.good,
@@ -103,6 +108,7 @@ describe('Ltv api tests', () => {
     });
 
     it(`should create margin call and liquidate once ltv reaches 90%`, async () => {
+      const expectedLiquidationCommandPublishSequence = 3;
       const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
         utilizationAmount: ledgerValue * 0.9,
       });
@@ -137,20 +143,28 @@ describe('Ltv api tests', () => {
           createdAt: expect.any(String),
         },
       ]);
-      expect(queueStub.publish).nthCalledWith(1, MARGIN_CALL_STARTED_TOPIC, {
+      expect(queueStub.publishEvent).nthCalledWith(1, LTV_UPDATED_TOPIC, {
         userId: user.id,
-        startedAt: expect.any(String),
         ltv: 90,
-        priceForMarginCall:
-          creditBalanceUpdatedPayload.utilizationAmount /
-          (LTV_MARGIN_CALL_LIMIT / 100),
-        priceForPartialCollateralSale:
-          creditBalanceUpdatedPayload.utilizationAmount /
-          (COLLATERAL_SALE_LTV_LIMIT / 100),
-        collateralBalance: ledgerValue,
       });
-      expect(queueStub.publish).nthCalledWith(
+      expect(queueStub.publishEvent).nthCalledWith(
         2,
+        MARGIN_CALL_STARTED_TOPIC,
+        {
+          userId: user.id,
+          startedAt: expect.any(String),
+          ltv: 90,
+          priceForMarginCall:
+            creditBalanceUpdatedPayload.utilizationAmount /
+            (LTV_MARGIN_CALL_LIMIT / 100),
+          priceForPartialCollateralSale:
+            creditBalanceUpdatedPayload.utilizationAmount /
+            (COLLATERAL_SALE_LTV_LIMIT / 100),
+          collateralBalance: ledgerValue,
+        },
+      );
+      expect(queueStub.publishEvent).nthCalledWith(
+        expectedLiquidationCommandPublishSequence,
         INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND,
         {
           userId: user.id,
@@ -158,10 +172,16 @@ describe('Ltv api tests', () => {
           liquidationId: expect.any(String),
         },
       );
-      liquidationId = queueStub.publish.mock.calls[1][1].liquidationId;
+      liquidationId =
+        queueStub.publishEvent.mock.calls[
+          expectedLiquidationCommandPublishSequence - 1
+        ][1].liquidationId;
     });
 
     it(`should not mark margin call as completed if only collateral balance update is received`, async () => {
+      if (liquidationId === undefined) {
+        throw new Error('Liquidation id is not found');
+      }
       const ledgerUpdatedDueToLiquidationEvent =
         ledgerAccountUpdatedPayloadFactory({
           action: {
@@ -187,6 +207,9 @@ describe('Ltv api tests', () => {
     });
 
     it(`should mark margin call as completed after also credit balance update is received`, async () => {
+      if (liquidationId === undefined) {
+        throw new Error('Liquidation id is not found');
+      }
       const creditUtilizationUpdatedDueToLiquidationEvent =
         creditBalanceUpdatedFactory({
           paymentDetails: {

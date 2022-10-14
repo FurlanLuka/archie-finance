@@ -143,7 +143,7 @@ export class RizeService {
       const transaction: RizeTransaction =
         await this.rizeApiService.getTransaction(transactionId);
 
-      this.queueService.publish<TransactionUpdatedPayload>(
+      this.queueService.publishEvent(
         TRANSACTION_UPDATED_TOPIC,
         {
           ...transaction,
@@ -290,7 +290,7 @@ export class RizeService {
       customerId,
       complianceWorkflow.product_uid,
     );
-    this.queueService.publish<CardActivatedPayload>(CARD_ACTIVATED_TOPIC, {
+    this.queueService.publishEvent(CARD_ACTIVATED_TOPIC, {
       userId,
       customerId,
     });

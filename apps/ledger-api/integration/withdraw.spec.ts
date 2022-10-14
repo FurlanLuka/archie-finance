@@ -266,7 +266,7 @@ describe('Ledger api withdrawal tests', () => {
         ],
       });
 
-      expect(queueStub.publish).toHaveBeenCalledWith(
+      expect(queueStub.publishEvent).toHaveBeenCalledWith(
         LEDGER_ACCOUNT_UPDATED_TOPIC,
         {
           userId: user.id,
@@ -284,7 +284,7 @@ describe('Ledger api withdrawal tests', () => {
         },
       );
 
-      expect(queueStub.publish).toHaveBeenCalledWith(
+      expect(queueStub.publishEvent).toHaveBeenCalledWith(
         INITIATE_COLLATERAL_WITHDRAWAL_COMMAND,
         {
           userId: user.id,

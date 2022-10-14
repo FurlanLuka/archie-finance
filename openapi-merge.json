@@ -32,6 +32,9 @@
     },
     {
       "inputFile": "./dist/apps/credit-line-api/target/generated/swagger.json"
+    },
+    {
+      "inputFile": "./dist/apps/websocket-event-api/target/generated/swagger.json"
     }
   ],
   "output": "./swagger.json"

@@ -19,7 +19,6 @@ import {
 import {
   CreateOrderResponseDto,
   GetOrderResponseDto,
-  PaypalPaymentReceivedPayload,
 } from './paypal.dto';
 import { QueueService } from '@archie/api/utils/queue';
 import {
@@ -146,7 +145,7 @@ export class PaypalService {
       },
     );
 
-    this.queueService.publish<PaypalPaymentReceivedPayload>(
+    this.queueService.publishEvent(
       PAYPAL_PAYMENT_RECEIVED_TOPIC,
       {
         userId: order.userId,

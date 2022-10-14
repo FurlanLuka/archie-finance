@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { SERVICE_QUEUE_NAME } from '@archie/api/peach-api/constants';
 import {
   CREDIT_LINE_UPDATED_TOPIC,
@@ -28,7 +28,6 @@ export class PeachBorrowerQueueController {
   @Subscribe(
     KYC_SUBMITTED_TOPIC,
     PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
-    { logBody: false },
   )
   async kycSubmittedHandler(payload: KycSubmittedPayload): Promise<void> {
     await this.peachService.handleKycSubmittedEvent(payload);
@@ -37,7 +36,6 @@ export class PeachBorrowerQueueController {
   @Subscribe(
     EMAIL_VERIFIED_TOPIC,
     PeachBorrowerQueueController.CONTROLLER_QUEUE_NAME,
-    { logBody: false },
   )
   async emailVerifiedHandler(payload: EmailVerifiedPayload): Promise<void> {
     await this.peachService.handleEmailVerifiedEvent(payload);

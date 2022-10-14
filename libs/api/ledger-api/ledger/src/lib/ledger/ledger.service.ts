@@ -59,7 +59,7 @@ export class LedgerService {
     });
     const ledgerActionType = LedgerActionType.DEPOSIT;
 
-    this.queueService.publish<LedgerAccountUpdatedPayload>(
+    this.queueService.publishEvent(
       LEDGER_ACCOUNT_UPDATED_TOPIC,
       {
         userId,
@@ -171,7 +171,7 @@ export class LedgerService {
         .slice(i, i + chunkSize)
         .map((ledgerUser) => ledgerUser.userId);
 
-      this.queueService.publish<InitiateLedgerRecalculationCommandPayload>(
+      this.queueService.publishEvent(
         INITIATE_LEDGER_RECALCULATION_COMMAND,
         {
           userIds: userIdChunk,
@@ -190,7 +190,7 @@ export class LedgerService {
       payload.userIds.map(async (userId) => {
         const ledger = await this.getLedger(userId, assetPrices);
 
-        this.queueService.publish<LedgerAccountUpdatedPayload>(
+        this.queueService.publishEvent(
           LEDGER_ACCOUNT_UPDATED_TOPIC,
           {
             userId,
@@ -260,7 +260,7 @@ export class LedgerService {
       },
     );
 
-    this.queueService.publish<LedgerAccountUpdatedPayload>(
+    this.queueService.publishEvent(
       LEDGER_ACCOUNT_UPDATED_TOPIC,
       {
         userId,
@@ -348,7 +348,7 @@ export class LedgerService {
           ),
         );
 
-      this.queueService.publish<LedgerAccountUpdatedPayload>(
+      this.queueService.publishEvent(
         LEDGER_ACCOUNT_UPDATED_TOPIC,
         {
           userId,
@@ -406,7 +406,7 @@ export class LedgerService {
       },
     );
 
-    this.queueService.publish<LedgerAccountUpdatedPayload>(
+    this.queueService.publishEvent(
       LEDGER_ACCOUNT_UPDATED_TOPIC,
       {
         userId,

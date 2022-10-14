@@ -150,7 +150,7 @@ describe('Ledger api liquidation tests', () => {
     );
 
     it('should liquidate all USDC and part of bitcoin', async () => {
-      queueStub.publish.mockReset();
+      queueStub.publishEvent.mockReset();
 
       const liquidationValue = BigNumber(700);
 
@@ -230,9 +230,9 @@ describe('Ledger api liquidation tests', () => {
         accountValue: '0',
       });
 
-      expect(queueStub.publish).toHaveBeenCalledTimes(3);
+      expect(queueStub.publishEvent).toHaveBeenCalledTimes(3);
 
-      expect(queueStub.publish).toHaveBeenNthCalledWith(
+      expect(queueStub.publishEvent).toHaveBeenNthCalledWith(
         1,
         LEDGER_ACCOUNT_UPDATED_TOPIC,
         {
@@ -261,7 +261,7 @@ describe('Ledger api liquidation tests', () => {
         },
       );
 
-      expect(queueStub.publish).toHaveBeenNthCalledWith(
+      expect(queueStub.publishEvent).toHaveBeenNthCalledWith(
         2,
         INITIATE_COLLATERAL_LIQUIDATION_COMMAND,
         {
@@ -273,7 +273,7 @@ describe('Ledger api liquidation tests', () => {
       );
 
       // NOT WERKIN FOR SOME REASON
-      // expect(queueStub.publish).toHaveBeenNthCalledWith(
+      // expect(queueStub.publishEvent).toHaveBeenNthCalledWith(
       //   3,
       //   INITIATE_COLLATERAL_LIQUIDATION_COMMAND,
       //   {
