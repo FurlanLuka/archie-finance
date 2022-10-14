@@ -1,7 +1,7 @@
-export * from './lib/utils';
+export * from './lib/queue/queue-util.service';
+export * from './lib/queue/queue.module';
+export * from './lib/queue/queue.service';
 
-export * from './lib/queue-util.service';
-export * from './lib/queue.module';
-export * from './lib/queue.service';
+export * from './lib/queue/queue.interfaces';
 
-export * from './lib/queue.interfaces';
+export * from './lib/event/event'

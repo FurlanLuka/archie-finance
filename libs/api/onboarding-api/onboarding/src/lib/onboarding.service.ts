@@ -5,7 +5,6 @@ import { Onboarding } from './onboarding.entity';
 import { GetOnboardingResponse } from './onboarding.interfaces';
 import { QueueService } from '@archie/api/utils/queue';
 import { ONBOARDING_UPDATED_TOPIC } from '@archie/api/onboarding-api/constants';
-import { OnboardingUpdatedPayload } from '@archie/api/onboarding-api/data-transfer-objects';
 
 @Injectable()
 export class OnboardingService {
@@ -81,7 +80,7 @@ export class OnboardingService {
       completed: isFinalRequiredOnboardingStep,
     };
 
-    this.queueService.publish<OnboardingUpdatedPayload>(
+    this.queueService.publishEvent(
       ONBOARDING_UPDATED_TOPIC,
       onboarding,
     );

@@ -16,7 +16,6 @@ import {
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
 import { PeachWebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import {
-  CreditBalanceUpdatedPayload,
   PaymentType,
 } from '@archie/api/peach-api/data-transfer-objects';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
@@ -83,7 +82,7 @@ export class PaymentsService {
       payment.loanId,
     );
 
-    this.queueService.publish<CreditBalanceUpdatedPayload>(
+    this.queueService.publishEvent(
       CREDIT_BALANCE_UPDATED_TOPIC,
       {
         ...credit,
@@ -143,7 +142,7 @@ export class PaymentsService {
       borrower.personId,
       borrower.creditLineId,
     );
-    this.queueService.publish<CreditBalanceUpdatedPayload>(
+    this.queueService.publishEvent(
       CREDIT_BALANCE_UPDATED_TOPIC,
       {
         ...credit,
@@ -200,7 +199,7 @@ export class PaymentsService {
       borrower.creditLineId,
     );
 
-    this.queueService.publish<CreditBalanceUpdatedPayload>(
+    this.queueService.publishEvent(
       CREDIT_BALANCE_UPDATED_TOPIC,
       {
         ...credit,

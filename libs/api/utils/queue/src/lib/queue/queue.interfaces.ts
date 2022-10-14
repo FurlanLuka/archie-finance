@@ -1,6 +1,7 @@
 import { RabbitMQExchangeConfig } from '@golevelup/nestjs-rabbitmq';
 
-export interface RabbitOptions {
+export interface QueueOptions {
+  useEventLog?: boolean;
   exchanges?: RabbitMQExchangeConfig[];
 }
 

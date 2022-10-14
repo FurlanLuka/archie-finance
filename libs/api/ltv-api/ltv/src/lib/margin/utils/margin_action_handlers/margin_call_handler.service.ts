@@ -3,10 +3,6 @@ import { MarginCall } from '../../margin_calls.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
-  MarginCallCompletedPayload,
-  MarginCallStartedPayload,
-} from '@archie/api/ltv-api/data-transfer-objects';
-import {
   LIQUIDATION_TARGET_LTV,
   MARGIN_CALL_COMPLETED_TOPIC,
 } from '@archie/api/ltv-api/constants';
@@ -15,7 +11,6 @@ import { MARGIN_CALL_STARTED_TOPIC } from '@archie/api/ltv-api/constants';
 import { MarginCallPriceFactory } from './margin_call_price.factory';
 import { MarginActionHandlerPayload } from '../utils.interfaces';
 import { INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND } from '@archie/api/ledger-api/constants';
-import { InitiateLedgerAssetLiquidationCommandPayload } from '@archie/api/ledger-api/data-transfer-objects';
 import { Liquidation } from '../../liquidation.entity';
 
 @Injectable()
@@ -36,7 +31,7 @@ export class MarginCallHandlerService {
       userId: actionPayload.userId,
     });
 
-    this.queueService.publish<MarginCallStartedPayload>(
+    this.queueService.publishEvent(
       MARGIN_CALL_STARTED_TOPIC,
       {
         userId: actionPayload.userId,
@@ -65,7 +60,7 @@ export class MarginCallHandlerService {
       throw new Error('Incorrect margin call deactivate handler usage');
     }
 
-    this.queueService.publish<MarginCallCompletedPayload>(
+    this.queueService.publishEvent(
       MARGIN_CALL_COMPLETED_TOPIC,
       {
         completedAt: marginCall.updatedAt.toISOString(),
@@ -104,7 +99,7 @@ export class MarginCallHandlerService {
       amount: loanRepaymentAmount,
     });
 
-    this.queueService.publish<InitiateLedgerAssetLiquidationCommandPayload>(
+    this.queueService.publishEvent(
       INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND,
       {
         userId: actionPayload.userId,
@@ -137,7 +132,7 @@ export class MarginCallHandlerService {
       throw new Error('Incorrect complete margin call handler usage');
     }
 
-    this.queueService.publish<MarginCallCompletedPayload>(
+    this.queueService.publishEvent(
       MARGIN_CALL_COMPLETED_TOPIC,
       {
         completedAt: marginCall.updatedAt.toISOString(),

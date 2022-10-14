@@ -15,7 +15,6 @@
     "api-fireblocks-api-constants": "libs/api/fireblocks-api/constants",
     "api-fireblocks-api-data-transfer-objects": "libs/api/fireblocks-api/data-transfer-objects",
     "api-fireblocks-api-fireblocks": "libs/api/fireblocks-api/fireblocks",
-    "api-fireblocks-api-ledger": "libs/api/fireblocks-api/ledger",
     "api-fireblocks-api-test-data": "libs/api/fireblocks-api/test-data",
     "api-ledger-api-assets": "libs/api/ledger-api/assets",
     "api-ledger-api-constants": "libs/api/ledger-api/constants",

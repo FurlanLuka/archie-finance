@@ -60,7 +60,7 @@ describe('Ltv api tests', () => {
     beforeAll(setup);
     afterAll(cleanup);
     afterEach(() => {
-      queueStub.publish.mockReset();
+      queueStub.publishEvent.mockReset();
     });
 
     const ledgerUpdatedPayload = ledgerAccountUpdatedPayloadFactory();
@@ -80,7 +80,7 @@ describe('Ltv api tests', () => {
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
 
-      expect(queueStub.publish).toHaveBeenCalledWith(LTV_UPDATED_TOPIC, {
+      expect(queueStub.publishEvent).toHaveBeenCalledWith(LTV_UPDATED_TOPIC, {
         userId: user.id,
         ltv: 0,
       });
@@ -143,23 +143,27 @@ describe('Ltv api tests', () => {
           createdAt: expect.any(String),
         },
       ]);
-      expect(queueStub.publish).nthCalledWith(1, LTV_UPDATED_TOPIC, {
+      expect(queueStub.publishEvent).nthCalledWith(1, LTV_UPDATED_TOPIC, {
         userId: user.id,
         ltv: 90,
       });
-      expect(queueStub.publish).nthCalledWith(2, MARGIN_CALL_STARTED_TOPIC, {
-        userId: user.id,
-        startedAt: expect.any(String),
-        ltv: 90,
-        priceForMarginCall:
-          creditBalanceUpdatedPayload.utilizationAmount /
-          (LTV_MARGIN_CALL_LIMIT / 100),
-        priceForPartialCollateralSale:
-          creditBalanceUpdatedPayload.utilizationAmount /
-          (COLLATERAL_SALE_LTV_LIMIT / 100),
-        collateralBalance: ledgerValue,
-      });
-      expect(queueStub.publish).nthCalledWith(
+      expect(queueStub.publishEvent).nthCalledWith(
+        2,
+        MARGIN_CALL_STARTED_TOPIC,
+        {
+          userId: user.id,
+          startedAt: expect.any(String),
+          ltv: 90,
+          priceForMarginCall:
+            creditBalanceUpdatedPayload.utilizationAmount /
+            (LTV_MARGIN_CALL_LIMIT / 100),
+          priceForPartialCollateralSale:
+            creditBalanceUpdatedPayload.utilizationAmount /
+            (COLLATERAL_SALE_LTV_LIMIT / 100),
+          collateralBalance: ledgerValue,
+        },
+      );
+      expect(queueStub.publishEvent).nthCalledWith(
         expectedLiquidationCommandPublishSequence,
         INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND,
         {
@@ -169,7 +173,7 @@ describe('Ltv api tests', () => {
         },
       );
       liquidationId =
-        queueStub.publish.mock.calls[
+        queueStub.publishEvent.mock.calls[
           expectedLiquidationCommandPublishSequence - 1
         ][1].liquidationId;
     });

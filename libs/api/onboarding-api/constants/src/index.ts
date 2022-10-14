@@ -1,3 +1,6 @@
+import { Event } from '@archie/api/utils/queue';
+import { OnboardingUpdatedPayload } from '@archie/api/onboarding-api/data-transfer-objects';
+
 export const SERVICE_NAME = 'onboarding-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
@@ -13,4 +16,7 @@ export enum ConfigVariables {
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
-export const ONBOARDING_UPDATED_TOPIC = 'onboarding.onboarding.updated';
+export const ONBOARDING_UPDATED_TOPIC = new Event<OnboardingUpdatedPayload>(
+  'onboarding.onboarding.updated',
+  1,
+);

@@ -20,7 +20,7 @@ export class PeachWebhookService {
   ) {}
 
   public async publishPaymentConfirmedEvent(body: PeachWebhookPaymentPayload) {
-    this.queueService.publish<PeachWebhookPaymentPayload>(
+    this.queueService.publishEvent(
       WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC,
       body,
     );
@@ -40,7 +40,7 @@ export class PeachWebhookService {
       );
 
     paymentEvents.data.forEach((event: Payment) => {
-      this.queueService.publish<PeachWebhookPaymentPayload>(
+      this.queueService.publishEvent(
         WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC,
         {
           ...event,

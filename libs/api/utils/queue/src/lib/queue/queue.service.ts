@@ -1,4 +1,10 @@
-import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  OnApplicationBootstrap,
+  Optional,
+} from '@nestjs/common';
 import {
   AmqpConnection,
   RabbitHandlerConfig,
@@ -8,32 +14,54 @@ import { QueueUtilService } from './queue-util.service';
 import { Options } from 'amqplib';
 import { RPCResponse, RPCResponseType } from './queue.interfaces';
 import { DiscoveryService } from '@golevelup/nestjs-discovery';
-import { RABBIT_RETRY_HANDLER } from './utils';
+import { RABBIT_RETRY_HANDLER } from '../decorators/subscribe';
 import tracer, { Span } from 'dd-trace';
+import { v4 } from 'uuid';
+import { Event } from '../event/event';
+import { LogService } from '../log/log.service';
 
 @Injectable()
 export class QueueService implements OnApplicationBootstrap {
   constructor(
     private amqpConnection: AmqpConnection,
     private discover: DiscoveryService,
+    @Inject('USE_EVENT_LOG') private useEventLog: boolean,
+    @Optional() private logService?: LogService,
   ) {}
 
-  public publish<T>(
-    routingKey: string,
+  public publishEvent<T extends object>(
+    event: Event<T>,
     message: T,
     exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
     options?: Options.Publish,
-  ) {
-    tracer.trace('queue_event_publish', (span: Span) => {
-      span.setTag('eventName', routingKey);
-      const headers = options?.headers !== undefined ? options.headers : {};
-      tracer.inject(span, 'text_map', headers);
+  ): void {
+    const eventId = v4();
 
-      this.amqpConnection.publish(exchange, routingKey, message, {
-        ...options,
-        headers,
+    const headers = {
+      'event-id': eventId,
+      ...options?.headers,
+    };
+
+    try {
+      tracer.trace('queue_event_publish', (span: Span) => {
+        span.setTag('eventName', event.getRoutingKey());
+
+        tracer.inject(span, 'text_map', headers);
       });
+    } catch (error) {
+      Logger.error('Failed adding event trace');
+    }
+
+    this.amqpConnection.publish(exchange, event.getRoutingKey(), message, {
+      ...options,
+      headers,
     });
+
+    if (this.useEventLog) {
+      const eventLogId = `${event.getRoutingKey()}-${eventId}-${exchange}`;
+
+      void this.logService?.writeEventLog(eventLogId, message);
+    }
   }
 
   public async request<K = object, T extends object = object>(

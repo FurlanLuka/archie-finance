@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { SERVICE_NAME } from '@archie/api/websocket-event-api/constants';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
 import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects';
 import { EventService } from './event.service';
@@ -19,8 +19,8 @@ export class EventQueueController {
 
   static CONTROLLER_QUEUE_NAME = `${SERVICE_NAME}-event`;
   static CONTROLLER_QUEUE_SETTINGS = {
-    logBody: false,
     requeueOnError: false,
+    useIdempotency: false,
   };
 
   @Subscribe(
@@ -33,7 +33,7 @@ export class EventQueueController {
     ...payload
   }: LedgerAccountUpdatedPayload) {
     this.eventService.publishToClient(userId, {
-      topic: LEDGER_ACCOUNT_UPDATED_TOPIC,
+      topic: LEDGER_ACCOUNT_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
     });
   }
@@ -48,7 +48,7 @@ export class EventQueueController {
     ...payload
   }: CreditBalanceUpdatedPayload) {
     this.eventService.publishToClient(userId, {
-      topic: CREDIT_BALANCE_UPDATED_TOPIC,
+      topic: CREDIT_BALANCE_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
     });
   }
@@ -63,7 +63,7 @@ export class EventQueueController {
     ...payload
   }: OnboardingUpdatedPayload) {
     this.eventService.publishToClient(userId, {
-      topic: ONBOARDING_UPDATED_TOPIC,
+      topic: ONBOARDING_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
     });
   }
@@ -75,7 +75,7 @@ export class EventQueueController {
   )
   async ltvUpdatedHandler({ userId, ...payload }: LtvUpdatedPayload) {
     this.eventService.publishToClient(userId, {
-      topic: LTV_UPDATED_TOPIC,
+      topic: LTV_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
     });
   }
@@ -90,7 +90,7 @@ export class EventQueueController {
     ...payload
   }: TransactionUpdatedPayload) {
     this.eventService.publishToClient(userId, {
-      topic: TRANSACTION_UPDATED_TOPIC,
+      topic: TRANSACTION_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
     });
   }

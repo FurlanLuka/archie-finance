@@ -10,7 +10,7 @@ import {
 } from '@archie/api/user-api/constants';
 import { CARD_ACTIVATED_TOPIC } from '@archie/api/credit-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import {
   EmailVerifiedPayload,
   KycSubmittedPayload,
@@ -43,7 +43,6 @@ export class OnboardingQueueController {
   @Subscribe(
     KYC_SUBMITTED_TOPIC,
     OnboardingQueueController.CONTROLLER_QUEUE_NAME,
-    { logBody: false },
   )
   async kycSubmittedEventHandler(payload: KycSubmittedPayload): Promise<void> {
     await this.onboardingService.completeOnboardingStage(
@@ -55,7 +54,6 @@ export class OnboardingQueueController {
   @Subscribe(
     EMAIL_VERIFIED_TOPIC,
     OnboardingQueueController.CONTROLLER_QUEUE_NAME,
-    { logBody: false },
   )
   async emailVerifiedEventHandler(
     payload: EmailVerifiedPayload,

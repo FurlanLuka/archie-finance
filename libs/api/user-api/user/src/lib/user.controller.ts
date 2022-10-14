@@ -3,7 +3,6 @@ import {
   BadRequestException,
   Controller,
   Get,
-  Logger,
   Post,
   Req,
   UseGuards,
@@ -11,11 +10,8 @@ import {
 import { UserService } from './user.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
-import {
-  RequestHandler,
-  RPCResponse,
-  RPCResponseType,
-} from '@archie/api/utils/queue';
+import { RPCResponse, RPCResponseType } from '@archie/api/utils/queue';
+import { RequestHandler } from '@archie/api/utils/queue/decorators/request_handler';
 import {
   GET_USER_EMAIL_ADDRESS_RPC,
   SERVICE_QUEUE_NAME,

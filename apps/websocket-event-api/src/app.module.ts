@@ -22,7 +22,9 @@ import { AuthModule } from '@archie/api/utils/auth0';
         ConfigVariables.REDIS_URL,
       ],
     }),
-    QueueModule.register(),
+    QueueModule.register({
+      useEventLog: false,
+    }),
     HealthModule,
     CryptoModule.register(),
     AuthModule.register({

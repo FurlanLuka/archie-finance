@@ -117,7 +117,7 @@ export class KycService {
       aptUnit: encryptedAptUnit,
     });
 
-    this.queueService.publish<KycSubmittedPayload>(KYC_SUBMITTED_TOPIC, {
+    this.queueService.publishEvent(KYC_SUBMITTED_TOPIC, {
       userId,
       ...payload,
     });
