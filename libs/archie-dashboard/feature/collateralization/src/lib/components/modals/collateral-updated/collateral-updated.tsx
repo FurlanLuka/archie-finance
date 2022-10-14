@@ -26,7 +26,7 @@ export const CollateralUpdatedModal: FC<CollateralUpdatedModalProps> = ({ initia
     initialLedger,
   });
 
-  const collateralCreditValue = useMemo(() => calculateLedgerCreditValue(currentLedger), [currentLedger]);
+  const collateralCreditValue = useMemo(() => calculateLedgerCreditValue(currentLedger.accounts), [currentLedger]);
 
   if (isModalOpen) {
     return (

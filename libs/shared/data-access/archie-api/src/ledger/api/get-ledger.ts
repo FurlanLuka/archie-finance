@@ -1,6 +1,7 @@
 import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
 
+// TODO move to DTOs lib? currently duplicated in ws events
 export interface LedgerAccountData {
   assetId: string;
   assetAmount: string;

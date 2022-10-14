@@ -69,7 +69,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, ledger, 
   const withdrawalAmount = watch('withdrawAmount');
   const depositAddress = watch('withdrawAddress');
 
-  const initialCreditValue = calculateLedgerCreditValue(ledger);
+  const initialCreditValue = calculateLedgerCreditValue(ledger.accounts);
 
   const { updatedLedgerValue, updatedCreditValue } = getUpdatedCreditAndTotal({
     asset: currentAsset,

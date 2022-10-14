@@ -26,7 +26,7 @@ export const CollateralDepositAlerts: FC = () => {
   });
 
   const collateralText = useMemo(() => formatLedgerAccountsToString(currentLedger.accounts), [currentLedger]);
-  const collateralCreditValue = useMemo(() => calculateLedgerCreditValue(currentLedger), [currentLedger]);
+  const collateralCreditValue = useMemo(() => calculateLedgerCreditValue(currentLedger.accounts), [currentLedger]);
 
   const currentCollateralDepositState = getCollateralDepositState(
     isModalOpen,

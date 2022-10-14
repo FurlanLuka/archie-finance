@@ -40,7 +40,7 @@ export function getUpdatedCreditAndTotal({
   };
 
   return {
-    updatedCreditValue: calculateLedgerCreditValue(updatedLedger),
+    updatedCreditValue: calculateLedgerCreditValue(updatedLedger.accounts),
     updatedLedgerValue: updatedLedger.value,
   };
 }
