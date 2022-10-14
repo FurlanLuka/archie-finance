@@ -1,5 +1,8 @@
 import { Controller } from '@nestjs/common';
-import { SERVICE_NAME } from '@archie/api/websocket-event-api/constants';
+import {
+  SERVICE_INSTANCE_ID,
+  SERVICE_NAME,
+} from '@archie/api/websocket-event-api/constants';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
 import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects';
@@ -17,9 +20,10 @@ import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-
 export class EventQueueController {
   constructor(private eventService: EventService) {}
 
-  static CONTROLLER_QUEUE_NAME = `${SERVICE_NAME}-event`;
+  static CONTROLLER_QUEUE_NAME = `${SERVICE_NAME}-event-${SERVICE_INSTANCE_ID}`;
   static CONTROLLER_QUEUE_SETTINGS = {
     requeueOnError: false,
+    autoDelete: true,
     useIdempotency: false,
   };
 
