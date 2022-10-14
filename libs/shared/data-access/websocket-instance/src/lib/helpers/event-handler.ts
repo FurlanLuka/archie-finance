@@ -8,6 +8,11 @@ const isLtvUpdatedWsEvent = (event: any): event is LtvUpdatedWsEvent => {
   return event?.topic === WsEventTopic.LTV_UPDATED_TOPIC && event.data !== undefined;
 };
 
+const eventGuards = new Map<WsEventTopic, (event: any) => boolean>([
+  [WsEventTopic.ONBOARDING_UPDATED_TOPIC, isOnboardingUpdatedWsEvent],
+  [WsEventTopic.LTV_UPDATED_TOPIC, isLtvUpdatedWsEvent],
+]);
+
 export const parseWsEvent = (event: any): WsEvent | undefined => {
   console.log('Handling event', event);
   if (!event?.topic) {
@@ -15,22 +20,17 @@ export const parseWsEvent = (event: any): WsEvent | undefined => {
     return;
   }
 
-  // TODO make this nicer, check by topic and then typeguard is an if?? kinda fugly
-  switch (event.topic) {
-    case WsEventTopic.ONBOARDING_UPDATED_TOPIC:
-      if (isOnboardingUpdatedWsEvent(event)) {
-        return event;
-      }
+  const eventGuard = eventGuards.get(event.topic);
 
-      return;
-    case WsEventTopic.LTV_UPDATED_TOPIC:
-      if (isLtvUpdatedWsEvent(event)) {
-        return event;
-      }
-
-      return;
-    default:
-      console.warn('Unknown event', event);
-      return;
+  // if we don't handle the event yet
+  if (!eventGuard) {
+    return;
   }
+
+  if (eventGuard(event)) {
+    return event;
+  }
+
+  console.warn('Malformed event structure', event);
+  return;
 };

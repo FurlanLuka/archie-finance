@@ -11,7 +11,6 @@ function waitFor(time: number) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
-// TODO: Map of handlers for events
 class WebsocketInstance {
   private connection: WebSocket | undefined = undefined;
   private accessToken: string | undefined = undefined;
