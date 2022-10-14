@@ -10,18 +10,20 @@ import { LogoutRoute } from '../routes/logout/logout-route';
 import '../utils/i18next';
 import { OnboardingRoute } from '../routes/onboarding/onboarding-route';
 
+import { LimitedFunctionalityToast } from './blocks/limited-functionality/limited-functionality';
 import { useStartup } from './use-startup';
 
 // This is separate because we need Auth0 session info here
 export const App: FC = () => {
-  const { initialized } = useStartup();
+  const { isInitialized, showLimitedToast } = useStartup();
 
-  if (!initialized) {
+  if (!isInitialized) {
     return <LoaderFullScreen />;
   }
 
   return (
     <BrowserRouter>
+      {showLimitedToast && <LimitedFunctionalityToast />}
       <Routes>
         <Route
           path="*"

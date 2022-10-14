@@ -5,24 +5,35 @@ import { SessionState, useSession } from '@archie-webapps/shared/data-access/ses
 import { websocketInstance } from '@archie-webapps/shared/data-access/websocket-instance';
 
 interface UseStartupResult {
-  initialized: boolean;
+  isInitialized: boolean;
+  showLimitedToast: boolean;
 }
 
 export const useStartup = (): UseStartupResult => {
   const { sessionState, accessToken } = useSession();
-  const [initialized, setInitialized] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
+  const [showLimitedToast, setShowLimitedToast] = useState(false);
+
   useAsyncEffect(async () => {
+    const handleConnect = () => {
+      setIsInitialized(true);
+      setShowLimitedToast(false);
+    };
+
+    const handleFail = () => {
+      setShowLimitedToast(true);
+      setIsInitialized(true);
+    };
+
     if (sessionState === SessionState.NOT_AUTHENTICATED) {
-      setInitialized(true);
+      setIsInitialized(true);
     }
 
     if (sessionState === SessionState.AUTHENTICATED && accessToken !== undefined) {
       websocketInstance.setToken(accessToken);
-      await websocketInstance.connect();
-      // still initialize the app if it fails?
-      setInitialized(true);
+      await websocketInstance.connect(handleConnect, handleFail);
     }
   }, [sessionState, accessToken]);
 
-  return { initialized };
+  return { isInitialized, showLimitedToast };
 };

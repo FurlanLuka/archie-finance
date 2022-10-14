@@ -343,5 +343,9 @@
   },
   "autopay_modal": {
     "title": "Manage Autopay"
+  },
+  "limited_functionality_modal": {
+    "title": "App running with limited functionality",
+    "text": "Due to network issues, the app isn't 100% operational. You can continue using it, but an occasional manual refresh may be necessary."
   }
 }

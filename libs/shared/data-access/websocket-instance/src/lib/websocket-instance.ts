@@ -4,8 +4,14 @@ import { WsEvent, WsEventTopic } from './events';
 import { getConnectionToken } from './get-connection-token/get-connection-token';
 import { parseWsEvent } from './helpers/event-handler';
 
+const BACKOFF_TIME = 1000;
+const MAX_RETRIES = 5;
+
+function waitFor(time: number) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
 // TODO: Map of handlers for events
-// TODO: Reconnect on token rotate?
 class WebsocketInstance {
   private connection: WebSocket | undefined = undefined;
   private accessToken: string | undefined = undefined;
@@ -16,30 +22,45 @@ class WebsocketInstance {
     this.accessToken = accessToken;
   }
 
-  public async connect(): Promise<void> {
-    if (this.accessToken === undefined) {
-      console.warn('Access token not set yet');
-      return;
-    }
-
-    try {
-      const { authToken } = await getConnectionToken(this.accessToken);
-      console.log;
-      this.connection = new WebSocket(`${WS_URL}?authToken=${authToken}`);
-      this.connected = true;
-
-      this.connection.onmessage = (message) => {
-        const parsedEvent = parseWsEvent(JSON.parse(message.data));
-
-        if (parsedEvent !== undefined) {
-          const eventHandlers = this.handlers.get(parsedEvent.topic);
-          eventHandlers?.forEach(({ handler }) => handler(parsedEvent));
+  public async connect(onConnect: VoidFunction, onFail: VoidFunction): Promise<void> {
+    const connectToWs = async (retryCount = 0): Promise<void> => {
+      try {
+        if (this.accessToken === undefined) {
+          console.warn('Access token not set yet');
+          return;
         }
-      };
-    } catch (error: any) {
-      console.error('Error while trying to set up WS connection', error);
-      // Wat do, graciously fail?
-    }
+
+        if (retryCount > 0) {
+          const timeToWait = retryCount * BACKOFF_TIME;
+          await waitFor(timeToWait);
+        }
+
+        const { authToken } = await getConnectionToken(this.accessToken);
+        this.connection = new WebSocket(`${WS_URL}?authToken=${authToken}`);
+        onConnect();
+        this.connected = true;
+
+        this.connection.onmessage = (message) => {
+          const parsedEvent = parseWsEvent(JSON.parse(message.data));
+
+          if (parsedEvent !== undefined) {
+            const eventHandlers = this.handlers.get(parsedEvent.topic);
+            eventHandlers?.forEach(({ handler }) => handler(parsedEvent));
+          }
+        };
+      } catch (error: unknown) {
+        console.error('Error while trying to set up WS connection', error);
+        onFail();
+
+        if (retryCount <= MAX_RETRIES) {
+          return connectToWs(retryCount + 1);
+        }
+
+        console.warn('Max retries reached, no websocket connection established');
+      }
+    };
+
+    await connectToWs();
   }
 
   // TODO figure out wtf is going on with event typing
