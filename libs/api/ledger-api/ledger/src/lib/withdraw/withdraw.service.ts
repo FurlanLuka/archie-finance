@@ -162,7 +162,7 @@ export class WithdrawService {
       await queryRunner.release();
     }
 
-    this.queueService.publish<InitiateCollateralWithdrawalCommandPayload>(
+    this.queueService.publishEvent(
       INITIATE_COLLATERAL_WITHDRAWAL_COMMAND,
       {
         userId,

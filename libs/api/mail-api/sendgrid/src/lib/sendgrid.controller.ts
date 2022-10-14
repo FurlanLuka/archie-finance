@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import {
   APPLIED_TO_WAITLIST_TOPIC,
   JOINED_WAITLIST_TOPIC,

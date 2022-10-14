@@ -309,7 +309,7 @@ describe('Peach service tests', () => {
           .creditLineUpdatedHandler(firstCreditLineUpdatedPayload);
 
         expect(peachNock.areAllDone()).toEqual(true);
-        expect(queueStub.publish).toHaveBeenCalledWith(
+        expect(queueStub.publishEvent).toHaveBeenCalledWith(
           CREDIT_BALANCE_UPDATED_TOPIC,
           {
             userId: user.id,

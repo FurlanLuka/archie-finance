@@ -1,5 +1,5 @@
 import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { SERVICE_QUEUE_NAME } from '@archie/api/peach-api/constants';
 import { TRANSACTION_UPDATED_TOPIC } from '@archie/api/credit-api/constants';
 import { PurchasesService } from './purchases.service';

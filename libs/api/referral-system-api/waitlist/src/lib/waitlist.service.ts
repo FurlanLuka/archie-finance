@@ -46,7 +46,7 @@ export class WaitlistService {
 
     const id: string = v4();
 
-    this.queueService.publish<AppliedToWaitlistPayload>(
+    this.queueService.publishEvent(
       APPLIED_TO_WAITLIST_TOPIC,
       {
         emailAddress,
@@ -134,7 +134,7 @@ export class WaitlistService {
         waitlistEntity.emailAddress,
       );
 
-      this.queueService.publish<JoinedToWaitlistPayload>(
+      this.queueService.publishEvent(
         JOINED_WAITLIST_TOPIC,
         {
           emailAddress,

@@ -33,7 +33,7 @@ export class UserService {
     const email: string = <string>user.email;
 
     if (emailVerified) {
-      this.queueService.publish<EmailVerifiedPayload>(EMAIL_VERIFIED_TOPIC, {
+      this.queueService.publishEvent(EMAIL_VERIFIED_TOPIC, {
         userId,
         email,
       });
@@ -104,7 +104,7 @@ export class UserService {
     );
 
     if (hasEnrolledAuthenticator !== undefined) {
-      this.queueService.publish<MfaEnrolledPayload>(MFA_ENROLLED_TOPIC, {
+      this.queueService.publishEvent(MFA_ENROLLED_TOPIC, {
         userId,
       });
     }

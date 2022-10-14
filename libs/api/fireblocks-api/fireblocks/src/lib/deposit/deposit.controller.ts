@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { SERVICE_QUEUE_NAME } from '@archie/api/fireblocks-api/constants';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { WEBHOOK_FIREBLOCKS_DEPOSIT_TRANSACTION_TOPIC } from '@archie/api/webhook-api/constants';
 import { FireblocksDepositTransactionPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { DepositService } from './deposit.service';

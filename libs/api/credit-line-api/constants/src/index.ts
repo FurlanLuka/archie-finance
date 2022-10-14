@@ -1,3 +1,9 @@
+import { Event } from '@archie/api/utils/queue';
+import {
+  CreditLineCreatedPayload,
+  CreditLineUpdatedPayload,
+} from '@archie/api/credit-line-api/data-transfer-objects';
+
 export const SERVICE_NAME = 'credit-line-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
@@ -14,5 +20,11 @@ export enum ConfigVariables {
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
-export const CREDIT_LINE_CREATED_TOPIC = 'credit_line.created';
-export const CREDIT_LINE_UPDATED_TOPIC = 'credit_line.updated';
+export const CREDIT_LINE_CREATED_TOPIC = new Event<CreditLineCreatedPayload>(
+  'credit_line.created',
+  1,
+);
+export const CREDIT_LINE_UPDATED_TOPIC = new Event<CreditLineUpdatedPayload>(
+  'credit_line.updated',
+  1,
+);

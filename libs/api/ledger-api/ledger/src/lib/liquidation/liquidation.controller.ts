@@ -4,7 +4,7 @@ import {
   SERVICE_QUEUE_NAME,
 } from '@archie/api/ledger-api/constants';
 import { LiquidationService } from './liquidation.service';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import {
   COLLATERAL_LIQUIDATION_TRANSACTION_ERROR_TOPIC,
   COLLATERAL_LIQUIDATION_TRANSACTION_SUBMITTED_TOPIC,

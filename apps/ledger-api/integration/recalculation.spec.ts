@@ -114,10 +114,10 @@ describe('Ledger api deposit tests', () => {
           .depositHandler(collateralDepositTransactionCompletedPayload);
       }
 
-      expect(queueStub.publish).toHaveBeenCalledTimes(100);
+      expect(queueStub.publishEvent).toHaveBeenCalledTimes(100);
 
       generatedUserIds.forEach((userId, index) => {
-        expect(queueStub.publish).toHaveBeenNthCalledWith(
+        expect(queueStub.publishEvent).toHaveBeenNthCalledWith(
           index + 1,
           LEDGER_ACCOUNT_UPDATED_TOPIC,
           {
@@ -142,17 +142,17 @@ describe('Ledger api deposit tests', () => {
     });
 
     it('should publish events to start recalculating ledger values', async () => {
-      queueStub.publish.mockReset();
+      queueStub.publishEvent.mockReset();
 
       await request(app.getHttpServer())
         .post('/internal/ledger/recalculate')
         .expect(201);
 
-      expect(queueStub.publish).toHaveBeenCalledTimes(100);
+      expect(queueStub.publishEvent).toHaveBeenCalledTimes(100);
     });
 
     it('should handle the recalculation events and publish ledger updates', async () => {
-      queueStub.publish.mockReset();
+      queueStub.publishEvent.mockReset();
 
       for (const userId in generatedUserIds) {
         const initiateLedgerRecalcuationCommandPayload =
@@ -167,10 +167,10 @@ describe('Ledger api deposit tests', () => {
           );
       }
 
-      expect(queueStub.publish).toHaveBeenCalledTimes(100);
+      expect(queueStub.publishEvent).toHaveBeenCalledTimes(100);
 
       generatedUserIds.forEach((userId, index) => {
-        expect(queueStub.publish).toHaveBeenNthCalledWith(
+        expect(queueStub.publishEvent).toHaveBeenNthCalledWith(
           index + 1,
           LEDGER_ACCOUNT_UPDATED_TOPIC,
           {

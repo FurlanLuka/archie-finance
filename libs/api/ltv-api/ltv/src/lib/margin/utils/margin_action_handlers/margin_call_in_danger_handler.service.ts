@@ -3,7 +3,6 @@ import { QueueService } from '@archie/api/utils/queue';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC } from '@archie/api/ltv-api/constants';
-import { MarginCallLtvLimitApproachingPayload } from '@archie/api/ltv-api/data-transfer-objects';
 import { MarginCallPriceFactory } from './margin_call_price.factory';
 import { MarginNotification } from '../../margin_notifications.entity';
 import { MarginActionHandlerPayload } from '../utils.interfaces';
@@ -20,7 +19,7 @@ export class MarginCallInDangerHandlerService {
   public async send(
     actionPayload: MarginActionHandlerPayload,
   ): Promise<MarginActionHandlerPayload> {
-    this.queueService.publish<MarginCallLtvLimitApproachingPayload>(
+    this.queueService.publishEvent(
       MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC,
       {
         userId: actionPayload.userId,

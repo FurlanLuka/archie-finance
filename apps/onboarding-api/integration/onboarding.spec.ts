@@ -48,7 +48,7 @@ describe('Onboarding service tests', () => {
     beforeAll(setup);
     afterAll(cleanup);
     afterEach(() => {
-      queueStub.publish.mockReset();
+      queueStub.publishEvent.mockReset();
     });
 
     it('should throw an error because onboarding record was not created yet', async () => {
@@ -84,7 +84,7 @@ describe('Onboarding service tests', () => {
         .get(OnboardingQueueController)
         .kycSubmittedEventHandler(kycSubmittedPayload);
 
-      expect(queueStub.publish).toHaveBeenCalledWith(
+      expect(queueStub.publishEvent).toHaveBeenCalledWith(
         ONBOARDING_UPDATED_TOPIC,
         onboardingUpdatedPayloadFactory({
           kycStage: true,
@@ -99,7 +99,7 @@ describe('Onboarding service tests', () => {
         .get(OnboardingQueueController)
         .mfaEnrollmentEventHandler(mfaEnrolledPayload);
 
-      expect(queueStub.publish).toHaveBeenCalledWith(
+      expect(queueStub.publishEvent).toHaveBeenCalledWith(
         ONBOARDING_UPDATED_TOPIC,
         onboardingUpdatedPayloadFactory({
           kycStage: true,
@@ -115,7 +115,7 @@ describe('Onboarding service tests', () => {
         .get(OnboardingQueueController)
         .emailVerifiedEventHandler(emailVerifiedPayload);
 
-      expect(queueStub.publish).toHaveBeenCalledWith(
+      expect(queueStub.publishEvent).toHaveBeenCalledWith(
         ONBOARDING_UPDATED_TOPIC,
         onboardingUpdatedPayloadFactory({
           kycStage: true,
@@ -132,7 +132,7 @@ describe('Onboarding service tests', () => {
         .get(OnboardingQueueController)
         .collateralReceivedEventHandler(creditLineCreatedPayload);
 
-      expect(queueStub.publish).toHaveBeenCalledWith(
+      expect(queueStub.publishEvent).toHaveBeenCalledWith(
         ONBOARDING_UPDATED_TOPIC,
         onboardingUpdatedPayloadFactory({
           kycStage: true,
@@ -150,7 +150,7 @@ describe('Onboarding service tests', () => {
         .get(OnboardingQueueController)
         .cardActivatedEventHandler(creditLineCreatedPayload);
 
-      expect(queueStub.publish).toHaveBeenCalledWith(
+      expect(queueStub.publishEvent).toHaveBeenCalledWith(
         ONBOARDING_UPDATED_TOPIC,
         onboardingUpdatedPayloadFactory({
           kycStage: true,

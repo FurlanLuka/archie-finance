@@ -1,3 +1,16 @@
+import { Event } from '@archie/api/utils/queue';
+import {
+  CollateralDepositTransactionCompletedPayload,
+  CollateralLiquidationTransactionErrorPayload,
+  CollateralLiquidationTransactionSubmittedPayload,
+  CollateralLiquidationTransactionUpdatedPayload,
+  CollateralWithdrawalTransactionErrorPayload,
+  CollateralWithdrawalTransactionSubmittedPayload,
+  CollateralWithdrawalTransactionUpdatedPayload,
+  InitiateCollateralLiquidationCommandPayload,
+  InitiateCollateralWithdrawalCommandPayload,
+} from '@archie/api/fireblocks-api/data-transfer-objects';
+
 export const SERVICE_NAME = 'fireblocks-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
@@ -20,28 +33,55 @@ export enum ConfigVariables {
  * Withdrawal
  */
 export const COLLATERAL_WITHDRAWAL_TRANSACTION_SUBMITTED_TOPIC =
-  'collateral.withdrawal.submitted';
+  new Event<CollateralWithdrawalTransactionSubmittedPayload>(
+    'collateral.withdrawal.submitted',
+    1,
+  );
 export const COLLATERAL_WITHDRAWAL_TRANSACTION_UPDATED_TOPIC =
-  'collateral.withdrawal.updated';
+  new Event<CollateralWithdrawalTransactionUpdatedPayload>(
+    'collateral.withdrawal.updated',
+    1,
+  );
 export const COLLATERAL_WITHDRAWAL_TRANSACTION_ERROR_TOPIC =
-  'collateral.withdrawal.error';
+  new Event<CollateralWithdrawalTransactionErrorPayload>(
+    'collateral.withdrawal.error',
+    1,
+  );
 export const INITIATE_COLLATERAL_WITHDRAWAL_COMMAND =
-  'initiate.collateral.withdrawal';
+  new Event<InitiateCollateralWithdrawalCommandPayload>(
+    'initiate.collateral.withdrawal',
+    1,
+  );
 
 /**
  * Liquidation
  */
 export const COLLATERAL_LIQUIDATION_TRANSACTION_SUBMITTED_TOPIC =
-  'collateral.liquidation.submitted';
+  new Event<CollateralLiquidationTransactionSubmittedPayload>(
+    'collateral.liquidation.submitted',
+    1,
+  );
 export const COLLATERAL_LIQUIDATION_TRANSACTION_UPDATED_TOPIC =
-  'collateral.liquidation.updated';
+  new Event<CollateralLiquidationTransactionUpdatedPayload>(
+    'collateral.liquidation.updated',
+    1,
+  );
 export const COLLATERAL_LIQUIDATION_TRANSACTION_ERROR_TOPIC =
-  'collateral.liquidation.error';
+  new Event<CollateralLiquidationTransactionErrorPayload>(
+    'collateral.liquidation.error',
+    1,
+  );
 export const INITIATE_COLLATERAL_LIQUIDATION_COMMAND =
-  'initiate.collateral.liquidation';
+  new Event<InitiateCollateralLiquidationCommandPayload>(
+    'initiate.collateral.liquidation',
+    1,
+  );
 
 /**
  * Deposit
  */
 export const COLLATERAL_DEPOSIT_TRANSACTION_COMPLETED_TOPIC =
-  'collateral.deposit.completed';
+  new Event<CollateralDepositTransactionCompletedPayload>(
+    'collateral.deposit.completed',
+    1,
+  );

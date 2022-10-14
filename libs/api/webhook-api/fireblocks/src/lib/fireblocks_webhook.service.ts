@@ -41,7 +41,7 @@ export class FireblocksWebhookService {
       payload.data.netAmount &&
       payload.data.networkFee
     ) {
-      this.queueService.publish<FireblocksInternalTransactionPayload>(
+      this.queueService.publishEvent(
         WEBHOOK_FIREBLOCKS_INTERNAL_TRANSACTION_TOPIC,
         {
           transactionId: payload.data.id,
@@ -59,7 +59,7 @@ export class FireblocksWebhookService {
       payload.data.destination.type === PeerType.EXTERNAL_WALLET &&
       payload.data.destinationAddress.length > 0
     ) {
-      this.queueService.publish<FireblocksWithdrawTransactionPayload>(
+      this.queueService.publishEvent(
         WEBHOOK_FIREBLOCKS_WITHDRAWAL_TRANSACTION_TOPIC,
         {
           transactionId: payload.data.id,
@@ -86,7 +86,7 @@ export class FireblocksWebhookService {
         return;
       }
 
-      this.queueService.publish<FireblocksDepositTransactionPayload>(
+      this.queueService.publishEvent(
         WEBHOOK_FIREBLOCKS_DEPOSIT_TRANSACTION_TOPIC,
         {
           transactionId: payload.data.id,

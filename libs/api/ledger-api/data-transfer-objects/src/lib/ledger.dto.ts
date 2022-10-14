@@ -16,7 +16,7 @@ export class Ledger {
   value: string;
   accounts: InternalLedgerAccountData[];
 }
-
+ 
 export interface LedgerAccountUpdatedPayload {
   userId: string;
   ledgerAccounts: LedgerAccountData[];

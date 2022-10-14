@@ -6,7 +6,7 @@ import {
 import { InitiateCollateralWithdrawalCommandPayload } from '@archie/api/fireblocks-api/data-transfer-objects';
 import { WithdrawService } from './withdraw.service';
 import { WEBHOOK_FIREBLOCKS_WITHDRAWAL_TRANSACTION_TOPIC } from '@archie/api/webhook-api/constants';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { FireblocksWithdrawTransactionPayload } from '@archie/api/webhook-api/data-transfer-objects';
 
 @Controller()
