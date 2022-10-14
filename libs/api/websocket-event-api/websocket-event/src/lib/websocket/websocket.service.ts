@@ -97,7 +97,6 @@ export class WebsocketService {
 
     userClients.forEach((client) => {
       client.send(JSON.stringify(event));
-      client.emit('event_sent');
     });
   }
 }

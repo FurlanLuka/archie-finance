@@ -46,10 +46,6 @@ export class WsAdapter extends BaseWsAdapter {
         client.on('pong', () => {
           this.setPingInterval(client);
         });
-        client.on('event_sent', () => {
-          this.clearPingInterval(client);
-          this.setPingInterval(client);
-        });
 
         callback(client, message, ...args);
       },
@@ -78,9 +74,6 @@ export class WsAdapter extends BaseWsAdapter {
     }, this.pingOptions.timeout);
   }
 
-  private clearPingInterval(client: ExtendedWebSocket): void {
-    clearTimeout(client.pingIntervalTimer);
-  }
   private clearPingTimeout(client: ExtendedWebSocket): void {
     clearTimeout(client.pingTimeoutTimer);
   }
