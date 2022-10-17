@@ -3,7 +3,7 @@ import { queryClient } from '@archie-webapps/shared/data-access/query-client';
 import { LedgerUpdatedWsEvent } from '@archie-webapps/shared/data-access/websocket-instance';
 import { calculateLedgerTotalValue, mergeLedgerWithWsUpdate } from '@archie-webapps/shared/utils';
 
-import { LEDGER_QUERY_KEY } from '../hooks/use-poll-ledger';
+import { LEDGER_QUERY_KEY } from '../hooks/use-get-ledger';
 
 export const handleLedgerUpdatedEvent = (event: LedgerUpdatedWsEvent): void => {
   queryClient.setQueryData<Ledger | undefined>(LEDGER_QUERY_KEY, (data): Ledger | undefined => {

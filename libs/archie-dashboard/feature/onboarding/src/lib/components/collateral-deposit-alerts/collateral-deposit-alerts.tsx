@@ -1,7 +1,14 @@
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 
-import { usePollLedgerChanges } from '@archie-webapps/archie-dashboard/hooks';
 import { calculateLedgerCreditValue, formatLedgerAccountsToString } from '@archie-webapps/archie-dashboard/utils';
+import { LedgerActionType } from '@archie-webapps/shared/data-access/archie-api-dtos';
+import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+import {
+  LedgerUpdatedWsEvent,
+  websocketInstance,
+  WsEventTopic,
+} from '@archie-webapps/shared/data-access/websocket-instance';
 
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';
@@ -10,28 +17,49 @@ import { NotEnoughCollateral } from '../toasts/not-enough-collateral/not-enough-
 
 import { getCollateralDepositState, CollateralDepositState } from './collateral-deposit-alerts.helpers';
 
+const COLLATERAL_DEPOSITED_HANDLER_ID = 'CollateralDepositAlerts.ledger-updated';
 export const CollateralDepositAlerts: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const onLedgerChange = () => {
-    setIsModalOpen(true);
+  const getLedgerResponse = useGetLedger();
+
+  const handleLedgerUpdatedEvent = (event: LedgerUpdatedWsEvent): void => {
+    if (event.data.action.type === LedgerActionType.DEPOSIT) {
+      setIsModalOpen(true);
+    }
   };
 
-  const { currentLedger, startPolling } = usePollLedgerChanges({
-    onLedgerChange,
-    initialLedger: {
-      value: '0',
-      accounts: [],
-    }, // we don't have any yet
-  });
+  useEffect(() => {
+    websocketInstance.addHandler(
+      WsEventTopic.LEDGER_UPDATED_TOPIC,
+      COLLATERAL_DEPOSITED_HANDLER_ID,
+      handleLedgerUpdatedEvent,
+    );
 
-  const collateralText = useMemo(() => formatLedgerAccountsToString(currentLedger.accounts), [currentLedger]);
-  const collateralCreditValue = useMemo(() => calculateLedgerCreditValue(currentLedger.accounts), [currentLedger]);
+    return () => {
+      websocketInstance.removeHandler(WsEventTopic.LEDGER_UPDATED_TOPIC, COLLATERAL_DEPOSITED_HANDLER_ID);
+    };
+  }, []);
+
+  const collateralText = useMemo(() => {
+    if (getLedgerResponse.state === RequestState.SUCCESS) {
+      return formatLedgerAccountsToString(getLedgerResponse.data.accounts);
+    }
+    return '';
+  }, [getLedgerResponse]);
+
+  const collateralCreditValue = useMemo(() => {
+    if (getLedgerResponse.state === RequestState.SUCCESS) {
+      return calculateLedgerCreditValue(getLedgerResponse.data.accounts);
+    }
+
+    return '';
+  }, [getLedgerResponse]);
 
   const currentCollateralDepositState = getCollateralDepositState(
     isModalOpen,
     collateralCreditValue,
-    currentLedger.accounts,
+    getLedgerResponse.state === RequestState.SUCCESS ? getLedgerResponse.data.accounts : [],
   );
 
   if (currentCollateralDepositState === CollateralDepositState.COLLATERAL_RECEIVED_MODAL) {
@@ -39,12 +67,11 @@ export const CollateralDepositAlerts: FC = () => {
       <CollateralReceivedModal
         onClose={() => {
           setIsModalOpen(false);
-          startPolling();
         }}
         onConfirm={() => {
           setIsModalOpen(false);
         }}
-        ledgerValue={currentLedger.value}
+        ledgerValue={collateralCreditValue}
         creditValue={collateralCreditValue}
       />
     );
@@ -56,7 +83,6 @@ export const CollateralDepositAlerts: FC = () => {
         creditValue={collateralCreditValue}
         onClose={() => {
           setIsModalOpen(false);
-          startPolling();
         }}
       />
     );
