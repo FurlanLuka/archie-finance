@@ -1,20 +1,20 @@
 import { FC, useState } from 'react';
 
+import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { Modal } from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectableAccountSelect } from './components/connectable-account-select/connectable-account-select';
 import { PlaidLink } from './components/plaid-link/plaid-link';
-import { ConnectableAccount } from './connect-acount.interfaces';
 
 interface ConnectAccountProps {
   close?: VoidFunction;
 }
 
 export const ConnectAccountModal: FC<ConnectAccountProps> = ({ close }) => {
-  const [availableAccounts, setAvailableAccounts] = useState<ConnectableAccount[]>([]);
+  const [availableAccounts, setAvailableAccounts] = useState<AccountResponse[]>([]);
   const [publicToken, setPublicToken] = useState<string | null>(null);
 
-  const onLinkSuccess = (publicToken: string, availableAccounts: ConnectableAccount[]) => {
+  const onLinkSuccess = (publicToken: string, availableAccounts: AccountResponse[]) => {
     setAvailableAccounts(availableAccounts);
     setPublicToken(publicToken);
   };
@@ -28,7 +28,7 @@ export const ConnectAccountModal: FC<ConnectAccountProps> = ({ close }) => {
   };
 
   return (
-    <Modal maxWidth="760px" isOpen close={close}>
+    <Modal maxWidth="780px" isOpen close={close}>
       {getContent()}
     </Modal>
   );

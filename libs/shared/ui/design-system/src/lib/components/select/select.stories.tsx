@@ -48,7 +48,7 @@ export const Default: Story<SelectStyledProps> = (props) => {
 Default.args = {
   isLoading: false,
   isDisabled: false,
-  maxWidth: '',
+  width: '',
   small: false,
 };
 
@@ -74,7 +74,7 @@ export const Disabled: Story<SelectStyledProps> = (props) => {
 Disabled.args = {
   isLoading: false,
   isDisabled: true,
-  maxWidth: '',
+  width: '',
   small: false,
 };
 
@@ -100,7 +100,7 @@ export const Loading: Story<SelectStyledProps> = (props) => {
 Loading.args = {
   isLoading: true,
   isDisabled: false,
-  maxWidth: '',
+  width: '',
   small: false,
 };
 
@@ -130,6 +130,6 @@ export const Small: Story<SelectStyledProps> = (props) => {
 Small.args = {
   isLoading: false,
   isDisabled: false,
-  maxWidth: '',
+  width: '',
   small: true,
 };

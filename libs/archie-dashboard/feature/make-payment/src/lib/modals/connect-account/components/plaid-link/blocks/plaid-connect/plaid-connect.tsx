@@ -2,16 +2,16 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PlaidLinkOnSuccessMetadata, usePlaidLink } from 'react-plaid-link';
 
+import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
 
 import plaidLogo from '../../../../../../../assets/plaid_logo.png';
-import { ConnectableAccount } from '../../../../connect-acount.interfaces';
 import { transformAccounts } from './plaid-connect.helpers';
 import { PlaidConnectStyled } from './plaid-connect.styled';
 
 interface PlaidConnectProps {
   linkToken: string;
-  onLinkSuccess: (publicToken: string, availableAccounts: ConnectableAccount[]) => void;
+  onLinkSuccess: (publicToken: string, availableAccounts: AccountResponse[]) => void;
 }
 
 export const PlaidConnect: FC<PlaidConnectProps> = ({ linkToken, onLinkSuccess }) => {

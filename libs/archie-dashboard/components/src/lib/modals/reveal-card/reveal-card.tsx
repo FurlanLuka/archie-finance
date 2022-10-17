@@ -24,10 +24,10 @@ export const RevealCardModal: FC<RevealCardModalProps> = ({ isOpen, close, onCon
       <RevealCardModalStyled>
         <TitleS>{t('dashboard_home.reveal_card_modal')}</TitleS>
         <div className="btn-group">
-          <ButtonOutline maxWidth="100%" onClick={close}>
+          <ButtonOutline width="100%" onClick={close}>
             {t('btn_cancel')}
           </ButtonOutline>
-          <ButtonPrimary maxWidth="100%" onClick={handleConfirm}>
+          <ButtonPrimary width="100%" onClick={handleConfirm}>
             {t('btn_yes')}
           </ButtonPrimary>
         </div>
