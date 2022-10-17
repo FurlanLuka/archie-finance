@@ -42,9 +42,10 @@ export class OnboardingService {
     return onboardingRecordWithoutUserId;
   }
 
-  async completeOnboardingStage(
+  async updateOnboardingStage(
     userId: string,
     stage: string,
+    complete: boolean,
   ): Promise<Onboarding> {
     const onboardingRecord: Onboarding | null =
       await this.onboardingRepository.findOneBy({
@@ -57,7 +58,7 @@ export class OnboardingService {
 
     const updatedOnboardingRecord: Onboarding = {
       ...onboardingRecord,
-      [stage]: true,
+      [stage]: complete,
     };
 
     const isFinalRequiredOnboardingStep: boolean =
@@ -70,7 +71,7 @@ export class OnboardingService {
         userId,
       },
       {
-        [stage]: true,
+        [stage]: complete,
         completed: isFinalRequiredOnboardingStep,
       },
     );
@@ -80,10 +81,7 @@ export class OnboardingService {
       completed: isFinalRequiredOnboardingStep,
     };
 
-    this.queueService.publishEvent(
-      ONBOARDING_UPDATED_TOPIC,
-      onboarding,
-    );
+    this.queueService.publishEvent(ONBOARDING_UPDATED_TOPIC, onboarding);
 
     return onboarding;
   }

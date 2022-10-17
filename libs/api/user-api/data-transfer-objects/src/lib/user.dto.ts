@@ -9,6 +9,10 @@ export class MfaEnrolledPayload {
   userId: string;
 }
 
+export class MfaDisEnrolledPayload {
+  userId: string;
+}
+
 export class EmailVerifiedPayload {
   userId: string;
   email: string;

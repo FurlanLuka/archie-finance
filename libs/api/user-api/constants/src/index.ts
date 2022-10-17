@@ -1,6 +1,7 @@
 import {
   EmailVerifiedPayload,
   KycSubmittedPayload,
+  MfaDisEnrolledPayload,
   MfaEnrolledPayload,
 } from '@archie/api/user-api/data-transfer-objects';
 import { Event } from '@archie/api/utils/queue';
@@ -42,6 +43,11 @@ export const EMAIL_VERIFIED_TOPIC = new Event<EmailVerifiedPayload>(
 
 export const MFA_ENROLLED_TOPIC = new Event<MfaEnrolledPayload>(
   'user.mfa.enrolled',
+  1,
+);
+
+export const MFA_DISENROLLED_TOPIC = new Event<MfaDisEnrolledPayload>(
+  'user.mfa.dis-enrolled',
   1,
 );
 

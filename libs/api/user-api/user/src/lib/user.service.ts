@@ -7,6 +7,7 @@ import { Enrollment, SendEnrollmentTicketResponse, User } from 'auth0';
 import { Auth0Service } from '@archie/api/user-api/auth0';
 import {
   EMAIL_VERIFIED_TOPIC,
+  MFA_DISENROLLED_TOPIC,
   MFA_ENROLLED_TOPIC,
 } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
@@ -137,6 +138,10 @@ export class UserService {
 
     await this.auth0Service.getManagmentClient().deleteGuardianEnrollment({
       id: enrollmentId,
+    });
+
+    this.queueService.publishEvent(MFA_DISENROLLED_TOPIC, {
+      userId,
     });
   }
 }
