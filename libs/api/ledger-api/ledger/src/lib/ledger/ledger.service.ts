@@ -59,26 +59,24 @@ export class LedgerService {
     });
     const ledgerActionType = LedgerActionType.DEPOSIT;
 
-    this.queueService.publishEvent(
-      LEDGER_ACCOUNT_UPDATED_TOPIC,
-      {
-        userId,
-        ledgerAccounts: [
-          {
-            assetId: asset.id,
-            assetAmount: amount,
-            accountValue: BigNumber(amount)
-              .multipliedBy(assetPrice.price)
-              .decimalPlaces(2, BigNumber.ROUND_DOWN)
-              .toString(),
-            calculatedAt: new Date().toISOString(),
-          },
-        ],
-        action: {
-          type: ledgerActionType,
+    this.queueService.publishEvent(LEDGER_ACCOUNT_UPDATED_TOPIC, {
+      userId,
+      ledgerAccounts: [
+        {
+          assetId: asset.id,
+          assetAmount: amount,
+          accountValue: BigNumber(amount)
+            .multipliedBy(assetPrice.price)
+            .decimalPlaces(2, BigNumber.ROUND_DOWN)
+            .toString(),
+          assetPrice: assetPrice.price.toString(),
+          calculatedAt: new Date().toISOString(),
         },
+      ],
+      action: {
+        type: ledgerActionType,
       },
-    );
+    });
 
     await this.ledgerLogRepository.insert({
       userId,
@@ -171,12 +169,9 @@ export class LedgerService {
         .slice(i, i + chunkSize)
         .map((ledgerUser) => ledgerUser.userId);
 
-      this.queueService.publishEvent(
-        INITIATE_LEDGER_RECALCULATION_COMMAND,
-        {
-          userIds: userIdChunk,
-        },
-      );
+      this.queueService.publishEvent(INITIATE_LEDGER_RECALCULATION_COMMAND, {
+        userIds: userIdChunk,
+      });
     }
   }
 
@@ -190,21 +185,16 @@ export class LedgerService {
       payload.userIds.map(async (userId) => {
         const ledger = await this.getLedger(userId, assetPrices);
 
-        this.queueService.publishEvent(
-          LEDGER_ACCOUNT_UPDATED_TOPIC,
-          {
-            userId,
-            ledgerAccounts: ledger.accounts.map(
-              ({ assetPrice: _, ...updatedAccount }) => ({
-                ...updatedAccount,
-                calculatedAt: new Date().toISOString(),
-              }),
-            ),
-            action: {
-              type: LedgerActionType.ASSET_PRICE_UPDATE,
-            },
+        this.queueService.publishEvent(LEDGER_ACCOUNT_UPDATED_TOPIC, {
+          userId,
+          ledgerAccounts: ledger.accounts.map((updatedAccount) => ({
+            ...updatedAccount,
+            calculatedAt: new Date().toISOString(),
+          })),
+          action: {
+            type: LedgerActionType.ASSET_PRICE_UPDATE,
           },
-        );
+        });
       }),
     );
   }
@@ -260,24 +250,22 @@ export class LedgerService {
       },
     );
 
-    this.queueService.publishEvent(
-      LEDGER_ACCOUNT_UPDATED_TOPIC,
-      {
-        userId,
-        ledgerAccounts: [
-          {
-            assetId: ledgerAccount.assetId,
-            assetAmount: updatedAmount.toString(),
-            accountValue: updatedAmount
-              .multipliedBy(ledgerAccount.assetPrice)
-              .decimalPlaces(2, BigNumber.ROUND_DOWN)
-              .toString(),
-            calculatedAt: new Date().toISOString(),
-          },
-        ],
-        action,
-      },
-    );
+    this.queueService.publishEvent(LEDGER_ACCOUNT_UPDATED_TOPIC, {
+      userId,
+      ledgerAccounts: [
+        {
+          assetId: ledgerAccount.assetId,
+          assetAmount: updatedAmount.toString(),
+          accountValue: updatedAmount
+            .multipliedBy(ledgerAccount.assetPrice)
+            .decimalPlaces(2, BigNumber.ROUND_DOWN)
+            .toString(),
+          assetPrice: ledgerAccount.assetPrice,
+          calculatedAt: new Date().toISOString(),
+        },
+      ],
+      action,
+    });
 
     await this.ledgerLogRepository.insert({
       userId,
@@ -348,19 +336,14 @@ export class LedgerService {
           ),
         );
 
-      this.queueService.publishEvent(
-        LEDGER_ACCOUNT_UPDATED_TOPIC,
-        {
-          userId,
-          ledgerAccounts: updatedLedgerAccounts.map(
-            ({ assetPrice: _, ...updatedAccount }) => ({
-              ...updatedAccount,
-              calculatedAt: new Date().toISOString(),
-            }),
-          ),
-          action: action,
-        },
-      );
+      this.queueService.publishEvent(LEDGER_ACCOUNT_UPDATED_TOPIC, {
+        userId,
+        ledgerAccounts: updatedLedgerAccounts.map((updatedAccount) => ({
+          ...updatedAccount,
+          calculatedAt: new Date().toISOString(),
+        })),
+        action: action,
+      });
 
       await queryRunner.commitTransaction();
     } catch {
@@ -406,24 +389,22 @@ export class LedgerService {
       },
     );
 
-    this.queueService.publishEvent(
-      LEDGER_ACCOUNT_UPDATED_TOPIC,
-      {
-        userId,
-        ledgerAccounts: [
-          {
-            assetId: asset.id,
-            assetAmount: updatedAmount.toString(),
-            accountValue: updatedAmount
-              .multipliedBy(ledgerAccount.assetPrice)
-              .decimalPlaces(2, BigNumber.ROUND_DOWN)
-              .toString(),
-            calculatedAt: new Date().toISOString(),
-          },
-        ],
-        action,
-      },
-    );
+    this.queueService.publishEvent(LEDGER_ACCOUNT_UPDATED_TOPIC, {
+      userId,
+      ledgerAccounts: [
+        {
+          assetId: asset.id,
+          assetAmount: updatedAmount.toString(),
+          accountValue: updatedAmount
+            .multipliedBy(ledgerAccount.assetPrice)
+            .decimalPlaces(2, BigNumber.ROUND_DOWN)
+            .toString(),
+          assetPrice: ledgerAccount.assetPrice,
+          calculatedAt: new Date().toISOString(),
+        },
+      ],
+      action,
+    });
 
     await this.ledgerLogRepository.insert({
       userId,
