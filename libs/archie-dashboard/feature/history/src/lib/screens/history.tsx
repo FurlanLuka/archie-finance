@@ -6,7 +6,7 @@ import { TransactionsTable } from '@archie-webapps/archie-dashboard/components';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetTransactions } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-transactions';
 import { ButtonOutline } from '@archie-webapps/shared/ui/design-system';
-import { Card, Loader, TitleM, TitleS } from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton, TitleM, TitleS } from '@archie-webapps/shared/ui/design-system';
 
 import { Statements } from '../components/statements/statements';
 
@@ -30,7 +30,11 @@ export const HistoryScreen: FC = () => {
 
   const getContent = () => {
     if (getTransactionsResponse.state === RequestState.LOADING) {
-      return <Loader marginAuto />;
+      return (
+        <Card height="450px">
+          <Skeleton />
+        </Card>
+      );
     }
 
     if (getTransactionsResponse.state === RequestState.ERROR) {
@@ -39,7 +43,7 @@ export const HistoryScreen: FC = () => {
 
     if (getTransactionsResponse.state === RequestState.SUCCESS) {
       return (
-        <>
+        <Card column alignItems="flex-start" padding="1.5rem 1.5rem 2rem">
           <div className="subtitle-group">
             <TitleS>{t('dashboard_history.subtitle')}</TitleS>
             <Statements />
@@ -50,13 +54,13 @@ export const HistoryScreen: FC = () => {
               {t('dashboard_history.btn_load_more')}
             </ButtonOutline>
           )}
-        </>
+        </Card>
       );
     }
 
     if (getTransactionsResponse.state === RequestState.LOADING_NEXT_PAGE) {
       return (
-        <>
+        <Card column alignItems="flex-start" padding="1.5rem 1.5rem 2rem">
           <div className="subtitle-group">
             <TitleS>{t('dashboard_history.subtitle')}</TitleS>
             <Statements />
@@ -65,7 +69,7 @@ export const HistoryScreen: FC = () => {
           <ButtonOutline small isLoading className="load-btn">
             {t('dashboard_history.btn_load_more')}
           </ButtonOutline>
-        </>
+        </Card>
       );
     }
 
@@ -75,9 +79,7 @@ export const HistoryScreen: FC = () => {
   return (
     <HistoryStyled>
       <TitleM className="title">{t('dashboard_history.title')}</TitleM>
-      <Card column alignItems="flex-start" padding="1.5rem 1.5rem 2rem" minHeight="450px">
-        {getContent()}
-      </Card>
+      {getContent()}
     </HistoryStyled>
   );
 };

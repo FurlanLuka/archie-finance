@@ -24,7 +24,7 @@ export const RecentTransactions: FC = () => {
 
   if (getRecentTransactionsResponse.state === RequestState.LOADING) {
     return (
-      <Card minHeight="450px">
+      <Card height="450px">
         <Skeleton />
       </Card>
     );

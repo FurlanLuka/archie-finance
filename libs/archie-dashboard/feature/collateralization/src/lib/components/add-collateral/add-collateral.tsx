@@ -6,7 +6,7 @@ import { Navigate } from 'react-router-dom';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
-import { Loader, ButtonOutline, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton, ButtonOutline, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
 
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
 
@@ -26,7 +26,11 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
   const getAssetPriceResponse = useGetAssetPrice();
 
   if (getLedgerResponse.state === RequestState.LOADING || getAssetPriceResponse.state === RequestState.LOADING) {
-    return <Loader marginAuto />;
+    return (
+      <Card height="782px">
+        <Skeleton />
+      </Card>
+    );
   }
 
   if (getLedgerResponse.state === RequestState.ERROR || getAssetPriceResponse.state === RequestState.ERROR) {
@@ -45,25 +49,27 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
     return (
       <>
         <CollateralUpdatedModal initialLedger={ledger} />
-        <TitleS className="title">{t('dashboard_collateralization.title', { selectedAsset })}</TitleS>
-        <BodyL className="subtitle-credit">
-          {t('dashboard_collateralization.subtitle_credit', {
-            collateralTotalValue: ledger.value,
-          })}
-        </BodyL>
-        {currentLedgerAccount && (
-          <BodyL className="subtitle-asset">
-            {t('dashboard_collateralization.subtitle_asset', {
-              collateral: currentLedgerAccount.assetAmount,
-              collateralAsset: currentLedgerAccount.assetId,
-              collateralValue: currentLedgerAccount.assetPrice,
+        <Card column alignItems="center" padding="2.5rem 1.5rem">
+          <TitleS className="title">{t('dashboard_collateralization.title', { selectedAsset })}</TitleS>
+          <BodyL className="subtitle-credit">
+            {t('dashboard_collateralization.subtitle_credit', {
+              collateralTotalValue: ledger.value,
             })}
           </BodyL>
-        )}
-        <CollateralizationForm assetInfo={assetInfo} assetPrice={assetPrice} />
-        <Link to="/collateral" className="cancel-btn">
-          <ButtonOutline>{t('btn_cancel')}</ButtonOutline>
-        </Link>
+          {currentLedgerAccount && (
+            <BodyL className="subtitle-asset">
+              {t('dashboard_collateralization.subtitle_asset', {
+                collateral: currentLedgerAccount.assetAmount,
+                collateralAsset: currentLedgerAccount.assetId,
+                collateralValue: currentLedgerAccount.assetPrice,
+              })}
+            </BodyL>
+          )}
+          <CollateralizationForm assetInfo={assetInfo} assetPrice={assetPrice} />
+          <Link to="/collateral" className="cancel-btn">
+            <ButtonOutline>{t('btn_cancel')}</ButtonOutline>
+          </Link>
+        </Card>
       </>
     );
   }

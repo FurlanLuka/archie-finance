@@ -6,7 +6,7 @@ import { RequestState } from '@archie-webapps/shared/data-access/archie-api/inte
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { LTVStatus } from '@archie-webapps/shared/constants';
 import { MarginCallAlert } from '@archie-webapps/archie-dashboard/components';
-import { Card, Loader } from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton } from '@archie-webapps/shared/ui/design-system';
 
 import { CollateralizationRouteParams } from '../interfaces/routing';
 import { AddCollateral } from '../components/add-collateral/add-collateral';
@@ -24,7 +24,11 @@ export const CollateralizationScreen: FC = () => {
 
   const getContent = () => {
     if (getLTVResponse.state === RequestState.LOADING) {
-      return <Loader marginAuto />;
+      return (
+        <Card height="782px">
+          <Skeleton />
+        </Card>
+      );
     }
 
     if (getLTVResponse.state === RequestState.ERROR) {
@@ -47,9 +51,7 @@ export const CollateralizationScreen: FC = () => {
   return (
     <CollateralizationStyled>
       <MarginCallAlert />
-      <Card column alignItems="center" padding="2.5rem 1.5rem" minHeight="762px">
-        {getContent()}
-      </Card>
+      {getContent()}
     </CollateralizationStyled>
   );
 };

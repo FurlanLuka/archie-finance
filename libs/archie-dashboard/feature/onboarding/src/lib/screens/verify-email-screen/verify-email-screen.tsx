@@ -8,7 +8,7 @@ import { useGetEmailVerification } from '@archie-webapps/shared/data-access/arch
 import { usePollEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
 import { useResendEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
 import { useAuthenticatedSession } from '@archie-webapps/shared/data-access/session';
-import { ButtonPrimary, Card, Loader, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, Card, Skeleton, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { VerifyEmailScreenStyled } from './verify-email-screen.styled';
@@ -65,7 +65,11 @@ export const VerifyEmailScreen: FC = () => {
 
   function getContent() {
     if (getEmailVerificationResponse.state === RequestState.LOADING) {
-      return <Loader marginAuto />;
+      return (
+        <Card height="400px">
+          <Skeleton />
+        </Card>
+      );
     }
 
     if (getEmailVerificationResponse.state === RequestState.ERROR) {
@@ -74,7 +78,7 @@ export const VerifyEmailScreen: FC = () => {
 
     if (getEmailVerificationResponse.state === RequestState.SUCCESS) {
       return (
-        <>
+        <Card column alignItems="center" padding="1.5rem">
           <TitleL className="title">{t('verify_email_step.title')}</TitleL>
           <BodyM className="text">
             {t('verify_email_step.subtitle', { email: getEmailVerificationResponse.data.email })}
@@ -100,18 +104,12 @@ export const VerifyEmailScreen: FC = () => {
               ? t('verify_email_step.resend_btn_disabled', { counter: `00:${counter}` })
               : t('verify_email_step.resend_btn')}
           </ButtonPrimary>
-        </>
+        </Card>
       );
     }
 
     return <></>;
   }
 
-  return (
-    <VerifyEmailScreenStyled>
-      <Card column alignItems="center" padding="1.5rem" minHeight="400px">
-        {getContent()}
-      </Card>
-    </VerifyEmailScreenStyled>
-  );
+  return <VerifyEmailScreenStyled>{getContent()}</VerifyEmailScreenStyled>;
 };
