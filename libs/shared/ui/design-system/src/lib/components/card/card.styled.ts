@@ -8,6 +8,7 @@ export interface CardProps {
   alignItems?: string;
   justifyContent?: string;
   maxWidth?: string;
+  height?: string;
   minHeight?: string;
   padding?: string;
   mobileRow?: boolean;
@@ -36,6 +37,7 @@ export const Card = styled.div<CardProps>`
   border-radius: 0.5rem;
   width: 100%;
   max-width: ${({ maxWidth }) => maxWidth};
+  height: ${({ height }) => height};
   min-height: ${({ minHeight }) => minHeight};
   padding: ${({ padding }) => padding};
   overflow: hidden;

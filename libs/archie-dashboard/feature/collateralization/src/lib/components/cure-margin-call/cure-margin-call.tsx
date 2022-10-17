@@ -7,7 +7,7 @@ import { RequestState } from '@archie-webapps/shared/data-access/archie-api/inte
 import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
-import { Loader, ButtonOutline, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton, ButtonOutline, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
 
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
 
@@ -34,7 +34,11 @@ export const CureMarginCall: FC<CureMarginCallProps> = ({ selectedAsset }) => {
     getAssetPriceResponse.state === RequestState.LOADING ||
     getCreditQueryResponse.state === RequestState.LOADING
   ) {
-    return <Loader marginAuto />;
+    return (
+      <Card height="782px">
+        <Skeleton />
+      </Card>
+    );
   }
 
   if (
@@ -61,17 +65,19 @@ export const CureMarginCall: FC<CureMarginCallProps> = ({ selectedAsset }) => {
     return (
       <>
         <CollateralUpdatedModal initialLedger={ledger} />
-        <TitleS className="title">{t('dashboard_collateralization.title', { selectedAsset })}</TitleS>
-        <BodyL className="subtitle-margin-call">{t('dashboard_collateralization.subtitle_margin_call')}</BodyL>
-        <CollateralizationForm
-          assetInfo={assetInfo}
-          assetPrice={assetPrice}
-          creditBalance={creditData.utilizationAmount}
-          collateralTotalValue={BigNumber(ledger.value).toNumber()}
-        />
-        <Link to="/collateral" className="cancel-btn">
-          <ButtonOutline>{t('btn_cancel')}</ButtonOutline>
-        </Link>
+        <Card column alignItems="center" padding="2.5rem 1.5rem">
+          <TitleS className="title">{t('dashboard_collateralization.title', { selectedAsset })}</TitleS>
+          <BodyL className="subtitle-margin-call">{t('dashboard_collateralization.subtitle_margin_call')}</BodyL>
+          <CollateralizationForm
+            assetInfo={assetInfo}
+            assetPrice={assetPrice}
+            creditBalance={creditData.utilizationAmount}
+            collateralTotalValue={BigNumber(ledger.value).toNumber()}
+          />
+          <Link to="/collateral" className="cancel-btn">
+            <ButtonOutline>{t('btn_cancel')}</ButtonOutline>
+          </Link>
+        </Card>
       </>
     );
   }

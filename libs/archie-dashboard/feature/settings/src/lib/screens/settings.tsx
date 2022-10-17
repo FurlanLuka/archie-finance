@@ -7,7 +7,7 @@ import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-k
 import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
 import { EmailVerificationResponse } from '@archie-webapps/shared/data-access/archie-api/user/api/get-email-verification';
 import { useGetEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-get-email-verification';
-import { Card, TitleM, TitleS, BodyM, Loader } from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton, TitleM, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { OptionsHandler } from '../components/options-handler/options-handler';
@@ -22,7 +22,11 @@ export const SettingsScreen: FC = () => {
 
   const getContent = () => {
     if (getKycResponse.state === RequestState.LOADING || getEmailVerificationResponse.state === RequestState.LOADING) {
-      return <Loader marginAuto />;
+      return (
+        <Card height="615px">
+          <Skeleton />
+        </Card>
+      );
     }
 
     if (getKycResponse.state === RequestState.ERROR || getEmailVerificationResponse.state === RequestState.ERROR) {
@@ -34,7 +38,7 @@ export const SettingsScreen: FC = () => {
       const emailVerificationData = getEmailVerificationResponse.data;
 
       return (
-        <>
+        <Card column alignItems="flex-start" padding="1.5rem 1.5rem 2rem">
           <div className="subtitle">
             <TitleS className="name">
               {kycData.firstName} {kycData.lastName}
@@ -44,7 +48,7 @@ export const SettingsScreen: FC = () => {
             </BodyM>
           </div>
           <OptionsHandler />
-        </>
+        </Card>
       );
     }
 
@@ -54,9 +58,7 @@ export const SettingsScreen: FC = () => {
   return (
     <SettingsStyled>
       <TitleM className="title">{t('dashboard_settings.title')}</TitleM>
-      <Card column alignItems="flex-start" padding="1.5rem 1.5rem 2rem" minHeight="615px">
-        {getContent()}
-      </Card>
+      {getContent()}
     </SettingsStyled>
   );
 };

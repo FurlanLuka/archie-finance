@@ -10,7 +10,7 @@ import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Container, Card, Loader, InputRange, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
+import { Container, Card, Skeleton, InputRange, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralDepositAlerts } from '../../components/collateral-deposit-alerts/collateral-deposit-alerts';
@@ -53,7 +53,11 @@ export const CollateralizationScreen: FC = () => {
 
   function getContent() {
     if (getAssetPriceResponse.state === RequestState.LOADING) {
-      return <Loader marginAuto />;
+      return (
+        <Card height="952px">
+          <Skeleton />
+        </Card>
+      );
     }
 
     if (getAssetPriceResponse.state === RequestState.ERROR) {
@@ -62,7 +66,7 @@ export const CollateralizationScreen: FC = () => {
 
     if (getAssetPriceResponse.state === RequestState.SUCCESS) {
       return (
-        <>
+        <Card column alignItems="center" padding="1.5rem 10% 2.5rem" mobilePadding="1.5rem 1.5rem 2.5rem">
           <CollateralDepositAlerts />
           <TitleL className="title">{t('collateralization_step.title')}</TitleL>
           <BodyM className="subtitle">{t('collateralization_step.subtitle')}</BodyM>
@@ -128,7 +132,7 @@ export const CollateralizationScreen: FC = () => {
           ) : (
             <div className="address-placeholder" />
           )}
-        </>
+        </Card>
       );
     }
 
@@ -138,17 +142,7 @@ export const CollateralizationScreen: FC = () => {
   return (
     <Container column mobileColumn alignItems="center">
       <StepsIndicator currentStep={OnboardingStep.COLLATERALIZE} />
-      <CollateralizationScreenStyled>
-        <Card
-          column
-          alignItems="center"
-          padding="1.5rem 10% 2.5rem"
-          mobilePadding="1.5rem 1.5rem 2.5rem"
-          minHeight="905px"
-        >
-          {getContent()}
-        </Card>
-      </CollateralizationScreenStyled>
+      <CollateralizationScreenStyled>{getContent()}</CollateralizationScreenStyled>
     </Container>
   );
 };
