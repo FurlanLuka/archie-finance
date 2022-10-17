@@ -47,6 +47,12 @@ class WebsocketInstance {
             eventHandlers?.forEach(({ handler }) => handler(parsedEvent));
           }
         };
+
+        this.connection.onclose = (event) => {
+          console.warn('Connection closed', event);
+          onFail();
+          connectToWs(retryCount);
+        };
       } catch (error: unknown) {
         console.error('Error while trying to set up WS connection', error);
         onFail();
