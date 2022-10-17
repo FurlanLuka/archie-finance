@@ -1,4 +1,5 @@
-import { API_URL } from '../../constants';
+import { API_URL } from '@archie-webapps/shared/constants';
+
 import { DefaultVariables, postRequest } from '../../helpers';
 
 export const createCreditLine = async ({ accessToken }: DefaultVariables): Promise<unknown> => {
