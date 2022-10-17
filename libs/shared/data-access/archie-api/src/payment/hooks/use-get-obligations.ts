@@ -1,5 +1,6 @@
 import { parse } from 'date-fns';
 
+import { ApiError } from '../../api-error';
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse, RequestState } from '../../interface';
 import { getObligations, Obligation, UserObligations, MISSING_PAYMENT_INFO_ERROR } from '../api/get-obligations';
@@ -29,10 +30,7 @@ export const useGetObligations = (): QueryResponse<UserObligations> => {
     if (queryResponse.data.dueDate === MISSING_DATE) {
       return {
         state: RequestState.ERROR,
-        error: {
-          name: MISSING_PAYMENT_INFO_ERROR,
-          message: 'No payment due date',
-        },
+        error: new ApiError(MISSING_PAYMENT_INFO_ERROR, 404, 'No payment due date'),
       };
     }
 

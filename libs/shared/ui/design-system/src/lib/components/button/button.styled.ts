@@ -8,7 +8,7 @@ const spin = keyframes`
 export interface ButtonProps {
   isLoading?: boolean;
   isDisabled?: boolean;
-  maxWidth?: string;
+  width?: string;
   small?: boolean;
   color?: string;
 }
@@ -25,7 +25,7 @@ const Button = styled.button<ButtonProps>`
   border: 1px solid;
   border-radius: ${({ small }) => (small ? '0.25rem' : '0.5rem')};
   max-height: 3rem;
-  width: ${({ maxWidth }) => maxWidth};
+  width: ${({ width }) => width};
   padding: ${({ small }) => (small ? '0.25rem 1rem' : '1rem 2rem')};
   pointer-events: ${({ isDisabled, isLoading }) => (isDisabled || isLoading ? 'none' : 'all')};
   cursor: pointer;

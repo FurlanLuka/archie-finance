@@ -12,7 +12,7 @@ export const PayWithPaypalFormStyled = styled.div`
     background-color: ${({ theme }) => theme.borderPrimary};
     width: 100%;
     height: 1px;
-    margin: 2rem 0 1.5rem;
+    margin: 1.5rem 0;
   }
 
   .payment-date {

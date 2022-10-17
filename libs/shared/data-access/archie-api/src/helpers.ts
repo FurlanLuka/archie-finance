@@ -3,10 +3,10 @@ import { MutationFunction, QueryFunction, QueryKey } from 'react-query';
 
 import { SessionState } from '@archie-webapps/shared/data-access/session';
 
-import { ApiError, UnauthenticatedApiError } from './api-error';
+import { ApiError, ApiErrors, UnauthenticatedApiError } from './api-error';
 import { ApiErrorResponse, PaginationParams } from './interface';
 
-export const mapErrorResponse = (apiErrorResponse: ApiErrorResponse, errorList: Map<string, string>): ApiError => {
+export const mapErrorResponse = (apiErrorResponse: ApiErrorResponse, errorList: Map<string, string>): ApiErrors => {
   if (apiErrorResponse.statusCode === 401) {
     return new UnauthenticatedApiError();
   }
@@ -17,13 +17,13 @@ export const mapErrorResponse = (apiErrorResponse: ApiErrorResponse, errorList: 
 
   if (errorMessage === undefined) {
     if (apiErrorResponse.error === undefined) {
-      return new ApiError('Unexpected error, please contact support.');
+      return new ApiError('Unexpected error, please contact support.', 500);
     }
 
-    return new ApiError('apiErrorResponse.error');
+    return new ApiError('apiErrorResponse.error', apiErrorResponse.statusCode);
   }
 
-  return new ApiError(errorMessage);
+  return new ApiError(apiErrorResponse.message, apiErrorResponse.statusCode, errorMessage);
 };
 
 export const getRequest = async <Response = any>(

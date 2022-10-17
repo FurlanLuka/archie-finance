@@ -38,13 +38,13 @@ export const StatementDownload: FC<StatementDownloadProps> = ({ statements }) =>
       <Select
         id="statements"
         small
-        maxWidth="220px"
+        width="220px"
         header={header}
         onChange={(statement: Statement) => setSelectedStatement(statement)}
       >
         {options}
       </Select>
-      <ButtonOutline small maxWidth="175px" isLoading={isLoading} onClick={downloadDocument}>
+      <ButtonOutline small width="175px" isLoading={isLoading} onClick={downloadDocument}>
         {t('dashboard_history.btn_statements')} <Icon name="download" />
       </ButtonOutline>
     </>

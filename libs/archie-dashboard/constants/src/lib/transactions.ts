@@ -23,6 +23,7 @@ export const TransactionTypeText = {
   [TransactionType.OTHER]: 'Other',
   [TransactionType.REVERSED_TRANSFER]: 'Reversed transfer',
   [TransactionType.THIRD_PARTY_TRANSFER]: 'Third party_transfer',
+  [TransactionType.BALANCE_PAYMENT]: 'Balance payment',
 };
 
 export const TransactionStatusColor = {

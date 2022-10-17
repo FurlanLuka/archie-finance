@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useConnectAccount } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-connect-account';
+import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { ConnectedAccountItem } from '@archie-webapps/archie-dashboard/components';
 import { ButtonPrimary, Select, SelectOption, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 
-import { ConnectableAccount } from '../../connect-acount.interfaces';
-import { ConnectableAccountItem } from './blocks/connectable-account-item/connectable-account-item';
 import { ConnectableAccountSelectStyled } from './connectable-account-select.styled';
 
 interface ConnectableAccountSelectProps {
-  accounts: ConnectableAccount[];
+  accounts: AccountResponse[];
   onConnect?: VoidFunction;
   publicToken: string;
 }
@@ -19,7 +19,7 @@ export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({ ac
   const { t } = useTranslation();
   const connectAccountMutation = useConnectAccount();
 
-  const [selectedAccount, setSelectedAccount] = useState<ConnectableAccount | null>(null);
+  const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
 
   useEffect(() => {
     if (connectAccountMutation.state === RequestState.SUCCESS) {
@@ -41,7 +41,7 @@ export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({ ac
   };
 
   const header = selectedAccount ? (
-    <ConnectableAccountItem account={selectedAccount} />
+    <ConnectedAccountItem account={selectedAccount} />
   ) : (
     <BodyM weight={500}>{t('dashboard_payment.account_select.empty')}</BodyM>
   );
@@ -49,7 +49,7 @@ export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({ ac
   const options = useMemo(() => {
     return accounts.map((account) => (
       <SelectOption key={account.id} value={account}>
-        <ConnectableAccountItem account={account} />
+        <ConnectedAccountItem account={account} />
       </SelectOption>
     ));
   }, [accounts]);
@@ -58,7 +58,7 @@ export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({ ac
     <ConnectableAccountSelectStyled>
       <TitleS className="modal-title">{t('dashboard_payment.account_select.label')}</TitleS>
       <div className="modal-select">
-        <Select id="accounts" header={header} onChange={(account: ConnectableAccount) => setSelectedAccount(account)}>
+        <Select id="accounts" header={header} onChange={(account: AccountResponse) => setSelectedAccount(account)}>
           {options}
         </Select>
       </div>

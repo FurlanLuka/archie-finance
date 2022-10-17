@@ -27,7 +27,7 @@ export const Default: Story = () => (
 
 export const Small: Story = (props) => (
   <StoriesContainer>
-    <StoriesTitle title="Input text" subtitle="small" />
+    <StoriesTitle title="Input radio" subtitle="small" />
     <InputRadio {...props}>
       <input type="radio" name="radio-group" value="first-item" />
       <BodyS>Join the Waitlist</BodyS>
@@ -41,7 +41,7 @@ Small.args = {
 
 export const Disabled: Story = () => (
   <StoriesContainer>
-    <StoriesTitle title="Input text" subtitle="disabled" />
+    <StoriesTitle title="Input radio" subtitle="disabled" />
     <InputRadio>
       <input type="radio" name="radio-group" value="first-item" checked disabled />
       <BodyL>Join the Waitlist</BodyL>

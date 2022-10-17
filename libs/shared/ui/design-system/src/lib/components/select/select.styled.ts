@@ -5,7 +5,7 @@ import { breakpoints } from '@archie-webapps/shared/ui/theme';
 export interface SelectStyledProps {
   isLoading?: boolean;
   isDisabled?: boolean;
-  maxWidth?: string;
+  width?: string;
   small?: boolean;
 }
 
@@ -18,7 +18,7 @@ export const SelectStyled = styled.div<SelectStyledProps>`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: ${({ maxWidth }) => maxWidth};
+  width: ${({ width }) => width};
 
   .select-header {
     display: flex;

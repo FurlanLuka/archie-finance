@@ -72,15 +72,13 @@ export const PaymentConfirm: FC<PaymentConfirmProps> = ({
         ${scheduledTransactionParams.amount}
       </TitleM>
       <BodyM>{t('payment_modal.payment_confirm.time_note')}</BodyM>
-      {scheduleTransactionMutation.state === RequestState.ERROR && (
-        <FormError>{t('payment_modal.payment_confirm.error')}</FormError>
-      )}
+      {scheduleTransactionMutation.state === RequestState.ERROR && <FormError>{t('error.try_again')}</FormError>}
       <div className="btn-group">
-        <ButtonPrimary maxWidth="100%" onClick={handleConfirm}>
+        <ButtonPrimary width="100%" onClick={handleConfirm}>
           {t('btn_next')}
         </ButtonPrimary>
         <ButtonOutline
-          maxWidth="100%"
+          width="100%"
           onClick={handleBack}
           isDisabled={scheduleTransactionMutation.state === RequestState.LOADING}
         >
