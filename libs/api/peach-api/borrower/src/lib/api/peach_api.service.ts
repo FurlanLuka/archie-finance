@@ -193,11 +193,6 @@ export class PeachApiService {
           paymentInstrumentId,
           amount,
         },
-        {
-          params: {
-            sync: true,
-          },
-        },
       );
     } catch (e) {
       const error: PeachErrorResponse = e;
@@ -299,19 +294,6 @@ export class PeachApiService {
 
   public async addMailContact(personId: string, email: string): Promise<void> {
     try {
-      console.log(
-        'called email contact',
-        {
-          contactType: 'email',
-          label: 'personal',
-          affiliation: 'self',
-          status: 'primary',
-          value: email,
-          valid: true,
-          verified: true,
-        },
-        personId,
-      );
       await this.peachClient.post(`/people/${personId}/contacts`, {
         contactType: 'email',
         label: 'personal',
@@ -474,6 +456,7 @@ export class PeachApiService {
         },
         {
           params: {
+            force: true,
             sync: true,
           },
         },
@@ -588,11 +571,6 @@ export class PeachApiService {
           paymentInstrumentId: paymentInstrumentId,
           amount,
           scheduledDate: scheduledDate ?? undefined,
-        },
-        {
-          params: {
-            sync: true, // TODO: check if possible to refactor via Peach event
-          },
         },
       );
     } catch (e) {

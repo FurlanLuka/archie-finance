@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import * as crypto from 'crypto';
 import { CryptoConfig } from './crypto.interfaces';
+import { createHmac } from 'crypto';
 
 @Injectable()
 export class CryptoService {
@@ -17,6 +18,17 @@ export class CryptoService {
 
   public sha256(data: crypto.BinaryLike): string {
     return crypto.createHash('sha256').update(data).digest('hex');
+  }
+
+  public computeHmac(
+    secret: string,
+    data: string | Buffer,
+    hashAlgorithm = 'sha256',
+  ): string {
+    const hmac = createHmac(hashAlgorithm, secret);
+    hmac.update(data);
+
+    return hmac.digest('hex');
   }
 
   public base64encode(data: string): string {

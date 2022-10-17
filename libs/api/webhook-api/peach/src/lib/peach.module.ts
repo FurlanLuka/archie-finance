@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { PeachWebhookService } from './peach.service';
-import { PeachApiModule } from './api/peach_api.module';
-import { PeachApiService } from './api/peach_api.service';
 import { PeachWebhookController } from './peach.controller';
+import { PeachWebhookStrategy } from './guard/peach_webhook.strategy';
 
 @Module({
   controllers: [PeachWebhookController],
-  providers: [PeachWebhookService, PeachApiModule, PeachApiService],
+  providers: [PeachWebhookService, PeachWebhookStrategy],
   exports: [PeachWebhookService],
 })
 export class PeachWebhookModule {}

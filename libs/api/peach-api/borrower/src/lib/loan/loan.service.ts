@@ -68,7 +68,6 @@ export class PeachBorrowerService {
     });
     this.borrowerValidation.isBorrowerDefined(borrower);
 
-    console.log('enc mail', borrower?.encryptedEmail);
     if (borrower.encryptedEmail === null) {
       await this.peachApiService.addMailContact(borrower.personId, email.email);
 

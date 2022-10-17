@@ -1,19 +1,14 @@
-import { Body, Controller, Post, Query, Request } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { PeachWebhookService } from './peach.service';
+import { PeachWebhookGuard } from './guard/peach_webhook.guard';
 
 @Controller('v1/webhooks/peach')
 export class PeachWebhookController {
   constructor(private peachWebhookService: PeachWebhookService) {}
 
   @Post('payments')
-  public async peachPaymentsHandler(@Request() req, @Body() body: any) {
-    console.log(req.headers);
-    console.log(body);
-    // await this.peachWebhookService.handlePaymentConfirmedEvent();
-  }
-
-  @Post('purchases')
-  public async peachPurchasesHandler() {
-    await this.peachWebhookService.handlePaymentConfirmedEvent();
+  @UseGuards(PeachWebhookGuard)
+  public async peachPaymentsHandler(@Body() body) {
+    await this.peachWebhookService.handlePaymentEvent(body);
   }
 }

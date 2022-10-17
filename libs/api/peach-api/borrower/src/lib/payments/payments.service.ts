@@ -14,10 +14,8 @@ import {
   ScheduleTransactionDto,
 } from './payments.dto';
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
-import { PeachWebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
-import {
-  PaymentType,
-} from '@archie/api/peach-api/data-transfer-objects';
+import { PeachPaymentUpdatedPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { PaymentType } from '@archie/api/peach-api/data-transfer-objects';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import { BorrowerValidation } from '../utils/borrower.validation';
@@ -74,29 +72,6 @@ export class PaymentsService {
     );
   }
 
-  public async handlePaymentConfirmedEvent(
-    payment: PeachWebhookPaymentPayload,
-  ): Promise<void> {
-    const credit: Credit = await this.peachApiService.getCreditBalance(
-      payment.personId,
-      payment.loanId,
-    );
-
-    this.queueService.publishEvent(
-      CREDIT_BALANCE_UPDATED_TOPIC,
-      {
-        ...credit,
-        userId: payment.personExternalId,
-        paymentDetails: {
-          type: PaymentType.payment,
-          amount: payment.amount,
-          asset: payment.currency,
-          id: payment.id,
-        },
-      },
-    );
-  }
-
   public async handleCollateralLiquidationEvent({
     userId,
     action,
@@ -137,24 +112,6 @@ export class PaymentsService {
       action.liquidation.id,
       PeachOneTimePaymentStatus.succeeded,
     );
-
-    const credit: Credit = await this.peachApiService.getCreditBalance(
-      borrower.personId,
-      borrower.creditLineId,
-    );
-    this.queueService.publishEvent(
-      CREDIT_BALANCE_UPDATED_TOPIC,
-      {
-        ...credit,
-        userId: userId,
-        paymentDetails: {
-          type: PaymentType.liquidation,
-          amount: action.liquidation.usdAmount,
-          asset: 'USD',
-          id: action.liquidation.id,
-        },
-      },
-    );
   }
 
   public async handlePaypalPaymentReceivedEvent(
@@ -193,24 +150,35 @@ export class PaymentsService {
       payload.orderId,
       PeachOneTimePaymentStatus.succeeded,
     );
+  }
+
+  public async handlePaymentUpdatedEvent({
+    userId,
+    transaction,
+  }: PeachPaymentUpdatedPayload): Promise<void> {
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
+      userId,
+    });
+    this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
     const credit: Credit = await this.peachApiService.getCreditBalance(
       borrower.personId,
       borrower.creditLineId,
     );
 
-    this.queueService.publishEvent(
-      CREDIT_BALANCE_UPDATED_TOPIC,
-      {
-        ...credit,
-        userId: payload.userId,
-        paymentDetails: {
-          type: PaymentType.payment,
-          amount: payload.amount,
-          asset: payload.currency,
-          id: payload.orderId,
-        },
+    return this.queueService.publishEvent(CREDIT_BALANCE_UPDATED_TOPIC, {
+      ...credit,
+      userId,
+      paymentDetails: {
+        type:
+          transaction.paymentDetails.fromInstrumentId ===
+          borrower.liquidationInstrumentId
+            ? PaymentType.liquidation
+            : PaymentType.payment,
+        amount: transaction.actualAmount,
+        asset: transaction.currency,
+        id: transaction.externalId,
       },
-    );
+    });
   }
 }
