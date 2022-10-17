@@ -157,6 +157,7 @@ describe('Ledger api deposit tests', () => {
               assetId: firstDepositAssetId,
               assetAmount: firstdepositAssetAmount,
               accountValue: firstDepositAccountValue.toString(),
+              assetPrice: BITCOIN_PRICE.toString(),
               calculatedAt: expect.any(String),
             },
           ],
@@ -212,6 +213,7 @@ describe('Ledger api deposit tests', () => {
             {
               assetId: secondDepositAssetId,
               assetAmount: secondDepositAssetAmount,
+              assetPrice: ETH_PRICE.toString(),
               accountValue: secondDepositAccountValue.toString(),
               calculatedAt: expect.any(String),
             },
