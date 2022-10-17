@@ -4,12 +4,12 @@ import { Navigate } from 'react-router-dom';
 
 import { MarginCallAlert } from '@archie-webapps/archie-dashboard/components';
 import { LTVText, LTVColor } from '@archie-webapps/shared/constants';
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { CreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/api/get-credit-line';
 import { useGetCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/hooks/use-get-credit-line';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
 import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import { Card, Loader, Badge, TitleM, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';

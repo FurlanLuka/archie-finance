@@ -18,11 +18,13 @@
     "archie-dashboard-utils": "libs/archie-dashboard/utils",
     "shared-constants": "libs/shared/constants",
     "shared-data-access-archie-api": "libs/shared/data-access/archie-api",
+    "shared-data-access-archie-api-dtos": "libs/shared/data-access/archie-api-dtos",
     "shared-data-access-query-client": "libs/shared/data-access/query-client",
     "shared-data-access-session": "libs/shared/data-access/session",
     "shared-data-access-websocket-instance": "libs/shared/data-access/websocket-instance",
     "shared-ui-design-system": "libs/shared/ui/design-system",
     "shared-ui-icons": "libs/shared/ui/icons",
-    "shared-ui-theme": "libs/shared/ui/theme"
+    "shared-ui-theme": "libs/shared/ui/theme",
+    "shared-utils-": "libs/shared/utils/"
   }
 }

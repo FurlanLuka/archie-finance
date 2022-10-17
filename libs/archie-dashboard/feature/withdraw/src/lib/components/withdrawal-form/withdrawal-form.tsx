@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { calculateLedgerCreditValue } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAssets } from '@archie-webapps/shared/constants';
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
 import { useCreateWithdrawal } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-create-withdrawal';
 import { getMaxWithdrawalAmountQueryKey } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-max-withdrawal-amount';
 import { ButtonOutline, ButtonPrimary, InputText, BodyM } from '@archie-webapps/shared/ui/design-system';
@@ -62,9 +62,10 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, ledger, 
     if (createWithdrawal.state === RequestState.SUCCESS) {
       setIsSuccessModalOpen(true);
       // Invalidate max withdrawal amount query so it refetches
+      // TODO move to the mutation?
       queryClient.invalidateQueries(getMaxWithdrawalAmountQueryKey(currentAsset));
     }
-  }, [createWithdrawal.state]);
+  }, [createWithdrawal.state, currentAsset, queryClient]);
 
   const withdrawalAmount = watch('withdrawAmount');
   const depositAddress = watch('withdrawAddress');

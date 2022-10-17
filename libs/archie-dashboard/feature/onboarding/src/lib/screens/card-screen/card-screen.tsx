@@ -3,6 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 import { OnboardingStep } from '@archie-webapps/archie-dashboard/constants';
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
 import { useCreateRizeUser } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
 import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
@@ -11,7 +12,6 @@ import {
   QueryResponse,
   RequestState,
 } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
 import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import { ButtonPrimary, Container, Card, Loader, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
 

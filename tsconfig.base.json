@@ -35,6 +35,7 @@
       "@archie-webapps/archie-dashboard/hooks": ["libs/archie-dashboard/hooks/src/index.ts"],
       "@archie-webapps/archie-dashboard/utils": ["libs/archie-dashboard/utils/src/index.ts"],
       "@archie-webapps/shared/constants": ["libs/shared/constants/src/index.ts"],
+      "@archie-webapps/shared/data-access/archie-api-dtos": ["libs/shared/data-access/archie-api-dtos/src/index.ts"],
       "@archie-webapps/shared/data-access/archie-api/*": ["libs/shared/data-access/archie-api/src/*"],
       "@archie-webapps/shared/data-access/query-client": ["libs/shared/data-access/query-client/src/index.ts"],
       "@archie-webapps/shared/data-access/session": ["libs/shared/data-access/session/src/index.ts"],
@@ -43,7 +44,8 @@
       ],
       "@archie-webapps/shared/ui/design-system": ["libs/shared/ui/design-system/src/index.ts"],
       "@archie-webapps/shared/ui/icons": ["libs/shared/ui/icons/src/index.ts"],
-      "@archie-webapps/shared/ui/theme": ["libs/shared/ui/theme/src/index.ts"]
+      "@archie-webapps/shared/ui/theme": ["libs/shared/ui/theme/src/index.ts"],
+      "@archie-webapps/shared/utils/": ["libs/shared/utils/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

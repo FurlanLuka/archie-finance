@@ -1,7 +1,7 @@
+import { Ledger, LedgerAccountData } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { queryClient } from '@archie-webapps/shared/data-access/query-client';
 import { LedgerUpdatedWsEvent } from '@archie-webapps/shared/data-access/websocket-instance';
 
-import { Ledger, LedgerAccountData } from '../api/get-ledger';
 import { LEDGER_QUERY_KEY } from '../hooks/use-poll-ledger';
 
 // TODO move total sum to helper

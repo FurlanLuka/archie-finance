@@ -6,7 +6,7 @@ import { calculateLedgerCreditValue } from '@archie-webapps/archie-dashboard/uti
 import { Modal } from '@archie-webapps/shared/ui/design-system';
 
 import { CollateralReceived } from './blocks/collateral-received/collateral-received';
-import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 
 interface CollateralUpdatedModalProps {
   initialLedger: Ledger;

@@ -4,15 +4,15 @@ import { FC } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { MINIMUM_LTV } from '@archie-webapps/archie-dashboard/constants';
+import { calculateCollateralValue } from '@archie-webapps/archie-dashboard/utils';
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { useGetMarginCalls } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-margin-calls';
 import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
 import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import { MINIMUM_LTV } from '@archie-webapps/archie-dashboard/constants';
-import { calculateCollateralValue } from '@archie-webapps/archie-dashboard/utils';
 import { ButtonLight, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 

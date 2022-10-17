@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { websocketInstance, WsEventTopic } from '@archie-webapps/shared/data-access/websocket-instance';
 
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';
-import { getLedger, Ledger } from '../api/get-ledger';
+import { getLedger } from '../api/get-ledger';
 import { handleLedgerUpdatedEvent } from '../event-handlers/handle-ledger-updated';
 
 export const LEDGER_QUERY_KEY = 'ledger';

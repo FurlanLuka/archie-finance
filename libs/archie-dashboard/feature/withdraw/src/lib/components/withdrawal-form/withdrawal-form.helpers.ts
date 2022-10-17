@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { calculateLedgerCreditValue } from '@archie-webapps/archie-dashboard/utils';
-import { Ledger, LedgerAccountData } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
+import { Ledger, LedgerAccountData } from '@archie-webapps/shared/data-access/archie-api-dtos';
 
 interface GetUpdatedCreditAndTotalResult {
   updatedCreditValue: string;

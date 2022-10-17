@@ -1,17 +1,7 @@
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
+
 import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
-
-export interface LedgerAccountData {
-  assetId: string;
-  assetAmount: string;
-  assetPrice: string;
-  accountValue: string;
-}
-
-export interface Ledger {
-  value: string;
-  accounts: LedgerAccountData[];
-}
 
 export const ERROR_LIST = new Map<string, string>([]);
 

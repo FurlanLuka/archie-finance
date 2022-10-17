@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
 import { usePollLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-poll-ledger';
 
 interface UsePollLedgerChangesParams {

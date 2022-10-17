@@ -1,6 +1,8 @@
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
+
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';
-import { getLedger, Ledger } from '../api/get-ledger';
+import { getLedger } from '../api/get-ledger';
 
 export const LEDGER_QUERY_KEY = 'ledger';
 

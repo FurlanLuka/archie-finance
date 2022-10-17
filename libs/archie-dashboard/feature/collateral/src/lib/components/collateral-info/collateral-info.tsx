@@ -2,8 +2,8 @@ import BigNumber from 'bignumber.js';
 import { FC, useMemo } from 'react';
 
 import { CollateralAssets, CollateralCurrency, LTVStatus } from '@archie-webapps/shared/constants';
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { CreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/api/get-credit-line';
-import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
 import { Table } from '@archie-webapps/shared/ui/design-system';
 
 import { tableColumns } from '../../fixtures/table-fixtures';
