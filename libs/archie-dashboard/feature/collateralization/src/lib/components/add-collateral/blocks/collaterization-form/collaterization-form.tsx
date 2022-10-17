@@ -5,7 +5,6 @@ import ReactTooltip from 'react-tooltip';
 import { MAX_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
 import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
-import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { InputRange, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -14,7 +13,7 @@ import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 
 interface CollateralizationFormProps {
   assetInfo: CollateralAsset;
-  assetPrice: AssetPrice;
+  assetPrice: number;
 }
 
 export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInfo, assetPrice }) => {
@@ -24,7 +23,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
   const [requiredCollateral, setRequiredCollateral] = useState(0);
 
   useEffect(() => {
-    const price = 1 / assetPrice.price;
+    const price = 1 / assetPrice;
     const result = (lineOfCredit / (assetInfo.loan_to_value / 100)) * price;
 
     setRequiredCollateral(Math.ceil(result * 10000) / 10000);

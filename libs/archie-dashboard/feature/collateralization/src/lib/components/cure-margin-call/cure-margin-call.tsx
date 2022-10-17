@@ -5,7 +5,6 @@ import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { CollateralAssets } from '@archie-webapps/shared/constants';
-import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import { Loader, ButtonOutline, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
 
@@ -25,47 +24,33 @@ export const CureMarginCall: FC<CureMarginCallProps> = ({ selectedAsset }) => {
   const assetInfo = CollateralAssets[selectedAsset];
 
   const getLedgerResponse = useGetLedger();
-  const getAssetPriceResponse = useGetAssetPrice();
   const getCreditQueryResponse = useGetCredit();
 
-  // TODO: Definitely think of optimizing these
-  if (
-    getLedgerResponse.state === RequestState.LOADING ||
-    getAssetPriceResponse.state === RequestState.LOADING ||
-    getCreditQueryResponse.state === RequestState.LOADING
-  ) {
+  if (getLedgerResponse.state === RequestState.LOADING || getCreditQueryResponse.state === RequestState.LOADING) {
     return <Loader marginAuto />;
   }
 
-  if (
-    getLedgerResponse.state === RequestState.ERROR ||
-    getAssetPriceResponse.state === RequestState.ERROR ||
-    getCreditQueryResponse.state === RequestState.ERROR
-  ) {
+  if (getLedgerResponse.state === RequestState.ERROR || getCreditQueryResponse.state === RequestState.ERROR) {
     return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
   }
 
-  if (
-    getLedgerResponse.state === RequestState.SUCCESS &&
-    getAssetPriceResponse.state === RequestState.SUCCESS &&
-    getCreditQueryResponse.state === RequestState.SUCCESS
-  ) {
+  if (getLedgerResponse.state === RequestState.SUCCESS && getCreditQueryResponse.state === RequestState.SUCCESS) {
     const ledger = getLedgerResponse.data;
-    const assetPrice = getAssetPriceResponse.data.find((asset) => asset.assetId === assetInfo.id);
+    const currentLedgerAccount = ledger.accounts.find((ledgerAccount) => ledgerAccount.assetId === selectedAsset);
     const creditData = getCreditQueryResponse.data;
 
-    if (!assetPrice) {
+    if (!currentLedgerAccount) {
       return <Navigate to="/error" state={{ prevPath: '/collateral', description: "Couldn't fetch price" }} />;
     }
 
     return (
       <>
-        <CollateralUpdatedModal initialLedger={ledger} />
+        <CollateralUpdatedModal />
         <TitleS className="title">{t('dashboard_collateralization.title', { selectedAsset })}</TitleS>
         <BodyL className="subtitle-margin-call">{t('dashboard_collateralization.subtitle_margin_call')}</BodyL>
         <CollateralizationForm
           assetInfo={assetInfo}
-          assetPrice={assetPrice}
+          assetPrice={BigNumber(currentLedgerAccount.assetPrice).toNumber()}
           creditBalance={creditData.utilizationAmount}
           collateralTotalValue={BigNumber(ledger.value).toNumber()}
         />

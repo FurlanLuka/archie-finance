@@ -2,7 +2,6 @@ import { FC, useState, useMemo } from 'react';
 
 import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
-import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { MINIMUM_LTV, SUGGESTED_LTV } from '@archie-webapps/archie-dashboard/constants';
 import { calculateCollateralValue } from '@archie-webapps/archie-dashboard/utils';
 import { Table, InputText } from '@archie-webapps/shared/ui/design-system';
@@ -13,11 +12,12 @@ import { CollaterizationFormStyled } from './collaterization-form.styled';
 
 interface CollateralizationFormProps {
   assetInfo: CollateralAsset;
-  assetPrice: AssetPrice;
+  assetPrice: number;
   creditBalance: number;
   collateralTotalValue: number;
 }
 
+// TODO rename to margin call something something
 export const CollateralizationForm: FC<CollateralizationFormProps> = ({
   assetInfo,
   assetPrice,
@@ -29,7 +29,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
   const getRequiredCollateral = (targetLtv: number) => {
     const collateral = calculateCollateralValue(targetLtv, creditBalance, collateralTotalValue);
 
-    const price = 1 / assetPrice.price;
+    const price = 1 / assetPrice;
     const result = (collateral / (assetInfo.loan_to_value / 100)) * price;
 
     return Math.ceil(result * 10000) / 10000;

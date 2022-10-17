@@ -5,13 +5,13 @@ import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { CollateralAssets } from '@archie-webapps/shared/constants';
-import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import { Loader, ButtonOutline, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
 
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
 
 import { CollateralizationForm } from './blocks/collaterization-form/collaterization-form';
 import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+import BigNumber from 'bignumber.js';
 
 interface AddCollateralProps {
   selectedAsset: string;
@@ -23,28 +23,26 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
   const assetInfo = CollateralAssets[selectedAsset];
 
   const getLedgerResponse = useGetLedger();
-  const getAssetPriceResponse = useGetAssetPrice();
 
-  if (getLedgerResponse.state === RequestState.LOADING || getAssetPriceResponse.state === RequestState.LOADING) {
+  if (getLedgerResponse.state === RequestState.LOADING) {
     return <Loader marginAuto />;
   }
 
-  if (getLedgerResponse.state === RequestState.ERROR || getAssetPriceResponse.state === RequestState.ERROR) {
+  if (getLedgerResponse.state === RequestState.ERROR) {
     return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
   }
 
-  if (getLedgerResponse.state === RequestState.SUCCESS && getAssetPriceResponse.state === RequestState.SUCCESS) {
+  if (getLedgerResponse.state === RequestState.SUCCESS) {
     const ledger = getLedgerResponse.data;
     const currentLedgerAccount = ledger.accounts.find((ledgerAccount) => ledgerAccount.assetId === selectedAsset);
-    const assetPrice = getAssetPriceResponse.data.find((asset) => asset.assetId === assetInfo.id);
 
-    if (!assetPrice) {
+    if (!currentLedgerAccount) {
       return <Navigate to="/error" state={{ prevPath: '/collateral', description: "Couldn't fetch price" }} />;
     }
 
     return (
       <>
-        <CollateralUpdatedModal initialLedger={ledger} />
+        <CollateralUpdatedModal />
         <TitleS className="title">{t('dashboard_collateralization.title', { selectedAsset })}</TitleS>
         <BodyL className="subtitle-credit">
           {t('dashboard_collateralization.subtitle_credit', {
@@ -60,7 +58,10 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
             })}
           </BodyL>
         )}
-        <CollateralizationForm assetInfo={assetInfo} assetPrice={assetPrice} />
+        <CollateralizationForm
+          assetInfo={assetInfo}
+          assetPrice={BigNumber(currentLedgerAccount.assetPrice).toNumber()}
+        />
         <Link to="/collateral" className="cancel-btn">
           <ButtonOutline>{t('btn_cancel')}</ButtonOutline>
         </Link>
