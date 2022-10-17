@@ -1341,7 +1341,7 @@
         ]
       }
     },
-    "/v1/ws_auth": {
+    "/v1/websockets/auth": {
       "post": {
         "operationId": "WebsocketController_createAuthToken",
         "parameters": [],

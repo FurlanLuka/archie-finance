@@ -17,6 +17,7 @@ import {
   GetMfaEnrollmentResponse,
   MfaEnrolledPayload,
 } from '@archie/api/user-api/data-transfer-objects';
+import { EnrollmentNotFoundError } from './user.errors';
 
 @Injectable()
 export class UserService {
@@ -117,6 +118,25 @@ export class UserService {
   async getMfaEnrollments(userId: string): Promise<Enrollment[]> {
     return this.auth0Service.getManagmentClient().getGuardianEnrollments({
       id: userId,
+    });
+  }
+
+  async deleteMfaEnrollment(
+    userId: string,
+    enrollmentId: string,
+  ): Promise<void> {
+    const enrollments: Enrollment[] = await this.getMfaEnrollments(userId);
+
+    const enrollmentExists: boolean = enrollments.some(
+      (enrollment) => enrollment.id === enrollmentId,
+    );
+
+    if (!enrollmentExists) {
+      throw new EnrollmentNotFoundError();
+    }
+
+    await this.auth0Service.getManagmentClient().deleteGuardianEnrollment({
+      id: enrollmentId,
     });
   }
 }
