@@ -275,6 +275,7 @@ describe('Ledger api withdrawal tests', () => {
               assetId,
               assetAmount: newBitcoinAccountAmount,
               accountValue: newBitcoinAccountValue,
+              assetPrice: ETH_PRICE.toString(),
               calculatedAt: expect.any(String),
             },
           ],
@@ -351,6 +352,7 @@ describe('Ledger api withdrawal tests', () => {
             ...ledgerResponse.body.accounts[0],
             assetAmount: updatedLedgerAssetAmount.toString(),
             accountValue: updatedLedgerValue.toString(),
+            assetPrice: ETH_PRICE.toString(),
           },
         ],
       });

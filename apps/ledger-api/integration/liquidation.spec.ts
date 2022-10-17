@@ -243,11 +243,13 @@ describe('Ledger api liquidation tests', () => {
               assetAmount: '0',
               accountValue: '0',
               calculatedAt: expect.any(String),
+              assetPrice: usdcCollateral.price.toString(),
             },
             {
               assetId: bitcoinCollateral.assetId,
               assetAmount: newBitcoinAmount.toString(),
               accountValue: newBitcoinAccountValue.toString(),
+              assetPrice: bitcoinCollateral.price.toString(),
               calculatedAt: expect.any(String),
             },
           ],
