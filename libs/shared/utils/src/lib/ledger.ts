@@ -17,7 +17,7 @@ export const mergeLedgerWithWsUpdate = (
         {
           assetId: updatedAccount.assetId,
           assetAmount: updatedAccount.assetAmount,
-          assetPrice: account.assetPrice,
+          assetPrice: updatedAccount.assetPrice,
           accountValue: updatedAccount.accountValue,
         },
       ];
@@ -32,7 +32,7 @@ export const mergeLedgerWithWsUpdate = (
     .map((wsAccount) => ({
       assetId: wsAccount.assetId,
       assetAmount: wsAccount.assetAmount,
-      assetPrice: '1000', // TODO use event value when BE is done
+      assetPrice: wsAccount.assetPrice,
       accountValue: wsAccount.accountValue,
     }));
 

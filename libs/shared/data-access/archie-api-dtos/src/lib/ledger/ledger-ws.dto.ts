@@ -2,6 +2,7 @@ export interface LedgerAccountDataWs {
   assetId: string;
   assetAmount: string;
   accountValue: string;
+  assetPrice: string;
   calculatedAt: string;
 }
 

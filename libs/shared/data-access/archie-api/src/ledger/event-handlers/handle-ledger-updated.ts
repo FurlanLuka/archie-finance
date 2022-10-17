@@ -5,7 +5,6 @@ import { calculateLedgerTotalValue, mergeLedgerWithWsUpdate } from '@archie-weba
 
 import { LEDGER_QUERY_KEY } from '../hooks/use-poll-ledger';
 
-// TODO move total sum to helper
 export const handleLedgerUpdatedEvent = (event: LedgerUpdatedWsEvent): void => {
   queryClient.setQueryData<Ledger | undefined>(LEDGER_QUERY_KEY, (data): Ledger | undefined => {
     if (data !== undefined) {
