@@ -166,6 +166,8 @@ export class PaymentsService {
       borrower.creditLineId,
     );
 
+    console.log('peach api', credit);
+
     return this.queueService.publishEvent(CREDIT_BALANCE_UPDATED_TOPIC, {
       ...credit,
       userId,

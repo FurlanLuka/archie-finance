@@ -100,6 +100,7 @@ export class PaymentsQueueController {
   async paymentUpdatedHandler(
     payload: PeachPaymentUpdatedPayload,
   ): Promise<void> {
+    console.log('peach api', payload);
     await this.paymentsService.handlePaymentUpdatedEvent(payload);
   }
 }
