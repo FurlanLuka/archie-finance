@@ -70,7 +70,7 @@ export function Subscribe(
   const decorators: MethodDecorator[] = [];
 
   if (subscriptionOptions.useTracer) {
-    decorators.push(TraceEvent(fullQueueName, event.getOptions().isSensitive));
+    decorators.push(TraceEvent(fullQueueName, !event.getOptions().isSensitive));
   }
 
   if (subscriptionOptions.useIdempotency) {
