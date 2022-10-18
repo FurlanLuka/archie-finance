@@ -3,7 +3,7 @@ import {
   FireblocksDepositTransactionPayload,
   FireblocksInternalTransactionPayload,
   FireblocksWithdrawTransactionPayload,
-  PeachWebhookPaymentPayload,
+  PeachPaymentUpdatedPayload,
 } from '@archie/api/webhook-api/data-transfer-objects';
 
 export const SERVICE_NAME = 'webhook-api';
@@ -16,15 +16,14 @@ export enum ConfigVariables {
   TYPEORM_DATABASE = 'TYPEORM_DATABASE',
   TYPEORM_PORT = 'TYPEORM_PORT',
   QUEUE_URL = 'QUEUE_URL',
-  PEACH_BASE_URL = 'PEACH_BASE_URL',
-  PEACH_API_KEY = 'PEACH_API_KEY',
   FIREBLOCKS_PUBLIC_KEY = 'FIREBLOCKS_PUBLIC_KEY',
+  PEACH_HMAC_SECRET = 'PEACH_HMAC_SECRET',
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
   AUTH0_WEBHOOK_SECRET = 'AUTH0_WEBHOOK_SECRET'
 }
 
-export const WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC =
-  new Event<PeachWebhookPaymentPayload>('webhook_peach.payment.confirmed', 1);
+export const WEBHOOK_PEACH_PAYMENT_UPDATED_TOPIC =
+  new Event<PeachPaymentUpdatedPayload>('webhook_peach.payment.updated', 1);
 
 export const WEBHOOK_FIREBLOCKS_DEPOSIT_TRANSACTION_TOPIC =
   new Event<FireblocksDepositTransactionPayload>(

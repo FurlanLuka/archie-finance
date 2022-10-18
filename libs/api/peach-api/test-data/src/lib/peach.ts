@@ -178,12 +178,7 @@ export const loanRequestBodyFactory = (
 export const drawRequestBodyFactory = (): PeachRequestBody => ({
   nickname: 'Credit Card',
   status: 'originated',
-  atOrigination: {
-    minPaymentCalculation: {
-      percentageOfPrincipal: 0.1,
-      minAmount: 0,
-    },
-  },
+  atOrigination: {},
 });
 
 export const creditLimitUpdateRequestBodyFactory = (

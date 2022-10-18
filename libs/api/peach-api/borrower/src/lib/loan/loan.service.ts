@@ -63,20 +63,20 @@ export class PeachBorrowerService {
   public async handleEmailVerifiedEvent(
     email: EmailVerifiedPayload,
   ): Promise<void> {
-    const encryptedEmail: string = this.cryptoService.encrypt(email.email);
-    const borrower: Borrower | null = await this.borrowerRepository
-      .createQueryBuilder()
-      .update(Borrower, {
-        encryptedEmail,
-      })
-      .where('userId = :userId', { userId: email.userId })
-      .returning('*')
-      .execute()
-      .then((response: UpdateResult) => (<Borrower[]>response.raw)[0] ?? null);
-
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
+      userId: email.userId,
+    });
     this.borrowerValidation.isBorrowerDefined(borrower);
 
-    await this.peachApiService.addMailContact(borrower.personId, email.email);
+    if (borrower.encryptedEmail === null) {
+      await this.peachApiService.addMailContact(borrower.personId, email.email);
+
+      const encryptedEmail: string = this.cryptoService.encrypt(email.email);
+      await this.borrowerRepository.update(
+        { userId: email.userId },
+        { encryptedEmail },
+      );
+    }
   }
 
   public async handleCreditLineCreatedEvent(
@@ -204,13 +204,10 @@ export class PeachBorrowerService {
         borrower.creditLineId,
       );
 
-      this.queueService.publishEvent(
-        CREDIT_BALANCE_UPDATED_TOPIC,
-        {
-          ...credit,
-          userId: creditLimit.userId,
-        },
-      );
+      this.queueService.publishEvent(CREDIT_BALANCE_UPDATED_TOPIC, {
+        ...credit,
+        userId: creditLimit.userId,
+      });
     }
   }
 }

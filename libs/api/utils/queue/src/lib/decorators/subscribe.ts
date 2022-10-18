@@ -80,7 +80,7 @@ export function Subscribe(
   const decorators: MethodDecorator[] = [];
 
   if (subscriptionOptions.useTracer) {
-    decorators.push(TraceEvent(fullQueueName, event.getOptions().isSensitive));
+    decorators.push(TraceEvent(fullQueueName, !event.getOptions().isSensitive));
   }
 
   if (subscriptionOptions.useIdempotency) {
@@ -138,23 +138,19 @@ function createErrorHandler(
         messageHeaders['x-delay'] ?? INITIAL_DELAY / RETRY_BACKOFF;
 
       if (retryAttempt < MAX_RETRIES) {
-        const span = tracer.scope().active();
-        const headers = {
+        const retryHeaders = {
+          ...messageHeaders,
           'x-delay': delay * RETRY_BACKOFF,
           'x-retry': retryAttempt + 1,
           'event-id': messageHeaders['event-id'],
         };
-
-        if (span !== null) {
-          tracer.inject(span, 'text_map', headers);
-        }
 
         channel.publish(
           QueueUtilService.getRetryExchangeName(exchange),
           queueSpecificRoutingKey,
           msg.content,
           {
-            headers,
+            headers: retryHeaders,
           },
         );
       } else {

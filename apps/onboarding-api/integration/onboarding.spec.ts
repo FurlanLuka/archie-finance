@@ -15,6 +15,7 @@ import * as request from 'supertest';
 import {
   emailVerifiedDataFactory,
   kycSubmittedDataFactory,
+  mfaRemovedDataFactory,
   mfaEnrolledDataFactory,
 } from '@archie/api/user-api/test-data';
 import { OnboardingQueueController } from '@archie/api/onboarding-api/onboarding';
@@ -177,6 +178,26 @@ describe('Onboarding service tests', () => {
         mfaEnrollmentStage: true,
         completed: true,
       });
+    });
+
+    it('should set mfa stage back to false in case the user dis-enrolls', async () => {
+      const mfaRemovedPayload = mfaRemovedDataFactory();
+
+      await app
+        .get(OnboardingQueueController)
+        .mfaRemovedEventHandler(mfaRemovedPayload);
+
+      expect(queueStub.publishEvent).toHaveBeenCalledWith(
+        ONBOARDING_UPDATED_TOPIC,
+        onboardingUpdatedPayloadFactory({
+          kycStage: true,
+          emailVerificationStage: true,
+          collateralizationStage: true,
+          cardActivationStage: true,
+          completed: true,
+          mfaEnrollmentStage: false,
+        }),
+      );
     });
   });
 });

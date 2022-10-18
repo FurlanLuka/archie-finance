@@ -7,6 +7,7 @@ import { Enrollment, SendEnrollmentTicketResponse, User } from 'auth0';
 import { Auth0Service } from '@archie/api/user-api/auth0';
 import {
   EMAIL_VERIFIED_TOPIC,
+  MFA_REMOVED_TOPIC,
   MFA_ENROLLED_TOPIC,
 } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
@@ -15,6 +16,7 @@ import {
   GetEmailVerificationResponse,
   GetMfaEnrollmentResponse,
 } from '@archie/api/user-api/data-transfer-objects';
+import { EnrollmentNotFoundError } from './user.errors';
 
 @Injectable()
 export class UserService {
@@ -115,6 +117,29 @@ export class UserService {
   async getMfaEnrollments(userId: string): Promise<Enrollment[]> {
     return this.auth0Service.getManagmentClient().getGuardianEnrollments({
       id: userId,
+    });
+  }
+
+  async deleteMfaEnrollment(
+    userId: string,
+    enrollmentId: string,
+  ): Promise<void> {
+    const enrollments: Enrollment[] = await this.getMfaEnrollments(userId);
+
+    const enrollmentExists: boolean = enrollments.some(
+      (enrollment) => enrollment.id === enrollmentId,
+    );
+
+    if (!enrollmentExists) {
+      throw new EnrollmentNotFoundError();
+    }
+
+    await this.auth0Service.getManagmentClient().deleteGuardianEnrollment({
+      id: enrollmentId,
+    });
+
+    this.queueService.publishEvent(MFA_REMOVED_TOPIC, {
+      userId,
     });
   }
 }

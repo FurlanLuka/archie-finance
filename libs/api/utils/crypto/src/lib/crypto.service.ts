@@ -19,6 +19,17 @@ export class CryptoService {
     return crypto.createHash('sha256').update(data).digest('hex');
   }
 
+  public computeHmac(
+    secret: string,
+    data: string | Buffer,
+    hashAlgorithm = 'sha256',
+  ): string {
+    const hmac = crypto.createHmac(hashAlgorithm, secret);
+    hmac.update(data);
+
+    return hmac.digest('hex');
+  }
+
   public base64encode(data: string): string {
     return Buffer.from(data).toString('base64');
   }

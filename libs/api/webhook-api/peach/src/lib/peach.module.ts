@@ -1,15 +1,11 @@
 import { Module } from '@nestjs/common';
 import { PeachWebhookService } from './peach.service';
-import { PeachApiModule } from './api/peach_api.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PeachEvent } from './peach_events.entity';
-import { PeachApiService } from './api/peach_api.service';
 import { PeachWebhookController } from './peach.controller';
+import { PeachWebhookStrategy } from './guard/peach_webhook.strategy';
 
 @Module({
   controllers: [PeachWebhookController],
-  imports: [TypeOrmModule.forFeature([PeachEvent])],
-  providers: [PeachWebhookService, PeachApiModule, PeachApiService],
+  providers: [PeachWebhookService, PeachWebhookStrategy],
   exports: [PeachWebhookService],
 })
 export class PeachWebhookModule {}
