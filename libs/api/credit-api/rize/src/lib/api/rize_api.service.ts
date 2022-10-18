@@ -7,7 +7,6 @@ import {
   ComplianceDocumentAcknowledgementRequest,
   ComplianceWorkflow,
   Customer,
-  CustomerDetails,
   RizeList,
   Product,
   DebitCard,
@@ -23,6 +22,7 @@ import {
 } from '@rizefinance/rize-js/lib/constants';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import * as rs from 'jsrsasign';
+import { CustomerDetailsParams } from '@rizefinance/rize-js/types/lib/core/customer';
 
 @Injectable()
 export class RizeApiService {
@@ -142,13 +142,12 @@ export class RizeApiService {
   public async addCustomerPii(
     customerUid: string,
     email: string,
-    customerDetails: CustomerDetails,
+    customerDetails: CustomerDetailsParams,
   ): Promise<void> {
     await this.rizeClient.customer.update(
       customerUid,
       email,
       customerDetails,
-      '',
     );
   }
 
