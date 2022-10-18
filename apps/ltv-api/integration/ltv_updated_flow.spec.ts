@@ -37,7 +37,10 @@ import {
 } from '@archie/api/ltv-api/constants';
 import { MARGIN_CALL_LIQUIDATION_AFTER_HOURS } from '@archie/api/ltv-api/constants';
 import { INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND } from '@archie/api/ledger-api/constants';
-import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects';
+import {
+  LedgerAccountUpdatedPayload,
+  LedgerActionType,
+} from '@archie/api/ledger-api/data-transfer-objects';
 import { PaymentType } from '@archie/api/peach-api/data-transfer-objects';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
@@ -73,13 +76,16 @@ describe('Ltv api tests', () => {
       queueStub.publishEvent.mockReset();
     });
 
+    function calculateLedgerValue(ledger: LedgerAccountUpdatedPayload): number {
+      return ledger.ledgerAccounts.reduce(
+        (value, ledgerAcc) =>
+          BigNumber(value).plus(ledgerAcc.accountValue).toNumber(),
+        0,
+      );
+    }
+
     const ledgerUpdatedPayload = ledgerAccountUpdatedPayloadFactory();
-    let ledgerValue = ledgerUpdatedPayload.ledgerAccounts.reduce(
-      (value, ledgerAcc) =>
-        BigNumber(value).plus(ledgerAcc.accountValue).toNumber(),
-      0,
-    );
-    let liquidationAmount = '15000';
+    let ledgerValue = calculateLedgerValue(ledgerUpdatedPayload);
     const afterLiquidationLtv = 60;
     let creditUtilizationAmount = 0;
 
@@ -149,14 +155,14 @@ describe('Ltv api tests', () => {
     });
 
     it(`should send ltv margin notification once collateral value falls for another 10%`, async () => {
-      const newLedgerValue = ledgerValue - 0.1 * ledgerValue;
-      const ltv = (creditUtilizationAmount / newLedgerValue) * 100;
+      ledgerValue = ledgerValue - 0.1 * ledgerValue;
+      const ltv = (creditUtilizationAmount / ledgerValue) * 100;
 
       await app.get(LtvQueueController).ledgerUpdated(
         ledgerAccountUpdatedPayloadFactory({
           ledgerAccounts: [
             ledgerAccountDataFactory({
-              accountValue: newLedgerValue.toString(),
+              accountValue: ledgerValue.toString(),
             }),
           ],
         }),
@@ -177,15 +183,18 @@ describe('Ltv api tests', () => {
             creditUtilizationAmount / (LTV_MARGIN_CALL_LIMIT / 100),
           priceForPartialCollateralSale:
             creditUtilizationAmount / (COLLATERAL_SALE_LTV_LIMIT / 100),
-          collateralBalance: newLedgerValue,
+          collateralBalance: ledgerValue,
         },
       );
     });
 
     it(`should reset ledger value`, async () => {
+      const ledgerAccountUpdatedPayload = ledgerAccountUpdatedPayloadFactory();
+      ledgerValue = calculateLedgerValue(ledgerAccountUpdatedPayload);
+
       await app
         .get(LtvQueueController)
-        .ledgerUpdated(ledgerAccountUpdatedPayloadFactory());
+        .ledgerUpdated(ledgerAccountUpdatedPayload);
 
       expect(queueStub.publishEvent).nthCalledWith(1, LTV_UPDATED_TOPIC, {
         userId: user.id,
@@ -264,11 +273,10 @@ describe('Ltv api tests', () => {
 
     describe('Liquidation in case ltv is above 75% for 72 hours', () => {
       let liquidationId: string | undefined;
+      const expectedLiquidationAmount = '7500';
 
-      it(`should liquidate`, async () => {
-        const expectedLiquidationCommandPublishSequence = 2;
+      it(`should start margin call with liquidation date in the past`, async () => {
         const targetLtv = 75;
-        const expectedLiquidation = '7500';
         creditUtilizationAmount = ledgerValue * (targetLtv / 100);
         const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
           utilizationAmount: creditUtilizationAmount,
@@ -280,13 +288,35 @@ describe('Ltv api tests', () => {
         await app
           .get(LtvQueueController)
           .creditBalanceUpdatedHandler(creditBalanceUpdatedPayload);
-        queueStub.publishEvent.mockReset();
         await marginCallRepository.update(
           { userId: user.id },
           {
             createdAt: marginCallEnter72HoursAgo,
           },
         );
+        const marginCallResponse = await request(app.getHttpServer())
+          .get('/v1/margin_calls')
+          .query({
+            status: MarginCallStatus.active,
+          })
+          .set('Authorization', `Bearer ${accessToken}`)
+          .expect(200);
+
+        expect(
+          DateTime.fromISO(marginCallResponse.body[0].automaticLiquidationAt) <
+            DateTime.now(),
+        ).toEqual(true);
+      });
+
+      it(`should liquidate if margin call is active for 72 hours straight`, async () => {
+        const expectedLiquidationCommandPublishSequence = 2;
+        const targetLtv = 75;
+        const expectedLiquidation = '7500';
+        creditUtilizationAmount = ledgerValue * (targetLtv / 100);
+        const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
+          utilizationAmount: creditUtilizationAmount,
+        });
+
         await app
           .get(LtvQueueController)
           .creditBalanceUpdatedHandler(creditBalanceUpdatedPayload);
@@ -315,13 +345,21 @@ describe('Ltv api tests', () => {
         if (liquidationId === undefined) {
           throw new Error('Liquidation id is not found');
         }
+        ledgerValue = BigNumber(ledgerValue)
+          .minus(expectedLiquidationAmount)
+          .toNumber();
         const ledgerUpdatedDueToLiquidationEvent =
           ledgerAccountUpdatedPayloadFactory({
+            ledgerAccounts: [
+              ledgerAccountDataFactory({
+                accountValue: ledgerValue.toString(),
+              }),
+            ],
             action: {
               type: LedgerActionType.LIQUIDATION,
               liquidation: {
                 id: liquidationId,
-                usdAmount: liquidationAmount,
+                usdAmount: expectedLiquidationAmount,
               },
             },
           });
@@ -346,12 +384,15 @@ describe('Ltv api tests', () => {
         if (liquidationId === undefined) {
           throw new Error('Liquidation id is not found');
         }
+        creditUtilizationAmount =
+          creditUtilizationAmount - Number(expectedLiquidationAmount);
         const creditUtilizationUpdatedDueToLiquidationEvent =
           creditBalanceUpdatedFactory({
+            utilizationAmount: creditUtilizationAmount,
             paymentDetails: {
               type: PaymentType.liquidation,
               id: liquidationId,
-              amount: liquidationAmount,
+              amount: expectedLiquidationAmount,
               asset: 'USD',
             },
           });
@@ -361,33 +402,59 @@ describe('Ltv api tests', () => {
           .creditBalanceUpdatedHandler(
             creditUtilizationUpdatedDueToLiquidationEvent,
           );
-        const marginCallResponse = await request(app.getHttpServer())
+        const activeMarginCalls = await request(app.getHttpServer())
           .get('/v1/margin_calls')
+          .query({
+            status: MarginCallStatus.active,
+          })
           .set('Authorization', `Bearer ${accessToken}`)
           .expect(200);
 
-        const activeMarginCalls = marginCallResponse.body.filter(
-          (marginCall) => marginCall.status === MarginCallStatus.active,
+        expect(activeMarginCalls.body).toHaveLength(0);
+        expect(queueStub.publishEvent).toHaveBeenCalledWith(
+          MARGIN_CALL_COMPLETED_TOPIC,
+          {
+            userId: user.id,
+            ltv: (creditUtilizationAmount / ledgerValue) * 100,
+            completedAt: expect.any(String),
+            liquidationAmount: Number(expectedLiquidationAmount),
+            priceForMarginCall:
+              creditUtilizationAmount / (LTV_MARGIN_CALL_LIMIT / 100),
+            priceForPartialCollateralSale:
+              creditUtilizationAmount / (COLLATERAL_SALE_LTV_LIMIT / 100),
+            collateralBalance: ledgerValue,
+          },
         );
-        expect(marginCallResponse.body.length > 0).toEqual(true);
-        expect(activeMarginCalls).toHaveLength(0);
       });
     });
 
     describe('Liquidation in case ltv reaches 90%', () => {
       let liquidationId: string | undefined;
+      const expectedLiquidationAmount = '15000';
+
+      it(`should reset ledger value`, async () => {
+        const ledgerAccountUpdatedPayload =
+          ledgerAccountUpdatedPayloadFactory();
+        ledgerValue = calculateLedgerValue(ledgerAccountUpdatedPayload);
+
+        await app
+          .get(LtvQueueController)
+          .ledgerUpdated(ledgerAccountUpdatedPayload);
+
+        expect(queueStub.publishEvent).nthCalledWith(1, LTV_UPDATED_TOPIC, {
+          userId: user.id,
+          ltv: (creditUtilizationAmount / ledgerValue) * 100,
+        });
+      });
 
       it(`should create margin call and liquidate once ltv reaches 90%`, async () => {
         const targetLtv = 90;
         const expectedLiquidationCommandPublishSequence = 3;
+        creditUtilizationAmount = ledgerValue * (targetLtv / 100);
         const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
-          utilizationAmount: ledgerValue * (targetLtv / 100),
+          utilizationAmount: creditUtilizationAmount,
         });
 
-        await app
-          .get(LtvQueueController)
-          .ledgerUpdated(ledgerAccountUpdatedPayloadFactory());
-        queueStub.publishEvent.mockReset();
         await app
           .get(LtvQueueController)
           .creditBalanceUpdatedHandler(creditBalanceUpdatedPayload);
@@ -446,7 +513,7 @@ describe('Ltv api tests', () => {
           INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND,
           {
             userId: user.id,
-            amount: liquidationAmount,
+            amount: expectedLiquidationAmount,
             liquidationId: expect.any(String),
           },
         );
@@ -460,20 +527,21 @@ describe('Ltv api tests', () => {
         if (liquidationId === undefined) {
           throw new Error('Liquidation id is not found');
         }
+        ledgerValue = BigNumber(ledgerValue)
+          .minus(expectedLiquidationAmount)
+          .toNumber();
         const ledgerUpdatedDueToLiquidationEvent =
           ledgerAccountUpdatedPayloadFactory({
             ledgerAccounts: [
               ledgerAccountDataFactory({
-                accountValue: BigNumber(ledgerValue)
-                  .minus(liquidationAmount)
-                  .toString(),
+                accountValue: ledgerValue.toString(),
               }),
             ],
             action: {
               type: LedgerActionType.LIQUIDATION,
               liquidation: {
                 id: liquidationId,
-                usdAmount: liquidationAmount,
+                usdAmount: expectedLiquidationAmount,
               },
             },
           });
@@ -499,14 +567,14 @@ describe('Ltv api tests', () => {
           throw new Error('Liquidation id is not found');
         }
         creditUtilizationAmount =
-          creditUtilizationAmount - Number(liquidationAmount);
+          creditUtilizationAmount - Number(expectedLiquidationAmount);
         const creditUtilizationUpdatedDueToLiquidationEvent =
           creditBalanceUpdatedFactory({
             utilizationAmount: creditUtilizationAmount,
             paymentDetails: {
               type: PaymentType.liquidation,
               id: liquidationId,
-              amount: liquidationAmount,
+              amount: expectedLiquidationAmount,
               asset: 'USD',
             },
           });
@@ -516,19 +584,21 @@ describe('Ltv api tests', () => {
           .creditBalanceUpdatedHandler(
             creditUtilizationUpdatedDueToLiquidationEvent,
           );
-        const marginCallResponse = await request(app.getHttpServer())
+        const activeMarginCalls = await request(app.getHttpServer())
           .get('/v1/margin_calls')
+          .query({
+            status: MarginCallStatus.active,
+          })
           .set('Authorization', `Bearer ${accessToken}`)
           .expect(200);
 
-        ledgerValue = ledgerValue - Number(liquidationAmount);
         expect(queueStub.publishEvent).toHaveBeenCalledWith(
           MARGIN_CALL_COMPLETED_TOPIC,
           {
             userId: user.id,
-            ltv: creditUtilizationAmount / ledgerValue,
+            ltv: (creditUtilizationAmount / ledgerValue) * 100,
             completedAt: expect.any(String),
-            liquidationAmount: Number(liquidationAmount),
+            liquidationAmount: Number(expectedLiquidationAmount),
             priceForMarginCall:
               creditUtilizationAmount / (LTV_MARGIN_CALL_LIMIT / 100),
             priceForPartialCollateralSale:
@@ -536,9 +606,7 @@ describe('Ltv api tests', () => {
             collateralBalance: ledgerValue,
           },
         );
-        expect(marginCallResponse.body[0].status).toStrictEqual(
-          MarginCallStatus.completed,
-        );
+        expect(activeMarginCalls.body).toHaveLength(0);
       });
     });
   });

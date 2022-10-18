@@ -22,12 +22,12 @@ export class MarginActionsCheckUtilService {
     lastMarginCheck: MarginCheck | null,
     marginNotification: MarginNotification | null,
     ltv: number,
-    collateralBalance: number,
+    ledgerValue: number,
   ): MarginAction[] {
     if (lastMarginCheck !== null) {
       const collateralValueChange: number = this.mathUtilService.getDifference(
         lastMarginCheck.ledgerValue,
-        collateralBalance,
+        ledgerValue,
       );
 
       if (
