@@ -1,16 +1,16 @@
 {
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/api/api/fireblocks-api/src",
+  "sourceRoot": "apps/api/fireblocks-api/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/api/api/fireblocks-api",
-        "main": "apps/api/api/fireblocks-api/src/main.ts",
-        "tsConfig": "apps/api/api/fireblocks-api/tsconfig.app.json",
-        "assets": ["apps/api/api/fireblocks-api/src/assets"],
+        "outputPath": "dist/apps/api/fireblocks-api",
+        "main": "apps/api/fireblocks-api/src/main.ts",
+        "tsConfig": "apps/api/fireblocks-api/tsconfig.app.json",
+        "assets": ["apps/api/fireblocks-api/src/assets"],
         "tsPlugins": ["@nestjs/swagger/plugin"]
       },
       "configurations": {
@@ -20,8 +20,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/api/api/fireblocks-api/src/environments/environment.ts",
-              "with": "apps/api/api/fireblocks-api/src/environments/environment.prod.ts"
+              "replace": "apps/api/fireblocks-api/src/environments/environment.ts",
+              "with": "apps/api/fireblocks-api/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -42,19 +42,19 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/api/api/fireblocks-api/**/*.ts"]
+        "lintFilePatterns": ["apps/api/fireblocks-api/**/*.ts"]
       }
     },
     "build-openapi": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npm run build fireblocks-api && RUN_MIGRATIONS=false node dist/apps/api/api/fireblocks-api/main build-swagger"
+        "command": "npm run build fireblocks-api && RUN_MIGRATIONS=false node dist/apps/api/fireblocks-api/main build-swagger"
       }
     },
     "generate-migration": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npm run build fireblocks-api && node dist/apps/api/api/fireblocks-api/main generate-migration"
+        "command": "npm run build fireblocks-api && node dist/apps/api/fireblocks-api/main generate-migration"
       }
     },
     "build-docker": {
@@ -62,9 +62,9 @@
     },
     "test-integration": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/api/api/fireblocks-api"],
+      "outputs": ["coverage/apps/api/fireblocks-api"],
       "options": {
-        "jestConfig": "apps/api/api/fireblocks-api/jest.config.ts",
+        "jestConfig": "apps/api/fireblocks-api/jest.config.ts",
         "passWithNoTests": true,
         "runInBand": true
       }
