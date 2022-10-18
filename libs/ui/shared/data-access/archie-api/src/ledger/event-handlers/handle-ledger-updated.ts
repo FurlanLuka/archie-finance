@@ -2,7 +2,7 @@ import {
   Ledger,
   LedgerAccountData,
 } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
-import { queryClient } from '@archie-webapps/shared/data-access/query-client';
+import { queryClient } from '@archie-microservices/ui/shared/data-access/query-client';
 import { LedgerUpdatedWsEvent } from '@archie-webapps/shared/data-access/websocket-instance';
 import {
   calculateLedgerTotalValue,

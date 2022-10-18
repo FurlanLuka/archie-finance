@@ -1,4 +1,4 @@
-import { queryClient } from '@archie-webapps/shared/data-access/query-client';
+import { queryClient } from '@archie-microservices/ui/shared/data-access/query-client';
 import { LtvUpdatedWsEvent } from '@archie-webapps/shared/data-access/websocket-instance';
 
 import { LTV } from '../api/get-ltv';

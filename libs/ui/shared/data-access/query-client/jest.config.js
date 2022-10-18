@@ -1,6 +1,6 @@
 module.exports = {
   displayName: 'shared-data-access-query-client',
-  preset: '../../../../jest.preset.js',
+  preset: '../../../../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
@@ -10,5 +10,6 @@ module.exports = {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../../coverage/libs/shared/data-access/query-client',
+  coverageDirectory:
+    '../../../../../coverage/libs/shared/data-access/query-client',
 };
