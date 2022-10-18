@@ -6,7 +6,7 @@ import {
   TitleS,
   BodyL,
   BodyM,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import { PayWithPaypalScheduledStyled } from './pay-with-paypal-scheduled.styled';
 

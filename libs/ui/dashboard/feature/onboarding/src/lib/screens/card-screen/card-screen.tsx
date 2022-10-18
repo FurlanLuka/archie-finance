@@ -20,7 +20,7 @@ import {
   Skeleton,
   TitleL,
   BodyM,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import imgCardReady from '../../../assets/img-card-ready.png';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';

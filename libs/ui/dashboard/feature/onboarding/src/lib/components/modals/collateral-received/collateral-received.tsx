@@ -9,7 +9,7 @@ import {
   Modal,
   TitleS,
   BodyM,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import imgCollateralReceived from '../../../../assets/img-collateral-received.png';
 

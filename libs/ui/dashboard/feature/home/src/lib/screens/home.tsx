@@ -17,7 +17,11 @@ import {
 } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
 import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
-import { Modal, TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
+import {
+  Modal,
+  TitleM,
+  BodyM,
+} from '@archie-microservices/ui/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { RecentTransactions } from '../components/recent-transactions/recent-transactions';

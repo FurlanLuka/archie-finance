@@ -17,7 +17,7 @@ import {
   Skeleton,
   BodyL,
   BodyS,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import imgCard from '../../assets/card-placeholder.png';
 

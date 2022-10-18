@@ -4,7 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { useDisconnectAccount } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-disconnect-account';
-import { ButtonOutline, BodyM } from '@archie-webapps/shared/ui/design-system';
+import {
+  ButtonOutline,
+  BodyM,
+} from '@archie-microservices/ui/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { ConnectedAccountStyled } from './connected-account.styled';

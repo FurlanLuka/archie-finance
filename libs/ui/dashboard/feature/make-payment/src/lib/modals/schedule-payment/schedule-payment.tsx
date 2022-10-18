@@ -4,7 +4,10 @@ import { Navigate } from 'react-router-dom';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
 import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
-import { Loader, Modal } from '@archie-webapps/shared/ui/design-system';
+import {
+  Loader,
+  Modal,
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import { PaymentSteps } from './components/payment-steps/payment-steps';
 import { SchedulePaymentStyled } from './schedule-payment.styled';

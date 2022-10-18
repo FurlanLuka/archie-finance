@@ -14,7 +14,7 @@ import {
   Skeleton,
   TitleS,
   BodyL,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import { WithdrawalForm } from '../components/withdrawal-form/withdrawal-form';
 

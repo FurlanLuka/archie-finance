@@ -7,7 +7,7 @@ import {
   Toast,
   ToastList,
   BodyM,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 interface NotEnoughCollateralProps {
   creditValue: string;

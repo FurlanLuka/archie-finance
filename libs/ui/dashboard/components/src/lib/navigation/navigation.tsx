@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import { dashboardNavItems } from '@archie-microservices/ui/dashboard/constants';
-import { BodyS } from '@archie-webapps/shared/ui/design-system';
+import { BodyS } from '@archie-microservices/ui/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 

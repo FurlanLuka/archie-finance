@@ -11,7 +11,7 @@ import {
   ButtonOutline,
   TitleS,
   BodyM,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import { ConnectedAccount } from './blocks/connected-account';
 import { ConnectedAccountsStyled } from './connected-accounts.styled';

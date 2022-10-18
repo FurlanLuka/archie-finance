@@ -5,7 +5,10 @@ import { Navigate } from 'react-router-dom';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { useCreateLinkToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
-import { TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
+import {
+  TitleS,
+  BodyM,
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import { PlaidConnect } from './blocks/plaid-connect/plaid-connect';
 import { PlaidConnectLoading } from './blocks/plaid-connect-loading/plaid-connect-loading';

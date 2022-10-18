@@ -1,7 +1,7 @@
 import { FC } from 'react';
 
 import { Icon } from '@archie-webapps/shared/ui/icons';
-import { BodyL, BodyS } from '@archie-webapps/shared/ui/design-system';
+import { BodyL, BodyS } from '@archie-microservices/ui/shared/ui/design-system';
 
 import { OptionsItemStyled } from './options-item.styled';
 import { theme } from '@archie-webapps/shared/ui/theme';

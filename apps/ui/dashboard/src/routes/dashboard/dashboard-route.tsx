@@ -24,7 +24,7 @@ import {
   LoaderFullScreen,
   Page,
   Container,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
 

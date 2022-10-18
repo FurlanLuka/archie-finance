@@ -11,7 +11,7 @@ import {
   Skeleton,
   BodyL,
   BodyM,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { QR_CODE } from '@archie-webapps/shared/ui/theme';
 import { theme } from '@archie-webapps/shared/ui/theme';

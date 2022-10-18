@@ -10,7 +10,7 @@ import {
   Card,
   Skeleton,
   TitleS,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import { RecentTransactionsStyled } from './recent-transactions.styled';
 

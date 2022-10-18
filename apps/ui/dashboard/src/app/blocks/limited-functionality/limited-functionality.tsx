@@ -1,7 +1,10 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ToastList, BodyM } from '@archie-webapps/shared/ui/design-system';
+import {
+  ToastList,
+  BodyM,
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import { LimitedFunctionalityStyled } from './limited-functionality.styled';
 

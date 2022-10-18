@@ -6,7 +6,11 @@ import {
   LTVText,
   LTVColor,
 } from '@archie-microservices/ui/shared/constants';
-import { Badge, TitleL, BodyS } from '@archie-webapps/shared/ui/design-system';
+import {
+  Badge,
+  TitleL,
+  BodyS,
+} from '@archie-microservices/ui/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { LoanToValueChartStyled } from './loan-to-value.styled';

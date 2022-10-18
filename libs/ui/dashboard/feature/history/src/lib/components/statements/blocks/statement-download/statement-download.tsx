@@ -10,7 +10,7 @@ import {
   SelectOption,
   BodyM,
   BodyS,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import { useDownloadStatement } from './use-download-statement';
 

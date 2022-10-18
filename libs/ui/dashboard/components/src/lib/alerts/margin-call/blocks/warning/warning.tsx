@@ -6,7 +6,7 @@ import {
   ButtonLight,
   BodyL,
   BodyM,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 interface WarningProps {

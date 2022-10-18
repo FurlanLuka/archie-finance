@@ -5,7 +5,7 @@ import {
   SessionState,
   useSession,
 } from '@archie-microservices/ui/shared/data-access/session';
-import { LoaderFullScreen } from '@archie-webapps/shared/ui/design-system';
+import { LoaderFullScreen } from '@archie-microservices/ui/shared/ui/design-system';
 
 export const ProtectedRoute: React.FC<PropsWithChildren<unknown>> = ({
   children,

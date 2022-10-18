@@ -10,7 +10,7 @@ import {
   Select,
   SelectOption,
   BodyM,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import { CollateralAssetStyled } from './collateral-asset-select.styled';
 

@@ -4,7 +4,7 @@ import {
   CardStatus,
   CardStatusText,
 } from '@archie-microservices/ui/shared/constants';
-import { BodyS } from '@archie-webapps/shared/ui/design-system';
+import { BodyS } from '@archie-microservices/ui/shared/ui/design-system';
 
 import { StatusBadgeStyled } from './status-badge.styled';
 

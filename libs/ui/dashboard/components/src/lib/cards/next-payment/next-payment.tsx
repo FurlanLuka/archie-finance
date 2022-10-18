@@ -17,7 +17,7 @@ import {
   Skeleton,
   TitleM,
   BodyM,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 import {
   QueryResponse,
   RequestState,

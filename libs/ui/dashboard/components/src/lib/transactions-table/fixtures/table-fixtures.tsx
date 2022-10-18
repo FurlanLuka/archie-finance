@@ -13,7 +13,11 @@ import {
   TransactionStatus,
   TransactionType,
 } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-transactions';
-import { BodyL, BodyM, BodyS } from '@archie-webapps/shared/ui/design-system';
+import {
+  BodyL,
+  BodyM,
+  BodyS,
+} from '@archie-microservices/ui/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { getRowDescription } from './table-fixtures.helpers';

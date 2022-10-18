@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { Toast } from '@archie-webapps/shared/ui/design-system';
+import { Toast } from '@archie-microservices/ui/shared/ui/design-system';
 
 export const LimitedFunctionalityStyled = styled(Toast)`
   .title {

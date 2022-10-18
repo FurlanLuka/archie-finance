@@ -10,7 +10,7 @@ import {
   InputCheckbox,
   ButtonPrimary,
   BodyL,
-} from '@archie-webapps/shared/ui/design-system';
+} from '@archie-microservices/ui/shared/ui/design-system';
 
 import { ConsentCheckStyled } from './consent-check.styled';
 

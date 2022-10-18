@@ -3,7 +3,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 import { dashboardNavItems } from '@archie-microservices/ui/dashboard/constants';
 import { useAuthenticatedSession } from '@archie-microservices/ui/shared/data-access/session';
-import { Container, BodyL } from '@archie-webapps/shared/ui/design-system';
+import {
+  Container,
+  BodyL,
+} from '@archie-microservices/ui/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 
 import { HeaderStyled, MobileNav } from './header.styled';
