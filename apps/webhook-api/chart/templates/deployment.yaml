@@ -116,7 +116,7 @@ spec:
             - name: PEACH_HMAC_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: peach-api-secrets
+                  name: webhook-api-secrets
                   key: peach-hmac-secret
           {{- end }}
       imagePullSecrets:
