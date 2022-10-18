@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import useAsyncEffect from 'use-async-effect';
 
-import { SessionState, useSession } from '@archie-webapps/shared/data-access/session';
+import {
+  SessionState,
+  useSession,
+} from '@archie-webapps/shared/data-access/session';
 import { websocketInstance } from '@archie-webapps/shared/data-access/websocket-instance';
 
 interface UseStartupResult {
@@ -29,7 +32,10 @@ export const useStartup = (): UseStartupResult => {
       setIsInitialized(true);
     }
 
-    if (sessionState === SessionState.AUTHENTICATED && accessToken !== undefined) {
+    if (
+      sessionState === SessionState.AUTHENTICATED &&
+      accessToken !== undefined
+    ) {
       websocketInstance.setToken(accessToken);
       await websocketInstance.connect(handleConnect, handleFail);
     }

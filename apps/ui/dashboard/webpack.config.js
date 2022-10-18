@@ -18,7 +18,10 @@ module.exports = (config, context) => {
         },
         {
           test: /\.svg$/,
-          use: [{ loader: '@svgr/webpack', options: { SVGO: true } }, { loader: 'url-loader' }],
+          use: [
+            { loader: '@svgr/webpack', options: { SVGO: true } },
+            { loader: 'url-loader' },
+          ],
         },
       ],
     },

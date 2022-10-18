@@ -1,6 +1,7 @@
 {
-  "root": "apps/archie-dashboard",
-  "sourceRoot": "apps/archie-dashboard/src",
+  "name": "ui-dashboard",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/ui/dashboard/src",
   "projectType": "application",
   "targets": {
     "build": {
@@ -9,22 +10,25 @@
       "defaultConfiguration": "production",
       "options": {
         "compiler": "babel",
-        "outputPath": "dist/apps/archie-dashboard",
-        "index": "apps/archie-dashboard/src/index.html",
+        "outputPath": "dist/apps/ui/dashboard",
+        "index": "apps/ui/dashboard/src/index.html",
         "baseHref": "/",
-        "main": "apps/archie-dashboard/src/main.tsx",
-        "polyfills": "apps/archie-dashboard/src/polyfills.ts",
-        "tsConfig": "apps/archie-dashboard/tsconfig.app.json",
-        "assets": ["apps/archie-dashboard/src/favicon.ico", "apps/archie-dashboard/src/assets"],
+        "main": "apps/ui/dashboard/src/main.tsx",
+        "polyfills": "apps/ui/dashboard/src/polyfills.ts",
+        "tsConfig": "apps/ui/dashboard/tsconfig.app.json",
+        "assets": [
+          "apps/ui/dashboard/src/favicon.ico",
+          "apps/ui/dashboard/src/assets"
+        ],
         "scripts": [],
-        "webpackConfig": "apps/archie-dashboard/webpack.config.js"
+        "webpackConfig": "apps/ui/dashboard/webpack.config.js"
       },
       "configurations": {
         "production": {
           "fileReplacements": [
             {
-              "replace": "apps/archie-dashboard/src/environments/environment.ts",
-              "with": "apps/archie-dashboard/src/environments/environment.prod.ts"
+              "replace": "apps/ui/dashboard/src/environments/environment.ts",
+              "with": "apps/ui/dashboard/src/environments/environment.prod.ts"
             }
           ],
           "optimization": true,
@@ -39,12 +43,12 @@
     "serve": {
       "executor": "@nrwl/web:dev-server",
       "options": {
-        "buildTarget": "archie-dashboard:build",
+        "buildTarget": "ui-dashboard:build",
         "hmr": true
       },
       "configurations": {
         "production": {
-          "buildTarget": "archie-dashboard:build:production",
+          "buildTarget": "ui-dashboard:build:production",
           "hmr": false
         }
       }
@@ -53,14 +57,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/archie-dashboard/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["apps/ui/dashboard/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/archie-dashboard"],
+      "outputs": ["coverage/apps/ui/dashboard"],
       "options": {
-        "jestConfig": "apps/archie-dashboard/jest.config.js",
+        "jestConfig": "apps/ui/dashboard/jest.config.js",
         "passWithNoTests": true
       }
     }

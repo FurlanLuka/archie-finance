@@ -9,7 +9,11 @@ import { SessionProvider } from '@archie-webapps/shared/data-access/session';
 import { GlobalStyles, theme } from '@archie-webapps/shared/ui/theme';
 
 import { App } from './app/app';
-import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants/auth';
+import {
+  AUTH0_AUDIENCE,
+  AUTH0_CLIENT_ID,
+  AUTH0_DOMAIN,
+} from './constants/auth';
 
 ReactDOM.render(
   <>

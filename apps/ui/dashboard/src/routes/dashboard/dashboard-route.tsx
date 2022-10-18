@@ -1,7 +1,10 @@
 import { FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { Header, Navigation } from '@archie-webapps/archie-dashboard/components';
+import {
+  Header,
+  Navigation,
+} from '@archie-webapps/archie-dashboard/components';
 import { ErrorScreen } from '@archie-webapps/archie-dashboard/components';
 import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature/collateral';
 import { CollateralizationScreen } from '@archie-webapps/archie-dashboard/feature/collateralization';
@@ -11,17 +14,27 @@ import { PaymentScreen } from '@archie-webapps/archie-dashboard/feature/payments
 import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature/rewards';
 import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature/settings';
 import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature/withdraw';
-import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import {
+  QueryResponse,
+  RequestState,
+} from '@archie-webapps/shared/data-access/archie-api/interface';
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
-import { LoaderFullScreen, Page, Container } from '@archie-webapps/shared/ui/design-system';
+import {
+  LoaderFullScreen,
+  Page,
+  Container,
+} from '@archie-webapps/shared/ui/design-system';
 
 import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
 
 export const DashboardRoute: FC = () => {
-  const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
+  const queryResponse: QueryResponse<GetOnboardingResponse> =
+    useGetOnboarding();
 
-  const isMfaSetup = queryResponse.state === RequestState.SUCCESS && queryResponse.data.mfaEnrollmentStage;
+  const isMfaSetup =
+    queryResponse.state === RequestState.SUCCESS &&
+    queryResponse.data.mfaEnrollmentStage;
 
   if (queryResponse.state === RequestState.LOADING) {
     return <LoaderFullScreen />;
@@ -45,8 +58,14 @@ export const DashboardRoute: FC = () => {
               <Route path="/" element={<HomeScreen />} />
               <Route path="/home" element={<HomeScreen />} />
               <Route path="/collateral" element={<CollateralScreen />} />
-              <Route path="/collateral/withdraw/*" element={<WithdrawScreen />} />
-              <Route path="/collateral/add/:asset" element={<CollateralizationScreen />} />
+              <Route
+                path="/collateral/withdraw/*"
+                element={<WithdrawScreen />}
+              />
+              <Route
+                path="/collateral/add/:asset"
+                element={<CollateralizationScreen />}
+              />
               {/* <Route path="/rewards" element={<RewardsScreen />} /> */}
               <Route path="/payment" element={<PaymentScreen />} />
               <Route path="/history" element={<HistoryScreen />} />
