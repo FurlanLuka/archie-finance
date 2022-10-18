@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-shared-ui-design-system",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/shared/ui/design-system/src",
   "projectType": "library",
   "tags": [],
@@ -16,7 +16,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/shared/ui/design-system"],
+      "outputs": ["{workspaceRoot}/coverage/libs/ui/shared/ui/design-system"],
       "options": {
         "jestConfig": "libs/ui/shared/ui/design-system/jest.config.js",
         "passWithNoTests": true

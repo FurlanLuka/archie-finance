@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-dashboard-feature-rewards",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/dashboard/feature/rewards/src",
   "projectType": "library",
   "tags": [],
@@ -16,7 +16,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/dashboard/feature/rewards"],
+      "outputs": ["{workspaceRoot}/coverage/libs/ui/dashboard/feature/rewards"],
       "options": {
         "jestConfig": "libs/ui/dashboard/feature/rewards/jest.config.js",
         "passWithNoTests": true

@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-shared-constants",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/shared/constants/src",
   "projectType": "library",
   "tags": [],
@@ -14,7 +14,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/shared/constants"],
+      "outputs": ["{workspaceRoot}/coverage/libs/ui/shared/constants"],
       "options": {
         "jestConfig": "libs/ui/shared/constants/jest.config.js",
         "passWithNoTests": true

@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-dashboard-constants",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/dashboard/constants/src",
   "targets": {
     "lint": {
@@ -12,7 +12,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/dashboard/constants"],
+      "outputs": ["{workspaceRoot}/coverage/libs/ui/dashboard/constants"],
       "options": {
         "jestConfig": "libs/ui/dashboard/constants/jest.config.js",
         "passWithNoTests": true

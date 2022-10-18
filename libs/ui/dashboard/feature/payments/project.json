@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-dashboard-feature-payments",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/dashboard/feature/payments/src",
   "projectType": "library",
   "tags": [],
@@ -16,7 +16,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/dashboard/feature/payments"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/ui/dashboard/feature/payments"
+      ],
       "options": {
         "jestConfig": "libs/ui/dashboard/feature/payments/jest.config.js",
         "passWithNoTests": true

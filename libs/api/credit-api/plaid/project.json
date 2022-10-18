@@ -12,7 +12,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/credit-api/plaid"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/credit-api/plaid"],
       "options": {
         "jestConfig": "libs/api/credit-api/plaid/jest.config.ts",
         "passWithNoTests": true

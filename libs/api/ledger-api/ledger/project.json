@@ -12,7 +12,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/ledger-api/ledger"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/ledger-api/ledger"],
       "options": {
         "jestConfig": "libs/api/ledger-api/ledger/jest.config.ts",
         "passWithNoTests": true

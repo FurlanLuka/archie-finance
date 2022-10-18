@@ -8,12 +8,16 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/api/websocket-event-api/data-transfer-objects/**/*.ts"]
+        "lintFilePatterns": [
+          "libs/api/websocket-event-api/data-transfer-objects/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/websocket-event-api/data-transfer-objects"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/api/websocket-event-api/data-transfer-objects"
+      ],
       "options": {
         "jestConfig": "libs/api/websocket-event-api/data-transfer-objects/jest.config.ts",
         "passWithNoTests": true

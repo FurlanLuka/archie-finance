@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-dashboard-components",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/dashboard/components/src",
   "projectType": "library",
   "tags": [],
@@ -16,7 +16,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/dashboard/components"],
+      "outputs": ["{workspaceRoot}/coverage/libs/ui/dashboard/components"],
       "options": {
         "jestConfig": "libs/ui/dashboard/components/jest.config.js",
         "passWithNoTests": true

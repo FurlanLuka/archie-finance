@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-shared-data-access-archie-api",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/shared/data-access/archie-api/src",
   "projectType": "library",
   "tags": [],
@@ -16,7 +16,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/shared/data-access/archie-api"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/ui/shared/data-access/archie-api"
+      ],
       "options": {
         "jestConfig": "libs/ui/shared/data-access/archie-api/jest.config.js",
         "passWithNoTests": true

@@ -14,7 +14,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/credit-line-api/data-transfer-objects"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/api/credit-line-api/data-transfer-objects"
+      ],
       "options": {
         "jestConfig": "libs/api/credit-line-api/data-transfer-objects/jest.config.ts",
         "passWithNoTests": true

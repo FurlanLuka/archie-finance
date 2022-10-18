@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-dashboard-hooks",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/dashboard/hooks/src",
   "projectType": "library",
   "tags": [],
@@ -14,7 +14,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/dashboard/hooks"],
+      "outputs": ["{workspaceRoot}/coverage/libs/ui/dashboard/hooks"],
       "options": {
         "jestConfig": "libs/ui/dashboard/hooks/jest.config.js",
         "passWithNoTests": true

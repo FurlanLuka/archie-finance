@@ -13,7 +13,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/webhook-api/auth0"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/webhook-api/auth0"],
       "options": {
         "jestConfig": "libs/api/webhook-api/auth0/jest.config.ts",
         "passWithNoTests": true

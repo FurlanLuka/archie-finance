@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-shared-data-access-websocket-instance",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/shared/data-access/websocket-instance/src",
   "targets": {
     "lint": {
@@ -14,7 +14,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/shared/data-access/websocket-instance"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/ui/shared/data-access/websocket-instance"
+      ],
       "options": {
         "jestConfig": "libs/ui/shared/data-access/websocket-instance/jest.config.js",
         "passWithNoTests": true

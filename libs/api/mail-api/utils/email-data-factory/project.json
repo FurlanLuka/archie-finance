@@ -14,7 +14,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/mail-api/utils/email-data-factory"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/api/mail-api/utils/email-data-factory"
+      ],
       "options": {
         "jestConfig": "libs/api/mail-api/utils/email-data-factory/jest.config.ts",
         "passWithNoTests": true

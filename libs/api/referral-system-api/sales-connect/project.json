@@ -7,12 +7,16 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/api/referral-system-api/sales-connect/**/*.ts"]
+        "lintFilePatterns": [
+          "libs/api/referral-system-api/sales-connect/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/referral-system-api/sales-connect"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/api/referral-system-api/sales-connect"
+      ],
       "options": {
         "jestConfig": "libs/api/referral-system-api/sales-connect/jest.config.ts",
         "passWithNoTests": true

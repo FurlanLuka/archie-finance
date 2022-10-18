@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-shared-data-access-query-client",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/shared/data-access/query-client/src",
   "targets": {
     "lint": {
@@ -12,7 +12,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/shared/data-access/query-client"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/ui/shared/data-access/query-client"
+      ],
       "options": {
         "jestConfig": "libs/ui/shared/data-access/query-client/jest.config.js",
         "passWithNoTests": true

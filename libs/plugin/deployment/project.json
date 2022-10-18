@@ -49,7 +49,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/plugin/deployment"],
+      "outputs": ["{workspaceRoot}/coverage/libs/plugin/deployment"],
       "options": {
         "jestConfig": "libs/plugin/deployment/jest.config.ts",
         "passWithNoTests": true

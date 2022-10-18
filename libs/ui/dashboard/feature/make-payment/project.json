@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-dashboard-feature-make-payment",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/dashboard/feature/make-payment/src",
   "projectType": "library",
   "tags": [],
@@ -16,7 +16,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/dashboard/feature/make-payment"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/ui/dashboard/feature/make-payment"
+      ],
       "options": {
         "jestConfig": "libs/ui/dashboard/feature/make-payment/jest.config.js",
         "passWithNoTests": true

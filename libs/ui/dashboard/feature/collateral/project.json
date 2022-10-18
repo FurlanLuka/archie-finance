@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-dashboard-feature-collateral",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/dashboard/feature/collateral/src",
   "projectType": "library",
   "tags": [],
@@ -16,7 +16,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/dashboard/feature/collateral"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/ui/dashboard/feature/collateral"
+      ],
       "options": {
         "jestConfig": "libs/ui/dashboard/feature/collateral/jest.config.js",
         "passWithNoTests": true

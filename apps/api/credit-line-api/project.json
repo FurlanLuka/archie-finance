@@ -5,19 +5,13 @@
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/api/credit-line-api",
         "main": "apps/api/credit-line-api/src/main.ts",
         "tsConfig": "apps/api/credit-line-api/tsconfig.app.json",
-        "assets": [
-          "apps/api/credit-line-api/src/assets"
-        ],
-        "tsPlugins": [
-          "@nestjs/swagger/plugin"
-        ]
+        "assets": ["apps/api/credit-line-api/src/assets"],
+        "tsPlugins": ["@nestjs/swagger/plugin"]
       },
       "configurations": {
         "production": {
@@ -46,13 +40,9 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "apps/api/credit-line-api/**/*.ts"
-        ]
+        "lintFilePatterns": ["apps/api/credit-line-api/**/*.ts"]
       }
     },
     "build-openapi": {
@@ -72,9 +62,7 @@
     },
     "test-integration": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/apps/api/credit-line-api"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/apps/api/credit-line-api"],
       "options": {
         "jestConfig": "apps/api/credit-line-api/jest.config.ts",
         "passWithNoTests": true,

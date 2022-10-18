@@ -12,7 +12,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/webhook-api/constants"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/webhook-api/constants"],
       "options": {
         "jestConfig": "libs/api/webhook-api/constants/jest.config.ts",
         "passWithNoTests": true

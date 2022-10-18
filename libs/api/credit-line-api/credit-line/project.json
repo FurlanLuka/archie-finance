@@ -12,7 +12,9 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/credit-line-api/credit-line"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/api/credit-line-api/credit-line"
+      ],
       "options": {
         "jestConfig": "libs/api/credit-line-api/credit-line/jest.config.ts",
         "passWithNoTests": true

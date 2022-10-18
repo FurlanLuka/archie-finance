@@ -49,7 +49,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/plugin/workspace-generator"],
+      "outputs": ["{workspaceRoot}/coverage/libs/plugin/workspace-generator"],
       "options": {
         "jestConfig": "libs/plugin/workspace-generator/jest.config.ts",
         "passWithNoTests": true

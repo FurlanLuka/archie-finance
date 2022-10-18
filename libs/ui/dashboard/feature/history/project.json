@@ -1,6 +1,6 @@
 {
-  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "name": "ui-dashboard-feature-history",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/dashboard/feature/history/src",
   "projectType": "library",
   "tags": [],
@@ -16,7 +16,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/ui/dashboard/feature/history"],
+      "outputs": ["{workspaceRoot}/coverage/libs/ui/dashboard/feature/history"],
       "options": {
         "jestConfig": "libs/ui/dashboard/feature/history/jest.config.js",
         "passWithNoTests": true
