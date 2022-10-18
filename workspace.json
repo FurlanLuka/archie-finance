@@ -78,7 +78,7 @@
     "onboarding-api": "apps/api/onboarding-api",
     "paypal-api": "apps/api/paypal-api",
     "peach-api": "apps/api/peach-api",
-    "plugin-deployment": "libs/plugin-deployment",
+    "plugin-deployment": "libs/plugin/deployment",
     "plugin-migration-generator": "libs/plugin/migration-generator",
     "plugin-workspace-generator": "libs/plugin/workspace-generator",
     "referral-system-api": "apps/api/referral-system-api",

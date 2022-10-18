@@ -196,7 +196,7 @@
       "@archie/api/websocket-event-api/websocket-event": [
         "libs/api/websocket-event-api/websocket-event/src/index.ts"
       ],
-      "@archie/plugin/deployment": ["libs/plugin-deployment/src/index.ts"],
+      "@archie/plugin/deployment": ["libs/plugin/deployment/src/index.ts"],
       "@archie/plugin/migration-generator": [
         "libs/plugin/migration-generator/src/index.ts"
       ],
