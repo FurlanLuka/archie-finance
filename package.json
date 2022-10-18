@@ -115,7 +115,7 @@
     "@storybook/builder-webpack5": "6.5.12",
     "@storybook/manager-webpack5": "6.5.12",
     "@storybook/react": "6.5.12",
-    "@svgr/webpack": "6.5.1",
+    "@svgr/webpack": "6.5.0",
     "@types/auth0": "^2.35.5",
     "@types/jest": "29.1.1",
     "@types/jest-when": "^3.5.2",
