@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonPrimary, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, TitleS, BodyM } from '@archie-microservices/ui/shared/ui/design-system';
 
 import imgCollateralReceived from '../../../../../../assets/img-collateral-received.png';
 

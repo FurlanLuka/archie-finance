@@ -2,12 +2,12 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactTooltip from 'react-tooltip';
 
-import { DepositAddress } from '@archie-webapps/archie-dashboard/components';
-import { MAX_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
-import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
-import { CollateralAsset } from '@archie-webapps/shared/constants';
-import { InputRange, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
-import { theme } from '@archie-webapps/shared/ui/theme';
+import { DepositAddress } from '@archie-microservices/ui/dashboard/components';
+import { MAX_LINE_OF_CREDIT } from '@archie-microservices/ui/dashboard/constants';
+import { copyToClipboard } from '@archie-microservices/ui/dashboard/utils';
+import { CollateralAsset } from '@archie-microservices/ui/shared/constants';
+import { InputRange, TitleL, BodyM } from '@archie-microservices/ui/shared/ui/design-system';
+import { theme } from '@archie-microservices/ui/shared/ui/theme';
 
 import { CollaterizationFormStyled } from './collaterization-form.styled';
 

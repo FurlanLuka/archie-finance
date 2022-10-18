@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { CollateralAssets } from '@archie-webapps/shared/constants';
-import { Card, Skeleton, ButtonOutline, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
+import { CollateralAssets } from '@archie-microservices/ui/shared/constants';
+import { Card, Skeleton, ButtonOutline, TitleS, BodyL } from '@archie-microservices/ui/shared/ui/design-system';
 
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
 

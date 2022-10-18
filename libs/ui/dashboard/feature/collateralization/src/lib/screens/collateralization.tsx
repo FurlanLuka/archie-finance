@@ -4,9 +4,9 @@ import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
 import { useGetLTV } from '@archie-microservices/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { LTVStatus } from '@archie-webapps/shared/constants';
-import { MarginCallAlert } from '@archie-webapps/archie-dashboard/components';
-import { Card, Skeleton } from '@archie-webapps/shared/ui/design-system';
+import { LTVStatus } from '@archie-microservices/ui/shared/constants';
+import { MarginCallAlert } from '@archie-microservices/ui/dashboard/components';
+import { Card, Skeleton } from '@archie-microservices/ui/shared/ui/design-system';
 
 import { CollateralizationRouteParams } from '../interfaces/routing';
 import { AddCollateral } from '../components/add-collateral/add-collateral';
