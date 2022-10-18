@@ -68,7 +68,7 @@
         "passWithNoTests": true
       }
     },
-    "deploy-configuration": {
+    "ui-deployment-configuration": {
       "executor": "@archie/plugin/deployment:ui-deploy-configuration"
     }
   },

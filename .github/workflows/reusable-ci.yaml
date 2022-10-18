@@ -137,7 +137,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ inputs.AWS_REGION }}
           ecr-repository: ${{ inputs.ECR_REPOSITORY }}
-          environment: ${{ inputs.ENVIRONMENT }}
           image-tag: ${{ needs.check_and_build.outputs.imageTag }}
       - if: contains(matrix.project, 'ui')
         uses: ./.github/actions/build-ui
