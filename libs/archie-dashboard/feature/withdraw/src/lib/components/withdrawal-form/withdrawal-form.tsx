@@ -3,7 +3,6 @@ import { BigNumber } from 'bignumber.js';
 import { FC, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useQueryClient } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 
 import { calculateLedgerCreditValue } from '@archie-webapps/archie-dashboard/utils';
@@ -11,7 +10,6 @@ import { CollateralAssets } from '@archie-webapps/shared/constants';
 import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useCreateWithdrawal } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-create-withdrawal';
-import { getMaxWithdrawalAmountQueryKey } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-max-withdrawal-amount';
 import { ButtonOutline, ButtonPrimary, InputText, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -39,7 +37,6 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, ledger, 
   const createWithdrawal = useCreateWithdrawal();
   const maxAmountBN = BigNumber(maxAmount);
   const WithdrawSchema = getWithdrawSchema(maxAmountBN);
-  const queryClient = useQueryClient();
 
   const {
     handleSubmit,
@@ -61,11 +58,8 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, ledger, 
   useEffect(() => {
     if (createWithdrawal.state === RequestState.SUCCESS) {
       setIsSuccessModalOpen(true);
-      // Invalidate max withdrawal amount query so it refetches
-      // TODO move to the mutation?
-      queryClient.invalidateQueries(getMaxWithdrawalAmountQueryKey(currentAsset));
     }
-  }, [createWithdrawal.state, currentAsset, queryClient]);
+  }, [createWithdrawal.state]);
 
   const withdrawalAmount = watch('withdrawAmount');
   const depositAddress = watch('withdrawAddress');
