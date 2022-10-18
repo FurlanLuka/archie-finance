@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import {
   ErrorScreen,
   Header,
-} from '@archie-webapps/archie-dashboard/components';
+} from '@archie-microservices/ui/dashboard/components';
 import { OnboardingHandler } from '@archie-webapps/archie-dashboard/feature/onboarding';
 import { Page } from '@archie-webapps/shared/ui/design-system';
 

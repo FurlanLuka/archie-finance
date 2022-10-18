@@ -4,8 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { useSetAutopay } from '@archie-webapps/shared/data-access/archie-api/autopay/hooks/use-set-autopay';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
-import { ConnectedAccountItem } from '@archie-webapps/archie-dashboard/components';
-import { TitleS, BodyM, SelectOption, Select, ButtonPrimary } from '@archie-webapps/shared/ui/design-system';
+import { ConnectedAccountItem } from '@archie-microservices/ui/dashboard/components';
+import {
+  TitleS,
+  BodyM,
+  SelectOption,
+  Select,
+  ButtonPrimary,
+} from '@archie-webapps/shared/ui/design-system';
 
 import { ConsentCheck } from '../consent-check/consent-check';
 
@@ -16,14 +22,20 @@ interface AutopayModalProps {
   onSuccess: VoidFunction;
 }
 
-export const SetupAutopay: FC<AutopayModalProps> = ({ accounts, onSuccess }) => {
+export const SetupAutopay: FC<AutopayModalProps> = ({
+  accounts,
+  onSuccess,
+}) => {
   const { t } = useTranslation();
 
   const setAutopayMutation = useSetAutopay();
 
-  const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
+  const [selectedAccount, setSelectedAccount] =
+    useState<AccountResponse | null>(null);
   const [hasConsent, setHasConsent] = useState<boolean>(false);
-  const [consentDocumentId, setConsentDocumentId] = useState<string | null>(null);
+  const [consentDocumentId, setConsentDocumentId] = useState<string | null>(
+    null,
+  );
 
   const header = selectedAccount ? (
     <ConnectedAccountItem account={selectedAccount} />

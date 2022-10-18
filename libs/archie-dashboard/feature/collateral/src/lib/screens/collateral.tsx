@@ -2,16 +2,26 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { MarginCallAlert } from '@archie-webapps/archie-dashboard/components';
+import { MarginCallAlert } from '@archie-microservices/ui/dashboard/components';
 import { LTVText, LTVColor } from '@archie-webapps/shared/constants';
 import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { CreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/api/get-credit-line';
 import { useGetCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/hooks/use-get-credit-line';
-import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import {
+  QueryResponse,
+  RequestState,
+} from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import { Card, Skeleton, Badge, TitleM, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
+import {
+  Card,
+  Skeleton,
+  Badge,
+  TitleM,
+  TitleS,
+  BodyM,
+} from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralInfo } from '../components/collateral-info/collateral-info';
@@ -57,7 +67,9 @@ export const CollateralScreen: FC = () => {
       return (
         <Card column padding="1.5rem 1.5rem 2rem">
           <div className="subtitle-group">
-            <TitleS className="subtitle">{t('dashboard_collateral.subtitle')}</TitleS>
+            <TitleS className="subtitle">
+              {t('dashboard_collateral.subtitle')}
+            </TitleS>
             <TitleM weight={400} className="total">
               ${getLedgerResponse.data.value}
             </TitleM>
@@ -68,7 +80,9 @@ export const CollateralScreen: FC = () => {
                 </BodyM>
                 <TitleS weight={400}>{ltvData.ltv.toFixed(2)}%</TitleS>
               </div>
-              <Badge statusColor={LTVColor[ltvData.status]}>{LTVText[ltvData.status]}</Badge>
+              <Badge statusColor={LTVColor[ltvData.status]}>
+                {LTVText[ltvData.status]}
+              </Badge>
             </div>
           </div>
           <CollateralInfo

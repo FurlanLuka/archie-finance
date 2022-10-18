@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { NextPaymentChartStyled } from '@archie-webapps/archie-dashboard/components';
+import { NextPaymentChartStyled } from '@archie-microservices/ui/dashboard/components';
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
 export const HomeStyled = styled.div`

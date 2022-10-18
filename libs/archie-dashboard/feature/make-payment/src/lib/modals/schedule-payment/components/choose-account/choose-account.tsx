@@ -5,8 +5,15 @@ import { Navigate } from 'react-router-dom';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
-import { ConnectedAccountItem } from '@archie-webapps/archie-dashboard/components';
-import { ButtonPrimary, Loader, TitleS, BodyM, Select, SelectOption } from '@archie-webapps/shared/ui/design-system';
+import { ConnectedAccountItem } from '@archie-microservices/ui/dashboard/components';
+import {
+  ButtonPrimary,
+  Loader,
+  TitleS,
+  BodyM,
+  Select,
+  SelectOption,
+} from '@archie-webapps/shared/ui/design-system';
 
 import { ChooseAccountStyled } from './choose-account.styled';
 
@@ -18,7 +25,8 @@ export const ChooseAccount: FC<ChooseAccountProps> = ({ onConfirm }) => {
   const { t } = useTranslation();
   const getConnectedAccountsResponse = useGetConnectedAccounts();
 
-  const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
+  const [selectedAccount, setSelectedAccount] =
+    useState<AccountResponse | null>(null);
 
   const handleConfirmClick = () => {
     if (!selectedAccount) {
@@ -29,7 +37,10 @@ export const ChooseAccount: FC<ChooseAccountProps> = ({ onConfirm }) => {
   };
 
   useEffect(() => {
-    if (getConnectedAccountsResponse.state === RequestState.SUCCESS && getConnectedAccountsResponse.data.length === 1) {
+    if (
+      getConnectedAccountsResponse.state === RequestState.SUCCESS &&
+      getConnectedAccountsResponse.data.length === 1
+    ) {
       onConfirm(getConnectedAccountsResponse.data[0]);
     }
   }, [getConnectedAccountsResponse, onConfirm]);
@@ -63,13 +74,25 @@ export const ChooseAccount: FC<ChooseAccountProps> = ({ onConfirm }) => {
     if (getConnectedAccountsResponse.state === RequestState.SUCCESS) {
       return (
         <>
-          <TitleS className="modal-title">{t('payment_modal.select_account.label')}</TitleS>
+          <TitleS className="modal-title">
+            {t('payment_modal.select_account.label')}
+          </TitleS>
           <div className="modal-select">
-            <Select id="accounts" header={header} onChange={(account: AccountResponse) => setSelectedAccount(account)}>
+            <Select
+              id="accounts"
+              header={header}
+              onChange={(account: AccountResponse) =>
+                setSelectedAccount(account)
+              }
+            >
               {options}
             </Select>
           </div>
-          <ButtonPrimary onClick={handleConfirmClick} width="fit-content" disabled={!selectedAccount}>
+          <ButtonPrimary
+            onClick={handleConfirmClick}
+            width="fit-content"
+            disabled={!selectedAccount}
+          >
             {t('payment_modal.select_account.btn_confirm')}
           </ButtonPrimary>
         </>

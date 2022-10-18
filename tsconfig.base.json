@@ -22,8 +22,8 @@
       "@archie-microservices/api/utils/redis": [
         "libs/api/utils/redis/src/index.ts"
       ],
-      "@archie-webapps/archie-dashboard/components": [
-        "libs/archie-dashboard/components/src/index.ts"
+      "@archie-microservices/ui/dashboard/components": [
+        "libs/ui/dashboard/components/src/index.ts"
       ],
       "@archie-webapps/archie-dashboard/constants": [
         "libs/archie-dashboard/constants/src/index.ts"

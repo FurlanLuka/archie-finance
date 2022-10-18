@@ -9,9 +9,12 @@ import {
   CollateralValue,
   NextPayment,
   MarginCallAlert,
-} from '@archie-webapps/archie-dashboard/components';
+} from '@archie-microservices/ui/dashboard/components';
 import { PayWithPaypalScheduled } from '@archie-webapps/archie-dashboard/feature/make-payment';
-import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import {
+  QueryResponse,
+  RequestState,
+} from '@archie-webapps/shared/data-access/archie-api/interface';
 import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
 import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
 import { Modal, TitleM, BodyM } from '@archie-webapps/shared/ui/design-system';
@@ -54,7 +57,9 @@ export const HomeScreen: FC = () => {
 
       return (
         <>
-          <TitleM className="title">{t('dashboard_home.title', { name: kycData.firstName })}</TitleM>
+          <TitleM className="title">
+            {t('dashboard_home.title', { name: kycData.firstName })}
+          </TitleM>
           <BodyM color={theme.textSecondary} className="subtitle">
             {t('dashboard_home.subtitle', { date: getDate() })}
           </BodyM>

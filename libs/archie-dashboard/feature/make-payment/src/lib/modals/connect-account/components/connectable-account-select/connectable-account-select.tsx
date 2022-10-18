@@ -4,8 +4,14 @@ import { useTranslation } from 'react-i18next';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useConnectAccount } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-connect-account';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
-import { ConnectedAccountItem } from '@archie-webapps/archie-dashboard/components';
-import { ButtonPrimary, Select, SelectOption, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
+import { ConnectedAccountItem } from '@archie-microservices/ui/dashboard/components';
+import {
+  ButtonPrimary,
+  Select,
+  SelectOption,
+  TitleS,
+  BodyM,
+} from '@archie-webapps/shared/ui/design-system';
 
 import { ConnectableAccountSelectStyled } from './connectable-account-select.styled';
 
@@ -15,11 +21,16 @@ interface ConnectableAccountSelectProps {
   publicToken: string;
 }
 
-export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({ accounts, onConnect, publicToken }) => {
+export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({
+  accounts,
+  onConnect,
+  publicToken,
+}) => {
   const { t } = useTranslation();
   const connectAccountMutation = useConnectAccount();
 
-  const [selectedAccount, setSelectedAccount] = useState<AccountResponse | null>(null);
+  const [selectedAccount, setSelectedAccount] =
+    useState<AccountResponse | null>(null);
 
   useEffect(() => {
     if (connectAccountMutation.state === RequestState.SUCCESS) {
@@ -56,9 +67,15 @@ export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({ ac
 
   return (
     <ConnectableAccountSelectStyled>
-      <TitleS className="modal-title">{t('dashboard_payment.account_select.label')}</TitleS>
+      <TitleS className="modal-title">
+        {t('dashboard_payment.account_select.label')}
+      </TitleS>
       <div className="modal-select">
-        <Select id="accounts" header={header} onChange={(account: AccountResponse) => setSelectedAccount(account)}>
+        <Select
+          id="accounts"
+          header={header}
+          onChange={(account: AccountResponse) => setSelectedAccount(account)}
+        >
           {options}
         </Select>
       </div>

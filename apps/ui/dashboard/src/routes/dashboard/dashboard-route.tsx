@@ -4,8 +4,8 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   Header,
   Navigation,
-} from '@archie-webapps/archie-dashboard/components';
-import { ErrorScreen } from '@archie-webapps/archie-dashboard/components';
+} from '@archie-microservices/ui/dashboard/components';
+import { ErrorScreen } from '@archie-microservices/ui/dashboard/components';
 import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature/collateral';
 import { CollateralizationScreen } from '@archie-webapps/archie-dashboard/feature/collateralization';
 import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature/history';
