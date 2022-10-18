@@ -1,5 +1,5 @@
 export const copyToClipboard = (id: string, value?: string) => {
-  if(!value) {
+  if (!value) {
     return;
   }
 
@@ -10,5 +10,4 @@ export const copyToClipboard = (id: string, value?: string) => {
       document.getElementById(id)?.classList.remove('copied');
     }, 1000);
   });
-}
-  
+};

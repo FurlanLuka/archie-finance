@@ -3,7 +3,7 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import {
   calculateLedgerCreditValue,
   formatLedgerAccountsToString,
-} from '@archie-webapps/archie-dashboard/utils';
+} from '@archie-microservices/ui/dashboard/utils';
 import { LedgerActionType } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';

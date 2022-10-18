@@ -5,7 +5,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { MINIMUM_LTV } from '@archie-microservices/ui/dashboard/constants';
-import { calculateCollateralValue } from '@archie-webapps/archie-dashboard/utils';
+import { calculateCollateralValue } from '@archie-microservices/ui/dashboard/utils';
 import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';

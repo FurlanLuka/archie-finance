@@ -22,7 +22,7 @@ import {
   QueryResponse,
   RequestState,
 } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { canUserSchedulePayment } from '@archie-webapps/archie-dashboard/utils';
+import { canUserSchedulePayment } from '@archie-microservices/ui/dashboard/utils';
 
 interface NextPaymentProps {
   withBtn?: boolean;

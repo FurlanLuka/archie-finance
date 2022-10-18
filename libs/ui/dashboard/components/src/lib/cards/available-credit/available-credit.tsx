@@ -5,7 +5,7 @@ import { BigNumber } from 'bignumber.js';
 
 import { MakePaymentModal } from '@archie-microservices/ui/dashboard/feature/make-payment';
 import { LoanToValueChart } from '@archie-microservices/ui/dashboard/components';
-import { canUserSchedulePayment } from '@archie-webapps/archie-dashboard/utils';
+import { canUserSchedulePayment } from '@archie-microservices/ui/dashboard/utils';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';

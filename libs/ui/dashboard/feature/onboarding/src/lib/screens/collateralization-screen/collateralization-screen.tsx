@@ -12,7 +12,7 @@ import {
   MIN_LINE_OF_CREDIT,
   OnboardingStep,
 } from '@archie-microservices/ui/dashboard/constants';
-import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
+import { copyToClipboard } from '@archie-microservices/ui/dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';

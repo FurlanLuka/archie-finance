@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 
-import { calculateLedgerCreditValue } from '@archie-webapps/archie-dashboard/utils';
+import { calculateLedgerCreditValue } from '@archie-microservices/ui/dashboard/utils';
 import {
   Ledger,
   LedgerAccountData,

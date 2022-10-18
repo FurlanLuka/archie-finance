@@ -58,11 +58,11 @@
       "@archie-microservices/ui/dashboard/hooks": [
         "libs/ui/dashboard/hooks/src/index.ts"
       ],
+      "@archie-microservices/ui/dashboard/utils": [
+        "libs/ui/dashboard/utils/src/index.ts"
+      ],
       "@archie-webapps/archie-dashboard/feature/collateralization": [
         "libs/archie-dashboard/feature/collateralization/src/index.ts"
-      ],
-      "@archie-webapps/archie-dashboard/utils": [
-        "libs/archie-dashboard/utils/src/index.ts"
       ],
       "@archie-webapps/shared/constants": [
         "libs/shared/constants/src/index.ts"

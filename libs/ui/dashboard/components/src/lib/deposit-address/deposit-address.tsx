@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import QRCode from 'react-qr-code';
 import ReactTooltip from 'react-tooltip';
 
-import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
+import { copyToClipboard } from '@archie-microservices/ui/dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetDepositAddress } from '@archie-webapps/shared/data-access/archie-api/vault_account/hooks/use-get-deposit-address';
