@@ -9,7 +9,7 @@ import { ErrorScreen } from '@archie-microservices/ui/dashboard/components';
 import { CollateralScreen } from '@archie-microservices/ui/dashboard/feature/collateral';
 import { CollateralizationScreen } from '@archie-webapps/archie-dashboard/feature/collateralization';
 import { HistoryScreen } from '@archie-microservices/ui/dashboard/feature/history';
-import { HomeScreen } from '@archie-webapps/archie-dashboard/feature/home';
+import { HomeScreen } from '@archie-microservices/ui/dashboard/feature/home';
 import { PaymentScreen } from '@archie-webapps/archie-dashboard/feature/payments';
 import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature/rewards';
 import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature/settings';

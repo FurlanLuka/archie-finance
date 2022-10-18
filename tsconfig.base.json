@@ -34,11 +34,11 @@
       "@archie-microservices/ui/dashboard/feature/history": [
         "libs/ui/dashboard/feature/history/src/index.ts"
       ],
+      "@archie-microservices/ui/dashboard/feature/home": [
+        "libs/ui/dashboard/feature/home/src/index.ts"
+      ],
       "@archie-webapps/archie-dashboard/feature/collateralization": [
         "libs/archie-dashboard/feature/collateralization/src/index.ts"
-      ],
-      "@archie-webapps/archie-dashboard/feature/home": [
-        "libs/archie-dashboard/feature/home/src/index.ts"
       ],
       "@archie-webapps/archie-dashboard/feature/make-payment": [
         "libs/archie-dashboard/feature/make-payment/src/index.ts"
