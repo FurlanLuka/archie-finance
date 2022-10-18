@@ -4,8 +4,16 @@ import ReactCodeInput from 'react-verification-code-input';
 
 import { useCompleteAptoVerification } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-complete-apto-verification';
 import { useStartAptoVerification } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-start-apto-verification';
-import { MutationQueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { ButtonPrimary, Card, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
+import {
+  MutationQueryResponse,
+  RequestState,
+} from '@archie-webapps/shared/data-access/archie-api/interface';
+import {
+  ButtonPrimary,
+  Card,
+  TitleL,
+  BodyM,
+} from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -17,8 +25,10 @@ export const VerifyPhoneScreen: FC = () => {
   const [code, setCode] = useState('');
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
-  const useCompleteAptoVerificationQuery: MutationQueryResponse<unknown> = useCompleteAptoVerification();
-  const useStartAptoVerificationQuery: MutationQueryResponse<unknown> = useStartAptoVerification();
+  const useCompleteAptoVerificationQuery: MutationQueryResponse<unknown> =
+    useCompleteAptoVerification();
+  const useStartAptoVerificationQuery: MutationQueryResponse<unknown> =
+    useStartAptoVerification();
 
   useEffect(() => {
     if (useStartAptoVerificationQuery.state === RequestState.IDLE) {
@@ -55,8 +65,13 @@ export const VerifyPhoneScreen: FC = () => {
       <Card column alignItems="center" padding="1.5rem">
         <TitleL className="title">{t('verify_phone_step.title')}</TitleL>
         <BodyM className="subtitle">{t('verify_phone_step.subtitle')}</BodyM>
-        <ReactCodeInput onComplete={(values) => setCode(values)} className="code-input" />
-        <BodyM className="resend-text">{t('verify_phone_step.resend_text')}</BodyM>
+        <ReactCodeInput
+          onComplete={(values) => setCode(values)}
+          className="code-input"
+        />
+        <BodyM className="resend-text">
+          {t('verify_phone_step.resend_text')}
+        </BodyM>
         <button className="resend-btn" onClick={handleResend}>
           <BodyM weight={700} color={theme.textHighlight}>
             {t('verify_phone_step.resend_btn')}
@@ -67,7 +82,9 @@ export const VerifyPhoneScreen: FC = () => {
           type="submit"
           onClick={handleSubmit}
           isDisabled={!isValid}
-          isLoading={useCompleteAptoVerificationQuery.state === RequestState.LOADING}
+          isLoading={
+            useCompleteAptoVerificationQuery.state === RequestState.LOADING
+          }
         >
           {t('btn_next')}
           <Icon name="arrow-right" fill={theme.textLight} />

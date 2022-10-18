@@ -3,8 +3,10 @@ import * as yup from 'yup';
 
 import { parseDate } from './kyc-form.helpers';
 
-const minYears = (value: Date) => differenceInYears(new Date(), new Date(value)) < 18;
-const maxYears = (value: Date) => differenceInYears(new Date(), new Date(value)) > 122;
+const minYears = (value: Date) =>
+  differenceInYears(new Date(), new Date(value)) < 18;
+const maxYears = (value: Date) =>
+  differenceInYears(new Date(), new Date(value)) > 122;
 
 const SUPPORTED_COUNTRIES = ['US'];
 
@@ -41,15 +43,21 @@ export const KycSchema = yup.object({
       }
       return !maxYears(parseDate(value));
     })
-    .test('future_birthday_test', 'kyc_step.error.cannot_be_future', (value) => {
-      if (!value) {
-        return false;
-      }
-      return !isFuture(parseDate(value));
-    }),
+    .test(
+      'future_birthday_test',
+      'kyc_step.error.cannot_be_future',
+      (value) => {
+        if (!value) {
+          return false;
+        }
+        return !isFuture(parseDate(value));
+      },
+    ),
   address: yup.object({
     addressStreet: yup.string().required('kyc_step.error.not_full_address'),
-    addressStreetNumber: yup.string().required('kyc_step.error.no_street_number'),
+    addressStreetNumber: yup
+      .string()
+      .required('kyc_step.error.no_street_number'),
     addressLocality: yup.string().required('kyc_step.error.not_full_address'),
     addressCountry: yup
       .string()
@@ -59,7 +67,13 @@ export const KycSchema = yup.object({
     addressPostalCode: yup.string().required('kyc_step.error.not_full_address'),
   }),
   aptUnit: yup.string(),
-  phoneNumber: yup.string().required('kyc_step.error.required_field').min(10, 'kyc_step.error.phone_number_digits'),
-  ssn: yup.string().required('kyc_step.error.required_field').length(9, 'kyc_step.error.ssn_digits'),
+  phoneNumber: yup
+    .string()
+    .required('kyc_step.error.required_field')
+    .min(10, 'kyc_step.error.phone_number_digits'),
+  ssn: yup
+    .string()
+    .required('kyc_step.error.required_field')
+    .length(9, 'kyc_step.error.ssn_digits'),
   income: yup.number().required('kyc_step.error.required_field'),
 });

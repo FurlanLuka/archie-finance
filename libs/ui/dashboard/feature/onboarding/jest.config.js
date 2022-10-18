@@ -1,9 +1,10 @@
 module.exports = {
   displayName: 'archie-dashboard-feature-onboarding',
-  preset: '../../../../jest.preset.js',
+  preset: '../../../../../jest.preset.js',
   transform: {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/libs/archie-dashboard/feature/onboarding',
+  coverageDirectory:
+    '../../../../../coverage/libs/archie-dashboard/feature/onboarding',
 };

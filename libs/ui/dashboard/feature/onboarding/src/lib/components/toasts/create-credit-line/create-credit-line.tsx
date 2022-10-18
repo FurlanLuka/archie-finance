@@ -3,14 +3,22 @@ import { useTranslation } from 'react-i18next';
 
 import { useCreateCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/hooks/use-create-credit-line';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Toast, ToastList, ButtonLight, BodyM } from '@archie-webapps/shared/ui/design-system';
+import {
+  Toast,
+  ToastList,
+  ButtonLight,
+  BodyM,
+} from '@archie-webapps/shared/ui/design-system';
 
 interface CreateCreditLineProps {
   collateralText: string;
   creditValue: string;
 }
 
-export const CreateCreditLine: FC<CreateCreditLineProps> = ({ collateralText, creditValue }) => {
+export const CreateCreditLine: FC<CreateCreditLineProps> = ({
+  collateralText,
+  creditValue,
+}) => {
   const createCreditLine = useCreateCreditLine();
   const { t } = useTranslation();
 

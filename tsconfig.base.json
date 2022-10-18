@@ -40,11 +40,11 @@
       "@archie-microservices/ui/dashboard/feature/make-payment": [
         "libs/ui/dashboard/feature/make-payment/src/index.ts"
       ],
+      "@archie-microservices/ui/dashboard/feature/onboarding": [
+        "libs/ui/dashboard/feature/onboarding/src/index.ts"
+      ],
       "@archie-webapps/archie-dashboard/feature/collateralization": [
         "libs/archie-dashboard/feature/collateralization/src/index.ts"
-      ],
-      "@archie-webapps/archie-dashboard/feature/onboarding": [
-        "libs/archie-dashboard/feature/onboarding/src/index.ts"
       ],
       "@archie-webapps/archie-dashboard/feature/payments": [
         "libs/archie-dashboard/feature/payments/src/index.ts"

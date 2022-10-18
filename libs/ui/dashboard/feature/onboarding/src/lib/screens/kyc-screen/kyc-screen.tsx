@@ -8,11 +8,25 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useCreateKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-create-kyc';
-import { ButtonPrimary, Card, InputText, TitleL, BodyL, BodyM } from '@archie-webapps/shared/ui/design-system';
+import {
+  ButtonPrimary,
+  Card,
+  InputText,
+  TitleL,
+  BodyL,
+  BodyM,
+} from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
-import { parseDate, addAddress, getAddressError, Address, formatIncome, getFormatTemplate } from './kyc-form.helpers';
+import {
+  parseDate,
+  addAddress,
+  getAddressError,
+  Address,
+  formatIncome,
+  getFormatTemplate,
+} from './kyc-form.helpers';
 import { KycSchema } from './kyc-form.schema';
 import { KycScreenStyled } from './kyc-screen.styled';
 
@@ -80,7 +94,10 @@ export const KycScreen: FC = () => {
           <div className="input-group">
             <InputText>
               {t('kyc_step.label.first_name')}
-              <input placeholder={t('kyc_step.placeholder.first_name')} {...register('firstName')} />
+              <input
+                placeholder={t('kyc_step.placeholder.first_name')}
+                {...register('firstName')}
+              />
               {errors.firstName?.message && (
                 <BodyM className="error" color={theme.textDanger}>
                   {t(errors.firstName.message)}
@@ -89,7 +106,10 @@ export const KycScreen: FC = () => {
             </InputText>
             <InputText>
               {t('kyc_step.label.last_name')}
-              <input placeholder={t('kyc_step.placeholder.last_name')} {...register('lastName')} />
+              <input
+                placeholder={t('kyc_step.placeholder.last_name')}
+                {...register('lastName')}
+              />
               {errors.lastName?.message && (
                 <BodyM className="error" color={theme.textDanger}>
                   {t(errors.lastName.message)}
@@ -136,7 +156,9 @@ export const KycScreen: FC = () => {
                   />
                   {errors.address && (
                     <BodyM className="error" color={theme.textDanger}>
-                      {!value ? t('kyc_step.error.required_field') : t(getAddressError(errors.address))}
+                      {!value
+                        ? t('kyc_step.error.required_field')
+                        : t(getAddressError(errors.address))}
                     </BodyM>
                   )}
                 </>
@@ -145,7 +167,10 @@ export const KycScreen: FC = () => {
           </InputText>
           <InputText>
             {t('kyc_step.label.apt_unit')}
-            <input placeholder={t('kyc_step.placeholder.apt_unit')} {...register('aptUnit')} />
+            <input
+              placeholder={t('kyc_step.placeholder.apt_unit')}
+              {...register('aptUnit')}
+            />
             {errors.aptUnit?.message && (
               <BodyM className="error" color={theme.textDanger}>
                 {t(errors.aptUnit.message)}
@@ -222,7 +247,11 @@ export const KycScreen: FC = () => {
             )}
           </InputText>
           <hr className="divider" />
-          <ButtonPrimary type="submit" width="100%" isLoading={mutationRequest.state === RequestState.LOADING}>
+          <ButtonPrimary
+            type="submit"
+            width="100%"
+            isLoading={mutationRequest.state === RequestState.LOADING}
+          >
             {t('btn_next')}
             <Icon name="arrow-right" fill={theme.textLight} />
           </ButtonPrimary>

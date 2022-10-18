@@ -2,13 +2,22 @@ import { FC, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import {
+  QueryResponse,
+  RequestState,
+} from '@archie-webapps/shared/data-access/archie-api/interface';
 import { EmailVerificationResponse } from '@archie-webapps/shared/data-access/archie-api/user/api/get-email-verification';
 import { useGetEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-get-email-verification';
 import { usePollEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
 import { useResendEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
 import { useAuthenticatedSession } from '@archie-webapps/shared/data-access/session';
-import { ButtonPrimary, Card, Skeleton, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
+import {
+  ButtonPrimary,
+  Card,
+  Skeleton,
+  TitleL,
+  BodyM,
+} from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { VerifyEmailScreenStyled } from './verify-email-screen.styled';
@@ -23,7 +32,8 @@ export const VerifyEmailScreen: FC = () => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [counter, setCounter] = useState(30);
 
-  const getEmailVerificationResponse: QueryResponse<EmailVerificationResponse> = useGetEmailVerification();
+  const getEmailVerificationResponse: QueryResponse<EmailVerificationResponse> =
+    useGetEmailVerification();
   const mutationResponse = useResendEmailVerification();
   usePollEmailVerification();
 
@@ -73,7 +83,9 @@ export const VerifyEmailScreen: FC = () => {
     }
 
     if (getEmailVerificationResponse.state === RequestState.ERROR) {
-      return <Navigate to="/onboarding/error" state={{ prevPath: '/onboarding' }} />;
+      return (
+        <Navigate to="/onboarding/error" state={{ prevPath: '/onboarding' }} />
+      );
     }
 
     if (getEmailVerificationResponse.state === RequestState.SUCCESS) {
@@ -81,7 +93,9 @@ export const VerifyEmailScreen: FC = () => {
         <Card column alignItems="center" padding="1.5rem">
           <TitleL className="title">{t('verify_email_step.title')}</TitleL>
           <BodyM className="text">
-            {t('verify_email_step.subtitle', { email: getEmailVerificationResponse.data.email })}
+            {t('verify_email_step.subtitle', {
+              email: getEmailVerificationResponse.data.email,
+            })}
           </BodyM>
           <BodyM className="text">{t('verify_email_step.text_1')}</BodyM>
           <div className="link">
@@ -101,7 +115,9 @@ export const VerifyEmailScreen: FC = () => {
             onClick={handleResend}
           >
             {btnDisabled
-              ? t('verify_email_step.resend_btn_disabled', { counter: `00:${counter}` })
+              ? t('verify_email_step.resend_btn_disabled', {
+                  counter: `00:${counter}`,
+                })
               : t('verify_email_step.resend_btn')}
           </ButtonPrimary>
         </Card>

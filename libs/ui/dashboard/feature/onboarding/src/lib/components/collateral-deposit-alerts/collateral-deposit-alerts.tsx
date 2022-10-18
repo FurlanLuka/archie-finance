@@ -1,6 +1,9 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 
-import { calculateLedgerCreditValue, formatLedgerAccountsToString } from '@archie-webapps/archie-dashboard/utils';
+import {
+  calculateLedgerCreditValue,
+  formatLedgerAccountsToString,
+} from '@archie-webapps/archie-dashboard/utils';
 import { LedgerActionType } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
@@ -15,9 +18,13 @@ import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-en
 import { CreateCreditLine } from '../toasts/create-credit-line/create-credit-line';
 import { NotEnoughCollateral } from '../toasts/not-enough-collateral/not-enough-collateral';
 
-import { getCollateralDepositState, CollateralDepositState } from './collateral-deposit-alerts.helpers';
+import {
+  getCollateralDepositState,
+  CollateralDepositState,
+} from './collateral-deposit-alerts.helpers';
 
-const COLLATERAL_DEPOSITED_HANDLER_ID = 'CollateralDepositAlerts.ledger-updated';
+const COLLATERAL_DEPOSITED_HANDLER_ID =
+  'CollateralDepositAlerts.ledger-updated';
 export const CollateralDepositAlerts: FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -37,7 +44,10 @@ export const CollateralDepositAlerts: FC = () => {
     );
 
     return () => {
-      websocketInstance.removeHandler(WsEventTopic.LEDGER_UPDATED_TOPIC, COLLATERAL_DEPOSITED_HANDLER_ID);
+      websocketInstance.removeHandler(
+        WsEventTopic.LEDGER_UPDATED_TOPIC,
+        COLLATERAL_DEPOSITED_HANDLER_ID,
+      );
     };
   }, []);
 
@@ -59,10 +69,15 @@ export const CollateralDepositAlerts: FC = () => {
   const currentCollateralDepositState = getCollateralDepositState(
     isModalOpen,
     collateralCreditValue,
-    getLedgerResponse.state === RequestState.SUCCESS ? getLedgerResponse.data.accounts : [],
+    getLedgerResponse.state === RequestState.SUCCESS
+      ? getLedgerResponse.data.accounts
+      : [],
   );
 
-  if (currentCollateralDepositState === CollateralDepositState.COLLATERAL_RECEIVED_MODAL) {
+  if (
+    currentCollateralDepositState ===
+    CollateralDepositState.COLLATERAL_RECEIVED_MODAL
+  ) {
     return (
       <CollateralReceivedModal
         onClose={() => {
@@ -77,7 +92,10 @@ export const CollateralDepositAlerts: FC = () => {
     );
   }
 
-  if (currentCollateralDepositState === CollateralDepositState.NOT_ENOUGH_COLLATERAL_MODAL) {
+  if (
+    currentCollateralDepositState ===
+    CollateralDepositState.NOT_ENOUGH_COLLATERAL_MODAL
+  ) {
     return (
       <NotEnoughCollateralModal
         creditValue={collateralCreditValue}
@@ -88,11 +106,22 @@ export const CollateralDepositAlerts: FC = () => {
     );
   }
 
-  if (currentCollateralDepositState === CollateralDepositState.CREATE_CREDIT_LINE_TOAST) {
-    return <CreateCreditLine collateralText={collateralText} creditValue={collateralCreditValue} />;
+  if (
+    currentCollateralDepositState ===
+    CollateralDepositState.CREATE_CREDIT_LINE_TOAST
+  ) {
+    return (
+      <CreateCreditLine
+        collateralText={collateralText}
+        creditValue={collateralCreditValue}
+      />
+    );
   }
 
-  if (currentCollateralDepositState === CollateralDepositState.NOT_ENOUGH_COLLATERAL_TOAST) {
+  if (
+    currentCollateralDepositState ===
+    CollateralDepositState.NOT_ENOUGH_COLLATERAL_TOAST
+  ) {
     return <NotEnoughCollateral creditValue={collateralCreditValue} />;
   }
 

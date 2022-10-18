@@ -4,7 +4,7 @@ import {
   ErrorScreen,
   Header,
 } from '@archie-microservices/ui/dashboard/components';
-import { OnboardingHandler } from '@archie-webapps/archie-dashboard/feature/onboarding';
+import { OnboardingHandler } from '@archie-microservices/ui/dashboard/feature/onboarding';
 import { Page } from '@archie-webapps/shared/ui/design-system';
 
 export const OnboardingRoute = () => (
