@@ -15,7 +15,7 @@ import {
 import {
   SessionState,
   useAuthenticatedSession,
-} from '@archie-webapps/shared/data-access/session';
+} from '@archie-microservices/ui/shared/data-access/session';
 
 import { ApiError, ApiErrors, UnauthenticatedApiError } from './api-error';
 import {

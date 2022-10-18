@@ -1,6 +1,10 @@
 import { useContext } from 'react';
 
-import { SessionContext, SessionContextValues, SessionState } from '../context/session-context';
+import {
+  SessionContext,
+  SessionContextValues,
+  SessionState,
+} from '../context/session-context';
 
 export type UseSessionResponse = SessionContextValues;
 

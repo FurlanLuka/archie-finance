@@ -10,7 +10,7 @@ import { EmailVerificationResponse } from '@archie-webapps/shared/data-access/ar
 import { useGetEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-get-email-verification';
 import { usePollEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
 import { useResendEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
-import { useAuthenticatedSession } from '@archie-webapps/shared/data-access/session';
+import { useAuthenticatedSession } from '@archie-microservices/ui/shared/data-access/session';
 import {
   ButtonPrimary,
   Card,

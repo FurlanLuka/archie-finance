@@ -4,7 +4,7 @@ import useAsyncEffect from 'use-async-effect';
 import {
   SessionState,
   useSession,
-} from '@archie-webapps/shared/data-access/session';
+} from '@archie-microservices/ui/shared/data-access/session';
 import { websocketInstance } from '@archie-webapps/shared/data-access/websocket-instance';
 
 interface UseStartupResult {
