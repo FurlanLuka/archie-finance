@@ -1,0 +1,89 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/credit-line-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/api/credit-line-api",
+        "main": "apps/api/credit-line-api/src/main.ts",
+        "tsConfig": "apps/api/credit-line-api/tsconfig.app.json",
+        "assets": [
+          "apps/api/credit-line-api/src/assets"
+        ],
+        "tsPlugins": [
+          "@nestjs/swagger/plugin"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/api/credit-line-api/src/environments/environment.ts",
+              "with": "apps/api/credit-line-api/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "credit-line-api:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "credit-line-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/api/credit-line-api/**/*.ts"
+        ]
+      }
+    },
+    "build-openapi": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build credit-line-api && RUN_MIGRATIONS=false node dist/apps/api/credit-line-api/main build-swagger"
+      }
+    },
+    "generate-migration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build credit-line-api && node dist/apps/api/credit-line-api/main generate-migration"
+      }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "test-integration": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/api/credit-line-api"
+      ],
+      "options": {
+        "jestConfig": "apps/api/credit-line-api/jest.config.ts",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
+    }
+  },
+  "tags": []
+}

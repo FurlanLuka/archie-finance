@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/referral-system-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/api/referral-system-api",
+        "main": "apps/api/referral-system-api/src/main.ts",
+        "tsConfig": "apps/api/referral-system-api/tsconfig.app.json",
+        "tsPlugins": [
+          "@nestjs/swagger/plugin"
+        ],
+        "assets": [
+          "apps/api/referral-system-api/src/assets"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/api/referral-system-api/src/environments/environment.ts",
+              "with": "apps/api/referral-system-api/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "build-openapi": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build referral-system-api && RUN_MIGRATIONS=false node dist/apps/api/referral-system-api/main build-swagger"
+      }
+    },
+    "generate-migration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build referral-system-api && node dist/apps/api/referral-system-api/main generate-migration"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "referral-system-api:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/api/referral-system-api/**/*.ts"
+        ]
+      }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
+    },
+    "test-integration": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/api/referral-system-api"
+      ],
+      "options": {
+        "jestConfig": "apps/api/referral-system-api/jest.config.ts",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    }
+  },
+  "tags": []
+}
