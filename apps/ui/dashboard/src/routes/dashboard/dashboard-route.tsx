@@ -11,7 +11,7 @@ import { CollateralizationScreen } from '@archie-webapps/archie-dashboard/featur
 import { HistoryScreen } from '@archie-microservices/ui/dashboard/feature/history';
 import { HomeScreen } from '@archie-microservices/ui/dashboard/feature/home';
 import { PaymentScreen } from '@archie-microservices/ui/dashboard/feature/payments';
-import { RewardsScreen } from '@archie-webapps/archie-dashboard/feature/rewards';
+import { RewardsScreen } from '@archie-microservices/ui/dashboard/feature/rewards';
 import { SettingsScreen } from '@archie-webapps/archie-dashboard/feature/settings';
 import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature/withdraw';
 import {
