@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { LTVStatus, LTVColor } from '@archie-webapps/shared/constants';
+import { LTVStatus, LTVColor } from '@archie-microservices/ui/shared/constants';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import {

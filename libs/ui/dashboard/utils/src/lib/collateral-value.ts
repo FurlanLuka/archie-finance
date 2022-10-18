@@ -1,7 +1,7 @@
 // TODO move to shared? it's used for calculation in events
 import { BigNumber } from 'bignumber.js';
 
-import { CollateralAssets } from '@archie-webapps/shared/constants';
+import { CollateralAssets } from '@archie-microservices/ui/shared/constants';
 import { LedgerAccountData } from '@archie-webapps/shared/data-access/archie-api-dtos';
 
 export const calculateLedgerCreditValue = (

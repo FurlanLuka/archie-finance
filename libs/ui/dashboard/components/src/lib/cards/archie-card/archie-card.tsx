@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 import {
   CardStatusColor,
   CardStatusText,
-} from '@archie-webapps/shared/constants';
+} from '@archie-microservices/ui/shared/constants';
 import { RevealCardModal } from '@archie-microservices/ui/dashboard/components';
 import {
   QueryResponse,

@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
 
@@ -21,7 +21,9 @@ export interface Statement {
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const getStatements = async (accessToken: string): Promise<Statement[]> => {
+export const getStatements = async (
+  accessToken: string,
+): Promise<Statement[]> => {
   return getRequest<Statement[]>(
     `${API_URL}/v1/loan_statements`,
     {

@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
 
@@ -9,7 +9,9 @@ export interface EmailVerificationResponse {
 
 const ERROR_LIST = new Map<string, string>([]);
 
-export const getEmailVerification = async (accessToken: string): Promise<EmailVerificationResponse> => {
+export const getEmailVerification = async (
+  accessToken: string,
+): Promise<EmailVerificationResponse> => {
   return getRequest<EmailVerificationResponse>(
     `${API_URL}/v1/user/email-verification`,
     {

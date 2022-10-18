@@ -5,7 +5,7 @@ import {
   CollateralAssets,
   CollateralCurrency,
   LTVStatus,
-} from '@archie-webapps/shared/constants';
+} from '@archie-microservices/ui/shared/constants';
 import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { CreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/api/get-credit-line';
 import { Table } from '@archie-webapps/shared/ui/design-system';

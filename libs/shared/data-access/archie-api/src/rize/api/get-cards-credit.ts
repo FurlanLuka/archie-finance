@@ -1,5 +1,5 @@
-import { API_URL } from '@archie-webapps/shared/constants';
-import { CardStatus } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
+import { CardStatus } from '@archie-microservices/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
 
@@ -11,7 +11,9 @@ export interface CardsCredit {
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const getCardsCredit = async (accessToken: string): Promise<CardsCredit> => {
+export const getCardsCredit = async (
+  accessToken: string,
+): Promise<CardsCredit> => {
   return getRequest<CardsCredit>(
     `${API_URL}/v1/rize/users/cards/credit`,
     {

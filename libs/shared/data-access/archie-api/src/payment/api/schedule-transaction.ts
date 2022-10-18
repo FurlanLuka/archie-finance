@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { DefaultVariables, postRequest } from '../../helpers';
 
@@ -8,11 +8,16 @@ export interface ScheduleTransactionParams {
   paymentInstrumentId: string;
 }
 
-export interface ScheduleTransactionBody extends DefaultVariables, ScheduleTransactionParams {}
+export interface ScheduleTransactionBody
+  extends DefaultVariables,
+    ScheduleTransactionParams {}
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const scheduleTransaction = async ({ accessToken, ...body }: ScheduleTransactionBody): Promise<void> => {
+export const scheduleTransaction = async ({
+  accessToken,
+  ...body
+}: ScheduleTransactionBody): Promise<void> => {
   return postRequest(
     `${API_URL}/v1/loan_payments`,
     body,

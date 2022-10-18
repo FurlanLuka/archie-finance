@@ -1,7 +1,11 @@
 import { ResponsivePie } from '@nivo/pie';
 import { FC } from 'react';
 
-import { LTVStatus, LTVText, LTVColor } from '@archie-webapps/shared/constants';
+import {
+  LTVStatus,
+  LTVText,
+  LTVColor,
+} from '@archie-microservices/ui/shared/constants';
 import { Badge, TitleL, BodyS } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 

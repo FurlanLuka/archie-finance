@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
 
@@ -11,9 +11,16 @@ export interface GetOnboardingResponse {
   completed: boolean;
 }
 
-const ERROR_LIST = new Map([['ONBOARDING_NOT_FOUND', 'Onboarding record was not found. Please contact support.']]);
+const ERROR_LIST = new Map([
+  [
+    'ONBOARDING_NOT_FOUND',
+    'Onboarding record was not found. Please contact support.',
+  ],
+]);
 
-export const getOnboarding = async (accessToken: string): Promise<GetOnboardingResponse> => {
+export const getOnboarding = async (
+  accessToken: string,
+): Promise<GetOnboardingResponse> => {
   return getRequest<GetOnboardingResponse>(
     `${API_URL}/v1/onboarding`,
     {

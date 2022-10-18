@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { DefaultVariables, postRequest } from '../../helpers';
 
@@ -9,7 +9,10 @@ export interface ConnectAccountBody extends DefaultVariables {
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const connectAccount = async ({ accessToken, ...body }: ConnectAccountBody): Promise<void> => {
+export const connectAccount = async ({
+  accessToken,
+  ...body
+}: ConnectAccountBody): Promise<void> => {
   return postRequest(
     `${API_URL}/v1/payment_instruments`,
     body,

@@ -83,7 +83,6 @@
     "plugin-migration-generator": "libs/plugin/migration-generator",
     "plugin-workspace-generator": "libs/plugin/workspace-generator",
     "referral-system-api": "apps/api/referral-system-api",
-    "shared-constants": "libs/shared/constants",
     "shared-data-access-archie-api": "libs/shared/data-access/archie-api",
     "shared-data-access-archie-api-dtos": "libs/shared/data-access/archie-api-dtos",
     "shared-data-access-query-client": "libs/shared/data-access/query-client",
@@ -107,6 +106,7 @@
     "ui-dashboard-feature-withdraw": "libs/ui/dashboard/feature/withdraw",
     "ui-dashboard-hooks": "libs/ui/dashboard/hooks",
     "ui-dashboard-utils": "libs/ui/dashboard/utils",
+    "ui-shared-constants": "libs/ui/shared/constants",
     "user-api": "apps/api/user-api",
     "webhook-api": "apps/api/webhook-api",
     "websocket-event-api": "apps/api/websocket-event-api"

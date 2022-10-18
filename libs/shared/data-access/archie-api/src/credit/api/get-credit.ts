@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
 
@@ -10,7 +10,9 @@ export interface GetCreditResponse {
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const getCredit = async (accessToken: string): Promise<GetCreditResponse> => {
+export const getCredit = async (
+  accessToken: string,
+): Promise<GetCreditResponse> => {
   return getRequest<GetCreditResponse>(
     `${API_URL}/v1/loan_balances`,
     {

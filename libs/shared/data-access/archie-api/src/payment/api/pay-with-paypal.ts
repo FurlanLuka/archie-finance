@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { DefaultVariables, postRequest } from '../../helpers';
 
@@ -13,7 +13,10 @@ export interface PayWithPaypalResponse {
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const payWithPaypal = async ({ accessToken, ...payload }: PayWithPaypalPayload): Promise<PayWithPaypalResponse> => {
+export const payWithPaypal = async ({
+  accessToken,
+  ...payload
+}: PayWithPaypalPayload): Promise<PayWithPaypalResponse> => {
   return postRequest(
     `${API_URL}/v1/paypal/orders`,
     payload,

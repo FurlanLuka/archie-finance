@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
 
@@ -52,7 +52,11 @@ export interface PaymentsResponse {
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const getLoanPayments = (accessToken: string, fromDate: string, toDate: string) => {
+export const getLoanPayments = (
+  accessToken: string,
+  fromDate: string,
+  toDate: string,
+) => {
   return getRequest<PaymentsResponse>(
     `${API_URL}/v1/loan_payments?fromEffectiveDate=${fromDate}&toEffectiveDate=${toDate}`,
     {

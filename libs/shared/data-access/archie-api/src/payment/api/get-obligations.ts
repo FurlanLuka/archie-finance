@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
 
@@ -50,7 +50,9 @@ export const ERROR_LIST = new Map<string, string>([
   [CREDIT_LINE_NOT_FOUND_ERROR, 'obligation_api.credit_line_not_found'],
 ]);
 
-export const getObligations = async (accessToken: string): Promise<GetObligationsResponse> => {
+export const getObligations = async (
+  accessToken: string,
+): Promise<GetObligationsResponse> => {
   return getRequest<GetObligationsResponse>(
     `${API_URL}/v1/loan_obligations`,
     {

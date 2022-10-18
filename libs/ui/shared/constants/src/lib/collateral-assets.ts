@@ -17,7 +17,10 @@ export interface CollateralAsset {
   url: string;
 }
 
-export const CollateralAssets: Record<CollateralCurrency | string, CollateralAsset> = {
+export const CollateralAssets: Record<
+  CollateralCurrency | string,
+  CollateralAsset
+> = {
   [CollateralCurrency.BTC]: {
     id: CollateralCurrency.BTC,
     name: 'Bitcoin',

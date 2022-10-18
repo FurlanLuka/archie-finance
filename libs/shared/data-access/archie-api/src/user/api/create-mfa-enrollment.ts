@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { DefaultVariables, postRequest } from '../../helpers';
 
@@ -9,7 +9,9 @@ export interface CreateMfaEnrollmentResponse {
 
 const ERROR_LIST = new Map<string, string>([]);
 
-export const createMfaEnrollment = async ({ accessToken }: DefaultVariables): Promise<CreateMfaEnrollmentResponse> => {
+export const createMfaEnrollment = async ({
+  accessToken,
+}: DefaultVariables): Promise<CreateMfaEnrollmentResponse> => {
   return postRequest(
     `${API_URL}/v1/user/mfa/enroll`,
     {},

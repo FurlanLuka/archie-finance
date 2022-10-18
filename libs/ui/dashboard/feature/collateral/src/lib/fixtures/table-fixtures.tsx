@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
-import { CollateralAssets } from '@archie-webapps/shared/constants';
+import { CollateralAssets } from '@archie-microservices/ui/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import {

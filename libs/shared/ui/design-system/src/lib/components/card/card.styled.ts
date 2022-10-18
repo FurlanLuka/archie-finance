@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { LTVStatus, LTVColor } from '@archie-webapps/shared/constants';
+import { LTVStatus, LTVColor } from '@archie-microservices/ui/shared/constants';
 import { breakpoints } from '@archie-webapps/shared/ui/theme';
 
 export interface CardProps {
@@ -99,7 +99,8 @@ export const Card = styled.div<CardProps>`
 
       :before {
         display: block;
-        background-color: ${({ theme, status }) => status ? LTVColor[status] : theme.loanToValueDefault};
+        background-color: ${({ theme, status }) =>
+          status ? LTVColor[status] : theme.loanToValueDefault};
       }
     }
   }

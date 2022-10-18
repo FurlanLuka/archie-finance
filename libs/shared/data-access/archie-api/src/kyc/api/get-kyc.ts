@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
 
@@ -16,7 +16,10 @@ export interface Kyc {
 }
 
 export const ERROR_LIST = new Map([
-  ['KYC_NOT_FOUND', 'KYC record not found. Please submit your KYC or contact support.'],
+  [
+    'KYC_NOT_FOUND',
+    'KYC record not found. Please submit your KYC or contact support.',
+  ],
 ]);
 
 export const getKyc = async (accessToken: string): Promise<Kyc> => {

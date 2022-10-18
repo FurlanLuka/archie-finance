@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
 
@@ -8,7 +8,9 @@ export interface GetMfaEnrollmentResponse {
 
 const ERROR_LIST = new Map<string, string>([]);
 
-export const getMfaEnrollment = async (accessToken: string): Promise<GetMfaEnrollmentResponse> => {
+export const getMfaEnrollment = async (
+  accessToken: string,
+): Promise<GetMfaEnrollmentResponse> => {
   return getRequest(
     `${API_URL}/v1/user/mfa/enrollment`,
     {

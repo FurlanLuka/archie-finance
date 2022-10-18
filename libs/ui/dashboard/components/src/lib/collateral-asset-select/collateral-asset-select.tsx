@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   CollateralAsset,
   CollateralAssets,
-} from '@archie-webapps/shared/constants';
+} from '@archie-microservices/ui/shared/constants';
 import {
   CollateralCurrency,
   Select,

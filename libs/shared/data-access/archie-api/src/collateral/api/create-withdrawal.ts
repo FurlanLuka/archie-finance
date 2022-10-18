@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { DefaultVariables, postRequest } from '../../helpers';
 
@@ -22,7 +22,10 @@ export interface WithdrawalResponse {
 
 const ERROR_LIST = new Map<string, string>([]);
 
-export const createWithdrawal = async ({ accessToken, ...body }: CreateWithdrawalBody): Promise<WithdrawalResponse> => {
+export const createWithdrawal = async ({
+  accessToken,
+  ...body
+}: CreateWithdrawalBody): Promise<WithdrawalResponse> => {
   return postRequest(
     `${API_URL}/v1/collateral/withdraw`,
     body,

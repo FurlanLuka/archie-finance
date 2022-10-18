@@ -1,10 +1,13 @@
-import { API_URL } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-microservices/ui/shared/constants';
 
 import { deleteRequest } from '../../helpers';
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const disconnectAccount = async (accessToken: string, accountId: string): Promise<void> => {
+export const disconnectAccount = async (
+  accessToken: string,
+  accountId: string,
+): Promise<void> => {
   return deleteRequest<void>(
     `${API_URL}/v1/payment_instruments/${accountId}`,
     {

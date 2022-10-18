@@ -1,4 +1,4 @@
-import { WS_URL } from '@archie-webapps/shared/constants';
+import { WS_URL } from '@archie-microservices/ui/shared/constants';
 
 import { WsEvent, WsEventTopic } from './events';
 import { getConnectionToken } from './get-connection-token/get-connection-token';
@@ -15,13 +15,19 @@ class WebsocketInstance {
   private connection: WebSocket | undefined = undefined;
   private accessToken: string | undefined = undefined;
   public connected = false;
-  private handlers: Map<WsEventTopic, Array<{ id: string; handler: (event: WsEvent) => void }>> = new Map();
+  private handlers: Map<
+    WsEventTopic,
+    Array<{ id: string; handler: (event: WsEvent) => void }>
+  > = new Map();
 
   public setToken(accessToken: string): void {
     this.accessToken = accessToken;
   }
 
-  public async connect(onConnect: VoidFunction, onFail: VoidFunction): Promise<void> {
+  public async connect(
+    onConnect: VoidFunction,
+    onFail: VoidFunction,
+  ): Promise<void> {
     const connectToWs = async (retryCount = 0): Promise<void> => {
       try {
         if (this.accessToken === undefined) {
@@ -61,7 +67,9 @@ class WebsocketInstance {
           return connectToWs(retryCount + 1);
         }
 
-        console.warn('Max retries reached, no websocket connection established');
+        console.warn(
+          'Max retries reached, no websocket connection established',
+        );
       }
     };
 
@@ -69,13 +77,19 @@ class WebsocketInstance {
   }
 
   // TODO figure out wtf is going on with event typing
-  public addHandler(event: WsEventTopic, id: string, handler: (event: any) => void): void {
+  public addHandler(
+    event: WsEventTopic,
+    id: string,
+    handler: (event: any) => void,
+  ): void {
     const eventHandlers = this.handlers.get(event) || [];
     this.handlers.set(event, [...eventHandlers, { id, handler }]);
   }
 
   public removeHandler(event: WsEventTopic, id: string): void {
-    const updatedHandlers = (this.handlers.get(event) || []).filter((h) => h.id !== id);
+    const updatedHandlers = (this.handlers.get(event) || []).filter(
+      (h) => h.id !== id,
+    );
 
     this.handlers.set(event, updatedHandlers);
   }
