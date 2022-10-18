@@ -118,6 +118,11 @@ spec:
                 secretKeyRef:
                   name: webhook-api-secrets
                   key: fireblocks-public-key
+            - name: AUTH0_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: webhook-api-secrets
+                  key: auth0-secret-key
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:

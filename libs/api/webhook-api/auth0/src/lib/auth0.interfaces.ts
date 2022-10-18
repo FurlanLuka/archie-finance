@@ -1,3 +1,5 @@
+import { IsArray } from "class-validator";
+
 export interface Auth0Log {
   data: {
     details: {
@@ -10,7 +12,8 @@ export interface Auth0Log {
   };
 }
 
-export interface Auth0Logs {
+export class Auth0Logs {
+  @IsArray()
   logs: Auth0Log[];
 }
 
