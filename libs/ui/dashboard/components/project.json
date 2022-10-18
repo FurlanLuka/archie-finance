@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "name": "ui-dashboard-components",
+  "sourceRoot": "libs/ui/dashboard/components/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ui/dashboard/components/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ui/dashboard/components"],
+      "options": {
+        "jestConfig": "libs/ui/dashboard/components/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "name": "ui-dashboard-feature-collateral",
+  "sourceRoot": "libs/ui/dashboard/feature/collateral/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ui/dashboard/feature/collateral/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ui/dashboard/feature/collateral"],
+      "options": {
+        "jestConfig": "libs/ui/dashboard/feature/collateral/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
