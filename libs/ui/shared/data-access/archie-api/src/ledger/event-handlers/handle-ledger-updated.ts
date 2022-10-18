@@ -7,7 +7,7 @@ import { LedgerUpdatedWsEvent } from '@archie-microservices/ui/shared/data-acces
 import {
   calculateLedgerTotalValue,
   mergeLedgerWithWsUpdate,
-} from '@archie-webapps/shared/utils';
+} from '@archie-microservices/ui/shared/utils';
 
 import { LEDGER_QUERY_KEY } from '../hooks/use-get-ledger';
 
