@@ -1,0 +1,87 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/ledger-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/apps/api/ledger-api",
+        "main": "apps/api/ledger-api/src/main.ts",
+        "tsConfig": "apps/api/ledger-api/tsconfig.app.json",
+        "assets": [
+          "apps/api/ledger-api/src/assets"
+        ],
+        "tsPlugins": ["@nestjs/swagger/plugin"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/api/ledger-api/src/environments/environment.ts",
+              "with": "apps/api/ledger-api/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "ledger-api:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "ledger-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/api/ledger-api/**/*.ts"
+        ]
+      }
+    },
+    "build-openapi": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build ledger-api && RUN_MIGRATIONS=false node dist/apps/api/ledger-api/main build-swagger"
+      }
+    },
+    "generate-migration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build ledger-api && node dist/apps/api/ledger-api/main generate-migration"
+      }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "test-integration": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/api/ledger-api"
+      ],
+      "options": {
+        "jestConfig": "apps/api/ledger-api/jest.config.ts",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
+    }
+  },
+  "tags": []
+}

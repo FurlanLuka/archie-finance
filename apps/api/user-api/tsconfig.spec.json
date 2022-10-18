@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../../dist/out-tsc",
+    "module": "commonjs",
+    "types": ["jest", "node"]
+  },
+  "include": [
+    "jest.config.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/*.d.ts",
+    "**/__data__",
+    "**/__mocks__",
+    "src/modules/kyc/kyc.service.spec.skip.ts",
+    "src/modules/user/user.service.spec.skip.ts"
+  ]
+}

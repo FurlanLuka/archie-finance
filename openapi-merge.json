@@ -1,40 +1,40 @@
 {
   "inputs": [
     {
-      "inputFile": "./dist/apps/credit-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/api/credit-api/target/generated/swagger.json"
     },
     {
-      "inputFile": "./dist/apps/onboarding-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/onboarding-api/target/generated/swagger.json"
     },
     {
-      "inputFile": "./dist/apps/user-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/user-api/target/generated/swagger.json"
     },
     {
-      "inputFile": "./dist/apps/referral-system-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/referral-system-api/target/generated/swagger.json"
     },
     {
-      "inputFile": "./dist/apps/webhook-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/webhook-api/target/generated/swagger.json"
     },
     {
-      "inputFile": "./dist/apps/peach-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/peach-api/target/generated/swagger.json"
     },
     {
-      "inputFile": "./dist/apps/ltv-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/ltv-api/target/generated/swagger.json"
     },
     {
-      "inputFile": "./dist/apps/paypal-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/paypal-api/target/generated/swagger.json"
     },
     {
-      "inputFile": "./dist/apps/ledger-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/ledger-api/target/generated/swagger.json"
     },
     {
-      "inputFile": "./dist/apps/fireblocks-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/fireblocks-api/target/generated/swagger.json"
     },
     {
-      "inputFile": "./dist/apps/credit-line-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/credit-line-api/target/generated/swagger.json"
     },
     {
-      "inputFile": "./dist/apps/websocket-event-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/websocket-event-api/target/generated/swagger.json"
     }
   ],
   "output": "./swagger.json"

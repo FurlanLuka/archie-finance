@@ -6,7 +6,7 @@
     "start": "nx serve",
     "build": "nx build",
     "build-openapi": "nx run-many --target=build-openapi --all && openapi-merge-cli",
-    "build-openapi:onboarding-api": "npm run build:onboarding-api && node ./dist/apps/onboarding-api/main",
+    "build-openapi:onboarding-api": "npm run build:onboarding-api && node ./dist/apps/api/onboarding-api/main",
     "build:credit-api": "nx run credit-api:build",
     "build:ltv-api": "nx run ltv-api:build",
     "build:user-api": "nx run user-api:build",
