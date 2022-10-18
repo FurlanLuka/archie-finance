@@ -26,8 +26,8 @@ import {
   ScheduleTransactionDto,
 } from './payments.dto';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
-import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
-import { PeachWebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { WEBHOOK_PEACH_PAYMENT_UPDATED_TOPIC } from '@archie/api/webhook-api/constants';
+import { PeachPaymentUpdatedPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { SERVICE_QUEUE_NAME } from '@archie/api/peach-api/constants';
 import { PAYPAL_PAYMENT_RECEIVED_TOPIC } from '@archie/api/paypal-api/constants';
 import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
@@ -76,16 +76,6 @@ export class PaymentsQueueController {
   constructor(private paymentsService: PaymentsService) {}
 
   @Subscribe(
-    WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC,
-    PaymentsQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async peachWebhookPaymentConfirmedHandler(
-    payload: PeachWebhookPaymentPayload,
-  ): Promise<void> {
-    await this.paymentsService.handlePaymentConfirmedEvent(payload);
-  }
-
-  @Subscribe(
     LEDGER_ACCOUNT_UPDATED_TOPIC,
     PaymentsQueueController.CONTROLLER_QUEUE_NAME,
   )
@@ -101,5 +91,15 @@ export class PaymentsQueueController {
     payload: PaypalPaymentReceivedPayload,
   ): Promise<void> {
     await this.paymentsService.handlePaypalPaymentReceivedEvent(payload);
+  }
+
+  @Subscribe(
+    WEBHOOK_PEACH_PAYMENT_UPDATED_TOPIC,
+    PaymentsQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async paymentUpdatedHandler(
+    payload: PeachPaymentUpdatedPayload,
+  ): Promise<void> {
+    await this.paymentsService.handlePaymentUpdatedEvent(payload);
   }
 }

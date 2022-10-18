@@ -130,6 +130,9 @@ describe('Peach service tests', () => {
       peachNock.cleanAll();
     });
 
+    const collisionDetectedError = {
+      message: 'collision detected',
+    };
     const person: Person = personFactory();
     const homeAddress: HomeAddress = homeAddressContactFactory();
     const creditLine: CreditLine = creditLineFactory();
@@ -164,7 +167,7 @@ describe('Peach service tests', () => {
       });
 
       it('Should not rethrow in case phone contact was already added and keep the same person entity', async () => {
-        createPhoneContactNock.reply(400);
+        createPhoneContactNock.reply(400, collisionDetectedError);
 
         await expect(
           app
@@ -189,18 +192,30 @@ describe('Peach service tests', () => {
     });
 
     describe('Email verified event handling', () => {
-      it('Should add email contact', async () => {
-        const emailVerifiedPayload = emailVerifiedDataFactory();
-        peachNock.setupCreateContactNock(
+      const emailVerifiedPayload = emailVerifiedDataFactory();
+      let emailContactNock: nock.Interceptor;
+
+      beforeEach(() => {
+        emailContactNock = peachNock.setupCreateContactNock(
           person.id,
           emailContactRequestBodyFactory(emailVerifiedPayload),
         );
+      });
 
+      it('Should add email contact', async () => {
         await app
           .get(PeachBorrowerQueueController)
           .emailVerifiedHandler(emailVerifiedPayload);
 
         expect(peachNock.areAllDone()).toEqual(true);
+      });
+
+      it('Should not add email contact as It was already added', async () => {
+        await app
+          .get(PeachBorrowerQueueController)
+          .emailVerifiedHandler(emailVerifiedPayload);
+
+        expect(peachNock.isDone(emailContactNock)).toEqual(false);
       });
     });
 
@@ -284,6 +299,7 @@ describe('Peach service tests', () => {
         expect(peachNock.isDone(createDrawNock)).toEqual(false);
       });
     });
+
     describe('Credit limit updates', () => {
       const creditLimit: CreditLimit = creditLimitFactory();
       const balances: Balances = balancesFactory();

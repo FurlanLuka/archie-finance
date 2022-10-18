@@ -103,16 +103,6 @@ spec:
                 secretKeyRef:
                   name: webhook-api-secrets
                   key: db-database
-            - name: PEACH_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: peach-api-key
-            - name: PEACH_BASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: peach-base-url
             - name: FIREBLOCKS_PUBLIC_KEY
               valueFrom:
                 secretKeyRef:
@@ -123,6 +113,11 @@ spec:
                 secretKeyRef:
                   name: queue-shared-secrets
                   key: queue-url
+            - name: PEACH_HMAC_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: webhook-api-secrets
+                  key: peach-hmac-secret
           {{- end }}
       imagePullSecrets:
         - name: regcred
@@ -140,35 +135,3 @@ spec:
       targetPort: 80
   selector:
     app: archie-webhook-api
----
-apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: check-new-peach-payment
-spec:
-  schedule: "*/5 * * * *"
-  jobTemplate:
-    metadata:
-      name: check-new-peach-payment-events
-    spec:
-      template:
-        spec:
-          containers:
-            - name: check-new-peach-payment-events-job
-              image: curlimages/curl
-              imagePullPolicy: IfNotPresent
-              env:
-                - name: INTERNAL_API_URL
-                  {{- if not .Values.local }}
-                  valueFrom:
-                    secretKeyRef:
-                      name: internal-api-shared-secrets
-                      key: internal-api-url
-                  {{- else }}
-                  value: http://host.minikube.internal
-                  {{- end }}
-              command:
-                - /bin/sh
-                - -c
-                - curl -X POST ${INTERNAL_API_URL}/internal/webhook/peach/confirmed_payments
-          restartPolicy: OnFailure
