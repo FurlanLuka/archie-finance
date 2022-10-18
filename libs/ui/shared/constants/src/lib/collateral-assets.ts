@@ -1,4 +1,4 @@
-import { IconName } from '@archie-webapps/shared/ui/icons';
+import { IconName } from '@archie-microservices/ui/shared/ui/icons';
 
 export enum CollateralCurrency {
   BTC = 'BTC',

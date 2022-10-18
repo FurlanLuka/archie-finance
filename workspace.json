@@ -83,7 +83,6 @@
     "plugin-migration-generator": "libs/plugin/migration-generator",
     "plugin-workspace-generator": "libs/plugin/workspace-generator",
     "referral-system-api": "apps/api/referral-system-api",
-    "shared-ui-icons": "libs/shared/ui/icons",
     "shared-ui-theme": "libs/shared/ui/theme",
     "shared-utils": "libs/shared/utils",
     "ui-dashboard": "apps/ui/dashboard",
@@ -107,6 +106,7 @@
     "ui-shared-data-access-session": "libs/ui/shared/data-access/session",
     "ui-shared-data-access-websocket-instance": "libs/ui/shared/data-access/websocket-instance",
     "ui-shared-ui-design-system": "libs/ui/shared/ui/design-system",
+    "ui-shared-ui-icons": "libs/ui/shared/ui/icons",
     "user-api": "apps/api/user-api",
     "webhook-api": "apps/api/webhook-api",
     "websocket-event-api": "apps/api/websocket-event-api"

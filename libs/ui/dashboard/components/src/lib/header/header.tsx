@@ -7,7 +7,7 @@ import {
   Container,
   BodyL,
 } from '@archie-microservices/ui/shared/ui/design-system';
-import { Icon } from '@archie-webapps/shared/ui/icons';
+import { Icon } from '@archie-microservices/ui/shared/ui/icons';
 
 import { HeaderStyled, MobileNav } from './header.styled';
 

@@ -54,7 +54,9 @@ export const Icon: FC<IconProps> = ({ name, className, fill }) => {
 
     const Component = iconModule.ReactComponent;
 
-    return <Component color={fill ?? theme.textPrimary} className={className} />;
+    return (
+      <Component color={fill ?? theme.textPrimary} className={className} />
+    );
   };
 
   return renderIcon();

@@ -14,7 +14,7 @@ import {
   TitleL,
   BodyM,
 } from '@archie-microservices/ui/shared/ui/design-system';
-import { Icon } from '@archie-webapps/shared/ui/icons';
+import { Icon } from '@archie-microservices/ui/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { VerifyPhoneScreenStyled } from './verify-phone-screen.styled';

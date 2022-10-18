@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { Icon } from '@archie-webapps/shared/ui/icons';
+import { Icon } from '@archie-microservices/ui/shared/ui/icons';
 import { BodyL, BodyS } from '@archie-microservices/ui/shared/ui/design-system';
 
 import { OptionsItemStyled } from './options-item.styled';

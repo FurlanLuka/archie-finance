@@ -82,10 +82,12 @@
       "@archie-microservices/ui/shared/ui/design-system": [
         "libs/ui/shared/ui/design-system/src/index.ts"
       ],
+      "@archie-microservices/ui/shared/ui/icons": [
+        "libs/ui/shared/ui/icons/src/index.ts"
+      ],
       "@archie-webapps/archie-dashboard/feature/collateralization": [
         "libs/archie-dashboard/feature/collateralization/src/index.ts"
       ],
-      "@archie-webapps/shared/ui/icons": ["libs/shared/ui/icons/src/index.ts"],
       "@archie-webapps/shared/ui/theme": ["libs/shared/ui/theme/src/index.ts"],
       "@archie-webapps/shared/utils": ["libs/shared/utils/src/index.ts"],
       "@archie/api/credit-api/constants": [

@@ -9,7 +9,7 @@ import {
   Select,
   BodyS,
 } from '@archie-microservices/ui/shared/ui/design-system';
-import { Icon } from '@archie-webapps/shared/ui/icons';
+import { Icon } from '@archie-microservices/ui/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { StatementDownload } from './blocks/statement-download/statement-download';
