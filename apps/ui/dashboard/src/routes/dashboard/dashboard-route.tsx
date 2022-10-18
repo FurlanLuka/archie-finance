@@ -13,7 +13,7 @@ import { HomeScreen } from '@archie-microservices/ui/dashboard/feature/home';
 import { PaymentScreen } from '@archie-microservices/ui/dashboard/feature/payments';
 import { RewardsScreen } from '@archie-microservices/ui/dashboard/feature/rewards';
 import { SettingsScreen } from '@archie-microservices/ui/dashboard/feature/settings';
-import { WithdrawScreen } from '@archie-webapps/archie-dashboard/feature/withdraw';
+import { WithdrawScreen } from '@archie-microservices/ui/dashboard/feature/withdraw';
 import {
   QueryResponse,
   RequestState,

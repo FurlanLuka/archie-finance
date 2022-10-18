@@ -69,7 +69,6 @@
     "api-websocket-event-api-data-transfer-objects": "libs/api/websocket-event-api/data-transfer-objects",
     "api-websocket-event-api-websocket-event": "libs/api/websocket-event-api/websocket-event",
     "archie-dashboard-feature-collateralization": "libs/archie-dashboard/feature/collateralization",
-    "archie-dashboard-feature-withdraw": "libs/archie-dashboard/feature/withdraw",
     "archie-dashboard-hooks": "libs/archie-dashboard/hooks",
     "archie-dashboard-utils": "libs/archie-dashboard/utils",
     "credit-api": "apps/api/credit-api",
@@ -107,6 +106,7 @@
     "ui-dashboard-feature-payments": "libs/ui/dashboard/feature/payments",
     "ui-dashboard-feature-rewards": "libs/ui/dashboard/feature/rewards",
     "ui-dashboard-feature-settings": "libs/ui/dashboard/feature/settings",
+    "ui-dashboard-feature-withdraw": "libs/ui/dashboard/feature/withdraw",
     "user-api": "apps/api/user-api",
     "webhook-api": "apps/api/webhook-api",
     "websocket-event-api": "apps/api/websocket-event-api"

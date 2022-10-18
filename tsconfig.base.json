@@ -52,11 +52,11 @@
       "@archie-microservices/ui/dashboard/feature/settings": [
         "libs/ui/dashboard/feature/settings/src/index.ts"
       ],
+      "@archie-microservices/ui/dashboard/feature/withdraw": [
+        "libs/ui/dashboard/feature/withdraw/src/index.ts"
+      ],
       "@archie-webapps/archie-dashboard/feature/collateralization": [
         "libs/archie-dashboard/feature/collateralization/src/index.ts"
-      ],
-      "@archie-webapps/archie-dashboard/feature/withdraw": [
-        "libs/archie-dashboard/feature/withdraw/src/index.ts"
       ],
       "@archie-webapps/archie-dashboard/hooks": [
         "libs/archie-dashboard/hooks/src/index.ts"

@@ -3,10 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, Navigate, Link } from 'react-router-dom';
 
 import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
-import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import {
+  QueryResponse,
+  RequestState,
+} from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import { useGetMaxWithdrawalAmount } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-max-withdrawal-amount';
-import { Card, Skeleton, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
+import {
+  Card,
+  Skeleton,
+  TitleS,
+  BodyL,
+} from '@archie-webapps/shared/ui/design-system';
 
 import { WithdrawalForm } from '../components/withdrawal-form/withdrawal-form';
 
@@ -16,9 +24,12 @@ export const WithdrawScreen: FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
   // TODO useParams this
-  const currentAsset = location.pathname.slice(location.pathname.lastIndexOf('/') + 1);
+  const currentAsset = location.pathname.slice(
+    location.pathname.lastIndexOf('/') + 1,
+  );
 
-  const getMaxWithdrawalAmountResponse = useGetMaxWithdrawalAmount(currentAsset);
+  const getMaxWithdrawalAmountResponse =
+    useGetMaxWithdrawalAmount(currentAsset);
   const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
 
   const getContent = () => {
@@ -33,7 +44,10 @@ export const WithdrawScreen: FC = () => {
       );
     }
 
-    if (getMaxWithdrawalAmountResponse.state === RequestState.ERROR || getLedgerResponse.state === RequestState.ERROR) {
+    if (
+      getMaxWithdrawalAmountResponse.state === RequestState.ERROR ||
+      getLedgerResponse.state === RequestState.ERROR
+    ) {
       return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
     }
 
@@ -47,7 +61,9 @@ export const WithdrawScreen: FC = () => {
 
       return (
         <Card column alignItems="center" padding="2.5rem 1.5rem">
-          <TitleS className="title">{t('dashboard_withdraw.title', { currentAsset })}</TitleS>
+          <TitleS className="title">
+            {t('dashboard_withdraw.title', { currentAsset })}
+          </TitleS>
           <BodyL className="subtitle">
             {selectedLedgerAccount ? (
               t('dashboard_withdraw.subtitle', {
