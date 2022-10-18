@@ -84,6 +84,7 @@ export class LtvService {
       );
     }
     const ltvMeta = await this.getNormalizedLtvMeta(credit.userId);
+
     const ltv: number = this.ltvUtilService.calculateLtv(
       ltvMeta.creditUtilization,
       ltvMeta.ledgerValue,
