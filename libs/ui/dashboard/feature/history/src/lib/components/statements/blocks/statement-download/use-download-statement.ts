@@ -8,18 +8,23 @@ interface UseDownloadStatementResult {
   isLoading: boolean;
 }
 
-export function useDownloadStatement(documentId: string): UseDownloadStatementResult {
+export function useDownloadStatement(
+  documentId: string,
+): UseDownloadStatementResult {
   const getStatementDocumentResponse = useGetStatementDocument(documentId);
 
   const downloadDocument = () => {
     if (getStatementDocumentResponse.state === RequestState.IDLE) {
       getStatementDocumentResponse.fetch();
     }
-  }
+  };
 
   useAsyncEffect(
     async (isMounted) => {
-      if (isMounted() && getStatementDocumentResponse.state === RequestState.SUCCESS) {
+      if (
+        isMounted() &&
+        getStatementDocumentResponse.state === RequestState.SUCCESS
+      ) {
         window.location.href = getStatementDocumentResponse.data.url;
       }
     },

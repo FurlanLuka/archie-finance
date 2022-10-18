@@ -4,7 +4,11 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetStatements } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-statements';
-import { ButtonOutline, Select, BodyS } from '@archie-webapps/shared/ui/design-system';
+import {
+  ButtonOutline,
+  Select,
+  BodyS,
+} from '@archie-webapps/shared/ui/design-system';
 import { Icon } from '@archie-webapps/shared/ui/icons';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
@@ -34,7 +38,8 @@ export const Statements: FC = () => {
             {[]}
           </Select>
           <ButtonOutline small width="175px" isLoading>
-            {t('dashboard_history.btn_statements')} <Icon name="download" fill={theme.textDisabled} />
+            {t('dashboard_history.btn_statements')}{' '}
+            <Icon name="download" fill={theme.textDisabled} />
           </ButtonOutline>
         </>
       );
@@ -59,7 +64,8 @@ export const Statements: FC = () => {
               {[]}
             </Select>
             <ButtonOutline small width="175px" isDisabled>
-              {t('dashboard_history.btn_statements')} <Icon name="download" fill={theme.textDisabled} />
+              {t('dashboard_history.btn_statements')}{' '}
+              <Icon name="download" fill={theme.textDisabled} />
             </ButtonOutline>
           </>
         );

@@ -69,7 +69,6 @@
     "api-websocket-event-api-data-transfer-objects": "libs/api/websocket-event-api/data-transfer-objects",
     "api-websocket-event-api-websocket-event": "libs/api/websocket-event-api/websocket-event",
     "archie-dashboard-feature-collateralization": "libs/archie-dashboard/feature/collateralization",
-    "archie-dashboard-feature-history": "libs/archie-dashboard/feature/history",
     "archie-dashboard-feature-home": "libs/archie-dashboard/feature/home",
     "archie-dashboard-feature-make-payment": "libs/archie-dashboard/feature/make-payment",
     "archie-dashboard-feature-onboarding": "libs/archie-dashboard/feature/onboarding",
@@ -107,6 +106,7 @@
     "ui-dashboard-components": "libs/ui/dashboard/components",
     "ui-dashboard-constants": "libs/ui/dashboard/constants",
     "ui-dashboard-feature-collateral": "libs/ui/dashboard/feature/collateral",
+    "ui-dashboard-feature-history": "libs/ui/dashboard/feature/history",
     "user-api": "apps/api/user-api",
     "webhook-api": "apps/api/webhook-api",
     "websocket-event-api": "apps/api/websocket-event-api"

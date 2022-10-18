@@ -31,11 +31,11 @@
       "@archie-microservices/ui/dashboard/feature/collateral": [
         "libs/ui/dashboard/feature/collateral/src/index.ts"
       ],
+      "@archie-microservices/ui/dashboard/feature/history": [
+        "libs/ui/dashboard/feature/history/src/index.ts"
+      ],
       "@archie-webapps/archie-dashboard/feature/collateralization": [
         "libs/archie-dashboard/feature/collateralization/src/index.ts"
-      ],
-      "@archie-webapps/archie-dashboard/feature/history": [
-        "libs/archie-dashboard/feature/history/src/index.ts"
       ],
       "@archie-webapps/archie-dashboard/feature/home": [
         "libs/archie-dashboard/feature/home/src/index.ts"
