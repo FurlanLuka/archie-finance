@@ -31,6 +31,9 @@
       "@archie-microservices/ui/dashboard/feature/collateral": [
         "libs/ui/dashboard/feature/collateral/src/index.ts"
       ],
+      "@archie-microservices/ui/dashboard/feature/collateralization": [
+        "libs/ui/dashboard/feature/collateralization/src/index.ts"
+      ],
       "@archie-microservices/ui/dashboard/feature/history": [
         "libs/ui/dashboard/feature/history/src/index.ts"
       ],
@@ -90,9 +93,6 @@
       ],
       "@archie-microservices/ui/shared/utils": [
         "libs/ui/shared/utils/src/index.ts"
-      ],
-      "@archie-microservices/ui/feature/collateralization": [
-        "libs/ui/dashboard/feature/collateralization/src/index.ts"
       ],
       "@archie/api/credit-api/constants": [
         "libs/api/credit-api/constants/src/index.ts"
