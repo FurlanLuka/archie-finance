@@ -19,7 +19,7 @@ interface OtherLedgerAccountAction {
 }
 
 export type LedgerAccountAction = LiquidationLedgerAccountAction | OtherLedgerAccountAction;
-// TODO use the above import sometime in the future
+
 export interface LedgerAccountUpdatedPayload {
   userId: string;
   ledgerAccounts: LedgerAccountDataWs[];
