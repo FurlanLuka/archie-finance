@@ -1,4 +1,4 @@
-import { PaymentStep } from '@archie-webapps/archie-dashboard/constants';
+import { PaymentStep } from '@archie-microservices/ui/dashboard/constants';
 import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 
 export enum PaymentStepsActionType {
@@ -67,7 +67,10 @@ export const initalPaymentStepsState: PaymentStepsState = {
   // scheduledDate: null,
 };
 
-export const paymentStepsReducer = (state: PaymentStepsState, action: PaymentStepsAction): PaymentStepsState => {
+export const paymentStepsReducer = (
+  state: PaymentStepsState,
+  action: PaymentStepsAction,
+): PaymentStepsState => {
   switch (action.type) {
     case PaymentStepsActionType.MOVE_TO_SCHEDULE_STEP:
       return {

@@ -2,8 +2,13 @@ import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
-import { ButtonPrimary, Modal, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
+import { MIN_LINE_OF_CREDIT } from '@archie-microservices/ui/dashboard/constants';
+import {
+  ButtonPrimary,
+  Modal,
+  TitleS,
+  BodyM,
+} from '@archie-webapps/shared/ui/design-system';
 
 import imgNotEnoughCollateral from '../../../../assets/img-not-enough-collateral.png';
 
@@ -14,17 +19,25 @@ interface NotEnoughCollateralModalProps {
   creditValue: string;
 }
 
-export const NotEnoughCollateralModal: FC<NotEnoughCollateralModalProps> = ({ onClose, creditValue }) => {
+export const NotEnoughCollateralModal: FC<NotEnoughCollateralModalProps> = ({
+  onClose,
+  creditValue,
+}) => {
   const { t } = useTranslation();
 
   return (
     <Modal isOpen={true} maxWidth="800px">
       <NotEnoughCollateralModalStyled>
         <div className="image">
-          <img src={imgNotEnoughCollateral} alt={t('not_enough_collateral_modal.img_alt')} />
+          <img
+            src={imgNotEnoughCollateral}
+            alt={t('not_enough_collateral_modal.img_alt')}
+          />
         </div>
         <div className="content">
-          <TitleS className="modal-title">{t('not_enough_collateral_modal.title')}</TitleS>
+          <TitleS className="modal-title">
+            {t('not_enough_collateral_modal.title')}
+          </TitleS>
           <BodyM className="modal-text">
             {t('not_enough_collateral_modal.text', {
               creditValue: creditValue,
@@ -35,7 +48,9 @@ export const NotEnoughCollateralModal: FC<NotEnoughCollateralModalProps> = ({ on
                 .toString(),
             })}
           </BodyM>
-          <ButtonPrimary onClick={onClose}>{t('not_enough_collateral_modal.btn')}</ButtonPrimary>
+          <ButtonPrimary onClick={onClose}>
+            {t('not_enough_collateral_modal.btn')}
+          </ButtonPrimary>
         </div>
       </NotEnoughCollateralModalStyled>
     </Modal>

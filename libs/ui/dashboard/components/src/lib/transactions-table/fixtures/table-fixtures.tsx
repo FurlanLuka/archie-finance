@@ -6,7 +6,7 @@ import {
   TransactionStatusColor,
   TransactionStatusText,
   TransactionTypeText,
-} from '@archie-webapps/archie-dashboard/constants';
+} from '@archie-microservices/ui/dashboard/constants';
 import {
   NetAsset,
   Transaction,

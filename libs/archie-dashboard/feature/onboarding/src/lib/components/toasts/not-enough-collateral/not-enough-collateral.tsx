@@ -2,14 +2,20 @@ import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
-import { Toast, ToastList, BodyM } from '@archie-webapps/shared/ui/design-system';
+import { MIN_LINE_OF_CREDIT } from '@archie-microservices/ui/dashboard/constants';
+import {
+  Toast,
+  ToastList,
+  BodyM,
+} from '@archie-webapps/shared/ui/design-system';
 
 interface NotEnoughCollateralProps {
   creditValue: string;
 }
 
-export const NotEnoughCollateral: FC<NotEnoughCollateralProps> = ({ creditValue }) => {
+export const NotEnoughCollateral: FC<NotEnoughCollateralProps> = ({
+  creditValue,
+}) => {
   const { t } = useTranslation();
 
   return (

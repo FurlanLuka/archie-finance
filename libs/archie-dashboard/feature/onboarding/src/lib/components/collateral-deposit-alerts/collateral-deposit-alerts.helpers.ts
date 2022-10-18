@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import { MIN_LINE_OF_CREDIT } from '@archie-webapps/archie-dashboard/constants';
+import { MIN_LINE_OF_CREDIT } from '@archie-microservices/ui/dashboard/constants';
 import { LedgerAccountData } from '@archie-webapps/shared/data-access/archie-api-dtos';
 
 export enum CollateralDepositState {

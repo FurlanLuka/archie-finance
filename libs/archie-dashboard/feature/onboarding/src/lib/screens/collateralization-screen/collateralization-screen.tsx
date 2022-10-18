@@ -11,7 +11,7 @@ import {
   MAX_LINE_OF_CREDIT,
   MIN_LINE_OF_CREDIT,
   OnboardingStep,
-} from '@archie-webapps/archie-dashboard/constants';
+} from '@archie-microservices/ui/dashboard/constants';
 import { copyToClipboard } from '@archie-webapps/archie-dashboard/utils';
 import { CollateralAsset } from '@archie-webapps/shared/constants';
 import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';

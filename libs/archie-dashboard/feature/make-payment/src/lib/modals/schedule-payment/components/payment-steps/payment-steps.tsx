@@ -1,7 +1,7 @@
 import { FC, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PaymentStep } from '@archie-webapps/archie-dashboard/constants';
+import { PaymentStep } from '@archie-microservices/ui/dashboard/constants';
 import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
 import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-obligations';
 
@@ -13,7 +13,11 @@ import { PaymentConfirm } from '../payment-confirm/payment-confirm';
 import { PaymentScheduleForm } from '../payment-schedule-form/payment-schedule-form';
 import { PaymentScheduled } from '../payment-scheduled/payment-scheduled';
 
-import { initalPaymentStepsState, PaymentStepsActionType, paymentStepsReducer } from './payment-steps.reducer';
+import {
+  initalPaymentStepsState,
+  PaymentStepsActionType,
+  paymentStepsReducer,
+} from './payment-steps.reducer';
 
 interface PaymentStepsProps {
   obligations: UserObligations;
@@ -21,10 +25,17 @@ interface PaymentStepsProps {
   close: () => void;
 }
 
-export const PaymentSteps: FC<PaymentStepsProps> = ({ obligations, kycData, close }) => {
+export const PaymentSteps: FC<PaymentStepsProps> = ({
+  obligations,
+  kycData,
+  close,
+}) => {
   const { t } = useTranslation();
 
-  const [stepsState, dispatch] = useReducer(paymentStepsReducer, initalPaymentStepsState);
+  const [stepsState, dispatch] = useReducer(
+    paymentStepsReducer,
+    initalPaymentStepsState,
+  );
 
   const getContent = () => {
     switch (stepsState.step) {

@@ -1,7 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 
-import { OnboardingStep } from '@archie-webapps/archie-dashboard/constants';
-import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { OnboardingStep } from '@archie-microservices/ui/dashboard/constants';
+import {
+  QueryResponse,
+  RequestState,
+} from '@archie-webapps/shared/data-access/archie-api/interface';
 import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
 import { LoaderFullScreen } from '@archie-webapps/shared/ui/design-system';
@@ -29,7 +32,8 @@ function getCurrentStep(step: OnboardingStep) {
 }
 
 export const OnboardingHandler: FC = () => {
-  const queryResponse: QueryResponse<GetOnboardingResponse> = useGetOnboarding();
+  const queryResponse: QueryResponse<GetOnboardingResponse> =
+    useGetOnboarding();
 
   const [currentStep, setCurrentStep] = useState<OnboardingStep>();
 

@@ -25,8 +25,8 @@
       "@archie-microservices/ui/dashboard/components": [
         "libs/ui/dashboard/components/src/index.ts"
       ],
-      "@archie-webapps/archie-dashboard/constants": [
-        "libs/archie-dashboard/constants/src/index.ts"
+      "@archie-microservices/ui/dashboard/constants": [
+        "libs/ui/dashboard/constants/src/index.ts"
       ],
       "@archie-webapps/archie-dashboard/feature/collateral": [
         "libs/archie-dashboard/feature/collateral/src/index.ts"
