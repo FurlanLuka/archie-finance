@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
-import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { useGetKyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
+import { useGetObligations } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 import {
   Loader,
   Modal,

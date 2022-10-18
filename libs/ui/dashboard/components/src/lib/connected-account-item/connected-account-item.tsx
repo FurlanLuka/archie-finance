@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { AccountResponse } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { BodyM } from '@archie-microservices/ui/shared/ui/design-system';
 
 import { ConnectedAccountItemStyled } from './connected-account-item.styled';

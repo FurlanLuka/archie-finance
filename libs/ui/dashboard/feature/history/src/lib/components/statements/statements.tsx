@@ -2,8 +2,8 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useGetStatements } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-statements';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { useGetStatements } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-get-statements';
 import {
   ButtonOutline,
   Select,

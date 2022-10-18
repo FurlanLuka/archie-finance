@@ -6,14 +6,14 @@ import { BigNumber } from 'bignumber.js';
 import { MakePaymentModal } from '@archie-microservices/ui/dashboard/feature/make-payment';
 import { LoanToValueChart } from '@archie-microservices/ui/dashboard/components';
 import { canUserSchedulePayment } from '@archie-microservices/ui/dashboard/utils';
-import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
-import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
-import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
+import { LTV } from '@archie-microservices/ui/shared/data-access/archie-api/collateral/api/get-ltv';
+import { useGetLTV } from '@archie-microservices/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
+import { GetCreditResponse } from '@archie-microservices/ui/shared/data-access/archie-api/credit/api/get-credit';
+import { useGetCredit } from '@archie-microservices/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
 import {
   ButtonOutline,
   Card,
@@ -23,7 +23,7 @@ import {
   BodyS,
 } from '@archie-microservices/ui/shared/ui/design-system';
 import { theme } from '@archie-microservices/ui/shared/ui/theme';
-import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
+import { useGetObligations } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 
 export const AvailableCredit: FC = () => {
   const { t } = useTranslation();

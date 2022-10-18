@@ -1,8 +1,8 @@
 import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useRemoveAutopay } from '@archie-webapps/shared/data-access/archie-api/autopay/hooks/use-remove-autopay';
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { useRemoveAutopay } from '@archie-microservices/ui/shared/data-access/archie-api/autopay/hooks/use-remove-autopay';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
 import {
   BodyM,
   ButtonPrimary,

@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Link, Navigate } from 'react-router-dom';
 
 import { TransactionsTable } from '@archie-microservices/ui/dashboard/components';
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useGetRecentTransactions } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-recent-transactions';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { useGetRecentTransactions } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-get-recent-transactions';
 import {
   ButtonOutline,
   Card,

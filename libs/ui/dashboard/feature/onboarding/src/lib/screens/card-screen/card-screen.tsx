@@ -4,15 +4,15 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 import { OnboardingStep } from '@archie-microservices/ui/dashboard/constants';
 import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
-import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
-import { useCreateRizeUser } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
-import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
+import { GetCreditResponse } from '@archie-microservices/ui/shared/data-access/archie-api/credit/api/get-credit';
+import { useCreateRizeUser } from '@archie-microservices/ui/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
+import { useGetCredit } from '@archie-microservices/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import {
   MutationQueryResponse,
   QueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { useGetLedger } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import {
   ButtonPrimary,
   Container,

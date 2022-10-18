@@ -2,12 +2,12 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactCodeInput from 'react-verification-code-input';
 
-import { useCompleteAptoVerification } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-complete-apto-verification';
-import { useStartAptoVerification } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-start-apto-verification';
+import { useCompleteAptoVerification } from '@archie-microservices/ui/shared/data-access/archie-api/credit/hooks/use-complete-apto-verification';
+import { useStartAptoVerification } from '@archie-microservices/ui/shared/data-access/archie-api/credit/hooks/use-start-apto-verification';
 import {
   MutationQueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
 import {
   ButtonPrimary,
   Card,

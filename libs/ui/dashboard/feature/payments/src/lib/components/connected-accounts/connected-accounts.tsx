@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
 import { ConnectAccountModal } from '@archie-microservices/ui/dashboard/feature/make-payment';
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useGetConnectedAccounts } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { useGetConnectedAccounts } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
 import {
   Card,
   Skeleton,

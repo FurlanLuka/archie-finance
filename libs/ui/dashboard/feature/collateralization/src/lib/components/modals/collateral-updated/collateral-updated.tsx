@@ -5,8 +5,8 @@ import { calculateLedgerCreditValue } from '@archie-webapps/archie-dashboard/uti
 import { Modal } from '@archie-webapps/shared/ui/design-system';
 
 import { CollateralReceived } from './blocks/collateral-received/collateral-received';
-import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { useGetLedger } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
 import { calculateLedgerTotalValue } from '@archie-webapps/shared/utils';
 import {
   LedgerUpdatedWsEvent,

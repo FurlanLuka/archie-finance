@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import {
   MutationQueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
-import { usePollMfaEnrollment } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-poll-mfa-enrollment';
-import { useStartMfaEnrollment } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-start-mfa-enrollment';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { usePollMfaEnrollment } from '@archie-microservices/ui/shared/data-access/archie-api/user/hooks/use-poll-mfa-enrollment';
+import { useStartMfaEnrollment } from '@archie-microservices/ui/shared/data-access/archie-api/user/hooks/use-start-mfa-enrollment';
 import {
   ButtonGhost,
   BodyL,

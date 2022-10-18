@@ -3,15 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
 import { CollateralAssets } from '@archie-webapps/shared/constants';
-import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';
+import { useGetCredit } from '@archie-microservices/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import { Card, Skeleton, ButtonOutline, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
 
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
 
 import { CollateralizationForm } from './blocks/collaterization-form/collaterization-form';
-import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+import { useGetLedger } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import BigNumber from 'bignumber.js';
 
 interface CureMarginCallProps {

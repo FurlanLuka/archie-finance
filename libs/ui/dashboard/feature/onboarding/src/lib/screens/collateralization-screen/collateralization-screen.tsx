@@ -14,12 +14,12 @@ import {
 } from '@archie-microservices/ui/dashboard/constants';
 import { copyToClipboard } from '@archie-microservices/ui/dashboard/utils';
 import { CollateralAsset } from '@archie-microservices/ui/shared/constants';
-import { AssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/api/get-asset-price';
-import { useGetAssetPrice } from '@archie-webapps/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
+import { AssetPrice } from '@archie-microservices/ui/shared/data-access/archie-api/asset_price/api/get-asset-price';
+import { useGetAssetPrice } from '@archie-microservices/ui/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
 import {
   Container,
   Card,

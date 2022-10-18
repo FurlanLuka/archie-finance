@@ -7,7 +7,7 @@ import {
   LTVStatus,
 } from '@archie-microservices/ui/shared/constants';
 import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
-import { CreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/api/get-credit-line';
+import { CreditLine } from '@archie-microservices/ui/shared/data-access/archie-api/credit_line/api/get-credit-line';
 import { Table } from '@archie-microservices/ui/shared/ui/design-system';
 
 import { tableColumns } from '../../fixtures/table-fixtures';

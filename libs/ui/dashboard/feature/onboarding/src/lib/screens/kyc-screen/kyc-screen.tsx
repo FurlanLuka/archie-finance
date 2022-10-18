@@ -6,8 +6,8 @@ import Autocomplete from 'react-google-autocomplete';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useCreateKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-create-kyc';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { useCreateKyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/hooks/use-create-kyc';
 import {
   ButtonPrimary,
   Card,

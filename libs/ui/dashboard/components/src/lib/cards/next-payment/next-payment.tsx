@@ -9,8 +9,8 @@ import {
   CREDIT_LINE_NOT_FOUND_ERROR,
   MISSING_PAYMENT_INFO_ERROR,
   UserObligations,
-} from '@archie-webapps/shared/data-access/archie-api/payment/api/get-obligations';
-import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
+} from '@archie-microservices/ui/shared/data-access/archie-api/payment/api/get-obligations';
+import { useGetObligations } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 import {
   ButtonOutline,
   Card,
@@ -21,7 +21,7 @@ import {
 import {
   QueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
 import { canUserSchedulePayment } from '@archie-microservices/ui/dashboard/utils';
 
 interface NextPaymentProps {

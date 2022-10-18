@@ -9,9 +9,9 @@ import { RevealCardModal } from '@archie-microservices/ui/dashboard/components';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
-import { CardsCredit } from '@archie-webapps/shared/data-access/archie-api/rize/api/get-cards-credit';
-import { useGetCardsCredit } from '@archie-webapps/shared/data-access/archie-api/rize/hooks/use-cards-credit';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { CardsCredit } from '@archie-microservices/ui/shared/data-access/archie-api/rize/api/get-cards-credit';
+import { useGetCardsCredit } from '@archie-microservices/ui/shared/data-access/archie-api/rize/hooks/use-cards-credit';
 import {
   Card,
   Skeleton,

@@ -5,11 +5,11 @@ import { Navigate } from 'react-router-dom';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
-import { EmailVerificationResponse } from '@archie-webapps/shared/data-access/archie-api/user/api/get-email-verification';
-import { useGetEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-get-email-verification';
-import { usePollEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
-import { useResendEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { EmailVerificationResponse } from '@archie-microservices/ui/shared/data-access/archie-api/user/api/get-email-verification';
+import { useGetEmailVerification } from '@archie-microservices/ui/shared/data-access/archie-api/user/hooks/use-get-email-verification';
+import { usePollEmailVerification } from '@archie-microservices/ui/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
+import { useResendEmailVerification } from '@archie-microservices/ui/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
 import { useAuthenticatedSession } from '@archie-microservices/ui/shared/data-access/session';
 import {
   ButtonPrimary,

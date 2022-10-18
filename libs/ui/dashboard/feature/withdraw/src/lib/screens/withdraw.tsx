@@ -6,9 +6,9 @@ import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-d
 import {
   QueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import { useGetMaxWithdrawalAmount } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-max-withdrawal-amount';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { useGetLedger } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+import { useGetMaxWithdrawalAmount } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-max-withdrawal-amount';
 import {
   Card,
   Skeleton,

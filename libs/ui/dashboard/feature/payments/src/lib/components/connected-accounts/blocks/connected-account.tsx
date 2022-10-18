@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
-import { useDisconnectAccount } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-disconnect-account';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { AccountResponse } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { useDisconnectAccount } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/hooks/use-disconnect-account';
 import {
   ButtonOutline,
   BodyM,

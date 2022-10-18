@@ -2,9 +2,9 @@ import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
-import { useCreateLinkToken } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { AccountResponse } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { useCreateLinkToken } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
 import {
   TitleS,
   BodyM,

@@ -64,7 +64,7 @@
       "@archie-microservices/ui/shared/constants": [
         "libs/ui/shared/constants/src/index.ts"
       ],
-      "@archie-microservices/ui/shared/data-access/archie-api": [
+      "@archie-microservices/ui/shared/data-access/archie-api/*": [
         "libs/ui/shared/data-access/archie-api/src/*"
       ],
       "@archie-microservices/ui/shared/data-access/archie-api-dtos": [
@@ -89,7 +89,7 @@
         "libs/ui/shared/ui/theme/src/index.ts"
       ],
       "@archie-microservices/ui/shared/utils": [
-        "libs/ui/shared/utilssrc/index.ts"
+        "libs/ui/shared/utils/src/index.ts"
       ],
       "@archie-microservices/ui/feature/collateralization": [
         "libs/ui/dashboard/feature/collateralization/src/index.ts"

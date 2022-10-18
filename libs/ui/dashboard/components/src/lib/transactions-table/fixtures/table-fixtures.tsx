@@ -12,7 +12,7 @@ import {
   Transaction,
   TransactionStatus,
   TransactionType,
-} from '@archie-webapps/shared/data-access/archie-api/payment/api/get-transactions';
+} from '@archie-microservices/ui/shared/data-access/archie-api/payment/api/get-transactions';
 import {
   BodyL,
   BodyM,

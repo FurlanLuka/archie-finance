@@ -1,9 +1,9 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useConnectAccount } from '@archie-webapps/shared/data-access/archie-api/plaid/hooks/use-connect-account';
-import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { useConnectAccount } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/hooks/use-connect-account';
+import { AccountResponse } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { ConnectedAccountItem } from '@archie-microservices/ui/dashboard/components';
 import {
   ButtonPrimary,

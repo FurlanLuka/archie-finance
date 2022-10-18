@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useCreateCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/hooks/use-create-credit-line';
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
+import { useCreateCreditLine } from '@archie-microservices/ui/shared/data-access/archie-api/credit_line/hooks/use-create-credit-line';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
 import {
   ButtonPrimary,
   ButtonOutline,

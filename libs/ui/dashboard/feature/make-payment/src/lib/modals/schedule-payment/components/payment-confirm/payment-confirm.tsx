@@ -1,11 +1,11 @@
 import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
-import { ScheduleTransactionParams } from '@archie-webapps/shared/data-access/archie-api/payment/api/schedule-transaction';
-import { useScheduleTransaction } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
-import { UserObligations } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-obligations';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { Kyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { ScheduleTransactionParams } from '@archie-microservices/ui/shared/data-access/archie-api/payment/api/schedule-transaction';
+import { useScheduleTransaction } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
+import { UserObligations } from '@archie-microservices/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import {
   ButtonOutline,
   ButtonPrimary,

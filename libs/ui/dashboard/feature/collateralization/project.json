@@ -1,6 +1,7 @@
 {
-  "root": "libs/archie-dashboard/feature-collateralization",
-  "sourceRoot": "libs/archie-dashboard/feature-collateralization/src",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "name": "ui-dashboard-feature-collateralization",
+  "sourceRoot": "libs/ui/dashboard/feature/collateralization/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -8,14 +9,16 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/archie-dashboard/feature-collateralization/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "libs/ui/dashboard/feature/collateralization/**/*.{ts,tsx,js,jsx}"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/archie-dashboard/feature-collateralization"],
+      "outputs": ["coverage/libs/ui/dashboard/feature/collateralization"],
       "options": {
-        "jestConfig": "libs/archie-dashboard/feature-collateralization/jest.config.js",
+        "jestConfig": "libs/ui/dashboard/feature/collateralization/jest.config.js",
         "passWithNoTests": true
       }
     }

@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { useCreateAutopayDocument } from '@archie-webapps/shared/data-access/archie-api/autopay/hooks/use-create-autopay-document';
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { AccountResponse } from '@archie-webapps/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { useCreateAutopayDocument } from '@archie-microservices/ui/shared/data-access/archie-api/autopay/hooks/use-create-autopay-document';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { AccountResponse } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import {
   Loader,
   Modal,

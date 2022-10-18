@@ -5,11 +5,11 @@ import { Navigate } from 'react-router-dom';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
-import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
-import { EmailVerificationResponse } from '@archie-webapps/shared/data-access/archie-api/user/api/get-email-verification';
-import { useGetEmailVerification } from '@archie-webapps/shared/data-access/archie-api/user/hooks/use-get-email-verification';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { Kyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { useGetKyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
+import { EmailVerificationResponse } from '@archie-microservices/ui/shared/data-access/archie-api/user/api/get-email-verification';
+import { useGetEmailVerification } from '@archie-microservices/ui/shared/data-access/archie-api/user/hooks/use-get-email-verification';
 import {
   Card,
   Skeleton,

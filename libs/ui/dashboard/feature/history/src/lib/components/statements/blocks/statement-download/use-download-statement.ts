@@ -1,7 +1,7 @@
 import { useAsyncEffect } from 'use-async-effect';
 
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useGetStatementDocument } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-statement-document';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { useGetStatementDocument } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-get-statement-document';
 
 interface UseDownloadStatementResult {
   downloadDocument: () => void;

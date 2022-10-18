@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { calculateLedgerCreditValue } from '@archie-microservices/ui/dashboard/utils';
 import { CollateralAssets } from '@archie-microservices/ui/shared/constants';
 import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useCreateWithdrawal } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-create-withdrawal';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { useCreateWithdrawal } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-create-withdrawal';
 import {
   ButtonOutline,
   ButtonPrimary,

@@ -7,7 +7,7 @@ import {
 } from '@archie-microservices/ui/dashboard/components';
 import { ErrorScreen } from '@archie-microservices/ui/dashboard/components';
 import { CollateralScreen } from '@archie-microservices/ui/dashboard/feature/collateral';
-import { CollateralizationScreen } from '@archie-webapps/archie-dashboard/feature/collateralization';
+import { CollateralizationScreen } from '@archie-microservices/ui/dashboard/feature/collateralization';
 import { HistoryScreen } from '@archie-microservices/ui/dashboard/feature/history';
 import { HomeScreen } from '@archie-microservices/ui/dashboard/feature/home';
 import { PaymentScreen } from '@archie-microservices/ui/dashboard/feature/payments';
@@ -17,9 +17,9 @@ import { WithdrawScreen } from '@archie-microservices/ui/dashboard/feature/withd
 import {
   QueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
-import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
-import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { GetOnboardingResponse } from '@archie-microservices/ui/shared/data-access/archie-api/onboarding/api/get-onboarding';
+import { useGetOnboarding } from '@archie-microservices/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
 import {
   LoaderFullScreen,
   Page,

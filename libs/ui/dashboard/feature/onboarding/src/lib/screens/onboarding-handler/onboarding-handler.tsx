@@ -4,9 +4,9 @@ import { OnboardingStep } from '@archie-microservices/ui/dashboard/constants';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
-import { GetOnboardingResponse } from '@archie-webapps/shared/data-access/archie-api/onboarding/api/get-onboarding';
-import { useGetOnboarding } from '@archie-webapps/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { GetOnboardingResponse } from '@archie-microservices/ui/shared/data-access/archie-api/onboarding/api/get-onboarding';
+import { useGetOnboarding } from '@archie-microservices/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
 import { LoaderFullScreen } from '@archie-microservices/ui/shared/ui/design-system';
 
 import { CardScreen } from '../card-screen/card-screen';

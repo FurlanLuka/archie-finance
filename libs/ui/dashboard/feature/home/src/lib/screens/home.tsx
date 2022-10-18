@@ -14,9 +14,9 @@ import { PayWithPaypalScheduled } from '@archie-microservices/ui/dashboard/featu
 import {
   QueryResponse,
   RequestState,
-} from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Kyc } from '@archie-webapps/shared/data-access/archie-api/kyc/api/get-kyc';
-import { useGetKyc } from '@archie-webapps/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
+} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { Kyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { useGetKyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
 import {
   Modal,
   TitleM,

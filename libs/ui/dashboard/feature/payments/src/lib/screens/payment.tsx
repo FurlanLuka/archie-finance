@@ -8,9 +8,9 @@ import {
 } from '@archie-microservices/ui/dashboard/components';
 import { MakePaymentModal } from '@archie-microservices/ui/dashboard/feature/make-payment';
 import { canUserSchedulePayment } from '@archie-microservices/ui/dashboard/utils';
-import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
-import { useGetAutopay } from '@archie-webapps/shared/data-access/archie-api/autopay/hooks/use-get-autopay';
+import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { useGetObligations } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
+import { useGetAutopay } from '@archie-microservices/ui/shared/data-access/archie-api/autopay/hooks/use-get-autopay';
 import {
   ButtonPrimary,
   Status,
