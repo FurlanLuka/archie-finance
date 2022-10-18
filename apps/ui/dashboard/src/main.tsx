@@ -6,7 +6,7 @@ import { ThemeProvider } from 'styled-components';
 
 import { queryClient } from '@archie-microservices/ui/shared/data-access/query-client';
 import { SessionProvider } from '@archie-microservices/ui/shared/data-access/session';
-import { GlobalStyles, theme } from '@archie-webapps/shared/ui/theme';
+import { GlobalStyles, theme } from '@archie-microservices/ui/shared/ui/theme';
 
 import { App } from './app/app';
 import {

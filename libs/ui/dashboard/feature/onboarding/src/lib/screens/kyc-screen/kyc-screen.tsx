@@ -17,7 +17,7 @@ import {
   BodyM,
 } from '@archie-microservices/ui/shared/ui/design-system';
 import { Icon } from '@archie-microservices/ui/shared/ui/icons';
-import { theme } from '@archie-webapps/shared/ui/theme';
+import { theme } from '@archie-microservices/ui/shared/ui/theme';
 
 import {
   parseDate,

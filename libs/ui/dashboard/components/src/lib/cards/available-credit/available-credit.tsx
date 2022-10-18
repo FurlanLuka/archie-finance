@@ -22,7 +22,7 @@ import {
   BodyM,
   BodyS,
 } from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-webapps/shared/ui/theme';
+import { theme } from '@archie-microservices/ui/shared/ui/theme';
 import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 
 export const AvailableCredit: FC = () => {

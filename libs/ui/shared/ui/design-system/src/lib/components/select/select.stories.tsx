@@ -1,7 +1,7 @@
 import { Story, Meta } from '@storybook/react';
 import { useState } from 'react';
 
-import { theme } from '@archie-webapps/shared/ui/theme';
+import { theme } from '@archie-microservices/ui/shared/ui/theme';
 
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';

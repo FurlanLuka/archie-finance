@@ -11,7 +11,7 @@ import {
   TitleL,
   BodyS,
 } from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-webapps/shared/ui/theme';
+import { theme } from '@archie-microservices/ui/shared/ui/theme';
 
 import { LoanToValueChartStyled } from './loan-to-value.styled';
 

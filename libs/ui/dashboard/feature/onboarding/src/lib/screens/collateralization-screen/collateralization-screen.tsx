@@ -28,7 +28,7 @@ import {
   TitleL,
   BodyM,
 } from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-webapps/shared/ui/theme';
+import { theme } from '@archie-microservices/ui/shared/ui/theme';
 
 import { CollateralDepositAlerts } from '../../components/collateral-deposit-alerts/collateral-deposit-alerts';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';

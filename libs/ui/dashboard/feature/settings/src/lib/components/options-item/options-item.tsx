@@ -4,7 +4,7 @@ import { Icon } from '@archie-microservices/ui/shared/ui/icons';
 import { BodyL, BodyS } from '@archie-microservices/ui/shared/ui/design-system';
 
 import { OptionsItemStyled } from './options-item.styled';
-import { theme } from '@archie-webapps/shared/ui/theme';
+import { theme } from '@archie-microservices/ui/shared/ui/theme';
 
 interface OptionsItemProps {
   title: string;

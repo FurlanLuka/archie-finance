@@ -14,7 +14,7 @@ import {
   ButtonOutline,
   CollateralCurrency,
 } from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-webapps/shared/ui/theme';
+import { theme } from '@archie-microservices/ui/shared/ui/theme';
 
 import {
   AlignCenterCellStyled,

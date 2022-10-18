@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 
-import { theme } from '@archie-webapps/shared/ui/theme';
+import { theme } from '@archie-microservices/ui/shared/ui/theme';
 
 export type IconName =
   | 'arrow-indicator-right'

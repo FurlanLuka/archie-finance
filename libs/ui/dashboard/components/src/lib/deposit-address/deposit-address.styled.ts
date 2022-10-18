@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-import { breakpoints } from '@archie-webapps/shared/ui/theme';
-import { QR_CODE } from '@archie-webapps/shared/ui/theme';
+import { breakpoints } from '@archie-microservices/ui/shared/ui/theme';
+import { QR_CODE } from '@archie-microservices/ui/shared/ui/theme';
 
 export const DepositAddressStyled = styled.div<{ showTerms?: boolean }>`
   position: relative;

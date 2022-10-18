@@ -2,7 +2,7 @@ import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Statement } from '@archie-webapps/shared/data-access/archie-api/payment/api/get-statements';
-import { theme } from '@archie-webapps/shared/ui/theme';
+import { theme } from '@archie-microservices/ui/shared/ui/theme';
 import { Icon } from '@archie-microservices/ui/shared/ui/icons';
 import {
   ButtonOutline,

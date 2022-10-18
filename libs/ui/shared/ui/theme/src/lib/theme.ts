@@ -83,8 +83,8 @@ export interface Theme {
   tooltipBackground: string;
   tooltipText: string;
   // nav item
-  navItem: string,
-  navItemActive: string,
+  navItem: string;
+  navItemActive: string;
   // loading screen
   loadingBackground: string;
   loadingBorder: string;

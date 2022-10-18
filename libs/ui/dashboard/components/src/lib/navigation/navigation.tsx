@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { dashboardNavItems } from '@archie-microservices/ui/dashboard/constants';
 import { BodyS } from '@archie-microservices/ui/shared/ui/design-system';
 import { Icon } from '@archie-microservices/ui/shared/ui/icons';
-import { theme } from '@archie-webapps/shared/ui/theme';
+import { theme } from '@archie-microservices/ui/shared/ui/theme';
 
 import { NavigationStyled } from './navigation.styled';
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { LTVStatus, LTVColor } from '@archie-microservices/ui/shared/constants';
-import { breakpoints } from '@archie-webapps/shared/ui/theme';
+import { breakpoints } from '@archie-microservices/ui/shared/ui/theme';
 
 export interface CardProps {
   column?: boolean;
