@@ -12,11 +12,9 @@ import {
 } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import {
-  EmailVerifiedPayload,
   GetEmailAddressResponse,
   GetEmailVerificationResponse,
   GetMfaEnrollmentResponse,
-  MfaEnrolledPayload,
 } from '@archie/api/user-api/data-transfer-objects';
 import { EnrollmentNotFoundError } from './user.errors';
 

@@ -165,10 +165,15 @@
       ],
       "@archie/api/utils/openapi": ["libs/api/utils/openapi/src/index.ts"],
       "@archie/api/utils/queue": ["libs/api/utils/queue/src/index.ts"],
-      "@archie/api/utils/queue/decorators/*": ["libs/api/utils/queue/src/lib/decorators/*"],
+      "@archie/api/utils/queue/decorators/*": [
+        "libs/api/utils/queue/src/lib/decorators/*"
+      ],
       "@archie/api/utils/tracing": ["libs/api/utils/tracing/src/index.ts"],
       "@archie/api/utils/typeorm-transformers": [
         "libs/api/utils/typeorm-transformers/src/index.ts"
+      ],
+      "@archie/api/webhook-api/auth0": [
+        "libs/api/webhook-api/auth0/src/index.ts"
       ],
       "@archie/api/webhook-api/constants": [
         "libs/api/webhook-api/constants/src/index.ts"

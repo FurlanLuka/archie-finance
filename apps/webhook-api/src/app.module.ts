@@ -10,6 +10,7 @@ import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
 import { HealthModule } from '@archie/api/utils/health';
 import { FireblocksWebhookModule } from '@archie/api/webhook-api/fireblocks';
+import { Auth0Module } from '@archie/api/webhook-api/auth0';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { FireblocksWebhookModule } from '@archie/api/webhook-api/fireblocks';
     PeachWebhookModule,
     FireblocksWebhookModule,
     HealthModule,
+    Auth0Module,
   ],
   controllers: [],
   providers: [],

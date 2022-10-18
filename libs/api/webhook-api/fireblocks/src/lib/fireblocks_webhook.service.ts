@@ -5,11 +5,6 @@ import {
   EventType,
   FireblocksWebhookPayload,
 } from './fireblocks_webhook.interfaces';
-import {
-  FireblocksDepositTransactionPayload,
-  FireblocksInternalTransactionPayload,
-  FireblocksWithdrawTransactionPayload,
-} from '@archie/api/webhook-api/data-transfer-objects';
 import { QueueService } from '@archie/api/utils/queue';
 import {
   WEBHOOK_FIREBLOCKS_DEPOSIT_TRANSACTION_TOPIC,

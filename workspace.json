@@ -60,6 +60,7 @@
     "api-utils-redis": "libs/api/utils/redis",
     "api-utils-tracing": "libs/api/utils/tracing",
     "api-utils-typeorm-transformers": "libs/api/utils/typeorm-transformers",
+    "api-webhook-api-auth0": "libs/api/webhook-api/auth0",
     "api-webhook-api-constants": "libs/api/webhook-api/constants",
     "api-webhook-api-data-transfer-objects": "libs/api/webhook-api/data-transfer-objects",
     "api-webhook-api-fireblocks": "libs/api/webhook-api/fireblocks",
