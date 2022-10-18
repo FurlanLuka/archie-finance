@@ -1,6 +1,9 @@
+import { LedgerAccountUpdatedPayload } from '@archie-webapps/shared/data-access/archie-api-dtos';
+
 export enum WsEventTopic {
   ONBOARDING_UPDATED_TOPIC = 'onboarding.onboarding.updated.v1',
   LTV_UPDATED_TOPIC = 'ltv.ltv.updated.v1',
+  LEDGER_UPDATED_TOPIC = 'ledger.account.updated.v1',
 }
 
 export interface OnboardingUpdatedPayload {
@@ -26,6 +29,11 @@ export interface OnboardingUpdatedWsEvent {
 export interface LtvUpdatedWsEvent {
   topic: WsEventTopic.LTV_UPDATED_TOPIC;
   data: LtvUpdatedPayload;
+}
+
+export interface LedgerUpdatedWsEvent {
+  topic: WsEventTopic.LEDGER_UPDATED_TOPIC;
+  data: LedgerAccountUpdatedPayload;
 }
 
 export type WsEvent = OnboardingUpdatedWsEvent | LtvUpdatedWsEvent;

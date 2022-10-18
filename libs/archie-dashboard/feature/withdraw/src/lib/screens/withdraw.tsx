@@ -2,8 +2,8 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, Navigate, Link } from 'react-router-dom';
 
+import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
-import { Ledger } from '@archie-webapps/shared/data-access/archie-api/ledger/api/get-ledger';
 import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import { useGetMaxWithdrawalAmount } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-max-withdrawal-amount';
 import { Card, Skeleton, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
