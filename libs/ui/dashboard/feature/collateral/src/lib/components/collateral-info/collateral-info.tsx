@@ -1,7 +1,11 @@
 import BigNumber from 'bignumber.js';
 import { FC, useMemo } from 'react';
 
-import { CollateralAssets, CollateralCurrency, LTVStatus } from '@archie-webapps/shared/constants';
+import {
+  CollateralAssets,
+  CollateralCurrency,
+  LTVStatus,
+} from '@archie-webapps/shared/constants';
 import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { CreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/api/get-credit-line';
 import { Table } from '@archie-webapps/shared/ui/design-system';
@@ -32,7 +36,11 @@ interface CollateralInfoProps {
   ltvStatus: LTVStatus;
 }
 
-export const CollateralInfo: FC<CollateralInfoProps> = ({ ledger, creditLine, ltvStatus }) => {
+export const CollateralInfo: FC<CollateralInfoProps> = ({
+  ledger,
+  creditLine,
+  ltvStatus,
+}) => {
   const columns = useMemo(() => tableColumns, []);
   const isInMarginCall = ltvStatus === LTVStatus.MARGIN_CALL;
 
@@ -42,9 +50,10 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ ledger, creditLine, lt
         return previousValue;
       }
 
-      const creditLimitAssetAllocation = creditLine.creditLimitAssetAllocation.find((item) => {
-        item.assetId = ledgerAccount.assetId;
-      });
+      const creditLimitAssetAllocation =
+        creditLine.creditLimitAssetAllocation.find((item) => {
+          item.assetId = ledgerAccount.assetId;
+        });
 
       return {
         ...previousValue,
@@ -52,11 +61,15 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ ledger, creditLine, lt
           collateral_asset: ledgerAccount.assetId,
           balance: `$${ledgerAccount.accountValue}`,
           holdings: `${ledgerAccount.assetAmount} ${ledgerAccount.assetId}`,
-          credit_limit: `${creditLimitAssetAllocation?.allocationPercentage ?? 0}%`,
+          credit_limit: `${
+            creditLimitAssetAllocation?.allocationPercentage ?? 0
+          }%`,
           change: {
             collateral_asset: ledgerAccount.assetId,
           },
-          allocation: BigNumber(ledgerAccount.accountValue).dividedBy(ledger.value).multipliedBy(100),
+          allocation: BigNumber(ledgerAccount.accountValue)
+            .dividedBy(ledger.value)
+            .multipliedBy(100),
           actions: {
             collateral_asset: ledgerAccount.assetId,
             isHolding: true,
@@ -65,10 +78,17 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({ ledger, creditLine, lt
         },
       };
     }, {} as AssetMap);
-  }, [creditLine.creditLimitAssetAllocation, isInMarginCall, ledger.accounts, ledger.value]);
+  }, [
+    creditLine.creditLimitAssetAllocation,
+    isInMarginCall,
+    ledger.accounts,
+    ledger.value,
+  ]);
 
   const tableData = useMemo(() => {
-    const notAddedAssets = Object.values(CollateralAssets).filter((asset) => assetMap[asset.id] === undefined);
+    const notAddedAssets = Object.values(CollateralAssets).filter(
+      (asset) => assetMap[asset.id] === undefined,
+    );
 
     return Object.values(assetMap).concat(
       notAddedAssets.map((item) => ({

@@ -11,7 +11,12 @@ interface AssetsAllocationProps {
   usdc?: number;
 }
 
-export const AssetsAllocation: FC<AssetsAllocationProps> = ({ btc = 0, eth = 0, sol = 0, usdc = 0 }) => (
+export const AssetsAllocation: FC<AssetsAllocationProps> = ({
+  btc = 0,
+  eth = 0,
+  sol = 0,
+  usdc = 0,
+}) => (
   <AssetsAllocationStyled btc={btc} eth={eth} sol={sol} usdc={usdc}>
     <div className="range" />
     <div className="legend">

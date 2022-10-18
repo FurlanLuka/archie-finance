@@ -6,7 +6,7 @@ import {
   Navigation,
 } from '@archie-microservices/ui/dashboard/components';
 import { ErrorScreen } from '@archie-microservices/ui/dashboard/components';
-import { CollateralScreen } from '@archie-webapps/archie-dashboard/feature/collateral';
+import { CollateralScreen } from '@archie-microservices/ui/dashboard/feature/collateral';
 import { CollateralizationScreen } from '@archie-webapps/archie-dashboard/feature/collateralization';
 import { HistoryScreen } from '@archie-webapps/archie-dashboard/feature/history';
 import { HomeScreen } from '@archie-webapps/archie-dashboard/feature/home';

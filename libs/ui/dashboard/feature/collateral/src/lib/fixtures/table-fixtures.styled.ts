@@ -10,10 +10,13 @@ export const AlignEndCellStyled = styled.div`
   justify-content: flex-end;
 `;
 
-export const ChangeCellStyled = styled(AlignCenterCellStyled)<{ isPositive: boolean }>`
+export const ChangeCellStyled = styled(AlignCenterCellStyled)<{
+  isPositive: boolean;
+}>`
   position: relative;
   gap: 0.25rem;
-  color: ${({ theme, isPositive }) => (isPositive ? theme.textSuccess : theme.textDanger)};
+  color: ${({ theme, isPositive }) =>
+    isPositive ? theme.textSuccess : theme.textDanger};
 `;
 
 export const ActionsCellStyled = styled.div`

@@ -28,8 +28,8 @@
       "@archie-microservices/ui/dashboard/constants": [
         "libs/ui/dashboard/constants/src/index.ts"
       ],
-      "@archie-webapps/archie-dashboard/feature/collateral": [
-        "libs/archie-dashboard/feature/collateral/src/index.ts"
+      "@archie-microservices/ui/dashboard/feature/collateral": [
+        "libs/ui/dashboard/feature/collateral/src/index.ts"
       ],
       "@archie-webapps/archie-dashboard/feature/collateralization": [
         "libs/archie-dashboard/feature/collateralization/src/index.ts"
