@@ -7,7 +7,7 @@ import {
   KYC_SUBMITTED_TOPIC,
   EMAIL_VERIFIED_TOPIC,
   MFA_ENROLLED_TOPIC,
-  MFA_DISENROLLED_TOPIC,
+  MFA_REMOVED_TOPIC,
 } from '@archie/api/user-api/constants';
 import { CARD_ACTIVATED_TOPIC } from '@archie/api/credit-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
@@ -15,7 +15,7 @@ import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import {
   EmailVerifiedPayload,
   KycSubmittedPayload,
-  MfaDisEnrolledPayload,
+  MfaRemovedPayload,
   MfaEnrolledPayload,
 } from '@archie/api/user-api/data-transfer-objects';
 import {
@@ -108,13 +108,8 @@ export class OnboardingQueueController {
     );
   }
 
-  @Subscribe(
-    MFA_DISENROLLED_TOPIC,
-    OnboardingQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async mfaDisEnrolledEventHandler(
-    payload: MfaDisEnrolledPayload,
-  ): Promise<void> {
+  @Subscribe(MFA_REMOVED_TOPIC, OnboardingQueueController.CONTROLLER_QUEUE_NAME)
+  async mfaRemovedEventHandler(payload: MfaRemovedPayload): Promise<void> {
     await this.onboardingService.updateOnboardingStage(
       payload.userId,
       'mfaEnrollmentStage',

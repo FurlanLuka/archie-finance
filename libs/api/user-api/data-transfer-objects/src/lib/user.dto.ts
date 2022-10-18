@@ -9,7 +9,7 @@ export class MfaEnrolledPayload {
   userId: string;
 }
 
-export class MfaDisEnrolledPayload {
+export class MfaRemovedPayload {
   userId: string;
 }
 

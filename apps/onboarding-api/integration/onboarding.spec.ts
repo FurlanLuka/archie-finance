@@ -15,7 +15,7 @@ import * as request from 'supertest';
 import {
   emailVerifiedDataFactory,
   kycSubmittedDataFactory,
-  mfaDisEnrolledDataFactory,
+  mfaRemovedDataFactory,
   mfaEnrolledDataFactory,
 } from '@archie/api/user-api/test-data';
 import { OnboardingQueueController } from '@archie/api/onboarding-api/onboarding';
@@ -181,11 +181,11 @@ describe('Onboarding service tests', () => {
     });
 
     it('should set mfa stage back to false in case the user dis-enrolls', async () => {
-      const mfaDisEnrolledPayload = mfaDisEnrolledDataFactory();
+      const mfaRemovedPayload = mfaRemovedDataFactory();
 
       await app
         .get(OnboardingQueueController)
-        .mfaDisEnrolledEventHandler(mfaDisEnrolledPayload);
+        .mfaRemovedEventHandler(mfaRemovedPayload);
 
       expect(queueStub.publishEvent).toHaveBeenCalledWith(
         ONBOARDING_UPDATED_TOPIC,

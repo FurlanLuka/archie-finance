@@ -7,7 +7,7 @@ import { Enrollment, SendEnrollmentTicketResponse, User } from 'auth0';
 import { Auth0Service } from '@archie/api/user-api/auth0';
 import {
   EMAIL_VERIFIED_TOPIC,
-  MFA_DISENROLLED_TOPIC,
+  MFA_REMOVED_TOPIC,
   MFA_ENROLLED_TOPIC,
 } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
@@ -140,7 +140,7 @@ export class UserService {
       id: enrollmentId,
     });
 
-    this.queueService.publishEvent(MFA_DISENROLLED_TOPIC, {
+    this.queueService.publishEvent(MFA_REMOVED_TOPIC, {
       userId,
     });
   }

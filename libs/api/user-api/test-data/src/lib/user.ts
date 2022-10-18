@@ -1,6 +1,6 @@
 import {
   EmailVerifiedPayload,
-  MfaDisEnrolledPayload,
+  MfaRemovedPayload,
   MfaEnrolledPayload,
 } from '@archie/api/user-api/data-transfer-objects';
 import { user } from '@archie/test/integration';
@@ -12,9 +12,9 @@ export const mfaEnrolledDataFactory = (
   ...override,
 });
 
-export const mfaDisEnrolledDataFactory = (
-  override?: Partial<MfaDisEnrolledPayload>,
-): MfaDisEnrolledPayload => ({
+export const mfaRemovedDataFactory = (
+  override?: Partial<MfaRemovedPayload>,
+): MfaRemovedPayload => ({
   userId: user.id,
   ...override,
 });
