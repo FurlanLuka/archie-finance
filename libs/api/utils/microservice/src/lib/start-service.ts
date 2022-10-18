@@ -30,6 +30,7 @@ export async function startService(
         }),
       ],
     }),
+    rawBody: true,
   });
   BigNumber.config({
     DECIMAL_PLACES: 18,

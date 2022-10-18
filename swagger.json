@@ -250,6 +250,34 @@
         ]
       }
     },
+    "/v1/user/mfa/enrollments/{enrollmentId}": {
+      "delete": {
+        "operationId": "UserController_deleteMfaEnrollment",
+        "parameters": [
+          {
+            "name": "enrollmentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "ENROLLMENT_NOT_FOUND"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/v1/user/mfa/enrollments": {
       "get": {
         "operationId": "UserController_getMfaEnrollments",
@@ -1341,7 +1369,7 @@
         ]
       }
     },
-    "/v1/ws_auth": {
+    "/v1/websockets/auth": {
       "post": {
         "operationId": "WebsocketController_createAuthToken",
         "parameters": [],

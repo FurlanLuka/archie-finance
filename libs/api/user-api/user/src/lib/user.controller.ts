@@ -2,7 +2,9 @@ import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   BadRequestException,
   Controller,
+  Delete,
   Get,
+  Param,
   Post,
   Req,
   UseGuards,
@@ -24,6 +26,7 @@ import {
   GetMfaEnrollmentResponse,
   GetSendEnrollmentTicketResponse,
 } from '@archie/api/user-api/data-transfer-objects';
+import { EnrollmentNotFoundError } from './user.errors';
 
 @Controller('v1/user')
 export class UserController {
@@ -51,6 +54,17 @@ export class UserController {
   @ApiBearerAuth()
   async enrollMfa(@Req() request): Promise<GetSendEnrollmentTicketResponse> {
     return this.userService.enrollMfa(request.user.sub);
+  }
+
+  @Delete('mfa/enrollments/:enrollmentId')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiErrorResponse([EnrollmentNotFoundError])
+  async deleteMfaEnrollment(
+    @Req() request,
+    @Param('enrollmentId') enrollmentId: string,
+  ): Promise<void> {
+    return this.userService.deleteMfaEnrollment(request.user.sub, enrollmentId);
   }
 
   @Get('mfa/enrollments')
