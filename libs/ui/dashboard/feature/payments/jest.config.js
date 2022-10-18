@@ -1,9 +1,10 @@
 module.exports = {
   displayName: 'archie-dashboard-feature-payments',
-  preset: '../../../../jest.preset.js',
+  preset: '../../../../../jest.preset.js',
   transform: {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/libs/archie-dashboard/feature/payments',
+  coverageDirectory:
+    '../../../../../coverage/libs/archie-dashboard/feature/payments',
 };

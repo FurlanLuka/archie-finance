@@ -43,11 +43,11 @@
       "@archie-microservices/ui/dashboard/feature/onboarding": [
         "libs/ui/dashboard/feature/onboarding/src/index.ts"
       ],
+      "@archie-microservices/ui/dashboard/feature/payments": [
+        "libs/ui/dashboard/feature/payments/src/index.ts"
+      ],
       "@archie-webapps/archie-dashboard/feature/collateralization": [
         "libs/archie-dashboard/feature/collateralization/src/index.ts"
-      ],
-      "@archie-webapps/archie-dashboard/feature/payments": [
-        "libs/archie-dashboard/feature/payments/src/index.ts"
       ],
       "@archie-webapps/archie-dashboard/feature/rewards": [
         "libs/archie-dashboard/feature/rewards/src/index.ts"
