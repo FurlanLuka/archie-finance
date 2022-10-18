@@ -1,8 +1,8 @@
-import { FC } from 'react';
-import ReactInput from 'input-format/react';
-import Autocomplete from 'react-google-autocomplete';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { templateFormatter, templateParser, parseDigit } from 'input-format';
+import ReactInput from 'input-format/react';
+import { FC } from 'react';
+import Autocomplete from 'react-google-autocomplete';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 

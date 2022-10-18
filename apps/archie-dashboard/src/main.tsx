@@ -1,22 +1,15 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
+import { queryClient } from '@archie-webapps/shared/data-access/query-client';
 import { SessionProvider } from '@archie-webapps/shared/data-access/session';
 import { GlobalStyles, theme } from '@archie-webapps/shared/ui/theme';
 
-import { ProtectedRoute } from './components/protected-route/protected-route';
+import { App } from './app/app';
 import { AUTH0_AUDIENCE, AUTH0_CLIENT_ID, AUTH0_DOMAIN } from './constants/auth';
-import { DashboardRoute } from './routes/dashboard/dashboard-route';
-import { LoginRoute } from './routes/login/login-route';
-import { LogoutRoute } from './routes/logout/logout-route';
-import './utils/i18next';
-import { OnboardingRoute } from './routes/onboarding/onboarding-route';
-
-const queryClient: QueryClient = new QueryClient();
 
 ReactDOM.render(
   <>
@@ -31,28 +24,7 @@ ReactDOM.render(
           onLogout={() => console.log('hello!')}
         >
           <ThemeProvider theme={theme}>
-            <BrowserRouter>
-              <Routes>
-                <Route
-                  path="*"
-                  element={
-                    <ProtectedRoute>
-                      <DashboardRoute />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/onboarding/*"
-                  element={
-                    <ProtectedRoute>
-                      <OnboardingRoute />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route path="/login" element={<LoginRoute />} />
-                <Route path="/logout" element={<LogoutRoute />} />
-              </Routes>
-            </BrowserRouter>
+            <App />
           </ThemeProvider>
         </SessionProvider>
         <ReactQueryDevtools initialIsOpen={false} />

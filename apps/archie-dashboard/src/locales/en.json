@@ -360,5 +360,9 @@
       "text": "Are you sure you want to disable autopay? Doing so means you need to manually pay your statements.",
       "btn_confirm": "Disable"
     }
+  },
+  "limited_functionality_modal": {
+    "title": "App running with limited functionality",
+    "text": "Due to network issues, the app isn't 100% operational. You can continue using it, but an occasional manual refresh may be necessary."
   }
 }
