@@ -13,7 +13,7 @@ import {
   RequestState,
 } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import { ButtonPrimary, Container, Card, Loader, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
+import { ButtonPrimary, Container, Card, Skeleton, TitleL, BodyM } from '@archie-webapps/shared/ui/design-system';
 
 import imgCardReady from '../../../assets/img-card-ready.png';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
@@ -75,7 +75,11 @@ export const CardScreen: FC = () => {
 
   const getContent = () => {
     if (getCreditQueryResponse.state === RequestState.LOADING || getLedgerResponse.state === RequestState.LOADING) {
-      return <Loader marginAuto />;
+      return (
+        <Card height="474px">
+          <Skeleton />
+        </Card>
+      );
     }
 
     if (getCreditQueryResponse.state === RequestState.ERROR || getLedgerResponse.state === RequestState.ERROR) {
@@ -84,7 +88,7 @@ export const CardScreen: FC = () => {
 
     if (getCreditQueryResponse.state === RequestState.SUCCESS && getLedgerResponse.state === RequestState.SUCCESS) {
       return (
-        <>
+        <Card column alignItems="center" padding="1.5rem 10% 2.5rem" mobilePadding="1.5rem 1.5rem 2.5rem">
           <TitleL className="title">{getTitle()}</TitleL>
           <BodyM className="subtitle">
             {stage === Stage.COMPLETE && (
@@ -102,7 +106,7 @@ export const CardScreen: FC = () => {
           <ButtonPrimary width="250px" isDisabled={stage !== Stage.COMPLETE} onClick={() => navigate('/collateral')}>
             {t('card_step.btn')}
           </ButtonPrimary>
-        </>
+        </Card>
       );
     }
 
@@ -112,17 +116,7 @@ export const CardScreen: FC = () => {
   return (
     <Container column mobileColumn alignItems="center">
       <StepsIndicator currentStep={OnboardingStep.CARD} />
-      <CardScreenStyled>
-        <Card
-          column
-          alignItems="center"
-          padding="1.5rem 10% 2.5rem"
-          mobilePadding="1.5rem 1.5rem 2.5rem"
-          minHeight="474px"
-        >
-          {getContent()}
-        </Card>
-      </CardScreenStyled>
+      <CardScreenStyled>{getContent()}</CardScreenStyled>
     </Container>
   );
 };

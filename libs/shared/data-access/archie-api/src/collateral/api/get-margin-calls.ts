@@ -1,6 +1,5 @@
-import { LTVStatus } from '@archie-webapps/shared/constants';
+import { API_URL } from '@archie-webapps/shared/constants';
 
-import { API_URL } from '../../constants';
 import { getRequest } from '../../helpers';
 
 export enum MarginCallStatus {

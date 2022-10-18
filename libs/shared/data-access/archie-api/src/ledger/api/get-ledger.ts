@@ -1,6 +1,7 @@
+import { API_URL } from '@archie-webapps/shared/constants';
 import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 
-import { API_URL } from '../../constants';
+
 import { getRequest } from '../../helpers';
 
 export const ERROR_LIST = new Map<string, string>([]);

@@ -85,7 +85,7 @@ export const CollateralizationScreenStyled = styled.div`
 
   .address-placeholder {
     width: 100%;
-    height: 470px;
+    height: 508px;
     background-color: ${({ theme }) => theme.backgroundSecondary};
     border-top: 1px solid ${({ theme }) => theme.borderPrimary};
     border-bottom: 1px solid ${({ theme }) => theme.borderPrimary};

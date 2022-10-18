@@ -11,7 +11,7 @@ import { CreditLine } from '@archie-webapps/shared/data-access/archie-api/credit
 import { useGetCreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/hooks/use-get-credit-line';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import { Card, Loader, Badge, TitleM, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton, Badge, TitleM, TitleS, BodyM } from '@archie-webapps/shared/ui/design-system';
 import { theme } from '@archie-webapps/shared/ui/theme';
 
 import { CollateralInfo } from '../components/collateral-info/collateral-info';
@@ -32,7 +32,11 @@ export const CollateralScreen: FC = () => {
       getLTVResponse.state === RequestState.LOADING ||
       getCreditLineResponse.state === RequestState.LOADING
     ) {
-      return <Loader marginAuto />;
+      return (
+        <Card height="528px">
+          <Skeleton />
+        </Card>
+      );
     }
 
     if (
@@ -51,7 +55,7 @@ export const CollateralScreen: FC = () => {
       const ltvData = getLTVResponse.data;
 
       return (
-        <>
+        <Card column padding="1.5rem 1.5rem 2rem">
           <div className="subtitle-group">
             <TitleS className="subtitle">{t('dashboard_collateral.subtitle')}</TitleS>
             <TitleM weight={400} className="total">
@@ -72,7 +76,7 @@ export const CollateralScreen: FC = () => {
             creditLine={getCreditLineResponse.data}
             ltvStatus={ltvData.status}
           />
-        </>
+        </Card>
       );
     }
 
@@ -83,9 +87,7 @@ export const CollateralScreen: FC = () => {
     <CollateralStyled>
       <MarginCallAlert />
       <TitleM className="title">{t('dashboard_collateral.title')}</TitleM>
-      <Card column padding="1.5rem 1.5rem 2rem" minHeight="528px">
-        {getContent()}
-      </Card>
+      {getContent()}
     </CollateralStyled>
   );
 };

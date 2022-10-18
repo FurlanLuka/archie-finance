@@ -6,7 +6,7 @@ import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
 import { QueryResponse, RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import { useGetMaxWithdrawalAmount } from '@archie-webapps/shared/data-access/archie-api/ledger/hooks/use-get-max-withdrawal-amount';
-import { Card, Loader, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
+import { Card, Skeleton, TitleS, BodyL } from '@archie-webapps/shared/ui/design-system';
 
 import { WithdrawalForm } from '../components/withdrawal-form/withdrawal-form';
 
@@ -26,7 +26,11 @@ export const WithdrawScreen: FC = () => {
       getMaxWithdrawalAmountResponse.state === RequestState.LOADING ||
       getLedgerResponse.state === RequestState.LOADING
     ) {
-      return <Loader marginAuto />;
+      return (
+        <Card height="682px">
+          <Skeleton />
+        </Card>
+      );
     }
 
     if (getMaxWithdrawalAmountResponse.state === RequestState.ERROR || getLedgerResponse.state === RequestState.ERROR) {
@@ -42,7 +46,7 @@ export const WithdrawScreen: FC = () => {
       );
 
       return (
-        <>
+        <Card column alignItems="center" padding="2.5rem 1.5rem">
           <TitleS className="title">{t('dashboard_withdraw.title', { currentAsset })}</TitleS>
           <BodyL className="subtitle">
             {selectedLedgerAccount ? (
@@ -67,18 +71,12 @@ export const WithdrawScreen: FC = () => {
             maxAmount={getMaxWithdrawalAmountResponse.data.maxAmount}
             ledger={getLedgerResponse.data}
           />
-        </>
+        </Card>
       );
     }
 
     return null;
   };
 
-  return (
-    <WithdrawScreenStyled>
-      <Card column alignItems="center" padding="2.5rem 1.5rem" minHeight="682px">
-        {getContent()}
-      </Card>
-    </WithdrawScreenStyled>
-  );
+  return <WithdrawScreenStyled>{getContent()}</WithdrawScreenStyled>;
 };
