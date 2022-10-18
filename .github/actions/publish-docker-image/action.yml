@@ -17,9 +17,6 @@ inputs:
   ecr-repository:
     description: 'ECR repository name'
     required: true
-  ecr-registry:
-    description: 'ECR registry url'
-    required: true
   image-tag:
     description: 'Image tag name'
     required: true
@@ -27,11 +24,10 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Download build artifacts
-      uses: actions/download-artifact@v2
-      with:
-        name: services-build-${{ inputs.NAME }}
-        path: ./dist
+    - name: Build app
+      shell: bash
+      run: |
+        npx nx run ${{ inputs.projectName }}:build
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -45,7 +41,7 @@ runs:
       shell: bash
       env:
         ECR_REPOSITORY: ${{ inputs.ecr-repository }}
-        ECR_REGISTRY: ${{ inputs.ecr-registry }}
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ inputs.image-tag }}
       run: |
         npx nx run ${{ inputs.projectName }}:build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG

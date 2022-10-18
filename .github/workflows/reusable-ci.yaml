@@ -88,18 +88,18 @@ jobs:
       - name: Affected Integration Test
         if: inputs.BASE_BRANCH_NAME != ''
         run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test-integration --parallel=3 --ci --code-coverage
-      - name: Affected Build
-        if: inputs.BASE_BRANCH_NAME == ''
-        run: npx nx affected --target=build --parallel=3
-      - name: Affected Build
-        if: inputs.BASE_BRANCH_NAME != ''
-        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=build --parallel=3
-      - name: Store build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: services-build-${{ inputs.NAME }}
-          path: ./dist
-          retention-days: 1
+      # - name: Affected Build
+      #   if: inputs.BASE_BRANCH_NAME == ''
+      #   run: npx nx affected --target=build --parallel=3
+      # - name: Affected Build
+      #   if: inputs.BASE_BRANCH_NAME != ''
+      #   run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=build --parallel=3
+      # - name: Store build artifacts
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: services-build-${{ inputs.NAME }}
+      #     path: ./dist
+      #     retention-days: 1
       - uses: ./.github/actions/affected-projects
         id: affected-projects
         name: Extract affected apps
@@ -114,7 +114,7 @@ jobs:
             echo "IMAGE_TAG=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           fi
   build_and_publish:
-    name: Build ${{ matrix.project }} docker
+    name: Build ${{ matrix.project }}
     if: ${{ needs.check_and_build.outputs.affectedProjects != '[]' && needs.check_and_build.outputs.affectedProjects != '' }}
     needs: [check_and_build]
     runs-on: ubuntu-latest
