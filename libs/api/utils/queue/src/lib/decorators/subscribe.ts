@@ -1,4 +1,8 @@
-import { RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import {
+  MessageHandlerOptions,
+  QueueOptions,
+  RabbitSubscribe,
+} from '@golevelup/nestjs-rabbitmq';
 import { applyDecorators, Logger, SetMetadata } from '@nestjs/common';
 import {
   ackErrorHandler,
@@ -16,6 +20,7 @@ interface SubscriptionOptions {
   requeueOnError: boolean;
   useIdempotency: boolean;
   exchange: string;
+  autoDelete: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/ban-types
@@ -41,13 +46,26 @@ export function Subscribe(
     requeueOnError: options?.requeueOnError ?? true,
     useIdempotency: options?.useIdempotency ?? true,
     exchange: options?.exchange ?? QueueUtilService.GLOBAL_EXCHANGE.name,
+    autoDelete: options?.autoDelete ?? false,
   };
 
   const routingKey = event.getRoutingKey();
   const queueSpecificRoutingKey = `${queueName}-${routingKey}`;
   const fullQueueName = `${queueName}-${subscriptionOptions.exchange}_${routingKey}`;
 
-  const baseQueueOptions = {
+  const queueOptions: QueueOptions = {
+    durable: true,
+    autoDelete: options?.autoDelete,
+    arguments: subscriptionOptions.requeueOnError
+      ? {
+          'x-dead-letter-exchange': QueueUtilService.getDeadLetterExchangeName(
+            subscriptionOptions.exchange,
+          ),
+          'x-dead-letter-routing-key': queueSpecificRoutingKey,
+        }
+      : {},
+  };
+  const baseMessageHandlerOptions: MessageHandlerOptions = {
     createQueueIfNotExists: true,
     queue: fullQueueName,
     errorHandler: createErrorHandler(
@@ -56,15 +74,7 @@ export function Subscribe(
       subscriptionOptions.exchange,
       event.getOptions().isSensitive,
     ),
-    queueOptions: {
-      durable: true,
-      arguments: {
-        'x-dead-letter-exchange': QueueUtilService.getDeadLetterExchangeName(
-          subscriptionOptions.exchange,
-        ),
-        'x-dead-letter-routing-key': queueSpecificRoutingKey,
-      },
-    },
+    queueOptions,
   };
 
   const decorators: MethodDecorator[] = [];
@@ -81,7 +91,7 @@ export function Subscribe(
     RabbitSubscribe({
       exchange: subscriptionOptions.exchange,
       routingKey: routingKey,
-      ...baseQueueOptions,
+      ...baseMessageHandlerOptions,
     }),
   );
 
@@ -93,7 +103,7 @@ export function Subscribe(
         exchange: QueueUtilService.getRetryExchangeName(
           subscriptionOptions.exchange,
         ),
-        ...baseQueueOptions,
+        ...baseMessageHandlerOptions,
       }),
     );
   }
