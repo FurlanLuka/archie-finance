@@ -10,7 +10,7 @@
       "defaultConfiguration": "production",
       "options": {
         "compiler": "babel",
-        "outputPath": "dist/apps/ui/dashboard",
+        "outputPath": "dist/apps/ui-dashboard",
         "index": "apps/ui/dashboard/src/index.html",
         "baseHref": "/",
         "main": "apps/ui/dashboard/src/main.tsx",
@@ -67,6 +67,9 @@
         "jestConfig": "apps/ui/dashboard/jest.config.js",
         "passWithNoTests": true
       }
+    },
+    "deploy-configuration": {
+      "executor": "@archie/plugin/deployment:ui-deploy-configuration"
     }
   },
   "tags": ["dashboard"]

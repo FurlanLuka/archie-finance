@@ -10,6 +10,11 @@
       "implementation": "./src/executors/deploy-api/executor",
       "schema": "./src/executors/deploy-api/schema.json",
       "description": "deploy executor"
+    },
+    "ui-deploy-configuration": {
+      "implementation": "./src/executors/ui-deploy-configuration/executor",
+      "schema": "./src/executors/ui-deploy-configuration/schema.json",
+      "description": "ui deployment configuration executor"
     }
   }
 }

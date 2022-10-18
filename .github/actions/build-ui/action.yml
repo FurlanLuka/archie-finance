@@ -1,0 +1,28 @@
+name: 'Build UI'
+description: 'Build UI and save artifacts'
+
+inputs:
+  projectName:
+    description: 'Project name'
+    required: true
+  environment:
+    description: 'Environment'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Configure build environment variables
+      uses: ./.github/actions/set-ui-configuration
+      with:
+        projectName: ${{ inputs.projectName }}
+        environment: ${{ inputs.environment }}
+    - name: Build UI
+      shell: bash
+      run: |
+        npx nx run ${{ inputs.projectName }}:build
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ inputs.projectName }}-build
+        path: dist/apps/${{ inputs.projectName }}

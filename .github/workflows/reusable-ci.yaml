@@ -109,9 +109,9 @@ jobs:
         id: extract-image-tag
         run: |
           if [[ ${{ inputs.IS_TAGGED }} == true ]]; then
-            echo ::set-output name=IMAGE_TAG::${GITHUB_REF#refs/tags/}
+            echo "IMAGE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
           else
-            echo ::set-output name=IMAGE_TAG::$(git rev-parse HEAD)
+            echo "IMAGE_TAG=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           fi
   build_and_publish:
     name: Build ${{ matrix.project }} docker
@@ -128,27 +128,23 @@ jobs:
         name: Checkout
       - uses: ./.github/actions/install-dependencies
         name: Install dependencies
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
+      - if: contains(matrix.project, 'api')
+        uses: ./.github/actions/publish-docker-image
+        name: Build and publish docker image
         with:
-          name: services-build-${{ inputs.NAME }}
-          path: ./dist
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
+          projectName: ${{ matrix.project }}
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ inputs.AWS_REGION }}
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-      - name: Docker build
-        env:
-          ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ needs.check_and_build.outputs.imageTag }}
-        run: |
-          npx nx run ${{ matrix.project }}:build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
+          ecr-repository: ${{ inputs.ECR_REPOSITORY }}
+          environment: ${{ inputs.ENVIRONMENT }}
+          image-tag: ${{ needs.check_and_build.outputs.imageTag }}
+      - if: contains(matrix.project, 'ui')
+        uses: ./.github/actions/build-ui
+        name: Build UI and save artifacts
+        with:
+          projectName: ${{ matrix.project }}
+          environment: ${{ inputs.ENVIRONMENT }}
   deploy:
     name: Deploy ${{ matrix.project }}
     if: ${{ needs.check_and_build.outputs.affectedProjects != '[]' && needs.check_and_build.outputs.affectedProjects != '' }}
@@ -165,24 +161,26 @@ jobs:
       run: exit 1
     - uses: actions/checkout@v2
       name: Checkout
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+    - uses: ./.github/actions/install-dependencies
+      name: Install dependencies
+    - if: contains(matrix.project, 'api')
+      uses: ./.github/actions/deploy-api
+      name: Deploy API
+      with:
+        projectName: ${{ matrix.project }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ inputs.AWS_REGION }}
+        ecr-repository: ${{ inputs.ECR_REPOSITORY }}
+        kube-config-data: ${{ secrets.KUBE_CONFIG_DATA }}
+        environment: ${{ inputs.ENVIRONMENT }}
+        image-tag: ${{ needs.check_and_build.outputs.imageTag }}
+    - if: contains(matrix.project, 'ui')
+      uses: ./.github/actions/deploy-ui
+      name: Deploy UI
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ inputs.AWS_REGION }}
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-    - name: Deploy
-      uses: koslib/helm-eks-action@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
-        IMAGE_TAG: ${{ matrix.project }}-${{ needs.check_and_build.outputs.imageTag }}
-        ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
-        CHART: ./apps/api/${{ matrix.project }}/chart
-        APP_NAME: ${{ matrix.project }}
-      with:
-        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment=$ENVIRONMENT
+        projectName: ${{ matrix.project }}
+        environment: ${{ inputs.ENVIRONMENT }}
