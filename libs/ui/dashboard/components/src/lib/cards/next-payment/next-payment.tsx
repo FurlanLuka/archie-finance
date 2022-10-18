@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
 
-import { MakePaymentModal } from '@archie-webapps/archie-dashboard/feature/make-payment';
+import { MakePaymentModal } from '@archie-microservices/ui/dashboard/feature/make-payment';
 import { NextPaymentChart } from '@archie-microservices/ui/dashboard/components';
 import {
   CREDIT_LINE_NOT_FOUND_ERROR,

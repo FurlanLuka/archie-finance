@@ -37,11 +37,11 @@
       "@archie-microservices/ui/dashboard/feature/home": [
         "libs/ui/dashboard/feature/home/src/index.ts"
       ],
+      "@archie-microservices/ui/dashboard/feature/make-payment": [
+        "libs/ui/dashboard/feature/make-payment/src/index.ts"
+      ],
       "@archie-webapps/archie-dashboard/feature/collateralization": [
         "libs/archie-dashboard/feature/collateralization/src/index.ts"
-      ],
-      "@archie-webapps/archie-dashboard/feature/make-payment": [
-        "libs/archie-dashboard/feature/make-payment/src/index.ts"
       ],
       "@archie-webapps/archie-dashboard/feature/onboarding": [
         "libs/archie-dashboard/feature/onboarding/src/index.ts"

@@ -6,7 +6,7 @@ import {
   NextPayment,
   InterestRate,
 } from '@archie-microservices/ui/dashboard/components';
-import { MakePaymentModal } from '@archie-webapps/archie-dashboard/feature/make-payment';
+import { MakePaymentModal } from '@archie-microservices/ui/dashboard/feature/make-payment';
 import { canUserSchedulePayment } from '@archie-webapps/archie-dashboard/utils';
 import { RequestState } from '@archie-webapps/shared/data-access/archie-api/interface';
 import { useGetObligations } from '@archie-webapps/shared/data-access/archie-api/payment/hooks/use-get-obligations';

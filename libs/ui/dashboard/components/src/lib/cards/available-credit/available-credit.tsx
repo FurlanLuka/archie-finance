@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 import { BigNumber } from 'bignumber.js';
 
-import { MakePaymentModal } from '@archie-webapps/archie-dashboard/feature/make-payment';
+import { MakePaymentModal } from '@archie-microservices/ui/dashboard/feature/make-payment';
 import { LoanToValueChart } from '@archie-microservices/ui/dashboard/components';
 import { canUserSchedulePayment } from '@archie-webapps/archie-dashboard/utils';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';

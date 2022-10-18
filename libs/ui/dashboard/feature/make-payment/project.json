@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "name": "ui-dashboard-feature-make-payment",
+  "sourceRoot": "libs/ui/dashboard/feature/make-payment/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ui/dashboard/feature/make-payment/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ui/dashboard/feature/make-payment"],
+      "options": {
+        "jestConfig": "libs/ui/dashboard/feature/make-payment/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

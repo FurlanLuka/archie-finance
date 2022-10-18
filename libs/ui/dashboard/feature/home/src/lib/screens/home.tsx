@@ -10,7 +10,7 @@ import {
   NextPayment,
   MarginCallAlert,
 } from '@archie-microservices/ui/dashboard/components';
-import { PayWithPaypalScheduled } from '@archie-webapps/archie-dashboard/feature/make-payment';
+import { PayWithPaypalScheduled } from '@archie-microservices/ui/dashboard/feature/make-payment';
 import {
   QueryResponse,
   RequestState,
