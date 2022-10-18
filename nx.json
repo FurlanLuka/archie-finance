@@ -1,19 +1,11 @@
 {
-<<<<<<< HEAD
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "npmScope": "archie-microservices",
-=======
-  "npmScope": "archie-webapps",
->>>>>>> dashboard/develop
   "affected": {
     "defaultBase": "main"
   },
   "cli": {
-<<<<<<< HEAD
     "defaultCollection": "@nrwl/nest"
-=======
-    "defaultCollection": "@nrwl/react"
->>>>>>> dashboard/develop
   },
   "implicitDependencies": {
     "package.json": {
