@@ -41,10 +41,13 @@ import {
   LedgerAccountUpdatedPayload,
   LedgerActionType,
 } from '@archie/api/ledger-api/data-transfer-objects';
-import { PaymentType } from '@archie/api/peach-api/data-transfer-objects';
+import {
+  CreditBalanceUpdatedPayload,
+  PaymentType,
+} from '@archie/api/peach-api/data-transfer-objects';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { MarginCall } from '@archie/api/ltv-api/ltv';
+import { MarginCall, MarginPrices } from '@archie/api/ltv-api/ltv';
 
 describe('Ltv api tests', () => {
   let app: INestApplication;
@@ -89,6 +92,25 @@ describe('Ltv api tests', () => {
     const afterLiquidationLtv = 60;
     let creditUtilizationAmount = 0;
 
+    function calculateCreditUtilizationForLtv(
+      targetLtv: number,
+    ): CreditBalanceUpdatedPayload {
+      creditUtilizationAmount = ledgerValue * (targetLtv / 100);
+      return creditBalanceUpdatedFactory({
+        utilizationAmount: creditUtilizationAmount,
+      });
+    }
+
+    function getMarginPrices(): MarginPrices {
+      return {
+        priceForMarginCall:
+          creditUtilizationAmount / (LTV_MARGIN_CALL_LIMIT / 100),
+        priceForPartialCollateralSale:
+          creditUtilizationAmount / (COLLATERAL_SALE_LTV_LIMIT / 100),
+        collateralBalance: ledgerValue,
+      };
+    }
+
     it(`should keep ltv at 0 as credit line was not created yet`, async () => {
       await app.get(LtvQueueController).ledgerUpdated(ledgerUpdatedPayload);
       const response = await request(app.getHttpServer())
@@ -125,10 +147,8 @@ describe('Ltv api tests', () => {
 
     it(`should send ltv margin notification once ltv reaches 65%`, async () => {
       const targetLtv = 65;
-      creditUtilizationAmount = ledgerValue * (targetLtv / 100);
-      const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
-        utilizationAmount: creditUtilizationAmount,
-      });
+      const creditBalanceUpdatedPayload =
+        calculateCreditUtilizationForLtv(targetLtv);
 
       await app
         .get(LtvQueueController)
@@ -145,11 +165,7 @@ describe('Ltv api tests', () => {
         {
           userId: user.id,
           ltv: targetLtv,
-          priceForMarginCall:
-            creditUtilizationAmount / (LTV_MARGIN_CALL_LIMIT / 100),
-          priceForPartialCollateralSale:
-            creditUtilizationAmount / (COLLATERAL_SALE_LTV_LIMIT / 100),
-          collateralBalance: ledgerValue,
+          ...getMarginPrices(),
         },
       );
     });
@@ -179,11 +195,7 @@ describe('Ltv api tests', () => {
         {
           userId: user.id,
           ltv,
-          priceForMarginCall:
-            creditUtilizationAmount / (LTV_MARGIN_CALL_LIMIT / 100),
-          priceForPartialCollateralSale:
-            creditUtilizationAmount / (COLLATERAL_SALE_LTV_LIMIT / 100),
-          collateralBalance: ledgerValue,
+          ...getMarginPrices(),
         },
       );
     });
@@ -204,10 +216,8 @@ describe('Ltv api tests', () => {
 
     it(`should start margin call once ltv reaches 75%`, async () => {
       const targetLtv = 75;
-      creditUtilizationAmount = ledgerValue * (targetLtv / 100);
-      const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
-        utilizationAmount: creditUtilizationAmount,
-      });
+      const creditBalanceUpdatedPayload =
+        calculateCreditUtilizationForLtv(targetLtv);
 
       await app
         .get(LtvQueueController)
@@ -225,23 +235,15 @@ describe('Ltv api tests', () => {
           userId: user.id,
           startedAt: expect.any(String),
           ltv: targetLtv,
-          priceForMarginCall:
-            creditBalanceUpdatedPayload.utilizationAmount /
-            (LTV_MARGIN_CALL_LIMIT / 100),
-          priceForPartialCollateralSale:
-            creditBalanceUpdatedPayload.utilizationAmount /
-            (COLLATERAL_SALE_LTV_LIMIT / 100),
-          collateralBalance: ledgerValue,
+          ...getMarginPrices(),
         },
       );
     });
 
     it(`should complete margin call without liquidation if ltv falls bellow 75% in the 72h grace period`, async () => {
       const targetLtv = 74;
-      creditUtilizationAmount = ledgerValue * (targetLtv / 100);
-      const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
-        utilizationAmount: creditUtilizationAmount,
-      });
+      const creditBalanceUpdatedPayload =
+        calculateCreditUtilizationForLtv(targetLtv);
 
       await app
         .get(LtvQueueController)
@@ -260,13 +262,7 @@ describe('Ltv api tests', () => {
           ltv: targetLtv,
           completedAt: expect.any(String),
           liquidationAmount: 0,
-          priceForMarginCall:
-            creditBalanceUpdatedPayload.utilizationAmount /
-            (LTV_MARGIN_CALL_LIMIT / 100),
-          priceForPartialCollateralSale:
-            creditBalanceUpdatedPayload.utilizationAmount /
-            (COLLATERAL_SALE_LTV_LIMIT / 100),
-          collateralBalance: ledgerValue,
+          ...getMarginPrices(),
         },
       );
     });
@@ -277,10 +273,8 @@ describe('Ltv api tests', () => {
 
       it(`should start margin call with liquidation date in the past`, async () => {
         const targetLtv = 75;
-        creditUtilizationAmount = ledgerValue * (targetLtv / 100);
-        const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
-          utilizationAmount: creditUtilizationAmount,
-        });
+        const creditBalanceUpdatedPayload =
+          calculateCreditUtilizationForLtv(targetLtv);
         const marginCallEnter72HoursAgo = DateTime.utc().minus({
           hour: 72,
         });
@@ -312,10 +306,8 @@ describe('Ltv api tests', () => {
         const expectedLiquidationCommandPublishSequence = 2;
         const targetLtv = 75;
         const expectedLiquidation = '7500';
-        creditUtilizationAmount = ledgerValue * (targetLtv / 100);
-        const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
-          utilizationAmount: creditUtilizationAmount,
-        });
+        const creditBalanceUpdatedPayload =
+          calculateCreditUtilizationForLtv(targetLtv);
 
         await app
           .get(LtvQueueController)
@@ -418,11 +410,7 @@ describe('Ltv api tests', () => {
             ltv: (creditUtilizationAmount / ledgerValue) * 100,
             completedAt: expect.any(String),
             liquidationAmount: Number(expectedLiquidationAmount),
-            priceForMarginCall:
-              creditUtilizationAmount / (LTV_MARGIN_CALL_LIMIT / 100),
-            priceForPartialCollateralSale:
-              creditUtilizationAmount / (COLLATERAL_SALE_LTV_LIMIT / 100),
-            collateralBalance: ledgerValue,
+            ...getMarginPrices(),
           },
         );
       });
@@ -450,10 +438,8 @@ describe('Ltv api tests', () => {
       it(`should create margin call and liquidate once ltv reaches 90%`, async () => {
         const targetLtv = 90;
         const expectedLiquidationCommandPublishSequence = 3;
-        creditUtilizationAmount = ledgerValue * (targetLtv / 100);
-        const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
-          utilizationAmount: creditUtilizationAmount,
-        });
+        const creditBalanceUpdatedPayload =
+          calculateCreditUtilizationForLtv(targetLtv);
 
         await app
           .get(LtvQueueController)
@@ -499,13 +485,7 @@ describe('Ltv api tests', () => {
             userId: user.id,
             startedAt: expect.any(String),
             ltv: targetLtv,
-            priceForMarginCall:
-              creditBalanceUpdatedPayload.utilizationAmount /
-              (LTV_MARGIN_CALL_LIMIT / 100),
-            priceForPartialCollateralSale:
-              creditBalanceUpdatedPayload.utilizationAmount /
-              (COLLATERAL_SALE_LTV_LIMIT / 100),
-            collateralBalance: ledgerValue,
+            ...getMarginPrices(),
           },
         );
         expect(queueStub.publishEvent).nthCalledWith(
@@ -599,11 +579,7 @@ describe('Ltv api tests', () => {
             ltv: (creditUtilizationAmount / ledgerValue) * 100,
             completedAt: expect.any(String),
             liquidationAmount: Number(expectedLiquidationAmount),
-            priceForMarginCall:
-              creditUtilizationAmount / (LTV_MARGIN_CALL_LIMIT / 100),
-            priceForPartialCollateralSale:
-              creditUtilizationAmount / (COLLATERAL_SALE_LTV_LIMIT / 100),
-            collateralBalance: ledgerValue,
+            ...getMarginPrices(),
           },
         );
         expect(activeMarginCalls.body).toHaveLength(0);
