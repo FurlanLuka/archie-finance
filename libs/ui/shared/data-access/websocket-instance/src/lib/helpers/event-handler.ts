@@ -1,15 +1,31 @@
-import { LedgerUpdatedWsEvent, LtvUpdatedWsEvent, OnboardingUpdatedWsEvent, WsEvent, WsEventTopic } from '../events';
+import {
+  LedgerUpdatedWsEvent,
+  LtvUpdatedWsEvent,
+  OnboardingUpdatedWsEvent,
+  WsEvent,
+  WsEventTopic,
+} from '../events';
 
-const isOnboardingUpdatedWsEvent = (event: any): event is OnboardingUpdatedWsEvent => {
-  return event?.topic === WsEventTopic.ONBOARDING_UPDATED_TOPIC && event.data !== undefined;
+const isOnboardingUpdatedWsEvent = (
+  event: any,
+): event is OnboardingUpdatedWsEvent => {
+  return (
+    event?.topic === WsEventTopic.ONBOARDING_UPDATED_TOPIC &&
+    event.data !== undefined
+  );
 };
 
 const isLtvUpdatedWsEvent = (event: any): event is LtvUpdatedWsEvent => {
-  return event?.topic === WsEventTopic.LTV_UPDATED_TOPIC && event.data !== undefined;
+  return (
+    event?.topic === WsEventTopic.LTV_UPDATED_TOPIC && event.data !== undefined
+  );
 };
 
 const isLedgerUpdatedWsEvent = (event: any): event is LedgerUpdatedWsEvent => {
-  return event?.topic === WsEventTopic.LEDGER_UPDATED_TOPIC && event.data !== undefined;
+  return (
+    event?.topic === WsEventTopic.LEDGER_UPDATED_TOPIC &&
+    event.data !== undefined
+  );
 };
 
 const eventGuards = new Map<WsEventTopic, (event: any) => boolean>([

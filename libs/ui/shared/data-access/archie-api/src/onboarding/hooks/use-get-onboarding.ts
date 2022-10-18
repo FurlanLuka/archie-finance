@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import {
   websocketInstance,
   WsEventTopic,
-} from '@archie-webapps/shared/data-access/websocket-instance';
+} from '@archie-microservices/ui/shared/data-access/websocket-instance';
 
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';

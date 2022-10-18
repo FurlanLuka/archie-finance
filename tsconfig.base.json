@@ -76,11 +76,11 @@
       "@archie-microservices/ui/shared/data-access/session": [
         "libs/ui/shared/data-access/session/src/index.ts"
       ],
+      "@archie-microservices/ui/shared/data-access/websocket-instance": [
+        "libs/ui/shared/data-access/websocket-instance/src/index.ts"
+      ],
       "@archie-webapps/archie-dashboard/feature/collateralization": [
         "libs/archie-dashboard/feature/collateralization/src/index.ts"
-      ],
-      "@archie-webapps/shared/data-access/websocket-instance": [
-        "libs/shared/data-access/websocket-instance/src/index.ts"
       ],
       "@archie-webapps/shared/ui/design-system": [
         "libs/shared/ui/design-system/src/index.ts"

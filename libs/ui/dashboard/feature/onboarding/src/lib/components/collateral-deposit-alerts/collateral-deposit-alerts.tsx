@@ -11,7 +11,7 @@ import {
   LedgerUpdatedWsEvent,
   websocketInstance,
   WsEventTopic,
-} from '@archie-webapps/shared/data-access/websocket-instance';
+} from '@archie-microservices/ui/shared/data-access/websocket-instance';
 
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';

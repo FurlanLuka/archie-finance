@@ -5,7 +5,7 @@ import {
   SessionState,
   useSession,
 } from '@archie-microservices/ui/shared/data-access/session';
-import { websocketInstance } from '@archie-webapps/shared/data-access/websocket-instance';
+import { websocketInstance } from '@archie-microservices/ui/shared/data-access/websocket-instance';
 
 interface UseStartupResult {
   isInitialized: boolean;
