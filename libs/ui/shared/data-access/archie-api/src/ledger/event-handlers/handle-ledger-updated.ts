@@ -1,7 +1,7 @@
 import {
   Ledger,
   LedgerAccountData,
-} from '@archie-webapps/shared/data-access/archie-api-dtos';
+} from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
 import { queryClient } from '@archie-webapps/shared/data-access/query-client';
 import { LedgerUpdatedWsEvent } from '@archie-webapps/shared/data-access/websocket-instance';
 import {

@@ -18,7 +18,9 @@ interface OtherLedgerAccountAction {
   type: Exclude<LedgerActionType, LedgerActionType.LIQUIDATION>;
 }
 
-export type LedgerAccountAction = LiquidationLedgerAccountAction | OtherLedgerAccountAction;
+export type LedgerAccountAction =
+  | LiquidationLedgerAccountAction
+  | OtherLedgerAccountAction;
 
 export interface LedgerAccountUpdatedPayload {
   userId: string;

@@ -4,7 +4,7 @@ import { calculateLedgerCreditValue } from '@archie-microservices/ui/dashboard/u
 import {
   Ledger,
   LedgerAccountData,
-} from '@archie-webapps/shared/data-access/archie-api-dtos';
+} from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
 
 interface GetUpdatedCreditAndTotalResult {
   updatedCreditValue: string;

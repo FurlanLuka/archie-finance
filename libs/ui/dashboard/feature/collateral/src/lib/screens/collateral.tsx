@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 
 import { MarginCallAlert } from '@archie-microservices/ui/dashboard/components';
 import { LTVText, LTVColor } from '@archie-microservices/ui/shared/constants';
-import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
+import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
 import { LTV } from '@archie-webapps/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie-webapps/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { CreditLine } from '@archie-webapps/shared/data-access/archie-api/credit_line/api/get-credit-line';

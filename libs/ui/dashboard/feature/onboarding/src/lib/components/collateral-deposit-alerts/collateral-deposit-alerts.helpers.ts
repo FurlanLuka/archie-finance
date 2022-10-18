@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
 import { MIN_LINE_OF_CREDIT } from '@archie-microservices/ui/dashboard/constants';
-import { LedgerAccountData } from '@archie-webapps/shared/data-access/archie-api-dtos';
+import { LedgerAccountData } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
 
 export enum CollateralDepositState {
   COLLATERAL_RECEIVED_MODAL = 'collateral_received_modal',

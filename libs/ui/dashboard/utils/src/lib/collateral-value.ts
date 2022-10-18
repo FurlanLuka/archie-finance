@@ -2,7 +2,7 @@
 import { BigNumber } from 'bignumber.js';
 
 import { CollateralAssets } from '@archie-microservices/ui/shared/constants';
-import { LedgerAccountData } from '@archie-webapps/shared/data-access/archie-api-dtos';
+import { LedgerAccountData } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
 
 export const calculateLedgerCreditValue = (
   ledgerAccounts: LedgerAccountData[],

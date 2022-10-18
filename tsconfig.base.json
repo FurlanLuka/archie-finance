@@ -67,11 +67,11 @@
       "@archie-microservices/ui/shared/data-access/archie-api": [
         "libs/ui/shared/data-access/archie-api/src/*"
       ],
+      "@archie-microservices/ui/shared/data-access/archie-api-dtos": [
+        "libs/ui/shared/data-access/archie-api-dtos/src/index.ts"
+      ],
       "@archie-webapps/archie-dashboard/feature/collateralization": [
         "libs/archie-dashboard/feature/collateralization/src/index.ts"
-      ],
-      "@archie-webapps/shared/data-access/archie-api-dtos": [
-        "libs/shared/data-access/archie-api-dtos/src/index.ts"
       ],
       "@archie-webapps/shared/data-access/query-client": [
         "libs/shared/data-access/query-client/src/index.ts"

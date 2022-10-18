@@ -3,7 +3,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 import { OnboardingStep } from '@archie-microservices/ui/dashboard/constants';
-import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
+import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
 import { GetCreditResponse } from '@archie-webapps/shared/data-access/archie-api/credit/api/get-credit';
 import { useCreateRizeUser } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
 import { useGetCredit } from '@archie-webapps/shared/data-access/archie-api/credit/hooks/use-get-credit';

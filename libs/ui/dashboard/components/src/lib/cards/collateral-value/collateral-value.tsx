@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, Navigate } from 'react-router-dom';
 
-import { Ledger } from '@archie-webapps/shared/data-access/archie-api-dtos';
+import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
 import {
   QueryResponse,
   RequestState,
