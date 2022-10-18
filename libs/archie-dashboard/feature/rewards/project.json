@@ -1,0 +1,23 @@
+{
+  "root": "libs/archie-dashboard/feature/rewards",
+  "sourceRoot": "libs/archie-dashboard/feature/rewards/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/archie-dashboard/feature/rewards/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/archie-dashboard/feature/rewards"],
+      "options": {
+        "jestConfig": "libs/archie-dashboard/feature/rewards/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

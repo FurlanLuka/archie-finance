@@ -1,0 +1,22 @@
+{
+  "root": "libs/archie-dashboard/constants",
+  "sourceRoot": "libs/archie-dashboard/constants/src",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/archie-dashboard/constants/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/archie-dashboard/constants"],
+      "options": {
+        "jestConfig": "libs/archie-dashboard/constants/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

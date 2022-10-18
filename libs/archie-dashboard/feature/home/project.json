@@ -1,0 +1,23 @@
+{
+  "root": "libs/archie-dashboard/feature/home",
+  "sourceRoot": "libs/archie-dashboard/feature/home/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/archie-dashboard/feature/home/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/archie-dashboard/feature/home"],
+      "options": {
+        "jestConfig": "libs/archie-dashboard/feature/home/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}
