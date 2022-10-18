@@ -107,6 +107,16 @@ describe('Ltv api tests', () => {
       });
     });
 
+    it(`should send ltv margin notification once ltv reaches 65%`, async () => {});
+    it(`should not send ltv margin notification if we already sent It at 65%`, async () => {});
+    it(`should send ltv margin notification once ltv reaches 70%`, async () => {});
+    it(`should send ltv margin notification once ltv reaches 73%`, async () => {});
+
+    it(`should start margin call once ltv reaches 75%`, async () => {});
+    it(`should complete margin call without liquidation if ltv falls bellow 75% in the 72h grace period`, async () => {});
+
+    it(`should complete margin call with liquidation if ltv is at 75% for 72 hours`, async () => {});
+
     it(`should create margin call and liquidate once ltv reaches 90%`, async () => {
       const expectedLiquidationCommandPublishSequence = 3;
       const creditBalanceUpdatedPayload = creditBalanceUpdatedFactory({
