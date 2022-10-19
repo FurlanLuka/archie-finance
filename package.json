@@ -157,7 +157,6 @@
     "ts-jest": "29.0.3",
     "ts-node": "~10.9.1",
     "tslib": "^2.4.0",
-    "ttf-loader": "^1.0.2",
     "typescript": "~4.8.4",
     "url-loader": "^4.1.1",
     "webpack": "^5.74.0",
