@@ -14,7 +14,7 @@
     "build:mail-api": "nx run mail-api:build",
     "build:peach-api": "nx run peach-api:build",
     "build:webhook-api": "nx run webhook-api:build",
-    "lint-affected": "npx nx affected --target=lint --parallel=3",
+    "lint-affected": "npx nx affected --base=origin/develop --target=lint --parallel=3",
     "test": "nx test",
     "local-deploy": "node ./deploy-localhost.js",
     "nx": "nx"

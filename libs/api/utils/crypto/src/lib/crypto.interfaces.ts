@@ -12,5 +12,5 @@ export interface CryptoOptions {
     Type | DynamicModule | Promise<DynamicModule> | ForwardReference
   >;
   inject: (InjectionToken | OptionalFactoryDependency)[];
-  useFactory: (...args: any[]) => CryptoConfig;
+  useFactory: (...args: unknown[]) => CryptoConfig;
 }
