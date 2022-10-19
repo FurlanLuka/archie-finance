@@ -15,7 +15,7 @@
           "build",
           "lint",
           "test",
-          "e2e"
+          "test-integration"
         ],
         "accessToken": "ZGNiYWU2MjktNjE3OC00ZDY5LWI3Y2ItNTE5ZmI4MjNmMDFjfHJlYWQtd3JpdGU="
       }
