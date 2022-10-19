@@ -1,4 +1,4 @@
-import { WS_URL } from '@archie-microservices/ui/shared/constants';
+import { WS_URL } from '@archie/ui/shared/constants';
 
 import { WsEvent, WsEventTopic } from './events';
 import { getConnectionToken } from './get-connection-token/get-connection-token';

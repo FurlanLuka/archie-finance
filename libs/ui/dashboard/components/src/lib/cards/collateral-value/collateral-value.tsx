@@ -2,19 +2,19 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, Navigate } from 'react-router-dom';
 
-import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
+import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetLedger } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+} from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import {
   ButtonOutline,
   Card,
   Skeleton,
   TitleM,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 export const CollateralValue: FC = () => {
   const { t } = useTranslation();

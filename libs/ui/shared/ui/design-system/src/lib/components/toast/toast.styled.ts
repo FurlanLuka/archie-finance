@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {
   breakpoints,
   HEADER_HEIGHT,
-} from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/theme';
 
 export const Toast = styled.div`
   display: flex;

@@ -6,8 +6,8 @@ import Autocomplete from 'react-google-autocomplete';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useCreateKyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/hooks/use-create-kyc';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useCreateKyc } from '@archie/ui/shared/data-access/archie-api/kyc/hooks/use-create-kyc';
 import {
   ButtonPrimary,
   Card,
@@ -15,9 +15,9 @@ import {
   TitleL,
   BodyL,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { Icon } from '@archie-microservices/ui/shared/ui/icons';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { Icon } from '@archie/ui/shared/ui/icons';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import {
   parseDate,

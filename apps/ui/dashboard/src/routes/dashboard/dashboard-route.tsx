@@ -4,27 +4,27 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   Header,
   Navigation,
-} from '@archie-microservices/ui/dashboard/components';
-import { ErrorScreen } from '@archie-microservices/ui/dashboard/components';
-import { CollateralScreen } from '@archie-microservices/ui/dashboard/feature/collateral';
-import { CollateralizationScreen } from '@archie-microservices/ui/dashboard/feature/collateralization';
-import { HistoryScreen } from '@archie-microservices/ui/dashboard/feature/history';
-import { HomeScreen } from '@archie-microservices/ui/dashboard/feature/home';
-import { PaymentScreen } from '@archie-microservices/ui/dashboard/feature/payments';
-import { RewardsScreen } from '@archie-microservices/ui/dashboard/feature/rewards';
-import { SettingsScreen } from '@archie-microservices/ui/dashboard/feature/settings';
-import { WithdrawScreen } from '@archie-microservices/ui/dashboard/feature/withdraw';
+} from '@archie/ui/dashboard/components';
+import { ErrorScreen } from '@archie/ui/dashboard/components';
+import { CollateralScreen } from '@archie/ui/dashboard/feature/collateral';
+import { CollateralizationScreen } from '@archie/ui/dashboard/feature/collateralization';
+import { HistoryScreen } from '@archie/ui/dashboard/feature/history';
+import { HomeScreen } from '@archie/ui/dashboard/feature/home';
+import { PaymentScreen } from '@archie/ui/dashboard/feature/payments';
+import { RewardsScreen } from '@archie/ui/dashboard/feature/rewards';
+import { SettingsScreen } from '@archie/ui/dashboard/feature/settings';
+import { WithdrawScreen } from '@archie/ui/dashboard/feature/withdraw';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { GetOnboardingResponse } from '@archie-microservices/ui/shared/data-access/archie-api/onboarding/api/get-onboarding';
-import { useGetOnboarding } from '@archie-microservices/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
+} from '@archie/ui/shared/data-access/archie-api/interface';
+import { GetOnboardingResponse } from '@archie/ui/shared/data-access/archie-api/onboarding/api/get-onboarding';
+import { useGetOnboarding } from '@archie/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
 import {
   LoaderFullScreen,
   Page,
   Container,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
 

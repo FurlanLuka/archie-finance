@@ -2,7 +2,7 @@ import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { addDecorator, addParameters } from '@storybook/react';
 import { withThemesProvider } from 'themeprovider-storybook';
 
-import { GlobalStyles, theme } from '@archie-microservices/ui/shared/ui/theme';
+import { GlobalStyles, theme } from '@archie/ui/shared/ui/theme';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },

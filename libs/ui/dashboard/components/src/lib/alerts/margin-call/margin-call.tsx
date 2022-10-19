@@ -1,12 +1,12 @@
 import { FC } from 'react';
 
-import { LTVStatus, LTVColor } from '@archie-microservices/ui/shared/constants';
-import { LTV } from '@archie-microservices/ui/shared/data-access/archie-api/collateral/api/get-ltv';
-import { useGetLTV } from '@archie-microservices/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
+import { LTVStatus, LTVColor } from '@archie/ui/shared/constants';
+import { LTV } from '@archie/ui/shared/data-access/archie-api/collateral/api/get-ltv';
+import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+} from '@archie/ui/shared/data-access/archie-api/interface';
 
 import { Danger } from './blocks/danger/danger';
 import { Warning } from './blocks/warning/warning';

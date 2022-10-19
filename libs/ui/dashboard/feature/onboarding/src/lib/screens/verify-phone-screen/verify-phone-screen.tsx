@@ -2,20 +2,20 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactCodeInput from 'react-verification-code-input';
 
-import { useCompleteAptoVerification } from '@archie-microservices/ui/shared/data-access/archie-api/credit/hooks/use-complete-apto-verification';
-import { useStartAptoVerification } from '@archie-microservices/ui/shared/data-access/archie-api/credit/hooks/use-start-apto-verification';
+import { useCompleteAptoVerification } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-complete-apto-verification';
+import { useStartAptoVerification } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-start-apto-verification';
 import {
   MutationQueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+} from '@archie/ui/shared/data-access/archie-api/interface';
 import {
   ButtonPrimary,
   Card,
   TitleL,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { Icon } from '@archie-microservices/ui/shared/ui/icons';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { Icon } from '@archie/ui/shared/ui/icons';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { VerifyPhoneScreenStyled } from './verify-phone-screen.styled';
 

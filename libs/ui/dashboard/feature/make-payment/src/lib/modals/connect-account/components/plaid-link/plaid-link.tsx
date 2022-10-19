@@ -2,13 +2,13 @@ import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { AccountResponse } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
-import { useCreateLinkToken } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { useCreateLinkToken } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
 import {
   TitleS,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { PlaidConnect } from './blocks/plaid-connect/plaid-connect';
 import { PlaidConnectLoading } from './blocks/plaid-connect-loading/plaid-connect-loading';

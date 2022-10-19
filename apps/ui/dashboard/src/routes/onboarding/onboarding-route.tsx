@@ -3,9 +3,9 @@ import { Route, Routes } from 'react-router-dom';
 import {
   ErrorScreen,
   Header,
-} from '@archie-microservices/ui/dashboard/components';
-import { OnboardingHandler } from '@archie-microservices/ui/dashboard/feature/onboarding';
-import { Page } from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/dashboard/components';
+import { OnboardingHandler } from '@archie/ui/dashboard/feature/onboarding';
+import { Page } from '@archie/ui/shared/ui/design-system';
 
 export const OnboardingRoute = () => (
   <>

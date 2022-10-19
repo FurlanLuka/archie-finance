@@ -1,6 +1,6 @@
 import { PlaidAccount } from 'react-plaid-link';
 
-import { AccountResponse } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 
 export const transformAccounts = (
   accountsBase: PlaidAccount[],

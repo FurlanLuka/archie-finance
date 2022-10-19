@@ -13,7 +13,7 @@ import {
 } from '@archie/api/peach-api/data-transfer-objects';
 import { CreditLineCreatedPayload } from '@archie/api/credit-line-api/data-transfer-objects';
 import { CreditService } from '../credit/credit.service';
-import { Lock } from '@archie-microservices/api/utils/redis';
+import { Lock } from '@archie/api/utils/redis';
 import { MarginService } from '../margin/margin.service';
 import { LedgerAccount } from '../ledger/ledger_account.entity';
 import { LtvMeta } from '../margin/margin.interfaces';

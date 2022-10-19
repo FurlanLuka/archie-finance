@@ -3,18 +3,18 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
-import { CollateralAssets } from '@archie-microservices/ui/shared/constants';
-import { AssetPrice } from '@archie-microservices/ui/shared/data-access/archie-api/asset_price/api/get-asset-price';
-import { useGetAssetPrice } from '@archie-microservices/ui/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
+import { CollateralAssets } from '@archie/ui/shared/constants';
+import { AssetPrice } from '@archie/ui/shared/data-access/archie-api/asset_price/api/get-asset-price';
+import { useGetAssetPrice } from '@archie/ui/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+} from '@archie/ui/shared/data-access/archie-api/interface';
 import {
   ButtonOutline,
   CollateralCurrency,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import {
   AlignCenterCellStyled,

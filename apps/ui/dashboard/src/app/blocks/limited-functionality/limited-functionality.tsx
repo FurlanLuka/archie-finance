@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import {
   ToastList,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { LimitedFunctionalityStyled } from './limited-functionality.styled';
 

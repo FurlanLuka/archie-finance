@@ -2,20 +2,20 @@ import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { ConnectAccountModal } from '@archie-microservices/ui/dashboard/feature/make-payment';
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetConnectedAccounts } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
+import { ConnectAccountModal } from '@archie/ui/dashboard/feature/make-payment';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetConnectedAccounts } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
 import {
   Card,
   Skeleton,
   ButtonOutline,
   TitleS,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { ConnectedAccount } from './blocks/connected-account';
 import { ConnectedAccountsStyled } from './connected-accounts.styled';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 export const ConnectedAccounts: FC = () => {
   const { t } = useTranslation();

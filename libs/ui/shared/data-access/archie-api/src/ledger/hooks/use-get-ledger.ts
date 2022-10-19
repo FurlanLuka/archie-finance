@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 
-import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
+import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
 import {
   websocketInstance,
   WsEventTopic,
-} from '@archie-microservices/ui/shared/data-access/websocket-instance';
+} from '@archie/ui/shared/data-access/websocket-instance';
 
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';

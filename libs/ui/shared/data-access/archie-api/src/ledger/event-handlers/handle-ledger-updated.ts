@@ -1,13 +1,13 @@
 import {
   Ledger,
   LedgerAccountData,
-} from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
-import { queryClient } from '@archie-microservices/ui/shared/data-access/query-client';
-import { LedgerUpdatedWsEvent } from '@archie-microservices/ui/shared/data-access/websocket-instance';
+} from '@archie/ui/shared/data-access/archie-api-dtos';
+import { queryClient } from '@archie/ui/shared/data-access/query-client';
+import { LedgerUpdatedWsEvent } from '@archie/ui/shared/data-access/websocket-instance';
 import {
   calculateLedgerTotalValue,
   mergeLedgerWithWsUpdate,
-} from '@archie-microservices/ui/shared/utils';
+} from '@archie/ui/shared/utils';
 
 import { LEDGER_QUERY_KEY } from '../hooks/use-get-ledger';
 

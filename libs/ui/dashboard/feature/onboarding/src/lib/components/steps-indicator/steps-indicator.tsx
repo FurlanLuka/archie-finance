@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { OnboardingStep } from '@archie-microservices/ui/dashboard/constants';
-import { BodyS } from '@archie-microservices/ui/shared/ui/design-system';
-import { Icon } from '@archie-microservices/ui/shared/ui/icons';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+import { OnboardingStep } from '@archie/ui/dashboard/constants';
+import { BodyS } from '@archie/ui/shared/ui/design-system';
+import { Icon } from '@archie/ui/shared/ui/icons';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { StepsIndicatorStyled } from './steps-indicator.styled';
 

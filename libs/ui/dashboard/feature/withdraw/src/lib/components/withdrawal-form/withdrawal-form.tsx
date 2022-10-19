@@ -5,18 +5,18 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { calculateLedgerCreditValue } from '@archie-microservices/ui/dashboard/utils';
-import { CollateralAssets } from '@archie-microservices/ui/shared/constants';
-import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useCreateWithdrawal } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-create-withdrawal';
+import { calculateLedgerCreditValue } from '@archie/ui/dashboard/utils';
+import { CollateralAssets } from '@archie/ui/shared/constants';
+import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useCreateWithdrawal } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-create-withdrawal';
 import {
   ButtonOutline,
   ButtonPrimary,
   InputText,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/successfull-withdrawal';
 

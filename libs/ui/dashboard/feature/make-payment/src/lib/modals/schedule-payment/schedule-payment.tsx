@@ -1,13 +1,13 @@
 import { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetKyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
-import { useGetObligations } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetKyc } from '@archie/ui/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
+import { useGetObligations } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 import {
   Loader,
   Modal,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { PaymentSteps } from './components/payment-steps/payment-steps';
 import { SchedulePaymentStyled } from './schedule-payment.styled';

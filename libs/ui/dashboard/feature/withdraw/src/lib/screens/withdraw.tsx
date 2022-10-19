@@ -2,19 +2,19 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, Navigate, Link } from 'react-router-dom';
 
-import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
+import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetLedger } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import { useGetMaxWithdrawalAmount } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-max-withdrawal-amount';
+} from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+import { useGetMaxWithdrawalAmount } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-max-withdrawal-amount';
 import {
   Card,
   Skeleton,
   TitleS,
   BodyL,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { WithdrawalForm } from '../components/withdrawal-form/withdrawal-form';
 

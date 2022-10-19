@@ -1,7 +1,7 @@
 import {
   LedgerAccountData,
   LedgerAccountDataWs,
-} from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
+} from '@archie/ui/shared/data-access/archie-api-dtos';
 
 export const mergeLedgerWithWsUpdate = (
   initialLedgerAccounts: LedgerAccountData[],

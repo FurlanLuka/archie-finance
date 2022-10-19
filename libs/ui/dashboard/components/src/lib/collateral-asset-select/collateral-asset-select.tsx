@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next';
 import {
   CollateralAsset,
   CollateralAssets,
-} from '@archie-microservices/ui/shared/constants';
+} from '@archie/ui/shared/constants';
 import {
   CollateralCurrency,
   Select,
   SelectOption,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { CollateralAssetStyled } from './collateral-asset-select.styled';
 

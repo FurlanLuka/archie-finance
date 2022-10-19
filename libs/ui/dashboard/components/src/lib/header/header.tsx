@@ -1,13 +1,13 @@
 import { FC, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-import { dashboardNavItems } from '@archie-microservices/ui/dashboard/constants';
-import { useAuthenticatedSession } from '@archie-microservices/ui/shared/data-access/session';
+import { dashboardNavItems } from '@archie/ui/dashboard/constants';
+import { useAuthenticatedSession } from '@archie/ui/shared/data-access/session';
 import {
   Container,
   BodyL,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { Icon } from '@archie-microservices/ui/shared/ui/icons';
+} from '@archie/ui/shared/ui/design-system';
+import { Icon } from '@archie/ui/shared/ui/icons';
 
 import { HeaderStyled, MobileNav } from './header.styled';
 

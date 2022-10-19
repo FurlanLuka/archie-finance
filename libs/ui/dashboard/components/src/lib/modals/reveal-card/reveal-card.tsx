@@ -6,7 +6,7 @@ import {
   ButtonPrimary,
   Modal,
   TitleS,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { RevealCardModalStyled } from './reveal-card.styled';
 

@@ -3,15 +3,15 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import {
   calculateLedgerCreditValue,
   formatLedgerAccountsToString,
-} from '@archie-microservices/ui/dashboard/utils';
-import { LedgerActionType } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetLedger } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+} from '@archie/ui/dashboard/utils';
+import { LedgerActionType } from '@archie/ui/shared/data-access/archie-api-dtos';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import {
   LedgerUpdatedWsEvent,
   websocketInstance,
   WsEventTopic,
-} from '@archie-microservices/ui/shared/data-access/websocket-instance';
+} from '@archie/ui/shared/data-access/websocket-instance';
 
 import { CollateralReceivedModal } from '../modals/collateral-received/collateral-received';
 import { NotEnoughCollateralModal } from '../modals/not-enough-collateral/not-enough-collateral';

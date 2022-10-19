@@ -7,7 +7,7 @@ import { QueueModule } from '@archie/api/utils/queue';
 import { migrations } from './migrations';
 import { AuthModule } from '@archie/api/utils/auth0';
 import { LtvModule } from '@archie/api/ltv-api/ltv';
-import { RedisModule } from '@archie-microservices/api/utils/redis';
+import { RedisModule } from '@archie/api/utils/redis';
 
 @Module({
   imports: [

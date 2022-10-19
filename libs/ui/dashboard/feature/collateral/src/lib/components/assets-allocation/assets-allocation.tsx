@@ -1,6 +1,6 @@
 import { FC } from 'react';
 
-import { BodyS } from '@archie-microservices/ui/shared/ui/design-system';
+import { BodyS } from '@archie/ui/shared/ui/design-system';
 
 import { AssetsAllocationStyled } from './assets-allocation.styled';
 

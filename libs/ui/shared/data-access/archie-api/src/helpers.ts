@@ -1,7 +1,7 @@
 import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 import { MutationFunction, QueryFunction, QueryKey } from 'react-query';
 
-import { SessionState } from '@archie-microservices/ui/shared/data-access/session';
+import { SessionState } from '@archie/ui/shared/data-access/session';
 
 import { ApiError, ApiErrors, UnauthenticatedApiError } from './api-error';
 import { ApiErrorResponse, PaginationParams } from './interface';

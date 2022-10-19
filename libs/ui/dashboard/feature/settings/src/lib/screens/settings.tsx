@@ -5,19 +5,19 @@ import { Navigate } from 'react-router-dom';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { Kyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/api/get-kyc';
-import { useGetKyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
-import { EmailVerificationResponse } from '@archie-microservices/ui/shared/data-access/archie-api/user/api/get-email-verification';
-import { useGetEmailVerification } from '@archie-microservices/ui/shared/data-access/archie-api/user/hooks/use-get-email-verification';
+} from '@archie/ui/shared/data-access/archie-api/interface';
+import { Kyc } from '@archie/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { useGetKyc } from '@archie/ui/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
+import { EmailVerificationResponse } from '@archie/ui/shared/data-access/archie-api/user/api/get-email-verification';
+import { useGetEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-get-email-verification';
 import {
   Card,
   Skeleton,
   TitleM,
   TitleS,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { OptionsHandler } from '../components/options-handler/options-handler';
 

@@ -1,11 +1,11 @@
 import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { Kyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/api/get-kyc';
-import { ScheduleTransactionParams } from '@archie-microservices/ui/shared/data-access/archie-api/payment/api/schedule-transaction';
-import { useScheduleTransaction } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
-import { UserObligations } from '@archie-microservices/ui/shared/data-access/archie-api/payment/api/get-obligations';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { Kyc } from '@archie/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { ScheduleTransactionParams } from '@archie/ui/shared/data-access/archie-api/payment/api/schedule-transaction';
+import { useScheduleTransaction } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
+import { UserObligations } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import {
   ButtonOutline,
   ButtonPrimary,
@@ -14,7 +14,7 @@ import {
   BodyL,
   BodyM,
   FormError,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { PaymentConfirmStyled } from './payment-confirm.styled';
 

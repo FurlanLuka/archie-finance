@@ -1,6 +1,6 @@
 import { FC, useMemo } from 'react';
 
-import { Table } from '@archie-microservices/ui/shared/ui/design-system';
+import { Table } from '@archie/ui/shared/ui/design-system';
 
 import { tableColumns } from './fixtures/table-fixtures';
 

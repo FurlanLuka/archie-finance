@@ -4,20 +4,20 @@ import { Navigate } from 'react-router-dom';
 import {
   CardStatusColor,
   CardStatusText,
-} from '@archie-microservices/ui/shared/constants';
-import { RevealCardModal } from '@archie-microservices/ui/dashboard/components';
+} from '@archie/ui/shared/constants';
+import { RevealCardModal } from '@archie/ui/dashboard/components';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { CardsCredit } from '@archie-microservices/ui/shared/data-access/archie-api/rize/api/get-cards-credit';
-import { useGetCardsCredit } from '@archie-microservices/ui/shared/data-access/archie-api/rize/hooks/use-cards-credit';
+} from '@archie/ui/shared/data-access/archie-api/interface';
+import { CardsCredit } from '@archie/ui/shared/data-access/archie-api/rize/api/get-cards-credit';
+import { useGetCardsCredit } from '@archie/ui/shared/data-access/archie-api/rize/hooks/use-cards-credit';
 import {
   Card,
   Skeleton,
   BodyL,
   BodyS,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import imgCard from '../../assets/card-placeholder.png';
 
