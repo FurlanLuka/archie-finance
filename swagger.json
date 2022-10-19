@@ -43,7 +43,7 @@
             }
           },
           "404": {
-            "description": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+            "description": "ERR_DEBIT_CARD_DOES_NOT_EXIST | ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
           }
         },
         "security": [
@@ -422,31 +422,10 @@
         }
       }
     },
-    "/internal/webhook/peach/confirmed_payments": {
+    "/v1/webhooks/peach/payments": {
       "post": {
-        "operationId": "PeachWebhookController_paymentConfirmedHandler",
+        "operationId": "PeachWebhookController_peachPaymentsHandler",
         "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/internal/webhook/peach/test/confirmed_payments": {
-      "post": {
-        "operationId": "PeachWebhookController_paymentAppliedHandler",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PeachWebhookPaymentPayload"
-              }
-            }
-          }
-        },
         "responses": {
           "201": {
             "description": ""
@@ -458,6 +437,27 @@
       "post": {
         "operationId": "FireblocksWebhookController_webhook",
         "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/webhooks/auth0": {
+      "post": {
+        "operationId": "Auth0Controller_webhook",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Auth0Logs"
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": ""
@@ -596,7 +596,7 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -626,7 +626,7 @@
             "description": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE"
           },
           "404": {
-            "description": "AMOUNT_EXCEEDS_AVAILABLE_BALANCE"
+            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR | CREDIT_LINE_DRAW_NOT_FOUND_ERROR | PAYMENT_INSTRUMENT_NOT_FOUND | AMOUNT_EXCEEDS_AVAILABLE_BALANCE"
           }
         },
         "security": [
@@ -689,7 +689,7 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_DRAW_NOT_FOUND_ERROR"
+            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR | CREDIT_LINE_DRAW_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -715,7 +715,7 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -741,7 +741,7 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -770,7 +770,7 @@
             "description": ""
           },
           "404": {
-            "description": "PAYMENT_INSTRUMENT_NOT_FOUND"
+            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR | PAYMENT_INSTRUMENT_NOT_FOUND"
           },
           "409": {
             "description": "AUTOPAY_ALREADY_CONFIGURED"
@@ -790,7 +790,7 @@
             "description": ""
           },
           "404": {
-            "description": "AUTOPAY_NOT_CONFIGURED"
+            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR | PAYMENT_INSTRUMENT_NOT_FOUND | AUTOPAY_NOT_CONFIGURED"
           }
         },
         "security": [
@@ -814,7 +814,7 @@
             }
           },
           "404": {
-            "description": "AUTOPAY_NOT_CONFIGURED"
+            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR | PAYMENT_INSTRUMENT_NOT_FOUND | AUTOPAY_NOT_CONFIGURED"
           }
         },
         "security": [
@@ -850,7 +850,7 @@
             }
           },
           "404": {
-            "description": "PAYMENT_INSTRUMENT_NOT_FOUND"
+            "description": "BORROWER_NOT_FOUND_ERROR | PAYMENT_INSTRUMENT_NOT_FOUND"
           }
         },
         "security": [
@@ -876,7 +876,7 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "Not Found | BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -905,7 +905,7 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -940,7 +940,7 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR"
           }
         },
         "security": [
@@ -1247,7 +1247,7 @@
             }
           },
           "400": {
-            "description": "INVALID_ASSET"
+            "description": "INVALID_WITHDRAWAL_AMOUNT | WITHDRAWAL_AMOUNT_TOO_HIGH | INVALID_ASSET"
           }
         },
         "security": [
@@ -1913,156 +1913,9 @@
           "company"
         ]
       },
-      "PeachWebhookPaymentPayload": {
+      "Auth0Logs": {
         "type": "object",
-        "properties": {
-          "accrualDate": {
-            "type": "string",
-            "nullable": true
-          },
-          "amount": {
-            "type": "number"
-          },
-          "caseExternalId": {
-            "type": "string",
-            "nullable": true
-          },
-          "caseId": {
-            "type": "string",
-            "nullable": true
-          },
-          "caseTypeId": {
-            "type": "string",
-            "nullable": true
-          },
-          "companyId": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string"
-          },
-          "creatingMessageId": {
-            "type": "string"
-          },
-          "currency": {
-            "type": "string"
-          },
-          "deletedAt": {
-            "type": "string",
-            "nullable": true
-          },
-          "discriminator": {
-            "type": "string"
-          },
-          "effectiveAt": {
-            "type": "string"
-          },
-          "eventClass": {
-            "type": "string"
-          },
-          "eventType": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          },
-          "interactionId": {
-            "type": "string",
-            "nullable": true
-          },
-          "isExternal": {
-            "type": "boolean"
-          },
-          "loanExternalId": {
-            "type": "string",
-            "nullable": true
-          },
-          "loanId": {
-            "type": "string"
-          },
-          "loanTypeId": {
-            "type": "string"
-          },
-          "maintenanceDate": {
-            "type": "string",
-            "nullable": true
-          },
-          "object": {
-            "type": "string"
-          },
-          "parentId": {
-            "type": "string"
-          },
-          "paymentInstrumentExternalId": {
-            "type": "string",
-            "nullable": true
-          },
-          "paymentInstrumentId": {
-            "type": "string"
-          },
-          "paymentInstrumentType": {
-            "type": "string"
-          },
-          "personExternalId": {
-            "type": "string"
-          },
-          "personId": {
-            "type": "string"
-          },
-          "requestId": {
-            "type": "string"
-          },
-          "sessionId": {
-            "type": "string",
-            "nullable": true
-          },
-          "transactionExternalId": {
-            "type": "string",
-            "nullable": true
-          },
-          "transactionId": {
-            "type": "string"
-          },
-          "updatedAt": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "required": [
-          "accrualDate",
-          "amount",
-          "caseExternalId",
-          "caseId",
-          "caseTypeId",
-          "companyId",
-          "createdAt",
-          "creatingMessageId",
-          "currency",
-          "deletedAt",
-          "discriminator",
-          "effectiveAt",
-          "eventClass",
-          "eventType",
-          "id",
-          "interactionId",
-          "isExternal",
-          "loanExternalId",
-          "loanId",
-          "loanTypeId",
-          "maintenanceDate",
-          "object",
-          "parentId",
-          "paymentInstrumentExternalId",
-          "paymentInstrumentId",
-          "paymentInstrumentType",
-          "personExternalId",
-          "personId",
-          "requestId",
-          "sessionId",
-          "transactionExternalId",
-          "transactionId",
-          "updatedAt"
-        ]
+        "properties": {}
       },
       "PaymentInstrumentDto": {
         "type": "object",
