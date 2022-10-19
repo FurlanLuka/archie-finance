@@ -59,6 +59,8 @@ jobs:
         image: redis:alpine3.16
         ports:
           - 6379:6379
+    env:
+      NX_CLOUD_DISTRIBUTED_EXECUTION: true
     steps:
       - uses: actions/checkout@v2
         name: Checkout
@@ -72,34 +74,28 @@ jobs:
           main-branch-name: ${{ inputs.BASE_BRANCH_NAME }}
       - uses: ./.github/actions/install-dependencies
         name: Install dependencies
+      - name: NX start agents and CI run
+        run: |
+          npx nx-cloud start-agent
+          npx nx-cloud start-ci-run
       - name: Workspace Lint
         run: npx nx workspace-lint
       - name: Prepare testing environment
         run: npx nx generate @archie/plugin/workspace-generator:test-environment-generator
-      # - name: Affected Lint
-      #   if: inputs.BASE_BRANCH_NAME == ''
-      #   run: npx nx affected --target=lint --parallel=3
-      # - name: Affected Lint
-      #   if: inputs.BASE_BRANCH_NAME != ''
-      #   run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=lint --parallel=3
+      - name: Affected Lint
+        if: inputs.BASE_BRANCH_NAME == ''
+        run: npx nx affected --target=lint --parallel=3
+      - name: Affected Lint
+        if: inputs.BASE_BRANCH_NAME != ''
+        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=lint --parallel=3
       - name: Affected Integration Test
         if: inputs.BASE_BRANCH_NAME == ''
         run: npx nx affected --target=test-integration --parallel=3 --ci --code-coverage
       - name: Affected Integration Test
         if: inputs.BASE_BRANCH_NAME != ''
         run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test-integration --parallel=3 --ci --code-coverage
-      # - name: Affected Build
-      #   if: inputs.BASE_BRANCH_NAME == ''
-      #   run: npx nx affected --target=build --parallel=3
-      # - name: Affected Build
-      #   if: inputs.BASE_BRANCH_NAME != ''
-      #   run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=build --parallel=3
-      # - name: Store build artifacts
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: services-build-${{ inputs.NAME }}
-      #     path: ./dist
-      #     retention-days: 1
+      - name: Cleanup NX cloud
+        run: npx nx-cloud stop-all-agents
       - uses: ./.github/actions/affected-projects
         id: affected-projects
         name: Extract affected apps
