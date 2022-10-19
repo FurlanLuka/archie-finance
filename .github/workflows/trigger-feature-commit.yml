@@ -1,11 +1,10 @@
 name: Deploy feature
 
 on:
-  push:
-    branches:
-      - 'feature/*'
-      - 'patch/*'
- 
+  pull_request:
+    types:
+      - 'ready_for_review'
+
 env:
   ECR_REPOSITORY: archie-development-container-repository
   AWS_REGION: us-east-1
