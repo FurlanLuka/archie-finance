@@ -7,7 +7,7 @@ import {
 import { MicroserviceModuleGeneratorSchema } from './schema';
 import { exec } from 'child_process';
 import { promisify } from 'util';
-import path = require('node:path');
+import * as path from 'node:path';
 
 interface NormalizedSchema extends MicroserviceModuleGeneratorSchema {
   serviceRoot: string;
@@ -27,7 +27,7 @@ function normalizeOptions(
   };
 }
 
-function addFiles(tree: Tree, options: NormalizedSchema) {
+function addFiles(tree: Tree, options: NormalizedSchema): void {
   const templateOptions = {
     ...options,
     offsetFromRoot: offsetFromRoot(options.serviceRoot),
@@ -46,7 +46,7 @@ const MIGRATION_END_OUTPUT = '_______END-MIGRATION-CODE_______';
 export default async function (
   tree: Tree,
   options: MicroserviceModuleGeneratorSchema,
-) {
+): Promise<void> {
   const normalizedOptions = normalizeOptions(tree, options);
 
   const execute = promisify(exec);

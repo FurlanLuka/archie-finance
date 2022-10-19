@@ -1,4 +1,9 @@
-import { getWorkspaceLayout, joinPathFragments, Tree } from '@nrwl/devkit';
+import {
+  GeneratorCallback,
+  getWorkspaceLayout,
+  joinPathFragments,
+  Tree,
+} from '@nrwl/devkit';
 import { MicroserviceGenerator } from './schema';
 import { initGenerator } from '@nrwl/nest';
 import { applicationGenerator as nodeApplicationGenerator } from '@nrwl/node';
@@ -35,7 +40,10 @@ function normalizeOptions(
   };
 }
 
-export default async function (tree: Tree, options: MicroserviceGenerator) {
+export default async function (
+  tree: Tree,
+  options: MicroserviceGenerator,
+): Promise<GeneratorCallback> {
   const normalizedOptions = normalizeOptions(tree, options);
 
   const initTask = await initGenerator(tree, {
@@ -64,7 +72,7 @@ export default async function (tree: Tree, options: MicroserviceGenerator) {
 
   microserviceProjectTargetGenerator(tree, {
     projectName: options.name,
-  })
+  });
 
   return runTasksInSerial(
     initTask,

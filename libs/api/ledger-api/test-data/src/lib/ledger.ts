@@ -8,7 +8,7 @@ import { user } from '@archie/test/integration';
 
 export const initiateLedgerRecalcuationCommandPayloadFactory = (
   overrides?: Partial<InitiateLedgerRecalculationCommandPayload>,
-) => ({
+): InitiateLedgerRecalculationCommandPayload => ({
   userIds: [user.id],
   ...overrides,
 });

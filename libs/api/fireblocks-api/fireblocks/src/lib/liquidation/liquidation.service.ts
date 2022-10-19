@@ -2,9 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
-  CollateralLiquidationTransactionErrorPayload,
-  CollateralLiquidationTransactionSubmittedPayload,
-  CollateralLiquidationTransactionUpdatedPayload,
   CollateralLiquidationTransactionUpdatedStatus,
   InitiateCollateralLiquidationCommandPayload,
 } from '@archie/api/fireblocks-api/data-transfer-objects';

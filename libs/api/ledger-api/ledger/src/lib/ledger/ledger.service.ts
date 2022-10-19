@@ -16,7 +16,6 @@ import {
   InternalLedgerAccountData,
   Ledger,
   LedgerAccountAction,
-  LedgerAccountUpdatedPayload,
   LedgerActionType,
 } from '@archie/api/ledger-api/data-transfer-objects';
 import { QueueService } from '@archie/api/utils/queue';
@@ -126,16 +125,16 @@ export class LedgerService {
           return [];
         }
 
-        const assetPrice: AssetPrice | undefined = assetPrices.find(
-          (assetPrice) => assetPrice.assetId === assetId,
+        const accountAssetPrice: AssetPrice | undefined = assetPrices.find(
+          (asset) => asset.assetId === assetId,
         );
 
-        if (assetPrice === undefined) {
+        if (accountAssetPrice === undefined) {
           return [];
         }
 
         const accountValue = BigNumber(amount)
-          .multipliedBy(assetPrice.price)
+          .multipliedBy(accountAssetPrice.price)
           .decimalPlaces(2, BigNumber.ROUND_DOWN);
 
         ledgerValue = ledgerValue.plus(accountValue);
@@ -143,7 +142,7 @@ export class LedgerService {
         return [
           {
             assetId: assetId,
-            assetPrice: assetPrice.price.toString(),
+            assetPrice: accountAssetPrice.price.toString(),
             accountValue: accountValue.toString(),
             assetAmount: amount,
           },

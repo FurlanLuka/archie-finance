@@ -8,7 +8,9 @@ export class QueueUtilService {
     type: 'topic',
   };
 
-  public static createExchanges(exchanges: RabbitMQExchangeConfig[]) {
+  public static createExchanges(
+    exchanges: RabbitMQExchangeConfig[],
+  ): RabbitMQExchangeConfig[] {
     return exchanges.flatMap((exchange: RabbitMQExchangeConfig) => {
       const retryExchange: RabbitMQExchangeConfig = {
         name: QueueUtilService.getRetryExchangeName(exchange.name),
@@ -28,15 +30,15 @@ export class QueueUtilService {
     });
   }
 
-  public static getRetryExchangeName(exchange: string) {
+  public static getRetryExchangeName(exchange: string): string {
     return `${exchange}.retry`;
   }
 
-  public static getDeadLetterExchangeName(exchange: string) {
+  public static getDeadLetterExchangeName(exchange: string): string {
     return `${exchange}.dead`;
   }
 
-  public static getDeadLetterQueueName(queueName: string) {
+  public static getDeadLetterQueueName(queueName: string): string {
     return `${queueName}.dead`;
   }
 }

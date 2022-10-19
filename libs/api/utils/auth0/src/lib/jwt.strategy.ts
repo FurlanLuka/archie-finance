@@ -23,7 +23,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'auth0-auth') {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  validate(payload: any, done: VerifiedCallback) {
+  validate(payload: any, done: VerifiedCallback): void {
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (!payload) {
       done(new UnauthorizedException(), false);
     }

@@ -2,7 +2,7 @@ import { CardActivatedPayload } from '@archie/api/credit-api/data-transfer-objec
 import { user } from '@archie/test/integration';
 
 export const cardActivatedDataFactory = (
-  override?: Promise<CardActivatedPayload>,
+  override?: CardActivatedPayload,
 ): CardActivatedPayload => ({
   userId: user.id,
   customerId: 'customerId',

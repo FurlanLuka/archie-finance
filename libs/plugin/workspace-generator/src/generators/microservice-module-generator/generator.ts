@@ -1,4 +1,9 @@
-import { getWorkspaceLayout, Tree, joinPathFragments } from '@nrwl/devkit';
+import {
+  getWorkspaceLayout,
+  Tree,
+  joinPathFragments,
+  GeneratorCallback,
+} from '@nrwl/devkit';
 import { MicroserviceModuleGeneratorSchema } from './schema';
 import { libraryGenerator } from '@nrwl/nest';
 import { Linter } from '@nrwl/linter';
@@ -32,10 +37,10 @@ function normalizeOptions(
   };
 }
 
-export async function microserviceModuleGenerator (
+export async function microserviceModuleGenerator(
   tree: Tree,
   options: MicroserviceModuleGeneratorSchema,
-) {
+): Promise<GeneratorCallback> {
   const normalizedOptions = normalizeOptions(tree, options);
 
   const libraryGeneratorTask = await libraryGenerator(tree, {

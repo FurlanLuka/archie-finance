@@ -1,12 +1,13 @@
 import { ExecutorContext, logger } from '@nrwl/devkit';
 import { execSync } from 'child_process';
 import { DockerBuildExecutorSchema } from './schema';
+import { ExecutorResult } from '../executor.interfaces';
 
 export default async function runExecutor(
   options: DockerBuildExecutorSchema,
   context: ExecutorContext,
-) {
-  if (!context.projectName) {
+): Promise<ExecutorResult> {
+  if (context.projectName === undefined) {
     logger.error(`Project name is not available.`);
 
     return { success: false };

@@ -24,7 +24,10 @@ import BigNumber from 'bignumber.js';
 import { initiateLedgerAssetLiquidationCommandPayloadFactory } from '@archie/api/ledger-api/test-data';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
 import { INITIATE_COLLATERAL_LIQUIDATION_COMMAND } from '@archie/api/fireblocks-api/constants';
-import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects';
+import {
+  Ledger,
+  LedgerActionType,
+} from '@archie/api/ledger-api/data-transfer-objects';
 
 describe('Ledger api liquidation tests', () => {
   let app: INestApplication;
@@ -132,8 +135,9 @@ describe('Ledger api liquidation tests', () => {
           .get('/v1/ledger')
           .set('Authorization', `Bearer ${accessToken}`)
           .expect(200);
+        const responseBody: Ledger = response.body;
 
-        const result = response.body.accounts.find(
+        const result = responseBody.accounts.find(
           (account) => account.assetId === assetId,
         );
 
@@ -207,8 +211,9 @@ describe('Ledger api liquidation tests', () => {
         .get('/v1/ledger')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200);
+      const responseBody: Ledger = response.body;
 
-      const bitcoinAccount = response.body.accounts.find(
+      const bitcoinAccount = responseBody.accounts.find(
         (account) => account.assetId === bitcoinCollateral.assetId,
       );
 
@@ -219,7 +224,7 @@ describe('Ledger api liquidation tests', () => {
         accountValue: newBitcoinAccountValue.toString(),
       });
 
-      const usdcAccount = response.body.accounts.find(
+      const usdcAccount = responseBody.accounts.find(
         (account) => account.assetId === usdcCollateral.assetId,
       );
 

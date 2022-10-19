@@ -1,4 +1,4 @@
-import { Body, Controller, Logger, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { Auth0Logs } from './auth0.interfaces';
 import { Auth0Service } from './auth0.service';
 import { Auth0WebhookGuard } from './guard/auth0.guard';

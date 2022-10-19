@@ -8,7 +8,7 @@ export class FireblocksWebhookController {
 
   @Post('')
   @UseGuards(FireblocksWebhookGuard)
-  public async webhook(@Body() body) {
+  public async webhook(@Body() body): Promise<void> {
     return this.fireblocksWebhookService.webhookHandler(body);
   }
 }

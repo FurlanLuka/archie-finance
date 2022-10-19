@@ -8,7 +8,7 @@ export class PeachWebhookController {
 
   @Post('payments')
   @UseGuards(PeachWebhookGuard)
-  public async peachPaymentsHandler(@Body() body) {
+  public async peachPaymentsHandler(@Body() body): Promise<void> {
     await this.peachWebhookService.handlePaymentEvent(body);
   }
 }

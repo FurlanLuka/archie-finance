@@ -102,7 +102,9 @@ describe('Ledger api withdrawal tests', () => {
   const cleanup = async (): Promise<void> =>
     cleanUpTestingModule(app, module, testDatabase);
 
-  const setupLoanBalancesResponse = (response: GetLoanBalancesResponse) => {
+  const setupLoanBalancesResponse = (
+    response: GetLoanBalancesResponse,
+  ): void => {
     when(queueStub.request)
       .calledWith(GET_LOAN_BALANCES_RPC, { userId: user.id })
       .mockResolvedValue(response);

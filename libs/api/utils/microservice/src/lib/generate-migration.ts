@@ -3,10 +3,11 @@ import {
   MigrationGeneratorModule,
   MigrationGeneratorService,
 } from '@archie/api/utils/migration-generator';
+import { ImportModule } from './microservice.interfaces';
 
 export async function generateMigration(
   appName: string,
-  appModule: unknown,
+  appModule: ImportModule,
 ): Promise<void> {
   const app = await NestFactory.create(
     MigrationGeneratorModule.register(appModule),

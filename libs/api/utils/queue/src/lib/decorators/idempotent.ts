@@ -1,5 +1,6 @@
 import { Inject, Logger } from '@nestjs/common';
 import { LogService } from '../log/log.service';
+import { QueueMessageMeta } from './queue_decorators.interfaces';
 
 export function Idempotent(
   routingKey: string,
@@ -8,9 +9,9 @@ export function Idempotent(
   const injector = Inject(LogService);
 
   return (
-    target: any,
+    target: object,
     _key?: string | symbol,
-    descriptor?: TypedPropertyDescriptor<any>,
+    descriptor?: PropertyDescriptor,
   ) => {
     if (descriptor === undefined) {
       Logger.warn('Incorrect decorator usage, descriptor is undefined');
@@ -21,8 +22,11 @@ export function Idempotent(
 
     const originalMethod = descriptor.value;
 
-    descriptor.value = async function (...args: any[]) {
-      const requestMeta = args[1];
+    descriptor.value = async function (
+      ...args: [object, QueueMessageMeta | undefined, ...unknown[]]
+    ): Promise<void> {
+      const logService: LogService = this.logService;
+      const requestMeta: QueueMessageMeta | undefined = args[1];
       const headers: object | undefined = requestMeta?.properties?.headers;
       const eventId: string | undefined = headers
         ? headers['event-id']
@@ -30,13 +34,13 @@ export function Idempotent(
 
       let keyExists = false;
 
-      if (eventId) {
+      if (eventId !== undefined) {
         try {
           keyExists = await this.logService.idempotencyKeyExists(
             `${queueName}-${routingKey}-${eventId}`,
           );
 
-          Logger.log(keyExists)
+          Logger.log(keyExists);
 
           if (!keyExists) {
             await originalMethod.apply(this, args);
@@ -52,8 +56,8 @@ export function Idempotent(
         await originalMethod.apply(this, args);
       }
 
-      if (eventId && !keyExists) {
-        void this.logService.writeIdempotencyKey(
+      if (eventId !== undefined && !keyExists) {
+        void logService.writeIdempotencyKey(
           `${queueName}-${routingKey}-${eventId}`,
         );
       }

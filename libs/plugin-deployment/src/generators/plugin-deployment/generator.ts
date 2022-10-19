@@ -22,14 +22,16 @@ function normalizeOptions(
   options: PluginDeploymentGeneratorSchema,
 ): NormalizedSchema {
   const name = names(options.name).fileName;
-  const projectDirectory = options.directory
-    ? `${names(options.directory).fileName}/${name}`
-    : name;
+  const projectDirectory =
+    options.directory !== undefined
+      ? `${names(options.directory).fileName}/${name}`
+      : name;
   const projectName = projectDirectory.replace(new RegExp('/', 'g'), '-');
   const projectRoot = `${getWorkspaceLayout(tree).libsDir}/${projectDirectory}`;
-  const parsedTags = options.tags
-    ? options.tags.split(',').map((s) => s.trim())
-    : [];
+  const parsedTags =
+    options.tags !== undefined
+      ? options.tags.split(',').map((s) => s.trim())
+      : [];
 
   return {
     ...options,
@@ -40,7 +42,7 @@ function normalizeOptions(
   };
 }
 
-function addFiles(tree: Tree, options: NormalizedSchema) {
+function addFiles(tree: Tree, options: NormalizedSchema): void {
   const templateOptions = {
     ...options,
     ...names(options.name),
@@ -58,7 +60,7 @@ function addFiles(tree: Tree, options: NormalizedSchema) {
 export default async function (
   tree: Tree,
   options: PluginDeploymentGeneratorSchema,
-) {
+): Promise<void> {
   const normalizedOptions = normalizeOptions(tree, options);
   addProjectConfiguration(tree, normalizedOptions.projectName, {
     root: normalizedOptions.projectRoot,

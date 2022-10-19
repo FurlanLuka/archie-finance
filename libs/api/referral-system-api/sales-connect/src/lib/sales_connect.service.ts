@@ -7,7 +7,7 @@ import { SalesConnectDto } from './sales_connect.dto';
 export class SalesConnectService {
   constructor(private queueService: QueueService) {}
 
-  public connect(dto: SalesConnectDto) {
+  public connect(dto: SalesConnectDto): void {
     this.queueService.publishEvent(SALES_CONNECT_TOPIC, dto);
   }
 }
