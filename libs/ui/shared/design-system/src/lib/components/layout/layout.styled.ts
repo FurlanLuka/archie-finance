@@ -4,7 +4,7 @@ import {
   breakpoints,
   HEADER_HEIGHT,
   HEADER_HEIGHT_MOBILE,
-} from '@archie/ui/shared/ui/theme';
+} from '@archie/ui/shared/theme';
 
 import bgOnboarding from '../../../assets/bg-onboarding.png';
 

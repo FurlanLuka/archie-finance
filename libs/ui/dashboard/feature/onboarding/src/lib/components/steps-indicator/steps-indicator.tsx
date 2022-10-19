@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { OnboardingStep } from '@archie/ui/dashboard/constants';
 import { BodyS } from '@archie/ui/shared/design-system';
-import { Icon } from '@archie/ui/shared/ui/icons';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { Icon } from '@archie/ui/shared/icons';
+import { theme } from '@archie/ui/shared/theme';
 
 import { StepsIndicatorStyled } from './steps-indicator.styled';
 

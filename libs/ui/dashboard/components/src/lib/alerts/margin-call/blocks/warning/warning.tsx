@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { ButtonLight, BodyL, BodyM } from '@archie/ui/shared/design-system';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 interface WarningProps {
   withButton?: boolean;

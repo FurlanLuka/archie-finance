@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "name": "ui-shared-icons",
+  "sourceRoot": "libs/ui/shared/icons/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ui/shared/icons/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/ui/shared/icons"],
+      "options": {
+        "jestConfig": "libs/ui/shared/icons/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

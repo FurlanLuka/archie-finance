@@ -3,7 +3,7 @@ import { ResponsiveStream } from '@nivo/stream';
 import { FC } from 'react';
 
 import { LTVStatus, LTVColor } from '@archie/ui/shared/constants';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 import { CollateralValueChartStyled } from './collateral-value.styled';
 

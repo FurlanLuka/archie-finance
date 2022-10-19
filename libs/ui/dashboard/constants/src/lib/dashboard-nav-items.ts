@@ -1,4 +1,4 @@
-import { IconName } from '@archie/ui/shared/ui/icons';
+import { IconName } from '@archie/ui/shared/icons';
 
 interface DashboardNavItem {
   icon: IconName;

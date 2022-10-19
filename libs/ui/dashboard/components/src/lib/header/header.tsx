@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { dashboardNavItems } from '@archie/ui/dashboard/constants';
 import { useAuthenticatedSession } from '@archie/ui/shared/data-access/session';
 import { Container, BodyL } from '@archie/ui/shared/design-system';
-import { Icon } from '@archie/ui/shared/ui/icons';
+import { Icon } from '@archie/ui/shared/icons';
 
 import { HeaderStyled, MobileNav } from './header.styled';
 

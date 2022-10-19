@@ -15,7 +15,7 @@ import {
 
 import { ConnectedAccount } from './blocks/connected-account';
 import { ConnectedAccountsStyled } from './connected-accounts.styled';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 export const ConnectedAccounts: FC = () => {
   const { t } = useTranslation();

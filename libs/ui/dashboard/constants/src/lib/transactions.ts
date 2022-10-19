@@ -2,7 +2,7 @@ import {
   TransactionStatus,
   TransactionType,
 } from '@archie/ui/shared/data-access/archie-api/payment/api/get-transactions';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 export const TransactionStatusText = {
   [TransactionStatus.PENDING]: 'Pending',

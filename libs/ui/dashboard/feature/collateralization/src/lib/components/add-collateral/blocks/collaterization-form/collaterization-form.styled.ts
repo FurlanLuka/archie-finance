@@ -1,6 +1,6 @@
 import styled, { keyframes } from 'styled-components';
 
-import { breakpoints } from '@archie/ui/shared/ui/theme';
+import { breakpoints } from '@archie/ui/shared/theme';
 
 const hide = keyframes`
   0% {
@@ -87,7 +87,8 @@ export const CollaterizationFormStyled = styled.div`
     width: 100%;
 
     &.fade-out {
-      animation: ${fadeOut} 0.4s ease-out 2s forwards, ${hide} 0s linear 2s forwards;
+      animation: ${fadeOut} 0.4s ease-out 2s forwards,
+        ${hide} 0s linear 2s forwards;
     }
   }
 

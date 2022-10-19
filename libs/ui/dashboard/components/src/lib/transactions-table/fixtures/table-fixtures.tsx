@@ -14,7 +14,7 @@ import {
   TransactionType,
 } from '@archie/ui/shared/data-access/archie-api/payment/api/get-transactions';
 import { BodyL, BodyM, BodyS } from '@archie/ui/shared/design-system';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 import { getRowDescription } from './table-fixtures.helpers';
 

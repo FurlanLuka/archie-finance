@@ -1,10 +1,10 @@
 import { FC } from 'react';
 
-import { Icon } from '@archie/ui/shared/ui/icons';
+import { Icon } from '@archie/ui/shared/icons';
 import { BodyL, BodyS } from '@archie/ui/shared/design-system';
 
 import { OptionsItemStyled } from './options-item.styled';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 interface OptionsItemProps {
   title: string;

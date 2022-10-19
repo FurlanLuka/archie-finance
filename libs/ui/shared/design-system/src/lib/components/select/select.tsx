@@ -1,7 +1,7 @@
 import { ReactElement, useState } from 'react';
 
-import { Icon } from '@archie/ui/shared/ui/icons';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { Icon } from '@archie/ui/shared/icons';
+import { theme } from '@archie/ui/shared/theme';
 
 import { SelectOptionProps } from './select-option';
 import { SelectStyled } from './select.styled';

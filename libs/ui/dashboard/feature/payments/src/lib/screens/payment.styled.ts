@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { NextPaymentChartStyled } from '@archie/ui/dashboard/components';
-import { breakpoints } from '@archie/ui/shared/ui/theme';
+import { breakpoints } from '@archie/ui/shared/theme';
 
 export const PaymentScreenStyled = styled.div`
   width: 100%;

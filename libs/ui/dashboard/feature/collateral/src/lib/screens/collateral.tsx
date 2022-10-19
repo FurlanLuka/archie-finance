@@ -22,7 +22,7 @@ import {
   TitleS,
   BodyM,
 } from '@archie/ui/shared/design-system';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 import { CollateralInfo } from '../components/collateral-info/collateral-info';
 

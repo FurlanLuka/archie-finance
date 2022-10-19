@@ -1,4 +1,4 @@
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 import { Loader } from '../loader/loader';
 

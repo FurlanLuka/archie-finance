@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { breakpoints, HEADER_HEIGHT } from '@archie/ui/shared/ui/theme';
+import { breakpoints, HEADER_HEIGHT } from '@archie/ui/shared/theme';
 
 export const Toast = styled.div`
   display: flex;

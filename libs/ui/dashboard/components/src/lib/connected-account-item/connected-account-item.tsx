@@ -4,7 +4,7 @@ import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/
 import { BodyM } from '@archie/ui/shared/design-system';
 
 import { ConnectedAccountItemStyled } from './connected-account-item.styled';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 interface ConnectedAccountItemProps {
   account: AccountResponse;

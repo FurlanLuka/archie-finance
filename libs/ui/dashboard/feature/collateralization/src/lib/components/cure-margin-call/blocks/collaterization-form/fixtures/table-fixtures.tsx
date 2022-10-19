@@ -2,7 +2,7 @@ import ReactTooltip from 'react-tooltip';
 
 import { copyToClipboard } from '@archie/ui/dashboard/utils';
 import { BodyM } from '@archie/ui/shared/design-system';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 export const tableColumns = (currentAsset: string) => [
   {

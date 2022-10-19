@@ -259,8 +259,8 @@
       "@archie/ui/shared/design-system": [
         "libs/ui/shared/design-system/src/index.ts"
       ],
-      "@archie/ui/shared/ui/icons": ["libs/ui/shared/ui/icons/src/index.ts"],
-      "@archie/ui/shared/ui/theme": ["libs/ui/shared/ui/theme/src/index.ts"],
+      "@archie/ui/shared/icons": ["libs/ui/shared/icons/src/index.ts"],
+      "@archie/ui/shared/theme": ["libs/ui/shared/theme/src/index.ts"],
       "@archie/ui/shared/utils": ["libs/ui/shared/utils/src/index.ts"]
     }
   },

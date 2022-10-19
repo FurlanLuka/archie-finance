@@ -16,8 +16,8 @@ import {
   BodyL,
   BodyM,
 } from '@archie/ui/shared/design-system';
-import { Icon } from '@archie/ui/shared/ui/icons';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { Icon } from '@archie/ui/shared/icons';
+import { theme } from '@archie/ui/shared/theme';
 
 import {
   parseDate,

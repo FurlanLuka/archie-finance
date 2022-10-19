@@ -17,7 +17,7 @@ import {
 } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import { ButtonLight, BodyL, BodyM } from '@archie/ui/shared/design-system';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 interface DangerProps {
   withButton?: boolean;

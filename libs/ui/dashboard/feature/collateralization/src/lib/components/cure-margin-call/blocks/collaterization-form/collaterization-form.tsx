@@ -9,7 +9,7 @@ import {
 } from '@archie/ui/dashboard/constants';
 import { calculateCollateralValue } from '@archie/ui/dashboard/utils';
 import { Table, InputText } from '@archie/ui/shared/design-system';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 import { tableColumns } from './fixtures/table-fixtures';
 import { CollaterizationFormStyled } from './collaterization-form.styled';

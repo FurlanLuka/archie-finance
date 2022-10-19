@@ -8,7 +8,7 @@ import {
   BodyM,
   BodyS,
 } from '@archie/ui/shared/design-system';
-import { theme } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/theme';
 
 export const Rewards: FC = () => {
   const { t } = useTranslation();
