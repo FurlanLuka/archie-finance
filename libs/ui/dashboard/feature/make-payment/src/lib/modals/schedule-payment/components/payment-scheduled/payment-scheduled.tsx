@@ -8,7 +8,7 @@ import {
   TitleS,
   BodyL,
   BodyM,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import { PaymentScheduledStyled } from './payment-scheduled.styled';
 

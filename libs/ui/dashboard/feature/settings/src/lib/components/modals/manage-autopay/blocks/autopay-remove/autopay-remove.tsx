@@ -3,11 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useRemoveAutopay } from '@archie/ui/shared/data-access/archie-api/autopay/hooks/use-remove-autopay';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
-import {
-  BodyM,
-  ButtonPrimary,
-  TitleS,
-} from '@archie/ui/shared/ui/design-system';
+import { BodyM, ButtonPrimary, TitleS } from '@archie/ui/shared/design-system';
 
 import { AutopayRemoveStyled } from './autopay-remove.styled';
 

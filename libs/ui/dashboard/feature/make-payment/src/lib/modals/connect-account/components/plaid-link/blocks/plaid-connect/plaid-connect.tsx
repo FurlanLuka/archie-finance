@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { PlaidLinkOnSuccessMetadata, usePlaidLink } from 'react-plaid-link';
 
 import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
-import { ButtonPrimary } from '@archie/ui/shared/ui/design-system';
+import { ButtonPrimary } from '@archie/ui/shared/design-system';
 
 import plaidLogo from '../../../../../../../assets/plaid_logo.png';
 import { transformAccounts } from './plaid-connect.helpers';

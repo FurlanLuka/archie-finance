@@ -2,9 +2,13 @@ import { FC, useState, useMemo } from 'react';
 
 import { DepositAddress } from '@archie/ui/dashboard/components';
 import { CollateralAsset } from '@archie/ui/shared/constants';
-import { MINIMUM_LTV, OK_LTV, SUGGESTED_LTV } from '@archie/ui/dashboard/constants';
+import {
+  MINIMUM_LTV,
+  OK_LTV,
+  SUGGESTED_LTV,
+} from '@archie/ui/dashboard/constants';
 import { calculateCollateralValue } from '@archie/ui/dashboard/utils';
-import { Table, InputText } from '@archie/ui/shared/ui/design-system';
+import { Table, InputText } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/ui/theme';
 
 import { tableColumns } from './fixtures/table-fixtures';
@@ -27,7 +31,11 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
   const [customLtv, setCustomLtv] = useState(OK_LTV);
 
   const getRequiredCollateral = (targetLtv: number) => {
-    const collateral = calculateCollateralValue(targetLtv, creditBalance, collateralTotalValue);
+    const collateral = calculateCollateralValue(
+      targetLtv,
+      creditBalance,
+      collateralTotalValue,
+    );
 
     const price = 1 / assetPrice;
     const result = (collateral / (assetInfo.loan_to_value / 100)) * price;

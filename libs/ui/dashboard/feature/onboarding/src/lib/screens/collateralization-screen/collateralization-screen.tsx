@@ -27,7 +27,7 @@ import {
   InputRange,
   TitleL,
   BodyM,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/ui/theme';
 
 import { CollateralDepositAlerts } from '../../components/collateral-deposit-alerts/collateral-deposit-alerts';

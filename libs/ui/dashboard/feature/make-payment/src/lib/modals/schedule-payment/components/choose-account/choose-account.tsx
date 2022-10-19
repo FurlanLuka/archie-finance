@@ -13,7 +13,7 @@ import {
   BodyM,
   Select,
   SelectOption,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import { ChooseAccountStyled } from './choose-account.styled';
 

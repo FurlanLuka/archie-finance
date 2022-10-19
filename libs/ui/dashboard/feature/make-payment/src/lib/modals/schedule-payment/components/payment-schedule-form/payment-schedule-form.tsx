@@ -17,7 +17,7 @@ import {
   BodyL,
   BodyM,
   BodyS,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import { PaymentOption } from './payment-schedule-form.interfaces';
 import {

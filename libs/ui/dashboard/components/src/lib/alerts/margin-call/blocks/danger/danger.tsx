@@ -16,11 +16,7 @@ import {
   RequestState,
 } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import {
-  ButtonLight,
-  BodyL,
-  BodyM,
-} from '@archie/ui/shared/ui/design-system';
+import { ButtonLight, BodyL, BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/ui/theme';
 
 interface DangerProps {

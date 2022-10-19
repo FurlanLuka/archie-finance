@@ -8,7 +8,7 @@ import {
   ToastList,
   ButtonLight,
   BodyM,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 interface CreateCreditLineProps {
   collateralText: string;

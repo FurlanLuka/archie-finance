@@ -5,7 +5,13 @@ import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { CollateralAssets } from '@archie/ui/shared/constants';
-import { Card, Skeleton, ButtonOutline, TitleS, BodyL } from '@archie/ui/shared/ui/design-system';
+import {
+  Card,
+  Skeleton,
+  ButtonOutline,
+  TitleS,
+  BodyL,
+} from '@archie/ui/shared/design-system';
 
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
 
@@ -38,17 +44,29 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
 
   if (getLedgerResponse.state === RequestState.SUCCESS) {
     const ledger = getLedgerResponse.data;
-    const currentLedgerAccount = ledger.accounts.find((ledgerAccount) => ledgerAccount.assetId === selectedAsset);
+    const currentLedgerAccount = ledger.accounts.find(
+      (ledgerAccount) => ledgerAccount.assetId === selectedAsset,
+    );
 
     if (!currentLedgerAccount) {
-      return <Navigate to="/error" state={{ prevPath: '/collateral', description: "Couldn't fetch price" }} />;
+      return (
+        <Navigate
+          to="/error"
+          state={{
+            prevPath: '/collateral',
+            description: "Couldn't fetch price",
+          }}
+        />
+      );
     }
 
     return (
       <>
         <CollateralUpdatedModal />
         <Card column alignItems="center" padding="2.5rem 1.5rem">
-          <TitleS className="title">{t('dashboard_collateralization.title', { selectedAsset })}</TitleS>
+          <TitleS className="title">
+            {t('dashboard_collateralization.title', { selectedAsset })}
+          </TitleS>
           <BodyL className="subtitle-credit">
             {t('dashboard_collateralization.subtitle_credit', {
               collateralTotalValue: ledger.value,

@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonPrimary } from '@archie/ui/shared/ui/design-system';
+import { ButtonPrimary } from '@archie/ui/shared/design-system';
 
 import plaidLogo from '../../../../../../../assets/plaid_logo.png';
 

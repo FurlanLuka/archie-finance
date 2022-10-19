@@ -1,10 +1,7 @@
 import { FC } from 'react';
 
-import {
-  CardStatus,
-  CardStatusText,
-} from '@archie/ui/shared/constants';
-import { BodyS } from '@archie/ui/shared/ui/design-system';
+import { CardStatus, CardStatusText } from '@archie/ui/shared/constants';
+import { BodyS } from '@archie/ui/shared/design-system';
 
 import { StatusBadgeStyled } from './status-badge.styled';
 

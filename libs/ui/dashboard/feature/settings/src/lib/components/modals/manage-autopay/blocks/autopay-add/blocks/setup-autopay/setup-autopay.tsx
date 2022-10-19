@@ -11,7 +11,7 @@ import {
   SelectOption,
   Select,
   ButtonPrimary,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import { ConsentCheck } from '../consent-check/consent-check';
 

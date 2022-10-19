@@ -2,7 +2,7 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { calculateLedgerCreditValue } from '@archie/ui/dashboard/utils';
-import { Modal } from '@archie/ui/shared/ui/design-system';
+import { Modal } from '@archie/ui/shared/design-system';
 
 import { CollateralReceived } from './blocks/collateral-received/collateral-received';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
@@ -38,7 +38,10 @@ export const CollateralUpdatedModal: FC = () => {
     );
 
     return () => {
-      websocketInstance.removeHandler(WsEventTopic.LEDGER_UPDATED_TOPIC, COLLATERAL_DEPOSITED_HANDLER_ID);
+      websocketInstance.removeHandler(
+        WsEventTopic.LEDGER_UPDATED_TOPIC,
+        COLLATERAL_DEPOSITED_HANDLER_ID,
+      );
     };
   }, []);
 
@@ -55,7 +58,9 @@ export const CollateralUpdatedModal: FC = () => {
       return '';
     }
 
-    return calculateLedgerTotalValue(getLedgerResponse.data.accounts).toString();
+    return calculateLedgerTotalValue(
+      getLedgerResponse.data.accounts,
+    ).toString();
   }, [getLedgerResponse]);
 
   if (isModalOpen) {

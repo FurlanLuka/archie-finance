@@ -6,7 +6,7 @@ import { DepositAddress } from '@archie/ui/dashboard/components';
 import { MAX_LINE_OF_CREDIT } from '@archie/ui/dashboard/constants';
 import { copyToClipboard } from '@archie/ui/dashboard/utils';
 import { CollateralAsset } from '@archie/ui/shared/constants';
-import { InputRange, TitleL, BodyM } from '@archie/ui/shared/ui/design-system';
+import { InputRange, TitleL, BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/ui/theme';
 
 import { CollaterizationFormStyled } from './collaterization-form.styled';
@@ -16,7 +16,10 @@ interface CollateralizationFormProps {
   assetPrice: number;
 }
 
-export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInfo, assetPrice }) => {
+export const CollateralizationForm: FC<CollateralizationFormProps> = ({
+  assetInfo,
+  assetPrice,
+}) => {
   const { t } = useTranslation();
 
   const [lineOfCredit, setLineOfCredit] = useState(200);
@@ -55,7 +58,9 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
             <span
               className="clickable"
               data-tip="Click to copy"
-              onClick={() => copyToClipboard('collateral', requiredCollateral.toString())}
+              onClick={() =>
+                copyToClipboard('collateral', requiredCollateral.toString())
+              }
             >
               {getFormattedCollateral()}
             </span>
@@ -68,7 +73,9 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
           />
         </div>
         <div className="result-item">
-          <BodyM weight={700}>{t('collateralization_step.result.second')}</BodyM>
+          <BodyM weight={700}>
+            {t('collateralization_step.result.second')}
+          </BodyM>
           <TitleL weight={400}>{assetInfo.loan_to_value}%</TitleL>
         </div>
         <div className="result-item">
@@ -76,7 +83,11 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({ assetInf
           <TitleL weight={400}>{assetInfo.interest_rate}%</TitleL>
         </div>
       </div>
-      <DepositAddress assetInfo={assetInfo} assetAmount={requiredCollateral} showTerms />
+      <DepositAddress
+        assetInfo={assetInfo}
+        assetAmount={requiredCollateral}
+        showTerms
+      />
     </CollaterizationFormStyled>
   );
 };

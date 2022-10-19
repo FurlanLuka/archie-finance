@@ -7,11 +7,7 @@ import { copyToClipboard } from '@archie/ui/dashboard/utils';
 import { CollateralAsset } from '@archie/ui/shared/constants';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetDepositAddress } from '@archie/ui/shared/data-access/archie-api/vault_account/hooks/use-get-deposit-address';
-import {
-  Skeleton,
-  BodyL,
-  BodyM,
-} from '@archie/ui/shared/ui/design-system';
+import { Skeleton, BodyL, BodyM } from '@archie/ui/shared/design-system';
 import { Icon } from '@archie/ui/shared/ui/icons';
 import { QR_CODE } from '@archie/ui/shared/ui/theme';
 import { theme } from '@archie/ui/shared/ui/theme';

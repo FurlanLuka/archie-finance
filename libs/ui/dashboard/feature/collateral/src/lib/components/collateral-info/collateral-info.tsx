@@ -8,7 +8,7 @@ import {
 } from '@archie/ui/shared/constants';
 import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
 import { CreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/api/get-credit-line';
-import { Table } from '@archie/ui/shared/ui/design-system';
+import { Table } from '@archie/ui/shared/design-system';
 
 import { tableColumns } from '../../fixtures/table-fixtures';
 import { AssetsAllocation } from '../assets-allocation/assets-allocation';

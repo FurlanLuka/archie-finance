@@ -1,10 +1,6 @@
 import { Story, Meta } from '@storybook/react';
 
-import {
-  LTVStatus,
-  LTVText,
-  LTVColor,
-} from '@archie/ui/shared/constants';
+import { LTVStatus, LTVText, LTVColor } from '@archie/ui/shared/constants';
 
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';

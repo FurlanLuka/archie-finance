@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ButtonPrimary, TitleS, BodyM } from '@archie/ui/shared/ui/design-system';
+import { ButtonPrimary, TitleS, BodyM } from '@archie/ui/shared/design-system';
 
 import imgCollateralReceived from '../../../../../../assets/img-collateral-received.png';
 
@@ -13,16 +13,25 @@ interface CollateralReceivedProps {
   collateralValue: string;
 }
 
-export const CollateralReceived: FC<CollateralReceivedProps> = ({ onConfirm, creditValue, collateralValue }) => {
+export const CollateralReceived: FC<CollateralReceivedProps> = ({
+  onConfirm,
+  creditValue,
+  collateralValue,
+}) => {
   const { t } = useTranslation();
 
   return (
     <CollateralReceivedStyled>
       <div className="image">
-        <img src={imgCollateralReceived} alt={t('collateral_received_modal.img_alt')} />
+        <img
+          src={imgCollateralReceived}
+          alt={t('collateral_received_modal.img_alt')}
+        />
       </div>
       <div className="content">
-        <TitleS className="modal-title">{t('dashboard_collateralization.collateral_received_modal.title')}</TitleS>
+        <TitleS className="modal-title">
+          {t('dashboard_collateralization.collateral_received_modal.title')}
+        </TitleS>
         <BodyM className="modal-text">
           {t('dashboard_collateralization.collateral_received_modal.text', {
             collateralValue: collateralValue,

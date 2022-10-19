@@ -13,7 +13,7 @@ import {
   Card,
   TitleL,
   BodyM,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 import { Icon } from '@archie/ui/shared/ui/icons';
 import { theme } from '@archie/ui/shared/ui/theme';
 

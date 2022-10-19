@@ -14,7 +14,7 @@ import {
   BodyL,
   BodyM,
   FormError,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import { PaymentConfirmStyled } from './payment-confirm.styled';
 

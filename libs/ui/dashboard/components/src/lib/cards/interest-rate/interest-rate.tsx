@@ -8,12 +8,7 @@ import {
   QueryResponse,
   RequestState,
 } from '@archie/ui/shared/data-access/archie-api/interface';
-import {
-  Card,
-  Skeleton,
-  TitleM,
-  BodyM,
-} from '@archie/ui/shared/ui/design-system';
+import { Card, Skeleton, TitleM, BodyM } from '@archie/ui/shared/design-system';
 
 export const InterestRate: FC = () => {
   const { t } = useTranslation();

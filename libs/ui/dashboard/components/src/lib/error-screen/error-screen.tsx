@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { Card, Error } from '@archie/ui/shared/ui/design-system';
+import { Card, Error } from '@archie/ui/shared/design-system';
 
 import { ErrorScreenStyled } from './error-screen.styled';
 

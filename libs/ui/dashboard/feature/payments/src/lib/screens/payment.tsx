@@ -17,7 +17,7 @@ import {
   StatusCircle,
   TitleM,
   BodyS,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import { ConnectedAccounts } from '../components/connected-accounts/connected-accounts';
 

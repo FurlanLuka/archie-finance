@@ -13,7 +13,7 @@ import {
   BodyL,
   BodyM,
   FormError,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import { PayWithPaypalConfirmStyled } from './pay-with-paypal-confirm.styled';
 

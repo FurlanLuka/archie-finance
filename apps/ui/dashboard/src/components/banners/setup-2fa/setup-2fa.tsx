@@ -7,11 +7,7 @@ import {
 } from '@archie/ui/shared/data-access/archie-api/interface';
 import { usePollMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-poll-mfa-enrollment';
 import { useStartMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-start-mfa-enrollment';
-import {
-  ButtonGhost,
-  BodyL,
-  BodyM,
-} from '@archie/ui/shared/ui/design-system';
+import { ButtonGhost, BodyL, BodyM } from '@archie/ui/shared/design-system';
 
 import img2fa from '../../../assets/images/img-2fa.png';
 

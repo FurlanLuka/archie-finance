@@ -1,10 +1,7 @@
 import { FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import {
-  Header,
-  Navigation,
-} from '@archie/ui/dashboard/components';
+import { Header, Navigation } from '@archie/ui/dashboard/components';
 import { ErrorScreen } from '@archie/ui/dashboard/components';
 import { CollateralScreen } from '@archie/ui/dashboard/feature/collateral';
 import { CollateralizationScreen } from '@archie/ui/dashboard/feature/collateralization';
@@ -24,7 +21,7 @@ import {
   LoaderFullScreen,
   Page,
   Container,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
 

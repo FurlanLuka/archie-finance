@@ -13,7 +13,7 @@ import {
 import {
   ButtonOutline,
   CollateralCurrency,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/ui/theme';
 
 import {

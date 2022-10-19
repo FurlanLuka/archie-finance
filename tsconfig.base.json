@@ -256,8 +256,8 @@
       "@archie/ui/shared/data-access/websocket-instance": [
         "libs/ui/shared/data-access/websocket-instance/src/index.ts"
       ],
-      "@archie/ui/shared/ui/design-system": [
-        "libs/ui/shared/ui/design-system/src/index.ts"
+      "@archie/ui/shared/design-system": [
+        "libs/ui/shared/design-system/src/index.ts"
       ],
       "@archie/ui/shared/ui/icons": ["libs/ui/shared/ui/icons/src/index.ts"],
       "@archie/ui/shared/ui/theme": ["libs/ui/shared/ui/theme/src/index.ts"],

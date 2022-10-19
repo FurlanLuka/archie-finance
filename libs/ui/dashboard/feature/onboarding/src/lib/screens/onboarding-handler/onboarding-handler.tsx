@@ -7,7 +7,7 @@ import {
 } from '@archie/ui/shared/data-access/archie-api/interface';
 import { GetOnboardingResponse } from '@archie/ui/shared/data-access/archie-api/onboarding/api/get-onboarding';
 import { useGetOnboarding } from '@archie/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
-import { LoaderFullScreen } from '@archie/ui/shared/ui/design-system';
+import { LoaderFullScreen } from '@archie/ui/shared/design-system';
 
 import { CardScreen } from '../card-screen/card-screen';
 import { CollateralizationScreen } from '../collateralization-screen/collateralization-screen';

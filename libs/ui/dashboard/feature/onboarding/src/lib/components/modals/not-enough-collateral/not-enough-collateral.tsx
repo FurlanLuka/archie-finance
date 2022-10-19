@@ -8,7 +8,7 @@ import {
   Modal,
   TitleS,
   BodyM,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import imgNotEnoughCollateral from '../../../../assets/img-not-enough-collateral.png';
 

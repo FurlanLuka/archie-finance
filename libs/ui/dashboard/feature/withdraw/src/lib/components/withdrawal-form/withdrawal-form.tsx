@@ -15,7 +15,7 @@ import {
   ButtonPrimary,
   InputText,
   BodyM,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/ui/theme';
 
 import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/successfull-withdrawal';

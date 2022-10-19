@@ -2,11 +2,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import {
-  ButtonLight,
-  BodyL,
-  BodyM,
-} from '@archie/ui/shared/ui/design-system';
+import { ButtonLight, BodyL, BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/ui/theme';
 
 interface WarningProps {

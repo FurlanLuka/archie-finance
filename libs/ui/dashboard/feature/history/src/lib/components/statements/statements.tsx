@@ -4,11 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetStatements } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-statements';
-import {
-  ButtonOutline,
-  Select,
-  BodyS,
-} from '@archie/ui/shared/ui/design-system';
+import { ButtonOutline, Select, BodyS } from '@archie/ui/shared/design-system';
 import { Icon } from '@archie/ui/shared/ui/icons';
 import { theme } from '@archie/ui/shared/ui/theme';
 

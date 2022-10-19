@@ -21,7 +21,7 @@ import {
   TitleM,
   BodyM,
   BodyS,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/ui/theme';
 import { useGetObligations } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 

@@ -2,7 +2,7 @@ import { differenceInDays } from 'date-fns';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { BodyS } from '@archie/ui/shared/ui/design-system';
+import { BodyS } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/ui/theme';
 
 import { NextPaymentChartStyled } from './next-payment.styled';

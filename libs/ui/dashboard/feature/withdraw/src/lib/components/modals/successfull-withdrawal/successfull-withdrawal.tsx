@@ -6,7 +6,7 @@ import {
   Modal,
   TitleS,
   BodyL,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import { SuccessfullWithdrawalModalStyled } from './successfull-withdrawal.styled';
 

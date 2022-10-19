@@ -6,7 +6,7 @@ import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { LTVStatus } from '@archie/ui/shared/constants';
 import { MarginCallAlert } from '@archie/ui/dashboard/components';
-import { Card, Skeleton } from '@archie/ui/shared/ui/design-system';
+import { Card, Skeleton } from '@archie/ui/shared/design-system';
 
 import { CollateralizationRouteParams } from '../interfaces/routing';
 import { AddCollateral } from '../components/add-collateral/add-collateral';

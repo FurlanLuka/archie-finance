@@ -1,10 +1,7 @@
 import { FC, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import {
-  CardStatusColor,
-  CardStatusText,
-} from '@archie/ui/shared/constants';
+import { CardStatusColor, CardStatusText } from '@archie/ui/shared/constants';
 import { RevealCardModal } from '@archie/ui/dashboard/components';
 import {
   QueryResponse,
@@ -12,12 +9,7 @@ import {
 } from '@archie/ui/shared/data-access/archie-api/interface';
 import { CardsCredit } from '@archie/ui/shared/data-access/archie-api/rize/api/get-cards-credit';
 import { useGetCardsCredit } from '@archie/ui/shared/data-access/archie-api/rize/hooks/use-cards-credit';
-import {
-  Card,
-  Skeleton,
-  BodyL,
-  BodyS,
-} from '@archie/ui/shared/ui/design-system';
+import { Card, Skeleton, BodyL, BodyS } from '@archie/ui/shared/design-system';
 
 import imgCard from '../../assets/card-placeholder.png';
 

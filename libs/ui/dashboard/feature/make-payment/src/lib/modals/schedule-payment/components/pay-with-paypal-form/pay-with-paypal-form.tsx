@@ -13,7 +13,7 @@ import {
   TitleS,
   BodyL,
   BodyM,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import { PaymentOption } from './pay-with-paypal-form.interfaces';
 import {

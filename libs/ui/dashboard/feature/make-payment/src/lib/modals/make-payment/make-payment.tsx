@@ -3,10 +3,7 @@ import { Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetConnectedAccounts } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
-import {
-  Modal,
-  Loader,
-} from '@archie/ui/shared/ui/design-system';
+import { Modal, Loader } from '@archie/ui/shared/design-system';
 
 import { ConnectAccountModal } from '../connect-account/connect-acount';
 import { SchedulePaymentModal } from '../schedule-payment/schedule-payment';

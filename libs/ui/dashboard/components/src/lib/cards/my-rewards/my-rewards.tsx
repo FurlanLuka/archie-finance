@@ -7,7 +7,7 @@ import {
   TitleM,
   BodyM,
   BodyS,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/ui/theme';
 
 export const Rewards: FC = () => {

@@ -3,11 +3,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { MIN_LINE_OF_CREDIT } from '@archie/ui/dashboard/constants';
-import {
-  Toast,
-  ToastList,
-  BodyM,
-} from '@archie/ui/shared/ui/design-system';
+import { Toast, ToastList, BodyM } from '@archie/ui/shared/design-system';
 
 interface NotEnoughCollateralProps {
   creditValue: string;

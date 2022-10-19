@@ -1,16 +1,8 @@
 import { ResponsivePie } from '@nivo/pie';
 import { FC } from 'react';
 
-import {
-  LTVStatus,
-  LTVText,
-  LTVColor,
-} from '@archie/ui/shared/constants';
-import {
-  Badge,
-  TitleL,
-  BodyS,
-} from '@archie/ui/shared/ui/design-system';
+import { LTVStatus, LTVText, LTVColor } from '@archie/ui/shared/constants';
+import { Badge, TitleL, BodyS } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/ui/theme';
 
 import { LoanToValueChartStyled } from './loan-to-value.styled';

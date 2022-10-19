@@ -14,7 +14,7 @@ import {
   Skeleton,
   TitleM,
   BodyM,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 export const CollateralValue: FC = () => {
   const { t } = useTranslation();

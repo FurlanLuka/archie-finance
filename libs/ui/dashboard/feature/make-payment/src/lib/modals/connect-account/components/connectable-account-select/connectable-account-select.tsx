@@ -11,7 +11,7 @@ import {
   SelectOption,
   TitleS,
   BodyM,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import { ConnectableAccountSelectStyled } from './connectable-account-select.styled';
 

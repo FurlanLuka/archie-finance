@@ -9,12 +9,7 @@ import {
 } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import { useGetMaxWithdrawalAmount } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-max-withdrawal-amount';
-import {
-  Card,
-  Skeleton,
-  TitleS,
-  BodyL,
-} from '@archie/ui/shared/ui/design-system';
+import { Card, Skeleton, TitleS, BodyL } from '@archie/ui/shared/design-system';
 
 import { WithdrawalForm } from '../components/withdrawal-form/withdrawal-form';
 

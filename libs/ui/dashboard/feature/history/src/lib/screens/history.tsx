@@ -5,13 +5,13 @@ import { Navigate } from 'react-router-dom';
 import { TransactionsTable } from '@archie/ui/dashboard/components';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetTransactions } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-transactions';
-import { ButtonOutline } from '@archie/ui/shared/ui/design-system';
+import { ButtonOutline } from '@archie/ui/shared/design-system';
 import {
   Card,
   Skeleton,
   TitleM,
   TitleS,
-} from '@archie/ui/shared/ui/design-system';
+} from '@archie/ui/shared/design-system';
 
 import { Statements } from '../components/statements/statements';
 

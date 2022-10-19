@@ -2,11 +2,7 @@ import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import {
-  ButtonPrimary,
-  TitleL,
-  TitleS,
-} from '@archie/ui/shared/ui/design-system';
+import { ButtonPrimary, TitleL, TitleS } from '@archie/ui/shared/design-system';
 
 import errorImg from '../../../assets/bell-alert.png';
 
