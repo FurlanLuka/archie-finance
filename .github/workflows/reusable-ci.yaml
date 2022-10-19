@@ -30,13 +30,26 @@ on:
         required: true
 
 jobs:
-  check_and_build:
-    name: Check and Build
+  affected_check:
+    name: Nx Cloud - Main Job
+    uses: nrwl/ci/.github/workflows/nx-cloud-main.yml@v0.8
+    with:
+      main-branch-name: ${{ inputs.BASE_BRANCH_NAME }}
+      number-of-agents: 3
+      parallel-commands: |
+        npx nx-cloud record -- npx nx workspace-lint
+        npx nx-cloud record -- npx nx format:check
+      parallel-commands-on-agents: |
+        npx nx affected --target=lint --parallel=3
+  agents:
+    name: Nx Cloud - Agents
+    uses: nrwl/ci/.github/workflows/nx-cloud-agents.yml@v0.8
+    with:
+      number-of-agents: 3
+  integration_tests:
+    name: Integration Tests
     runs-on: ubuntu-latest
     environment: ${{ inputs.ENVIRONMENT }}
-    outputs:
-      affectedProjects: ${{ steps.affected-projects.outputs.affectedProjects }}
-      imageTag: ${{ steps.extract-image-tag.outputs.IMAGE_TAG }}
     services:
       postgres:
         image: postgres:alpine
@@ -59,43 +72,37 @@ jobs:
         image: redis:alpine3.16
         ports:
           - 6379:6379
-    env:
-      NX_CLOUD_DISTRIBUTED_EXECUTION: true
     steps:
       - uses: actions/checkout@v2
         name: Checkout
         with:
           fetch-depth: 0
       - uses: nrwl/nx-set-shas@v2
-        if: inputs.BASE_BRANCH_NAME == ''
-      - uses: nrwl/nx-set-shas@v2
-        if: inputs.BASE_BRANCH_NAME != ''
         with:
           main-branch-name: ${{ inputs.BASE_BRANCH_NAME }}
       - uses: ./.github/actions/install-dependencies
         name: Install dependencies
-      - name: NX start agents and CI run
-        run: |
-          npx nx-cloud start-agent
-          npx nx-cloud start-ci-run
-      - name: Workspace Lint
-        run: npx nx workspace-lint
       - name: Prepare testing environment
         run: npx nx generate @archie/plugin/workspace-generator:test-environment-generator
-      - name: Affected Lint
-        if: inputs.BASE_BRANCH_NAME == ''
-        run: npx nx affected --target=lint --parallel=3
-      - name: Affected Lint
-        if: inputs.BASE_BRANCH_NAME != ''
-        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=lint --parallel=3
-      - name: Affected Integration Test
-        if: inputs.BASE_BRANCH_NAME == ''
-        run: npx nx affected --target=test-integration --parallel=3 --ci --code-coverage
-      - name: Affected Integration Test
-        if: inputs.BASE_BRANCH_NAME != ''
-        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test-integration --parallel=3 --ci --code-coverage
-      - name: Cleanup NX cloud
-        run: npx nx-cloud stop-all-agents
+      - name: Integration Tests
+        run: npx nx affected --target=test-integration --parallel=3 --ci
+  build_setup:
+    name: Build setup
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.ENVIRONMENT }}
+    outputs:
+      affectedProjects: ${{ steps.affected-projects.outputs.affectedProjects }}
+      imageTag: ${{ steps.extract-image-tag.outputs.IMAGE_TAG }}
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v2
+        with:
+          main-branch-name: ${{ inputs.BASE_BRANCH_NAME }}
+      - uses: ./.github/actions/install-dependencies
+        name: Install dependencies
       - uses: ./.github/actions/affected-projects
         id: affected-projects
         name: Extract affected apps
@@ -111,14 +118,14 @@ jobs:
           fi
   build_and_publish:
     name: Build ${{ matrix.project }}
-    if: ${{ needs.check_and_build.outputs.affectedProjects != '[]' && needs.check_and_build.outputs.affectedProjects != '' }}
-    needs: [check_and_build]
+    if: ${{ needs.build_setup.outputs.affectedProjects != '[]' && needs.build_setup.outputs.affectedProjects != '' }}
+    needs: [build_setup]
     runs-on: ubuntu-latest
     environment: ${{ inputs.ENVIRONMENT }}
     strategy:
       fail-fast: false
       matrix:
-        project: ${{ fromJSON(needs.check_and_build.outputs.affectedProjects) }}
+        project: ${{ fromJSON(needs.build_setup.outputs.affectedProjects) }}
     steps:
       - uses: actions/checkout@v2
         name: Checkout
@@ -133,7 +140,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ inputs.AWS_REGION }}
           ecr-repository: ${{ inputs.ECR_REPOSITORY }}
-          image-tag: ${{ needs.check_and_build.outputs.imageTag }}
+          image-tag: ${{ needs.build_setup.outputs.imageTag }}
       - if: contains(matrix.project, 'ui')
         uses: ./.github/actions/build-ui
         name: Build UI and save artifacts
@@ -142,14 +149,14 @@ jobs:
           environment: ${{ inputs.ENVIRONMENT }}
   deploy:
     name: Deploy ${{ matrix.project }}
-    if: ${{ needs.check_and_build.outputs.affectedProjects != '[]' && needs.check_and_build.outputs.affectedProjects != '' }}
-    needs: [build_and_publish, check_and_build]
+    if: ${{ needs.build_setup.outputs.affectedProjects != '[]' && needs.build_setup.outputs.affectedProjects != '' }}
+    needs: [build_and_publish, build_setup]
     runs-on: ubuntu-latest
     environment: ${{ inputs.ENVIRONMENT }}
     strategy:
       fail-fast: false
       matrix:
-        project: ${{ fromJSON(needs.check_and_build.outputs.affectedProjects) }}
+        project: ${{ fromJSON(needs.build_setup.outputs.affectedProjects) }}
     steps:
     - name: Poor mans manual deploy
       if: ${{ github.run_attempt== 1}}
@@ -169,7 +176,7 @@ jobs:
         ecr-repository: ${{ inputs.ECR_REPOSITORY }}
         kube-config-data: ${{ secrets.KUBE_CONFIG_DATA }}
         environment: ${{ inputs.ENVIRONMENT }}
-        image-tag: ${{ needs.check_and_build.outputs.imageTag }}
+        image-tag: ${{ needs.build_setup.outputs.imageTag }}
     - if: contains(matrix.project, 'ui')
       uses: ./.github/actions/deploy-ui
       name: Deploy UI
