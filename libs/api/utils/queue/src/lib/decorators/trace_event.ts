@@ -19,11 +19,11 @@ export function TraceEvent(
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (
-      ...args: [object, QueueMessageMeta, ...unknown[]]
+      ...args: [object, QueueMessageMeta | undefined, ...unknown[]]
     ): Promise<unknown> {
       const requestPayload = args[0];
-      const requestMeta: QueueMessageMeta = args[1];
-      const headers: object | undefined = requestMeta.properties?.headers;
+      const requestMeta: QueueMessageMeta | undefined = args[1];
+      const headers: object | undefined = requestMeta?.properties?.headers;
       const childOf = tracer.extract('text_map', headers);
 
       return tracer.trace(
