@@ -2,17 +2,17 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { Navigate, useNavigate } from 'react-router-dom';
 
-import { OnboardingStep } from '@archie-microservices/ui/dashboard/constants';
-import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
-import { GetCreditResponse } from '@archie-microservices/ui/shared/data-access/archie-api/credit/api/get-credit';
-import { useCreateRizeUser } from '@archie-microservices/ui/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
-import { useGetCredit } from '@archie-microservices/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
+import { OnboardingStep } from '@archie/ui/dashboard/constants';
+import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
+import { GetCreditResponse } from '@archie/ui/shared/data-access/archie-api/credit/api/get-credit';
+import { useCreateRizeUser } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
+import { useGetCredit } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import {
   MutationQueryResponse,
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetLedger } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+} from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import {
   ButtonPrimary,
   Container,
@@ -20,7 +20,7 @@ import {
   Skeleton,
   TitleL,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import imgCardReady from '../../../assets/img-card-ready.png';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';

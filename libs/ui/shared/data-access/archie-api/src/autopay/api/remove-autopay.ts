@@ -1,4 +1,4 @@
-import { API_URL } from '@archie-microservices/ui/shared/constants';
+import { API_URL } from '@archie/ui/shared/constants';
 
 import { deleteRequest } from '../../helpers';
 import { AUTOPAY_NOT_CONFIGURED } from '../autopay.interfaces';

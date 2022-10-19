@@ -1,10 +1,10 @@
 import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { Kyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/api/get-kyc';
-import { usePayWithPaypal } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-pay-with-paypal';
-import { UserObligations } from '@archie-microservices/ui/shared/data-access/archie-api/payment/api/get-obligations';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { Kyc } from '@archie/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { usePayWithPaypal } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-pay-with-paypal';
+import { UserObligations } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import {
   ButtonOutline,
   ButtonPrimary,
@@ -13,7 +13,7 @@ import {
   BodyL,
   BodyM,
   FormError,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { PayWithPaypalConfirmStyled } from './pay-with-paypal-confirm.styled';
 

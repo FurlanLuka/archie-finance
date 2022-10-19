@@ -16,84 +16,70 @@
     "baseUrl": ".",
     "strictNullChecks": true,
     "paths": {
-      "@archie-microservices/api/peach-api/test-data": [
+      "@archie/api/peach-api/test-data": [
         "libs/api/peach-api/test-data/src/index.ts"
       ],
-      "@archie-microservices/api/utils/redis": [
-        "libs/api/utils/redis/src/index.ts"
-      ],
-      "@archie-microservices/ui/dashboard/components": [
+      "@archie/api/utils/redis": ["libs/api/utils/redis/src/index.ts"],
+      "@archie/ui/dashboard/components": [
         "libs/ui/dashboard/components/src/index.ts"
       ],
-      "@archie-microservices/ui/dashboard/constants": [
+      "@archie/ui/dashboard/constants": [
         "libs/ui/dashboard/constants/src/index.ts"
       ],
-      "@archie-microservices/ui/dashboard/feature/collateral": [
+      "@archie/ui/dashboard/feature/collateral": [
         "libs/ui/dashboard/feature/collateral/src/index.ts"
       ],
-      "@archie-microservices/ui/dashboard/feature/collateralization": [
+      "@archie/ui/dashboard/feature/collateralization": [
         "libs/ui/dashboard/feature/collateralization/src/index.ts"
       ],
-      "@archie-microservices/ui/dashboard/feature/history": [
+      "@archie/ui/dashboard/feature/history": [
         "libs/ui/dashboard/feature/history/src/index.ts"
       ],
-      "@archie-microservices/ui/dashboard/feature/home": [
+      "@archie/ui/dashboard/feature/home": [
         "libs/ui/dashboard/feature/home/src/index.ts"
       ],
-      "@archie-microservices/ui/dashboard/feature/make-payment": [
+      "@archie/ui/dashboard/feature/make-payment": [
         "libs/ui/dashboard/feature/make-payment/src/index.ts"
       ],
-      "@archie-microservices/ui/dashboard/feature/onboarding": [
+      "@archie/ui/dashboard/feature/onboarding": [
         "libs/ui/dashboard/feature/onboarding/src/index.ts"
       ],
-      "@archie-microservices/ui/dashboard/feature/payments": [
+      "@archie/ui/dashboard/feature/payments": [
         "libs/ui/dashboard/feature/payments/src/index.ts"
       ],
-      "@archie-microservices/ui/dashboard/feature/rewards": [
+      "@archie/ui/dashboard/feature/rewards": [
         "libs/ui/dashboard/feature/rewards/src/index.ts"
       ],
-      "@archie-microservices/ui/dashboard/feature/settings": [
+      "@archie/ui/dashboard/feature/settings": [
         "libs/ui/dashboard/feature/settings/src/index.ts"
       ],
-      "@archie-microservices/ui/dashboard/feature/withdraw": [
+      "@archie/ui/dashboard/feature/withdraw": [
         "libs/ui/dashboard/feature/withdraw/src/index.ts"
       ],
-      "@archie-microservices/ui/dashboard/hooks": [
-        "libs/ui/dashboard/hooks/src/index.ts"
-      ],
-      "@archie-microservices/ui/dashboard/utils": [
-        "libs/ui/dashboard/utils/src/index.ts"
-      ],
-      "@archie-microservices/ui/shared/constants": [
-        "libs/ui/shared/constants/src/index.ts"
-      ],
-      "@archie-microservices/ui/shared/data-access/archie-api-dtos": [
+      "@archie/ui/dashboard/hooks": ["libs/ui/dashboard/hooks/src/index.ts"],
+      "@archie/ui/dashboard/utils": ["libs/ui/dashboard/utils/src/index.ts"],
+      "@archie/ui/shared/constants": ["libs/ui/shared/constants/src/index.ts"],
+      "@archie/ui/shared/data-access/archie-api-dtos": [
         "libs/ui/shared/data-access/archie-api-dtos/src/index.ts"
       ],
-      "@archie-microservices/ui/shared/data-access/archie-api/*": [
+      "@archie/ui/shared/data-access/archie-api/*": [
         "libs/ui/shared/data-access/archie-api/src/*"
       ],
-      "@archie-microservices/ui/shared/data-access/query-client": [
+      "@archie/ui/shared/data-access/query-client": [
         "libs/ui/shared/data-access/query-client/src/index.ts"
       ],
-      "@archie-microservices/ui/shared/data-access/session": [
+      "@archie/ui/shared/data-access/session": [
         "libs/ui/shared/data-access/session/src/index.ts"
       ],
-      "@archie-microservices/ui/shared/data-access/websocket-instance": [
+      "@archie/ui/shared/data-access/websocket-instance": [
         "libs/ui/shared/data-access/websocket-instance/src/index.ts"
       ],
-      "@archie-microservices/ui/shared/ui/design-system": [
+      "@archie/ui/shared/ui/design-system": [
         "libs/ui/shared/ui/design-system/src/index.ts"
       ],
-      "@archie-microservices/ui/shared/ui/icons": [
-        "libs/ui/shared/ui/icons/src/index.ts"
-      ],
-      "@archie-microservices/ui/shared/ui/theme": [
-        "libs/ui/shared/ui/theme/src/index.ts"
-      ],
-      "@archie-microservices/ui/shared/utils": [
-        "libs/ui/shared/utils/src/index.ts"
-      ],
+      "@archie/ui/shared/ui/icons": ["libs/ui/shared/ui/icons/src/index.ts"],
+      "@archie/ui/shared/ui/theme": ["libs/ui/shared/ui/theme/src/index.ts"],
+      "@archie/ui/shared/utils": ["libs/ui/shared/utils/src/index.ts"],
       "@archie/api/credit-api/constants": [
         "libs/api/credit-api/constants/src/index.ts"
       ],

@@ -6,7 +6,7 @@ import {
   ButtonPrimary,
   TitleL,
   TitleS,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import errorImg from '../../../assets/bell-alert.png';
 

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { breakpoints } from '@archie-microservices/ui/shared/ui/theme';
+import { breakpoints } from '@archie/ui/shared/ui/theme';
 
 export const ArchieCardStyled = styled.div`
   .archie-card {

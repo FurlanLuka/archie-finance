@@ -1,16 +1,16 @@
 import { FC, useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { useCreateAutopayDocument } from '@archie-microservices/ui/shared/data-access/archie-api/autopay/hooks/use-create-autopay-document';
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { AccountResponse } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { useCreateAutopayDocument } from '@archie/ui/shared/data-access/archie-api/autopay/hooks/use-create-autopay-document';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import {
   Loader,
   Modal,
   InputCheckbox,
   ButtonPrimary,
   BodyL,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { ConsentCheckStyled } from './consent-check.styled';
 

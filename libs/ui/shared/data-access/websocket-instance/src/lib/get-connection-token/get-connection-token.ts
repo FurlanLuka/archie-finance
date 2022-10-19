@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 
-import { API_URL } from '@archie-microservices/ui/shared/constants';
+import { API_URL } from '@archie/ui/shared/constants';
 
 interface ConnectionTokenResponse {
   authToken: string;

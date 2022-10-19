@@ -1,4 +1,4 @@
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 export enum LTVStatus {
   GOOD = 'good',

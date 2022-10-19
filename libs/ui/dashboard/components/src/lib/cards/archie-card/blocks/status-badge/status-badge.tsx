@@ -3,8 +3,8 @@ import { FC } from 'react';
 import {
   CardStatus,
   CardStatusText,
-} from '@archie-microservices/ui/shared/constants';
-import { BodyS } from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/constants';
+import { BodyS } from '@archie/ui/shared/ui/design-system';
 
 import { StatusBadgeStyled } from './status-badge.styled';
 

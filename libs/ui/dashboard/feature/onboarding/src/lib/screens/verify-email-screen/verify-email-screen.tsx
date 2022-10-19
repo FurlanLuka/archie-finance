@@ -5,20 +5,20 @@ import { Navigate } from 'react-router-dom';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { EmailVerificationResponse } from '@archie-microservices/ui/shared/data-access/archie-api/user/api/get-email-verification';
-import { useGetEmailVerification } from '@archie-microservices/ui/shared/data-access/archie-api/user/hooks/use-get-email-verification';
-import { usePollEmailVerification } from '@archie-microservices/ui/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
-import { useResendEmailVerification } from '@archie-microservices/ui/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
-import { useAuthenticatedSession } from '@archie-microservices/ui/shared/data-access/session';
+} from '@archie/ui/shared/data-access/archie-api/interface';
+import { EmailVerificationResponse } from '@archie/ui/shared/data-access/archie-api/user/api/get-email-verification';
+import { useGetEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-get-email-verification';
+import { usePollEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
+import { useResendEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
+import { useAuthenticatedSession } from '@archie/ui/shared/data-access/session';
 import {
   ButtonPrimary,
   Card,
   Skeleton,
   TitleL,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { VerifyEmailScreenStyled } from './verify-email-screen.styled';
 

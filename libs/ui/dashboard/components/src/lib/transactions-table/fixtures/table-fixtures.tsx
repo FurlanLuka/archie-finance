@@ -6,19 +6,19 @@ import {
   TransactionStatusColor,
   TransactionStatusText,
   TransactionTypeText,
-} from '@archie-microservices/ui/dashboard/constants';
+} from '@archie/ui/dashboard/constants';
 import {
   NetAsset,
   Transaction,
   TransactionStatus,
   TransactionType,
-} from '@archie-microservices/ui/shared/data-access/archie-api/payment/api/get-transactions';
+} from '@archie/ui/shared/data-access/archie-api/payment/api/get-transactions';
 import {
   BodyL,
   BodyM,
   BodyS,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { getRowDescription } from './table-fixtures.helpers';
 

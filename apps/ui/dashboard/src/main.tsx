@@ -4,9 +4,9 @@ import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { ThemeProvider } from 'styled-components';
 
-import { queryClient } from '@archie-microservices/ui/shared/data-access/query-client';
-import { SessionProvider } from '@archie-microservices/ui/shared/data-access/session';
-import { GlobalStyles, theme } from '@archie-microservices/ui/shared/ui/theme';
+import { queryClient } from '@archie/ui/shared/data-access/query-client';
+import { SessionProvider } from '@archie/ui/shared/data-access/session';
+import { GlobalStyles, theme } from '@archie/ui/shared/ui/theme';
 
 import { App } from './app/app';
 import {

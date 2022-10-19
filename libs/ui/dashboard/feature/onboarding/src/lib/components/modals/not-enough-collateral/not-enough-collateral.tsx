@@ -2,13 +2,13 @@ import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MIN_LINE_OF_CREDIT } from '@archie-microservices/ui/dashboard/constants';
+import { MIN_LINE_OF_CREDIT } from '@archie/ui/dashboard/constants';
 import {
   ButtonPrimary,
   Modal,
   TitleS,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import imgNotEnoughCollateral from '../../../../assets/img-not-enough-collateral.png';
 

@@ -9,20 +9,20 @@ import {
   CollateralValue,
   NextPayment,
   MarginCallAlert,
-} from '@archie-microservices/ui/dashboard/components';
-import { PayWithPaypalScheduled } from '@archie-microservices/ui/dashboard/feature/make-payment';
+} from '@archie/ui/dashboard/components';
+import { PayWithPaypalScheduled } from '@archie/ui/dashboard/feature/make-payment';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { Kyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/api/get-kyc';
-import { useGetKyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
+} from '@archie/ui/shared/data-access/archie-api/interface';
+import { Kyc } from '@archie/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { useGetKyc } from '@archie/ui/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
 import {
   Modal,
   TitleM,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { RecentTransactions } from '../components/recent-transactions/recent-transactions';
 

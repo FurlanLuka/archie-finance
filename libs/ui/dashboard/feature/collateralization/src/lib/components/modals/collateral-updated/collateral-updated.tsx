@@ -1,19 +1,19 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { calculateLedgerCreditValue } from '@archie-microservices/ui/dashboard/utils';
-import { Modal } from '@archie-microservices/ui/shared/ui/design-system';
+import { calculateLedgerCreditValue } from '@archie/ui/dashboard/utils';
+import { Modal } from '@archie/ui/shared/ui/design-system';
 
 import { CollateralReceived } from './blocks/collateral-received/collateral-received';
-import { useGetLedger } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { calculateLedgerTotalValue } from '@archie-microservices/ui/shared/utils';
+import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { calculateLedgerTotalValue } from '@archie/ui/shared/utils';
 import {
   LedgerUpdatedWsEvent,
   websocketInstance,
   WsEventTopic,
-} from '@archie-microservices/ui/shared/data-access/websocket-instance';
-import { LedgerActionType } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
+} from '@archie/ui/shared/data-access/websocket-instance';
+import { LedgerActionType } from '@archie/ui/shared/data-access/archie-api-dtos';
 
 const COLLATERAL_DEPOSITED_HANDLER_ID = 'CollateralUpdatedModal.ledger-updated';
 

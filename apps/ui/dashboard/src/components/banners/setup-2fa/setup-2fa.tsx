@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next';
 import {
   MutationQueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { usePollMfaEnrollment } from '@archie-microservices/ui/shared/data-access/archie-api/user/hooks/use-poll-mfa-enrollment';
-import { useStartMfaEnrollment } from '@archie-microservices/ui/shared/data-access/archie-api/user/hooks/use-start-mfa-enrollment';
+} from '@archie/ui/shared/data-access/archie-api/interface';
+import { usePollMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-poll-mfa-enrollment';
+import { useStartMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-start-mfa-enrollment';
 import {
   ButtonGhost,
   BodyL,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import img2fa from '../../../assets/images/img-2fa.png';
 

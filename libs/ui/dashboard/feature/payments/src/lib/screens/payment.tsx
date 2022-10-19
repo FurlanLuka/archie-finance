@@ -5,19 +5,19 @@ import {
   AvailableCredit,
   NextPayment,
   InterestRate,
-} from '@archie-microservices/ui/dashboard/components';
-import { MakePaymentModal } from '@archie-microservices/ui/dashboard/feature/make-payment';
-import { canUserSchedulePayment } from '@archie-microservices/ui/dashboard/utils';
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetObligations } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
-import { useGetAutopay } from '@archie-microservices/ui/shared/data-access/archie-api/autopay/hooks/use-get-autopay';
+} from '@archie/ui/dashboard/components';
+import { MakePaymentModal } from '@archie/ui/dashboard/feature/make-payment';
+import { canUserSchedulePayment } from '@archie/ui/dashboard/utils';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetObligations } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
+import { useGetAutopay } from '@archie/ui/shared/data-access/archie-api/autopay/hooks/use-get-autopay';
 import {
   ButtonPrimary,
   Status,
   StatusCircle,
   TitleM,
   BodyS,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { ConnectedAccounts } from '../components/connected-accounts/connected-accounts';
 

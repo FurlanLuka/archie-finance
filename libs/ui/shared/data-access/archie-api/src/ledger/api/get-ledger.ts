@@ -1,5 +1,5 @@
-import { API_URL } from '@archie-microservices/ui/shared/constants';
-import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
+import { API_URL } from '@archie/ui/shared/constants';
+import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
 
 import { getRequest } from '../../helpers';
 

@@ -54,8 +54,8 @@ import {
   balancesFactory,
   creditLimitUpdateRequestBodyFactory,
   PeachNock,
-} from '@archie-microservices/api/peach-api/test-data';
-import { LockedResourceError } from '@archie-microservices/api/utils/redis';
+} from '@archie/api/peach-api/test-data';
+import { LockedResourceError } from '@archie/api/utils/redis';
 import { DateTime } from 'luxon';
 
 describe('Peach service tests', () => {

@@ -1,5 +1,5 @@
-import { queryClient } from '@archie-microservices/ui/shared/data-access/query-client';
-import { LtvUpdatedWsEvent } from '@archie-microservices/ui/shared/data-access/websocket-instance';
+import { queryClient } from '@archie/ui/shared/data-access/query-client';
+import { LtvUpdatedWsEvent } from '@archie/ui/shared/data-access/websocket-instance';
 
 import { LTV } from '../api/get-ltv';
 import { LTV_RECORD_QUERY_KEY } from '../hooks/use-get-ltv';

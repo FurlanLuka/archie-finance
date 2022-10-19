@@ -1,13 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 
-import { OnboardingStep } from '@archie-microservices/ui/dashboard/constants';
+import { OnboardingStep } from '@archie/ui/dashboard/constants';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { GetOnboardingResponse } from '@archie-microservices/ui/shared/data-access/archie-api/onboarding/api/get-onboarding';
-import { useGetOnboarding } from '@archie-microservices/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
-import { LoaderFullScreen } from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/data-access/archie-api/interface';
+import { GetOnboardingResponse } from '@archie/ui/shared/data-access/archie-api/onboarding/api/get-onboarding';
+import { useGetOnboarding } from '@archie/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
+import { LoaderFullScreen } from '@archie/ui/shared/ui/design-system';
 
 import { CardScreen } from '../card-screen/card-screen';
 import { CollateralizationScreen } from '../collateralization-screen/collateralization-screen';

@@ -2,15 +2,15 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetStatements } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-get-statements';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetStatements } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-statements';
 import {
   ButtonOutline,
   Select,
   BodyS,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { Icon } from '@archie-microservices/ui/shared/ui/icons';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { Icon } from '@archie/ui/shared/ui/icons';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { StatementDownload } from './blocks/statement-download/statement-download';
 import { StatementsStyled } from './statements.styled';

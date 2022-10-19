@@ -12,7 +12,7 @@ import { PlaidModule } from '@archie/api/credit-api/plaid';
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
 import { CryptoModule } from '@archie/api/utils/crypto';
-import { RedisModule } from '@archie-microservices/api/utils/redis';
+import { RedisModule } from '@archie/api/utils/redis';
 
 @Module({
   imports: [

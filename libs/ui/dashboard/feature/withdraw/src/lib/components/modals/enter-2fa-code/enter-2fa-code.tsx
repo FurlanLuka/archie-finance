@@ -6,7 +6,7 @@ import {
   Modal,
   TitleS,
   BodyL,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { Enter2faCodeModalStyled } from './enter-2fa-code.styled';
 

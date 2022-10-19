@@ -1,8 +1,8 @@
 import ReactTooltip from 'react-tooltip';
 
-import { copyToClipboard } from '@archie-microservices/ui/dashboard/utils';
-import { BodyM } from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+import { copyToClipboard } from '@archie/ui/dashboard/utils';
+import { BodyM } from '@archie/ui/shared/ui/design-system';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 export const tableColumns = (currentAsset: string) => [
   {

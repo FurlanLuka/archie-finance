@@ -2,18 +2,18 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { MarginCallAlert } from '@archie-microservices/ui/dashboard/components';
-import { LTVText, LTVColor } from '@archie-microservices/ui/shared/constants';
-import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
-import { LTV } from '@archie-microservices/ui/shared/data-access/archie-api/collateral/api/get-ltv';
-import { useGetLTV } from '@archie-microservices/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { CreditLine } from '@archie-microservices/ui/shared/data-access/archie-api/credit_line/api/get-credit-line';
-import { useGetCreditLine } from '@archie-microservices/ui/shared/data-access/archie-api/credit_line/hooks/use-get-credit-line';
+import { MarginCallAlert } from '@archie/ui/dashboard/components';
+import { LTVText, LTVColor } from '@archie/ui/shared/constants';
+import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
+import { LTV } from '@archie/ui/shared/data-access/archie-api/collateral/api/get-ltv';
+import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
+import { CreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/api/get-credit-line';
+import { useGetCreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/hooks/use-get-credit-line';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetLedger } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+} from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import {
   Card,
   Skeleton,
@@ -21,8 +21,8 @@ import {
   TitleM,
   TitleS,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { CollateralInfo } from '../components/collateral-info/collateral-info';
 

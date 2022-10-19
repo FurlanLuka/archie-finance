@@ -5,13 +5,13 @@ import {
   LTVStatus,
   LTVText,
   LTVColor,
-} from '@archie-microservices/ui/shared/constants';
+} from '@archie/ui/shared/constants';
 import {
   Badge,
   TitleL,
   BodyS,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { LoanToValueChartStyled } from './loan-to-value.styled';
 

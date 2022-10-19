@@ -1,10 +1,10 @@
 import { FC } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { ConnectAccountModal } from '@archie-microservices/ui/dashboard/feature/make-payment';
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetConnectedAccounts } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
-import { Loader } from '@archie-microservices/ui/shared/ui/design-system';
+import { ConnectAccountModal } from '@archie/ui/dashboard/feature/make-payment';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetConnectedAccounts } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
+import { Loader } from '@archie/ui/shared/ui/design-system';
 
 import { SetupAutopay } from './blocks/setup-autopay/setup-autopay';
 

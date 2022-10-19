@@ -3,8 +3,8 @@ import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Kyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/api/get-kyc';
-import { UserObligations } from '@archie-microservices/ui/shared/data-access/archie-api/payment/api/get-obligations';
+import { Kyc } from '@archie/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { UserObligations } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import {
   ButtonPrimary,
   FormError,
@@ -13,7 +13,7 @@ import {
   TitleS,
   BodyL,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { PaymentOption } from './pay-with-paypal-form.interfaces';
 import {

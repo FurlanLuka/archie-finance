@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 
-import { AccountResponse } from '@archie-microservices/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
-import { Modal } from '@archie-microservices/ui/shared/ui/design-system';
+import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { Modal } from '@archie/ui/shared/ui/design-system';
 
 import { ConnectableAccountSelect } from './components/connectable-account-select/connectable-account-select';
 import { PlaidLink } from './components/plaid-link/plaid-link';

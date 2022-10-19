@@ -3,18 +3,18 @@ import { Trans, useTranslation } from 'react-i18next';
 import QRCode from 'react-qr-code';
 import ReactTooltip from 'react-tooltip';
 
-import { copyToClipboard } from '@archie-microservices/ui/dashboard/utils';
-import { CollateralAsset } from '@archie-microservices/ui/shared/constants';
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetDepositAddress } from '@archie-microservices/ui/shared/data-access/archie-api/vault_account/hooks/use-get-deposit-address';
+import { copyToClipboard } from '@archie/ui/dashboard/utils';
+import { CollateralAsset } from '@archie/ui/shared/constants';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetDepositAddress } from '@archie/ui/shared/data-access/archie-api/vault_account/hooks/use-get-deposit-address';
 import {
   Skeleton,
   BodyL,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { Icon } from '@archie-microservices/ui/shared/ui/icons';
-import { QR_CODE } from '@archie-microservices/ui/shared/ui/theme';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { Icon } from '@archie/ui/shared/ui/icons';
+import { QR_CODE } from '@archie/ui/shared/ui/theme';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { DepositAddressStyled } from './deposit-address.styled';
 

@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useGetAutopay } from '@archie-microservices/ui/shared/data-access/archie-api/autopay/hooks/use-get-autopay';
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+import { useGetAutopay } from '@archie/ui/shared/data-access/archie-api/autopay/hooks/use-get-autopay';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import {
   Loader,
   Modal,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { AutopayAdd } from './blocks/autopay-add/autopay-add';
 import { AutopayRemove } from './blocks/autopay-remove/autopay-remove';

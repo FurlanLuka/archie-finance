@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { LoaderFullScreen } from '@archie-microservices/ui/shared/ui/design-system';
+import { LoaderFullScreen } from '@archie/ui/shared/ui/design-system';
 
 import '../utils/i18next';
 import { ProtectedRoute } from '../components/protected-route/protected-route';

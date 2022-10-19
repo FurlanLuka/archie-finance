@@ -1,9 +1,9 @@
 import { FC, useReducer } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PaymentStep } from '@archie-microservices/ui/dashboard/constants';
-import { Kyc } from '@archie-microservices/ui/shared/data-access/archie-api/kyc/api/get-kyc';
-import { UserObligations } from '@archie-microservices/ui/shared/data-access/archie-api/payment/api/get-obligations';
+import { PaymentStep } from '@archie/ui/dashboard/constants';
+import { Kyc } from '@archie/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { UserObligations } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 
 import { ChooseAccount } from '../choose-account/choose-account';
 import { PayWithPaypalConfirm } from '../pay-with-paypal-confirm/pay-with-paypal-confirm';

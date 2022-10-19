@@ -2,15 +2,15 @@ import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Navigate } from 'react-router-dom';
 
-import { TransactionsTable } from '@archie-microservices/ui/dashboard/components';
-import { RequestState } from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetRecentTransactions } from '@archie-microservices/ui/shared/data-access/archie-api/payment/hooks/use-get-recent-transactions';
+import { TransactionsTable } from '@archie/ui/dashboard/components';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetRecentTransactions } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-recent-transactions';
 import {
   ButtonOutline,
   Card,
   Skeleton,
   TitleS,
-} from '@archie-microservices/ui/shared/ui/design-system';
+} from '@archie/ui/shared/ui/design-system';
 
 import { RecentTransactionsStyled } from './recent-transactions.styled';
 

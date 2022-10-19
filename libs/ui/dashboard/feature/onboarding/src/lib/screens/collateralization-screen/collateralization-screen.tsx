@@ -6,20 +6,20 @@ import ReactTooltip from 'react-tooltip';
 import {
   CollateralAssetSelect,
   DepositAddress,
-} from '@archie-microservices/ui/dashboard/components';
+} from '@archie/ui/dashboard/components';
 import {
   MAX_LINE_OF_CREDIT,
   MIN_LINE_OF_CREDIT,
   OnboardingStep,
-} from '@archie-microservices/ui/dashboard/constants';
-import { copyToClipboard } from '@archie-microservices/ui/dashboard/utils';
-import { CollateralAsset } from '@archie-microservices/ui/shared/constants';
-import { AssetPrice } from '@archie-microservices/ui/shared/data-access/archie-api/asset_price/api/get-asset-price';
-import { useGetAssetPrice } from '@archie-microservices/ui/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
+} from '@archie/ui/dashboard/constants';
+import { copyToClipboard } from '@archie/ui/dashboard/utils';
+import { CollateralAsset } from '@archie/ui/shared/constants';
+import { AssetPrice } from '@archie/ui/shared/data-access/archie-api/asset_price/api/get-asset-price';
+import { useGetAssetPrice } from '@archie/ui/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
+} from '@archie/ui/shared/data-access/archie-api/interface';
 import {
   Container,
   Card,
@@ -27,8 +27,8 @@ import {
   InputRange,
   TitleL,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { CollateralDepositAlerts } from '../../components/collateral-deposit-alerts/collateral-deposit-alerts';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';

@@ -2,8 +2,8 @@ import { linearGradientDef } from '@nivo/core';
 import { ResponsiveStream } from '@nivo/stream';
 import { FC } from 'react';
 
-import { LTVStatus, LTVColor } from '@archie-microservices/ui/shared/constants';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+import { LTVStatus, LTVColor } from '@archie/ui/shared/constants';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 import { CollateralValueChartStyled } from './collateral-value.styled';
 

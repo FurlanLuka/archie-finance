@@ -1,7 +1,7 @@
 import {
   NetAsset,
   Transaction,
-} from '@archie-microservices/ui/shared/data-access/archie-api/payment/api/get-transactions';
+} from '@archie/ui/shared/data-access/archie-api/payment/api/get-transactions';
 
 export const getRowDescription = (
   transaction: Transaction,

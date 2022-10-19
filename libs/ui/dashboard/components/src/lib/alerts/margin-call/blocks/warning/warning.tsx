@@ -6,8 +6,8 @@ import {
   ButtonLight,
   BodyL,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 interface WarningProps {
   withButton?: boolean;

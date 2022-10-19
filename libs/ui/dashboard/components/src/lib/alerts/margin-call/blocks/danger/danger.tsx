@@ -4,24 +4,24 @@ import { FC } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { MINIMUM_LTV } from '@archie-microservices/ui/dashboard/constants';
-import { calculateCollateralValue } from '@archie-microservices/ui/dashboard/utils';
-import { Ledger } from '@archie-microservices/ui/shared/data-access/archie-api-dtos';
-import { LTV } from '@archie-microservices/ui/shared/data-access/archie-api/collateral/api/get-ltv';
-import { useGetLTV } from '@archie-microservices/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { useGetMarginCalls } from '@archie-microservices/ui/shared/data-access/archie-api/collateral/hooks/use-get-margin-calls';
-import { useGetCredit } from '@archie-microservices/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
+import { MINIMUM_LTV } from '@archie/ui/dashboard/constants';
+import { calculateCollateralValue } from '@archie/ui/dashboard/utils';
+import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
+import { LTV } from '@archie/ui/shared/data-access/archie-api/collateral/api/get-ltv';
+import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
+import { useGetMarginCalls } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-margin-calls';
+import { useGetCredit } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import {
   QueryResponse,
   RequestState,
-} from '@archie-microservices/ui/shared/data-access/archie-api/interface';
-import { useGetLedger } from '@archie-microservices/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
+} from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import {
   ButtonLight,
   BodyL,
   BodyM,
-} from '@archie-microservices/ui/shared/ui/design-system';
-import { theme } from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/design-system';
+import { theme } from '@archie/ui/shared/ui/theme';
 
 interface DangerProps {
   withButton?: boolean;

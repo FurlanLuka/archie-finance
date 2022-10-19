@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-import { breakpoints } from '@archie-microservices/ui/shared/ui/theme';
+import { breakpoints } from '@archie/ui/shared/ui/theme';
 
 export const StatementsStyled = styled.div`
   display: flex;

@@ -1,5 +1,5 @@
-import { queryClient } from '@archie-microservices/ui/shared/data-access/query-client';
-import { OnboardingUpdatedWsEvent } from '@archie-microservices/ui/shared/data-access/websocket-instance';
+import { queryClient } from '@archie/ui/shared/data-access/query-client';
+import { OnboardingUpdatedWsEvent } from '@archie/ui/shared/data-access/websocket-instance';
 
 import { GetOnboardingResponse } from '../api/get-onboarding';
 import { ONBOARDING_RECORD_QUERY_KEY } from '../hooks/use-get-onboarding';

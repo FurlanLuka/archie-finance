@@ -43,7 +43,7 @@ import {
 import { LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LastDebitCardUpdateMeta } from './last_debit_card_update_meta.entity';
-import { Lock } from '@archie-microservices/api/utils/redis';
+import { Lock } from '@archie/api/utils/redis';
 import {
   GetEmailAddressPayload,
   GetEmailAddressResponse,

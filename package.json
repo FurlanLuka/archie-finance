@@ -1,5 +1,5 @@
 {
-  "name": "archie-microservices",
+  "name": "archie",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
@@ -160,6 +160,7 @@
     "ttf-loader": "^1.0.2",
     "typescript": "~4.8.4",
     "url-loader": "^4.1.1",
+    "webpack": "^5.74.0",
     "webpack-merge": "^5.8.0"
   }
 }

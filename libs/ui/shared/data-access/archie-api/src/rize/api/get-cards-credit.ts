@@ -1,5 +1,5 @@
-import { API_URL } from '@archie-microservices/ui/shared/constants';
-import { CardStatus } from '@archie-microservices/ui/shared/constants';
+import { API_URL } from '@archie/ui/shared/constants';
+import { CardStatus } from '@archie/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
 

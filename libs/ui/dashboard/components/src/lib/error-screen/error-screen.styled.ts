@@ -4,7 +4,7 @@ import {
   breakpoints,
   NAV_WIDTH,
   NAV_WIDTH_TABLET,
-} from '@archie-microservices/ui/shared/ui/theme';
+} from '@archie/ui/shared/ui/theme';
 
 export const ErrorScreenStyled = styled.div`
   display: flex;
