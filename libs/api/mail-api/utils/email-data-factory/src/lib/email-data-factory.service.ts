@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import {
+  CollateralInfoMailBody,
   CollateralLiquidatedMail,
+  CollateralLiquidatedMailBody,
   MarginInfoMail,
 } from './email-data-factory.interfaces';
 import {
@@ -11,14 +13,14 @@ import {
 
 @Injectable()
 export class EmailDataFactoryService {
-  private roundValue(price: number) {
+  private roundValue(price: number): string {
     return price.toFixed(2);
   }
 
   public createCollateralLiquidatedMail<T extends CollateralLiquidatedMail>(
     firstName: string,
     marginCall: T,
-  ) {
+  ): CollateralLiquidatedMailBody {
     return {
       firstName: firstName,
       liquidatedAmount: this.roundValue(marginCall.liquidationAmount),
@@ -30,7 +32,7 @@ export class EmailDataFactoryService {
   public createInfoData<T extends MarginInfoMail>(
     firstName: string,
     marginCall: T,
-  ) {
+  ): CollateralInfoMailBody {
     return {
       firstName: firstName,
       collateralValue: this.roundValue(marginCall.collateralBalance),

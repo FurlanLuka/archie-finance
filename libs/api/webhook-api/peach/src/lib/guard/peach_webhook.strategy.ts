@@ -25,7 +25,7 @@ export class PeachWebhookStrategy extends PassportStrategy(
     const peachHmac: string | undefined = request.headers['x-peach-hmac'];
 
     const rawBody: Buffer | undefined = (<RequestWithRawBody>(<unknown>request))
-      ?.rawBody;
+      .rawBody;
 
     if (peachHmac === undefined || rawBody === undefined) {
       return false;

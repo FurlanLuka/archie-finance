@@ -1,14 +1,15 @@
 import { Logger } from '@nestjs/common';
 import tracer, { Span } from 'dd-trace';
+import { QueueMessageMeta } from './queue_decorators.interfaces';
 
 export function TraceEvent(
   queueName: string,
   logBody: boolean,
 ): MethodDecorator {
   return (
-    target: any,
+    target: object,
     _key?: string | symbol,
-    descriptor?: TypedPropertyDescriptor<any>,
+    descriptor?: PropertyDescriptor,
   ) => {
     if (descriptor === undefined) {
       Logger.warn('Incorrect decorator usage, descriptor is undefined');
@@ -17,10 +18,12 @@ export function TraceEvent(
 
     const originalMethod = descriptor.value;
 
-    descriptor.value = async function (...args: any[]) {
-      const requestMeta = args[1];
+    descriptor.value = async function (
+      ...args: [object, QueueMessageMeta, ...unknown[]]
+    ): Promise<unknown> {
       const requestPayload = args[0];
-      const headers: object | undefined = requestMeta?.properties?.headers;
+      const requestMeta: QueueMessageMeta = args[1];
+      const headers: object | undefined = requestMeta.properties?.headers;
       const childOf = tracer.extract('text_map', headers);
 
       return tracer.trace(
@@ -37,7 +40,7 @@ export function TraceEvent(
 
           span.setTag('payload', payloadToLog);
           try {
-            const response = await originalMethod.apply(this, args);
+            const response: unknown = await originalMethod.apply(this, args);
             return response;
           } catch (error) {
             span.setTag('error', error);

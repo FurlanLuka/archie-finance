@@ -3,7 +3,7 @@ import { Connection, DataSource } from 'typeorm';
 /**
  * @deprecated
  */
-export async function clearDatabase(connection: Connection) {
+export async function clearDatabase(connection: Connection): Promise<void> {
   const entities = connection.entityMetadatas;
   for (const entity of entities) {
     const repository = connection.getRepository(entity.name);

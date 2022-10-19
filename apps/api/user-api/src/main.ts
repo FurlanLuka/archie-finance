@@ -5,7 +5,7 @@ import { SERVICE_NAME } from '@archie/api/user-api/constants';
 import 'dotenv/config';
 import { Logger } from '@nestjs/common';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   await start(SERVICE_NAME, AppModule);
 }
 

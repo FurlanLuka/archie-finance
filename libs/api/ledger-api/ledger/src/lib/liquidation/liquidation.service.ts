@@ -23,7 +23,6 @@ import {
   CollateralLiquidationTransactionSubmittedPayload,
   CollateralLiquidationTransactionUpdatedPayload,
   CollateralLiquidationTransactionUpdatedStatus,
-  InitiateCollateralLiquidationCommandPayload,
 } from '@archie/api/fireblocks-api/data-transfer-objects';
 import BigNumber from 'bignumber.js';
 import { Lock } from '@archie-microservices/api/utils/redis';
@@ -172,12 +171,12 @@ export class LiquidationService {
 
     await Promise.all(
       accountsLiquidationReducerResult.accountsToLiquidate.map(
-        async ({ asset, amount }) => {
+        async ({ asset, amount: assetAmount }) => {
           const internalTransactionId = v4();
 
           await this.liquidationRepository.insert({
             userId,
-            amount,
+            amount: assetAmount,
             assetId: asset.id,
             internalTransactionId,
             status: LiquidationStatus.INITIATED,
@@ -187,7 +186,7 @@ export class LiquidationService {
             INITIATE_COLLATERAL_LIQUIDATION_COMMAND,
             {
               userId,
-              amount,
+              amount: assetAmount,
               assetId: asset.id,
               internalTransactionId,
             },

@@ -14,9 +14,9 @@ export class WsAdapter extends BaseWsAdapter {
 
   public create(
     port: number,
-    options?: Record<string, any> & {
+    options?: Record<string, unknown> & {
       namespace?: string;
-      server?: any;
+      server?: WebSocketServer;
       pingInterval?: number;
       pingTimeout?: number;
     },
@@ -30,11 +30,11 @@ export class WsAdapter extends BaseWsAdapter {
   }
 
   public bindClientConnect(
-    server: any,
+    server: WebSocketServer,
     callback: (
       client: ExtendedWebSocket,
       message: IncomingMessage,
-      ...args: any
+      ...args: unknown[]
     ) => void,
   ): void {
     return super.bindClientConnect(

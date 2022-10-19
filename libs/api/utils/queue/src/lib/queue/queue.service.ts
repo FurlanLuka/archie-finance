@@ -94,7 +94,7 @@ export class QueueService implements OnApplicationBootstrap {
     });
   }
 
-  async onApplicationBootstrap() {
+  async onApplicationBootstrap(): Promise<void> {
     Logger.log('Initializing retry and dead letter queues');
     const retryHandlers = [
       ...(await this.discover.providerMethodsWithMetaAtKey<RabbitHandlerConfig>(

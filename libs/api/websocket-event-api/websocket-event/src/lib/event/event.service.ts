@@ -6,7 +6,7 @@ import { WsEvent } from '../websocket/websocket.interfaces';
 export class EventService {
   constructor(private websocketService: WebsocketService) {}
 
-  public publishToClient(userId: string, event: WsEvent) {
+  public publishToClient(userId: string, event: WsEvent): void {
     this.websocketService.publish(userId, event);
   }
 }

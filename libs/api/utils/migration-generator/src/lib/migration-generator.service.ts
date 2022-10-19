@@ -10,7 +10,7 @@ import { format } from '@sqltools/formatter/lib/sqlFormatter';
 export class MigrationGeneratorService {
   constructor(private dataSource: DataSource) {}
 
-  public async generateMigration(serviceName: string) {
+  public async generateMigration(serviceName: string): Promise<void> {
     const upSqls: string[] = [];
     const downSqls: string[] = [];
     const sqlInMemory = await this.dataSource.driver
@@ -55,7 +55,7 @@ export class MigrationGeneratorService {
     console.log('_______END-MIGRATION-CODE_______');
   }
 
-  private queryParams(parameters: any[] | undefined): string {
+  private queryParams(parameters: unknown[] | undefined): string {
     if (!parameters || !parameters.length) {
       return '';
     }
@@ -63,7 +63,7 @@ export class MigrationGeneratorService {
     return `, ${JSON.stringify(parameters)}`;
   }
 
-  private prettifyQuery(query: string) {
+  private prettifyQuery(query: string): string {
     const formattedQuery = format(query, { indent: '    ' });
     return '\n' + formattedQuery.replace(/^/gm, '            ') + '\n        ';
   }

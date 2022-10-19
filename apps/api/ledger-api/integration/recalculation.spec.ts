@@ -4,7 +4,6 @@ import {
   cleanUpTestingModule,
   createTestDatabase,
   createTestingModule,
-  generateUserAccessToken,
   initializeTestingModule,
   queueStub,
   TestDatabase,
@@ -28,7 +27,6 @@ describe('Ledger api deposit tests', () => {
   let app: INestApplication;
   let module: TestingModule;
   let testDatabase: TestDatabase;
-  let accessToken: string;
 
   const BITCOIN_PRICE = 18_000;
   const ETH_PRICE = 2_000;
@@ -63,8 +61,6 @@ describe('Ledger api deposit tests', () => {
     }).compile();
 
     app = await initializeTestingModule(module);
-
-    accessToken = generateUserAccessToken();
 
     await setAssetPrices([
       {

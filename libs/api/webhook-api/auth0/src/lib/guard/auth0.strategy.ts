@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-custom';
 import { ConfigService } from '@archie/api/utils/config';
@@ -14,10 +14,7 @@ export class Auth0WebhookStrategy extends PassportStrategy(
   }
 
   async validate(request: Request): Promise<boolean> {
-    if (
-      request.headers['authorization'] === undefined ||
-      request.body === undefined
-    ) {
+    if (request.headers['authorization'] === undefined) {
       return false;
     }
 

@@ -1,12 +1,13 @@
 import { ExecutorContext, logger } from '@nrwl/devkit';
 import { execSync } from 'child_process';
 import { DeployExecutorSchema } from './schema';
+import { ExecutorResult } from '../executor.interfaces';
 
 export default async function runExecutor(
   { imageTag, ecrRegistry, ecrRepository, environment }: DeployExecutorSchema,
   { projectName, workspace }: ExecutorContext,
-) {
-  if (!projectName) {
+): Promise<ExecutorResult> {
+  if (projectName === undefined) {
     logger.error(`Project name is not available.`);
 
     return { success: false };

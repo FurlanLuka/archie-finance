@@ -11,5 +11,5 @@ export class FireblocksWebhookDto {
   @IsNumber()
   timestamp: number;
 
-  data: any;
+  data: unknown;
 }
