@@ -1,11 +1,11 @@
 import { generateMigration } from './lib/generate-migration';
 import { startService, StartServiceOptions } from './lib/start-service';
-import { Import } from './lib/microservice.interfaces';
+import { ImportModule } from './lib/microservice.interfaces';
 import { generateOpenapi } from './lib/generate-openapi';
 
 export async function start(
   appName: string,
-  module: Import,
+  module: ImportModule,
   options?: StartServiceOptions,
 ): Promise<void> {
   const generateMigrations: boolean = process.argv.some(

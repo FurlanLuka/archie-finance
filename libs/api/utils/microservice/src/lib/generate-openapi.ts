@@ -1,7 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { Openapi } from '@archie/api/utils/openapi';
+import { ImportModule } from './microservice.interfaces';
 
-export async function generateOpenapi(module: unknown): Promise<void> {
+export async function generateOpenapi(module: ImportModule): Promise<void> {
   const app = await NestFactory.create(module, {});
 
   await Openapi.generate(app);
