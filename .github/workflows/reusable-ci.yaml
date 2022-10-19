@@ -49,8 +49,8 @@ jobs:
         name: Install dependencies
       - name: Workspace lint
         run: npx nx-cloud record -- npx nx workspace-lint
-      - name: Affected project lint
-        run: npx nx affected --target=lint --parallel=3 --base=origin/${{ inputs.BASE_BRANCH_NAME }}
+      # - name: Affected project lint
+      #   run: npx nx affected --target=lint --parallel=3 --base=origin/${{ inputs.BASE_BRANCH_NAME }}
       - uses: ./.github/actions/affected-projects
         id: affected-projects
         name: Extract affected apps
