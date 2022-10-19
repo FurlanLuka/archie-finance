@@ -8,7 +8,7 @@ import { HttpException } from '@nestjs/common';
 import { ClassConstructor } from 'class-transformer';
 import { ExamplesObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
 
-type ErrorsByStatus = Record<string, HttpException[]>;
+type ErrorsByStatus = Record<string, HttpException[] | undefined>;
 
 export class ErrorResponse {
   @ApiProperty({ type: Number })
@@ -33,10 +33,12 @@ export function ApiErrorResponse<T extends ClassConstructor<HttpException>>(
         const initializedError: HttpException = new Error();
         const errorStatus: string = initializedError.getStatus().toString();
 
+        const alreadyGroupedErrors = errorsGroupedByStatusCode[errorStatus];
+
         errorsGroupedByStatusCode[errorStatus] =
-          errorsGroupedByStatusCode[errorStatus] === undefined
+          alreadyGroupedErrors === undefined
             ? [initializedError]
-            : [...errorsGroupedByStatusCode[errorStatus], initializedError];
+            : [...alreadyGroupedErrors, initializedError];
 
         return errorsGroupedByStatusCode;
       },
@@ -44,19 +46,18 @@ export function ApiErrorResponse<T extends ClassConstructor<HttpException>>(
     );
 
     Object.keys(errorsByStatus).forEach((status) => {
-      const errorExamples: ExamplesObject = errorsByStatus[status].reduce(
-        (examples: ExamplesObject, error: HttpException) => {
-          examples[error.message] = {
-            value: {
-              statusCode: error.getStatus(),
-              message: error.message,
-            },
-          };
+      const errorExamples: ExamplesObject = (<HttpException[]>(
+        errorsByStatus[status]
+      )).reduce((examples: ExamplesObject, error: HttpException) => {
+        examples[error.message] = {
+          value: {
+            statusCode: error.getStatus(),
+            message: error.message,
+          },
+        };
 
-          return examples;
-        },
-        {},
-      );
+        return examples;
+      }, {});
 
       ApiResponse({
         status: Number(status),
