@@ -1,3 +1,8 @@
+import { InjectionToken, OptionalFactoryDependency } from '@nestjs/common';
+import { Type } from '@nestjs/common/interfaces/type.interface';
+import { DynamicModule } from '@nestjs/common/interfaces/modules/dynamic-module.interface';
+import { ForwardReference } from '@nestjs/common/interfaces/modules/forward-reference.interface';
+
 export { ExecutionError } from 'redlock';
 
 export interface RedisConfig {
@@ -6,10 +11,9 @@ export interface RedisConfig {
 }
 
 export interface RedisOptions {
-  // eslint-ignore-next-line
-  imports: any[];
-  // eslint-ignore-next-line
-  inject: any[];
-  // eslint-ignore-next-line
-  useFactory: (...args: any[]) => RedisConfig;
+  imports: Array<
+    Type | DynamicModule | Promise<DynamicModule> | ForwardReference
+  >;
+  inject: (InjectionToken | OptionalFactoryDependency)[];
+  useFactory: (...args: unknown[]) => RedisConfig;
 }

@@ -25,25 +25,25 @@
       "files": ["*.ts", "*.tsx"],
       "extends": ["plugin:@nrwl/nx/typescript", "prettier"],
       "parserOptions": {
-        "project": ["./tsconfig.eslint.json"]
+        "project": ["./tsconfig.base.json"]
       },
       "rules": {
         "@typescript-eslint/no-floating-promises": "error",
         "@typescript-eslint/await-thenable": "error",
-        "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/no-explicit-any": "error",
         "no-shadow": "off",
-        "@typescript-eslint/no-shadow": "warn",
-        "@typescript-eslint/consistent-type-definitions": "warn",
-        "@typescript-eslint/explicit-function-return-type": "warn",
-        "@typescript-eslint/no-unnecessary-type-assertion": "warn",
+        "@typescript-eslint/no-shadow": "error",
+        "@typescript-eslint/consistent-type-definitions": "error",
+        "@typescript-eslint/explicit-function-return-type": "error",
+        "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/prefer-optional-chain": "warn",
         "return-await": "off",
         "@typescript-eslint/return-await": ["error", "in-try-catch"],
-        "@typescript-eslint/strict-boolean-expressions": ["warn"],
-        "@typescript-eslint/naming-convention": ["warn",
+        "@typescript-eslint/strict-boolean-expressions": ["error"],
+        "@typescript-eslint/naming-convention": ["error",
           {
             "selector": "default",
-            "format": ["camelCase", "UPPER_CASE"],
+            "format": ["camelCase", "UPPER_CASE", "snake_case", "PascalCase"],
             "leadingUnderscore": "allow"
           },
           {
@@ -70,32 +70,37 @@
             "modifiers": ["requiresQuotes"]
           }
         ],
-        "@typescript-eslint/no-dynamic-delete": "warn",
+        "@typescript-eslint/no-dynamic-delete": "error",
         "no-empty-function": "off",
-        "@typescript-eslint/no-empty-function": "warn",
-        "@typescript-eslint/no-extra-non-null-assertion": "warn",
+        "@typescript-eslint/no-empty-function": "error",
+        "@typescript-eslint/no-extra-non-null-assertion": "error",
         "no-invalid-this": "off",
         "@typescript-eslint/no-invalid-this": "warn",
         "@typescript-eslint/no-invalid-void-type": "warn",
         "no-magic-numbers": "off",
-        "@typescript-eslint/no-misused-promises": "warn",
+        "@typescript-eslint/no-misused-promises": "error",
         "no-redeclare": "off",
-        "@typescript-eslint/no-redeclare": "warn",
-        "@typescript-eslint/no-require-imports": "warn",
-        "@typescript-eslint/no-unnecessary-condition": "warn",
-        "@typescript-eslint/no-unnecessary-type-constraint": "warn",
-        "@typescript-eslint/no-unsafe-call": "warn",
+        "@typescript-eslint/no-redeclare": "error",
+        "@typescript-eslint/no-require-imports": "error",
+        "@typescript-eslint/no-unnecessary-condition": "error",
+        "@typescript-eslint/no-unnecessary-type-constraint": "error",
         "no-unused-expressions": "off",
-        "@typescript-eslint/no-unused-expressions": "warn",
+        "@typescript-eslint/no-unused-expressions": "error",
         "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": "warn",
+        "@typescript-eslint/no-unused-vars": ["error", {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^(?:_|[A-Z](([a-z]+[A-Z]?)*)$)",
+          "caughtErrorsIgnorePattern": "^_"
+        }],
         "no-use-before-define": "off",
-        "@typescript-eslint/no-use-before-define": "warn",
-        "@typescript-eslint/prefer-enum-initializers": "warn",
+        "@typescript-eslint/prefer-enum-initializers": "error",
 
+        "@typescript-eslint/no-unsafe-call": "warn",
         "@typescript-eslint/no-unsafe-member-access": "warn",
         "@typescript-eslint/no-unsafe-argument": "warn",
-        "@typescript-eslint/no-unsafe-return": "warn"
+        "@typescript-eslint/no-unsafe-return": "warn",
+
+        "@typescript-eslint/no-use-before-define": "off"
       }
     },
     {

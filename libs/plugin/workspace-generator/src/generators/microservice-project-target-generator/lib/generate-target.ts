@@ -1,4 +1,4 @@
-export function generateTarget(projectName: string) {
+export function generateTarget(projectName: string): object {
   return {
     'build-openapi': {
       executor: 'nx:run-commands',

@@ -12,8 +12,8 @@ import { Channel, ConsumeMessage } from 'amqplib';
 import { QueueUtilService } from '../queue/queue-util.service';
 import { TraceEvent } from './trace_event';
 import { Idempotent } from './idempotent';
-import tracer from 'dd-trace';
 import { Event } from '../event/event';
+import { AppliedDecorator } from './queue_decorators.interfaces';
 
 interface SubscriptionOptions {
   useTracer: boolean;
@@ -23,13 +23,6 @@ interface SubscriptionOptions {
   autoDelete: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-type AppliedDecorator = <TFunction extends Function, Y>(
-  target: object | TFunction,
-  propertyKey?: string | symbol,
-  descriptor?: TypedPropertyDescriptor<Y>,
-) => void;
-
 const INITIAL_DELAY = 20000;
 const MAX_RETRIES = 5;
 const RETRY_BACKOFF = 2;
@@ -37,7 +30,7 @@ const RETRY_BACKOFF = 2;
 export const RABBIT_RETRY_HANDLER = 'RABBIT_RETRY_HANDLER';
 
 export function Subscribe(
-  event: Event<any>,
+  event: Event<unknown>,
   queueName: string,
   options?: Partial<SubscriptionOptions>,
 ): AppliedDecorator {

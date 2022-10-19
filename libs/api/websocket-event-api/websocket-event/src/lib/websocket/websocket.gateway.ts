@@ -4,7 +4,7 @@ import { IncomingMessage } from 'http';
 import { WebsocketService } from './websocket.service';
 import * as queryString from 'query-string';
 import { Logger } from '@nestjs/common';
-import { WebSocket, WebSocketServer } from 'ws';
+import { WebSocketServer } from 'ws';
 import { ExtendedWebSocket } from './websocket.interfaces';
 
 const PING_INTERVAL_IN_MS = 25_000;
@@ -29,10 +29,10 @@ export class WebsocketGateway implements NestGateway {
   async handleConnection(
     client: ExtendedWebSocket,
     message: IncomingMessage,
-    ..._args: any[]
+    ..._args: unknown[]
   ): Promise<void> {
     const parsedUrl = (<string>message.url).replace('/', '').replace('?', '');
-    const queryParams = queryString.parse(parsedUrl);
+    const queryParams: Record<string, unknown> = queryString.parse(parsedUrl);
 
     if (
       queryParams.authToken === undefined ||

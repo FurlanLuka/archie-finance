@@ -6,8 +6,8 @@ export interface QueueOptions {
 }
 
 export enum RPCResponseType {
-  SUCCESS,
-  ERROR,
+  SUCCESS = 0,
+  ERROR = 1,
 }
 
 interface RPCSuccessResponse<T> {

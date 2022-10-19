@@ -35,7 +35,7 @@ export class EventQueueController {
   async ledgerAccountUpdatedHandler({
     userId,
     ...payload
-  }: LedgerAccountUpdatedPayload) {
+  }: LedgerAccountUpdatedPayload): Promise<void> {
     this.eventService.publishToClient(userId, {
       topic: LEDGER_ACCOUNT_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
@@ -50,7 +50,7 @@ export class EventQueueController {
   async creditBalanceUpdatedHandler({
     userId,
     ...payload
-  }: CreditBalanceUpdatedPayload) {
+  }: CreditBalanceUpdatedPayload): Promise<void> {
     this.eventService.publishToClient(userId, {
       topic: CREDIT_BALANCE_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
@@ -65,7 +65,7 @@ export class EventQueueController {
   async onboardingUpdatedHandler({
     userId,
     ...payload
-  }: OnboardingUpdatedPayload) {
+  }: OnboardingUpdatedPayload): Promise<void> {
     this.eventService.publishToClient(userId, {
       topic: ONBOARDING_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
@@ -77,7 +77,10 @@ export class EventQueueController {
     EventQueueController.CONTROLLER_QUEUE_NAME,
     EventQueueController.CONTROLLER_QUEUE_SETTINGS,
   )
-  async ltvUpdatedHandler({ userId, ...payload }: LtvUpdatedPayload) {
+  async ltvUpdatedHandler({
+    userId,
+    ...payload
+  }: LtvUpdatedPayload): Promise<void> {
     this.eventService.publishToClient(userId, {
       topic: LTV_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
@@ -92,7 +95,7 @@ export class EventQueueController {
   async transactionUpdatedHandler({
     userId,
     ...payload
-  }: TransactionUpdatedPayload) {
+  }: TransactionUpdatedPayload): Promise<void> {
     this.eventService.publishToClient(userId, {
       topic: TRANSACTION_UPDATED_TOPIC.getRoutingKey(),
       data: payload,

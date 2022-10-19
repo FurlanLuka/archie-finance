@@ -1,11 +1,11 @@
 import { Catch, ArgumentsHost, Logger } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import tracer, { Span } from 'dd-trace';
-import { RequestWithUser } from './tracing.interfaces';
+import { RequestWithUser } from '@archie/api/utils/auth0';
 
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const request: Request = ctx.getRequest<Request>();
     const span: Span | null = tracer.scope().active();

@@ -74,9 +74,9 @@ export function Lock(
   const injector = Inject(RedisService);
 
   return (
-    target: any,
+    target: object,
     _key?: string | symbol,
-    descriptor?: TypedPropertyDescriptor<any>,
+    descriptor?: PropertyDescriptor,
   ) => {
     if (descriptor === undefined) {
       Logger.warn('Incorrect decorator usage, descriptor is undefined');
@@ -87,11 +87,12 @@ export function Lock(
 
     const originalMethod = descriptor.value;
 
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (...args: unknown[]): Promise<unknown> {
+      const redisService: RedisService = this.redisService;
       let lockedResource: string;
 
       try {
-        lockedResource = await this.redisService.acquireLock(
+        lockedResource = await redisService.acquireLock(
           resourceNameCallBack(args[0]),
         );
       } catch (error) {
@@ -103,10 +104,10 @@ export function Lock(
       }
 
       try {
-        const response = await originalMethod.apply(this, args);
+        const response: unknown = await originalMethod.apply(this, args);
         return response;
       } finally {
-        await this.redisService.releaseLock(lockedResource);
+        await redisService.releaseLock(lockedResource);
       }
     };
   };

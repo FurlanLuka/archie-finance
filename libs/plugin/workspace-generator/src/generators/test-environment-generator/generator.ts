@@ -1,7 +1,7 @@
 import { Tree } from '@nrwl/devkit';
 import { readWorkspace } from 'nx/src/generators/utils/project-configuration';
 
-export function testEnvironmentGenerator(tree: Tree) {
+export function testEnvironmentGenerator(tree: Tree): void {
   const workspace = readWorkspace(tree);
 
   const projects = Object.keys(workspace.projects).flatMap((projectKey) => {

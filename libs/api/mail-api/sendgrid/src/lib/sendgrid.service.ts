@@ -22,7 +22,7 @@ export class SendgridService {
 
   public async sendMarginCallCompletedMail(
     marginCall: MarginCallCompletedPayload,
-  ) {
+  ): Promise<void> {
     const contact: DecryptedContact = await this.contactService.getContact(
       marginCall.userId,
     );
@@ -49,7 +49,9 @@ export class SendgridService {
     }
   }
 
-  public async sendMarginCallStartedMail(marginCall: MarginCallStartedPayload) {
+  public async sendMarginCallStartedMail(
+    marginCall: MarginCallStartedPayload,
+  ): Promise<void> {
     const contact: DecryptedContact = await this.contactService.getContact(
       marginCall.userId,
     );
@@ -65,7 +67,7 @@ export class SendgridService {
 
   public async sendLtvLimitApproachingMail(
     marginCall: MarginCallLtvLimitApproachingPayload,
-  ) {
+  ): Promise<void> {
     const contact: DecryptedContact = await this.contactService.getContact(
       marginCall.userId,
     );
@@ -79,7 +81,7 @@ export class SendgridService {
     );
   }
 
-  public async sendSalesConnectEmail(payload: SalesConnectDto) {
+  public async sendSalesConnectEmail(payload: SalesConnectDto): Promise<void> {
     await this.sendEmail(
       'sales@archie.finance',
       this.configService.get(
@@ -89,7 +91,7 @@ export class SendgridService {
     );
   }
 
-  public async addToWaitlist(emailAddress: string) {
+  public async addToWaitlist(emailAddress: string): Promise<void> {
     await axios.put(
       `${this.configService.get(
         ConfigVariables.SENDGRID_API_URL,
@@ -118,7 +120,7 @@ export class SendgridService {
     emailAddress: string,
     emailTemplateId: string,
     emailData: unknown,
-  ) {
+  ): Promise<void> {
     try {
       await axios.post(
         `${this.configService.get(

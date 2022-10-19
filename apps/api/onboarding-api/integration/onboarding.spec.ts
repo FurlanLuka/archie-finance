@@ -8,7 +8,6 @@ import {
   initializeTestingModule,
   queueStub,
   TestDatabase,
-  user,
 } from '@archie/test/integration';
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';

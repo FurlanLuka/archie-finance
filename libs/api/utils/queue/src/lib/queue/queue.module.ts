@@ -43,7 +43,7 @@ export class QueueModule {
       }),
     ];
 
-    const providers: Provider<any>[] = [
+    const providers: Provider[] = [
       {
         provide: 'USE_EVENT_LOG',
         useValue: useEventLog,
@@ -51,7 +51,7 @@ export class QueueModule {
       QueueService,
     ];
 
-    const exports: any[] = [RabbitMQModule, QueueService];
+    const exports: Provider[] = [RabbitMQModule, QueueService];
 
     if (useEventLog) {
       imports.push(TypeOrmModule.forFeature([EventLog, Idempotency]));
