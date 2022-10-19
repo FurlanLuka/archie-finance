@@ -1,12 +1,12 @@
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 
 import { ModalStyled, ModalOverlay, ModalContent } from './modal.styled';
 
-export interface ModalProps {
+export type ModalProps = PropsWithChildren<{
   isOpen: boolean;
   close?: () => void;
   maxWidth?: string;
-}
+}>;
 
 export const Modal: FC<ModalProps> = ({
   children,
