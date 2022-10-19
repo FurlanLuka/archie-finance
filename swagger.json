@@ -17,7 +17,22 @@
             "description": ""
           },
           "409": {
-            "description": "ERR_CUSTOMER_ALREADY_EXISTS"
+            "description": "Error response with 409 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "ERR_CUSTOMER_ALREADY_EXISTS": {
+                    "value": {
+                      "statusCode": 409,
+                      "message": "ERR_CUSTOMER_ALREADY_EXISTS"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -43,7 +58,28 @@
             }
           },
           "404": {
-            "description": "ERR_DEBIT_CARD_DOES_NOT_EXIST | ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "ERR_DEBIT_CARD_DOES_NOT_EXIST": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "ERR_DEBIT_CARD_DOES_NOT_EXIST"
+                    }
+                  },
+                  "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -69,7 +105,22 @@
             }
           },
           "404": {
-            "description": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -141,7 +192,22 @@
             }
           },
           "404": {
-            "description": "KYC_NOT_FOUND"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "KYC_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "KYC_NOT_FOUND"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -175,7 +241,22 @@
             }
           },
           "400": {
-            "description": "KYC_ALREADY_SUBMITTED"
+            "description": "Error response with 400 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "KYC_ALREADY_SUBMITTED": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "KYC_ALREADY_SUBMITTED"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -217,7 +298,22 @@
             "description": ""
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Error response with 400 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "Bad Request": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "Bad Request"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -268,7 +364,22 @@
             "description": ""
           },
           "404": {
-            "description": "ENROLLMENT_NOT_FOUND"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "ENROLLMENT_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "ENROLLMENT_NOT_FOUND"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -366,7 +477,22 @@
             "description": ""
           },
           "404": {
-            "description": "Not Found"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "Not Found": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -396,7 +522,22 @@
             }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "Not Found": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -484,7 +625,22 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -596,7 +752,28 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -623,10 +800,64 @@
             "description": ""
           },
           "400": {
-            "description": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE"
+            "description": "Error response with 400 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR | CREDIT_LINE_DRAW_NOT_FOUND_ERROR | PAYMENT_INSTRUMENT_NOT_FOUND | AMOUNT_EXCEEDS_AVAILABLE_BALANCE"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_DRAW_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_DRAW_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "PAYMENT_INSTRUMENT_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND"
+                    }
+                  },
+                  "AMOUNT_EXCEEDS_AVAILABLE_BALANCE": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "AMOUNT_EXCEEDS_AVAILABLE_BALANCE"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -689,7 +920,34 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR | CREDIT_LINE_DRAW_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_DRAW_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_DRAW_NOT_FOUND_ERROR"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -715,7 +973,28 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -741,7 +1020,28 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -770,10 +1070,52 @@
             "description": ""
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR | PAYMENT_INSTRUMENT_NOT_FOUND"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "PAYMENT_INSTRUMENT_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND"
+                    }
+                  }
+                }
+              }
+            }
           },
           "409": {
-            "description": "AUTOPAY_ALREADY_CONFIGURED"
+            "description": "Error response with 409 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "AUTOPAY_ALREADY_CONFIGURED": {
+                    "value": {
+                      "statusCode": 409,
+                      "message": "AUTOPAY_ALREADY_CONFIGURED"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -790,7 +1132,40 @@
             "description": ""
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR | PAYMENT_INSTRUMENT_NOT_FOUND | AUTOPAY_NOT_CONFIGURED"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "PAYMENT_INSTRUMENT_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND"
+                    }
+                  },
+                  "AUTOPAY_NOT_CONFIGURED": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "AUTOPAY_NOT_CONFIGURED"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -814,7 +1189,40 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR | PAYMENT_INSTRUMENT_NOT_FOUND | AUTOPAY_NOT_CONFIGURED"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "PAYMENT_INSTRUMENT_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND"
+                    }
+                  },
+                  "AUTOPAY_NOT_CONFIGURED": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "AUTOPAY_NOT_CONFIGURED"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -850,7 +1258,28 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR | PAYMENT_INSTRUMENT_NOT_FOUND"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "PAYMENT_INSTRUMENT_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -876,7 +1305,34 @@
             }
           },
           "404": {
-            "description": "Not Found | BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "Not Found": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "Not Found"
+                    }
+                  },
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -905,7 +1361,28 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -940,7 +1417,28 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR | CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -966,7 +1464,22 @@
             }
           },
           "404": {
-            "description": "CREDIT_NOT_SET_UP"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "CREDIT_NOT_SET_UP": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_NOT_SET_UP"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1247,7 +1760,34 @@
             }
           },
           "400": {
-            "description": "INVALID_WITHDRAWAL_AMOUNT | WITHDRAWAL_AMOUNT_TOO_HIGH | INVALID_ASSET"
+            "description": "Error response with 400 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "INVALID_WITHDRAWAL_AMOUNT": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "INVALID_WITHDRAWAL_AMOUNT"
+                    }
+                  },
+                  "WITHDRAWAL_AMOUNT_TOO_HIGH": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "WITHDRAWAL_AMOUNT_TOO_HIGH"
+                    }
+                  },
+                  "INVALID_ASSET": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "INVALID_ASSET"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1332,10 +1872,40 @@
             }
           },
           "400": {
-            "description": "NOT_ENOUGH_COLLATERAL"
+            "description": "Error response with 400 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "NOT_ENOUGH_COLLATERAL": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "NOT_ENOUGH_COLLATERAL"
+                    }
+                  }
+                }
+              }
+            }
           },
           "409": {
-            "description": "CREDIT_LINE_ALREADY_EXISTS"
+            "description": "Error response with 409 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "CREDIT_LINE_ALREADY_EXISTS": {
+                    "value": {
+                      "statusCode": 409,
+                      "message": "CREDIT_LINE_ALREADY_EXISTS"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1359,7 +1929,22 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_RECORD_NOT_FOUND"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "CREDIT_LINE_RECORD_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_RECORD_NOT_FOUND"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
