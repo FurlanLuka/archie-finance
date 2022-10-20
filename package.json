@@ -77,7 +77,6 @@
     "react-router-dom": "^6.4.2",
     "react-table": "^7.8.0",
     "react-tooltip": "^4.4.2",
-    "react-verification-code-input": "^1.2.9",
     "redlock": "^5.0.0-beta.2",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.7",
