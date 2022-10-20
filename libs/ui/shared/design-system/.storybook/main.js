@@ -14,6 +14,7 @@ module.exports = {
     ...rootMain.addons,
     '@nrwl/react/plugins/storybook',
     'storybook-addon-react-router-v6',
+    '@react-theming/storybook-addon',
   ],
   webpackFinal: async (config, { configType }) => {
     if (rootMain.webpackFinal) {

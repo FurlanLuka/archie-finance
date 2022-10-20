@@ -1,6 +1,7 @@
+import { withThemes } from '@react-theming/storybook-addon';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { addDecorator, addParameters } from '@storybook/react';
-import { withThemesProvider } from 'themeprovider-storybook';
+import { ThemeProvider } from 'styled-components';
 
 import { GlobalStyles, theme } from '@archie/ui/shared/theme';
 
@@ -15,10 +16,9 @@ const themes = [
     ...theme,
   },
 ];
+const themingDecorator = withThemes(ThemeProvider, themes);
 
-export const decorators = [
-  withThemesProvider(themes, { disableThemePreview: true }),
-];
+export const decorators = [themingDecorator];
 
 addDecorator((Story) => (
   <>
