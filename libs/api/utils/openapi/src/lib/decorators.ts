@@ -11,6 +11,9 @@ export class ErrorResponse {
 
   @ApiProperty({ type: String })
   message: string;
+
+  @ApiProperty({ type: String })
+  error: string;
 }
 
 export function ApiErrorResponse<T extends ClassConstructor<HttpException>>(
@@ -43,10 +46,7 @@ export function ApiErrorResponse<T extends ClassConstructor<HttpException>>(
         errorsByStatus[status]
       )).reduce((examples: ExamplesObject, error: HttpException) => {
         examples[error.message] = {
-          value: {
-            statusCode: error.getStatus(),
-            message: error.message,
-          },
+          value: error.getResponse(),
         };
 
         return examples;

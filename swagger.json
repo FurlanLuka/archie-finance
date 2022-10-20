@@ -27,7 +27,8 @@
                   "ERR_CUSTOMER_ALREADY_EXISTS": {
                     "value": {
                       "statusCode": 409,
-                      "message": "ERR_CUSTOMER_ALREADY_EXISTS"
+                      "message": "ERR_CUSTOMER_ALREADY_EXISTS",
+                      "error": "Conflict"
                     }
                   }
                 }
@@ -68,13 +69,15 @@
                   "ERR_DEBIT_CARD_DOES_NOT_EXIST": {
                     "value": {
                       "statusCode": 404,
-                      "message": "ERR_DEBIT_CARD_DOES_NOT_EXIST"
+                      "message": "ERR_DEBIT_CARD_DOES_NOT_EXIST",
+                      "error": "Not Found"
                     }
                   },
                   "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST": {
                     "value": {
                       "statusCode": 404,
-                      "message": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+                      "message": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -115,7 +118,8 @@
                   "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST": {
                     "value": {
                       "statusCode": 404,
-                      "message": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+                      "message": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -202,7 +206,8 @@
                   "KYC_NOT_FOUND": {
                     "value": {
                       "statusCode": 404,
-                      "message": "KYC_NOT_FOUND"
+                      "message": "KYC_NOT_FOUND",
+                      "error": "KYC record not found. Please submit your KYC or contact support."
                     }
                   }
                 }
@@ -251,7 +256,8 @@
                   "KYC_ALREADY_SUBMITTED": {
                     "value": {
                       "statusCode": 400,
-                      "message": "KYC_ALREADY_SUBMITTED"
+                      "message": "KYC_ALREADY_SUBMITTED",
+                      "error": "You have already submitted your KYC. If you made a mistake, please contact support."
                     }
                   }
                 }
@@ -374,7 +380,8 @@
                   "ENROLLMENT_NOT_FOUND": {
                     "value": {
                       "statusCode": 404,
-                      "message": "ENROLLMENT_NOT_FOUND"
+                      "message": "ENROLLMENT_NOT_FOUND",
+                      "error": "Enrollment was not found."
                     }
                   }
                 }
@@ -635,7 +642,8 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -762,13 +770,15 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -810,7 +820,8 @@
                   "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE": {
                     "value": {
                       "statusCode": 400,
-                      "message": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE"
+                      "message": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE",
+                      "error": "Bad Request"
                     }
                   }
                 }
@@ -828,31 +839,36 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_DRAW_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_DRAW_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_DRAW_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "PAYMENT_INSTRUMENT_NOT_FOUND": {
                     "value": {
                       "statusCode": 404,
-                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND"
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND",
+                      "error": "Not Found"
                     }
                   },
                   "AMOUNT_EXCEEDS_AVAILABLE_BALANCE": {
                     "value": {
                       "statusCode": 404,
-                      "message": "AMOUNT_EXCEEDS_AVAILABLE_BALANCE"
+                      "message": "AMOUNT_EXCEEDS_AVAILABLE_BALANCE",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -930,19 +946,22 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_DRAW_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_DRAW_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_DRAW_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -983,13 +1002,15 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -1030,13 +1051,15 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -1080,19 +1103,22 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "PAYMENT_INSTRUMENT_NOT_FOUND": {
                     "value": {
                       "statusCode": 404,
-                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND"
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -1110,7 +1136,8 @@
                   "AUTOPAY_ALREADY_CONFIGURED": {
                     "value": {
                       "statusCode": 409,
-                      "message": "AUTOPAY_ALREADY_CONFIGURED"
+                      "message": "AUTOPAY_ALREADY_CONFIGURED",
+                      "error": "Conflict"
                     }
                   }
                 }
@@ -1142,25 +1169,29 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "PAYMENT_INSTRUMENT_NOT_FOUND": {
                     "value": {
                       "statusCode": 404,
-                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND"
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND",
+                      "error": "Not Found"
                     }
                   },
                   "AUTOPAY_NOT_CONFIGURED": {
                     "value": {
                       "statusCode": 404,
-                      "message": "AUTOPAY_NOT_CONFIGURED"
+                      "message": "AUTOPAY_NOT_CONFIGURED",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -1199,25 +1230,29 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "PAYMENT_INSTRUMENT_NOT_FOUND": {
                     "value": {
                       "statusCode": 404,
-                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND"
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND",
+                      "error": "Not Found"
                     }
                   },
                   "AUTOPAY_NOT_CONFIGURED": {
                     "value": {
                       "statusCode": 404,
-                      "message": "AUTOPAY_NOT_CONFIGURED"
+                      "message": "AUTOPAY_NOT_CONFIGURED",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -1268,13 +1303,15 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "PAYMENT_INSTRUMENT_NOT_FOUND": {
                     "value": {
                       "statusCode": 404,
-                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND"
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -1321,13 +1358,15 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -1371,13 +1410,15 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -1427,13 +1468,15 @@
                   "BORROWER_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "BORROWER_NOT_FOUND_ERROR"
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   },
                   "CREDIT_LINE_NOT_FOUND_ERROR": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_NOT_FOUND_ERROR"
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -1474,7 +1517,8 @@
                   "CREDIT_NOT_SET_UP": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_NOT_SET_UP"
+                      "message": "CREDIT_NOT_SET_UP",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -1770,19 +1814,22 @@
                   "INVALID_WITHDRAWAL_AMOUNT": {
                     "value": {
                       "statusCode": 400,
-                      "message": "INVALID_WITHDRAWAL_AMOUNT"
+                      "message": "INVALID_WITHDRAWAL_AMOUNT",
+                      "error": "Bad Request"
                     }
                   },
                   "WITHDRAWAL_AMOUNT_TOO_HIGH": {
                     "value": {
                       "statusCode": 400,
-                      "message": "WITHDRAWAL_AMOUNT_TOO_HIGH"
+                      "message": "WITHDRAWAL_AMOUNT_TOO_HIGH",
+                      "error": "Bad Request"
                     }
                   },
                   "INVALID_ASSET": {
                     "value": {
                       "statusCode": 400,
-                      "message": "INVALID_ASSET"
+                      "message": "INVALID_ASSET",
+                      "error": "Bad Request"
                     }
                   }
                 }
@@ -1882,7 +1929,8 @@
                   "NOT_ENOUGH_COLLATERAL": {
                     "value": {
                       "statusCode": 400,
-                      "message": "NOT_ENOUGH_COLLATERAL"
+                      "message": "NOT_ENOUGH_COLLATERAL",
+                      "error": "Bad Request"
                     }
                   }
                 }
@@ -1900,7 +1948,8 @@
                   "CREDIT_LINE_ALREADY_EXISTS": {
                     "value": {
                       "statusCode": 409,
-                      "message": "CREDIT_LINE_ALREADY_EXISTS"
+                      "message": "CREDIT_LINE_ALREADY_EXISTS",
+                      "error": "Conflict"
                     }
                   }
                 }
@@ -1939,7 +1988,8 @@
                   "CREDIT_LINE_RECORD_NOT_FOUND": {
                     "value": {
                       "statusCode": 404,
-                      "message": "CREDIT_LINE_RECORD_NOT_FOUND"
+                      "message": "CREDIT_LINE_RECORD_NOT_FOUND",
+                      "error": "Not Found"
                     }
                   }
                 }
@@ -2141,11 +2191,15 @@
           },
           "message": {
             "type": "string"
+          },
+          "error": {
+            "type": "string"
           }
         },
         "required": [
           "statusCode",
-          "message"
+          "message",
+          "error"
         ]
       },
       "GetOnboardingResponseDto": {
