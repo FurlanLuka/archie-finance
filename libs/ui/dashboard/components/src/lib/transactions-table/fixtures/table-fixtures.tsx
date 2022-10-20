@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { Column } from 'react-table';
 
 import {
@@ -40,16 +40,17 @@ const DescriptionCell: FC<DescriptionCellProps> = ({ title, code }) => (
   </>
 );
 
-interface TypeCellProps {
+type TypeCellProps = PropsWithChildren<{
   type: TransactionType;
-}
+}>;
 
 const TypeCell: FC<TypeCellProps> = ({ type }) => (
   <BodyM weight={500}>{TransactionTypeText[type]}</BodyM>
 );
-interface StatusCellProps {
+
+type StatusCellProps = PropsWithChildren<{
   status: TransactionStatus;
-}
+}>;
 
 const StatusCell: FC<StatusCellProps> = ({ status }) => (
   <BodyM color={TransactionStatusColor[status]} weight={500}>
