@@ -1,9 +1,4 @@
-import {
-  ApiProperty,
-  ApiResponse,
-  getSchemaPath,
-  ApiExtraModels,
-} from '@nestjs/swagger';
+import { ApiProperty, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 import { HttpException } from '@nestjs/common';
 import { ClassConstructor } from 'class-transformer';
 import { ExamplesObject } from '@nestjs/swagger/dist/interfaces/open-api-spec.interface';
@@ -26,8 +21,6 @@ export function ApiErrorResponse<T extends ClassConstructor<HttpException>>(
     propertyKey: string,
     descriptor: PropertyDescriptor,
   ): void => {
-    ApiExtraModels(ErrorResponse);
-
     const errorsByStatus = errors.reduce(
       (errorsGroupedByStatusCode: ErrorsByStatus, Error: T) => {
         const initializedError: HttpException = new Error();

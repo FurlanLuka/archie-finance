@@ -2133,6 +2133,21 @@
           "data"
         ]
       },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "statusCode",
+          "message"
+        ]
+      },
       "GetOnboardingResponseDto": {
         "type": "object",
         "properties": {

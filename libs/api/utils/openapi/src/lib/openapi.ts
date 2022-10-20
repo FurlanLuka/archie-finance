@@ -1,6 +1,7 @@
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as fs from 'fs';
 import { INestApplication } from '@nestjs/common';
+import { ErrorResponse } from './decorators';
 
 export class Openapi {
   public static async generate(app: INestApplication): Promise<void> {
@@ -9,7 +10,9 @@ export class Openapi {
       .addBearerAuth()
       .build();
 
-    const document = SwaggerModule.createDocument(app, config);
+    const document = SwaggerModule.createDocument(app, config, {
+      extraModels: [ErrorResponse],
+    });
 
     fs.mkdirSync(`${__dirname}/target/generated`, { recursive: true });
     fs.writeFileSync(
