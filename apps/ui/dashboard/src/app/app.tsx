@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
+import '../utils/i18next';
 import { LoaderFullScreen } from '@archie/ui/shared/design-system';
 
-import '../utils/i18next';
 import { ProtectedRoute } from '../components/protected-route/protected-route';
 import { DashboardRoute } from '../routes/dashboard/dashboard-route';
 import { LoginRoute } from '../routes/login/login-route';
