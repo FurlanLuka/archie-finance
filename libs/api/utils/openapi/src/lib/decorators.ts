@@ -12,7 +12,7 @@ export class ErrorResponse {
   @ApiProperty({ type: String })
   message: string;
 
-  @ApiProperty({ type: String })
+  @ApiProperty({ type: String, required: false })
   error: string;
 }
 
