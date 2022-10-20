@@ -1,81 +1,20 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { Enrollment, SendEnrollmentTicketResponse, User } from 'auth0';
+import { Injectable } from '@nestjs/common';
+import { Enrollment, SendEnrollmentTicketResponse } from 'auth0';
 import { Auth0Service } from '@archie/api/user-api/auth0';
 import {
-  EMAIL_VERIFIED_TOPIC,
   MFA_REMOVED_TOPIC,
   MFA_ENROLLED_TOPIC,
 } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
-import {
-  GetEmailAddressResponse,
-  GetEmailVerificationResponse,
-  GetMfaEnrollmentResponse,
-} from '@archie/api/user-api/data-transfer-objects';
-import { EnrollmentNotFoundError } from './user.errors';
+import { GetMfaEnrollmentResponse } from '@archie/api/user-api/data-transfer-objects';
+import { EnrollmentNotFoundError } from './mfa.errors';
 
 @Injectable()
-export class UserService {
+export class MfaService {
   constructor(
     private auth0Service: Auth0Service,
     private queueService: QueueService,
   ) {}
-
-  async isEmailVerified(userId: string): Promise<GetEmailVerificationResponse> {
-    const user: User = await this.auth0Service.getManagmentClient().getUser({
-      id: userId,
-    });
-    const emailVerified: boolean = <boolean>user.email_verified;
-    const email: string = <string>user.email;
-
-    if (emailVerified) {
-      this.queueService.publishEvent(EMAIL_VERIFIED_TOPIC, {
-        userId,
-        email,
-      });
-    }
-
-    return {
-      isVerified: emailVerified,
-      email,
-    };
-  }
-
-  async getEmailAddress(userId: string): Promise<GetEmailAddressResponse> {
-    const user: User = await this.auth0Service.getManagmentClient().getUser({
-      id: userId,
-    });
-
-    if (user.email === undefined) {
-      throw new NotFoundException();
-    }
-
-    return {
-      email: user.email,
-    };
-  }
-
-  async resendEmailVerification(userId: string): Promise<void> {
-    const user: User = await this.auth0Service.getManagmentClient().getUser({
-      id: userId,
-    });
-    const emailVerified: boolean = <boolean>user.email_verified;
-
-    if (emailVerified) {
-      throw new BadRequestException(
-        'EMAIL_ALREADY_VERIFIED',
-        'Your email has already been verified.',
-      );
-    }
-
-    await this.auth0Service.getManagmentClient().sendEmailVerification({
-      user_id: userId,
-    });
-  }
 
   async enrollMfa(userId: string): Promise<SendEnrollmentTicketResponse> {
     return this.auth0Service
