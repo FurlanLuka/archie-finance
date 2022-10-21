@@ -23,6 +23,13 @@ import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/suc
 import { getUpdatedCreditAndTotal } from './withdrawal-form.helpers';
 import { getWithdrawSchema } from './withdrawal-form.schema';
 import { WithdrawalFormStyled } from './withdrawal-form.styled';
+import { useAuth0 } from '@auth0/auth0-react';
+import {
+  AUTH0_AUDIENCE,
+  AUTH0_CLIENT_ID,
+  AUTH0_DOMAIN,
+} from '../../../../../../../../../apps/ui/dashboard/src/constants/auth';
+import axios from 'axios';
 
 interface WithdrawFormData {
   withdrawAmount: string;
@@ -46,6 +53,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({
   const createWithdrawal = useCreateWithdrawal();
   const maxAmountBN = BigNumber(maxAmount);
   const WithdrawSchema = getWithdrawSchema(maxAmountBN);
+  const x = useAuth0();
 
   const {
     handleSubmit,
@@ -65,6 +73,16 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   useEffect(() => {
+    x.buildAuthorizeUrl({
+      domain: AUTH0_DOMAIN,
+      clientId: AUTH0_CLIENT_ID,
+      audience: AUTH0_AUDIENCE,
+      redirectUri: window.location.origin,
+      scope: 'mfa:reset',
+    }).then((x) => {
+      console.log(x);
+    });
+
     if (createWithdrawal.state === RequestState.SUCCESS) {
       setIsSuccessModalOpen(true);
     }

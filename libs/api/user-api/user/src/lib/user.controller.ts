@@ -1,4 +1,4 @@
-import { AuthGuard } from '@archie/api/utils/auth0';
+import { AuthGuard, ScopeGuard, Scopes } from '@archie/api/utils/auth0';
 import {
   BadRequestException,
   Controller,
@@ -57,7 +57,8 @@ export class UserController {
   }
 
   @Delete('mfa/enrollments/:enrollmentId')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ScopeGuard)
+  @Scopes('mfa:reset')
   @ApiBearerAuth()
   @ApiErrorResponse([EnrollmentNotFoundError])
   async deleteMfaEnrollment(
