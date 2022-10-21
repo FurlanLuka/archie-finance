@@ -21,8 +21,8 @@ export default async function runExecutor(
   ));
 
   Object.keys(data).forEach(key => {
-    logger.info(key)
-    execSync(`echo "${key}=${data[key]}" >> "$GITHUB_ENV"`)
+    logger.info(`Executing: ${`echo "${key}=${data[key]}" >> "$GITHUB_ENV"`}`)
+    execSync(`echo "${key}=${data[key]}" >> $GITHUB_ENV`)
   })
 
   return {

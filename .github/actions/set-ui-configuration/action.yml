@@ -16,3 +16,6 @@ runs:
       shell: bash
       run: |
         npx nx run ${{ inputs.projectName }}:ui-deployment-configuration --environment=${{ inputs.environment }}
+    - name: Test
+      shell: bash
+      run: echo ${{ env.CLOUDFRONT_ID }}
