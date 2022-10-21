@@ -12,7 +12,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/peach-api/borrower"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/peach-api/borrower"],
       "options": {
         "jestConfig": "libs/api/peach-api/borrower/jest.config.ts",
         "passWithNoTests": true

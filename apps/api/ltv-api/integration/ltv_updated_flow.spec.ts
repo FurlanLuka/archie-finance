@@ -24,7 +24,7 @@ import {
   ledgerAccountUpdatedPayloadFactory,
 } from '@archie/api/ledger-api/test-data';
 import { creditLineCreatedDataFactory } from '@archie/api/credit-line-api/test-data';
-import { creditBalanceUpdatedFactory } from '@archie-microservices/api/peach-api/test-data';
+import { creditBalanceUpdatedFactory } from '@archie/api/peach-api/test-data';
 import BigNumber from 'bignumber.js';
 import { DateTime } from 'luxon';
 import {

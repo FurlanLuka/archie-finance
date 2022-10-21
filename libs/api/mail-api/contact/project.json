@@ -12,7 +12,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/mail-api/contact"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/mail-api/contact"],
       "options": {
         "jestConfig": "libs/api/mail-api/contact/jest.config.ts",
         "passWithNoTests": true

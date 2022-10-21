@@ -1,0 +1,9 @@
+{
+  "CLOUDFRONT_ID": "E228CLDFAX793S",
+  "BUCKET_NAME": "dashboard.archie.finance",
+  "NX_API_URL": "https://api.archie.finance",
+  "NX_WS_URL": "wss://ws.archie.finance",
+  "NX_AUTH0_DOMAIN": "auth.archie.finance",
+  "NX_AUTH0_CLIENT_ID": "3zquGmbgOi6zVCudVB6JjfB2xOOL2xr8",
+  "NX_AUTH0_AUDIENCE": "https://api.archie.finance"
+}

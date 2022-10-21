@@ -25,7 +25,7 @@ import {
   CollateralLiquidationTransactionUpdatedStatus,
 } from '@archie/api/fireblocks-api/data-transfer-objects';
 import BigNumber from 'bignumber.js';
-import { Lock } from '@archie-microservices/api/utils/redis';
+import { Lock } from '@archie/api/utils/redis';
 
 interface LiquidatedAccounts {
   asset: AssetInformation;

@@ -7,7 +7,7 @@ import {
   EventModule,
   WebsocketModule,
 } from '@archie/api/websocket-event-api/websocket-event';
-import { RedisModule } from '@archie-microservices/api/utils/redis';
+import { RedisModule } from '@archie/api/utils/redis';
 import { SERVICE_NAME } from '@archie/api/credit-api/constants';
 import { CryptoModule } from '@archie/api/utils/crypto';
 import { AuthModule } from '@archie/api/utils/auth0';

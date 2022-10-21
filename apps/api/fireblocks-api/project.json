@@ -62,7 +62,7 @@
     },
     "test-integration": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/api/fireblocks-api"],
+      "outputs": ["{workspaceRoot}/coverage/apps/api/fireblocks-api"],
       "options": {
         "jestConfig": "apps/api/fireblocks-api/jest.config.ts",
         "passWithNoTests": true,

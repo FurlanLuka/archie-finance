@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { RedisService } from '@archie-microservices/api/utils/redis';
+import { RedisService } from '@archie/api/utils/redis';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { AuthTokenDto } from '@archie/api/websocket-event-api/data-transfer-objects';
 import { ExtendedWebSocket, WsEvent } from './websocket.interfaces';

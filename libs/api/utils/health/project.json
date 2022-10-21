@@ -12,7 +12,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/utils/health"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/utils/health"],
       "options": {
         "jestConfig": "libs/api/utils/health/jest.config.ts",
         "passWithNoTests": true

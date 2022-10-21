@@ -1,0 +1,28 @@
+{
+  "name": "ui-shared-data-access-session",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/shared/data-access/session/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ui/shared/data-access/session/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/ui/shared/data-access/session"
+      ],
+      "options": {
+        "jestConfig": "libs/ui/shared/data-access/session/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

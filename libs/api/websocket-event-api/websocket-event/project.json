@@ -8,12 +8,16 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/api/websocket-event-api/websocket-event/**/*.ts"]
+        "lintFilePatterns": [
+          "libs/api/websocket-event-api/websocket-event/**/*.ts"
+        ]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/websocket-event-api/websocket-event"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/api/websocket-event-api/websocket-event"
+      ],
       "options": {
         "jestConfig": "libs/api/websocket-event-api/websocket-event/jest.config.ts",
         "passWithNoTests": true

@@ -7,7 +7,7 @@ import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
 import { CreditLineModule } from '@archie/api/credit-line-api/credit-line';
 import { AuthModule } from '@archie/api/utils/auth0';
-import { RedisModule } from '@archie-microservices/api/utils/redis';
+import { RedisModule } from '@archie/api/utils/redis';
 import { SERVICE_NAME } from '@archie/api/credit-api/constants';
 
 @Module({

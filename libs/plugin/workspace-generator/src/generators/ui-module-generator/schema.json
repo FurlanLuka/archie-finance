@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "DeploymentConfigGenerator",
+  "title": "",
+  "type": "object",
+  "properties": {
+    "moduleName": {
+      "description": "Module name",
+      "type": "string"
+    },
+    "projectName": {
+      "description": "The UI project to target",
+      "type": "string",
+      "$default": {
+        "$source": "projectName"
+      },
+      "x-prompt": "What UI project would you like to target?"
+    },
+    "moduleType": {
+      "description": "Type of a module you want to generate",
+      "type": "string",
+      "default": "none",
+      "x-prompt": {
+        "message": "Which stylesheet format would you like to use?",
+        "type": "list",
+        "items": [
+          { "value": "PROJECT", "label": "Top level project module" },
+          { "value": "PROJECT_FEATURE", "label": "Project feature module" },
+          { "value": "SHARED", "label": "Top level shared module (does not require projectName to be selected)" },
+          { "value": "SHARED_DATA_ACCESS", "label": "Shared data access module (does not require projectName to be selected)" }
+        ]
+      }
+    }
+  },
+  "required": ["moduleName", "moduleType"]
+}

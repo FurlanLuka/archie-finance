@@ -49,7 +49,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/plugin/migration-generator"],
+      "outputs": ["{workspaceRoot}/coverage/libs/plugin/migration-generator"],
       "options": {
         "jestConfig": "libs/plugin/migration-generator/jest.config.ts",
         "passWithNoTests": true

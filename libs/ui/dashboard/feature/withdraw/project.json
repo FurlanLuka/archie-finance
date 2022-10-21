@@ -1,0 +1,28 @@
+{
+  "name": "ui-dashboard-feature-withdraw",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/dashboard/feature/withdraw/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ui/dashboard/feature/withdraw/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/ui/dashboard/feature/withdraw"
+      ],
+      "options": {
+        "jestConfig": "libs/ui/dashboard/feature/withdraw/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

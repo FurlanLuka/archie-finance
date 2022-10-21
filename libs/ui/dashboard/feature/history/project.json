@@ -1,0 +1,26 @@
+{
+  "name": "ui-dashboard-feature-history",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/dashboard/feature/history/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ui/dashboard/feature/history/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/ui/dashboard/feature/history"],
+      "options": {
+        "jestConfig": "libs/ui/dashboard/feature/history/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

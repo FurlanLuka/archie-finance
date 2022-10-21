@@ -1,0 +1,368 @@
+{
+  "btn_next": "Next",
+  "btn_ok": "Ok",
+  "btn_yes": "Yes",
+  "btn_cancel": "Cancel",
+  "btn_continue": "Continue",
+  "btn_add": "Add",
+  "btn_back": "Back",
+  "btn_claim": "Claim",
+  "btn_redeem": "Redeem",
+  "ltv": "LTV",
+  "on": "on",
+  "off": "off",
+  "error": {
+    "try_again": "Something went wrong, please try again",
+    "refresh_page": "Something went wrong, try refreshing the page"
+  },
+  "steps_indicator": {
+    "first": "Sign up",
+    "second": "Collateralize",
+    "third": "Get Archie Card"
+  },
+  "kyc_step": {
+    "title": "Let's get started",
+    "subtitle": "We are required to collect this information from you in order to issue you a credit card.",
+    "label": {
+      "first_name": "Legal first name",
+      "last_name": "Legal last name",
+      "date_of_birth": "Date of birth",
+      "address": "Address",
+      "apt_unit": "Apt/Unit",
+      "phone_number": "Phone Number",
+      "ssn": "SSN/TIN",
+      "income": "Annual Income"
+    },
+    "placeholder": {
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "date_of_birth": "mm-dd-yyyy",
+      "address": "Mailing address (no P.O. Boxes)",
+      "apt_unit": "Apartment or unit number (optional)",
+      "phone_number": "Phone number",
+      "ssn": "XXX-XX-XXXX",
+      "income": "$"
+    },
+    "error": {
+      "required_field": "This field is required",
+      "too_short": "This name is too short",
+      "too_long": "This name is too long",
+      "not_us_address": "Must be a U.S. address",
+      "not_full_address": "Please enter your full address",
+      "no_street_number": "Please enter your street number",
+      "not_valid_date": "Invalid date",
+      "should_be_older": "You must be at least 18 years old",
+      "should_be_under": "You must be under 122 years old",
+      "cannot_be_future": "Date cannot be in the future",
+      "phone_number_digits": "Invalid phone number",
+      "ssn_digits": "Invalid SSN/TIN",
+      "income_digits": "Please enter your annual income"
+    }
+  },
+  "verify_phone_step": {
+    "title": "Verify phone number",
+    "subtitle": "Enter the 6-digit code you received via SMS",
+    "resend_text": "Didn't get it?",
+    "resend_btn": "Resend"
+  },
+  "verify_email_step": {
+    "title": "Verify Your Email",
+    "subtitle": "A verification email was sent to {{email}}.",
+    "text_1": "Check your email for a verification link from Archie. Once you have verified your email, we'll create your Archie Credit Line.",
+    "text_2": "The email is not correct?",
+    "logout_btn": "Log out.",
+    "resend_btn": "Resend verification email",
+    "resend_btn_disabled": "Resend in {{counter}}"
+  },
+  "collateralization_step": {
+    "title": "Create your credit line",
+    "subtitle": "Select the crypto asset you'd like to collateralize and your desired credit limit",
+    "margin_call_info": {
+      "current_ltv": "Current LTV: {{ltv}}%",
+      "suggested_ltv": "Suggested LTV: 50%",
+      "collateral_to_add": "Collateral to add: {{collateral}}"
+    },
+    "inputs": {
+      "input_range_label": "Credit amount",
+      "input_select_label": "Collateral",
+      "input_select_empty_name": "Select your collateral currency",
+      "input_select_empty_short": "BTC, ETH, SOL, or USDC"
+    },
+    "result": {
+      "first": "Collateral Required",
+      "second": "Credit Limit Ratio",
+      "third": "Interest Rate"
+    },
+    "address": {
+      "title": "Send {{required_collateral}} to:",
+      "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address. Please select another asset above if you'd like to collateralize a different currency.",
+      "info_text_2": "We will settle receipt of your collateral after <b>three</b> confirmations.",
+      "info_link_1": "Follow along on",
+      "info_link_2": "this blockchain explorer "
+    },
+    "terms": {
+      "title": "Terms & Conditions",
+      "first": "You may spend up to <b>75%</b> of the value of your digital assets. We strongly suggest you maintain a line of credit less than <b>{{loan_to_value}}%</b> of your {{asset}} collateral.",
+      "second": "Your minimum payment is due monthly. You will receive an email reminder when your payment is due.",
+      "third": "You will be notified to pay down your balance or add collateral if your <br/> loan-to-value ratio exceeds 75%. You will be immediately partially liquidated if your loan-to-value ratio exceeds 90%."
+    }
+  },
+  "card_step": {
+    "title": {
+      "create": "Issuing credit card...",
+      "complete": "Your Archie Card is ready!"
+    },
+    "subtitle": "You have submitted ${{total_value}} worth of collateral and have a ${{credit_value}} credit limit. Make sure <br /> your email is verified before continuing.",
+    "img_alt": "Your Archie Card is ready",
+    "btn": "Go to dashboard"
+  },
+  "error_indicator": {
+    "title": "Something went wrong",
+    "error_image_alt": "Something went wrong",
+    "btn_reload": "Reload?"
+  },
+  "email_verification_alert": {
+    "title": "Please verify your email",
+    "text_1": "Check your email for a verification link from Archie. If you did not receive a verification email, click",
+    "btn": "here",
+    "text_2": "to resend it.",
+    "img_alt": "Resend verification email"
+  },
+  "collateral_received_modal": {
+    "title": "We received your collateral!",
+    "text": "Your collateral is now worth ${{collateralValue}}, giving you an initial credit line of ${{creditValue}}. You may provide more collateral to increase your credit line. Click 'next' when you're ready to get your Archie Card.",
+    "img_alt": "Collateral received",
+    "btn": "Collateralize more"
+  },
+  "not_enough_collateral_modal": {
+    "title": "Add more collateral for your Archie Card",
+    "text": "We've received your collateral, which is worth ${{creditValue}}. To receive an Archie card, you must provide at least ${{minValue}} in collateral value. Please add ${{difference}} of collateralized assets.",
+    "img_alt": "Not enough collateral",
+    "btn": "Add collateral"
+  },
+  "not_enough_collateral_popup": {
+    "text": "We've received ${{creditValue}} worth of collateral. You must collateralize ${{difference}} more in crypto assets to receive an Archie card."
+  },
+  "collateral_credit_line_popup": {
+    "text": "You have collateralized {{collateral}} and will have an initial credit line of ${{creditValue}}."
+  },
+  "setup_2fa_banner": {
+    "title": "Protect your funds with 2FA",
+    "text": "Setup Multi-Factor Authentication using your authenticator app.",
+    "img_alt": "Setup 2FA"
+  },
+  "close_to_margin_call_alert": {
+    "title": "You are close to entering a margin call!",
+    "text": "The value of your ArchCredit collateral is nearing an LTV rate above 75%. We recommend taking action to prevent a margin call. To quickly remedy this issue, we recommend adding more collateral to your ArchCredit as  paying down your balance through your bank may take up to 3 business days.",
+    "btn": "Cure"
+  },
+  "margin_call_alert": {
+    "title": "Margin Call - Action Required",
+    "text_1": "Your LTV is {{ltv}}%, which exceeds the 75% margin call threshold, as the value of your collateral has declined. To avoid liquidation, please send at least ${{minCollateral}} collateral to restore your LTV to below 75% before <b>{{date}}</b>.",
+    "text_2": "Note that Archie may liquidate some of your collateral if your LTV exceeds 90% at any time, even if it is before the above date.",
+    "btn": "Cure"
+  },
+  "available_credit_card": {
+    "title_1": "ArchCredit Balance",
+    "title_2": "Available Credit",
+    "btn": "Pay now",
+    "text": "Line of Credit: ${{lineOfCredit}}"
+  },
+  "collateral_value_card": {
+    "title": "Collateral Value"
+  },
+  "interest_rate_card": {
+    "title": "Interest Rate"
+  },
+  "rewards_card": {
+    "title": "Rewards",
+    "note_1": "Points",
+    "note_2": "Projected Value"
+  },
+  "next_payment_card": {
+    "title": "Next Payment",
+    "btn": "Pay now",
+    "chart": "Due in {{days}} days",
+    "no_payment_due": "No payment due"
+  },
+  "dashboard_home": {
+    "title": "Hi, {{name}}",
+    "subtitle": "Member since {{date}}",
+    "reveal_card_modal": "Show card details?",
+    "archie_card": {},
+    "available_credit": {},
+    "collateral_value": {},
+    "next_payment": {},
+    "rewards": {},
+    "recent_transactions": {
+      "title": "Recent Transactions",
+      "btn": "View More"
+    }
+  },
+  "dashboard_collateral": {
+    "title": "Collateral",
+    "subtitle": "Wallet"
+  },
+  "dashboard_withdraw": {
+    "title": "Withdraw {{currentAsset}}",
+    "subtitle": "You currently have {{assetAmount}} {{asset}} (~${{assetValue}}).",
+    "subtitle_empty": "You do not have {{asset}} collateralized. ",
+    "subtitle_empty_link": "Feel free to add it!",
+    "address_title": "What address would you like to send your {{currentAsset}} to?",
+    "form": {
+      "amount_label": "How much {{currentAsset}} would you like to withdraw? Max is {{maxAmount}}",
+      "amount_label_empty": "You cannot withdraw any {{currentAsset}}.",
+      "address_label": "Send {{currentAsset}} to:",
+      "address_placeholder": "Enter your address",
+      "required_field_error": "This field is required",
+      "amount_type_error": "Amount must be a number",
+      "amount_min_error": "You must withdraw more than 0",
+      "amount_max_error": "You cannot withdraw more than {{maxAmount}}",
+      "credit_change": "Withdrawing this amount will reduce your Archie Collateral from ${{initialCollateralValue}} to ${{updatedCollateralValue}}. This reduces your credit limit from ${{initialCreditValue}} to ${{updatedCreditValue}}"
+    },
+    "successfull_withdrawal_modal": {
+      "title": "Withdrawal successfully initiated",
+      "subtitle": "We have initiated your withdrawal request. Follow along on the",
+      "link": "the blockchain explorer"
+    },
+    "enter_2fa_code_modal": {
+      "title": "Enter Your 2-Factor Authentication Code",
+      "subtitle": "To complete this action, please verify your 2-Factor Authentication Code from your 2FA application"
+    },
+    "btn": "Withdraw Collateral"
+  },
+  "dashboard_collateralization": {
+    "title": "Send {{selectedAsset}} to your Collateral Wallet",
+    "subtitle_asset": "You currently have {{collateral}} {{collateralAsset}} (~${{collateralValue}}).",
+    "subtitle_credit": "With ArchCredit, your Crypto is your credit. You currently have a ${{collateralTotalValue}} credit line. Add collateral to increase it.",
+    "subtitle_margin_call": "To exit a margin call, you must bring your LTV below 75%. We suggest adding enough collateral to bring your LTV to 50% or below.",
+    "collateral_received_modal": {
+      "title": "We received your collateral!",
+      "text": "Your collateral is now worth ${{collateralValue}}, giving you an initial credit line of ${{creditValue}}."
+    }
+  },
+  "dashboard_payment": {
+    "title": "Payments",
+    "btn_pay": "Make a Payment",
+    "auto_payments": "auto payments:",
+    "connected_accounts": {
+      "title": "Accounts",
+      "no_accounts": "No accounts have been added yet. Connect to your Plaid account to start making payments.",
+      "btn_add": "Add account",
+      "btn_disconnect": "Disconnect"
+    },
+    "account_select": {
+      "label": "Accounts",
+      "empty": "Select an account to connect",
+      "btn_connect": "Connect to Archie"
+    },
+    "plaid_connect": {
+      "title": "Setup payment method",
+      "text": "Let's connect your bank account so you can make payments.",
+      "btn_connect": "Connect with Plaid"
+    }
+  },
+  "dashboard_rewards": {
+    "title": ""
+  },
+  "dashboard_history": {
+    "title": "History",
+    "subtitle": "Recent Transactions",
+    "btn_load_more": "Load more",
+    "btn_statements": "Download Statement",
+    "fetch_statements": "Fetching statements...",
+    "no_statements": "No statements"
+  },
+  "dashboard_settings": {
+    "title": "Settings",
+    "password": {
+      "title": "Reset Password"
+    },
+    "2fa": {
+      "title": "Change 2FA device"
+    },
+    "autopay": {
+      "title": "Autopay Settings",
+      "subtitle": "Autopay is currently {{autopay}}"
+    },
+    "support": {
+      "title": "Contact support",
+      "subtitle": "Need help? Chat with Archie support"
+    },
+    "whitelisted_addresses": {
+      "title": "Manage whitelisted wallet addresses",
+      "subtitle": "Manage addresses you can withdraw collateral to"
+    }
+  },
+  "payment_modal": {
+    "credit_for": "ArchCredit for {{name}}",
+    "interest_owed": "Interest owed: ${{interestOwed}}",
+    "select_account": {
+      "label": "Accounts",
+      "empty": "Select account to pay with",
+      "balance_subtext": "Funds available",
+      "btn_confirm": "Confirm"
+    },
+    "payment_schedule": {
+      "title": "Schedule a payment",
+      "payment_date": "Payment Date",
+      "payment_options": "Payment Options",
+      "schedule": "Schedule",
+      "due_date": "Due date is {{date}}",
+      "balance_owed": "Pay balance owed: ${{balanceOwed}}",
+      "balance_with_interest": "Pay balance owed with interest: ${{balanceWithInterest}}",
+      "full_balance": "Pay full balance: ${{fullBalance}}",
+      "other_amount": "Pay other amount:",
+      "error": {
+        "required_field": "This field is required",
+        "not_valid_date": "Not a valid date",
+        "max_date": "Cannot schedule past due date",
+        "cannot_be_past": "Date cannot be in the past",
+        "amount_type_error": "Amount must be a number",
+        "min_amount": "You must pay more than 0",
+        "max_amount": "You cannot pay more than your owed balance"
+      }
+    },
+    "payment_confirm": {
+      "title": "Confirm payment",
+      "credit_for": "ArchCredit for {{name}}",
+      "balance_note": "Pay balance owed:",
+      "time_note": "This payment will be processed today and will take 2-4 business days to settle."
+    },
+    "payment_scheduled": {
+      "title": "Payment scheduled",
+      "credit_for": "ArchCredit for {{name}}",
+      "scheduled_note": "Your payment of ${{newPayment}} has been scheduled for {{paymentDate}}!",
+      "email_note": "You will receive an email notification.",
+      "time_note": "Your payment will take 2-4 business days to settle."
+    },
+    "pay_with_paypal_form": {
+      "title": "Pay balance",
+      "time_note": "This payment will be processed through Paypal and is subject to their terms and conditions.",
+      "processed_note": "Your payment has been scheduled!",
+      "email_note": "You will receive an email confirmation as soon as your payment has been processed.",
+      "btn": "Pay with Paypal"
+    }
+  },
+  "autopay_modal": {
+    "title": "Manage Autopay",
+    "schedule_text": "Payments are automatically scheduled on each period's due date.",
+    "balance_text": "Payment will be the full statement balance of each period.",
+    "select": {
+      "empty": "Select payment method",
+      "label": "Payment method"
+    },
+    "btn_confirm": "Set Autopay",
+    "consent_text": "I agree to the <btn>Autopay Consent.</btn>",
+    "document_agree": "Got it!",
+    "remove": {
+      "title": "Disable Autopay",
+      "text": "Are you sure you want to disable autopay? Doing so means you need to manually pay your statements.",
+      "btn_confirm": "Disable"
+    }
+  },
+  "limited_functionality_modal": {
+    "title": "App running with limited functionality",
+    "text": "Due to network issues, the app isn't 100% operational. You can continue using it, but an occasional manual refresh may be necessary."
+  }
+}

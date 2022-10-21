@@ -1,0 +1,28 @@
+{
+  "name": "ui-dashboard-feature-collateralization",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/dashboard/feature/collateralization/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ui/dashboard/feature/collateralization/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/ui/dashboard/feature/collateralization"
+      ],
+      "options": {
+        "jestConfig": "libs/ui/dashboard/feature/collateralization/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

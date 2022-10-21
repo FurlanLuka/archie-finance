@@ -23,7 +23,7 @@ import {
 } from './credit_line.errors';
 import BigNumber from 'bignumber.js';
 import { CreditLimitAssetAllocationService } from '../credit_limit_asset_allocation/credit_limit_asset_allocation.service';
-import { Lock } from '@archie-microservices/api/utils/redis';
+import { Lock } from '@archie/api/utils/redis';
 
 @Injectable()
 export class CreditLineService {

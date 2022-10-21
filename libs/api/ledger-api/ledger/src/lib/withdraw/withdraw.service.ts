@@ -31,7 +31,7 @@ import {
 import { INITIATE_COLLATERAL_WITHDRAWAL_COMMAND } from '@archie/api/fireblocks-api/constants';
 import { v4 } from 'uuid';
 import { AssetInformation, AssetsService } from '@archie/api/ledger-api/assets';
-import { Lock } from '@archie-microservices/api/utils/redis';
+import { Lock } from '@archie/api/utils/redis';
 
 @Injectable()
 export class WithdrawService {

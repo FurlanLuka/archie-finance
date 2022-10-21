@@ -5,16 +5,12 @@
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/api/ledger-api",
         "main": "apps/api/ledger-api/src/main.ts",
         "tsConfig": "apps/api/ledger-api/tsconfig.app.json",
-        "assets": [
-          "apps/api/ledger-api/src/assets"
-        ],
+        "assets": ["apps/api/ledger-api/src/assets"],
         "tsPlugins": ["@nestjs/swagger/plugin"]
       },
       "configurations": {
@@ -44,13 +40,9 @@
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "apps/api/ledger-api/**/*.ts"
-        ]
+        "lintFilePatterns": ["apps/api/ledger-api/**/*.ts"]
       }
     },
     "build-openapi": {
@@ -70,9 +62,7 @@
     },
     "test-integration": {
       "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "coverage/apps/api/ledger-api"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/apps/api/ledger-api"],
       "options": {
         "jestConfig": "apps/api/ledger-api/jest.config.ts",
         "passWithNoTests": true,
