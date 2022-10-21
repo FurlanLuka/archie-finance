@@ -20,12 +20,6 @@ runs:
         environment: ${{ inputs.environment }}
     - name: Build UI
       shell: bash
-      env:
-        NX_API_URL: ${{ env.NX_API_URL }}
-        NX_WS_URL: ${{ env.NX_WS_URL }}
-        NX_AUTH0_DOMAIN: ${{ env.NX_AUTH0_DOMAIN }}
-        NX_AUTH0_CLIENT_ID: ${{ env.NX_AUTH0_CLIENT_ID }}
-        NX_AUTH0_AUDIENCE: ${{ env.NX_AUTH0_AUDIENCE }}
       run: |
         npx nx run ${{ inputs.projectName }}:build
     - name: Upload artifacts
