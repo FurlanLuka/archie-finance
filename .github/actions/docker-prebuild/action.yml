@@ -1,15 +1,6 @@
 name: 'Docker prebuild'
 description: 'Prebuild docker image and cache layers'
 
-inputs:
-  projectName:
-    description: 'Project name'
-    required: true
-  environment:
-    description: 'Environment'
-    required: true
-  
-
 runs:
   using: composite
   steps:
