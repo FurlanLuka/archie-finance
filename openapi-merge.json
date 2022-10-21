@@ -1,7 +1,7 @@
 {
   "inputs": [
     {
-      "inputFile": "./dist/apps/api/api/credit-api/target/generated/swagger.json"
+      "inputFile": "./dist/apps/api/credit-api/target/generated/swagger.json"
     },
     {
       "inputFile": "./dist/apps/api/onboarding-api/target/generated/swagger.json"
