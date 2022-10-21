@@ -1,7 +1,4 @@
-import {
-  BadRequestException,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, NotFoundException } from '@nestjs/common';
 
 export class KycNotFoundError extends NotFoundException {
   constructor() {
@@ -12,7 +9,7 @@ export class KycNotFoundError extends NotFoundException {
   }
 }
 
-export class KycAlreadySubmitted extends BadRequestException {
+export class KycAlreadySubmitted extends ConflictException {
   constructor() {
     super(
       'KYC_ALREADY_SUBMITTED',

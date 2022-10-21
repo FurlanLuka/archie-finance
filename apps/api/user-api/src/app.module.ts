@@ -6,9 +6,9 @@ import { HealthModule } from '@archie/api/utils/health';
 import { ConfigVariables, SERVICE_NAME } from '@archie/api/user-api/constants';
 import { CryptoModule } from '@archie/api/utils/crypto';
 import { KycModule } from '@archie/api/user-api/kyc';
-import { UserModule } from '@archie/api/user-api/user';
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
+import { EmailModule, MfaModule } from '@archie/api/user-api/user';
 
 @Module({
   imports: [
@@ -64,7 +64,8 @@ import { QueueModule } from '@archie/api/utils/queue';
     }),
     KycModule,
     HealthModule,
-    UserModule,
+    EmailModule,
+    MfaModule,
     QueueModule.register(),
   ],
   controllers: [],
