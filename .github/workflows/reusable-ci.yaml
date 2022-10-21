@@ -105,10 +105,21 @@ jobs:
         run: npx nx generate @archie/plugin/workspace-generator:test-environment-generator
       - name: Integration Tests
         run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test-integration --parallel=3 --ci
+  prebuild: 
+    name: Prebuild
+    runs-on: ubuntu-latest
+    needs: [setup_and_check, integration_tests]
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+      - uses: ./.github/actions/install-dependencies
+        name: Install dependencies
+      - uses: ./.github/actions/docker-prebuild
+        name: Prebuild docker image and cache layers
   build_and_publish:
     name: Build ${{ matrix.project }}
     if: ${{ needs.setup_and_check.outputs.affectedProjects != '[]' && needs.setup_and_check.outputs.affectedProjects != '' }}
-    needs: [setup_and_check, integration_tests]
+    needs: [setup_and_check, integration_tests, prebuild]
     runs-on: ubuntu-latest
     environment: ${{ inputs.ENVIRONMENT }}
     strategy:

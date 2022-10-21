@@ -1,10 +1,11 @@
 FROM node:16-alpine
+
 WORKDIR /service
 
-COPY dist/apps/api/credit-line-api/ /service
 COPY node_modules/ /service/node_modules
-COPY package-lock.json /service/
-COPY package.json /service/
+COPY package-lock.json package.json /service/
+
+COPY dist/apps/api/credit-line-api/ /service
 
 USER node
 
