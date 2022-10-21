@@ -20,8 +20,6 @@ function getProjectFolder(
   moduleType: string,
   projectName?: string,
 ): string {
-  console.log(moduleType);
-  console.log(projectName);
   if (moduleType === 'PROJECT') {
     return projectName!.replace('ui-', '');
   }
