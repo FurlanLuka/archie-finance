@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "nx build",
-    "build-openapi": "nx run-many --target=build-openapi --all -- skip-nx-cache && openapi-merge-cli",
+    "build-openapi": "nx run-many --target=build-openapi --all --skip-nx-cache && openapi-merge-cli",
     "build:credit-api": "nx run credit-api:build",
     "build:ltv-api": "nx run ltv-api:build",
     "build:mail-api": "nx run mail-api:build",
