@@ -11,6 +11,7 @@ runs:
       with:
         context: ./
         push: true
+        tags: ${{ github.sha }}
         file: ./.github/actions/docker-prebuild/Dockerfile
         cache-from: type=gha, scope=${{ github.sha }}
         cache-to: type=gha, scope=${{ github.sha }}, mode=max
