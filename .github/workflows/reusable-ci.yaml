@@ -114,6 +114,8 @@ jobs:
         name: Checkout
       - uses: ./.github/actions/install-dependencies
         name: Install dependencies
+      - name: Prune
+        run: npm prune
       - uses: ./.github/actions/docker-prebuild
         name: Prebuild docker image and cache layers
         with:
