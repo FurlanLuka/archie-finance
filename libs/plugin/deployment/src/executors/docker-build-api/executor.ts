@@ -19,7 +19,7 @@ export default async function runExecutor(
   logger.info(`Building docker image for ${context.projectName}...`);
 
   execSync(
-    `docker buildx build -f ${projectConfig.root}/Dockerfile.ci -t ${options.ecrRegistry}/${options.ecrRepository}:${versionTag} --cache-from=type=gha,scope${options.sha} .`,
+    `docker buildx build -f ${projectConfig.root}/Dockerfile.ci -t ${options.ecrRegistry}/${options.ecrRepository}:${versionTag} --push --cache-from=type=gha,scope${options.sha} .`,
   );
 
   logger.info(`Pushing docker image to registry...`);
