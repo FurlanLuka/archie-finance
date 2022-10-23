@@ -42,9 +42,11 @@ runs:
     - name: Build
       uses: docker/build-push-action@v2
       with:
-        context: .
+        context: ./
         push: true
-        file: apps/api/${{ inputs.projectName }}/Dockerfile
+        file: ./apps/api/${{ inputs.projectName }}/Dockerfile.ci
+        cache-from: type=gha,scope=${{ github.sha }}
+        cache-to: type=gha,scope=${{ github.sha }}
         tags: ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr-repository }}:${{ inputs.image-tag }}
     # - name: Docker build
     #   shell: bash
