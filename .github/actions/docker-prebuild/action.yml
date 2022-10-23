@@ -13,4 +13,4 @@ runs:
         push: false
         file: ./.github/actions/docker-prebuild/Dockerfile
         cache-from: type=gha, scope=${{ github.sha }}
-        cache-to: type=gha, scope=${{ github.sha }}
+        cache-to: type=gha, scope=${{ github.sha }}, mode=max
