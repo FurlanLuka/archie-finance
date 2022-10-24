@@ -2,7 +2,7 @@ name: Publish docker image
 description: Build and publish docker image
 
 inputs:
-  project:
+  projectName:
     description: 'Name of the buildable project'
     required: true
   aws-access-key-id:
@@ -43,11 +43,5 @@ runs:
       uses: koslib/helm-eks-action@master
       env:
         KUBE_CONFIG_DATA: ${{ inputs.kube-config-data }}
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: ${{ inputs.ecr-repository }}
-        IMAGE_TAG: ${{ inputs.project }}-${{ inputs.image-tag }}
-        ENVIRONMENT: ${{ inputs.environment }}
-        CHART: ./apps/api/${{ inputs.project }}/chart
-        APP_NAME: ${{ inputs.project }}
       with:
-        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment=$ENVIRONMENT
+        command: helm upgrade --install ${{ inputs.projectName }} ./apps/api/${{ inputs.projectName }}/chart --set tag=${{ inputs.projectName }}-${{ inputs.image-tag }} --set image=${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr-repository }} --set environment=${{ inputs.environment }}
