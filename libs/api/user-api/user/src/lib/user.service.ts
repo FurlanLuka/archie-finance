@@ -20,6 +20,8 @@ import { EnrollmentNotFoundError } from './user.errors';
 
 @Injectable()
 export class UserService {
+  MFA_ROLE_ID = 'rol_8iZfnq4Ds6hdFojy';
+
   constructor(
     private auth0Service: Auth0Service,
     private queueService: QueueService,

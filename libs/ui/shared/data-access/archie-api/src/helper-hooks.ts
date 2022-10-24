@@ -30,6 +30,7 @@ import {
   QueryResponse,
   RequestState,
 } from './interface';
+import { AccessForbiddenError } from '@archie/api/utils/auth0';
 
 export const useExtendedQuery = <TQueryFnData>(
   queryKey: string,
@@ -112,7 +113,7 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
   const { setAccessToken, setSessionState, accessToken } =
     useAuthenticatedSession();
 
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 
   const request = useInfiniteQuery<TQueryFnData, ApiErrors>(
     queryKey,
@@ -132,6 +133,18 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
           } catch (error) {
             setSessionState(SessionState.NOT_AUTHENTICATED);
             throw new Error('TOKEN_REFRESH_FAILED');
+          }
+        }
+
+        if (error instanceof AccessForbiddenError) {
+          try {
+            const accessToken = await getAccessTokenWithPopup({
+              scope: error.requiredScopes.join(' '),
+            });
+
+            return queryFn(accessToken, paginationParams);
+          } catch (error) {
+            throw new Error('GET_ACCESS_TOKEN_WITH_SCOPES_FAILED');
           }
         }
 

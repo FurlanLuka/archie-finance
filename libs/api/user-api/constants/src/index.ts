@@ -23,6 +23,7 @@ export enum ConfigVariables {
   QUEUE_URL = 'QUEUE_URL',
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
+  REDIS_URL = 'REDIS_URL',
 }
 
 export const KYC_SUBMITTED_TOPIC = new Event<KycSubmittedPayload>(

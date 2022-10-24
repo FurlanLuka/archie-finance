@@ -73,16 +73,6 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   useEffect(() => {
-    x.buildAuthorizeUrl({
-      domain: AUTH0_DOMAIN,
-      clientId: AUTH0_CLIENT_ID,
-      audience: AUTH0_AUDIENCE,
-      redirectUri: window.location.origin,
-      scope: 'mfa:reset',
-    }).then((x) => {
-      console.log(x);
-    });
-
     if (createWithdrawal.state === RequestState.SUCCESS) {
       setIsSuccessModalOpen(true);
     }

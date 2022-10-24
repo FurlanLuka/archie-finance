@@ -7,14 +7,25 @@ import {
 import { RequestWithUser } from '@archie/api/utils/auth0';
 import { AccessForbiddenError } from './auth.errors';
 import { Reflector } from '@nestjs/core';
+import { RedisService } from '@archie/api/utils/redis';
+import { CryptoService } from '@archie/api/utils/crypto';
 
 const SCOPES_KEY = 'scopes';
+export const SCOPE_GUARD_PREFIX = 'scope-guard-';
+
+export enum AuthScopes {
+  mfa = 'mfa',
+}
 
 @Injectable()
 export class ScopeGuard implements CanActivate {
-  constructor(private reflector: Reflector) {}
+  constructor(
+    private reflector: Reflector,
+    private redisService: RedisService,
+    private cryptoService: CryptoService,
+  ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const scopes: string[] | undefined = this.reflector.get<string[]>(
       SCOPES_KEY,
       context.getHandler(),
@@ -23,17 +34,37 @@ export class ScopeGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const user = request.user;
 
+    if (user === undefined) {
+      return false;
+    }
+
     if (scopes === undefined) {
       return true;
     }
 
+    const hashedToken = this.cryptoService.sha256(
+      request.headers['authorization'],
+    );
+    const tokenAlreadyUsed: boolean =
+      (await this.redisService.get(hashedToken, SCOPE_GUARD_PREFIX)) !== null;
+
     const missingScopes: string[] = scopes.filter(
-      (scope) => !user?.scope.includes(scope) ?? true,
+      (scope) => !user.scope.includes(scope) ?? true,
     );
 
-    if (missingScopes.length !== 0) {
-      throw new AccessForbiddenError(missingScopes);
+    if (missingScopes.length > 0 || tokenAlreadyUsed) {
+      throw new AccessForbiddenError(scopes);
     }
+
+    const currentTimestamp = Date.now() / 1000;
+    const tokenExpiresAfter = user.exp - currentTimestamp;
+
+    await this.redisService.setWithExpiry(
+      hashedToken,
+      'true',
+      tokenExpiresAfter,
+      SCOPE_GUARD_PREFIX,
+    );
 
     return true;
   }

@@ -9,6 +9,7 @@ import { KycModule } from '@archie/api/user-api/kyc';
 import { UserModule } from '@archie/api/user-api/user';
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
+import { RedisModule } from '@archie/api/utils/redis';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { QueueModule } from '@archie/api/utils/queue';
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.QUEUE_URL,
         ConfigVariables.ENCRYPTION_KEY,
+        ConfigVariables.REDIS_URL,
       ],
       parse: (_configVariable, value) => value,
     }),
@@ -66,6 +68,14 @@ import { QueueModule } from '@archie/api/utils/queue';
     HealthModule,
     UserModule,
     QueueModule.register(),
+    RedisModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        url: configService.get(ConfigVariables.REDIS_URL),
+        keyPrefix: SERVICE_NAME,
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [],
   providers: [],
