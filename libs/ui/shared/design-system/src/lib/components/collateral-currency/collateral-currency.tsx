@@ -1,8 +1,9 @@
 import { FC } from 'react';
 
-import { BodyM } from '@archie/ui/shared/design-system';
 import { Icon, IconName } from '@archie/ui/shared/icons';
 import { theme } from '@archie/ui/shared/theme';
+
+import { BodyM } from '../typography/typography.styled';
 
 import { CollateralCurrencyStyled } from './collateral-currency.styled';
 
