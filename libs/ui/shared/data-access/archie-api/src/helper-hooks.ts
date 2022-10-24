@@ -1,4 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
+import { AxiosError } from 'axios';
 import { useState } from 'react';
 import {
   MutationFunction,
@@ -18,7 +19,6 @@ import {
 } from '@archie/ui/shared/data-access/session';
 
 import { ApiError, ApiErrors, UnauthenticatedApiError } from './api-error';
-
 import {
   DefaultVariables,
   sessionRefreshWrapper,
@@ -31,7 +31,6 @@ import {
   QueryResponse,
   RequestState,
 } from './interface';
-import { AxiosError } from 'axios';
 
 export const useExtendedQuery = <TQueryFnData>(
   queryKey: string,

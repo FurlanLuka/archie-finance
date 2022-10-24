@@ -23,7 +23,6 @@ import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/suc
 import { getUpdatedCreditAndTotal } from './withdrawal-form.helpers';
 import { getWithdrawSchema } from './withdrawal-form.schema';
 import { WithdrawalFormStyled } from './withdrawal-form.styled';
-import { useAuth0 } from '@auth0/auth0-react';
 
 interface WithdrawFormData {
   withdrawAmount: string;

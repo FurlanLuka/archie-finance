@@ -1,10 +1,11 @@
 import {
   CanActivate,
+  CustomDecorator,
   ExecutionContext,
   Injectable,
   SetMetadata,
 } from '@nestjs/common';
-import { RequestWithUser } from '@archie/api/utils/auth0';
+import { RequestWithUser } from './auth.interfaces';
 import { AccessForbiddenError } from './auth.errors';
 import { Reflector } from '@nestjs/core';
 import { RedisService } from '@archie/api/utils/redis';
@@ -26,10 +27,9 @@ export class ScopeGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const scopes: string[] | undefined = this.reflector.get<string[]>(
-      SCOPES_KEY,
-      context.getHandler(),
-    );
+    const scopes: string[] | undefined = this.reflector.get<
+      string[] | undefined
+    >(SCOPES_KEY, context.getHandler());
 
     const request = context.switchToHttp().getRequest<RequestWithUser>();
     const user = request.user;
@@ -38,7 +38,7 @@ export class ScopeGuard implements CanActivate {
       return false;
     }
 
-    if (scopes === undefined) {
+    if (scopes === undefined || scopes.length === 0) {
       return true;
     }
 
@@ -49,7 +49,7 @@ export class ScopeGuard implements CanActivate {
       (await this.redisService.get(hashedToken, SCOPE_GUARD_PREFIX)) !== null;
 
     const missingScopes: string[] = scopes.filter(
-      (scope) => !user.scope.includes(scope) ?? true,
+      (scope) => !user.scope.includes(scope),
     );
 
     if (missingScopes.length > 0 || tokenAlreadyUsed) {
@@ -70,4 +70,5 @@ export class ScopeGuard implements CanActivate {
   }
 }
 
-export const Scopes = (...scopes: string[]) => SetMetadata(SCOPES_KEY, scopes);
+export const Scopes = (...scopes: AuthScopes[]): CustomDecorator =>
+  SetMetadata(SCOPES_KEY, scopes);
