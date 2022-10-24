@@ -1,6 +1,11 @@
 name: Install dependencies
 description: Install node modules or pull them from cache
 
+inputs:
+  environment:
+    description: Additional cache key
+    default: development
+
 runs:
   using: composite
   steps:
@@ -9,9 +14,12 @@ runs:
       uses: actions/cache@v2
       with:
         path: ./node_modules
-        key: dependencies-${{ hashFiles('package-lock.json') }}
-
-    - name: Install dependencies
+        key: ${{ inputs.environment }}-dependencies-${{ hashFiles('package-lock.json') }}
+    - name: Install dev dependencies
+      if: ${{ inputs.environment }} == 'development' && steps.cache.outputs.cache-hit != 'true'
       shell: bash
-      if: steps.cache.outputs.cache-hit != 'true'
       run: npm ci
+    - name: Install prod dependencies
+      if: ${{ inputs.environment }} == 'production' && steps.cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: npm ci --production

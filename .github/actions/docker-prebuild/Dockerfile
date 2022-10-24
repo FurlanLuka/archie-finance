@@ -1,5 +1,6 @@
-FROM node:16-alpine
+FROM node:18-alpine
 
 WORKDIR /service
 
-COPY node_modules package-lock.json package.json /service/
+COPY node_modules/ /service/node_modules
+COPY package-lock.json package.json /service/
