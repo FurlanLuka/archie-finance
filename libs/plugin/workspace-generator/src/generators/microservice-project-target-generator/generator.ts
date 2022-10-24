@@ -12,6 +12,7 @@ function normalizeOptions(
 ): NormalizedSchema {
   const projectRoot = joinPathFragments(
     getWorkspaceLayout(tree).appsDir,
+    'api',
     options.projectName,
   );
 

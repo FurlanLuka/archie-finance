@@ -25,6 +25,7 @@ function normalizeOptions(
 ): NormalizedSchema {
   const projectRoot = joinPathFragments(
     getWorkspaceLayout(tree).appsDir,
+    'api',
     options.name,
   );
 
@@ -45,7 +46,7 @@ export default async function (
   options: MicroserviceGenerator,
 ): Promise<GeneratorCallback> {
   const normalizedOptions = normalizeOptions(tree, options);
-
+  console.log(normalizedOptions)
   const initTask = await initGenerator(tree, {
     unitTestRunner: 'jest',
     skipFormat: true,
@@ -54,6 +55,7 @@ export default async function (
   const nodeApplicationTask = await nodeApplicationGenerator(tree, {
     unitTestRunner: 'jest',
     name: normalizedOptions.name,
+    directory: 'api'
   });
 
   createAppFiles(tree, normalizedOptions);

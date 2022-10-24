@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "nx build",
-    "build-openapi": "nx run-many --target=build-openapi --all -- skip-nx-cache && openapi-merge-cli",
+    "build-openapi": "nx run-many --target=build-openapi --all --skip-nx-cache && openapi-merge-cli",
     "build:credit-api": "nx run credit-api:build",
     "build:ltv-api": "nx run ltv-api:build",
     "build:mail-api": "nx run mail-api:build",
@@ -131,6 +131,8 @@
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "~5.40.1",
     "@typescript-eslint/parser": "~5.40.1",
+    "@swc-node/register": "^1.5.4",
+    "@swc/core": "^1.3.10",
     "babel-jest": "29.2.1",
     "babel-loader": "8.2.5",
     "babel-plugin-styled-components": "^2.0.7",

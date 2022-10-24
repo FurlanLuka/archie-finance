@@ -15,6 +15,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { AuthGuard } from '@archie/api/utils/auth0';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { EmailService } from './email.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { RPCResponse, RPCResponseType } from '@archie/api/utils/queue';
@@ -27,18 +30,16 @@ import {
   GetEmailAddressPayload,
   GetEmailAddressResponse,
   GetEmailVerificationResponse,
-  GetEnrollmentResponse,
-  GetMfaEnrollmentResponse,
-  GetSendEnrollmentTicketResponse,
 } from '@archie/api/user-api/data-transfer-objects';
 import { EnrollmentNotFoundError } from './user.errors';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
+import { EmailAlreadyVerifiedError } from './email.errors';
 
-@Controller('v1/user')
-export class UserController {
-  constructor(private userService: UserService) {}
+@Controller('v1/user/email-verification')
+export class EmailController {
+  constructor(private userService: EmailService) {}
 
-  @Get('email-verification')
+  @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   async checkEmailVerification(
@@ -47,10 +48,10 @@ export class UserController {
     return this.userService.isEmailVerified(request.user.sub);
   }
 
-  @Post('email-verification/resend')
+  @Post('resend')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([BadRequestException])
+  @ApiErrorResponse([EmailAlreadyVerifiedError])
   async resendEmailVerification(@Req() request): Promise<void> {
     return this.userService.resendEmailVerification(request.user.sub);
   }
@@ -90,14 +91,14 @@ export class UserController {
 }
 
 @Controller()
-export class UserQueueController {
+export class EmailQueueController {
   private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-user`;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: EmailService) {}
 
   @RequestHandler(
     GET_USER_EMAIL_ADDRESS_RPC,
-    UserQueueController.CONTROLLER_QUEUE_NAME,
+    EmailQueueController.CONTROLLER_QUEUE_NAME,
   )
   async getEmailAddress(
     payload: GetEmailAddressPayload,

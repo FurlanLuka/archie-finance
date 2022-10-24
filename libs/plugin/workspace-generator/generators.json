@@ -23,6 +23,11 @@
       "schema": "./src/generators/microservice-project-target-generator/schema.json",
       "description": "microservice project target generator"
     },
+    "ui-module-generator": {
+      "factory": "./src/generators/ui-module-generator/generator",
+      "schema": "./src/generators/ui-module-generator/schema.json",
+      "description": "UI module generator"
+    },
     "test-environment-generator": {
       "factory": "./src/generators/test-environment-generator/generator",
       "schema": "./src/generators/test-environment-generator/schema.json",

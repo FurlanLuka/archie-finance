@@ -15,7 +15,7 @@ function normalizeOptions(
   tree: Tree,
   options: DeploymentConfigGeneratorSchema,
 ): NormalizedSchema {
-  const projectRoot = `${getWorkspaceLayout(tree).appsDir}/${
+  const projectRoot = `${getWorkspaceLayout(tree).appsDir}/api/${
     options.projectName
   }`;
 
