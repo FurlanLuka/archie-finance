@@ -16,10 +16,10 @@ runs:
         path: ./node_modules
         key: ${{ inputs.environment }}-dependencies-${{ hashFiles('package-lock.json') }}
     - name: Install dev dependencies
-      if: ${{ inputs.environment }} == 'development' && steps.cache.outputs.cache-hit != 'true'
+      if: contains(inputs.environment, 'development') && steps.cache.outputs.cache-hit != 'true'
       shell: bash
       run: npm ci
     - name: Install prod dependencies
-      if: ${{ inputs.environment }} == 'production' && steps.cache.outputs.cache-hit != 'true'
+      if: contains(inputs.environment, 'production') && steps.cache.outputs.cache-hit != 'true'
       shell: bash
       run: npm ci --production
