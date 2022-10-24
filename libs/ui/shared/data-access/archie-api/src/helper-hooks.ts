@@ -18,6 +18,8 @@ import {
 } from '@archie/ui/shared/data-access/session';
 
 import { ApiError, ApiErrors, UnauthenticatedApiError } from './api-error';
+import { AccessForbiddenError } from '@archie/api/utils/auth0';
+
 import {
   DefaultVariables,
   sessionRefreshWrapper,
@@ -30,7 +32,6 @@ import {
   QueryResponse,
   RequestState,
 } from './interface';
-import { AccessForbiddenError } from '@archie/api/utils/auth0';
 
 export const useExtendedQuery = <TQueryFnData>(
   queryKey: string,

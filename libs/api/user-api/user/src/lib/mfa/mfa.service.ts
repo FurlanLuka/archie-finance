@@ -83,4 +83,13 @@ export class MfaService {
       userId,
     });
   }
+
+  async addMfaRole(userId: string): Promise<void> {
+    await this.auth0Service.getManagmentClient().assignRolestoUser(
+      { id: userId },
+      {
+        roles: [this.MFA_ROLE_ID],
+      },
+    );
+  }
 }
