@@ -1,10 +1,9 @@
+import { BigNumber } from 'bignumber.js';
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
-import { BigNumber } from 'bignumber.js';
 
 import { MakePaymentModal } from '@archie/ui/dashboard/feature/make-payment';
-import { LoanToValueChart } from '@archie/ui/dashboard/components';
 import { canUserSchedulePayment } from '@archie/ui/dashboard/utils';
 import { LTV } from '@archie/ui/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
@@ -14,6 +13,7 @@ import {
   QueryResponse,
   RequestState,
 } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetObligations } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 import {
   ButtonOutline,
   Card,
@@ -23,7 +23,8 @@ import {
   BodyS,
 } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
-import { useGetObligations } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
+
+import { LoanToValueChart } from '../../charts/loan-to-value/loan-to-value';
 
 export const AvailableCredit: FC = () => {
   const { t } = useTranslation();

@@ -2,9 +2,8 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
-import { useConnectAccount } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-connect-account';
 import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
-import { ConnectedAccountItem } from '@archie/ui/dashboard/components';
+import { useConnectAccount } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-connect-account';
 import {
   ButtonPrimary,
   Select,
@@ -13,6 +12,7 @@ import {
   BodyM,
 } from '@archie/ui/shared/design-system';
 
+import { ConnectedAccountItem } from './blocks/connected-account-item/connected-account-item';
 import { ConnectableAccountSelectStyled } from './connectable-account-select.styled';
 
 interface ConnectableAccountSelectProps {
