@@ -18,11 +18,7 @@
     "imageTag": {
       "type": "string",
       "description": "Tag name for the image"
-    },
-    "sha": {
-      "type": "string",
-      "description": "Commit sha"
     }
   },
-  "required": ["ecrRegistry", "ecrRepository", "imageTag", "sha"]
+  "required": ["ecrRegistry", "ecrRepository", "imageTag"]
 }

@@ -19,14 +19,14 @@ export default async function runExecutor(
   logger.info(`Building docker image for ${context.projectName}...`);
 
   execSync(
-    `docker buildx build -f ${projectConfig.root}/Dockerfile.ci -t ${options.ecrRegistry}/${options.ecrRepository}:${versionTag} --push .`,
+    `docker build -f ${projectConfig.root}/Dockerfile.ci -t ${options.ecrRegistry}/${options.ecrRepository}:${versionTag} .`,
   );
 
-  // logger.info(`Pushing docker image to registry...`);
+  logger.info(`Pushing docker image to registry...`);
 
-  // execSync(`
-  //   docker push ${options.ecrRegistry}/${options.ecrRepository}:${versionTag}
-  // `);
+  execSync(`
+    docker push ${options.ecrRegistry}/${options.ecrRepository}:${versionTag}
+  `);
 
   console.log('Executor ran for Build', options);
 

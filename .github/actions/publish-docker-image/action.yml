@@ -49,11 +49,3 @@ runs:
         build-args: BASE_IMAGE=${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr-repository }}:prebuild-${{ github.sha }}
         cache-to: type=gha,scope=${{ github.sha }}
         tags: ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr-repository }}:${{ inputs.image-tag }}
-    # - name: Docker build
-    #   shell: bash
-    #   env:
-    #     ECR_REPOSITORY: ${{ inputs.ecr-repository }}
-    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-    #     IMAGE_TAG: ${{ inputs.image-tag }}
-    #   run: |
-    #     npx nx run ${{ inputs.projectName }}:build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG --sha=${{ github.sha }}
