@@ -20,12 +20,12 @@ import {
   GetEnrollmentResponse,
   GetMfaEnrollmentResponse,
   GetSendEnrollmentTicketResponse,
-  MfaEnrolledPayload,
+  KycSubmittedPayload,
 } from '@archie/api/user-api/data-transfer-objects';
 import { EnrollmentNotFoundError } from './mfa.errors';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import {
-  MFA_ENROLLED_TOPIC,
+  KYC_SUBMITTED_TOPIC,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/user-api/constants';
 
@@ -73,8 +73,8 @@ export class MfaQueueController {
 
   private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-mfa`;
 
-  @Subscribe(MFA_ENROLLED_TOPIC, MfaQueueController.CONTROLLER_QUEUE_NAME)
-  async handleMfaEnrolledEvent(payload: MfaEnrolledPayload): Promise<void> {
+  @Subscribe(KYC_SUBMITTED_TOPIC, MfaQueueController.CONTROLLER_QUEUE_NAME)
+  async handleMfaEnrolledEvent(payload: KycSubmittedPayload): Promise<void> {
     return this.mfaService.addMfaRole(payload.userId);
   }
 }

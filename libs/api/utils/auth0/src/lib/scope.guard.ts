@@ -57,7 +57,7 @@ export class ScopeGuard implements CanActivate {
     }
 
     const currentTimestamp = Date.now() / 1000;
-    const tokenExpiresAfter = user.exp - currentTimestamp;
+    const tokenExpiresAfter = Math.ceil(user.exp - currentTimestamp);
 
     await this.redisService.setWithExpiry(
       hashedToken,
