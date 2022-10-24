@@ -61,6 +61,7 @@ export class MfaController {
   }
 }
 
+@Controller()
 export class MfaQueueController {
   constructor(private mfaService: MfaService) {}
 
