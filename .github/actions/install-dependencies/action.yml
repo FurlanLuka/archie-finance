@@ -18,7 +18,7 @@ runs:
     - name: Install dev dependencies
       if: ${{ inputs.environment }} == 'development' && steps.cache.outputs.cache-hit != 'true'
       shell: bash
-      run: npm ci
+      run: npm i
     - name: Install prod dependencies
       if: ${{ inputs.environment }} == 'production' && steps.cache.outputs.cache-hit != 'true'
       shell: bash
