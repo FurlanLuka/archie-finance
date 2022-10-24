@@ -1,10 +1,9 @@
-FROM node:16-alpine
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
 WORKDIR /service
 
 COPY dist/apps/api/websocket-event-api/ /service
-COPY node_modules/ /service/node_modules
-COPY package-lock.json /service/
-COPY package.json /service/
 
 USER node
 
