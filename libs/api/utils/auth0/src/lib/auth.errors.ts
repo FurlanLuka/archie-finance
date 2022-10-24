@@ -1,8 +1,6 @@
 import { ForbiddenException } from '@nestjs/common';
 
 export class AccessForbiddenError extends ForbiddenException {
-  requiredScopes: string[];
-
   constructor(scopes: string[]) {
     super({
       statusCode: 403,

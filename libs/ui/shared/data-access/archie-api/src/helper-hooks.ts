@@ -18,7 +18,6 @@ import {
 } from '@archie/ui/shared/data-access/session';
 
 import { ApiError, ApiErrors, UnauthenticatedApiError } from './api-error';
-import { AccessForbiddenError } from '@archie/api/utils/auth0';
 
 import {
   DefaultVariables,
@@ -32,6 +31,7 @@ import {
   QueryResponse,
   RequestState,
 } from './interface';
+import { AxiosError } from 'axios';
 
 export const useExtendedQuery = <TQueryFnData>(
   queryKey: string,
@@ -137,15 +137,20 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
           }
         }
 
-        if (error instanceof AccessForbiddenError) {
-          try {
-            const accessToken = await getAccessTokenWithPopup({
-              scope: error.requiredScopes.join(' '),
-            });
+        // TODO: compare with BE error
+        if (error instanceof AxiosError) {
+          const responseData = error.response?.data;
 
-            return queryFn(accessToken, paginationParams);
-          } catch (error) {
-            throw new Error('GET_ACCESS_TOKEN_WITH_SCOPES_FAILED');
+          if (responseData.message === 'FORBIDDEN_RESOURCE_ACCESS') {
+            try {
+              const accessToken = await getAccessTokenWithPopup({
+                scope: responseData.requiredScopes.join(' '),
+              });
+
+              return queryFn(accessToken, paginationParams);
+            } catch (error) {
+              throw new Error('GET_ACCESS_TOKEN_WITH_SCOPES_FAILED');
+            }
           }
         }
 
