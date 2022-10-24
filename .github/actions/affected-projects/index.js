@@ -19,6 +19,8 @@ const run = () => {
 
   core.setOutput('isAffected', affectedProjects.length > 0);
   core.notice(`isAffected: ${affectedProjects.length > 0}`);
+
+  core.setOutput('hasAffectedApi', affectedProjects.find((project) => project.indexOf()))
 };
 
 run();

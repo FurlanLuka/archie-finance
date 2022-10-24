@@ -46,6 +46,6 @@ runs:
         push: true
         file: ./apps/api/${{ inputs.projectName }}/Dockerfile.ci
         cache-from: type=gha,scope=${{ github.sha }}
-        build-args: BASE_IMAGE=${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr-repository }}:prebuild-${{ github.sha }}
+        build-args: BASE_IMAGE=${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr-repository }}:${{ inputs.projectName }}-${{ github.sha }}
         cache-to: type=gha,scope=${{ github.sha }}
         tags: ${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr-repository }}:${{ inputs.image-tag }}
