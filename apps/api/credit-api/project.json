@@ -68,5 +68,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:app:credit-api", "scope:api:app"]
 }
