@@ -7,8 +7,8 @@ import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/
 import { useCreateLinkToken } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
 import { TitleS, BodyM } from '@archie/ui/shared/design-system';
 
-import { PlaidConnect } from './blocks/plaid-connect/plaid-connect';
 import { PlaidConnectLoading } from './blocks/plaid-connect-loading/plaid-connect-loading';
+import { PlaidConnect } from './blocks/plaid-connect/plaid-connect';
 import { PlaidLinkStyled } from './plaid-link.styled';
 
 // TODO 2 layer prop passing isn't optimal, rework if the flow becomes more complex
