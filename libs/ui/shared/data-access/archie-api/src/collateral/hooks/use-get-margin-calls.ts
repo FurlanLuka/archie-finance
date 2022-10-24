@@ -3,7 +3,6 @@ import { QueryResponse } from '../../interface';
 import {
   getMarginCalls,
   MarginCall,
-  MarginCallStatus,
 } from '../api/get-margin-calls';
 
 export const MARGIN_CALLS_RECORD_QUERY_KEY = 'margin_calls_record';

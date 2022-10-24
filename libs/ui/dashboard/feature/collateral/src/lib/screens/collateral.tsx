@@ -4,24 +4,11 @@ import { Navigate } from 'react-router-dom';
 
 import { MarginCallAlert } from '@archie/ui/dashboard/components';
 import { LTVText, LTVColor } from '@archie/ui/shared/constants';
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
-import { LTV } from '@archie/ui/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { CreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/api/get-credit-line';
 import { useGetCreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/hooks/use-get-credit-line';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import {
-  Card,
-  Skeleton,
-  Badge,
-  TitleM,
-  TitleS,
-  BodyM,
-} from '@archie/ui/shared/design-system';
+import { Card, Skeleton, Badge, TitleM, TitleS, BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
 import { CollateralInfo } from '../components/collateral-info/collateral-info';
@@ -31,9 +18,9 @@ import { CollateralStyled } from './collateral.styled';
 export const CollateralScreen: FC = () => {
   const { t } = useTranslation();
 
-  const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
-  const getLTVResponse: QueryResponse<LTV> = useGetLTV();
-  const getCreditLineResponse: QueryResponse<CreditLine> = useGetCreditLine();
+  const getLedgerResponse = useGetLedger();
+  const getLTVResponse = useGetLTV();
+  const getCreditLineResponse = useGetCreditLine();
 
   const getContent = () => {
     // TODO: Think of optimizing these
@@ -67,9 +54,7 @@ export const CollateralScreen: FC = () => {
       return (
         <Card column padding="1.5rem 1.5rem 2rem">
           <div className="subtitle-group">
-            <TitleS className="subtitle">
-              {t('dashboard_collateral.subtitle')}
-            </TitleS>
+            <TitleS className="subtitle">{t('dashboard_collateral.subtitle')}</TitleS>
             <TitleM weight={400} className="total">
               ${getLedgerResponse.data.value}
             </TitleM>
@@ -80,9 +65,7 @@ export const CollateralScreen: FC = () => {
                 </BodyM>
                 <TitleS weight={400}>{ltvData.ltv.toFixed(2)}%</TitleS>
               </div>
-              <Badge statusColor={LTVColor[ltvData.status]}>
-                {LTVText[ltvData.status]}
-              </Badge>
+              <Badge statusColor={LTVColor[ltvData.status]}>{LTVText[ltvData.status]}</Badge>
             </div>
           </div>
           <CollateralInfo

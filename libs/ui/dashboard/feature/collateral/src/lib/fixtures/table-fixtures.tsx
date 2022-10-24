@@ -4,16 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
 import { CollateralAssets } from '@archie/ui/shared/constants';
-import { AssetPrice } from '@archie/ui/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie/ui/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
-import {
-  ButtonOutline,
-  CollateralCurrency,
-} from '@archie/ui/shared/design-system';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { ButtonOutline, CollateralCurrency } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
 import {
@@ -30,13 +23,7 @@ interface CollateralAssetCellProps {
 const CollateralAssetCell: FC<CollateralAssetCellProps> = ({ id }) => {
   const asset = CollateralAssets[id];
 
-  return (
-    <CollateralCurrency
-      icon={asset?.icon}
-      name={asset?.name}
-      short={asset?.id}
-    />
-  );
+  return <CollateralCurrency icon={asset?.icon} name={asset?.name} short={asset?.id} />;
 };
 
 interface ChangeCellProps {
@@ -44,13 +31,11 @@ interface ChangeCellProps {
 }
 
 const ChangeCell: FC<ChangeCellProps> = ({ id }) => {
-  const getAssetPriceResponse: QueryResponse<AssetPrice[]> = useGetAssetPrice();
+  const getAssetPriceResponse = useGetAssetPrice();
 
   const getAssetDailyChange = () => {
     if (getAssetPriceResponse.state === RequestState.SUCCESS) {
-      const asset = getAssetPriceResponse.data.find(
-        (asset) => asset.assetId === id,
-      );
+      const asset = getAssetPriceResponse.data.find((asset) => asset.assetId === id);
 
       if (asset) {
         return asset.dailyChange;
@@ -97,20 +82,10 @@ const ActionsCell: FC<ActionsCellProps> = ({ canClaim, id }) => {
 
   return (
     <ActionsCellStyled>
-      <ButtonOutline
-        small
-        width="100%"
-        color={theme.textPositive}
-        onClick={() => navigate(`add/${id}`)}
-      >
+      <ButtonOutline small width="100%" color={theme.textPositive} onClick={() => navigate(`add/${id}`)}>
         {t('btn_add')}
       </ButtonOutline>
-      <ButtonOutline
-        small
-        width="100%"
-        isDisabled={!canClaim}
-        onClick={() => navigate(`withdraw/${id}`)}
-      >
+      <ButtonOutline small width="100%" isDisabled={!canClaim} onClick={() => navigate(`withdraw/${id}`)}>
         {t('btn_claim')}
       </ButtonOutline>
     </ActionsCellStyled>
@@ -168,15 +143,8 @@ export const tableColumns = [
         Header: '',
         accessor: 'actions',
         width: 1,
-        Cell: ({
-          value: { collateral_asset, isHolding, isInMarginCall },
-        }: any) => {
-          return (
-            <ActionsCell
-              id={collateral_asset}
-              canClaim={isHolding && !isInMarginCall}
-            />
-          );
+        Cell: ({ value: { collateral_asset, isHolding, isInMarginCall } }: any) => {
+          return <ActionsCell id={collateral_asset} canClaim={isHolding && !isInMarginCall} />;
         },
       },
     ],

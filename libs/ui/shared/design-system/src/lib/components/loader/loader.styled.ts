@@ -16,14 +16,14 @@ const stretchdelay = keyframes`
 
 export const LoaderStyled = styled.div<LoaderProps>`
   width: 50px;
-  height: 35px;
+  height: 32px;
   margin: ${({ marginAuto }) => marginAuto && 'auto'};
 
   .rect {
     display: inline-block;
     background-color: ${({ color, theme }) => color ?? theme.loaderBackground};
     height: 100%;
-    width: 5px;
+    width: 4px;
     margin-left: 2px;
     animation: ${stretchdelay} 1.2s infinite ease-in-out;
 

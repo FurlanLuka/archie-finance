@@ -1,10 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  MutationQueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { usePollMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-poll-mfa-enrollment';
 import { useStartMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-start-mfa-enrollment';
 import { ButtonGhost, BodyL, BodyM } from '@archie/ui/shared/design-system';
@@ -15,25 +12,25 @@ import { Setup2faBannerStyled } from './setup-2fa.styled';
 
 export const Setup2faBanner: FC = () => {
   const { t } = useTranslation();
+  const startMfaEnrollmentMutation = useStartMfaEnrollment();
+
   const [shouldPollMfaEnrollment, setShouldPollMfaEnrollment] = useState(false);
-  const startMfaEnrollmentResponse: MutationQueryResponse =
-    useStartMfaEnrollment();
 
   usePollMfaEnrollment(shouldPollMfaEnrollment);
 
   useEffect(() => {
-    if (startMfaEnrollmentResponse.state === RequestState.SUCCESS) {
+    if (startMfaEnrollmentMutation.state === RequestState.SUCCESS) {
       if (shouldPollMfaEnrollment === false) {
-        window.open(startMfaEnrollmentResponse.data.ticket_url, '_blank');
+        window.open(startMfaEnrollmentMutation.data.ticket_url, '_blank');
       }
 
       setShouldPollMfaEnrollment(true);
     }
-  }, [startMfaEnrollmentResponse]);
+  }, [startMfaEnrollmentMutation]);
 
   const handleClick = () => {
-    if (startMfaEnrollmentResponse.state === RequestState.IDLE) {
-      startMfaEnrollmentResponse.mutate({});
+    if (startMfaEnrollmentMutation.state === RequestState.IDLE) {
+      startMfaEnrollmentMutation.mutate({});
     }
   };
 
