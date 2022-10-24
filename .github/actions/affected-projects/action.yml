@@ -11,6 +11,10 @@ outputs:
     description: 'Indicates if any project is affected'
   affectedProjects:
     description: Affected projects matrix
+  hasAffectedApi:
+    description: Flag
+  hasAffectedUi:
+    description: Flag
 
 runs:
   using: 'node16'
