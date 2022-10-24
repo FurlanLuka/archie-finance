@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
+import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects';
 import { CollateralAssets } from '@archie/ui/shared/constants';
-import { AssetPrice } from '@archie/ui/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie/ui/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import {
   QueryResponse,

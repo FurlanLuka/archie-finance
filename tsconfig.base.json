@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "strictNullChecks": true,
+    "strictPropertyInitialization": false,
     "paths": {
       "@archie/api/credit-api/constants": [
         "libs/api/credit-api/constants/src/index.ts"
