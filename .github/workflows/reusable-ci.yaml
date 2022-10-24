@@ -170,13 +170,10 @@ jobs:
       run: exit 1
     - uses: actions/checkout@v2
       name: Checkout
-    - uses: ./.github/actions/install-dependencies
-      name: Install dependencies
     - if: contains(matrix.project, 'api')
       uses: ./.github/actions/deploy-api
       name: Deploy API
       with:
-        projectName: ${{ matrix.project }}
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ inputs.AWS_REGION }}
