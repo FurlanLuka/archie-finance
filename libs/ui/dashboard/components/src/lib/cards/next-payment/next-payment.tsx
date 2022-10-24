@@ -1,10 +1,14 @@
-import { FC, useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
+import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Navigate } from 'react-router-dom';
 
 import { MakePaymentModal } from '@archie/ui/dashboard/feature/make-payment';
-import { NextPaymentChart } from '@archie/ui/dashboard/components';
+import { canUserSchedulePayment } from '@archie/ui/dashboard/utils';
+import {
+  QueryResponse,
+  RequestState,
+} from '@archie/ui/shared/data-access/archie-api/interface';
 import {
   CREDIT_LINE_NOT_FOUND_ERROR,
   MISSING_PAYMENT_INFO_ERROR,
@@ -18,11 +22,8 @@ import {
   TitleM,
   BodyM,
 } from '@archie/ui/shared/design-system';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
-import { canUserSchedulePayment } from '@archie/ui/dashboard/utils';
+
+import { NextPaymentChart } from '../../charts/next-payment/next-payment';
 
 interface NextPaymentProps {
   withBtn?: boolean;
