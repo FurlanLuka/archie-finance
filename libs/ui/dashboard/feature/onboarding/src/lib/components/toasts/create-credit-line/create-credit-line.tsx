@@ -32,7 +32,7 @@ export const CreateCreditLine: FC<CreateCreditLineProps> = ({
     <ToastList>
       <Toast>
         <BodyM weight={700}>
-          {t('collateral_credit_line_popup.text', {
+          {t('collateral_credit_line_toast.text', {
             collateral: collateralText,
             creditValue: creditValue,
           })}

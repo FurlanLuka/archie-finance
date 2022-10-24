@@ -18,7 +18,7 @@ export const NotEnoughCollateral: FC<NotEnoughCollateralProps> = ({
     <ToastList>
       <Toast>
         <BodyM weight={700}>
-          {t('not_enough_collateral_popup.text', {
+          {t('not_enough_collateral_toast.text', {
             creditValue: creditValue,
             difference: BigNumber(MIN_LINE_OF_CREDIT)
               .minus(creditValue)

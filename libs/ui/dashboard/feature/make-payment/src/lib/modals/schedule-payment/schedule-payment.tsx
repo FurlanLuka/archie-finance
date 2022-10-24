@@ -13,38 +13,21 @@ interface SchedulePaymentModalProps {
   close: () => void;
 }
 
-export const SchedulePaymentModal: FC<SchedulePaymentModalProps> = ({
-  close,
-}) => {
+export const SchedulePaymentModal: FC<SchedulePaymentModalProps> = ({ close }) => {
   const getKycResponse = useGetKyc();
   const getObligationsResponse = useGetObligations();
 
   const getContent = () => {
-    if (
-      getKycResponse.state === RequestState.LOADING ||
-      getObligationsResponse.state === RequestState.LOADING
-    ) {
+    if (getKycResponse.state === RequestState.LOADING || getObligationsResponse.state === RequestState.LOADING) {
       return <Loader marginAuto />;
     }
 
-    if (
-      getKycResponse.state === RequestState.ERROR ||
-      getObligationsResponse.state === RequestState.ERROR
-    ) {
+    if (getKycResponse.state === RequestState.ERROR || getObligationsResponse.state === RequestState.ERROR) {
       return <Navigate to="/error" state={{ prevPath: '/payment' }} />;
     }
 
-    if (
-      getKycResponse.state === RequestState.SUCCESS &&
-      getObligationsResponse.state === RequestState.SUCCESS
-    ) {
-      return (
-        <PaymentSteps
-          obligations={getObligationsResponse.data}
-          kycData={getKycResponse.data}
-          close={close}
-        />
-      );
+    if (getKycResponse.state === RequestState.SUCCESS && getObligationsResponse.state === RequestState.SUCCESS) {
+      return <PaymentSteps obligations={getObligationsResponse.data} kycData={getKycResponse.data} close={close} />;
     }
 
     return <></>;
