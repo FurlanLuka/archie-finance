@@ -47,6 +47,8 @@ jobs:
           main-branch-name: ${{ inputs.BASE_BRANCH_NAME }}
       - uses: ./.github/actions/install-dependencies
         name: Install dependencies
+        with:
+          environment: development
       - name: Workspace lint
         run: npx nx-cloud record -- npx nx workspace-lint
       - name: Affected project lint
@@ -101,6 +103,8 @@ jobs:
           main-branch-name: ${{ inputs.BASE_BRANCH_NAME }}
       - uses: ./.github/actions/install-dependencies
         name: Install dependencies
+        with:
+          environment: development
       - name: Prepare testing environment
         run: npx nx generate @archie/plugin/workspace-generator:test-environment-generator
       - name: Integration Tests
