@@ -113,7 +113,7 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
   const { setAccessToken, setSessionState, accessToken } =
     useAuthenticatedSession();
 
-  const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
 
   const request = useInfiniteQuery<TQueryFnData, ApiErrors>(
     queryKey,
@@ -133,23 +133,6 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
           } catch (error) {
             setSessionState(SessionState.NOT_AUTHENTICATED);
             throw new Error('TOKEN_REFRESH_FAILED');
-          }
-        }
-
-        // TODO: compare with BE error
-        if (error instanceof AxiosError) {
-          const responseData = error.response?.data;
-
-          if (responseData.message === 'FORBIDDEN_RESOURCE_ACCESS') {
-            try {
-              const accessToken = await getAccessTokenWithPopup({
-                scope: responseData.requiredScopes.join(' '),
-              });
-
-              return queryFn(accessToken, paginationParams);
-            } catch (error) {
-              throw new Error('GET_ACCESS_TOKEN_WITH_SCOPES_FAILED');
-            }
           }
         }
 
