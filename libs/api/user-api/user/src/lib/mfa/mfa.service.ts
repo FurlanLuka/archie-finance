@@ -1,9 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {
-  Enrollment,
-  EnrollmentStatus,
-  SendEnrollmentTicketResponse,
-} from 'auth0';
+import { Enrollment, SendEnrollmentTicketResponse } from 'auth0';
 import { Auth0Service } from '@archie/api/user-api/auth0';
 import {
   MFA_REMOVED_TOPIC,
@@ -11,7 +7,6 @@ import {
 } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import {
-  EnrollmentType,
   GetEnrollmentsQuery,
   GetMfaEnrollmentResponse,
 } from '@archie/api/user-api/data-transfer-objects';
@@ -19,8 +14,6 @@ import { EnrollmentNotFoundError } from './mfa.errors';
 
 @Injectable()
 export class MfaService {
-  MFA_ROLE_ID = 'rol_8iZfnq4Ds6hdFojy';
-
   constructor(
     private auth0Service: Auth0Service,
     private queueService: QueueService,
@@ -110,14 +103,5 @@ export class MfaService {
     this.queueService.publishEvent(MFA_REMOVED_TOPIC, {
       userId,
     });
-  }
-
-  async addMfaRole(userId: string): Promise<void> {
-    await this.auth0Service.getManagmentClient().assignRolestoUser(
-      { id: userId },
-      {
-        roles: [this.MFA_ROLE_ID],
-      },
-    );
   }
 }

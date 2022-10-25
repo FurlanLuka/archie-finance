@@ -10,6 +10,7 @@ import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
 import { RedisModule } from '@archie/api/utils/redis';
 import { EmailModule, MfaModule } from '@archie/api/user-api/user';
+import { RolesModule } from '@archie/api/user-api/user';
 
 @Module({
   imports: [
@@ -68,6 +69,7 @@ import { EmailModule, MfaModule } from '@archie/api/user-api/user';
     HealthModule,
     EmailModule,
     MfaModule,
+    RolesModule,
     QueueModule.register(),
     RedisModule.register({
       imports: [ConfigModule],
