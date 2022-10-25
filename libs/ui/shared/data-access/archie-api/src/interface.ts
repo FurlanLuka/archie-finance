@@ -4,6 +4,7 @@ export interface ApiErrorResponse {
   statusCode: number;
   message: string;
   error?: string;
+  requiredScopes?: string[];
 }
 
 export enum RequestState {
@@ -34,11 +35,7 @@ interface IdleQueryResponse {
   fetch: () => void;
 }
 
-export type QueryResponse<T> =
-  | LoadingQueryResponse
-  | ErrorQueryResponse
-  | SuccessQueryResponse<T>
-  | IdleQueryResponse;
+export type QueryResponse<T> = LoadingQueryResponse | ErrorQueryResponse | SuccessQueryResponse<T> | IdleQueryResponse;
 
 interface LoadingMutationQueryResponse {
   state: RequestState.LOADING;
