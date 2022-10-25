@@ -1,6 +1,5 @@
 import { Controller } from '@nestjs/common';
 import {
-  DEFAULT_ROLE_MIGRATION_TOPIC,
   KYC_SUBMITTED_TOPIC,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/user-api/constants';
@@ -17,18 +16,5 @@ export class RolesQueueController {
   @Subscribe(KYC_SUBMITTED_TOPIC, RolesQueueController.CONTROLLER_QUEUE_NAME)
   async handleKycSubmittedEvent(payload: KycSubmittedPayload): Promise<void> {
     return this.rolesService.addDefaultRole(payload.userId);
-  }
-
-  @Subscribe(
-    DEFAULT_ROLE_MIGRATION_TOPIC,
-    RolesQueueController.CONTROLLER_QUEUE_NAME,
-    {
-      autoDelete: true,
-      useIdempotency: false,
-      requeueOnError: false,
-    },
-  )
-  async handleDefaultRoleMigration(_payload: unknown): Promise<void> {
-    return this.rolesService.addDefaultRoleToAllExistingUsers();
   }
 }

@@ -22,32 +22,4 @@ export class RolesService {
       },
     );
   }
-
-  // TODO: remove - only temporary
-  async addDefaultRoleToAllExistingUsers(page = 0): Promise<void> {
-    const users = await this.auth0Service.getManagmentClient().getUsers({
-      page,
-      per_page: 5,
-    });
-
-    function sleep(ms: number): Promise<void> {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-    await sleep(2000);
-
-    await Promise.all(
-      users.map(async (user) => {
-        await this.auth0Service.getManagmentClient().assignRolestoUser(
-          { id: user.user_id! },
-          {
-            roles: [this.DEFAULT_ROLE_ID],
-          },
-        );
-      }),
-    );
-
-    if (users.length > 0) {
-      await this.addDefaultRoleToAllExistingUsers(page + 1);
-    }
-  }
 }

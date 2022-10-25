@@ -35,12 +35,6 @@ export const KYC_SUBMITTED_TOPIC = new Event<KycSubmittedPayload>(
   },
 );
 
-export const DEFAULT_ROLE_MIGRATION_TOPIC = new Event<unknown>(
-  'user.default_roles.migrate',
-  1,
-  {},
-);
-
 export const EMAIL_VERIFIED_TOPIC = new Event<EmailVerifiedPayload>(
   'user.email.verified',
   1,
