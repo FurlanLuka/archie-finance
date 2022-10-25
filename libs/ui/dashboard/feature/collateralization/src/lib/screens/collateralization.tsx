@@ -15,12 +15,9 @@ import { CureMarginCall } from '../components/cure-margin-call/cure-margin-call'
 import { CollateralizationStyled } from './collateralization.styled';
 
 export const CollateralizationScreen: FC = () => {
-  const params = useParams<CurrentAssetRouteParams>();
+  const { asset } = useParams<CurrentAssetRouteParams>();
+
   const getLTVResponse = useGetLTV();
-
-  console.log(params);
-
-  const asset = params.asset;
 
   if (asset === undefined) {
     return <Navigate to="/collateral" />;

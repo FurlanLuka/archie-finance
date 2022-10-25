@@ -15,13 +15,9 @@ import { WithdrawScreenStyled } from './withdraw.styled';
 
 export const WithdrawScreen: FC = () => {
   const { t } = useTranslation();
-  const params = useParams<CurrentAssetRouteParams>();
+  const { asset } = useParams<CurrentAssetRouteParams>();
 
-  console.log(params);
-
-  const asset = 'SOL';
-
-  const getMaxWithdrawalAmountResponse = useGetMaxWithdrawalAmount(asset);
+  const getMaxWithdrawalAmountResponse = useGetMaxWithdrawalAmount(asset ?? '');
   const getLedgerResponse = useGetLedger();
 
   const getContent = () => {
@@ -50,7 +46,7 @@ export const WithdrawScreen: FC = () => {
 
       return (
         <Card column alignItems="center" padding="2.5rem 1.5rem">
-          <TitleS className="title">{t('dashboard_withdraw.title', { asset })}</TitleS>
+          <TitleS className="title">{t('dashboard_withdraw.title', { currentAsset: asset })}</TitleS>
           <BodyL className="subtitle">
             {selectedLedgerAccount ? (
               t('dashboard_withdraw.subtitle', {
@@ -70,7 +66,7 @@ export const WithdrawScreen: FC = () => {
             )}
           </BodyL>
           <WithdrawalForm
-            currentAsset={asset}
+            currentAsset={asset ?? ''}
             maxAmount={getMaxWithdrawalAmountResponse.data.maxAmount}
             ledger={getLedgerResponse.data}
           />

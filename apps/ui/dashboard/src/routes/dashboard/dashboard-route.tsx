@@ -45,7 +45,7 @@ export const DashboardRoute: FC = () => {
               <Route path="/" element={<HomeScreen />} />
               <Route path="/home" element={<HomeScreen />} />
               <Route path="/collateral" element={<CollateralScreen />} />
-              <Route path="/collateral/withdraw/*" element={<WithdrawScreen />} />
+              <Route path="/collateral/withdraw/:asset" element={<WithdrawScreen />} />
               <Route path="/collateral/add/:asset" element={<CollateralizationScreen />} />
               {/* <Route path="/rewards" element={<RewardsScreen />} /> */}
               <Route path="/payment" element={<PaymentScreen />} />
