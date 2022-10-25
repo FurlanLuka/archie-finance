@@ -1,4 +1,4 @@
-import { AssetPrice } from "./asset_price.interfaces";
+import { AssetPrice } from './asset_price.interfaces';
 
 export class AssetPriceDto implements AssetPrice {
   assetId: string;
