@@ -11,7 +11,6 @@ import {
   AssetsService,
 } from '@archie/api/ledger-api/assets';
 import {
-  AssetPriceDto,
   InitiateLedgerRecalculationCommandPayload,
   InternalLedgerAccountData,
   Ledger,
@@ -25,6 +24,7 @@ import {
 } from '@archie/api/ledger-api/constants';
 import { BatchDecrementLedgerAccounts } from './ledger.interfaces';
 import { LedgerUser } from './ledger_user.entity';
+import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 @Injectable()
 export class LedgerService {
@@ -48,7 +48,7 @@ export class LedgerService {
     asset: AssetInformation,
     amount: string,
   ): Promise<void> {
-    const assetPrice: AssetPriceDto =
+    const assetPrice: AssetPrice =
       await this.assetPricesService.getLatestAssetPrice(asset.id);
 
     await this.ledgerRepository.save({
@@ -106,12 +106,12 @@ export class LedgerService {
     return ledgerAccount;
   }
 
-  async getLedger(userId: string, assetPrice?: AssetPriceDto[]): Promise<Ledger> {
+  async getLedger(userId: string, assetPrice?: AssetPrice[]): Promise<Ledger> {
     const ledgerAccounts: LedgerAccount[] = await this.ledgerRepository.findBy({
       userId,
     });
 
-    const assetPrices: AssetPriceDto[] =
+    const assetPrices: AssetPrice[] =
       assetPrice ?? (await this.assetPricesService.getLatestAssetPrices());
 
     let ledgerValue: BigNumber = BigNumber(0);
@@ -125,7 +125,7 @@ export class LedgerService {
           return [];
         }
 
-        const accountAssetPrice: AssetPriceDto | undefined = assetPrices.find(
+        const accountAssetPrice: AssetPrice | undefined = assetPrices.find(
           (asset) => asset.assetId === assetId,
         );
 
@@ -177,7 +177,7 @@ export class LedgerService {
   async initiateLedgerRecalcuationCommandHandler(
     payload: InitiateLedgerRecalculationCommandPayload,
   ): Promise<void> {
-    const assetPrices: AssetPriceDto[] =
+    const assetPrices: AssetPrice[] =
       await this.assetPricesService.getLatestAssetPrices();
 
     await Promise.all(

@@ -7,7 +7,7 @@ import { CoingeckoApiService } from './api/coingecko.service';
 import { AssetsService } from './assets.service';
 import { AssetInformation, AssetList } from './assets.interfaces';
 import { AssetNotFoundError } from './asset_prices.errors';
-import { AssetPriceDto } from '@archie/api/ledger-api/data-transfer-objects';
+import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 @Injectable()
 export class AssetPricesService {
@@ -54,7 +54,7 @@ export class AssetPricesService {
     await this.assetPriceRepository.save(assetPrices);
   }
 
-  public async getLatestAssetPrices(): Promise<AssetPriceDto[]> {
+  public async getLatestAssetPrices(): Promise<AssetPrice[]> {
     const assetPrices: AssetPrices[] = await this.assetPriceRepository.find();
 
     return assetPrices.map(
@@ -63,7 +63,7 @@ export class AssetPricesService {
     );
   }
 
-  public async getLatestAssetPrice(assetId: string): Promise<AssetPriceDto> {
+  public async getLatestAssetPrice(assetId: string): Promise<AssetPrice> {
     const assetPrice: AssetPrices | null =
       await this.assetPriceRepository.findOneBy({
         assetId,
