@@ -41,7 +41,10 @@ export class Borrower {
 
   @OneToOne(
     (_) => LastCreditLimitUpdate,
-    (creditLimitUpdate) => creditLimitUpdate.id,
+    (creditLimitUpdate) => creditLimitUpdate.borrower,
+    {
+      nullable: true,
+    },
   )
   lastCreditLimitUpdate: LastCreditLimitUpdate | null;
 }
