@@ -10,6 +10,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -18,6 +19,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import {
   GetEnrollmentResponse,
+  GetEnrollmentsQuery,
   GetMfaEnrollmentResponse,
   GetSendEnrollmentTicketResponse,
   KycSubmittedPayload,
@@ -55,8 +57,11 @@ export class MfaController {
   @Get('enrollments')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getMfaEnrollments(@Req() request): Promise<GetEnrollmentResponse[]> {
-    return this.mfaService.getMfaEnrollments(request.user.sub);
+  async getMfaEnrollments(
+    @Req() request,
+    @Query() query: GetEnrollmentsQuery,
+  ): Promise<GetEnrollmentResponse[]> {
+    return this.mfaService.getMfaEnrollments(request.user.sub, query);
   }
 
   @Get('enrollment')

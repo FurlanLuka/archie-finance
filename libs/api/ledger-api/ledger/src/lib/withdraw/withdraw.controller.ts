@@ -20,11 +20,16 @@ import {
   CollateralWithdrawalTransactionUpdatedPayload,
 } from '@archie/api/fireblocks-api/data-transfer-objects';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
-import { AuthGuard } from '@archie/api/utils/auth0';
 import {
+  AuthGuard,
+  AuthScopes,
+  ScopeGuard,
+  Scopes,
+} from '@archie/api/utils/auth0';
+import {
+  MaxWithdrawalAmountResponse,
   WithdrawPayloadDto,
   WithdrawResponseDto,
-  MaxWithdrawalAmountResponse,
 } from '@archie/api/ledger-api/data-transfer-objects';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
@@ -39,7 +44,8 @@ export class WithdrawController {
   constructor(private withdrawService: WithdrawService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ScopeGuard)
+  @Scopes(AuthScopes.mfa)
   @ApiBearerAuth()
   @ApiErrorResponse([
     InvalidWithdrawalAmountError,
