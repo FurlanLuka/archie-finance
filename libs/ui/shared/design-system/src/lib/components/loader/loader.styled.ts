@@ -23,7 +23,7 @@ export const LoaderStyled = styled.div<LoaderProps>`
     display: inline-block;
     background-color: ${({ color, theme }) => color ?? theme.loaderBackground};
     height: 100%;
-    width: 4px;
+    width: 5px;
     margin-left: 2px;
     animation: ${stretchdelay} 1.2s infinite ease-in-out;
 
