@@ -24,6 +24,7 @@ export enum ConfigVariables {
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
   REDIS_URL = 'REDIS_URL',
+  DEFAULT_ROLE_ID = 'DEFAULT_ROLE_ID',
 }
 
 export const KYC_SUBMITTED_TOPIC = new Event<KycSubmittedPayload>(

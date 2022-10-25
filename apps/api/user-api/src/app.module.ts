@@ -28,6 +28,7 @@ import { RolesModule } from '@archie/api/user-api/user';
         ConfigVariables.QUEUE_URL,
         ConfigVariables.ENCRYPTION_KEY,
         ConfigVariables.REDIS_URL,
+        ConfigVariables.DEFAULT_ROLE_ID,
       ],
       parse: (_configVariable, value) => value,
     }),

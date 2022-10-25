@@ -180,11 +180,7 @@ describe('Ledger api withdrawal tests', () => {
     it(`should return 403 because access token does not have mfa scope`, async () => {
       const response = await request(app.getHttpServer())
         .post('/v1/ledger/withdraw')
-        .send({
-          assetId: 'RANDOM_ASSET',
-          amount: '1',
-          destinationAddress: 'destinationAddress',
-        })
+        .send({})
         .set('Authorization', `Bearer ${generateUserAccessToken(user, [])}`)
         .expect(403);
 
@@ -200,20 +196,12 @@ describe('Ledger api withdrawal tests', () => {
     it(`should return 403 in case the same token is used twice`, async () => {
       await request(app.getHttpServer())
         .post('/v1/ledger/withdraw')
-        .send({
-          assetId: 'RANDOM_ASSET',
-          amount: '1',
-          destinationAddress: 'destinationAddress',
-        })
+        .send({})
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(400);
       const response = await request(app.getHttpServer())
         .post('/v1/ledger/withdraw')
-        .send({
-          assetId: 'RANDOM_ASSET',
-          amount: '1',
-          destinationAddress: 'destinationAddress',
-        })
+        .send({})
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(403);
 
