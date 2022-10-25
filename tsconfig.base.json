@@ -15,7 +15,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "strictNullChecks": true,
-    "strictPropertyInitialization": false,
     "paths": {
       "@archie/api/credit-api/constants": [
         "libs/api/credit-api/constants/src/index.ts"
@@ -68,6 +67,9 @@
       ],
       "@archie/api/ledger-api/data-transfer-objects": [
         "libs/api/ledger-api/data-transfer-objects/src/index.ts"
+      ],
+      "@archie/api/ledger-api/data-transfer-objects/types": [
+        "libs/api/ledger-api/data-transfer-objects/src/types.ts"
       ],
       "@archie/api/ledger-api/ledger": [
         "libs/api/ledger-api/ledger/src/index.ts"

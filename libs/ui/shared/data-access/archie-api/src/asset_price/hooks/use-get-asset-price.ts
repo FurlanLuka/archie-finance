@@ -1,4 +1,4 @@
-import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects';
+import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';

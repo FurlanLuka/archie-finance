@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
-import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects';
+import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects/types';
 import {
   CollateralAssetSelect,
   DepositAddress,
