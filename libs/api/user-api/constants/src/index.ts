@@ -35,7 +35,7 @@ export const KYC_SUBMITTED_TOPIC = new Event<KycSubmittedPayload>(
 );
 
 export const DEFAULT_ROLE_MIGRATION_TOPIC = new Event<unknown>(
-  'user.migration.default_roles',
+  'user.default_roles.migrate',
   1,
   {},
 );

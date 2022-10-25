@@ -15,7 +15,7 @@ export class RolesQueueController {
   private static CONTROLLER_QUEUE_NAME = `${SERVICE_QUEUE_NAME}-roles`;
 
   @Subscribe(KYC_SUBMITTED_TOPIC, RolesQueueController.CONTROLLER_QUEUE_NAME)
-  async handleMfaEnrolledEvent(payload: KycSubmittedPayload): Promise<void> {
+  async handleKycSubmittedEvent(payload: KycSubmittedPayload): Promise<void> {
     return this.rolesService.addDefaultRole(payload.userId);
   }
 

@@ -16,6 +16,7 @@ export class RolesService {
     );
   }
 
+  // TODO: remove - only temporary
   async addDefaultRoleToAllExistingUsers(page = 0): Promise<void> {
     const users = await this.auth0Service.getManagmentClient().getUsers({
       page,
