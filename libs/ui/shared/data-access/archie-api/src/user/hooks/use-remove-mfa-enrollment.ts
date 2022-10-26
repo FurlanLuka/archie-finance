@@ -5,7 +5,7 @@ import { DefaultVariables } from '../../helpers';
 import { MutationQueryResponse } from '../../interface';
 import { removeMfaEnrollment } from '../api/remove-mfa-enrollment';
 
-import { MFA_ENROLLMENT_QUERY_KEY } from './use-poll-mfa-enrollment';
+export const MFA_ENROLLMENT_QUERY_KEY = 'mfa_enrollment';
 
 export const useRemoveMfaEnrollment = (enrollmentId: string): MutationQueryResponse<void, void> => {
   const queryClient = useQueryClient();

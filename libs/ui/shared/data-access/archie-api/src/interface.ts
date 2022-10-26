@@ -47,9 +47,10 @@ interface ErrorMutationQueryResponse<T> {
   mutate: (payload: Omit<T, 'accessToken'>) => void;
 }
 
-interface SuccessMutationQueryResponse<T = any> {
+interface SuccessMutationQueryResponse<T = any, P = any> {
   state: RequestState.SUCCESS;
   data: T;
+  mutate: (payload: Omit<P, 'accessToken'>) => void;
 }
 
 interface IdleMutationQueryResponse<T = any> {
@@ -60,7 +61,7 @@ interface IdleMutationQueryResponse<T = any> {
 export type MutationQueryResponse<Payload = any, Response = any> =
   | LoadingMutationQueryResponse
   | ErrorMutationQueryResponse<Payload>
-  | SuccessMutationQueryResponse<Response>
+  | SuccessMutationQueryResponse<Response, Payload>
   | IdleMutationQueryResponse<Payload>;
 
 interface SuccessInfiniteQueryResponse<T> {

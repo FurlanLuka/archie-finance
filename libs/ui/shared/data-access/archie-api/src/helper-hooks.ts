@@ -230,7 +230,8 @@ export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
     return {
       state: RequestState.SUCCESS,
       data: request.data,
-    };
+      mutate: request.mutate,
+    } as MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData>;
   }
 
   return {
