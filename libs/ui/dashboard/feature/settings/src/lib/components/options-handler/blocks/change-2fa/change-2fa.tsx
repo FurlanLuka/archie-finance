@@ -29,7 +29,7 @@ export const Change2FA: FC = () => {
         setMfaEndollmentId(getMfaEnrollmentsResponse.data[0].id);
       }
     }
-  }, [isMfaSet, getMfaEnrollmentsResponse, mfaEnrollmentId]);
+  }, [isMfaSet, getMfaEnrollmentsResponse]);
 
   console.log(removeMfaEnrollmentMutation.state);
 
