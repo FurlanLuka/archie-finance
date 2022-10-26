@@ -49,6 +49,7 @@ export const Change2FA: FC = () => {
     if (mfaEnrollmentId) {
       if (
         removeMfaEnrollmentMutation.state === RequestState.IDLE ||
+        // ni prav da se klice on SUCCESS state. kako lahko dosezemo da je spet nazaj IDLE
         removeMfaEnrollmentMutation.state === RequestState.SUCCESS
       ) {
         removeMfaEnrollmentMutation.mutate({});
