@@ -8,8 +8,8 @@ import { StoriesTitle } from '../../utils/stories-title/stories-title';
 import { BodyM, BodyS } from '../typography/typography.styled';
 
 import { Select } from './select';
-import { SelectStyledProps } from './select.styled';
 import { SelectOption } from './select-option';
+import { SelectStyledProps } from './select.styled';
 
 export default {
   title: 'Components/Select',
@@ -72,7 +72,14 @@ export const Disabled: Story<SelectStyledProps> = (props) => {
     <StoriesContainer>
       <StoriesTitle title="Select" subtitle="disabled" />
       <div style={{ maxWidth: '30%' }}>
-        <Select {...props} id="select" header={header} onChange={() => {}}>
+        <Select
+          {...props}
+          id="select"
+          header={header}
+          onChange={() => {
+            console.log('change!');
+          }}
+        >
           {[]}
         </Select>
       </div>
@@ -98,7 +105,14 @@ export const Loading: Story<SelectStyledProps> = (props) => {
     <StoriesContainer>
       <StoriesTitle title="Select" subtitle="loading" />
       <div style={{ maxWidth: '30%' }}>
-        <Select {...props} id="select" header={header} onChange={() => {}}>
+        <Select
+          {...props}
+          id="select"
+          header={header}
+          onChange={() => {
+            console.log('Change!');
+          }}
+        >
           {[]}
         </Select>
       </div>

@@ -1,10 +1,12 @@
+import BigNumber from 'bignumber.js';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { CollateralAssets } from '@archie/ui/shared/constants';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import {
   Card,
   Skeleton,
@@ -16,8 +18,7 @@ import {
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
 
 import { CollateralizationForm } from './blocks/collaterization-form/collaterization-form';
-import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import BigNumber from 'bignumber.js';
+
 
 interface AddCollateralProps {
   selectedAsset: string;

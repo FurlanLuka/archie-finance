@@ -2,7 +2,6 @@ import { FC, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
 import { CardStatusColor, CardStatusText } from '@archie/ui/shared/constants';
-import { RevealCardModal } from '@archie/ui/dashboard/components';
 import {
   QueryResponse,
   RequestState,
@@ -12,9 +11,10 @@ import { useGetCardsCredit } from '@archie/ui/shared/data-access/archie-api/rize
 import { Card, Skeleton, BodyL, BodyS } from '@archie/ui/shared/design-system';
 
 import imgCard from '../../assets/card-placeholder.png';
+import { RevealCardModal } from '../../modals/reveal-card/reveal-card';
 
-import { StatusBadge } from './blocks/status-badge/status-badge';
 import { ArchieCardStyled } from './archie-card.styled';
+import { StatusBadge } from './blocks/status-badge/status-badge';
 
 export const ArchieCard: FC = () => {
   const [revealCardModalOpen, setRevealCardModalOpen] = useState(false);

@@ -1,18 +1,18 @@
 import { FC, useState, useMemo } from 'react';
 
 import { DepositAddress } from '@archie/ui/dashboard/components';
-import { CollateralAsset } from '@archie/ui/shared/constants';
 import {
   MINIMUM_LTV,
   OK_LTV,
   SUGGESTED_LTV,
 } from '@archie/ui/dashboard/constants';
 import { calculateCollateralValue } from '@archie/ui/dashboard/utils';
+import { CollateralAsset } from '@archie/ui/shared/constants';
 import { Table, InputText } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
-import { tableColumns } from './fixtures/table-fixtures';
 import { CollaterizationFormStyled } from './collaterization-form.styled';
+import { tableColumns } from './fixtures/table-fixtures';
 
 interface CollateralizationFormProps {
   assetInfo: CollateralAsset;
