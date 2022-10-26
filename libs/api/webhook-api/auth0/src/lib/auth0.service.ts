@@ -11,7 +11,6 @@ export class Auth0Service {
   constructor(private queueService: QueueService) {}
 
   public webhookHandler(payload: Auth0Logs): void {
-    Logger.log('Auth0 webhook payload', payload);
 
     payload.logs.forEach((log: Auth0Log) => {
       try {
