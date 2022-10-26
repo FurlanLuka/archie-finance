@@ -5,7 +5,7 @@ import {
 } from '@archie/api/websocket-event-api/constants';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
-import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects';
+import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { EventService } from './event.service';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';

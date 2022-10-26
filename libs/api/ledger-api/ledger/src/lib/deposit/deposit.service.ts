@@ -3,7 +3,7 @@ import { CollateralDepositTransactionCompletedPayload } from '@archie/api/firebl
 import { LedgerService } from '../ledger/ledger.service';
 import { AssetInformation, AssetsService } from '@archie/api/ledger-api/assets';
 import { InvalidAssetError } from './deposit.errors';
-import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects';
+import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 @Injectable()
 export class DepositService {

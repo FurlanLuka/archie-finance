@@ -16,7 +16,7 @@ import {
   Ledger,
   LedgerAccountAction,
   LedgerActionType,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { QueueService } from '@archie/api/utils/queue';
 import {
   INITIATE_LEDGER_RECALCULATION_COMMAND,

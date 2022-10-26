@@ -8,7 +8,7 @@ import {
   InternalLedgerAccountData,
   Ledger,
   LedgerActionType,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import {
   InvalidAssetError,
   InvalidWithdrawalAmountError,
@@ -29,7 +29,10 @@ import { INITIATE_COLLATERAL_WITHDRAWAL_COMMAND } from '@archie/api/fireblocks-a
 import { v4 } from 'uuid';
 import { AssetInformation, AssetsService } from '@archie/api/ledger-api/assets';
 import { Lock } from '@archie/api/utils/redis';
-import { MaxWithdrawalAmountResponse, WithdrawResponse } from '@archie/api/ledger-api/data-transfer-objects/types';
+import {
+  MaxWithdrawalAmountResponse,
+  WithdrawResponse,
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 
 @Injectable()
 export class WithdrawService {

@@ -5,3 +5,13 @@ export type {
   WithdrawResponse,
   WithdrawalRecord,
 } from './lib/withdraw.interfaces';
+export type {
+  InitiateLedgerRecalculationCommandPayload,
+  InternalLedgerAccountData,
+  Ledger,
+  LedgerAccountAction,
+  LedgerAccountData,
+  LedgerAccountUpdatedPayload,
+} from './lib/ledger.interfaces';
+// you can't use enums by exporting type
+export { LedgerActionType } from './lib/ledger.interfaces';
