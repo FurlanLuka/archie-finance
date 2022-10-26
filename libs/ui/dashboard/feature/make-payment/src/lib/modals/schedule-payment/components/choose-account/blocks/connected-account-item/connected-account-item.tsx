@@ -9,7 +9,8 @@ import { ConnectedAccountItemStyled } from './connected-account-item.styled';
 interface ConnectedAccountItemProps {
   account: AccountResponse;
 }
-
+// TODO move this and the components lib one into a new lib
+// DONT TOUCH without moving, circular dependency
 export const ConnectedAccountItem: FC<ConnectedAccountItemProps> = ({
   account,
 }) => (

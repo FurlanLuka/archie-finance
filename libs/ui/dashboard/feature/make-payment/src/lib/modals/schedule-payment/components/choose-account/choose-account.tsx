@@ -15,6 +15,7 @@ import {
   SelectOption,
 } from '@archie/ui/shared/design-system';
 
+import { ConnectedAccountItem } from './blocks/connected-account-item/connected-account-item';
 import { ChooseAccountStyled } from './choose-account.styled';
 
 interface ChooseAccountProps {

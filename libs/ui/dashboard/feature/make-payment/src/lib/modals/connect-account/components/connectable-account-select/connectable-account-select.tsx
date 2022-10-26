@@ -13,6 +13,7 @@ import {
   BodyM,
 } from '@archie/ui/shared/design-system';
 
+import { ConnectedAccountItem } from './blocks/connected-account-item/connected-account-item';
 import { ConnectableAccountSelectStyled } from './connectable-account-select.styled';
 
 interface ConnectableAccountSelectProps {
