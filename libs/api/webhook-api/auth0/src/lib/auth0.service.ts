@@ -11,7 +11,6 @@ export class Auth0Service {
   constructor(private queueService: QueueService) {}
 
   public webhookHandler(payload: Auth0Logs): void {
-
     payload.logs.forEach((log: Auth0Log) => {
       try {
         if (log.data.type === Auth0Events.EMAIL_VERIFIED) {
