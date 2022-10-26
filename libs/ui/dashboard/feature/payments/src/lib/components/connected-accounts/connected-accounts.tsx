@@ -12,10 +12,10 @@ import {
   TitleS,
   BodyM,
 } from '@archie/ui/shared/design-system';
+import { theme } from '@archie/ui/shared/theme';
 
 import { ConnectedAccount } from './blocks/connected-account';
 import { ConnectedAccountsStyled } from './connected-accounts.styled';
-import { theme } from '@archie/ui/shared/theme';
 
 export const ConnectedAccounts: FC = () => {
   const { t } = useTranslation();

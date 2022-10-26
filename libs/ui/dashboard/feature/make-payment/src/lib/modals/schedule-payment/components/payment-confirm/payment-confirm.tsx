@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { Kyc } from '@archie/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { UserObligations } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import { ScheduleTransactionParams } from '@archie/ui/shared/data-access/archie-api/payment/api/schedule-transaction';
 import { useScheduleTransaction } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
-import { UserObligations } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import {
   ButtonOutline,
   ButtonPrimary,

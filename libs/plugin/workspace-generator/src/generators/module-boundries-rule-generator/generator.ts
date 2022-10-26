@@ -57,6 +57,13 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
           'scope:api:lib:shared',
         ],
       },
+      {
+        sourceTag: `scope:api:lib:${project}:shared`,
+        onlyDependOnLibsWithTags: [
+          `scope:api:lib:${project}:shared`,
+          'scope:api:lib:shared',
+        ],
+      }
     ];
   });
 

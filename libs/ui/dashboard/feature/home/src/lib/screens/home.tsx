@@ -89,7 +89,7 @@ export const HomeScreen: FC = () => {
         </div>
       </HomeStyled>
       {confirmPaymentModalOpen && (
-        <Modal maxWidth="780px" isOpen close={close}>
+        <Modal maxWidth="780px" isOpen>
           <PayWithPaypalScheduled onConfirm={handleConfirmPaymentModaConfirm} />
         </Modal>
       )}

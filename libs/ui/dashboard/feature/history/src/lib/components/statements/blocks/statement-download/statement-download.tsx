@@ -2,8 +2,6 @@ import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Statement } from '@archie/ui/shared/data-access/archie-api/payment/api/get-statements';
-import { theme } from '@archie/ui/shared/theme';
-import { Icon } from '@archie/ui/shared/icons';
 import {
   ButtonOutline,
   Select,
@@ -11,6 +9,8 @@ import {
   BodyM,
   BodyS,
 } from '@archie/ui/shared/design-system';
+import { Icon } from '@archie/ui/shared/icons';
+import { theme } from '@archie/ui/shared/theme';
 
 import { useDownloadStatement } from './use-download-statement';
 

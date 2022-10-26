@@ -37,6 +37,13 @@
                 ]
               },
               {
+                "sourceTag": "scope:api:lib:credit-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:credit-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
                 "sourceTag": "scope:api:app:credit-line-api",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:credit-line-api",
@@ -47,6 +54,13 @@
               },
               {
                 "sourceTag": "scope:api:lib:credit-line-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:credit-line-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:credit-line-api:shared",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:credit-line-api:shared",
                   "scope:api:lib:shared"
@@ -69,6 +83,13 @@
                 ]
               },
               {
+                "sourceTag": "scope:api:lib:fireblocks-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:fireblocks-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
                 "sourceTag": "scope:api:app:ledger-api",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:ledger-api",
@@ -79,6 +100,13 @@
               },
               {
                 "sourceTag": "scope:api:lib:ledger-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:ledger-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:ledger-api:shared",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:ledger-api:shared",
                   "scope:api:lib:shared"
@@ -101,6 +129,13 @@
                 ]
               },
               {
+                "sourceTag": "scope:api:lib:ltv-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:ltv-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
                 "sourceTag": "scope:api:app:mail-api",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:mail-api",
@@ -111,6 +146,13 @@
               },
               {
                 "sourceTag": "scope:api:lib:mail-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:mail-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:mail-api:shared",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:mail-api:shared",
                   "scope:api:lib:shared"
@@ -133,6 +175,13 @@
                 ]
               },
               {
+                "sourceTag": "scope:api:lib:onboarding-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:onboarding-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
                 "sourceTag": "scope:api:app:paypal-api",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:paypal-api",
@@ -143,6 +192,13 @@
               },
               {
                 "sourceTag": "scope:api:lib:paypal-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:paypal-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:paypal-api:shared",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:paypal-api:shared",
                   "scope:api:lib:shared"
@@ -165,6 +221,13 @@
                 ]
               },
               {
+                "sourceTag": "scope:api:lib:peach-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:peach-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
                 "sourceTag": "scope:api:app:referral-system-api",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:referral-system-api",
@@ -175,6 +238,13 @@
               },
               {
                 "sourceTag": "scope:api:lib:referral-system-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:referral-system-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:referral-system-api:shared",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:referral-system-api:shared",
                   "scope:api:lib:shared"
@@ -197,6 +267,13 @@
                 ]
               },
               {
+                "sourceTag": "scope:api:lib:user-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:user-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
                 "sourceTag": "scope:api:app:webhook-api",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:webhook-api",
@@ -213,6 +290,13 @@
                 ]
               },
               {
+                "sourceTag": "scope:api:lib:webhook-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:webhook-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
                 "sourceTag": "scope:api:app:websocket-event-api",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:websocket-event-api",
@@ -223,6 +307,13 @@
               },
               {
                 "sourceTag": "scope:api:lib:websocket-event-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:websocket-event-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:websocket-event-api:shared",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:websocket-event-api:shared",
                   "scope:api:lib:shared"

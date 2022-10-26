@@ -11,5 +11,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:onboarding-api:shared", "scope:api:lib:shared"]
 }

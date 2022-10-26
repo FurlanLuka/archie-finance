@@ -3,11 +3,12 @@ import { readFileSync } from 'fs';
 import { DeployConfigurationSchema } from './schema';
 import { execSync } from 'child_process';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default async function runExecutor(
   { environment }: DeployConfigurationSchema,
   { projectName, workspace }: ExecutorContext,
 ) {
-  if (!projectName) {
+  if (projectName == null) {
     logger.error(`Project name is not available.`);
 
     return { success: false };

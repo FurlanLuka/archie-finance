@@ -68,5 +68,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:app:onboarding-api", "scope:api:app"]
 }
