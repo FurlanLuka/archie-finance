@@ -8,9 +8,6 @@ import {
   InternalLedgerAccountData,
   Ledger,
   LedgerActionType,
-  MaxWithdrawalAmountResponse,
-  WithdrawalRecord,
-  WithdrawResponseDto,
 } from '@archie/api/ledger-api/data-transfer-objects';
 import {
   InvalidAssetError,
@@ -32,6 +29,7 @@ import { INITIATE_COLLATERAL_WITHDRAWAL_COMMAND } from '@archie/api/fireblocks-a
 import { v4 } from 'uuid';
 import { AssetInformation, AssetsService } from '@archie/api/ledger-api/assets';
 import { Lock } from '@archie/api/utils/redis';
+import { MaxWithdrawalAmountResponse, WithdrawResponse } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 @Injectable()
 export class WithdrawService {
@@ -97,7 +95,7 @@ export class WithdrawService {
     assetId: string,
     amount: string,
     destinationAddress: string,
-  ): Promise<WithdrawResponseDto> {
+  ): Promise<WithdrawResponse> {
     const assetInformation: AssetInformation | undefined =
       this.assetService.getAssetInformation(assetId);
 
@@ -162,16 +160,13 @@ export class WithdrawService {
       await queryRunner.release();
     }
 
-    this.queueService.publishEvent(
-      INITIATE_COLLATERAL_WITHDRAWAL_COMMAND,
-      {
-        userId,
-        assetId,
-        amount,
-        internalTransactionId,
-        destinationAddress,
-      },
-    );
+    this.queueService.publishEvent(INITIATE_COLLATERAL_WITHDRAWAL_COMMAND, {
+      userId,
+      assetId,
+      amount,
+      internalTransactionId,
+      destinationAddress,
+    });
 
     return {
       id: internalTransactionId,

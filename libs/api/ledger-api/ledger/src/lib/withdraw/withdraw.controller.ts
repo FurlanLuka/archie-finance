@@ -24,7 +24,7 @@ import { AuthGuard } from '@archie/api/utils/auth0';
 import {
   WithdrawPayloadDto,
   WithdrawResponseDto,
-  MaxWithdrawalAmountResponse,
+  MaxWithdrawalAmountResponseDto,
 } from '@archie/api/ledger-api/data-transfer-objects';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
@@ -64,7 +64,7 @@ export class WithdrawController {
   async getMaxWithdrawalAmount(
     @Param('assetId') assetId: string,
     @Req() request,
-  ): Promise<MaxWithdrawalAmountResponse> {
+  ): Promise<MaxWithdrawalAmountResponseDto> {
     return this.withdrawService.getMaxWithdrawalAmount(
       request.user.sub,
       assetId,
