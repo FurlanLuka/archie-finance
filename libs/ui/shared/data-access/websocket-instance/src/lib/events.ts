@@ -1,4 +1,4 @@
-import { LedgerAccountUpdatedPayload } from '@archie/ui/shared/data-access/archie-api-dtos';
+import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 export enum WsEventTopic {
   ONBOARDING_UPDATED_TOPIC = 'onboarding.onboarding.updated.v1',

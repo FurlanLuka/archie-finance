@@ -4,9 +4,9 @@ import { FC } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { MINIMUM_LTV } from '@archie/ui/dashboard/constants';
 import { calculateCollateralValue } from '@archie/ui/dashboard/utils';
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
 import { LTV } from '@archie/ui/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { useGetMarginCalls } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-margin-calls';

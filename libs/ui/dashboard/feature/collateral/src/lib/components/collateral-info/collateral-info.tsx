@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { FC, useMemo } from 'react';
 
+import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
 import {
   CollateralAssets,
   CollateralCurrency,
   LTVStatus,
 } from '@archie/ui/shared/constants';
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
 import { CreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/api/get-credit-line';
 import { Table } from '@archie/ui/shared/design-system';
 

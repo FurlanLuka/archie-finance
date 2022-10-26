@@ -2,8 +2,8 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { Navigate, useNavigate } from 'react-router-dom';
 
+import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { OnboardingStep } from '@archie/ui/dashboard/constants';
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
 import { GetCreditResponse } from '@archie/ui/shared/data-access/archie-api/credit/api/get-credit';
 import { useCreateRizeUser } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
 import { useGetCredit } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';

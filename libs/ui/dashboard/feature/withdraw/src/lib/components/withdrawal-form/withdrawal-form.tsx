@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { calculateLedgerCreditValue } from '@archie/ui/dashboard/utils';
 import { CollateralAssets } from '@archie/ui/shared/constants';
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useCreateWithdrawal } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-create-withdrawal';
 import {
