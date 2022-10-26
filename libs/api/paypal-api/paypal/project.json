@@ -19,5 +19,5 @@
       }
     }
   },
-  "tags": ["scope:api:lib:paypal-api:shared"]
+  "tags": ["scope:api:lib:paypal-api:shared", "scope:api:lib:shared"]
 }
