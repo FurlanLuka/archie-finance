@@ -28,9 +28,6 @@ export default function () {
       k6: 'try1',
     }),
     content_type: 'application/json',
-    properties: {
-      headers: {},
-    },
     // exchange: '',
     // mandatory: false,
     // immediate: false,

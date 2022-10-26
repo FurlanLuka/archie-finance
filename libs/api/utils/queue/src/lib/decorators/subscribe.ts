@@ -14,6 +14,7 @@ import { TraceEvent } from './trace_event';
 import { Idempotent } from './idempotent';
 import { Event } from '../event/event';
 import { AppliedDecorator } from './queue_decorators.interfaces';
+import { v4 } from 'uuid';
 
 interface SubscriptionOptions {
   useTracer: boolean;
@@ -116,8 +117,10 @@ function createErrorHandler(
 ) => void | Promise<void> {
   return (channel: Channel, msg: ConsumeMessage, error) => {
     console.log('message', msg);
-    const messageHeaders = msg.properties.headers;
-    const retryAttempt: number = messageHeaders['x-retry'] ?? 0;
+
+    const messageHeaders: object | undefined = msg.properties.headers;
+    const retryAttempt: number =
+      messageHeaders !== undefined ? messageHeaders['x-retry'] : 0;
 
     Logger.error({
       message: `Event handling failed for routing key "${queueSpecificRoutingKey}"`,
@@ -129,14 +132,17 @@ function createErrorHandler(
 
     if (options.requeueOnError) {
       const delay: number =
-        messageHeaders['x-delay'] ?? INITIAL_DELAY / RETRY_BACKOFF;
+        messageHeaders !== undefined
+          ? messageHeaders['x-delay']
+          : INITIAL_DELAY / RETRY_BACKOFF;
 
       if (retryAttempt < MAX_RETRIES) {
         const retryHeaders = {
           ...messageHeaders,
           'x-delay': delay * RETRY_BACKOFF,
           'x-retry': retryAttempt + 1,
-          'event-id': messageHeaders['event-id'],
+          'event-id':
+            messageHeaders !== undefined ? messageHeaders['event-id'] : v4(),
         };
 
         channel.publish(
