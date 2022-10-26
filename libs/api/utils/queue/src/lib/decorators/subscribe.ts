@@ -115,6 +115,7 @@ function createErrorHandler(
   error: unknown,
 ) => void | Promise<void> {
   return (channel: Channel, msg: ConsumeMessage, error) => {
+    console.log('message', msg);
     const messageHeaders = msg.properties.headers;
     const retryAttempt: number = messageHeaders['x-retry'] ?? 0;
 

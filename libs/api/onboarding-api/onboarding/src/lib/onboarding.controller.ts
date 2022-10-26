@@ -61,6 +61,7 @@ export class OnboardingQueueController {
   async emailVerifiedEventHandler(
     payload: EmailVerifiedPayload,
   ): Promise<void> {
+    console.log(payload);
     await this.onboardingService.updateOnboardingStage(
       payload.userId,
       'emailVerificationStage',

@@ -38,3 +38,5 @@ lerna-debug.log*
 
 local/vault/volumes/*
 local/vault/secrets.txt
+
+k6
