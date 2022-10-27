@@ -1,24 +1,17 @@
 import { useQueryClient } from 'react-query';
 
 import { useExtendedMutation } from '../../helper-hooks';
-import { DefaultVariables } from '../../helpers';
 import { MutationQueryResponse } from '../../interface';
-import { removeMfaEnrollment } from '../api/remove-mfa-enrollment';
+import { removeMfaEnrollment, RemoveMfaEnrollmentBody } from '../api/remove-mfa-enrollment';
 
 export const MFA_ENROLLMENT_QUERY_KEY = 'mfa_enrollment';
 
-export const useRemoveMfaEnrollment = (enrollmentId: string): MutationQueryResponse<void, void> => {
+export const useRemoveMfaEnrollment = (): MutationQueryResponse<RemoveMfaEnrollmentBody, void> => {
   const queryClient = useQueryClient();
 
-  return useExtendedMutation<void, DefaultVariables>(
-    'remove_mfa_enrollment',
-    async ({ accessToken }) => {
-      return removeMfaEnrollment(accessToken, enrollmentId);
+  return useExtendedMutation<void, RemoveMfaEnrollmentBody>('remove_mfa_enrollment', removeMfaEnrollment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(MFA_ENROLLMENT_QUERY_KEY);
     },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries(MFA_ENROLLMENT_QUERY_KEY);
-      },
-    },
-  );
+  });
 };

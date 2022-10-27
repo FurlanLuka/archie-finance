@@ -13,33 +13,27 @@ import { OptionsItem } from '../../../options-item/options-item';
 export const Change2FA: FC = () => {
   const { t } = useTranslation();
 
-  const [mfaEnrollmentId, setMfaEndollmentId] = useState('');
   const [change2faConfirmatinModalOpen, setChange2faConfirmatinModalOpen] = useState(false);
 
   const getOnboardinResponse = useGetOnboarding();
   const getMfaEnrollmentsResponse = useGetMfaEnrollments();
-  const removeMfaEnrollmentMutation = useRemoveMfaEnrollment(mfaEnrollmentId);
+  const removeMfaEnrollmentMutation = useRemoveMfaEnrollment();
 
   const isMfaSet = getOnboardinResponse.state === RequestState.SUCCESS && getOnboardinResponse.data.mfaEnrollmentStage;
+  console.log('borda', getMfaEnrollmentsResponse);
 
   useEffect(() => {
+    console.log('mfa set change', isMfaSet);
     queryClient.invalidateQueries('mfa_enrollments_record');
   }, [isMfaSet]);
 
-  useEffect(() => {
-    if (isMfaSet) {
-      if (getMfaEnrollmentsResponse.state === RequestState.SUCCESS) {
-        if (getMfaEnrollmentsResponse.data.length > 0) {
-          setMfaEndollmentId(getMfaEnrollmentsResponse.data[0].id);
-        }
-      }
-    }
-  }, [isMfaSet, getMfaEnrollmentsResponse]);
-
   const handleClick = () => {
-    if (mfaEnrollmentId) {
-      if (removeMfaEnrollmentMutation.state === RequestState.IDLE) {
-        removeMfaEnrollmentMutation.mutate({});
+    if (getMfaEnrollmentsResponse.state === RequestState.SUCCESS && getMfaEnrollmentsResponse.data.length > 0) {
+      if (
+        removeMfaEnrollmentMutation.state === RequestState.IDLE ||
+        removeMfaEnrollmentMutation.state === RequestState.SUCCESS
+      ) {
+        removeMfaEnrollmentMutation.mutate({ mfaEnrollmentId: getMfaEnrollmentsResponse.data[0].id });
         setChange2faConfirmatinModalOpen(false);
       }
     }
