@@ -10,6 +10,7 @@ module.exports = (config, context) => {
   });
 
   return merge(newConfig, {
+    devtool: 'source-map',
     module: {
       rules: [
         {
