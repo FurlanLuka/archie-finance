@@ -11,5 +11,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:referral-system-api:shared", "scope:api:lib:shared"]
 }

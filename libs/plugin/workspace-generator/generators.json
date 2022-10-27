@@ -23,6 +23,11 @@
       "schema": "./src/generators/microservice-project-target-generator/schema.json",
       "description": "microservice project target generator"
     },
+    "module-boundries-rule-generator": {
+      "factory": "./src/generators/module-boundries-rule-generator/generator",
+      "schema": "./src/generators/module-boundries-rule-generator/schema.json",
+      "description": "microservice project tags generator"
+    },
     "ui-module-generator": {
       "factory": "./src/generators/ui-module-generator/generator",
       "schema": "./src/generators/ui-module-generator/schema.json",
