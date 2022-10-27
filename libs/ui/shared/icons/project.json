@@ -3,7 +3,7 @@
   "name": "ui-shared-icons",
   "sourceRoot": "libs/ui/shared/icons/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:ui:lib:shared"],
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",

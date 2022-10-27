@@ -3,7 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/dashboard/components/src",
   "projectType": "library",
-  "tags": ["scope:ui:lib:shared"],
+  "tags": ["scope:ui:lib:shared", "scope:ui:lib:ui-dashboard:shared"],
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",

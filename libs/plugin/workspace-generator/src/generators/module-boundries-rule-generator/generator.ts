@@ -87,7 +87,8 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
     ];
   });
 
-  updateJson(tree, joinPathFragments('./', '.eslintrc.json'), (json) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updater = (json: any): any => {
     const hasBoundariesRule =
       json['overrides'][0].rules['@nrwl/nx/enforce-module-boundaries'] !==
       undefined;
@@ -103,7 +104,10 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
     }
 
     return json;
-  });
+  }
+
+  updateJson(tree, joinPathFragments('./', '.eslintrc.json'), updater);
+  updateJson(tree, joinPathFragments('./', '.eslintrc.ui.json'), updater);
 }
 
 export default microserviceProjectTargetGenerator;
