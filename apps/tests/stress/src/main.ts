@@ -47,8 +47,20 @@ import Amqp from 'k6/x/amqp';
 // import * as amqp from 'amqplib';
 // import "regenerator-runtime/runtime";
 import http from 'k6/http';
+import { Options } from 'k6/options';
+import {
+  SERVICE_NAME,
+  ONBOARDING_UPDATED_TOPIC,
+} from '@archie/api/onboarding-api/constants';
+
+export let options: Options = {
+  vus: 1,
+  duration: '1s',
+};
 
 export default function () {
+  // accept path & exec
+  console.log(SERVICE_NAME, ONBOARDING_UPDATED_TOPIC);
   // console.log('K6 amqp extension enabled, version: ' + Amqp.version);
   const res = http.get('https://test-api.k6.io');
   console.log(res);
@@ -94,9 +106,9 @@ export default function () {
     listener: listener,
     // consumer: '',
     auto_ack: true,
-    exclusive: true,
+    // exclusive: true,
     // no_local: false,
-    no_wait: false,
+    // no_wait: false,
     // args: null
   });
   console.log('end');
