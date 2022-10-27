@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { LtvDto, LtvStatus } from './ltv.dto';
+import {
+  Ltv,
+  LtvStatus,
+} from '@archie/api/ltv-api/data-transfer-objects/types';
 import { QueueService } from '@archie/api/utils/queue';
 import { LtvUtilService } from './utils/ltv.service';
 import { LedgerService } from '../ledger/ledger.service';
 import {
   LedgerAccountUpdatedPayload,
   LedgerActionType,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import {
   CreditBalanceUpdatedPayload,
   PaymentType,
@@ -29,7 +32,7 @@ export class LtvService {
     private marginService: MarginService,
   ) {}
 
-  async getCurrentLtv(userId: string): Promise<LtvDto> {
+  async getCurrentLtv(userId: string): Promise<Ltv> {
     const ltvMeta = await this.getNormalizedLtvMeta(userId);
 
     const ltv: number = this.ltvUtilService.calculateLtv(
