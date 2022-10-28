@@ -2,7 +2,7 @@ import { Event } from '@archie/api/utils/queue';
 import {
   CreditLineCreatedPayload,
   CreditLineUpdatedPayload,
-} from '@archie/api/credit-line-api/data-transfer-objects';
+} from '@archie/api/credit-line-api/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'credit-line-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;

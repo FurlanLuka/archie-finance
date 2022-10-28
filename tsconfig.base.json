@@ -38,6 +38,9 @@
       "@archie/api/credit-line-api/data-transfer-objects": [
         "libs/api/credit-line-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/credit-line-api/data-transfer-objects/types": [
+        "libs/api/credit-line-api/data-transfer-objects/src/types.ts"
+      ],
       "@archie/api/credit-line-api/test-data": [
         "libs/api/credit-line-api/test-data/src/index.ts"
       ],

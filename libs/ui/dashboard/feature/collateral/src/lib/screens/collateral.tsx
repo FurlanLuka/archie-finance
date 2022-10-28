@@ -7,7 +7,6 @@ import { Ltv } from '@archie/api/ltv-api/data-transfer-objects/types';
 import { MarginCallAlert } from '@archie/ui/dashboard/components';
 import { LTVText, LTVColor } from '@archie/ui/shared/constants';
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { CreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/api/get-credit-line';
 import { useGetCreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/hooks/use-get-credit-line';
 import {
   QueryResponse,
@@ -33,7 +32,7 @@ export const CollateralScreen: FC = () => {
 
   const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
   const getLTVResponse: QueryResponse<Ltv> = useGetLTV();
-  const getCreditLineResponse: QueryResponse<CreditLine> = useGetCreditLine();
+  const getCreditLineResponse = useGetCreditLine();
 
   const getContent = () => {
     // TODO: Think of optimizing these

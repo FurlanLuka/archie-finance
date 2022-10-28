@@ -1,13 +1,13 @@
 import BigNumber from 'bignumber.js';
 import { FC, useMemo } from 'react';
 
+import { CreditLine } from '@archie/api/credit-line-api/data-transfer-objects/types';
 import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { LtvStatus } from '@archie/api/ltv-api/data-transfer-objects/types';
 import {
   CollateralAssets,
   CollateralCurrency,
 } from '@archie/ui/shared/constants';
-import { CreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/api/get-credit-line';
 import { Table } from '@archie/ui/shared/design-system';
 
 import { tableColumns } from '../../fixtures/table-fixtures';
