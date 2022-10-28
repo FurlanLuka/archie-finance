@@ -8,9 +8,9 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/tests/stress",
-        "main": "apps/tests/stress/src/main.ts",
         "tsConfig": "apps/tests/stress/tsconfig.json",
-        "assets": ["apps/tests/stress/src/assets"]
+        "assets": ["apps/tests/stress/src/assets"],
+        "externalDependencies": ["https://jslib.k6.io/k6-utils/1.4.0/index.js", "k6/x/amqp", "k6/http"]
       }
     },
     "lint": {
