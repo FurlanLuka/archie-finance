@@ -68,5 +68,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:app:referral-system-api", "scope:api:app"]
 }

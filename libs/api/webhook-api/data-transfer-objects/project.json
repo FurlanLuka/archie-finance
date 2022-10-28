@@ -23,5 +23,9 @@
       }
     }
   },
-  "tags": []
+  "tags": [
+    "scope:api:lib:webhook-api:shared",
+    "scope:api:lib:shared",
+    "scope:ui:lib:shared"
+  ]
 }

@@ -12,4 +12,4 @@ export const migrations = [
   LedgerApi1664870003424,
   LedgerApi1665057363239,
   LedgerApi1665665844526,
-  ]
+];

@@ -6,7 +6,7 @@ export enum PeachTransactionStatus {
 }
 
 // Not all properties are included in the interface - check payload if something is missing
-export class Borrower {
+export interface Borrower {
   externalId: string;
 }
 
