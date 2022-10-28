@@ -12,7 +12,7 @@ import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer
 import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects/types';
 import { ONBOARDING_UPDATED_TOPIC } from '@archie/api/onboarding-api/constants';
-import { OnboardingUpdatedPayload } from '@archie/api/onboarding-api/data-transfer-objects';
+import { OnboardingUpdatedPayload } from '@archie/api/onboarding-api/data-transfer-objects/types';
 import { TRANSACTION_UPDATED_TOPIC } from '@archie/api/credit-api/constants';
 import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
 

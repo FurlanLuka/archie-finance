@@ -1,9 +1,9 @@
 import {
   EmailVerifiedPayload,
-  KycSubmittedPayload,
   MfaRemovedPayload,
   MfaEnrolledPayload,
 } from '@archie/api/user-api/data-transfer-objects';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 import { Event } from '@archie/api/utils/queue';
 
 export const SERVICE_NAME = 'user-api';

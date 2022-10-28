@@ -111,6 +111,9 @@
       "@archie/api/onboarding-api/data-transfer-objects": [
         "libs/api/onboarding-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/onboarding-api/data-transfer-objects/types": [
+        "libs/api/onboarding-api/data-transfer-objects/src/types.ts"
+      ],
       "@archie/api/onboarding-api/onboarding": [
         "libs/api/onboarding-api/onboarding/src/index.ts"
       ],

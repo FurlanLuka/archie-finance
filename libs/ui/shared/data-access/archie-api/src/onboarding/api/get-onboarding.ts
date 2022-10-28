@@ -1,15 +1,7 @@
+import { Onboarding } from '@archie/api/onboarding-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
-
-export interface GetOnboardingResponse {
-  kycStage: boolean;
-  emailVerificationStage: boolean;
-  collateralizationStage: boolean;
-  cardActivationStage: boolean;
-  mfaEnrollmentStage: boolean;
-  completed: boolean;
-}
 
 const ERROR_LIST = new Map([
   [
@@ -20,8 +12,8 @@ const ERROR_LIST = new Map([
 
 export const getOnboarding = async (
   accessToken: string,
-): Promise<GetOnboardingResponse> => {
-  return getRequest<GetOnboardingResponse>(
+): Promise<Onboarding> => {
+  return getRequest<Onboarding>(
     `${API_URL}/v1/onboarding`,
     {
       headers: {

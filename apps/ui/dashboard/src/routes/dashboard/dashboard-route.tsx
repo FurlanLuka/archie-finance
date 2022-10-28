@@ -11,11 +11,7 @@ import { PaymentScreen } from '@archie/ui/dashboard/feature/payments';
 import { RewardsScreen } from '@archie/ui/dashboard/feature/rewards';
 import { SettingsScreen } from '@archie/ui/dashboard/feature/settings';
 import { WithdrawScreen } from '@archie/ui/dashboard/feature/withdraw';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
-import { GetOnboardingResponse } from '@archie/ui/shared/data-access/archie-api/onboarding/api/get-onboarding';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetOnboarding } from '@archie/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
 import {
   LoaderFullScreen,
@@ -26,8 +22,7 @@ import {
 import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
 
 export const DashboardRoute: FC = () => {
-  const queryResponse: QueryResponse<GetOnboardingResponse> =
-    useGetOnboarding();
+  const queryResponse = useGetOnboarding();
 
   const isMfaSetup =
     queryResponse.state === RequestState.SUCCESS &&

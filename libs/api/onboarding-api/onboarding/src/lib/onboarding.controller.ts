@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { OnboardingService } from './onboarding.service';
 import { AuthGuard } from '@archie/api/utils/auth0';
-import { GetOnboardingResponseDto } from './onboarding.dto';
+import { OnboardingDto } from '@archie/api/onboarding-api/data-transfer-objects';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   KYC_SUBMITTED_TOPIC,
@@ -31,7 +31,7 @@ export class OnboardingController {
   @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getOnboardingRecord(@Request() req): Promise<GetOnboardingResponseDto> {
+  async getOnboardingRecord(@Request() req): Promise<OnboardingDto> {
     return this.onboardingService.getOrCreateOnboardingRecord(req.user.sub);
   }
 }
