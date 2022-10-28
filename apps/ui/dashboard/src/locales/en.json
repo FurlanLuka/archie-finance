@@ -283,7 +283,7 @@
       "title": "Reset Password"
     },
     "2fa": {
-      "title": "Remove 2FA device"
+      "title": "Change 2FA device"
     },
     "autopay": {
       "title": "Autopay Settings",
@@ -370,7 +370,7 @@
     "text": "We've just sent you an email to reset your password."
   },
   "change_2fa_modal": {
-    "title": "Remove 2FA device",
-    "text": "Are you sure you want to remove 2FA from your current device? After clicking 'Yes' you will be redirected to enter your current 2FA code."
+    "title": "Change 2FA device",
+    "text": "Are you sure you want to remove 2FA from your current device?"
   }
 }
