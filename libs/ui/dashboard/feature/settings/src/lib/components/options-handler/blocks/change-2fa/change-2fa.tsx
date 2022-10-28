@@ -17,14 +17,15 @@ import { OptionsItem } from '../../../options-item/options-item';
 export const Change2FA: FC = () => {
   const { t } = useTranslation();
 
-  const [change2faConfirmatinModalOpen, setChange2faConfirmatinModalOpen] = useState(false);
+  const [change2faConfirmationModalOpen, setChange2faConfirmationModalOpen] = useState(false);
 
-  const getOnboardinResponse = useGetOnboarding();
+  const getOnboardingResponse = useGetOnboarding();
   const getMfaEnrollmentsResponse = useGetMfaEnrollments();
   const removeMfaEnrollmentMutation = useRemoveMfaEnrollment();
   const startMfaEnrollmentMutation = useStartMfaEnrollment();
 
-  const isMfaSet = getOnboardinResponse.state === RequestState.SUCCESS && getOnboardinResponse.data.mfaEnrollmentStage;
+  const isMfaSet =
+    getOnboardingResponse.state === RequestState.SUCCESS && getOnboardingResponse.data.mfaEnrollmentStage;
 
   useEffect(() => {
     queryClient.invalidateQueries(MFA_ENROLLMENTS_RECORD_QUERY_KEY);
@@ -49,7 +50,7 @@ export const Change2FA: FC = () => {
         removeMfaEnrollmentMutation.state === RequestState.SUCCESS
       ) {
         removeMfaEnrollmentMutation.mutate({ mfaEnrollmentId: getMfaEnrollmentsResponse.data[0].id });
-        setChange2faConfirmatinModalOpen(false);
+        setChange2faConfirmationModalOpen(false);
       }
     }
   };
@@ -58,13 +59,13 @@ export const Change2FA: FC = () => {
     <>
       <OptionsItem
         title={t('dashboard_settings.2fa.title')}
-        onClick={() => setChange2faConfirmatinModalOpen(true)}
+        onClick={() => setChange2faConfirmationModalOpen(true)}
         isDisabled={!isMfaSet}
       />
       <Change2faConfirmationModal
-        isOpen={change2faConfirmatinModalOpen}
+        isOpen={change2faConfirmationModalOpen}
         onConfirm={handleClick}
-        close={() => setChange2faConfirmatinModalOpen(false)}
+        close={() => setChange2faConfirmationModalOpen(false)}
       />
     </>
   );
