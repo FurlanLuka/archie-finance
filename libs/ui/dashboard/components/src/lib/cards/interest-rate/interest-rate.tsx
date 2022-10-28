@@ -2,19 +2,14 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import { LoanInterests } from '@archie/ui/shared/data-access/archie-api/credit/api/get-loan-interests';
 import { useGetLoanInterests } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-get-loan-interests';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { Card, Skeleton, TitleM, BodyM } from '@archie/ui/shared/design-system';
 
 export const InterestRate: FC = () => {
   const { t } = useTranslation();
 
-  const getLoanInterestsResponse: QueryResponse<LoanInterests> =
-    useGetLoanInterests();
+  const getLoanInterestsResponse = useGetLoanInterests();
 
   if (getLoanInterestsResponse.state === RequestState.LOADING) {
     return (

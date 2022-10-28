@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Borrower } from '../borrower.entity';
 import { Repository } from 'typeorm';
 import { BorrowerValidation } from '../utils/borrower.validation';
-import { InterestsDto } from './interests.dto';
+import { LoanInterests } from '@archie/api/peach-api/data-transfer-objects/types';
 import { CreditLine } from '../api/peach_api.interfaces';
 
 @Injectable()
@@ -16,7 +16,7 @@ export class InterestsService {
     private borrowerValidation: BorrowerValidation,
   ) {}
 
-  public async getInterests(userId: string): Promise<InterestsDto> {
+  public async getInterests(userId: string): Promise<LoanInterests> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
