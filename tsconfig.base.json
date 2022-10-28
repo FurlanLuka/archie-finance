@@ -22,6 +22,9 @@
       "@archie/api/credit-api/data-transfer-objects": [
         "libs/api/credit-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/credit-api/data-transfer-objects/types": [
+        "libs/api/credit-api/data-transfer-objects/src/types.ts"
+      ],
       "@archie/api/credit-api/plaid": [
         "libs/api/credit-api/plaid/src/index.ts"
       ],
