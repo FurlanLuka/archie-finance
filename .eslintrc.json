@@ -1,20 +1,356 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx"],
+  "ignorePatterns": [
+    "**/*"
+  ],
+  "plugins": [
+    "@nrwl/nx"
+  ],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
       "rules": {
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
           {
-            "enforceBuildableLibDependency": true,
             "allow": [],
             "depConstraints": [
               {
-                "sourceTag": "*",
-                "onlyDependOnLibsWithTags": ["*"]
+                "sourceTag": "scope:api:app:credit-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:credit-api",
+                  "scope:api:lib:credit-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:credit-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:credit-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:credit-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:credit-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:app:credit-line-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:credit-line-api",
+                  "scope:api:lib:credit-line-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:credit-line-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:credit-line-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:credit-line-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:credit-line-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:app:fireblocks-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:fireblocks-api",
+                  "scope:api:lib:fireblocks-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:fireblocks-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:fireblocks-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:fireblocks-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:fireblocks-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:app:ledger-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:ledger-api",
+                  "scope:api:lib:ledger-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:ledger-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:ledger-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:ledger-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:ledger-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:app:ltv-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:ltv-api",
+                  "scope:api:lib:ltv-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:ltv-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:ltv-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:ltv-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:ltv-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:app:mail-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:mail-api",
+                  "scope:api:lib:mail-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:mail-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:mail-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:mail-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:mail-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:app:onboarding-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:onboarding-api",
+                  "scope:api:lib:onboarding-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:onboarding-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:onboarding-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:onboarding-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:onboarding-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:app:paypal-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:paypal-api",
+                  "scope:api:lib:paypal-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:paypal-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:paypal-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:paypal-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:paypal-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:app:peach-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:peach-api",
+                  "scope:api:lib:peach-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:peach-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:peach-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:peach-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:peach-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:app:referral-system-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:referral-system-api",
+                  "scope:api:lib:referral-system-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:referral-system-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:referral-system-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:referral-system-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:referral-system-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:app:user-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:user-api",
+                  "scope:api:lib:user-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:user-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:user-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:user-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:user-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:app:webhook-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:webhook-api",
+                  "scope:api:lib:webhook-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:webhook-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:webhook-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:webhook-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:webhook-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:app:websocket-event-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:websocket-event-api",
+                  "scope:api:lib:websocket-event-api:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:websocket-event-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:websocket-event-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:websocket-event-api:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:websocket-event-api:shared",
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:ui:app:ui-dashboard",
+                "onlyDependOnLibsWithTags": [
+                  "scope:ui:lib:ui-dashboard",
+                  "scope:ui:lib:ui-dashboard:shared",
+                  "scope:ui:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:ui:lib:ui-dashboard",
+                "onlyDependOnLibsWithTags": [
+                  "scope:ui:lib:ui-dashboard:shared",
+                  "scope:ui:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:test-data",
+                "onlyDependOnLibsWithTags": [
+                  "*"
+                ]
+              },
+              {
+                "sourceTag": "scope:ui:lib:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:ui:lib:shared"
+                ]
               }
             ]
           }
@@ -22,10 +358,18 @@
       }
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript", "prettier"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "extends": [
+        "plugin:@nrwl/nx/typescript",
+        "prettier"
+      ],
       "parserOptions": {
-        "project": ["./tsconfig.base.json"]
+        "project": [
+          "./tsconfig.base.json"
+        ]
       },
       "rules": {
         "@typescript-eslint/no-floating-promises": "error",
@@ -38,22 +382,39 @@
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/prefer-optional-chain": "warn",
         "return-await": "off",
-        "@typescript-eslint/return-await": ["error", "in-try-catch"],
-        "@typescript-eslint/strict-boolean-expressions": ["error"],
-        "@typescript-eslint/naming-convention": ["error",
+        "@typescript-eslint/return-await": [
+          "error",
+          "in-try-catch"
+        ],
+        "@typescript-eslint/strict-boolean-expressions": [
+          "error"
+        ],
+        "@typescript-eslint/naming-convention": [
+          "error",
           {
             "selector": "default",
-            "format": ["camelCase", "UPPER_CASE", "snake_case", "PascalCase"],
+            "format": [
+              "camelCase",
+              "UPPER_CASE",
+              "snake_case",
+              "PascalCase"
+            ],
             "leadingUnderscore": "allow"
           },
           {
             "selector": "enumMember",
-            "format": ["camelCase", "snake_case", "UPPER_CASE"],
+            "format": [
+              "camelCase",
+              "snake_case",
+              "UPPER_CASE"
+            ],
             "leadingUnderscore": "allow"
           },
           {
             "selector": "typeLike",
-            "format": ["PascalCase"]
+            "format": [
+              "PascalCase"
+            ]
           },
           {
             "selector": [
@@ -67,7 +428,9 @@
               "enumMember"
             ],
             "format": null,
-            "modifiers": ["requiresQuotes"]
+            "modifiers": [
+              "requiresQuotes"
+            ]
           }
         ],
         "@typescript-eslint/no-dynamic-delete": "error",
@@ -87,25 +450,31 @@
         "no-unused-expressions": "off",
         "@typescript-eslint/no-unused-expressions": "error",
         "no-unused-vars": "off",
-        "@typescript-eslint/no-unused-vars": ["error", {
-          "argsIgnorePattern": "^_",
-          "varsIgnorePattern": "^(?:_|[A-Z](([a-z]+[A-Z]?)*)$)",
-          "caughtErrorsIgnorePattern": "^_"
-        }],
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^(?:_|[A-Z](([a-z]+[A-Z]?)*)$)",
+            "caughtErrorsIgnorePattern": "^_"
+          }
+        ],
         "no-use-before-define": "off",
         "@typescript-eslint/prefer-enum-initializers": "error",
-
         "@typescript-eslint/no-unsafe-call": "warn",
         "@typescript-eslint/no-unsafe-member-access": "warn",
         "@typescript-eslint/no-unsafe-argument": "warn",
         "@typescript-eslint/no-unsafe-return": "warn",
-
         "@typescript-eslint/no-use-before-define": "off"
       }
     },
     {
-      "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nrwl/nx/javascript"],
+      "files": [
+        "*.js",
+        "*.jsx"
+      ],
+      "extends": [
+        "plugin:@nrwl/nx/javascript"
+      ],
       "rules": {}
     },
     {

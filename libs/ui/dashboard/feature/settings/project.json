@@ -3,7 +3,7 @@
   "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/dashboard/feature/settings/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:ui:lib:ui-dashboard"],
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",

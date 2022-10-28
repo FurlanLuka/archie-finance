@@ -4,11 +4,12 @@ import { DeployConfigurationSchema } from './schema';
 import { execSync } from 'child_process';
 import { ExecutorResult } from '../executor.interfaces';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export default async function runExecutor(
   { environment }: DeployConfigurationSchema,
   { projectName, workspace }: ExecutorContext,
-): Promise<ExecutorResult> {
-  if (projectName === undefined) {
+) {
+  if (projectName == null) {
     logger.error(`Project name is not available.`);
 
     return { success: false };
