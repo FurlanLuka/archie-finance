@@ -14,7 +14,6 @@ import { TraceEvent } from './trace_event';
 import { Idempotent } from './idempotent';
 import { Event } from '../event/event';
 import { AppliedDecorator } from './queue_decorators.interfaces';
-import { v4 } from 'uuid';
 
 interface SubscriptionOptions {
   useTracer: boolean;
