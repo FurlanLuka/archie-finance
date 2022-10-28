@@ -4,7 +4,6 @@ import { Navigate, useNavigate } from 'react-router-dom';
 
 import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { OnboardingStep } from '@archie/ui/dashboard/constants';
-import { GetCreditResponse } from '@archie/ui/shared/data-access/archie-api/credit/api/get-credit';
 import { useCreateRizeUser } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
 import { useGetCredit } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import {
@@ -40,8 +39,7 @@ export const CardScreen: FC = () => {
   const [stage, setStage] = useState(Stage.CREATE_USER);
 
   const createUserQuery: MutationQueryResponse = useCreateRizeUser();
-  const getCreditQueryResponse: QueryResponse<GetCreditResponse> =
-    useGetCredit();
+  const getCreditQueryResponse = useGetCredit();
   const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
 
   useEffect(() => {

@@ -7,7 +7,6 @@ import { Ltv } from '@archie/api/ltv-api/data-transfer-objects/types';
 import { MakePaymentModal } from '@archie/ui/dashboard/feature/make-payment';
 import { canUserSchedulePayment } from '@archie/ui/dashboard/utils';
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { GetCreditResponse } from '@archie/ui/shared/data-access/archie-api/credit/api/get-credit';
 import { useGetCredit } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import {
   QueryResponse,
@@ -31,8 +30,7 @@ export const AvailableCredit: FC = () => {
 
   const [makePaymentModalOpen, setMakePaymentModalOpen] = useState(false);
 
-  const getCreditQueryResponse: QueryResponse<GetCreditResponse> =
-    useGetCredit();
+  const getCreditQueryResponse = useGetCredit();
   const getLTVResponse: QueryResponse<Ltv> = useGetLTV();
   const getObligationsResponse = useGetObligations();
 
