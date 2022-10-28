@@ -1,8 +1,8 @@
 import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { KycResponse } from '@archie/api/user-api/data-transfer-objects/types';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
-import { Kyc } from '@archie/ui/shared/data-access/archie-api/kyc/api/get-kyc';
 import { UserObligations } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import { ScheduleTransactionParams } from '@archie/ui/shared/data-access/archie-api/payment/api/schedule-transaction';
 import { useScheduleTransaction } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
@@ -22,7 +22,7 @@ interface PaymentConfirmProps {
   onConfirm: () => void;
   onBack: () => void;
   obligations: UserObligations;
-  kycData: Kyc;
+  kycData: KycResponse;
   scheduledTransactionParams: ScheduleTransactionParams;
 }
 

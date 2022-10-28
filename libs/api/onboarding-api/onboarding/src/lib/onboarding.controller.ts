@@ -14,10 +14,10 @@ import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import {
   EmailVerifiedPayload,
-  KycSubmittedPayload,
   MfaRemovedPayload,
   MfaEnrolledPayload,
 } from '@archie/api/user-api/data-transfer-objects';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 import {
   CardActivatedPayload,
   CollateralReceivedPayload,

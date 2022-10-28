@@ -11,11 +11,7 @@ import {
   MarginCallAlert,
 } from '@archie/ui/dashboard/components';
 import { PayWithPaypalScheduled } from '@archie/ui/dashboard/feature/make-payment';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
-import { Kyc } from '@archie/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetKyc } from '@archie/ui/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
 import { Modal, TitleM, BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
@@ -30,7 +26,7 @@ export const HomeScreen: FC = () => {
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
-  const getKycResponse: QueryResponse<Kyc> = useGetKyc();
+  const getKycResponse = useGetKyc();
 
   const [confirmPaymentModalOpen, setConfirmPaymentModalOpen] = useState(false);
 

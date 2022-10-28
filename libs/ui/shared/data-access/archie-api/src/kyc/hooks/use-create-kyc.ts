@@ -1,16 +1,14 @@
+import { KycResponse } from '@archie/api/user-api/data-transfer-objects/types';
+
 import { useExtendedMutation } from '../../helper-hooks';
 import { MutationQueryResponse } from '../../interface';
-import {
-  createKyc,
-  CreateKycPayload,
-  CreateKycResponse,
-} from '../api/create-kyc';
+import { createKyc, CreateKycPayload } from '../api/create-kyc';
 
 export const useCreateKyc = (): MutationQueryResponse<
   CreateKycPayload,
-  CreateKycResponse
+  KycResponse
 > => {
-  return useExtendedMutation<CreateKycResponse, CreateKycPayload>(
+  return useExtendedMutation<KycResponse, CreateKycPayload>(
     'kyc_record',
     createKyc,
   );

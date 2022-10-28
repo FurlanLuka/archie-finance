@@ -157,6 +157,9 @@
       "@archie/api/user-api/data-transfer-objects": [
         "libs/api/user-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/user-api/data-transfer-objects/types": [
+        "libs/api/user-api/data-transfer-objects/src/types.ts"
+      ],
       "@archie/api/user-api/kyc": ["libs/api/user-api/kyc/src/index.ts"],
       "@archie/api/user-api/test-data": [
         "libs/api/user-api/test-data/src/index.ts"

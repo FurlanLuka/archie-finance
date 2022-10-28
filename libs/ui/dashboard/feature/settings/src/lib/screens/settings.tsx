@@ -6,7 +6,6 @@ import {
   QueryResponse,
   RequestState,
 } from '@archie/ui/shared/data-access/archie-api/interface';
-import { Kyc } from '@archie/ui/shared/data-access/archie-api/kyc/api/get-kyc';
 import { useGetKyc } from '@archie/ui/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
 import { EmailVerificationResponse } from '@archie/ui/shared/data-access/archie-api/user/api/get-email-verification';
 import { useGetEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-get-email-verification';
@@ -26,7 +25,7 @@ import { SettingsStyled } from './settings.styled';
 export const SettingsScreen: FC = () => {
   const { t } = useTranslation();
 
-  const getKycResponse: QueryResponse<Kyc> = useGetKyc();
+  const getKycResponse = useGetKyc();
   const getEmailVerificationResponse: QueryResponse<EmailVerificationResponse> =
     useGetEmailVerification();
 
