@@ -3,9 +3,9 @@ import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
+import { Ltv } from '@archie/api/ltv-api/data-transfer-objects/types';
 import { MakePaymentModal } from '@archie/ui/dashboard/feature/make-payment';
 import { canUserSchedulePayment } from '@archie/ui/dashboard/utils';
-import { LTV } from '@archie/ui/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { GetCreditResponse } from '@archie/ui/shared/data-access/archie-api/credit/api/get-credit';
 import { useGetCredit } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
@@ -33,7 +33,7 @@ export const AvailableCredit: FC = () => {
 
   const getCreditQueryResponse: QueryResponse<GetCreditResponse> =
     useGetCredit();
-  const getLTVResponse: QueryResponse<LTV> = useGetLTV();
+  const getLTVResponse: QueryResponse<Ltv> = useGetLTV();
   const getObligationsResponse = useGetObligations();
 
   if (

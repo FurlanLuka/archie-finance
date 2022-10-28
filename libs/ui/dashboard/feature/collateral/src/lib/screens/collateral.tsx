@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
 import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
+import { Ltv } from '@archie/api/ltv-api/data-transfer-objects/types';
 import { MarginCallAlert } from '@archie/ui/dashboard/components';
 import { LTVText, LTVColor } from '@archie/ui/shared/constants';
-import { LTV } from '@archie/ui/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { CreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/api/get-credit-line';
 import { useGetCreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/hooks/use-get-credit-line';
@@ -32,7 +32,7 @@ export const CollateralScreen: FC = () => {
   const { t } = useTranslation();
 
   const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
-  const getLTVResponse: QueryResponse<LTV> = useGetLTV();
+  const getLTVResponse: QueryResponse<Ltv> = useGetLTV();
   const getCreditLineResponse: QueryResponse<CreditLine> = useGetCreditLine();
 
   const getContent = () => {
