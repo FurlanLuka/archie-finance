@@ -8,13 +8,8 @@ import {
 } from '@archie/api/peach-api/data-transfer-objects';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
-import {
-  RequestHandler,
-} from '@archie/api/utils/queue/decorators/request_handler';
-import {
-  RPCResponse,
-  RPCResponseType,
-} from '@archie/api/utils/queue'
+import { RequestHandler } from '@archie/api/utils/queue/decorators/request_handler';
+import { RPCResponse, RPCResponseType } from '@archie/api/utils/queue';
 import {
   Controller,
   Get,
@@ -27,8 +22,8 @@ import {
   BorrowerNotFoundError,
   CreditLineNotFoundError,
 } from '../borrower.errors';
-import { GetLoanBalancesDto } from './loan-balances.dto';
 import { LoanBalancesService } from './loan-balances.service';
+import { LoanBalancesDto } from '@archie/api/peach-api/data-transfer-objects';
 
 @Controller('v1/loan_balances')
 export class LoanBalancesController {
@@ -42,7 +37,7 @@ export class LoanBalancesController {
     BorrowerNotFoundError,
     CreditLineNotFoundError,
   ])
-  async getLoanBalances(@Req() req): Promise<GetLoanBalancesDto> {
+  async getLoanBalances(@Req() req): Promise<LoanBalancesDto> {
     return this.loanBalancesService.getLoanBalances(req.user.sub);
   }
 }

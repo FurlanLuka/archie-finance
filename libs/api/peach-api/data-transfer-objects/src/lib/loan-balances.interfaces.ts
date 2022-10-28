@@ -1,4 +1,4 @@
-export class GetLoanBalancesDto {
+export interface LoanBalances {
   isBalanceChangeInProgress: boolean;
   totalCredit: number;
   availableCredit: number;

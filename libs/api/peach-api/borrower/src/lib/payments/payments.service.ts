@@ -24,7 +24,7 @@ import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
 import {
   LedgerAccountUpdatedPayload,
   LedgerActionType,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 
 @Injectable()
 export class PaymentsService {

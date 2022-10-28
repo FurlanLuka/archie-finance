@@ -129,6 +129,9 @@
       "@archie/api/peach-api/data-transfer-objects": [
         "libs/api/peach-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/peach-api/data-transfer-objects/types": [
+        "libs/api/peach-api/data-transfer-objects/src/types.ts"
+      ],
       "@archie/api/peach-api/test-data": [
         "libs/api/peach-api/test-data/src/index.ts"
       ],
