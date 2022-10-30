@@ -170,6 +170,8 @@ jobs:
       run: exit 1
     - uses: actions/checkout@v2
       name: Checkout
+    - uses: ./.github/actions/install-dependencies
+      name: Install dependencies
     - if: contains(matrix.project, 'api')
       uses: ./.github/actions/deploy-api
       name: Deploy API
