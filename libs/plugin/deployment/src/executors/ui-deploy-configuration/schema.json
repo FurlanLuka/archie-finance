@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "outputCapture": "direct-nodejs",
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "title": "Get config executor",
+  "description": "",
+  "type": "object",
+  "properties": {},
+  "environment": {
+    "type": "string",
+    "description": "Environment"
+  },
+  "required": ["environment"]
+}

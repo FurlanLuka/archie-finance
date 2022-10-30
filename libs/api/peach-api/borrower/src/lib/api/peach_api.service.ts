@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 import { ConfigService } from '@archie/api/utils/config';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
 import {
@@ -17,7 +17,6 @@ import {
   Person,
   PersonStatus,
   Obligations,
-  PaymentInstrumentBalance,
   Document,
   AutopayOptions,
   Autopay,
@@ -50,7 +49,7 @@ import { BorrowerWithCreditLine } from '../utils/borrower.validation.interfaces'
 @Injectable()
 export class PeachApiService {
   MAX_REQUEST_TIMEOUT = 10000;
-  CONTACT_ALREADY_EXISTS_STATUS = 400;
+  CONFLICT_ERROR_MESSAGE = 'collision detected';
   ALREADY_ACTIVATED_STATUS = 400;
   USER_ALREADY_EXISTS_STATUS = 409;
   NOMINAL_APR = 0;
@@ -194,11 +193,6 @@ export class PeachApiService {
           paymentInstrumentId,
           amount,
         },
-        {
-          params: {
-            sync: true,
-          },
-        },
       );
     } catch (e) {
       const error: PeachErrorResponse = e;
@@ -293,20 +287,28 @@ export class PeachApiService {
     } catch (error) {
       const axiosError: PeachErrorResponse = error;
 
-      if (axiosError.status !== this.CONTACT_ALREADY_EXISTS_STATUS) throw error;
+      if (axiosError.errorResponse.message !== this.CONFLICT_ERROR_MESSAGE)
+        throw error;
     }
   }
 
   public async addMailContact(personId: string, email: string): Promise<void> {
-    await this.peachClient.post(`/people/${personId}/contacts`, {
-      contactType: 'email',
-      label: 'personal',
-      affiliation: 'self',
-      status: 'primary',
-      value: email,
-      valid: true,
-      verified: true,
-    });
+    try {
+      await this.peachClient.post(`/people/${personId}/contacts`, {
+        contactType: 'email',
+        label: 'personal',
+        affiliation: 'self',
+        status: 'primary',
+        value: email,
+        valid: true,
+        verified: true,
+      });
+    } catch (error) {
+      const axiosError: PeachErrorResponse = error;
+
+      if (axiosError.errorResponse.message !== this.CONFLICT_ERROR_MESSAGE)
+        throw error;
+    }
   }
 
   public async createUser(personId: string, email: string): Promise<void> {
@@ -378,16 +380,6 @@ export class PeachApiService {
     return response.data.data;
   }
 
-  public async getCreditLimit(
-    personId: string,
-    loanId: string,
-  ): Promise<CreditLimit> {
-    const response = await this.peachClient.get<PeachResponseData<CreditLimit>>(
-      `/people/${personId}/loans/${loanId}/credit-limit`,
-    );
-
-    return response.data.data;
-  }
   public async updateCreditLimit(
     personId: string,
     loanId: string,
@@ -424,12 +416,7 @@ export class PeachApiService {
       {
         nickname: 'Credit Card',
         status: 'originated',
-        atOrigination: {
-          minPaymentCalculation: {
-            percentageOfPrincipal: 0.1,
-            minAmount: 0,
-          },
-        },
+        atOrigination: {},
       },
     );
 
@@ -469,6 +456,7 @@ export class PeachApiService {
         },
         {
           params: {
+            force: true,
             sync: true,
           },
         },
@@ -584,11 +572,6 @@ export class PeachApiService {
           amount,
           scheduledDate: scheduledDate ?? undefined,
         },
-        {
-          params: {
-            sync: true, // TODO: check if possible to refactor via Peach event
-          },
-        },
       );
     } catch (e) {
       const error: PeachErrorResponse = e;
@@ -602,50 +585,6 @@ export class PeachApiService {
 
       throw error;
     }
-  }
-
-  public async getCachedBalance(
-    personId: string,
-    paymentInstrumentId: string,
-  ): Promise<PaymentInstrumentBalance> {
-    let response: AxiosResponse<PeachResponseData<PaymentInstrumentBalance>>;
-
-    try {
-      response = await this.peachClient.get<
-        PeachResponseData<PaymentInstrumentBalance>
-      >(
-        `/people/${personId}/payment-instruments/${paymentInstrumentId}/balance`,
-      );
-    } catch (e) {
-      const error: PeachErrorResponse = e;
-
-      if (error.status === 404) {
-        response = await this.peachClient.post<
-          PeachResponseData<PaymentInstrumentBalance>
-        >(
-          `/people/${personId}/payment-instruments/${paymentInstrumentId}/balance`,
-          {},
-        );
-      } else {
-        throw error;
-      }
-    }
-
-    return response.data.data;
-  }
-
-  public async getRefreshedBalance(
-    personId: string,
-    paymentInstrumentId: string,
-  ): Promise<PaymentInstrumentBalance> {
-    const response = await this.peachClient.post<
-      PeachResponseData<PaymentInstrumentBalance>
-    >(
-      `/people/${personId}/payment-instruments/${paymentInstrumentId}/balance`,
-      {},
-    );
-
-    return response.data.data;
   }
 
   public async createAutopayAgreementDocument(

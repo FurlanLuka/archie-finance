@@ -1,4 +1,9 @@
-import { getWorkspaceLayout, joinPathFragments, Tree } from '@nrwl/devkit';
+import {
+  GeneratorCallback,
+  getWorkspaceLayout,
+  joinPathFragments,
+  Tree,
+} from '@nrwl/devkit';
 import { MicroserviceGenerator } from './schema';
 import { initGenerator } from '@nrwl/nest';
 import { applicationGenerator as nodeApplicationGenerator } from '@nrwl/node';
@@ -11,7 +16,6 @@ import microserviceProjectTargetGenerator from '../microservice-project-target-g
 
 export interface NormalizedSchema extends MicroserviceGenerator {
   projectRoot: string;
-  constantsRoot: string;
 }
 
 function normalizeOptions(
@@ -20,22 +24,20 @@ function normalizeOptions(
 ): NormalizedSchema {
   const projectRoot = joinPathFragments(
     getWorkspaceLayout(tree).appsDir,
+    'api',
     options.name,
-  );
-
-  const constantsRoot = joinPathFragments(
-    getWorkspaceLayout(tree).libsDir,
-    `api/${options.name}/constants`,
   );
 
   return {
     ...options,
     projectRoot,
-    constantsRoot,
   };
 }
 
-export default async function (tree: Tree, options: MicroserviceGenerator) {
+export default async function (
+  tree: Tree,
+  options: MicroserviceGenerator,
+): Promise<GeneratorCallback> {
   const normalizedOptions = normalizeOptions(tree, options);
 
   const initTask = await initGenerator(tree, {
@@ -46,6 +48,8 @@ export default async function (tree: Tree, options: MicroserviceGenerator) {
   const nodeApplicationTask = await nodeApplicationGenerator(tree, {
     unitTestRunner: 'jest',
     name: normalizedOptions.name,
+    directory: 'api',
+    tags: `scope:api:app:${normalizedOptions.name}`
   });
 
   createAppFiles(tree, normalizedOptions);
@@ -54,6 +58,20 @@ export default async function (tree: Tree, options: MicroserviceGenerator) {
   const createConstantsLibraryTask = await microserviceModuleGenerator(tree, {
     projectName: options.name,
     name: 'constants',
+    moduleType: 'SHARED',
+  });
+
+  const createDataTransferObjectsLibraryTask =
+    await microserviceModuleGenerator(tree, {
+      projectName: options.name,
+      name: 'data-transfer-objects',
+      moduleType: 'SHARED_WITH_UI',
+    });
+
+  const createTestDataLibraryTask = await microserviceModuleGenerator(tree, {
+    projectName: options.name,
+    name: 'test-data',
+    moduleType: 'TEST_DATA_MODULE',
   });
 
   createLibFiles(tree, normalizedOptions);
@@ -64,11 +82,13 @@ export default async function (tree: Tree, options: MicroserviceGenerator) {
 
   microserviceProjectTargetGenerator(tree, {
     projectName: options.name,
-  })
+  });
 
   return runTasksInSerial(
     initTask,
     nodeApplicationTask,
     createConstantsLibraryTask,
+    createDataTransferObjectsLibraryTask,
+    createTestDataLibraryTask,
   );
 }

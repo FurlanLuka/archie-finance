@@ -1,0 +1,10 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+WORKDIR /service
+
+COPY dist/apps/api/peach-api/ /service
+
+USER node
+
+CMD ["node", "main.js"]

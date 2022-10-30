@@ -12,12 +12,12 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/mail-api/sendgrid"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/mail-api/sendgrid"],
       "options": {
         "jestConfig": "libs/api/mail-api/sendgrid/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:mail-api"]
 }

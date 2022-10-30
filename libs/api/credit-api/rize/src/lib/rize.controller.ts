@@ -21,16 +21,16 @@ import {
   GetTransactionsQueryDto,
   TransactionResponseDto,
 } from './rize.dto';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
 import {
   MARGIN_CALL_COMPLETED_TOPIC,
   MARGIN_CALL_STARTED_TOPIC,
-} from '@archie/api/margin-api/constants';
+} from '@archie/api/ltv-api/constants';
 import {
   MarginCallCompletedPayload,
   MarginCallStartedPayload,
-} from '@archie/api/margin-api/data-transfer-objects';
+} from '@archie/api/ltv-api/data-transfer-objects';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 

@@ -1,4 +1,9 @@
-import { getWorkspaceLayout, Tree, joinPathFragments } from '@nrwl/devkit';
+import {
+  getWorkspaceLayout,
+  Tree,
+  joinPathFragments,
+  GeneratorCallback,
+} from '@nrwl/devkit';
 import { MicroserviceModuleGeneratorSchema } from './schema';
 import { libraryGenerator } from '@nrwl/nest';
 import { Linter } from '@nrwl/linter';
@@ -32,11 +37,30 @@ function normalizeOptions(
   };
 }
 
-export async function microserviceModuleGenerator (
+export async function microserviceModuleGenerator(
   tree: Tree,
   options: MicroserviceModuleGeneratorSchema,
-) {
+): Promise<GeneratorCallback> {
   const normalizedOptions = normalizeOptions(tree, options);
+
+  const tags: string[] = [];
+
+  if (options.moduleType === 'NORMAL') {
+    tags.push(`scope:api:lib:${options.projectName}`);
+  } else if (options.moduleType === 'SHARED') {
+    tags.push(
+      `scope:api:lib:${options.projectName}:shared`,
+      `scope:api:lib:shared`,
+    );
+  } else if (options.moduleType === 'SHARED_WITH_UI') {
+    tags.push(
+      `scope:api:lib:${options.projectName}:shared`,
+      `scope:api:lib:shared`,
+      'scope:ui:lib:shared',
+    );
+  } else {
+    tags.push(`scope:api:lib:test-data`);
+  }
 
   const libraryGeneratorTask = await libraryGenerator(tree, {
     name: normalizedOptions.name,
@@ -48,6 +72,7 @@ export async function microserviceModuleGenerator (
     linter: Linter.EsLint,
     service: true,
     publishable: false,
+    tags: tags.join(','),
   });
 
   deleteFiles(tree, normalizedOptions);

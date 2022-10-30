@@ -12,12 +12,12 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/paypal-api/paypal"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/paypal-api/paypal"],
       "options": {
         "jestConfig": "libs/api/paypal-api/paypal/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:paypal-api:shared", "scope:api:lib:shared"]
 }

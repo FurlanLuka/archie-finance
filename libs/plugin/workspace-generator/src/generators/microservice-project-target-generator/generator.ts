@@ -12,6 +12,7 @@ function normalizeOptions(
 ): NormalizedSchema {
   const projectRoot = joinPathFragments(
     getWorkspaceLayout(tree).appsDir,
+    'api',
     options.projectName,
   );
 
@@ -24,7 +25,7 @@ function normalizeOptions(
 export function microserviceProjectTargetGenerator(
   tree: Tree,
   options: MicroserviceProjectTargetGenerator,
-) {
+): void {
   const normalizedOptions = normalizeOptions(tree, options);
 
   updateProjectConfiguration(tree, normalizedOptions);

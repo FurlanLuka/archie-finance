@@ -1,0 +1,142 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: archie-webhook-api
+  labels:
+    app: archie-webhook-api
+    {{- if not .Values.local }}
+    tags.datadoghq.com/env: '{{ .Values.environment }}'
+    tags.datadoghq.com/service: 'archie-webhook-api'
+    tags.datadoghq.com/version: '{{ .Values.tag }}'
+    {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: archie-webhook-api
+  {{- if not .Values.local }}
+  replicas: 1
+  {{- else }}
+  replicas: 1
+  {{- end }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: archie-webhook-api
+        {{- if not .Values.local }}
+        tags.datadoghq.com/env: '{{ .Values.environment }}'
+        tags.datadoghq.com/service: 'archie-webhook-api'
+        tags.datadoghq.com/version: '{{ .Values.tag }}'
+        {{- else }}
+        helm-revision: '{{ .Release.Revision }}'
+        {{- end }}
+    spec:
+      containers:
+        - name: archie-webhook-api
+          image: '{{ .Values.image }}:{{ .Values.tag }}'
+          {{- if not .Values.local }}
+          imagePullPolicy: Always
+          {{- else }}
+          imagePullPolicy: Never
+          {{- end }}
+          ports:
+            - containerPort: 80
+          livenessProbe:
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            httpGet:
+              path: /health
+              port: 80
+          resources:
+            requests:
+              memory: '64Mi'
+              cpu: '50m'
+            limits:
+              memory: '256Mi'
+              cpu: '500m'
+          {{- if not .Values.local }}
+          env:
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+            - name: DD_ENV
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/env']
+            - name: DD_VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/version']
+            - name: DD_SERVICE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/service']
+            - name: DD_LOGS_INJECTION
+              value: 'true'
+            - name: TYPEORM_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: webhook-api-secrets
+                  key: db-username
+            - name: TYPEORM_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: webhook-api-secrets
+                  key: db-password
+            - name: TYPEORM_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: webhook-api-secrets
+                  key: db-hostname
+            - name: TYPEORM_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: webhook-api-secrets
+                  key: db-port
+            - name: TYPEORM_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: webhook-api-secrets
+                  key: db-database
+            - name: FIREBLOCKS_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: webhook-api-secrets
+                  key: fireblocks-public-key
+            - name: AUTH0_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: webhook-api-secrets
+                  key: auth0-secret-key
+            - name: QUEUE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: queue-shared-secrets
+                  key: queue-url
+            - name: PEACH_HMAC_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: webhook-api-secrets
+                  key: peach-hmac-secret
+          {{- end }}
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: archie-webhook-api-service
+  labels:
+    app: archie-webhook-api-service
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: archie-webhook-api

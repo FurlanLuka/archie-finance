@@ -89,7 +89,7 @@ async function buildMicroservices(microservices, debugEnabled) {
       const microservice = microservices[i];
 
       buildCommands.push(
-        `docker build -f ./apps/${microservice}/Dockerfile.local -t ${microservice} --build-arg LOCAL=true .`,
+        `docker build -f ./apps/api/${microservice}/Dockerfile.local -t ${microservice} --build-arg LOCAL=true .`,
       );
     }
 
@@ -130,7 +130,7 @@ async function deployMicroservices(microservices, debugEnabled) {
       console.log(`Deploying ${microservice}...`);
 
       await exec(
-        `helm upgrade --install ${microservice} apps/${microservice}/chart --set tag=latest --set image=${microservice} --set local=true --force`,
+        `helm upgrade --install ${microservice} apps/api/${microservice}/chart --set tag=latest --set image=${microservice} --set local=true --force`,
       );
       console.log(`${microservice} deployed ✅`);
     }

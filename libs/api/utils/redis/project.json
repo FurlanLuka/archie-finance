@@ -12,12 +12,12 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/utils/redis"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/utils/redis"],
       "options": {
         "jestConfig": "libs/api/utils/redis/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:shared"]
 }

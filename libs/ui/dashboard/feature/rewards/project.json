@@ -1,0 +1,26 @@
+{
+  "name": "ui-dashboard-feature-rewards",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/dashboard/feature/rewards/src",
+  "projectType": "library",
+  "tags": ["scope:ui:lib:ui-dashboard"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ui/dashboard/feature/rewards/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/ui/dashboard/feature/rewards"],
+      "options": {
+        "jestConfig": "libs/ui/dashboard/feature/rewards/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

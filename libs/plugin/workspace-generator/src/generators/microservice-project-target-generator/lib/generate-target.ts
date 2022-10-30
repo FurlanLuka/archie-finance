@@ -1,13 +1,13 @@
-export function generateTarget(projectName: string) {
+export function generateTarget(projectName: string): object {
   return {
     'build-openapi': {
-      executor: '@nrwl/workspace:run-commands',
+      executor: 'nx:run-commands',
       options: {
-        command: `npm run build ${projectName} && node dist/apps/${projectName}/main build-swagger`,
+        command: `npm run build ${projectName} && RUN_MIGRATIONS=false node dist/apps/${projectName}/main build-swagger`,
       },
     },
     'generate-migration': {
-      executor: '@nrwl/workspace:run-commands',
+      executor: 'nx:run-commands',
       options: {
         command: `npm run build ${projectName} && node dist/apps/${projectName}/main generate-migration`,
       },

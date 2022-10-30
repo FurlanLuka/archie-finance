@@ -1,22 +1,26 @@
-export class LtvUpdatedPayload {
+export class MarginCallLtvLimitApproachingPayload {
   userId: string;
   ltv: number;
-  calculatedOn: LtvCalculatedOn;
-}
-
-export class LtvCalculatedOn {
-  collateral: CollateralWithPrice[];
+  priceForMarginCall: number;
+  priceForPartialCollateralSale: number;
   collateralBalance: number;
-  utilizedCreditAmount: number;
-  calculatedAt: string;
 }
 
-export class LtvPeriodicCheckRequestedPayload {
-  userIds: string[];
+export class MarginCallCompletedPayload {
+  completedAt: string;
+  userId: string;
+  liquidationAmount: number;
+  ltv: number;
+  priceForMarginCall: number;
+  priceForPartialCollateralSale: number;
+  collateralBalance: number;
 }
 
-export class CollateralWithPrice {
-  asset: string;
-  amount: string;
-  price: number;
+export class MarginCallStartedPayload {
+  userId: string;
+  startedAt: string;
+  ltv: number;
+  priceForMarginCall: number;
+  priceForPartialCollateralSale: number;
+  collateralBalance: number;
 }

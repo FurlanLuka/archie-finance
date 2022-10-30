@@ -7,20 +7,22 @@ import {
   KYC_SUBMITTED_TOPIC,
   EMAIL_VERIFIED_TOPIC,
   MFA_ENROLLED_TOPIC,
+  MFA_REMOVED_TOPIC,
 } from '@archie/api/user-api/constants';
 import { CARD_ACTIVATED_TOPIC } from '@archie/api/credit-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import {
   EmailVerifiedPayload,
   KycSubmittedPayload,
+  MfaRemovedPayload,
   MfaEnrolledPayload,
 } from '@archie/api/user-api/data-transfer-objects';
 import {
   CardActivatedPayload,
   CollateralReceivedPayload,
 } from '@archie/api/credit-api/data-transfer-objects';
-import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-limit-api/constants';
+import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-line-api/constants';
 
 @Controller('v1/onboarding')
 export class OnboardingController {
@@ -43,26 +45,26 @@ export class OnboardingQueueController {
   @Subscribe(
     KYC_SUBMITTED_TOPIC,
     OnboardingQueueController.CONTROLLER_QUEUE_NAME,
-    { logBody: false },
   )
   async kycSubmittedEventHandler(payload: KycSubmittedPayload): Promise<void> {
-    await this.onboardingService.completeOnboardingStage(
+    await this.onboardingService.updateOnboardingStage(
       payload.userId,
       'kycStage',
+      true,
     );
   }
 
   @Subscribe(
     EMAIL_VERIFIED_TOPIC,
     OnboardingQueueController.CONTROLLER_QUEUE_NAME,
-    { logBody: false },
   )
   async emailVerifiedEventHandler(
     payload: EmailVerifiedPayload,
   ): Promise<void> {
-    await this.onboardingService.completeOnboardingStage(
+    await this.onboardingService.updateOnboardingStage(
       payload.userId,
       'emailVerificationStage',
+      true,
     );
   }
 
@@ -71,9 +73,10 @@ export class OnboardingQueueController {
     OnboardingQueueController.CONTROLLER_QUEUE_NAME,
   )
   async mfaEnrollmentEventHandler(payload: MfaEnrolledPayload): Promise<void> {
-    await this.onboardingService.completeOnboardingStage(
+    await this.onboardingService.updateOnboardingStage(
       payload.userId,
       'mfaEnrollmentStage',
+      true,
     );
   }
 
@@ -84,9 +87,10 @@ export class OnboardingQueueController {
   async collateralReceivedEventHandler(
     payload: CollateralReceivedPayload,
   ): Promise<void> {
-    await this.onboardingService.completeOnboardingStage(
+    await this.onboardingService.updateOnboardingStage(
       payload.userId,
       'collateralizationStage',
+      true,
     );
   }
 
@@ -97,9 +101,19 @@ export class OnboardingQueueController {
   async cardActivatedEventHandler(
     payload: CardActivatedPayload,
   ): Promise<void> {
-    await this.onboardingService.completeOnboardingStage(
+    await this.onboardingService.updateOnboardingStage(
       payload.userId,
       'cardActivationStage',
+      true,
+    );
+  }
+
+  @Subscribe(MFA_REMOVED_TOPIC, OnboardingQueueController.CONTROLLER_QUEUE_NAME)
+  async mfaRemovedEventHandler(payload: MfaRemovedPayload): Promise<void> {
+    await this.onboardingService.updateOnboardingStage(
+      payload.userId,
+      'mfaEnrollmentStage',
+      false,
     );
   }
 }

@@ -1,0 +1,24 @@
+{
+  "name": "ui-shared-constants",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/shared/constants/src",
+  "projectType": "library",
+  "tags": ["scope:ui:lib:shared"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ui/shared/constants/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/ui/shared/constants"],
+      "options": {
+        "jestConfig": "libs/ui/shared/constants/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

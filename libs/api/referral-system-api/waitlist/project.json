@@ -12,12 +12,14 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/referral-system-api/waitlist"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/api/referral-system-api/waitlist"
+      ],
       "options": {
         "jestConfig": "libs/api/referral-system-api/waitlist/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:referral-system-api"]
 }

@@ -1,0 +1,72 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/onboarding-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/api/onboarding-api",
+        "main": "apps/api/onboarding-api/src/main.ts",
+        "tsConfig": "apps/api/onboarding-api/tsconfig.app.json",
+        "tsPlugins": ["@nestjs/swagger/plugin"],
+        "assets": ["apps/api/onboarding-api/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/api/onboarding-api/src/environments/environment.ts",
+              "with": "apps/api/onboarding-api/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "build-openapi": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build onboarding-api && RUN_MIGRATIONS=false node dist/apps/api/onboarding-api/main build-swagger"
+      }
+    },
+    "generate-migration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build onboarding-api && node dist/apps/api/onboarding-api/main generate-migration"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "onboarding-api:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/api/onboarding-api/**/*.ts"]
+      }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
+    },
+    "test-integration": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/api/onboarding-api"],
+      "options": {
+        "jestConfig": "apps/api/onboarding-api/jest.config.ts",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    }
+  },
+  "tags": ["scope:api:app:onboarding-api", "scope:api:app"]
+}

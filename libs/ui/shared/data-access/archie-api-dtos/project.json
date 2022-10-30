@@ -1,0 +1,28 @@
+{
+  "name": "ui-shared-data-access-archie-api-dtos",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/shared/data-access/archie-api-dtos/src",
+  "projectType": "library",
+  "tags": ["scope:ui:lib:shared"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ui/shared/data-access/archie-api-dtos/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/ui/shared/data-access/archie-api-dtos"
+      ],
+      "options": {
+        "jestConfig": "libs/ui/shared/data-access/archie-api-dtos/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

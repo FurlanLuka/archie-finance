@@ -12,12 +12,12 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/user-api/user"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/user-api/user"],
       "options": {
         "jestConfig": "libs/api/user-api/user/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:user-api"]
 }

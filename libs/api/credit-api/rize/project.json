@@ -12,12 +12,12 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/credit-api/rize"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/credit-api/rize"],
       "options": {
         "jestConfig": "libs/api/credit-api/rize/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:credit-api"]
 }

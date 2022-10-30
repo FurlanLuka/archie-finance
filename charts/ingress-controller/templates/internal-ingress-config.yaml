@@ -25,61 +25,6 @@ spec:
   rules:
     - http:
         paths:
-          ## User api service
-          - path: /internal/kyc
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-user-api-service
-                port:
-                  number: 80
-          ## Onboarding api service
-          - path: /internal/onboarding
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-onboarding-api-service
-                port:
-                  number: 80
-          ## Credit api service
-          - path: /internal/collateral
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-credit-api-service
-                port:
-                  number: 80
-          ## Asset price api service
-          - path: /internal/asset_price
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-asset-price-api-service
-                port:
-                  number: 80
-          ## Collateral api service
-          - path: /internal/asset_information
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-collateral-api-service
-                port:
-                  number: 80
-          - path: /internal/margins
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-credit-api-service
-                port:
-                  number: 80
-          ## User api service
-          - path: /internal/user
-            pathType: Prefix
-            backend:
-              service:
-                name: archie-user-api-service
-                port:
-                  number: 80
           ## Webhook api service
           - path: /internal/webhook
             pathType: Prefix
@@ -88,19 +33,18 @@ spec:
                 name: archie-webhook-api-service
                 port:
                   number: 80
-          # Ltv api
-          - path: /internal/ltv/periodic_check
+          # Ledger api
+          - path: /internal/ledger
             pathType: Prefix
             backend:
               service:
-                name: archie-ltv-api-service
+                name: archie-ledger-api-service
                 port:
                   number: 80
-          ## Credit limit api service
-          - path: /internal/credit_limits/periodic_check
+          - path: /internal/asset/price
             pathType: Prefix
             backend:
               service:
-                name: archie-credit-limit-api-service
+                name: archie-ledger-api-service
                 port:
                   number: 80

@@ -12,12 +12,18 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/peach-api/data-transfer-objects"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/api/peach-api/data-transfer-objects"
+      ],
       "options": {
         "jestConfig": "libs/api/peach-api/data-transfer-objects/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": []
+  "tags": [
+    "scope:api:lib:peach-api:shared",
+    "scope:api:lib:shared",
+    "scope:ui:lib:shared"
+  ]
 }

@@ -15,8 +15,8 @@ import {
   TestDatabase,
   truncateDatabase,
 } from './database.utils';
-import * as winston from 'winston';
-import { WinstonModule } from 'nest-winston';
+// import * as winston from 'winston';
+// import { WinstonModule } from 'nest-winston';
 
 export const createTestingModule = (
   moduleMetadata: ModuleMetadata,
@@ -35,20 +35,20 @@ export const createTestingModule = (
       },
     })
     .overrideProvider(QueueService)
-    .useValue(queueStub)
-    .setLogger(
-      WinstonModule.createLogger({
-        transports: [
-          new winston.transports.Console({
-            format: winston.format.combine(
-              winston.format.timestamp(),
-              winston.format.ms(),
-              winston.format.json(),
-            ),
-          }),
-        ],
-      }),
-    );
+    .useValue(queueStub);
+  // .setLogger(
+  //   WinstonModule.createLogger({
+  //     transports: [
+  //       new winston.transports.Console({
+  //         format: winston.format.combine(
+  //           winston.format.timestamp(),
+  //           winston.format.ms(),
+  //           winston.format.json(),
+  //         ),
+  //       }),
+  //     ],
+  //   }),
+  // );
 };
 
 export const initializeTestingModule = async (

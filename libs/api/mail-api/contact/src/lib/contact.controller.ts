@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import {
   EMAIL_VERIFIED_TOPIC,
   KYC_SUBMITTED_TOPIC,
@@ -21,9 +21,6 @@ export class ContactQueueController {
   @Subscribe(
     KYC_SUBMITTED_TOPIC,
     ContactQueueController.CONTROLLER_QUEUE_NAME,
-    {
-      logBody: false,
-    },
   )
   async kycSubmittedHandler(payload: KycSubmittedPayload): Promise<void> {
     await this.contactService.saveFirstName(payload.userId, payload.firstName);
@@ -32,9 +29,6 @@ export class ContactQueueController {
   @Subscribe(
     EMAIL_VERIFIED_TOPIC,
     ContactQueueController.CONTROLLER_QUEUE_NAME,
-    {
-      logBody: false,
-    },
   )
   async emailVerifiedHandler(payload: EmailVerifiedPayload): Promise<void> {
     await this.contactService.saveEmail(payload.userId, payload.email);

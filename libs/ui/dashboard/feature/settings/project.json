@@ -1,0 +1,28 @@
+{
+  "name": "ui-dashboard-feature-settings",
+  "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/dashboard/feature/settings/src",
+  "projectType": "library",
+  "tags": ["scope:ui:lib:ui-dashboard"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/ui/dashboard/feature/settings/**/*.{ts,tsx,js,jsx}"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/ui/dashboard/feature/settings"
+      ],
+      "options": {
+        "jestConfig": "libs/ui/dashboard/feature/settings/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

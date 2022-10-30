@@ -25,20 +25,14 @@ import {
   PaymentsResponseDto,
   ScheduleTransactionDto,
 } from './payments.dto';
-import { Subscribe } from '@archie/api/utils/queue';
-import { WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC } from '@archie/api/webhook-api/constants';
-import { WebhookPaymentPayload } from '@archie/api/webhook-api/data-transfer-objects';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
+import { WEBHOOK_PEACH_PAYMENT_UPDATED_TOPIC } from '@archie/api/webhook-api/constants';
+import { PeachPaymentUpdatedPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { SERVICE_QUEUE_NAME } from '@archie/api/peach-api/constants';
-import {
-  INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
-  INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
-} from '@archie/api/collateral-api/constants';
 import { PAYPAL_PAYMENT_RECEIVED_TOPIC } from '@archie/api/paypal-api/constants';
 import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
-import {
-  InternalCollateralTransactionCompletedPayload,
-  InternalCollateralTransactionCreatedPayload,
-} from '@archie/api/collateral-api/data-transfer-objects';
+import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
+import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects';
 
 @Controller('v1/loan_payments')
 export class PaymentsController {
@@ -82,33 +76,11 @@ export class PaymentsQueueController {
   constructor(private paymentsService: PaymentsService) {}
 
   @Subscribe(
-    WEBHOOK_PEACH_PAYMENT_CONFIRMED_TOPIC,
+    LEDGER_ACCOUNT_UPDATED_TOPIC,
     PaymentsQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async peachWebhookPaymentConfirmedHandler(
-    payload: WebhookPaymentPayload,
-  ): Promise<void> {
-    await this.paymentsService.handlePaymentConfirmedEvent(payload);
-  }
-
-  @Subscribe(
-    INTERNAL_COLLATERAL_TRANSACTION_CREATED_TOPIC,
-    PaymentsQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async internalTransactionCreatedHandler(
-    payload: InternalCollateralTransactionCreatedPayload,
-  ): Promise<void> {
-    await this.paymentsService.handleInternalTransactionCreatedEvent(payload);
-  }
-
-  @Subscribe(
-    INTERNAL_COLLATERAL_TRANSACTION_COMPLETED_TOPIC,
-    PaymentsQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async internalTransactionCompletedHandler(
-    payload: InternalCollateralTransactionCompletedPayload,
-  ): Promise<void> {
-    await this.paymentsService.handleInternalTransactionCompletedEvent(payload);
+  async ledgerUpdated(payload: LedgerAccountUpdatedPayload): Promise<void> {
+    return this.paymentsService.handleCollateralLiquidationEvent(payload);
   }
 
   @Subscribe(
@@ -119,5 +91,15 @@ export class PaymentsQueueController {
     payload: PaypalPaymentReceivedPayload,
   ): Promise<void> {
     await this.paymentsService.handlePaypalPaymentReceivedEvent(payload);
+  }
+
+  @Subscribe(
+    WEBHOOK_PEACH_PAYMENT_UPDATED_TOPIC,
+    PaymentsQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async paymentUpdatedHandler(
+    payload: PeachPaymentUpdatedPayload,
+  ): Promise<void> {
+    await this.paymentsService.handlePaymentUpdatedEvent(payload);
   }
 }

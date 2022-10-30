@@ -1,0 +1,28 @@
+{
+  "name": "api-websocket-event-api-websocket",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/websocket-event-api/websocket-event/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/api/websocket-event-api/websocket-event/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/api/websocket-event-api/websocket-event"
+      ],
+      "options": {
+        "jestConfig": "libs/api/websocket-event-api/websocket-event/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["scope:api:lib:websocket-event-api:shared", "scope:api:lib:shared"]
+}

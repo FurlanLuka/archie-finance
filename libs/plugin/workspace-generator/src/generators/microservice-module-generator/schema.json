@@ -13,10 +13,33 @@
       },
       "x-prompt": "What microservice project would you like to target?"
     },
+    "moduleType": {
+      "description": "Type of a module you want to generate",
+      "type": "string",
+      "default": "none",
+      "x-prompt": {
+        "type": "list",
+        "items": [
+          { "value": "NORMAL", "label": "Module only imported into the app" },
+          {
+            "value": "SHARED",
+            "label": "Module that can be imported into other api modules"
+          },
+          {
+            "value": "SHARED_WITH_UI",
+            "label": "Module that can be imported into other modules as well as UI modules"
+          },
+          {
+            "value": "TEST_DATA_MODULE",
+            "label": "Module that contains test data and can be imported into other modules"
+          }
+        ]
+      }
+    },
     "name": {
       "description": "Module name",
       "type": "string"
     }
   },
-  "required": ["projectName", "name"]
+  "required": ["projectName", "name", "moduleType"]
 }

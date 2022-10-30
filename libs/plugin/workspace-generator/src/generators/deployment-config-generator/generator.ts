@@ -15,7 +15,7 @@ function normalizeOptions(
   tree: Tree,
   options: DeploymentConfigGeneratorSchema,
 ): NormalizedSchema {
-  const projectRoot = `${getWorkspaceLayout(tree).appsDir}/${
+  const projectRoot = `${getWorkspaceLayout(tree).appsDir}/api/${
     options.projectName
   }`;
 
@@ -25,7 +25,7 @@ function normalizeOptions(
   };
 }
 
-function addFiles(tree: Tree, options: NormalizedSchema) {
+function addFiles(tree: Tree, options: NormalizedSchema): void {
   const templateOptions = {
     ...options,
     offsetFromRoot: offsetFromRoot(options.projectRoot),
@@ -38,10 +38,10 @@ function addFiles(tree: Tree, options: NormalizedSchema) {
   );
 }
 
-export function deploymentConfigGenerator (
+export function deploymentConfigGenerator(
   tree: Tree,
   options: DeploymentConfigGeneratorSchema,
-) {
+): void {
   const normalizedOptions = normalizeOptions(tree, options);
 
   addFiles(tree, normalizedOptions);

@@ -8,120 +8,6 @@
   },
   "servers": [],
   "paths": {
-    "/v1/asset_price": {
-      "get": {
-        "operationId": "AssetPriceController_getAssetPrices",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GetAssetPriceResponse"
-                  }
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/v1/asset_price/{asset}": {
-      "get": {
-        "operationId": "AssetPriceController_getAssetPrice",
-        "parameters": [
-          {
-            "name": "asset",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetAssetPriceResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      }
-    },
-    "/internal/asset_price/fetch": {
-      "get": {
-        "operationId": "InternalAssetPriceController_fetchAssetPrices",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/v1/deposit_address/{asset}": {
-      "get": {
-        "operationId": "DepositAddressController_getDepositAddress",
-        "parameters": [
-          {
-            "name": "asset",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetDepositAddressResponseDto"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "DEPOSIT_ADDRESS_UNKNOWN_ASSET"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/fireblocks/webhook": {
-      "post": {
-        "operationId": "FireblocksWebhookController_webhook",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          },
-          "500": {
-            "description": "FIREBLOCKS_WEBHOOK_ERROR"
-          }
-        }
-      }
-    },
     "/v1/rize/users": {
       "post": {
         "operationId": "RizeController_createUser",
@@ -131,7 +17,23 @@
             "description": ""
           },
           "409": {
-            "description": "ERR_CUSTOMER_ALREADY_EXISTS"
+            "description": "Error response with 409 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "ERR_CUSTOMER_ALREADY_EXISTS": {
+                    "value": {
+                      "statusCode": 409,
+                      "message": "ERR_CUSTOMER_ALREADY_EXISTS",
+                      "error": "Conflict"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -157,7 +59,30 @@
             }
           },
           "404": {
-            "description": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "ERR_DEBIT_CARD_DOES_NOT_EXIST": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "ERR_DEBIT_CARD_DOES_NOT_EXIST",
+                      "error": "Not Found"
+                    }
+                  },
+                  "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -183,7 +108,23 @@
             }
           },
           "404": {
-            "description": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "ERR_ACTIVE_CUSTOMER_DOES_NOT_EXIST",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -204,173 +145,6 @@
               "application/json": {
                 "schema": {
                   "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/collateral": {
-      "get": {
-        "operationId": "CollateralController_getCollateral",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GetCollateralResponse"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/collateral/value": {
-      "get": {
-        "operationId": "CollateralController_getUserCollateralValue",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GetCollateralValueResponse"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/collateral/value/total": {
-      "get": {
-        "operationId": "CollateralController_getUserTotalCollateralValue",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetTotalCollateralValueResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/collateral/withdraw": {
-      "post": {
-        "operationId": "CollateralWithdrawalController_withdrawUserCollateral",
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CollateralWithdrawCreateDto"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetCollateralWithdrawalResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "COLLATERAL_NOT_FOUND"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      },
-      "get": {
-        "operationId": "CollateralWithdrawalController_getUserWithdrawals",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/GetCollateralWithdrawalResponse"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/collateral/withdraw/{asset}/max_amount": {
-      "get": {
-        "operationId": "CollateralWithdrawalController_getUserMaxWithdrawalAmount",
-        "parameters": [
-          {
-            "name": "asset",
-            "required": true,
-            "in": "path",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GetUserMaxWithdrawalAmountResponse"
                 }
               }
             }
@@ -422,7 +196,23 @@
             }
           },
           "404": {
-            "description": "KYC_NOT_FOUND"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "KYC_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "KYC_NOT_FOUND",
+                      "error": "KYC record not found. Please submit your KYC or contact support."
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -456,7 +246,23 @@
             }
           },
           "400": {
-            "description": "KYC_ALREADY_SUBMITTED"
+            "description": "Error response with 400 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "KYC_ALREADY_SUBMITTED": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "KYC_ALREADY_SUBMITTED",
+                      "error": "You have already submitted your KYC. If you made a mistake, please contact support."
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -498,7 +304,22 @@
             "description": ""
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Error response with 400 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "Bad Request": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "Bad Request"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -519,6 +340,50 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GetSendEnrollmentTicketResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/user/mfa/enrollments/{enrollmentId}": {
+      "delete": {
+        "operationId": "UserController_deleteMfaEnrollment",
+        "parameters": [
+          {
+            "name": "enrollmentId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          },
+          "404": {
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "ENROLLMENT_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "ENROLLMENT_NOT_FOUND",
+                      "error": "Enrollment was not found."
+                    }
+                  }
                 }
               }
             }
@@ -619,7 +484,22 @@
             "description": ""
           },
           "404": {
-            "description": "Not Found"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "Not Found": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -649,7 +529,22 @@
             }
           },
           "404": {
-            "description": "Not Found"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "Not Found": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -675,9 +570,9 @@
         }
       }
     },
-    "/internal/webhook/peach/confirmed_payments": {
+    "/v1/webhooks/peach/payments": {
       "post": {
-        "operationId": "PeachWebhookController_paymentConfirmedHandler",
+        "operationId": "PeachWebhookController_peachPaymentsHandler",
         "parameters": [],
         "responses": {
           "201": {
@@ -686,16 +581,27 @@
         }
       }
     },
-    "/internal/webhook/peach/test/confirmed_payments": {
+    "/v1/webhook/fireblocks": {
       "post": {
-        "operationId": "PeachWebhookController_paymentAppliedHandler",
+        "operationId": "FireblocksWebhookController_webhook",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/webhooks/auth0": {
+      "post": {
+        "operationId": "Auth0Controller_webhook",
         "parameters": [],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/WebhookPaymentPayload"
+                "$ref": "#/components/schemas/Auth0Logs"
               }
             }
           }
@@ -726,7 +632,23 @@
             }
           },
           "404": {
-            "description": "BORROWER_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -838,7 +760,30 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -865,10 +810,70 @@
             "description": ""
           },
           "400": {
-            "description": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE"
+            "description": "Error response with 400 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "AMOUNT_EXCEEDS_OUTSTANDING_BALANCE",
+                      "error": "Bad Request"
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "AMOUNT_EXCEEDS_AVAILABLE_BALANCE"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_DRAW_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_DRAW_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "PAYMENT_INSTRUMENT_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND",
+                      "error": "Not Found"
+                    }
+                  },
+                  "AMOUNT_EXCEEDS_AVAILABLE_BALANCE": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "AMOUNT_EXCEEDS_AVAILABLE_BALANCE",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -931,7 +936,37 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_DRAW_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_DRAW_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_DRAW_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -957,7 +992,30 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -983,7 +1041,30 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1012,10 +1093,56 @@
             "description": ""
           },
           "404": {
-            "description": "PAYMENT_INSTRUMENT_NOT_FOUND"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "PAYMENT_INSTRUMENT_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           },
           "409": {
-            "description": "AUTOPAY_ALREADY_CONFIGURED"
+            "description": "Error response with 409 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "AUTOPAY_ALREADY_CONFIGURED": {
+                    "value": {
+                      "statusCode": 409,
+                      "message": "AUTOPAY_ALREADY_CONFIGURED",
+                      "error": "Conflict"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1032,7 +1159,44 @@
             "description": ""
           },
           "404": {
-            "description": "AUTOPAY_NOT_CONFIGURED"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "PAYMENT_INSTRUMENT_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND",
+                      "error": "Not Found"
+                    }
+                  },
+                  "AUTOPAY_NOT_CONFIGURED": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "AUTOPAY_NOT_CONFIGURED",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1056,7 +1220,44 @@
             }
           },
           "404": {
-            "description": "AUTOPAY_NOT_CONFIGURED"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "PAYMENT_INSTRUMENT_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND",
+                      "error": "Not Found"
+                    }
+                  },
+                  "AUTOPAY_NOT_CONFIGURED": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "AUTOPAY_NOT_CONFIGURED",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1092,7 +1293,30 @@
             }
           },
           "404": {
-            "description": "PAYMENT_INSTRUMENT_NOT_FOUND"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "PAYMENT_INSTRUMENT_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "PAYMENT_INSTRUMENT_NOT_FOUND",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1118,7 +1342,36 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "Not Found": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "Not Found"
+                    }
+                  },
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1147,7 +1400,30 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1182,33 +1458,30 @@
             }
           },
           "404": {
-            "description": "CREDIT_LINE_NOT_FOUND_ERROR"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/v1/credit_limits": {
-      "post": {
-        "operationId": "CreditLimitController_createCreditLine",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": "",
+            "description": "Error response with 404 status code.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreditLimitResponse"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "BORROWER_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "BORROWER_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  },
+                  "CREDIT_LINE_NOT_FOUND_ERROR": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_NOT_FOUND_ERROR",
+                      "error": "Not Found"
+                    }
+                  }
                 }
               }
             }
-          },
-          "400": {
-            "description": "ERR_CREDIT_ALREADY_EXISTS"
           }
         },
         "security": [
@@ -1216,41 +1489,6 @@
             "bearer": []
           }
         ]
-      },
-      "get": {
-        "operationId": "CreditLimitController_getCreditLine",
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CreditLimitResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "ERR_CREDIT_LINE_NOT_FOUND"
-          }
-        },
-        "security": [
-          {
-            "bearer": []
-          }
-        ]
-      }
-    },
-    "/internal/credit_limits/periodic_check": {
-      "post": {
-        "operationId": "InternalPeriodicCheckController_triggerCreditLimitPeriodicCheck",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        }
       }
     },
     "/v1/ltv": {
@@ -1269,7 +1507,23 @@
             }
           },
           "404": {
-            "description": "CREDIT_NOT_SET_UP"
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "CREDIT_NOT_SET_UP": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_NOT_SET_UP",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1277,17 +1531,6 @@
             "bearer": []
           }
         ]
-      }
-    },
-    "/internal/ltv/periodic_check": {
-      "post": {
-        "operationId": "InternalPeriodicCheckController_startPeriodicCheck",
-        "parameters": [],
-        "responses": {
-          "201": {
-            "description": ""
-          }
-        }
       }
     },
     "/v1/margin_calls": {
@@ -1420,25 +1663,373 @@
           }
         }
       }
+    },
+    "/v1/ledger": {
+      "get": {
+        "operationId": "LedgerController_getLedger",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ledger"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/ledger/recalculate": {
+      "post": {
+        "operationId": "InternalLedgerController_recaltulateLedgers",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/asset/price": {
+      "get": {
+        "operationId": "AssetPricesController_getLatestAssetPrices",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AssetPrice"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/asset/price/{assetId}": {
+      "get": {
+        "operationId": "AssetPricesController_getLatestAssetPrice",
+        "parameters": [
+          {
+            "name": "assetId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssetPrice"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/internal/asset/price/fetch": {
+      "post": {
+        "operationId": "InternalAssetPricesController_fetchAssetPrices",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/v1/ledger/liquidation": {
+      "get": {
+        "operationId": "LiquidationController_getLiquidations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Liquidation"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/ledger/withdraw": {
+      "post": {
+        "operationId": "WithdrawController_withdraw",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WithdrawPayloadDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WithdrawResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error response with 400 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "INVALID_WITHDRAWAL_AMOUNT": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "INVALID_WITHDRAWAL_AMOUNT",
+                      "error": "Bad Request"
+                    }
+                  },
+                  "WITHDRAWAL_AMOUNT_TOO_HIGH": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "WITHDRAWAL_AMOUNT_TOO_HIGH",
+                      "error": "Bad Request"
+                    }
+                  },
+                  "INVALID_ASSET": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "INVALID_ASSET",
+                      "error": "Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/ledger/withdraw/{assetId}/max_amount": {
+      "get": {
+        "operationId": "WithdrawController_getMaxWithdrawalAmount",
+        "parameters": [
+          {
+            "name": "assetId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaxWithdrawalAmountResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/vault_account/deposit_address/{assetId}": {
+      "get": {
+        "operationId": "VaultAccountController_getOrCreateDepositAddresss",
+        "parameters": [
+          {
+            "name": "assetId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDepositAddressResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/credit_lines": {
+      "post": {
+        "operationId": "CreditLineController_createCreditLine",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditLine"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error response with 400 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "NOT_ENOUGH_COLLATERAL": {
+                    "value": {
+                      "statusCode": 400,
+                      "message": "NOT_ENOUGH_COLLATERAL",
+                      "error": "Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Error response with 409 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "CREDIT_LINE_ALREADY_EXISTS": {
+                    "value": {
+                      "statusCode": 409,
+                      "message": "CREDIT_LINE_ALREADY_EXISTS",
+                      "error": "Conflict"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "get": {
+        "operationId": "CreditLineController_getCreditLine",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreditLine"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error response with 404 status code.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "CREDIT_LINE_RECORD_NOT_FOUND": {
+                    "value": {
+                      "statusCode": 404,
+                      "message": "CREDIT_LINE_RECORD_NOT_FOUND",
+                      "error": "Not Found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/v1/websockets/auth": {
+      "post": {
+        "operationId": "WebsocketController_createAuthToken",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthTokenDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
-      "GetAssetPriceResponse": {
-        "type": "object",
-        "properties": {}
-      },
-      "GetDepositAddressResponseDto": {
-        "type": "object",
-        "properties": {
-          "address": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "address"
-        ]
-      },
       "CardResponseDto": {
         "type": "object",
         "properties": {
@@ -1592,29 +2183,24 @@
           "data"
         ]
       },
-      "GetCollateralResponse": {
+      "ErrorResponse": {
         "type": "object",
-        "properties": {}
-      },
-      "GetCollateralValueResponse": {
-        "type": "object",
-        "properties": {}
-      },
-      "GetTotalCollateralValueResponse": {
-        "type": "object",
-        "properties": {}
-      },
-      "CollateralWithdrawCreateDto": {
-        "type": "object",
-        "properties": {}
-      },
-      "GetCollateralWithdrawalResponse": {
-        "type": "object",
-        "properties": {}
-      },
-      "GetUserMaxWithdrawalAmountResponse": {
-        "type": "object",
-        "properties": {}
+        "properties": {
+          "statusCode": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "statusCode",
+          "message",
+          "error"
+        ]
       },
       "GetOnboardingResponseDto": {
         "type": "object",
@@ -1649,31 +2235,281 @@
       },
       "GetKycResponse": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string"
+          },
+          "addressStreet": {
+            "type": "string"
+          },
+          "addressStreetNumber": {
+            "type": "string"
+          },
+          "addressLocality": {
+            "type": "string"
+          },
+          "addressCountry": {
+            "type": "string"
+          },
+          "addressRegion": {
+            "type": "string"
+          },
+          "addressPostalCode": {
+            "type": "string"
+          },
+          "phoneNumberCountryCode": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "ssn": {
+            "type": "string"
+          },
+          "income": {
+            "type": "number"
+          },
+          "aptUnit": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "dateOfBirth",
+          "addressStreet",
+          "addressStreetNumber",
+          "addressLocality",
+          "addressCountry",
+          "addressRegion",
+          "addressPostalCode",
+          "phoneNumberCountryCode",
+          "phoneNumber",
+          "ssn",
+          "income",
+          "aptUnit",
+          "createdAt"
+        ]
       },
       "KycDto": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "addressStreet": {
+            "type": "string"
+          },
+          "addressStreetNumber": {
+            "type": "string"
+          },
+          "addressLocality": {
+            "type": "string"
+          },
+          "addressRegion": {
+            "type": "string"
+          },
+          "addressPostalCode": {
+            "type": "string"
+          },
+          "addressCountry": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "phoneNumberCountryCode": {
+            "type": "string"
+          },
+          "ssn": {
+            "type": "string",
+            "minLength": 9,
+            "maxLength": 9
+          },
+          "income": {
+            "type": "number"
+          },
+          "aptUnit": {
+            "type": "string",
+            "nullable": true,
+            "default": null
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "dateOfBirth",
+          "addressStreet",
+          "addressStreetNumber",
+          "addressLocality",
+          "addressRegion",
+          "addressPostalCode",
+          "addressCountry",
+          "phoneNumber",
+          "phoneNumberCountryCode",
+          "ssn",
+          "income",
+          "aptUnit"
+        ]
       },
       "CreateKycResponse": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "dateOfBirth": {
+            "type": "string"
+          },
+          "addressStreet": {
+            "type": "string"
+          },
+          "addressStreetNumber": {
+            "type": "string"
+          },
+          "addressLocality": {
+            "type": "string"
+          },
+          "addressCountry": {
+            "type": "string"
+          },
+          "addressRegion": {
+            "type": "string"
+          },
+          "addressPostalCode": {
+            "type": "string"
+          },
+          "phoneNumberCountryCode": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "ssn": {
+            "type": "string"
+          },
+          "income": {
+            "type": "number"
+          },
+          "aptUnit": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "dateOfBirth",
+          "addressStreet",
+          "addressStreetNumber",
+          "addressLocality",
+          "addressCountry",
+          "addressRegion",
+          "addressPostalCode",
+          "phoneNumberCountryCode",
+          "phoneNumber",
+          "ssn",
+          "income",
+          "aptUnit",
+          "createdAt"
+        ]
       },
       "GetEmailVerificationResponse": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "isVerified": {
+            "type": "boolean"
+          },
+          "email": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "isVerified",
+          "email"
+        ]
       },
       "GetSendEnrollmentTicketResponse": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "ticket_id": {
+            "type": "string"
+          },
+          "ticket_url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id",
+          "ticket_url"
+        ]
       },
       "GetEnrollmentResponse": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "object"
+          },
+          "enrolled_at": {
+            "type": "string"
+          },
+          "last_auth": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "auth_method": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "id",
+          "status",
+          "enrolled_at",
+          "last_auth",
+          "type",
+          "auth_method"
+        ]
       },
       "GetMfaEnrollmentResponse": {
         "type": "object",
-        "properties": {}
+        "properties": {
+          "isEnrolled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "isEnrolled"
+        ]
       },
       "CreateDto": {
         "type": "object",
@@ -1731,156 +2567,9 @@
           "company"
         ]
       },
-      "WebhookPaymentPayload": {
+      "Auth0Logs": {
         "type": "object",
-        "properties": {
-          "accrualDate": {
-            "type": "string",
-            "nullable": true
-          },
-          "amount": {
-            "type": "number"
-          },
-          "caseExternalId": {
-            "type": "string",
-            "nullable": true
-          },
-          "caseId": {
-            "type": "string",
-            "nullable": true
-          },
-          "caseTypeId": {
-            "type": "string",
-            "nullable": true
-          },
-          "companyId": {
-            "type": "string"
-          },
-          "createdAt": {
-            "type": "string"
-          },
-          "creatingMessageId": {
-            "type": "string"
-          },
-          "currency": {
-            "type": "string"
-          },
-          "deletedAt": {
-            "type": "string",
-            "nullable": true
-          },
-          "discriminator": {
-            "type": "string"
-          },
-          "effectiveAt": {
-            "type": "string"
-          },
-          "eventClass": {
-            "type": "string"
-          },
-          "eventType": {
-            "type": "string"
-          },
-          "id": {
-            "type": "string"
-          },
-          "interactionId": {
-            "type": "string",
-            "nullable": true
-          },
-          "isExternal": {
-            "type": "boolean"
-          },
-          "loanExternalId": {
-            "type": "string",
-            "nullable": true
-          },
-          "loanId": {
-            "type": "string"
-          },
-          "loanTypeId": {
-            "type": "string"
-          },
-          "maintenanceDate": {
-            "type": "string",
-            "nullable": true
-          },
-          "object": {
-            "type": "string"
-          },
-          "parentId": {
-            "type": "string"
-          },
-          "paymentInstrumentExternalId": {
-            "type": "string",
-            "nullable": true
-          },
-          "paymentInstrumentId": {
-            "type": "string"
-          },
-          "paymentInstrumentType": {
-            "type": "string"
-          },
-          "personExternalId": {
-            "type": "string"
-          },
-          "personId": {
-            "type": "string"
-          },
-          "requestId": {
-            "type": "string"
-          },
-          "sessionId": {
-            "type": "string",
-            "nullable": true
-          },
-          "transactionExternalId": {
-            "type": "string",
-            "nullable": true
-          },
-          "transactionId": {
-            "type": "string"
-          },
-          "updatedAt": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "required": [
-          "accrualDate",
-          "amount",
-          "caseExternalId",
-          "caseId",
-          "caseTypeId",
-          "companyId",
-          "createdAt",
-          "creatingMessageId",
-          "currency",
-          "deletedAt",
-          "discriminator",
-          "effectiveAt",
-          "eventClass",
-          "eventType",
-          "id",
-          "interactionId",
-          "isExternal",
-          "loanExternalId",
-          "loanId",
-          "loanTypeId",
-          "maintenanceDate",
-          "object",
-          "parentId",
-          "paymentInstrumentExternalId",
-          "paymentInstrumentId",
-          "paymentInstrumentType",
-          "personExternalId",
-          "personId",
-          "requestId",
-          "sessionId",
-          "transactionExternalId",
-          "transactionId",
-          "updatedAt"
-        ]
+        "properties": {}
       },
       "PaymentInstrumentDto": {
         "type": "object",
@@ -1894,12 +2583,6 @@
           "mask": {
             "type": "string"
           },
-          "availableBalance": {
-            "type": "number"
-          },
-          "currencyISO": {
-            "type": "string"
-          },
           "subType": {
             "type": "string"
           }
@@ -1908,8 +2591,6 @@
           "id",
           "name",
           "mask",
-          "availableBalance",
-          "currencyISO",
           "subType"
         ]
       },
@@ -2562,6 +3243,9 @@
       "GetLoanBalancesDto": {
         "type": "object",
         "properties": {
+          "isBalanceChangeInProgress": {
+            "type": "boolean"
+          },
           "totalCredit": {
             "type": "number"
           },
@@ -2570,16 +3254,13 @@
           },
           "utilizationAmount": {
             "type": "number"
-          },
-          "calculatedAt": {
-            "type": "string"
           }
         },
         "required": [
+          "isBalanceChangeInProgress",
           "totalCredit",
           "availableCredit",
-          "utilizationAmount",
-          "calculatedAt"
+          "utilizationAmount"
         ]
       },
       "GetLoanDocumentDto": {
@@ -2592,10 +3273,6 @@
         "required": [
           "url"
         ]
-      },
-      "CreditLimitResponse": {
-        "type": "object",
-        "properties": {}
       },
       "LtvDto": {
         "type": "object",
@@ -2689,6 +3366,202 @@
           "id",
           "status",
           "amount"
+        ]
+      },
+      "InternalLedgerAccountData": {
+        "type": "object",
+        "properties": {
+          "assetId": {
+            "type": "string"
+          },
+          "assetAmount": {
+            "type": "string"
+          },
+          "assetPrice": {
+            "type": "string"
+          },
+          "accountValue": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "assetId",
+          "assetAmount",
+          "assetPrice",
+          "accountValue"
+        ]
+      },
+      "Ledger": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "accounts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InternalLedgerAccountData"
+            }
+          }
+        },
+        "required": [
+          "value",
+          "accounts"
+        ]
+      },
+      "AssetPrice": {
+        "type": "object",
+        "properties": {
+          "assetId": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number"
+          },
+          "dailyChange": {
+            "type": "number"
+          },
+          "currency": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "assetId",
+          "price",
+          "dailyChange",
+          "currency"
+        ]
+      },
+      "Liquidation": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "assetId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "assetId",
+          "amount",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "WithdrawPayloadDto": {
+        "type": "object",
+        "properties": {
+          "assetId": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "string",
+            "pattern": "/^\\d+((.)|(.\\d{0,18})?)$/"
+          },
+          "destinationAddress": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "assetId",
+          "amount",
+          "destinationAddress"
+        ]
+      },
+      "WithdrawResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id"
+        ]
+      },
+      "MaxWithdrawalAmountResponse": {
+        "type": "object",
+        "properties": {
+          "maxAmount": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "maxAmount"
+        ]
+      },
+      "GetDepositAddressResponse": {
+        "type": "object",
+        "properties": {
+          "address": {
+            "type": "string"
+          },
+          "asset": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "address",
+          "asset"
+        ]
+      },
+      "CreditLimitAssetAllocation": {
+        "type": "object",
+        "properties": {
+          "assetId": {
+            "type": "string"
+          },
+          "allocationPercentage": {
+            "type": "number"
+          },
+          "allocatedAssetValue": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "assetId",
+          "allocationPercentage",
+          "allocatedAssetValue"
+        ]
+      },
+      "CreditLine": {
+        "type": "object",
+        "properties": {
+          "creditLimit": {
+            "type": "number"
+          },
+          "creditLimitAssetAllocation": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CreditLimitAssetAllocation"
+            }
+          }
+        },
+        "required": [
+          "creditLimit",
+          "creditLimitAssetAllocation"
+        ]
+      },
+      "AuthTokenDto": {
+        "type": "object",
+        "properties": {
+          "authToken": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "authToken"
         ]
       }
     },

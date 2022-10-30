@@ -13,7 +13,7 @@ import {
   KycSubmittedPayload,
 } from '@archie/api/user-api/data-transfer-objects';
 import { RequestBodyMatcher } from 'nock';
-import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
+import { CreditLineCreatedPayload } from '@archie/api/credit-line-api/data-transfer-objects';
 import { user } from '@archie/test/integration';
 
 export type PeachRequestBody = RequestBodyMatcher;
@@ -169,8 +169,8 @@ export const loanRequestBodyFactory = (
     originatingCreditorName: 'Bank of Mars',
     aprNominal: 0,
     aprEffective: 0.16,
-    creditLimitAmount: creditLineCreatedPayload.amount,
-    downPaymentAmount: creditLineCreatedPayload.downPayment,
+    creditLimitAmount: creditLineCreatedPayload.creditLimit,
+    downPaymentAmount: creditLineCreatedPayload.ledgerValue,
     personAddressId: homeAddressId,
   },
 });
@@ -178,12 +178,7 @@ export const loanRequestBodyFactory = (
 export const drawRequestBodyFactory = (): PeachRequestBody => ({
   nickname: 'Credit Card',
   status: 'originated',
-  atOrigination: {
-    minPaymentCalculation: {
-      percentageOfPrincipal: 0.1,
-      minAmount: 0,
-    },
-  },
+  atOrigination: {},
 });
 
 export const creditLimitUpdateRequestBodyFactory = (

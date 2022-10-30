@@ -12,12 +12,14 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/utils/typeorm-transformers"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/api/utils/typeorm-transformers"
+      ],
       "options": {
         "jestConfig": "libs/api/utils/typeorm-transformers/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:shared"]
 }

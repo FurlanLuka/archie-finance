@@ -12,12 +12,12 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/ltv-api/constants"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/ltv-api/constants"],
       "options": {
         "jestConfig": "libs/api/ltv-api/constants/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:shared", "scope:api:lib:ltv-api:shared"]
 }

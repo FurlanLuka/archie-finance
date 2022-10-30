@@ -1,0 +1,32 @@
+{
+  "name": "api-onboarding-api-data-transfer-objects",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/onboarding-api/data-transfer-objects/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/api/onboarding-api/data-transfer-objects/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/api/onboarding-api/data-transfer-objects"
+      ],
+      "options": {
+        "jestConfig": "libs/api/onboarding-api/data-transfer-objects/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": [
+    "scope:api:lib:onboarding-api:shared",
+    "scope:api:lib:shared",
+    "scope:ui:lib:shared"
+  ]
+}

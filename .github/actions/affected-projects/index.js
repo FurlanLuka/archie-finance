@@ -19,6 +19,20 @@ const run = () => {
 
   core.setOutput('isAffected', affectedProjects.length > 0);
   core.notice(`isAffected: ${affectedProjects.length > 0}`);
+
+  const hasAffectedApi =
+    affectedProjects.find((project) => project.indexOf('-api') > -1) !==
+    undefined;
+
+  const hasAffectedUi =
+    affectedProjects.find((project) => project.indexOf('ui-') > -1) !==
+    undefined;
+
+  core.setOutput('hasAffectedApi', hasAffectedApi);
+  core.notice(`hasAffectedApi: ${hasAffectedApi}`);
+
+  core.setOutput('hasAffectedUi', hasAffectedUi);
+  core.notice(`hasAffectedUi: ${hasAffectedUi}`);
 };
 
 run();

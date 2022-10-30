@@ -30,58 +30,45 @@ on:
         required: true
 
 jobs:
-  check_and_build:
-    name: Check and Build
+  setup_and_check:
+    name: Setup and lint
     runs-on: ubuntu-latest
     environment: ${{ inputs.ENVIRONMENT }}
     outputs:
       affectedProjects: ${{ steps.affected-projects.outputs.affectedProjects }}
       imageTag: ${{ steps.extract-image-tag.outputs.IMAGE_TAG }}
-
-    env:
-      # GLOBAL
-      AUTH0_DOMAIN: auth.dev.archie.finance
-      AUTH0_AUDIENCE: https://api.dev.archie.finance
-
-      TYPEORM_HOST: localhost
-      TYPEORM_USERNAME: postgres
-      TYPEORM_PASSWORD: postgres
-      TYPEORM_DATABASE: postgres
-      TYPEORM_PORT: 5432
-      TZ: UTC
-
-      INTERNAL_API_URL: http://localhost
-      QUEUE_URL: amqp://localhost
-      REDIS_URL: 'redis://localhost:6379'
-
-      ENCRYPTION_KEY: ')J@McQfTjWnZr4u7x!A%D*G-KaPdRgUk'
-
-      # CREDIT API
-      APTO_API_KEY: ''
-      APTO_API_URL: ''
-      APTO_CARD_PROGRAME_ID: ''
-      APTO_PUBLIC_KEY: ''
-      APTO_PRIVATE_KEY: ''
-      APTO_FUNDING_BALANCE_ID: ''
-
-      RIZE_ENVIRONMENT: 'sandbox'
-      RIZE_PROGRAM_ID: 'test'
-      RIZE_HMAC_KEY: 'test'
-      RIZE_MQ_HOST: 'test'
-      RIZE_MQ_TOPIC_PREFIX: 'test'
-      RIZE_MQ_USERNAME: 'test'
-      RIZE_MQ_PASSWORD: 'test'
-
-      ## Peach api
-      PEACH_API_KEY: 'test'
-      PEACH_BASE_URL: 'https://sandboxapi.peach.finance/api'
-      PEACH_COMPANY_ID: 'CP-25K9-4GJ6'
-      PEACH_BORROWER_ROLE_ID: 'RL-G2K6-NLK4'
-      PEACH_LOAN_ID: 'LT-GDB3-WEBO'
-      API_BASE_URL: 'http://localhost'
-
-      # Credit limit api
-      ASSET_LTV_LIST: '{"BTC":{"ltv":"50"},"ETH":{"ltv":"50"},"SOL":{"ltv":"50"},"USDC":{"ltv":"70"}}'
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+        with:
+          fetch-depth: 0
+      - uses: nrwl/nx-set-shas@v2
+        with:
+          main-branch-name: ${{ inputs.BASE_BRANCH_NAME }}
+      - uses: ./.github/actions/install-dependencies
+        name: Install dependencies
+      - name: Workspace lint
+        run: npx nx-cloud record -- npx nx workspace-lint
+      - name: Affected project lint
+        run: npx nx affected --target=lint --parallel=3 --base=origin/${{ inputs.BASE_BRANCH_NAME }}
+      - uses: ./.github/actions/affected-projects
+        id: affected-projects
+        name: Extract affected apps
+        with:
+          base: origin/${{ inputs.BASE_BRANCH_NAME }}
+      - name: Extract image tag
+        id: extract-image-tag
+        run: |
+          if [[ ${{ inputs.IS_TAGGED }} == true ]]; then
+            echo "IMAGE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          else
+            echo "IMAGE_TAG=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          fi
+  integration_tests:
+    needs: [setup_and_check]
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.ENVIRONMENT }}
     services:
       postgres:
         image: postgres:alpine
@@ -110,128 +97,97 @@ jobs:
         with:
           fetch-depth: 0
       - uses: nrwl/nx-set-shas@v2
-        if: inputs.BASE_BRANCH_NAME == ''
-      - uses: nrwl/nx-set-shas@v2
-        if: inputs.BASE_BRANCH_NAME != ''
         with:
           main-branch-name: ${{ inputs.BASE_BRANCH_NAME }}
       - uses: ./.github/actions/install-dependencies
         name: Install dependencies
-      - name: Workspace Lint
-        run: npx nx workspace-lint
-      - name: Affected Lint
-        if: inputs.BASE_BRANCH_NAME == ''
-        run: npx nx affected --target=lint --parallel=3
-      - name: Affected Lint
-        if: inputs.BASE_BRANCH_NAME != ''
-        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=lint --parallel=3
-      - name: Affected Test
-        if: inputs.BASE_BRANCH_NAME == ''
-        run: npx nx affected --target=test --parallel=3 --ci --code-coverage
-      - name: Affected Test
-        if: inputs.BASE_BRANCH_NAME != ''
-        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test --parallel=3 --ci --code-coverage
-      - name: Affected Integration Test
-        if: inputs.BASE_BRANCH_NAME == ''
-        run: npx nx affected --target=test-integration --parallel=3 --ci --code-coverage
-      - name: Affected Integration Test
-        if: inputs.BASE_BRANCH_NAME != ''
-        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test-integration --parallel=3 --ci --code-coverage
-      - name: Affected Build
-        if: inputs.BASE_BRANCH_NAME == ''
-        run: npx nx affected --target=build --parallel=3
-      - name: Affected Build
-        if: inputs.BASE_BRANCH_NAME != ''
-        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=build --parallel=3
-      - name: Store build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: services-build-${{ inputs.NAME }}
-          path: ./dist
-          retention-days: 1
-      - uses: ./.github/actions/affected-projects
-        id: affected-projects
-        name: Extract affected apps
-        with:
-          base: origin/${{ inputs.BASE_BRANCH_NAME }}
-      - name: Extract image tag
-        id: extract-image-tag
-        run: |
-          if [[ ${{ inputs.IS_TAGGED }} == true ]]; then
-            echo ::set-output name=IMAGE_TAG::${GITHUB_REF#refs/tags/}
-          else
-            echo ::set-output name=IMAGE_TAG::$(git rev-parse HEAD)
-          fi
-  build_and_publish:
-    name: Build ${{ matrix.project }} docker
-    if: ${{ needs.check_and_build.outputs.affectedProjects != '[]' && needs.check_and_build.outputs.affectedProjects != '' }}
-    needs: [check_and_build]
+      - name: Prepare testing environment
+        run: npx nx generate @archie/plugin/workspace-generator:test-environment-generator
+      - name: Integration Tests
+        run: npx nx affected --base=origin/${{ inputs.BASE_BRANCH_NAME }} --target=test-integration --parallel=3 --ci
+  prebuild: 
+    name: Prebuild
     runs-on: ubuntu-latest
-    environment: ${{ inputs.ENVIRONMENT }}
-    strategy:
-      fail-fast: false
-      matrix:
-        project: ${{ fromJSON(needs.check_and_build.outputs.affectedProjects) }}
+    needs: [setup_and_check, integration_tests]
     steps:
       - uses: actions/checkout@v2
         name: Checkout
       - uses: ./.github/actions/install-dependencies
         name: Install dependencies
-      - name: Download build artifacts
-        uses: actions/download-artifact@v2
         with:
-          name: services-build-${{ inputs.NAME }}
-          path: ./dist
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
+          environment: production
+      - uses: ./.github/actions/docker-prebuild
+        name: Prebuild docker image and cache layers
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ inputs.AWS_REGION }}
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-      - name: Docker build
-        env:
-          ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ needs.check_and_build.outputs.imageTag }}
-        run: |
-          npx nx run ${{ matrix.project }}:build-docker --ecrRegistry=$ECR_REGISTRY --ecrRepository=$ECR_REPOSITORY --imageTag=$IMAGE_TAG
-  deploy:
-    name: Deploy ${{ matrix.project }}
-    if: ${{ needs.check_and_build.outputs.affectedProjects != '[]' && needs.check_and_build.outputs.affectedProjects != '' }}
-    needs: [build_and_publish, check_and_build]
+          ecr-repository: ${{ inputs.ECR_REPOSITORY }}
+  build_and_publish:
+    name: Build ${{ matrix.project }}
+    if: ${{ needs.setup_and_check.outputs.affectedProjects != '[]' && needs.setup_and_check.outputs.affectedProjects != '' }}
+    needs: [setup_and_check, integration_tests, prebuild]
     runs-on: ubuntu-latest
     environment: ${{ inputs.ENVIRONMENT }}
     strategy:
       fail-fast: false
       matrix:
-        project: ${{ fromJSON(needs.check_and_build.outputs.affectedProjects) }}
+        project: ${{ fromJSON(needs.setup_and_check.outputs.affectedProjects) }}
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+      - uses: ./.github/actions/install-dependencies
+        name: Install dependencies
+      - if: contains(matrix.project, 'api')
+        uses: ./.github/actions/publish-docker-image
+        name: Build and publish docker image
+        with:
+          projectName: ${{ matrix.project }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ inputs.AWS_REGION }}
+          ecr-repository: ${{ inputs.ECR_REPOSITORY }}
+          image-tag: ${{ needs.setup_and_check.outputs.imageTag }}
+      - if: contains(matrix.project, 'ui')
+        uses: ./.github/actions/build-ui
+        name: Build UI and save artifacts
+        with:
+          projectName: ${{ matrix.project }}
+          environment: ${{ inputs.ENVIRONMENT }}
+  deploy:
+    name: Deploy ${{ matrix.project }}
+    if: ${{ needs.setup_and_check.outputs.affectedProjects != '[]' && needs.setup_and_check.outputs.affectedProjects != '' }}
+    needs: [build_and_publish, setup_and_check]
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.ENVIRONMENT }}
+    strategy:
+      fail-fast: false
+      matrix:
+        project: ${{ fromJSON(needs.setup_and_check.outputs.affectedProjects) }}
     steps:
     - name: Poor mans manual deploy
       if: ${{ github.run_attempt== 1}}
       run: exit 1
     - uses: actions/checkout@v2
       name: Checkout
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
+    - if: contains(matrix.project, 'api')
+      uses: ./.github/actions/deploy-api
+      name: Deploy API
+      with:
+        projectName: ${{ matrix.project }}
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ inputs.AWS_REGION }}
+        ecr-repository: ${{ inputs.ECR_REPOSITORY }}
+        kube-config-data: ${{ secrets.KUBE_CONFIG_DATA }}
+        environment: ${{ inputs.ENVIRONMENT }}
+        image-tag: ${{ needs.setup_and_check.outputs.imageTag }}
+    - if: contains(matrix.project, 'ui')
+      uses: ./.github/actions/deploy-ui
+      name: Deploy UI
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ inputs.AWS_REGION }}
-    - name: Login to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v1
-    - name: Deploy
-      uses: koslib/helm-eks-action@master
-      env:
-        KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: ${{ inputs.ECR_REPOSITORY }}
-        IMAGE_TAG: ${{ matrix.project }}-${{ needs.check_and_build.outputs.imageTag }}
-        ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
-        CHART: ./apps/${{ matrix.project }}/chart
-        APP_NAME: ${{ matrix.project }}
-      with:
-        command: helm upgrade --install $APP_NAME $CHART --set tag=$IMAGE_TAG --set image=$ECR_REGISTRY/$ECR_REPOSITORY --set environment=$ENVIRONMENT
+        projectName: ${{ matrix.project }}
+        environment: ${{ inputs.ENVIRONMENT }}

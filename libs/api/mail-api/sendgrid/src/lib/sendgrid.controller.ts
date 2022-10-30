@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { Subscribe } from '@archie/api/utils/queue';
+import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import {
   APPLIED_TO_WAITLIST_TOPIC,
   JOINED_WAITLIST_TOPIC,
@@ -12,19 +12,19 @@ import {
 import { ConfigService } from '@archie/api/utils/config';
 import { SendgridService } from './sendgrid.service';
 import {
-  LTV_LIMIT_APPROACHING_TOPIC,
+  MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC,
   MARGIN_CALL_COMPLETED_TOPIC,
   MARGIN_CALL_STARTED_TOPIC,
-} from '@archie/api/margin-api/constants';
+} from '@archie/api/ltv-api/constants';
 import {
   AppliedToWaitlistPayload,
   JoinedToWaitlistPayload,
 } from '@archie/api/referral-system-api/data-transfer-objects';
 import {
-  LtvLimitApproachingPayload,
+  MarginCallLtvLimitApproachingPayload,
   MarginCallCompletedPayload,
   MarginCallStartedPayload,
-} from '@archie/api/margin-api/data-transfer-objects';
+} from '@archie/api/ltv-api/data-transfer-objects';
 import { SalesConnectDto } from '@archie/api/referral-system-api/sales-connect';
 
 @Controller()
@@ -85,11 +85,11 @@ export class SendgirdQueueController {
   }
 
   @Subscribe(
-    LTV_LIMIT_APPROACHING_TOPIC,
+    MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC,
     SendgirdQueueController.CONTROLLER_QUEUE_NAME,
   )
   async LtvLimitApproachingHandler(
-    payload: LtvLimitApproachingPayload,
+    payload: MarginCallLtvLimitApproachingPayload,
   ): Promise<void> {
     await this.sendgridService.sendLtvLimitApproachingMail(payload);
   }

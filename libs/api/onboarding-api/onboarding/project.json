@@ -12,12 +12,14 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/onboarding-api/onboarding"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/api/onboarding-api/onboarding"
+      ],
       "options": {
         "jestConfig": "libs/api/onboarding-api/onboarding/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:onboarding-api"]
 }

@@ -1,0 +1,24 @@
+{
+  "name": "ui-dashboard-hooks",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/ui/dashboard/hooks/src",
+  "projectType": "library",
+  "tags": ["scope:ui:lib:ui-dashboard:shared", "scope:ui:lib:shared"],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ui/dashboard/hooks/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/ui/dashboard/hooks"],
+      "options": {
+        "jestConfig": "libs/ui/dashboard/hooks/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

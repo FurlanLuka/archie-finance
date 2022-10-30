@@ -5,7 +5,6 @@ import { LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
 import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { QueueService } from '@archie/api/utils/queue';
-import { CreditLimitUpdatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import {
   EmailVerifiedPayload,
@@ -13,11 +12,13 @@ import {
 } from '@archie/api/user-api/data-transfer-objects';
 import { BorrowerWithHomeAddress } from '../utils/borrower.validation.interfaces';
 import { Credit, Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
-import { CreditLineCreatedPayload } from '@archie/api/credit-limit-api/data-transfer-objects';
-import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { LastCreditLimitUpdate } from '../last_credit_limit_update.entity';
-import { Lock } from '@archie-microservices/api/utils/redis';
+import { Lock } from '@archie/api/utils/redis';
+import {
+  CreditLineUpdatedPayload,
+  CreditLineCreatedPayload,
+} from '@archie/api/credit-line-api/data-transfer-objects';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -62,20 +63,20 @@ export class PeachBorrowerService {
   public async handleEmailVerifiedEvent(
     email: EmailVerifiedPayload,
   ): Promise<void> {
-    const encryptedEmail: string = this.cryptoService.encrypt(email.email);
-    const borrower: Borrower | null = await this.borrowerRepository
-      .createQueryBuilder()
-      .update(Borrower, {
-        encryptedEmail,
-      })
-      .where('userId = :userId', { userId: email.userId })
-      .returning('*')
-      .execute()
-      .then((response: UpdateResult) => (<Borrower[]>response.raw)[0] ?? null);
-
+    const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
+      userId: email.userId,
+    });
     this.borrowerValidation.isBorrowerDefined(borrower);
 
-    await this.peachApiService.addMailContact(borrower.personId, email.email);
+    if (borrower.encryptedEmail === null) {
+      await this.peachApiService.addMailContact(borrower.personId, email.email);
+
+      const encryptedEmail: string = this.cryptoService.encrypt(email.email);
+      await this.borrowerRepository.update(
+        { userId: email.userId },
+        { encryptedEmail },
+      );
+    }
   }
 
   public async handleCreditLineCreatedEvent(
@@ -108,9 +109,9 @@ export class PeachBorrowerService {
     if (creditLineId === null) {
       const creditLine = await this.peachApiService.createCreditLine(
         borrower.personId,
-        createdCreditLine.amount,
+        createdCreditLine.creditLimit,
         borrower.homeAddressContactId,
-        createdCreditLine.downPayment,
+        createdCreditLine.ledgerValue,
       );
       creditLineId = creditLine.id;
 
@@ -171,9 +172,9 @@ export class PeachBorrowerService {
     );
   }
 
-  @Lock((payload: CreditLimitUpdatedPayload) => payload.userId)
-  public async handleCreditLimitUpdatedEvent(
-    creditLimit: CreditLimitUpdatedPayload,
+  @Lock((payload: CreditLineUpdatedPayload) => payload.userId)
+  public async handleCreditLineUpdatedEvent(
+    creditLimit: CreditLineUpdatedPayload,
   ): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: creditLimit.userId,
@@ -203,13 +204,10 @@ export class PeachBorrowerService {
         borrower.creditLineId,
       );
 
-      this.queueService.publish<CreditBalanceUpdatedPayload>(
-        CREDIT_BALANCE_UPDATED_TOPIC,
-        {
-          ...credit,
-          userId: creditLimit.userId,
-        },
-      );
+      this.queueService.publishEvent(CREDIT_BALANCE_UPDATED_TOPIC, {
+        ...credit,
+        userId: creditLimit.userId,
+      });
     }
   }
 }

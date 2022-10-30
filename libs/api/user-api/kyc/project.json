@@ -12,12 +12,12 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/api/user-api/kyc"],
+      "outputs": ["{workspaceRoot}/coverage/libs/api/user-api/kyc"],
       "options": {
         "jestConfig": "libs/api/user-api/kyc/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:user-api"]
 }

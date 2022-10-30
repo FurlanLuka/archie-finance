@@ -2,14 +2,17 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Kyc } from './kyc.entity';
-import { CreateKycResponse, GetKycResponse } from './kyc.interfaces';
-import { KycDto } from './kyc.interfaces';
 import { DateTime } from 'luxon';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
 import { KYC_SUBMITTED_TOPIC } from '@archie/api/user-api/constants';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { QueueService } from '@archie/api/utils/queue';
-import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects';
+import {
+  CreateKycResponse,
+  GetKycResponse,
+  KycDto,
+  KycSubmittedPayload,
+} from '@archie/api/user-api/data-transfer-objects';
 
 @Injectable()
 export class KycService {
@@ -114,7 +117,7 @@ export class KycService {
       aptUnit: encryptedAptUnit,
     });
 
-    this.queueService.publish<KycSubmittedPayload>(KYC_SUBMITTED_TOPIC, {
+    this.queueService.publishEvent(KYC_SUBMITTED_TOPIC, {
       userId,
       ...payload,
     });

@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Onboarding } from './onboarding.entity';
 import { GetOnboardingResponse } from './onboarding.interfaces';
+import { QueueService } from '@archie/api/utils/queue';
+import { ONBOARDING_UPDATED_TOPIC } from '@archie/api/onboarding-api/constants';
 
 @Injectable()
 export class OnboardingService {
   constructor(
     @InjectRepository(Onboarding)
     private onboardingRepository: Repository<Onboarding>,
+    private queueService: QueueService,
   ) {}
 
   async getOrCreateOnboardingRecord(
@@ -39,9 +42,10 @@ export class OnboardingService {
     return onboardingRecordWithoutUserId;
   }
 
-  async completeOnboardingStage(
+  async updateOnboardingStage(
     userId: string,
     stage: string,
+    complete: boolean,
   ): Promise<Onboarding> {
     const onboardingRecord: Onboarding | null =
       await this.onboardingRepository.findOneBy({
@@ -54,7 +58,7 @@ export class OnboardingService {
 
     const updatedOnboardingRecord: Onboarding = {
       ...onboardingRecord,
-      [stage]: true,
+      [stage]: complete,
     };
 
     const isFinalRequiredOnboardingStep: boolean =
@@ -67,14 +71,18 @@ export class OnboardingService {
         userId,
       },
       {
-        [stage]: true,
+        [stage]: complete,
         completed: isFinalRequiredOnboardingStep,
       },
     );
 
-    return {
+    const onboarding: Onboarding = {
       ...updatedOnboardingRecord,
       completed: isFinalRequiredOnboardingStep,
     };
+
+    this.queueService.publishEvent(ONBOARDING_UPDATED_TOPIC, onboarding);
+
+    return onboarding;
   }
 }

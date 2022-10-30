@@ -1,0 +1,77 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/websocket-event-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/api/websocket-event-api",
+        "main": "apps/api/websocket-event-api/src/main.ts",
+        "tsConfig": "apps/api/websocket-event-api/tsconfig.app.json",
+        "assets": ["apps/api/websocket-event-api/src/assets"],
+        "tsPlugins": ["@nestjs/swagger/plugin"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/api/websocket-event-api/src/environments/environment.ts",
+              "with": "apps/api/websocket-event-api/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "websocket-event-api:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "websocket-event-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/api/websocket-event-api/**/*.ts"]
+      }
+    },
+    "build-openapi": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build websocket-event-api && node dist/apps/api/websocket-event-api/main build-swagger"
+      }
+    },
+    "generate-migration": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "command": "npm run build websocket-event-api && node dist/apps/api/websocket-event-api/main generate-migration"
+      }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "test-integration": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/api/websocket-event-api"],
+      "options": {
+        "jestConfig": "apps/api/websocket-event-api/jest.config.ts",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
+    }
+  },
+  "tags": ["scope:api:app:websocket-event-api", "scope:api:app"]
+}

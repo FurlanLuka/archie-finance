@@ -1,14 +1,26 @@
 import { generateMigration } from './lib/generate-migration';
-import { startService } from './lib/start-service';
+import { startService, StartServiceOptions } from './lib/start-service';
+import { ImportModule } from './lib/microservice.interfaces';
+import { generateOpenapi } from './lib/generate-openapi';
 
-export async function start(appName: string, module: unknown) {
+export async function start(
+  appName: string,
+  module: ImportModule,
+  options?: StartServiceOptions,
+): Promise<void> {
   const generateMigrations: boolean = process.argv.some(
     (arg) => arg === 'generate-migration',
   );
+  
+  const buildSwagger: boolean = process.argv.some(
+    (arg) => arg === 'build-swagger',
+  );
 
-  if (generateMigrations) {
+  if (buildSwagger) {
+    await generateOpenapi(module);
+  } else if (generateMigrations) {
     await generateMigration(appName, module);
   } else {
-    await startService(appName, module);
+    await startService(appName, module, options);
   }
 }

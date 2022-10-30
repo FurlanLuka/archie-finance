@@ -9,9 +9,12 @@ import {
   PaymentInstrumentDto,
 } from './payment_instruments.dto';
 import { BorrowerValidation } from '../utils/borrower.validation';
-import { GetKycPayload, GetKycResponse } from '@archie/api/user-api/kyc';
 import { GET_USER_KYC_RPC } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
+import {
+  GetKycPayload,
+  GetKycResponse,
+} from '@archie/api/user-api/data-transfer-objects';
 
 @Injectable()
 export class PeachPaymentInstrumentsService {
@@ -34,39 +37,12 @@ export class PeachPaymentInstrumentsService {
     const paymentInstruments: PaymentInstrument[] =
       await this.peachApiService.getPaymentInstruments(borrower.personId);
 
-    // TODO: uncomment once we get response from Peach
-    // return Promise.all(
-    //   paymentInstruments.map(async (paymentInstrument: PaymentInstrument) => {
-    //     const balance: PaymentInstrumentBalance =
-    //       await this.peachApiService.getCachedBalance(
-    //         borrower.personId,
-    //         paymentInstrument.id,
-    //       );
-    //
-    //     return {
-    //       id: paymentInstrument.id,
-    //       name: paymentInstrument.nickname,
-    //       mask: paymentInstrument.accountNumberLastFour,
-    //       subType: paymentInstrument.accountType,
-    //       availableBalance:
-    //         balance.lastSuccessfulBalance.availableBalanceAmount,
-    //       currencyISO: balance.lastSuccessfulBalance.currency,
-    //     };
-    //   }),
-    // );
-
-    return Promise.all(
-      paymentInstruments.map(async (paymentInstrument: PaymentInstrument) => {
-        return {
-          id: paymentInstrument.id,
-          name: paymentInstrument.nickname,
-          mask: paymentInstrument.accountNumberLastFour,
-          subType: paymentInstrument.accountType,
-          availableBalance: 500,
-          currencyISO: 'USD',
-        };
-      }),
-    );
+    return paymentInstruments.map((paymentInstrument: PaymentInstrument) => ({
+      id: paymentInstrument.id,
+      name: paymentInstrument.nickname,
+      mask: paymentInstrument.accountNumberLastFour,
+      subType: paymentInstrument.accountType,
+    }));
   }
 
   public async connectAccount(
@@ -106,5 +82,4 @@ export class PeachPaymentInstrumentsService {
 
     await this.peachApiService.deletePaymentInstrument(borrower.personId, id);
   }
-
 }
