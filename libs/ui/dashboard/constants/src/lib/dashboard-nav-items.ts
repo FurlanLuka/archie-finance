@@ -4,42 +4,44 @@ interface DashboardNavItem {
   icon: IconName;
   name: string;
   path: string;
+  end?: boolean;
 }
 
 export const dashboardNavItems: DashboardNavItem[] = [
   {
     icon: 'home',
     name: 'Home',
-    path: '/',
+    path: '',
+    end: true,
   },
   {
     icon: 'wallet',
     name: 'Collateral',
-    path: '/collateral',
+    path: 'collateral',
   },
   // {
   //   icon: 'bitcoin-outline',
   //   name: 'Rewards',
-  //   path: '/rewards',
+  //   path: 'rewards',
   // },
   {
     icon: 'credit-card',
     name: 'Payment',
-    path: '/payment',
+    path: 'payment',
   },
   {
     icon: 'paper',
     name: 'History',
-    path: '/history',
+    path: 'history',
   },
   {
     icon: 'settings',
     name: 'Settings',
-    path: '/settings',
+    path: 'settings',
   },
   {
     icon: 'logout',
     name: 'Logout',
-    path: '/logout',
+    path: 'logout',
   },
 ];

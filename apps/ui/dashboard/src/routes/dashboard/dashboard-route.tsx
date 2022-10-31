@@ -42,16 +42,16 @@ export const DashboardRoute: FC = () => {
           {!isMfaSet && <Setup2faBanner />}
           <Container justifyContent="center" maxWidth="100%">
             <Routes>
-              <Route path="/" element={<HomeScreen />} />
-              <Route path="/home" element={<HomeScreen />} />
-              <Route path="/collateral" element={<CollateralScreen />} />
-              <Route path="/collateral/withdraw/:asset" element={<WithdrawScreen />} />
-              <Route path="/collateral/add/:asset" element={<CollateralizationScreen />} />
+              <Route path="" element={<HomeScreen />} />
+              <Route path="home" element={<HomeScreen />} />
+              <Route path="collateral" element={<CollateralScreen />} />
+              <Route path="collateral/withdraw/:asset" element={<WithdrawScreen />} />
+              <Route path="collateral/add/:asset" element={<CollateralizationScreen />} />
               {/* <Route path="/rewards" element={<RewardsScreen />} /> */}
-              <Route path="/payment" element={<PaymentScreen />} />
-              <Route path="/history" element={<HistoryScreen />} />
-              <Route path="/settings" element={<SettingsScreen />} />
-              <Route path="/error" element={<ErrorScreen />} />
+              <Route path="payment" element={<PaymentScreen />} />
+              <Route path="history" element={<HistoryScreen />} />
+              <Route path="settings" element={<SettingsScreen />} />
+              <Route path="error" element={<ErrorScreen />} />
             </Routes>
           </Container>
         </Container>
