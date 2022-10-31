@@ -7,18 +7,11 @@ import { Navigate } from 'react-router-dom';
 import { CollateralAssets } from '@archie/ui/shared/constants';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import {
-  Card,
-  Skeleton,
-  ButtonOutline,
-  TitleS,
-  BodyL,
-} from '@archie/ui/shared/design-system';
+import { Card, Skeleton, ButtonOutline, TitleS, BodyL } from '@archie/ui/shared/design-system';
 
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
 
-import { CollateralizationForm } from './blocks/collaterization-form/collaterization-form';
-
+import { CollateralizationCalculator } from './blocks/collateralization-calculator/collateralization-calculator';
 
 interface AddCollateralProps {
   selectedAsset: string;
@@ -45,9 +38,7 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
 
   if (getLedgerResponse.state === RequestState.SUCCESS) {
     const ledger = getLedgerResponse.data;
-    const currentLedgerAccount = ledger.accounts.find(
-      (ledgerAccount) => ledgerAccount.assetId === selectedAsset,
-    );
+    const currentLedgerAccount = ledger.accounts.find((ledgerAccount) => ledgerAccount.assetId === selectedAsset);
 
     if (!currentLedgerAccount) {
       return (
@@ -65,9 +56,7 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
       <>
         <CollateralUpdatedModal />
         <Card column alignItems="center" padding="2.5rem 1.5rem">
-          <TitleS className="title">
-            {t('dashboard_collateralization.title', { selectedAsset })}
-          </TitleS>
+          <TitleS className="title">{t('dashboard_collateralization.title', { selectedAsset })}</TitleS>
           <BodyL className="subtitle-credit">
             {t('dashboard_collateralization.subtitle_credit', {
               collateralTotalValue: ledger.value,
@@ -82,7 +71,7 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
               })}
             </BodyL>
           )}
-          <CollateralizationForm
+          <CollateralizationCalculator
             assetInfo={assetInfo}
             assetPrice={BigNumber(currentLedgerAccount.assetPrice).toNumber()}
           />

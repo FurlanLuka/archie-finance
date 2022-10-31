@@ -1,28 +1,23 @@
 import { FC, useState, useMemo } from 'react';
 
 import { DepositAddress } from '@archie/ui/dashboard/components';
-import {
-  MINIMUM_LTV,
-  OK_LTV,
-  SUGGESTED_LTV,
-} from '@archie/ui/dashboard/constants';
+import { MINIMUM_LTV, OK_LTV, SUGGESTED_LTV } from '@archie/ui/dashboard/constants';
 import { calculateCollateralValue } from '@archie/ui/dashboard/utils';
 import { CollateralAsset } from '@archie/ui/shared/constants';
 import { Table, InputText } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
-import { CollaterizationFormStyled } from './collaterization-form.styled';
 import { tableColumns } from './fixtures/table-fixtures';
+import { MarginCallCalculatorStyled } from './margin-call-calculator.styled';
 
-interface CollateralizationFormProps {
+interface MarginCallCalculatorProps {
   assetInfo: CollateralAsset;
   assetPrice: number;
   creditBalance: number;
   collateralTotalValue: number;
 }
 
-// TODO rename to margin call something something
-export const CollateralizationForm: FC<CollateralizationFormProps> = ({
+export const MarginCallCalculator: FC<MarginCallCalculatorProps> = ({
   assetInfo,
   assetPrice,
   creditBalance,
@@ -31,11 +26,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
   const [customLtv, setCustomLtv] = useState(OK_LTV);
 
   const getRequiredCollateral = (targetLtv: number) => {
-    const collateral = calculateCollateralValue(
-      targetLtv,
-      creditBalance,
-      collateralTotalValue,
-    );
+    const collateral = calculateCollateralValue(targetLtv, creditBalance, collateralTotalValue);
 
     const price = 1 / assetPrice;
     const result = (collateral / (assetInfo.loan_to_value / 100)) * price;
@@ -104,11 +95,11 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
   }, [customLtv]);
 
   return (
-    <CollaterizationFormStyled>
+    <MarginCallCalculatorStyled>
       <div className="ltv-info">
         <Table columns={tableColumns(assetInfo.short)} data={tableData} />
       </div>
       <DepositAddress assetInfo={assetInfo} />
-    </CollaterizationFormStyled>
+    </MarginCallCalculatorStyled>
   );
 };

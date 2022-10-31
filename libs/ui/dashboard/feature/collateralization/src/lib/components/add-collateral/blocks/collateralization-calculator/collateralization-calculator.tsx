@@ -9,17 +9,14 @@ import { CollateralAsset } from '@archie/ui/shared/constants';
 import { InputRange, TitleL, BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
-import { CollaterizationFormStyled } from './collaterization-form.styled';
+import { CollateralizationCalculatorStyled } from './collateralization-calculator.styled';
 
-interface CollateralizationFormProps {
+interface CollateralizationCalculatorProps {
   assetInfo: CollateralAsset;
   assetPrice: number;
 }
 
-export const CollateralizationForm: FC<CollateralizationFormProps> = ({
-  assetInfo,
-  assetPrice,
-}) => {
+export const CollateralizationCalculator: FC<CollateralizationCalculatorProps> = ({ assetInfo, assetPrice }) => {
   const { t } = useTranslation();
 
   const [lineOfCredit, setLineOfCredit] = useState(200);
@@ -42,7 +39,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
   };
 
   return (
-    <CollaterizationFormStyled>
+    <CollateralizationCalculatorStyled>
       <InputRange
         className="credit-slider"
         label={t('collateralization_step.inputs.input_range_label')}
@@ -58,9 +55,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
             <span
               className="clickable"
               data-tip="Click to copy"
-              onClick={() =>
-                copyToClipboard('collateral', requiredCollateral.toString())
-              }
+              onClick={() => copyToClipboard('collateral', requiredCollateral.toString())}
             >
               {getFormattedCollateral()}
             </span>
@@ -73,9 +68,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
           />
         </div>
         <div className="result-item">
-          <BodyM weight={700}>
-            {t('collateralization_step.result.second')}
-          </BodyM>
+          <BodyM weight={700}>{t('collateralization_step.result.second')}</BodyM>
           <TitleL weight={400}>{assetInfo.loan_to_value}%</TitleL>
         </div>
         <div className="result-item">
@@ -83,11 +76,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
           <TitleL weight={400}>{assetInfo.interest_rate}%</TitleL>
         </div>
       </div>
-      <DepositAddress
-        assetInfo={assetInfo}
-        assetAmount={requiredCollateral}
-        showTerms
-      />
-    </CollaterizationFormStyled>
+      <DepositAddress assetInfo={assetInfo} assetAmount={requiredCollateral} showTerms />
+    </CollateralizationCalculatorStyled>
   );
 };
