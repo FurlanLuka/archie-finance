@@ -16,7 +16,7 @@ export const ResetPassword: FC = () => {
 
   const [email, setEmail] = useState('');
   const [resetPasswordSent, setResetPasswordSent] = useState(false);
-  const [resetPasswordConfirmatinModalOpen, setResetPasswordConfirmatinModalOpen] = useState(false);
+  const [resetPasswordConfirmationModalOpen, setResetPasswordConfirmationModalOpen] = useState(false);
 
   useEffect(() => {
     if (getEmailVerificationResponse.state === RequestState.SUCCESS) {
@@ -26,7 +26,7 @@ export const ResetPassword: FC = () => {
 
   useEffect(() => {
     if (changePasswordMutation.state === RequestState.SUCCESS) {
-      setResetPasswordConfirmatinModalOpen(true);
+      setResetPasswordConfirmationModalOpen(true);
       setResetPasswordSent(true);
     }
   }, [changePasswordMutation.state]);
@@ -49,8 +49,8 @@ export const ResetPassword: FC = () => {
         isDisabled={resetPasswordSent}
       />
       <ResetPasswordConfirmationModal
-        isOpen={resetPasswordConfirmatinModalOpen}
-        close={() => setResetPasswordConfirmatinModalOpen(false)}
+        isOpen={resetPasswordConfirmationModalOpen}
+        close={() => setResetPasswordConfirmationModalOpen(false)}
       />
     </>
   );

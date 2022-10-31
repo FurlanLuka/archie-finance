@@ -16,7 +16,6 @@ import microserviceProjectTargetGenerator from '../microservice-project-target-g
 
 export interface NormalizedSchema extends MicroserviceGenerator {
   projectRoot: string;
-  constantsRoot: string;
 }
 
 function normalizeOptions(
@@ -29,15 +28,9 @@ function normalizeOptions(
     options.name,
   );
 
-  const constantsRoot = joinPathFragments(
-    getWorkspaceLayout(tree).libsDir,
-    `api/${options.name}/constants`,
-  );
-
   return {
     ...options,
     projectRoot,
-    constantsRoot,
   };
 }
 
@@ -46,7 +39,7 @@ export default async function (
   options: MicroserviceGenerator,
 ): Promise<GeneratorCallback> {
   const normalizedOptions = normalizeOptions(tree, options);
-  console.log(normalizedOptions)
+
   const initTask = await initGenerator(tree, {
     unitTestRunner: 'jest',
     skipFormat: true,
@@ -55,7 +48,8 @@ export default async function (
   const nodeApplicationTask = await nodeApplicationGenerator(tree, {
     unitTestRunner: 'jest',
     name: normalizedOptions.name,
-    directory: 'api'
+    directory: 'api',
+    tags: `scope:api:app:${normalizedOptions.name}`
   });
 
   createAppFiles(tree, normalizedOptions);
@@ -64,6 +58,20 @@ export default async function (
   const createConstantsLibraryTask = await microserviceModuleGenerator(tree, {
     projectName: options.name,
     name: 'constants',
+    moduleType: 'SHARED',
+  });
+
+  const createDataTransferObjectsLibraryTask =
+    await microserviceModuleGenerator(tree, {
+      projectName: options.name,
+      name: 'data-transfer-objects',
+      moduleType: 'SHARED_WITH_UI',
+    });
+
+  const createTestDataLibraryTask = await microserviceModuleGenerator(tree, {
+    projectName: options.name,
+    name: 'test-data',
+    moduleType: 'TEST_DATA_MODULE',
   });
 
   createLibFiles(tree, normalizedOptions);
@@ -80,5 +88,7 @@ export default async function (
     initTask,
     nodeApplicationTask,
     createConstantsLibraryTask,
+    createDataTransferObjectsLibraryTask,
+    createTestDataLibraryTask,
   );
 }

@@ -1,8 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
-import { usePollMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-poll-mfa-enrollment';
 import { useStartMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-start-mfa-enrollment';
 import { ButtonGhost, BodyL, BodyM } from '@archie/ui/shared/design-system';
 
@@ -14,23 +13,19 @@ export const Setup2faBanner: FC = () => {
   const { t } = useTranslation();
   const startMfaEnrollmentMutation = useStartMfaEnrollment();
 
-  const [shouldPollMfaEnrollment, setShouldPollMfaEnrollment] = useState(false);
-
-  usePollMfaEnrollment(shouldPollMfaEnrollment);
-
   useEffect(() => {
     if (startMfaEnrollmentMutation.state === RequestState.SUCCESS) {
-      if (shouldPollMfaEnrollment === false) {
-        window.open(startMfaEnrollmentMutation.data.ticket_url, '_blank');
-      }
-
-      setShouldPollMfaEnrollment(true);
+      window.open(startMfaEnrollmentMutation.data.ticket_url, '_blank');
     }
-  }, [startMfaEnrollmentMutation]);
+  }, [startMfaEnrollmentMutation.state]);
 
   const handleClick = () => {
     if (startMfaEnrollmentMutation.state === RequestState.IDLE) {
       startMfaEnrollmentMutation.mutate({});
+    }
+
+    if (startMfaEnrollmentMutation.state === RequestState.SUCCESS) {
+      window.open(startMfaEnrollmentMutation.data.ticket_url, '_blank');
     }
   };
 
@@ -44,9 +39,7 @@ export const Setup2faBanner: FC = () => {
           <BodyL weight={800}>{t('setup_2fa_banner.title')}</BodyL>
           <BodyM>{t('setup_2fa_banner.text')}</BodyM>
         </div>
-        <ButtonGhost onClick={handleClick} isDisabled={shouldPollMfaEnrollment}>
-          {t('btn_continue')}
-        </ButtonGhost>
+        <ButtonGhost onClick={handleClick}>{t('btn_continue')}</ButtonGhost>
       </div>
     </Setup2faBannerStyled>
   );

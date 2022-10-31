@@ -1,4 +1,4 @@
-import { IsArray } from "class-validator";
+import { IsArray } from 'class-validator';
 
 export interface Auth0Log {
   data: {
@@ -9,6 +9,7 @@ export interface Auth0Log {
       };
     };
     type: string;
+    user_id: string;
   };
 }
 

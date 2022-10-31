@@ -2,9 +2,14 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
-import { useGetMfaEnrollments } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-get-mfa-enrollments';
+import { useGetOnboarding } from '@archie/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
+import {
+  useGetMfaEnrollments,
+  MFA_ENROLLMENTS_RECORD_QUERY_KEY,
+} from '@archie/ui/shared/data-access/archie-api/user/hooks/use-get-mfa-enrollments';
 import { useRemoveMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-remove-mfa-enrollment';
 import { useStartMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-start-mfa-enrollment';
+import { queryClient } from '@archie/ui/shared/data-access/query-client';
 
 import { Change2faConfirmationModal } from '../../../modals/change-2fa-confirmation/change-2fa-confirmation';
 import { OptionsItem } from '../../../options-item/options-item';
@@ -12,49 +17,55 @@ import { OptionsItem } from '../../../options-item/options-item';
 export const Change2FA: FC = () => {
   const { t } = useTranslation();
 
-  const [mfaEnrollmentId, setMfaEndollmentId] = useState('');
-  const [change2faConfirmatinModalOpen, setChange2faConfirmatinModalOpen] = useState(false);
+  const [change2faConfirmationModalOpen, setChange2faConfirmationModalOpen] = useState(false);
 
-  const startMfaEnrollmentMutation = useStartMfaEnrollment();
+  const getOnboardingResponse = useGetOnboarding();
   const getMfaEnrollmentsResponse = useGetMfaEnrollments();
-  const removeMfaEnrollmentMutation = useRemoveMfaEnrollment(mfaEnrollmentId);
+  const removeMfaEnrollmentMutation = useRemoveMfaEnrollment();
+  const startMfaEnrollmentMutation = useStartMfaEnrollment();
+
+  const isMfaSet =
+    getOnboardingResponse.state === RequestState.SUCCESS && getOnboardingResponse.data.mfaEnrollmentStage;
 
   useEffect(() => {
-    if (getMfaEnrollmentsResponse.state === RequestState.SUCCESS) {
-      setMfaEndollmentId(getMfaEnrollmentsResponse.data[0].id);
-    }
-  }, [getMfaEnrollmentsResponse.state]);
+    queryClient.invalidateQueries(MFA_ENROLLMENTS_RECORD_QUERY_KEY);
+  }, [isMfaSet]);
 
   useEffect(() => {
-    if (startMfaEnrollmentMutation.state === RequestState.SUCCESS) {
-      window.open(startMfaEnrollmentMutation.data.ticket_url, '_blank');
-    }
-  }, [startMfaEnrollmentMutation.state]);
+    if (removeMfaEnrollmentMutation.state === RequestState.SUCCESS) {
+      if (startMfaEnrollmentMutation.state === RequestState.IDLE) {
+        startMfaEnrollmentMutation.mutate({});
+      }
 
-  const handleClick = () => {
-    if (mfaEnrollmentId) {
-      if (removeMfaEnrollmentMutation.state === RequestState.IDLE) {
-        removeMfaEnrollmentMutation.mutate({});
+      if (startMfaEnrollmentMutation.state === RequestState.SUCCESS) {
+        window.open(startMfaEnrollmentMutation.data.ticket_url, '_blank');
       }
     }
+  }, [removeMfaEnrollmentMutation.state, startMfaEnrollmentMutation.state]);
 
-    if (startMfaEnrollmentMutation.state === RequestState.IDLE) {
-      startMfaEnrollmentMutation.mutate({});
-      setChange2faConfirmatinModalOpen(false);
-    }
-
-    if (startMfaEnrollmentMutation.state === RequestState.SUCCESS) {
-      window.open(startMfaEnrollmentMutation.data.ticket_url, '_blank');
+  const handleClick = () => {
+    if (getMfaEnrollmentsResponse.state === RequestState.SUCCESS && getMfaEnrollmentsResponse.data.length > 0) {
+      if (
+        removeMfaEnrollmentMutation.state === RequestState.IDLE ||
+        removeMfaEnrollmentMutation.state === RequestState.SUCCESS
+      ) {
+        removeMfaEnrollmentMutation.mutate({ mfaEnrollmentId: getMfaEnrollmentsResponse.data[0].id });
+        setChange2faConfirmationModalOpen(false);
+      }
     }
   };
 
   return (
     <>
-      <OptionsItem title={t('dashboard_settings.2fa.title')} onClick={() => setChange2faConfirmatinModalOpen(true)} />
+      <OptionsItem
+        title={t('dashboard_settings.2fa.title')}
+        onClick={() => setChange2faConfirmationModalOpen(true)}
+        isDisabled={!isMfaSet}
+      />
       <Change2faConfirmationModal
-        isOpen={change2faConfirmatinModalOpen}
+        isOpen={change2faConfirmationModalOpen}
         onConfirm={handleClick}
-        close={() => setChange2faConfirmatinModalOpen(false)}
+        close={() => setChange2faConfirmationModalOpen(false)}
       />
     </>
   );

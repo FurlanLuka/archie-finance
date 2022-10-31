@@ -20,7 +20,7 @@ import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
 export const DashboardRoute: FC = () => {
   const getOnboardingResponse = useGetOnboarding();
 
-  const isMfaSetup =
+  const isMfaSet =
     getOnboardingResponse.state === RequestState.SUCCESS && getOnboardingResponse.data.mfaEnrollmentStage;
 
   if (getOnboardingResponse.state === RequestState.LOADING) {
@@ -39,7 +39,7 @@ export const DashboardRoute: FC = () => {
       <Page>
         <Navigation />
         <Container column mobileColumn maxWidth="100%">
-          {!isMfaSetup && <Setup2faBanner />}
+          {!isMfaSet && <Setup2faBanner />}
           <Container justifyContent="center" maxWidth="100%">
             <Routes>
               <Route path="/" element={<HomeScreen />} />

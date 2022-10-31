@@ -371,6 +371,6 @@
   },
   "change_2fa_modal": {
     "title": "Change 2FA device",
-    "text": "Are you sure you want to remove 2FA from your current device? After clicking 'Yes' you will be redirected to scan a new QA code."
+    "text": "Are you sure you want to remove 2FA from your current device?"
   }
 }

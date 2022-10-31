@@ -12,17 +12,10 @@ import {
   UseQueryOptions,
 } from 'react-query';
 
-import {
-  SessionState,
-  useAuthenticatedSession,
-} from '@archie/ui/shared/data-access/session';
+import { SessionState, useAuthenticatedSession } from '@archie/ui/shared/data-access/session';
 
-import { ApiError, ApiErrors, UnauthenticatedApiError } from './api-error';
-import {
-  DefaultVariables,
-  sessionRefreshWrapper,
-  sessionRefreshWrapperMutation,
-} from './helpers';
+import { ApiError, ApiErrors, UnauthenticatedApiError, UnauthorizedApiError } from './api-error';
+import { DefaultVariables, sessionRefreshWrapper, sessionRefreshWrapperMutation } from './helpers';
 import {
   InfiniteQueryResponse,
   MutationQueryResponse,
@@ -34,15 +27,11 @@ import {
 export const useExtendedQuery = <TQueryFnData>(
   queryKey: string,
   queryFn: (accessToken: string) => Promise<TQueryFnData>,
-  options?: Omit<
-    UseQueryOptions<TQueryFnData, ApiErrors, TQueryFnData, QueryKey>,
-    'queryKey' | 'queryFn'
-  >,
+  options?: Omit<UseQueryOptions<TQueryFnData, ApiErrors, TQueryFnData, QueryKey>, 'queryKey' | 'queryFn'>,
 ): QueryResponse<TQueryFnData> => {
-  const { setAccessToken, setSessionState, accessToken } =
-    useAuthenticatedSession();
+  const { setAccessToken, setSessionState, accessToken } = useAuthenticatedSession();
 
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 
   const request = useQuery<TQueryFnData, ApiErrors>(
     queryKey,
@@ -52,6 +41,7 @@ export const useExtendedQuery = <TQueryFnData>(
       setAccessToken,
       setSessionState,
       getAccessTokenSilently,
+      getAccessTokenWithPopup,
     ),
     {
       ...options,
@@ -89,30 +79,17 @@ export const useExtendedQuery = <TQueryFnData>(
 
 export const useExtendedInfiniteQuery = <TQueryFnData>(
   queryKey: string,
-  getNextPage: (
-    lastPage: TQueryFnData,
-    allPages: TQueryFnData[],
-  ) => number | undefined,
-  queryFn: (
-    accessToken: string,
-    paginationParams: PaginationParams,
-  ) => Promise<TQueryFnData>,
+  getNextPage: (lastPage: TQueryFnData, allPages: TQueryFnData[]) => number | undefined,
+  queryFn: (accessToken: string, paginationParams: PaginationParams) => Promise<TQueryFnData>,
   options?: Omit<
-    UseInfiniteQueryOptions<
-      TQueryFnData,
-      ApiErrors,
-      TQueryFnData,
-      TQueryFnData,
-      QueryKey
-    >,
+    UseInfiniteQueryOptions<TQueryFnData, ApiErrors, TQueryFnData, TQueryFnData, QueryKey>,
     'queryKey' | 'queryFn'
   >,
 ): InfiniteQueryResponse<TQueryFnData> => {
   const [isFetchingNextPageError, setIsFetchingNextPageError] = useState(false);
-  const { setAccessToken, setSessionState, accessToken } =
-    useAuthenticatedSession();
+  const { setAccessToken, setSessionState, accessToken } = useAuthenticatedSession();
 
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 
   const request = useInfiniteQuery<TQueryFnData, ApiErrors>(
     queryKey,
@@ -132,6 +109,18 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
           } catch (error) {
             setSessionState(SessionState.NOT_AUTHENTICATED);
             throw new Error('TOKEN_REFRESH_FAILED');
+          }
+        }
+
+        if (error instanceof UnauthorizedApiError) {
+          try {
+            const accessToken = await getAccessTokenWithPopup({
+              scope: error.requiredScopes,
+            });
+
+            return queryFn(accessToken, paginationParams);
+          } catch (error) {
+            throw new Error('TOKEN_WITH_SCOPES_FLOW_FAILED');
           }
         }
 
@@ -204,15 +193,11 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
 export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
   mutationKey: MutationKey,
   mutationFn: MutationFunction<TData, TVariables>,
-  options?: Omit<
-    UseMutationOptions<TData, ApiErrors, TVariables, unknown>,
-    'mutationKey' | 'mutationFn'
-  >,
+  options?: Omit<UseMutationOptions<TData, ApiErrors, TVariables, unknown>, 'mutationKey' | 'mutationFn'>,
 ): MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData> => {
-  const { setAccessToken, setSessionState, accessToken } =
-    useAuthenticatedSession();
+  const { setAccessToken, setSessionState, accessToken } = useAuthenticatedSession();
 
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 
   const request = useMutation<TData, ApiError, TVariables>(
     mutationKey,
@@ -222,6 +207,7 @@ export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
       setAccessToken,
       setSessionState,
       getAccessTokenSilently,
+      getAccessTokenWithPopup,
     ),
     options,
   );
@@ -244,7 +230,8 @@ export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
     return {
       state: RequestState.SUCCESS,
       data: request.data,
-    };
+      mutate: request.mutate,
+    } as MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData>;
   }
 
   return {

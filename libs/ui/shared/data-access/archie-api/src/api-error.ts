@@ -25,4 +25,16 @@ export class UnauthenticatedApiError extends Error {
   }
 }
 
-export type ApiErrors = ApiError | UnauthenticatedApiError;
+export class UnauthorizedApiError extends Error {
+  statusCode: number;
+  requiredScopes: string;
+
+  constructor(message: string, requiredScopes: string[] = []) {
+    super();
+    this.statusCode = 403;
+    this.message = message;
+    this.requiredScopes = requiredScopes.join(' ');
+  }
+}
+
+export type ApiErrors = ApiError | UnauthenticatedApiError | UnauthorizedApiError;
