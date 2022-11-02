@@ -1,18 +1,6 @@
-import {
-  IsBoolean,
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsString,
-  Matches,
-} from 'class-validator';
+import { IsBoolean, IsEnum, IsNumber, IsOptional, IsPositive, IsString, Matches } from 'class-validator';
 import { PEACH_ID_REGEX } from '../utils/validation';
-import {
-  AmountType,
-  AutopayOptions,
-  PaymentFrequency,
-} from '../api/peach_api.interfaces';
+import { AmountType, AutopayOptions, PaymentFrequency } from '@archie/api/peach-api/data-transfer-objects/types';
 
 export class CreateAutopayDto implements AutopayOptions {
   @IsEnum(AmountType)

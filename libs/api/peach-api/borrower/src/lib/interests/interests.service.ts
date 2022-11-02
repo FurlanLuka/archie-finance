@@ -5,7 +5,7 @@ import { Borrower } from '../borrower.entity';
 import { Repository } from 'typeorm';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import { LoanInterests } from '@archie/api/peach-api/data-transfer-objects/types';
-import { CreditLine } from '../api/peach_api.interfaces';
+import { CreditLine } from '@archie/api/peach-api/data-transfer-objects/types';
 
 @Injectable()
 export class InterestsService {
@@ -22,10 +22,7 @@ export class InterestsService {
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    const creditLine: CreditLine = await this.peachApiService.getCreditLine(
-      borrower.personId,
-      borrower.creditLineId,
-    );
+    const creditLine: CreditLine = await this.peachApiService.getCreditLine(borrower.personId, borrower.creditLineId);
 
     return {
       aprEffective: creditLine.atOrigination.aprEffective ?? 0,

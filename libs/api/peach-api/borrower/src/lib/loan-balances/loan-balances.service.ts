@@ -22,10 +22,7 @@ export class LoanBalancesService {
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    const balance = await this.peachApiService.getLoanBalances(
-      borrower.personId,
-      borrower.creditLineId,
-    );
+    const balance = await this.peachApiService.getLoanBalances(borrower.personId, borrower.creditLineId);
 
     return {
       isBalanceChangeInProgress: balance.isLocked,
@@ -35,18 +32,13 @@ export class LoanBalancesService {
     };
   }
 
-  public async getLatestLoanBalance(
-    userId: string,
-  ): Promise<GetLoanBalancesResponse> {
+  public async getLatestLoanBalance(userId: string): Promise<GetLoanBalancesResponse> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    const balance = await this.peachApiService.getCreditBalance(
-      borrower.personId,
-      borrower.creditLineId,
-    );
+    const balance = await this.peachApiService.getCreditBalance(borrower.personId, borrower.creditLineId);
 
     return {
       availableCredit: balance.availableCreditAmount,

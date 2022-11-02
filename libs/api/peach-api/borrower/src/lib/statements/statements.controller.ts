@@ -1,12 +1,9 @@
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
-import { Statement } from '../api/peach_api.interfaces';
+import { Statement } from '@archie/api/peach-api/data-transfer-objects/types';
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import {
-  BorrowerNotFoundError,
-  CreditLineNotFoundError,
-} from '../borrower.errors';
+import { BorrowerNotFoundError, CreditLineNotFoundError } from '../borrower.errors';
 import { LoanStatementsService } from './statements.service';
 import { GetLoanDocumentDto } from './statements.dto';
 
@@ -26,13 +23,7 @@ export class LoanStatementsController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([BorrowerNotFoundError, CreditLineNotFoundError])
-  async getLoanDocumentUrl(
-    @Req() req,
-    @Param('documentId') documentId: string,
-  ): Promise<GetLoanDocumentDto> {
-    return this.loanStatementsService.getLoanDocumentUrl(
-      req.user.sub,
-      documentId,
-    );
+  async getLoanDocumentUrl(@Req() req, @Param('documentId') documentId: string): Promise<GetLoanDocumentDto> {
+    return this.loanStatementsService.getLoanDocumentUrl(req.user.sub, documentId);
   }
 }

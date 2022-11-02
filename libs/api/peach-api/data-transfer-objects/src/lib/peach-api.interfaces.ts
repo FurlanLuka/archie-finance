@@ -23,7 +23,7 @@ export interface Person extends PeachResponse {
   companyId: string;
 }
 
-export interface PaymentInstrument extends PeachResponse {
+export interface PeachPaymentInstrument extends PeachResponse {
   id: string;
   nickname: string;
   accountNumberLastFour: string;
@@ -84,7 +84,7 @@ export interface Payments extends PeachResponse {
   data: Payment[];
 }
 
-export class Payment {
+export interface Payment {
   id: string;
   timestamps: {
     appliedAt: string;

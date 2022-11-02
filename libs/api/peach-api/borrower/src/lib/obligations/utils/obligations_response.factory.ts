@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ObligationsResponseDto } from '../obligations.dto';
-import { Balances, Obligation } from '../../api/peach_api.interfaces';
+import { Balances, Obligation } from '@archie/api/peach-api/data-transfer-objects/types';
 
 @Injectable()
 export class ObligationsResponseFactory {

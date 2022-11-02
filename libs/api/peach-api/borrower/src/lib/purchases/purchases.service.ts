@@ -2,7 +2,7 @@ import { Borrower } from '../borrower.entity';
 import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Credit, Purchases } from '../api/peach_api.interfaces';
+import { Credit, Purchases } from '@archie/api/peach-api/data-transfer-objects/types';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import { PurchasesResponseFactory } from './utils/purchases_response.factory';
 import { GetPurchasesQueryDto, PurchasesResponseDto } from './purchases.dto';
@@ -23,26 +23,18 @@ export class PurchasesService {
     private queueService: QueueService,
   ) {}
 
-  public async getPurchases(
-    userId: string,
-    query: GetPurchasesQueryDto,
-  ): Promise<PurchasesResponseDto> {
+  public async getPurchases(userId: string, query: GetPurchasesQueryDto): Promise<PurchasesResponseDto> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
     this.borrowerValidation.isBorrowerDrawDefined(borrower);
 
-    const purchases: Purchases = await this.peachApiService.getPurchases(
-      borrower,
-      query,
-    );
+    const purchases: Purchases = await this.peachApiService.getPurchases(borrower, query);
 
     return this.purchasesResponseFactory.create(purchases, query.limit);
   }
 
-  public async handleTransactionsEvent(
-    transaction: TransactionUpdatedPayload,
-  ): Promise<void> {
+  public async handleTransactionsEvent(transaction: TransactionUpdatedPayload): Promise<void> {
     if (transaction.status === 'queued') {
       return;
     }
@@ -52,17 +44,9 @@ export class PurchasesService {
     this.borrowerValidation.isBorrowerDrawDefined(borrower);
 
     if (transaction.status === 'pending') {
-      await this.peachApiService.createPurchase(
-        borrower.personId,
-        borrower.creditLineId,
-        borrower.drawId,
-        transaction,
-      );
+      await this.peachApiService.createPurchase(borrower.personId, borrower.creditLineId, borrower.drawId, transaction);
 
-      const credit: Credit = await this.peachApiService.getCreditBalance(
-        borrower.personId,
-        borrower.creditLineId,
-      );
+      const credit: Credit = await this.peachApiService.getCreditBalance(borrower.personId, borrower.creditLineId);
       this.queueService.publishEvent(CREDIT_BALANCE_UPDATED_TOPIC, {
         ...credit,
         userId: transaction.userId,
@@ -74,12 +58,7 @@ export class PurchasesService {
         },
       });
     } else {
-      await this.peachApiService.updatePurchase(
-        borrower.personId,
-        borrower.creditLineId,
-        borrower.drawId,
-        transaction,
-      );
+      await this.peachApiService.updatePurchase(borrower.personId, borrower.creditLineId, borrower.drawId, transaction);
     }
   }
 }

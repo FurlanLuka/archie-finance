@@ -1,18 +1,11 @@
-import {
-  IsDateString,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  IsString,
-  Matches,
-} from 'class-validator';
+import { IsDateString, IsNumber, IsOptional, IsPositive, IsString, Matches } from 'class-validator';
 import { Type } from 'class-transformer';
 import {
   PaymentReason,
   PaymentStatus,
   PaymentType,
   TransactionType,
-} from '../api/peach_api.interfaces';
+} from '@archie/api/peach-api/data-transfer-objects/types';
 
 export class GetPaymentsQueryDto {
   @IsString()
