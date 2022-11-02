@@ -95,7 +95,9 @@
     },
     "address": {
       "title": "Send {{required_collateral}} to:",
-      "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address. Please select another asset above if you'd like to collateralize a different currency.",
+      "title_usdc": "Send {{required_collateral}} to the below Ethereum address:",
+      "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address. Please select another asset if you'd like to collateralize a different currency.",
+      "info_text_1_usdc": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this Ethereum address. Please select another asset if you'd like to collateralize a different currency.",
       "info_text_2": "We will settle receipt of your collateral after <b>three</b> confirmations.",
       "info_link_1": "Follow along on",
       "info_link_2": "this blockchain explorer "
@@ -217,6 +219,7 @@
       "amount_label": "How much {{currentAsset}} would you like to withdraw? Max is {{maxAmount}}",
       "amount_label_empty": "You cannot withdraw any {{currentAsset}}.",
       "address_label": "Send {{currentAsset}} to:",
+      "address_label_usdc": "Send {{currentAsset}} to the below Ethereum address:",
       "address_placeholder": "Enter your address",
       "required_field_error": "This field is required",
       "amount_type_error": "Amount must be a number",
