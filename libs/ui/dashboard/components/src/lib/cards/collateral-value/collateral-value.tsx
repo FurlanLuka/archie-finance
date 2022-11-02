@@ -2,25 +2,15 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, Navigate } from 'react-router-dom';
 
-import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import {
-  ButtonOutline,
-  Card,
-  Skeleton,
-  TitleM,
-  BodyM,
-} from '@archie/ui/shared/design-system';
+import { ButtonOutline, Card, Skeleton, TitleM, BodyM } from '@archie/ui/shared/design-system';
 
 export const CollateralValue: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
+  const getLedgerResponse = useGetLedger();
 
   if (getLedgerResponse.state === RequestState.LOADING) {
     return (
@@ -36,12 +26,7 @@ export const CollateralValue: FC = () => {
 
   if (getLedgerResponse.state === RequestState.SUCCESS) {
     return (
-      <Card
-        column
-        alignItems="flex-start"
-        justifyContent="space-between"
-        padding="1.5rem"
-      >
+      <Card column alignItems="flex-start" justifyContent="space-between" padding="1.5rem">
         <div>
           <BodyM weight={700} className="card-title">
             {t('collateral_value_card.title')}

@@ -28,23 +28,23 @@ function getCurrentStep(step: OnboardingStep) {
 }
 
 export const OnboardingHandler: FC = () => {
-  const queryResponse = useGetOnboarding();
+  const getOnboardingResponse = useGetOnboarding();
 
   const [currentStep, setCurrentStep] = useState<OnboardingStep>();
 
   useEffect(() => {
-    if (queryResponse.state === RequestState.SUCCESS) {
-      if (queryResponse.data.kycStage === false) {
+    if (getOnboardingResponse.state === RequestState.SUCCESS) {
+      if (getOnboardingResponse.data.kycStage === false) {
         setCurrentStep(OnboardingStep.KYC);
-      } else if (queryResponse.data.emailVerificationStage === false) {
+      } else if (getOnboardingResponse.data.emailVerificationStage === false) {
         setCurrentStep(OnboardingStep.VERIFY_EMAIL);
-      } else if (queryResponse.data.collateralizationStage === false) {
+      } else if (getOnboardingResponse.data.collateralizationStage === false) {
         setCurrentStep(OnboardingStep.COLLATERALIZE);
-      } else if (queryResponse.data.cardActivationStage === false) {
+      } else if (getOnboardingResponse.data.cardActivationStage === false) {
         setCurrentStep(OnboardingStep.CARD);
       }
     }
-  }, [queryResponse]);
+  }, [getOnboardingResponse]);
 
   return (
     <OnboardingStyled>

@@ -140,11 +140,15 @@
     "img_alt": "Not enough collateral",
     "btn": "Add collateral"
   },
-  "not_enough_collateral_popup": {
+  "not_enough_collateral_toast": {
     "text": "We've received ${{creditValue}} worth of collateral. You must collateralize ${{difference}} more in crypto assets to receive an Archie card."
   },
-  "collateral_credit_line_popup": {
+  "collateral_credit_line_toast": {
     "text": "You have collateralized {{collateral}} and will have an initial credit line of ${{creditValue}}."
+  },
+  "limited_functionality_toast": {
+    "title": "App running with limited functionality",
+    "text": "Due to network issues, the app isn't 100% operational. You can continue using it, but an occasional manual refresh may be necessary."
   },
   "setup_2fa_banner": {
     "title": "Protect your funds with 2FA",
@@ -361,8 +365,12 @@
       "btn_confirm": "Disable"
     }
   },
-  "limited_functionality_modal": {
-    "title": "App running with limited functionality",
-    "text": "Due to network issues, the app isn't 100% operational. You can continue using it, but an occasional manual refresh may be necessary."
+  "reset_password_modal": {
+    "title": "Reset Password instructions sent",
+    "text": "We've just sent you an email to reset your password."
+  },
+  "change_2fa_modal": {
+    "title": "Change 2FA device",
+    "text": "Are you sure you want to remove 2FA from your current device?"
   }
 }

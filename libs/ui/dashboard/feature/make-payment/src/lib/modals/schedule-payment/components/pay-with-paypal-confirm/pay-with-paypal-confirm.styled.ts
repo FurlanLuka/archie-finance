@@ -29,7 +29,7 @@ export const PayWithPaypalConfirmStyled = styled.div`
 
   .btn-group {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
     max-width: 70%;
     margin-top: 4rem;
 

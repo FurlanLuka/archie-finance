@@ -13,27 +13,22 @@ import { SettingsScreen } from '@archie/ui/dashboard/feature/settings';
 import { WithdrawScreen } from '@archie/ui/dashboard/feature/withdraw';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetOnboarding } from '@archie/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
-import {
-  LoaderFullScreen,
-  Page,
-  Container,
-} from '@archie/ui/shared/design-system';
+import { LoaderFullScreen, Page, Container } from '@archie/ui/shared/design-system';
 
 import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
 
 export const DashboardRoute: FC = () => {
-  const queryResponse = useGetOnboarding();
+  const getOnboardingResponse = useGetOnboarding();
 
-  const isMfaSetup =
-    queryResponse.state === RequestState.SUCCESS &&
-    queryResponse.data.mfaEnrollmentStage;
+  const isMfaSet =
+    getOnboardingResponse.state === RequestState.SUCCESS && getOnboardingResponse.data.mfaEnrollmentStage;
 
-  if (queryResponse.state === RequestState.LOADING) {
+  if (getOnboardingResponse.state === RequestState.LOADING) {
     return <LoaderFullScreen />;
   }
 
-  if (queryResponse.state === RequestState.SUCCESS) {
-    if (!queryResponse.data.completed) {
+  if (getOnboardingResponse.state === RequestState.SUCCESS) {
+    if (!getOnboardingResponse.data.completed) {
       return <Navigate to="/onboarding" />;
     }
   }
@@ -44,25 +39,19 @@ export const DashboardRoute: FC = () => {
       <Page>
         <Navigation />
         <Container column mobileColumn maxWidth="100%">
-          {!isMfaSetup && <Setup2faBanner />}
+          {!isMfaSet && <Setup2faBanner />}
           <Container justifyContent="center" maxWidth="100%">
             <Routes>
-              <Route path="/" element={<HomeScreen />} />
-              <Route path="/home" element={<HomeScreen />} />
-              <Route path="/collateral" element={<CollateralScreen />} />
-              <Route
-                path="/collateral/withdraw/*"
-                element={<WithdrawScreen />}
-              />
-              <Route
-                path="/collateral/add/:asset"
-                element={<CollateralizationScreen />}
-              />
+              <Route path="" element={<HomeScreen />} />
+              <Route path="home" element={<HomeScreen />} />
+              <Route path="collateral" element={<CollateralScreen />} />
+              <Route path="collateral/withdraw/:asset" element={<WithdrawScreen />} />
+              <Route path="collateral/add/:asset" element={<CollateralizationScreen />} />
               {/* <Route path="/rewards" element={<RewardsScreen />} /> */}
-              <Route path="/payment" element={<PaymentScreen />} />
-              <Route path="/history" element={<HistoryScreen />} />
-              <Route path="/settings" element={<SettingsScreen />} />
-              <Route path="/error" element={<ErrorScreen />} />
+              <Route path="payment" element={<PaymentScreen />} />
+              <Route path="history" element={<HistoryScreen />} />
+              <Route path="settings" element={<SettingsScreen />} />
+              <Route path="error" element={<ErrorScreen />} />
             </Routes>
           </Container>
         </Container>

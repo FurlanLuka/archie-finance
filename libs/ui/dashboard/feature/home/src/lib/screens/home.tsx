@@ -53,9 +53,7 @@ export const HomeScreen: FC = () => {
 
       return (
         <>
-          <TitleM className="title">
-            {t('dashboard_home.title', { name: kycData.firstName })}
-          </TitleM>
+          <TitleM className="title">{t('dashboard_home.title', { name: kycData.firstName })}</TitleM>
           <BodyM color={theme.textSecondary} className="subtitle">
             {t('dashboard_home.subtitle', { date: getDate() })}
           </BodyM>
@@ -85,11 +83,7 @@ export const HomeScreen: FC = () => {
         </div>
       </HomeStyled>
       {confirmPaymentModalOpen && (
-        <Modal
-          maxWidth="780px"
-          isOpen
-          close={() => setConfirmPaymentModalOpen(false)}
-        >
+        <Modal maxWidth="780px" isOpen close={() => setConfirmPaymentModalOpen(false)}>
           <PayWithPaypalScheduled onConfirm={handleConfirmPaymentModaConfirm} />
         </Modal>
       )}
