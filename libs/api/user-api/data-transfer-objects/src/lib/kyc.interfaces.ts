@@ -1,3 +1,4 @@
+// TODO rework this to be a class and imported inside controllers
 export interface KycSubmittedPayload {
   userId: string;
   firstName: string;

@@ -1,13 +1,13 @@
 import { FC } from 'react';
 
-import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
 import { BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
 import { ConnectedAccountItemStyled } from './connected-account-item.styled';
 
 interface ConnectedAccountItemProps {
-  account: AccountResponse;
+  account: PaymentInstrument;
 }
 
 export const ConnectedAccountItem: FC<ConnectedAccountItemProps> = ({

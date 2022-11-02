@@ -3,18 +3,18 @@ import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Borrower } from '../borrower.entity';
 import { Repository } from 'typeorm';
-import { PaymentInstrument } from '../api/peach_api.interfaces';
+import { PaymentInstrument as PeachPaymentInstrument } from '../api/peach_api.interfaces';
 import {
-  ConnectAccountDto,
-  PaymentInstrumentDto,
-} from './payment_instruments.dto';
+  ConnectAccountBody,
+  PaymentInstrument,
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import { GET_USER_KYC_RPC } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import {
   GetKycPayload,
-  GetKycResponse,
-} from '@archie/api/user-api/data-transfer-objects';
+  KycResponse,
+} from '@archie/api/user-api/data-transfer-objects/types';
 
 @Injectable()
 export class PeachPaymentInstrumentsService {
@@ -28,34 +28,36 @@ export class PeachPaymentInstrumentsService {
 
   public async listPaymentInstruments(
     userId: string,
-  ): Promise<PaymentInstrumentDto[]> {
+  ): Promise<PaymentInstrument[]> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
     this.borrowerValidation.isBorrowerDefined(borrower);
 
-    const paymentInstruments: PaymentInstrument[] =
+    const paymentInstruments: PeachPaymentInstrument[] =
       await this.peachApiService.getPaymentInstruments(borrower.personId);
 
-    return paymentInstruments.map((paymentInstrument: PaymentInstrument) => ({
-      id: paymentInstrument.id,
-      name: paymentInstrument.nickname,
-      mask: paymentInstrument.accountNumberLastFour,
-      subType: paymentInstrument.accountType,
-    }));
+    return paymentInstruments.map(
+      (paymentInstrument: PeachPaymentInstrument) => ({
+        id: paymentInstrument.id,
+        name: paymentInstrument.nickname,
+        mask: paymentInstrument.accountNumberLastFour,
+        subType: paymentInstrument.accountType,
+      }),
+    );
   }
 
   public async connectAccount(
     userId: string,
-    accountInfo: ConnectAccountDto,
+    accountInfo: ConnectAccountBody,
   ): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
     this.borrowerValidation.isBorrowerDefined(borrower);
 
-    const kyc: GetKycResponse = await this.queueService.request<
-      GetKycResponse,
+    const kyc: KycResponse = await this.queueService.request<
+      KycResponse,
       GetKycPayload
     >(GET_USER_KYC_RPC, {
       userId: `${userId}`,
