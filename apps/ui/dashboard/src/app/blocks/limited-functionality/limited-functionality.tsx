@@ -12,9 +12,9 @@ export const LimitedFunctionalityToast: FC = () => {
     <ToastList>
       <LimitedFunctionalityStyled>
         <BodyM weight={800} className="title">
-          {t('limited_functionality_modal.title')}
+          {t('limited_functionality_toast.title')}
         </BodyM>
-        <BodyM weight={600}>{t('limited_functionality_modal.text')}</BodyM>
+        <BodyM weight={600}>{t('limited_functionality_toast.text')}</BodyM>
       </LimitedFunctionalityStyled>
     </ToastList>
   );

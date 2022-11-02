@@ -19,7 +19,9 @@ export class LastCreditLimitUpdate {
   @Index()
   calculatedAt: string;
 
-  @OneToOne((_) => Borrower, (borrower) => borrower.uuid, { nullable: false })
+  @OneToOne((_) => Borrower, (borrower) => borrower.lastCreditLimitUpdate, {
+    nullable: false,
+  })
   @JoinColumn()
   borrower: Borrower;
 }

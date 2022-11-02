@@ -73,5 +73,5 @@
       "executor": "@archie/plugin/deployment:deploy"
     }
   },
-  "tags": []
+  "tags": ["scope:api:app:fireblocks-api", "scope:api:app"]
 }

@@ -3,7 +3,7 @@
   "name": "ui-shared-design-system",
   "sourceRoot": "libs/ui/shared/design-system/src",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:ui:lib:shared"],
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",

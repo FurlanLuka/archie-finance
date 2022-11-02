@@ -31,7 +31,7 @@ export const CollateralReceivedModalStyled = styled.div`
 
   .btn-group {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
 
     @media (max-width: ${breakpoints.screenSM}) {
       flex-direction: column;

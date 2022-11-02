@@ -152,7 +152,7 @@ export const theme: Theme = {
   navItem: colors.black,
   navItemActive: colors.neutralgray_600,
   // loading screen
-  loadingBackground: colors.teal_800,
+  loadingBackground: colors.neutralgray_200,
   loadingBorder: colors.neutralgray_300,
   loadingBorderTop: colors.neutralgray_400,
   // inline loader

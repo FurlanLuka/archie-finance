@@ -68,5 +68,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:app:ltv-api", "scope:api:app"]
 }

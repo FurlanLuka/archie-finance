@@ -4,6 +4,7 @@ export interface ApiErrorResponse {
   statusCode: number;
   message: string;
   error?: string;
+  requiredScopes?: string[];
 }
 
 export enum RequestState {
@@ -34,11 +35,7 @@ interface IdleQueryResponse {
   fetch: () => void;
 }
 
-export type QueryResponse<T> =
-  | LoadingQueryResponse
-  | ErrorQueryResponse
-  | SuccessQueryResponse<T>
-  | IdleQueryResponse;
+export type QueryResponse<T> = LoadingQueryResponse | ErrorQueryResponse | SuccessQueryResponse<T> | IdleQueryResponse;
 
 interface LoadingMutationQueryResponse {
   state: RequestState.LOADING;
@@ -50,9 +47,10 @@ interface ErrorMutationQueryResponse<T> {
   mutate: (payload: Omit<T, 'accessToken'>) => void;
 }
 
-interface SuccessMutationQueryResponse<T = any> {
+interface SuccessMutationQueryResponse<T = any, P = any> {
   state: RequestState.SUCCESS;
   data: T;
+  mutate: (payload: Omit<P, 'accessToken'>) => void;
 }
 
 interface IdleMutationQueryResponse<T = any> {
@@ -63,7 +61,7 @@ interface IdleMutationQueryResponse<T = any> {
 export type MutationQueryResponse<Payload = any, Response = any> =
   | LoadingMutationQueryResponse
   | ErrorMutationQueryResponse<Payload>
-  | SuccessMutationQueryResponse<Response>
+  | SuccessMutationQueryResponse<Response, Payload>
   | IdleMutationQueryResponse<Payload>;
 
 interface SuccessInfiniteQueryResponse<T> {

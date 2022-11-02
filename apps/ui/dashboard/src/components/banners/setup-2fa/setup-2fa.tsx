@@ -1,11 +1,7 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  MutationQueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
-import { usePollMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-poll-mfa-enrollment';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useStartMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-start-mfa-enrollment';
 import { ButtonGhost, BodyL, BodyM } from '@archie/ui/shared/design-system';
 
@@ -15,25 +11,21 @@ import { Setup2faBannerStyled } from './setup-2fa.styled';
 
 export const Setup2faBanner: FC = () => {
   const { t } = useTranslation();
-  const [shouldPollMfaEnrollment, setShouldPollMfaEnrollment] = useState(false);
-  const startMfaEnrollmentResponse: MutationQueryResponse =
-    useStartMfaEnrollment();
-
-  usePollMfaEnrollment(shouldPollMfaEnrollment);
+  const startMfaEnrollmentMutation = useStartMfaEnrollment();
 
   useEffect(() => {
-    if (startMfaEnrollmentResponse.state === RequestState.SUCCESS) {
-      if (shouldPollMfaEnrollment === false) {
-        window.open(startMfaEnrollmentResponse.data.ticket_url, '_blank');
-      }
-
-      setShouldPollMfaEnrollment(true);
+    if (startMfaEnrollmentMutation.state === RequestState.SUCCESS) {
+      window.open(startMfaEnrollmentMutation.data.ticket_url, '_blank');
     }
-  }, [startMfaEnrollmentResponse]);
+  }, [startMfaEnrollmentMutation.state]);
 
   const handleClick = () => {
-    if (startMfaEnrollmentResponse.state === RequestState.IDLE) {
-      startMfaEnrollmentResponse.mutate({});
+    if (startMfaEnrollmentMutation.state === RequestState.IDLE) {
+      startMfaEnrollmentMutation.mutate({});
+    }
+
+    if (startMfaEnrollmentMutation.state === RequestState.SUCCESS) {
+      window.open(startMfaEnrollmentMutation.data.ticket_url, '_blank');
     }
   };
 
@@ -47,9 +39,7 @@ export const Setup2faBanner: FC = () => {
           <BodyL weight={800}>{t('setup_2fa_banner.title')}</BodyL>
           <BodyM>{t('setup_2fa_banner.text')}</BodyM>
         </div>
-        <ButtonGhost onClick={handleClick} isDisabled={shouldPollMfaEnrollment}>
-          {t('btn_continue')}
-        </ButtonGhost>
+        <ButtonGhost onClick={handleClick}>{t('btn_continue')}</ButtonGhost>
       </div>
     </Setup2faBannerStyled>
   );

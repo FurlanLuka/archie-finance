@@ -5,23 +5,13 @@ import { Navigate } from 'react-router-dom';
 
 import { MakePaymentModal } from '@archie/ui/dashboard/feature/make-payment';
 import { canUserSchedulePayment } from '@archie/ui/dashboard/utils';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import {
   CREDIT_LINE_NOT_FOUND_ERROR,
   MISSING_PAYMENT_INFO_ERROR,
-  UserObligations,
 } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import { useGetObligations } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
-import {
-  ButtonOutline,
-  Card,
-  Skeleton,
-  TitleM,
-  BodyM,
-} from '@archie/ui/shared/design-system';
+import { ButtonOutline, Card, Skeleton, TitleM, BodyM } from '@archie/ui/shared/design-system';
 
 import { NextPaymentChart } from '../../charts/next-payment/next-payment';
 
@@ -34,8 +24,7 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
 
   const [makePaymentModalOpen, setMakePaymentModalOpen] = useState(false);
 
-  const getObligationsResponse: QueryResponse<UserObligations> =
-    useGetObligations();
+  const getObligationsResponse = useGetObligations();
 
   if (getObligationsResponse.state === RequestState.LOADING) {
     return (
@@ -93,9 +82,7 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
             </div>
           )}
         </Card>
-        {makePaymentModalOpen && (
-          <MakePaymentModal close={() => setMakePaymentModalOpen(false)} />
-        )}
+        {makePaymentModalOpen && <MakePaymentModal close={() => setMakePaymentModalOpen(false)} />}
       </>
     );
   }

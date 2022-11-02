@@ -68,5 +68,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:app:mail-api", "scope:api:app"]
 }
