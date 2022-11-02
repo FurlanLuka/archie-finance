@@ -6,7 +6,7 @@ import {
   uuidv4,
   group,
 } from '../utils';
-import { SERVICE_NAME } from '@archie/api/onboarding-api/constants';
+import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
 import {
   EMAIL_VERIFIED_TOPIC,
   KYC_SUBMITTED_TOPIC,
@@ -22,25 +22,23 @@ import {
 import { creditLineCreatedDataFactory } from '@archie/api/credit-line-api/test-data';
 import { cardActivatedDataFactory } from '@archie/api/credit-api/test-data';
 
-export let options: Options = {
-  vus: 10,
-  duration: '20s',
-  userAgent: 'k6-stress-test',
-};
+export let options: Options = getOptions();
 
 export function setup() {
-  console.log('setup');
   createAmqpConnection();
 }
 
 export default function () {
   group('Onboarding flow', () => {
     const userId: string = uuidv4();
+    const controllerQueuePrefix: string = `${SERVICE_QUEUE_NAME}-onboarding`;
+
+    // Create onboarding record
 
     group('KYC completed', () => {
       publishQueueMessage(
         KYC_SUBMITTED_TOPIC,
-        SERVICE_NAME,
+        controllerQueuePrefix,
         kycSubmittedDataFactory({
           userId,
         }),
@@ -50,7 +48,7 @@ export default function () {
     group('Email verified', () => {
       publishQueueMessage(
         EMAIL_VERIFIED_TOPIC,
-        SERVICE_NAME,
+        controllerQueuePrefix,
         emailVerifiedDataFactory({
           userId,
         }),
@@ -60,7 +58,7 @@ export default function () {
     group('MFA enrolled', () => {
       publishQueueMessage(
         MFA_ENROLLED_TOPIC,
-        SERVICE_NAME,
+        controllerQueuePrefix,
         mfaEnrolledDataFactory({
           userId,
         }),
@@ -70,7 +68,7 @@ export default function () {
     group('Collaterization stage', () => {
       publishQueueMessage(
         CREDIT_LINE_CREATED_TOPIC,
-        SERVICE_NAME,
+        controllerQueuePrefix,
         creditLineCreatedDataFactory({
           userId,
         }),
@@ -80,7 +78,7 @@ export default function () {
     group('Card activated', () => {
       publishQueueMessage(
         CARD_ACTIVATED_TOPIC,
-        SERVICE_NAME,
+        controllerQueuePrefix,
         cardActivatedDataFactory({
           userId,
         }),
@@ -88,3 +86,10 @@ export default function () {
     });
   });
 }
+
+// onboarding - api - queue - archie.microservice.tx_credit.card.activated.v1;
+// onboarding -
+//   api -
+//   queue -
+//   onboarding -
+//   archie.microservice.tx_credit.card.activated.v1;

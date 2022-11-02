@@ -1,4 +1,4 @@
-import { user } from '@archie/test/integration/stubs';
+import { user } from '../../../../test/integration/src/lib/data-stubs';
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects';
 
 export const ltvUpdatedPayloadFactory = (

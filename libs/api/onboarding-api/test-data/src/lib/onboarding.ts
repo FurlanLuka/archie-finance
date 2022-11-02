@@ -1,4 +1,4 @@
-import { user } from '@archie/test/integration/stubs';
+import { user } from '../../../../test/integration/src/lib/data-stubs';
 import { OnboardingUpdatedPayload } from '@archie/api/onboarding-api/data-transfer-objects';
 
 export const onboardingUpdatedPayloadFactory = (

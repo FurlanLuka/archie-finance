@@ -3,7 +3,7 @@ import { Options } from 'k6/options';
 export function getOptions(): Options {
   const defaultOptions: Options = {
     vus: 10,
-    duration: '20s',
+    duration: '5s',
     userAgent: 'k6-stress-test',
   };
 

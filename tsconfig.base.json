@@ -203,7 +203,8 @@
         "libs/plugin/workspace-generator/src/index.ts"
       ],
       "@archie/test/integration": ["libs/api/test/integration/src/index.ts"],
-      "@archie/test/integration/stubs": ["libs/api/test/integration/src/lib/stubs/index.ts"],
+      "@archie/test/integration/data-stubs": ["libs/api/test/integration/src/lib/data-stubs/index.ts"],
+      "@archie/test/integration/module-stubs": ["libs/api/test/integration/src/lib/module-stubs/index.ts"],
       "@archie/ui/dashboard/components": [
         "libs/ui/dashboard/components/src/index.ts"
       ],

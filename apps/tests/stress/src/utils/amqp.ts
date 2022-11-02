@@ -15,12 +15,12 @@ export function createAmqpConnection(): Amqp {
 
 export function publishQueueMessage<T extends object>(
   event: Event<T>,
-  serviceName: string,
+  serviceQueueName: string,
   message: T,
   exchange: string = 'archie.microservice.tx',
 ): void {
-  const queueName = `${serviceName}-${exchange}_${event.getRoutingKey()}`;
-
+  const queueName = `${serviceQueueName}-${exchange}_${event.getRoutingKey()}`;
+  console.log(queueName);
   Amqp.publish({
     queue_name: queueName,
     body: JSON.stringify(message),
