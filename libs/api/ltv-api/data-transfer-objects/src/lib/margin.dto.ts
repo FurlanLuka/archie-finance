@@ -1,9 +1,5 @@
 import { IsEnum, IsOptional } from 'class-validator';
-
-export enum MarginCallStatus {
-  active = 'active',
-  completed = 'completed',
-}
+import { MarginCall, MarginCallStatus } from './margin.interfaces';
 
 export class MarginCallQueryDto {
   @IsOptional()
@@ -11,7 +7,7 @@ export class MarginCallQueryDto {
   status: MarginCallStatus | null = null;
 }
 
-export class MarginCallsDto {
+export class MarginCallDto implements MarginCall {
   status: MarginCallStatus;
   automaticLiquidationAt: string;
   createdAt: string;

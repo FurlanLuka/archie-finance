@@ -8,10 +8,7 @@ import { EmailAddress, EmailVerification } from '@archie/api/user-api/data-trans
 
 @Injectable()
 export class EmailService {
-  constructor(
-    private auth0Service: Auth0Service,
-    private queueService: QueueService,
-  ) {}
+  constructor(private auth0Service: Auth0Service, private queueService: QueueService) {}
 
   async isEmailVerified(userId: string): Promise<EmailVerification> {
     const user: User = await this.auth0Service.getManagmentClient().getUser({
