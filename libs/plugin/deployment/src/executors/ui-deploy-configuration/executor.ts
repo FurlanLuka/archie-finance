@@ -16,15 +16,12 @@ export default async function runExecutor(
 
   const projectConfig = workspace.projects[projectName];
 
-  const data = JSON.parse(readFileSync(
-    `${projectConfig.root}/deployment-${environment}.json`,
-    'utf-8'
-  ));
+  const data = JSON.parse(readFileSync(`${projectConfig.root}/deployment-${environment}.json`, 'utf-8'));
 
-  Object.keys(data).forEach(key => {
-    logger.info(`Executing: ${`echo "${key}=${data[key]}" >> "$GITHUB_ENV"`}`)
-    execSync(`echo "${key}=${data[key]}" >> $GITHUB_ENV`)
-  })
+  Object.keys(data).forEach((key) => {
+    logger.info(`Executing: ${`echo "${key}=${data[key]}" >> "$GITHUB_ENV"`}`);
+    execSync(`echo "${key}=${data[key]}" >> $GITHUB_ENV`);
+  });
 
   return {
     success: true,
