@@ -138,6 +138,16 @@ spec:
                 secretKeyRef:
                   name: user-api-secrets
                   key: encryption-key
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: redis-shared-secrets
+                  key: redis-url
+            - name: DEFAULT_ROLE_ID
+              valueFrom:
+                secretKeyRef:
+                  name: user-api-secrets
+                  key: default-role-id
           {{- end }}
       imagePullSecrets:
         - name: regcred

@@ -18,7 +18,7 @@ import { EmailAlreadyVerifiedError } from './email.errors';
 
 @Controller('v1/user/email-verification')
 export class EmailController {
-  constructor(private userService: EmailService) {}
+  constructor(private emailService: EmailService) {}
 
   @Get()
   @UseGuards(AuthGuard)
@@ -26,7 +26,7 @@ export class EmailController {
   async checkEmailVerification(
     @Req() request,
   ): Promise<GetEmailVerificationResponse> {
-    return this.userService.isEmailVerified(request.user.sub);
+    return this.emailService.isEmailVerified(request.user.sub);
   }
 
   @Post('resend')
@@ -34,7 +34,7 @@ export class EmailController {
   @ApiBearerAuth()
   @ApiErrorResponse([EmailAlreadyVerifiedError])
   async resendEmailVerification(@Req() request): Promise<void> {
-    return this.userService.resendEmailVerification(request.user.sub);
+    return this.emailService.resendEmailVerification(request.user.sub);
   }
 }
 

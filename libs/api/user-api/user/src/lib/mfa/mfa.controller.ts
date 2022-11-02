@@ -1,10 +1,16 @@
-import { AuthGuard } from '@archie/api/utils/auth0';
+import {
+  AuthGuard,
+  AuthScopes,
+  ScopeGuard,
+  Scopes,
+} from '@archie/api/utils/auth0';
 import {
   Controller,
   Delete,
   Get,
   Param,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -13,6 +19,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import {
   GetEnrollmentResponse,
+  GetEnrollmentsQuery,
   GetMfaEnrollmentResponse,
   GetSendEnrollmentTicketResponse,
 } from '@archie/api/user-api/data-transfer-objects';
@@ -20,37 +27,41 @@ import { EnrollmentNotFoundError } from './mfa.errors';
 
 @Controller('v1/user/mfa')
 export class MfaController {
-  constructor(private userService: MfaService) {}
+  constructor(private mfaService: MfaService) {}
 
   @Post('enroll')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   async enrollMfa(@Req() request): Promise<GetSendEnrollmentTicketResponse> {
-    return this.userService.enrollMfa(request.user.sub);
+    return this.mfaService.enrollMfa(request.user.sub);
   }
 
   @Delete('enrollments/:enrollmentId')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ScopeGuard)
+  @Scopes(AuthScopes.mfa)
   @ApiBearerAuth()
   @ApiErrorResponse([EnrollmentNotFoundError])
   async deleteMfaEnrollment(
     @Req() request,
     @Param('enrollmentId') enrollmentId: string,
   ): Promise<void> {
-    return this.userService.deleteMfaEnrollment(request.user.sub, enrollmentId);
+    return this.mfaService.deleteMfaEnrollment(request.user.sub, enrollmentId);
   }
 
   @Get('enrollments')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getMfaEnrollments(@Req() request): Promise<GetEnrollmentResponse[]> {
-    return this.userService.getMfaEnrollments(request.user.sub);
+  async getMfaEnrollments(
+    @Req() request,
+    @Query() query: GetEnrollmentsQuery,
+  ): Promise<GetEnrollmentResponse[]> {
+    return this.mfaService.getMfaEnrollments(request.user.sub, query);
   }
 
   @Get('enrollment')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   async isMfaEnrolled(@Req() request): Promise<GetMfaEnrollmentResponse> {
-    return this.userService.isMfaEnrolled(request.user.sub);
+    return this.mfaService.isMfaEnrolled(request.user.sub);
   }
 }
