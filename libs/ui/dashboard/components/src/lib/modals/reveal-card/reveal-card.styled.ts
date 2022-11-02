@@ -7,6 +7,6 @@ export const RevealCardModalStyled = styled.div`
 
   .btn-group {
     display: flex;
-    gap: 1rem;
+    gap: 0.5rem;
   }
 `;

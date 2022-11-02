@@ -1,12 +1,8 @@
 import { FC } from 'react';
 
 import { LTVStatus, LTVColor } from '@archie/ui/shared/constants';
-import { LTV } from '@archie/ui/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 
 import { Danger } from './blocks/danger/danger';
 import { Warning } from './blocks/warning/warning';
@@ -17,31 +13,27 @@ interface MarginCallAlertProps {
 }
 
 export const MarginCallAlert: FC<MarginCallAlertProps> = ({ withButton }) => {
-  const getLTVResponse: QueryResponse<LTV> = useGetLTV();
+  const getLTVResponse = useGetLTV();
 
-  const getContent = () => {
-    if (getLTVResponse.state === RequestState.SUCCESS) {
-      const ltvData = getLTVResponse.data;
+  if (getLTVResponse.state === RequestState.SUCCESS) {
+    const ltvData = getLTVResponse.data;
 
-      if (ltvData.status === LTVStatus.WARNING) {
-        return (
-          <MarginCallAlertStyled bgColor={LTVColor[ltvData.status]}>
-            <Warning withButton={withButton} />
-          </MarginCallAlertStyled>
-        );
-      }
-
-      if (ltvData.status === LTVStatus.MARGIN_CALL) {
-        return (
-          <MarginCallAlertStyled bgColor={LTVColor[ltvData.status]}>
-            <Danger withButton={withButton} />
-          </MarginCallAlertStyled>
-        );
-      }
+    if (ltvData.status === LTVStatus.WARNING) {
+      return (
+        <MarginCallAlertStyled bgColor={LTVColor[ltvData.status]}>
+          <Warning withButton={withButton} />
+        </MarginCallAlertStyled>
+      );
     }
 
-    return null;
-  };
+    if (ltvData.status === LTVStatus.MARGIN_CALL) {
+      return (
+        <MarginCallAlertStyled bgColor={LTVColor[ltvData.status]}>
+          <Danger withButton={withButton} />
+        </MarginCallAlertStyled>
+      );
+    }
+  }
 
-  return getContent();
+  return <></>;
 };

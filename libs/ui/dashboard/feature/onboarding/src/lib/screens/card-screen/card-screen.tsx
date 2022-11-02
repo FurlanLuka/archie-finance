@@ -7,20 +7,9 @@ import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
 import { GetCreditResponse } from '@archie/ui/shared/data-access/archie-api/credit/api/get-credit';
 import { useCreateRizeUser } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
 import { useGetCredit } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
-import {
-  MutationQueryResponse,
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import {
-  ButtonPrimary,
-  Container,
-  Card,
-  Skeleton,
-  TitleL,
-  BodyM,
-} from '@archie/ui/shared/design-system';
+import { ButtonPrimary, Container, Card, Skeleton, TitleL, BodyM } from '@archie/ui/shared/design-system';
 
 import imgCardReady from '../../../assets/img-card-ready.png';
 import { StepsIndicator } from '../../components/steps-indicator/steps-indicator';
@@ -34,27 +23,25 @@ enum Stage {
 
 export const CardScreen: FC = () => {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
 
   const [stage, setStage] = useState(Stage.CREATE_USER);
 
-  const createUserQuery: MutationQueryResponse = useCreateRizeUser();
-  const getCreditQueryResponse: QueryResponse<GetCreditResponse> =
-    useGetCredit();
-  const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
+  const createUserMutation = useCreateRizeUser();
+  const getCreditResponse = useGetCredit();
+  const getLedgerResponse = useGetLedger();
 
   useEffect(() => {
     if (stage === Stage.CREATE_USER) {
-      if (createUserQuery.state === RequestState.IDLE) {
-        createUserQuery.mutate({});
+      if (createUserMutation.state === RequestState.IDLE) {
+        createUserMutation.mutate({});
       }
 
-      if (createUserQuery.state === RequestState.SUCCESS) {
+      if (createUserMutation.state === RequestState.SUCCESS) {
         setStage(Stage.COMPLETE);
       }
     }
-  }, [stage, createUserQuery]);
+  }, [stage, createUserMutation]);
 
   const getTitle = () => {
     switch (stage) {
@@ -66,10 +53,7 @@ export const CardScreen: FC = () => {
   };
 
   const getCollateralTotalValue = () => {
-    if (
-      getLedgerResponse.state === RequestState.SUCCESS &&
-      stage === Stage.COMPLETE
-    ) {
+    if (getLedgerResponse.state === RequestState.SUCCESS && stage === Stage.COMPLETE) {
       return getLedgerResponse.data.value;
     }
 
@@ -77,21 +61,15 @@ export const CardScreen: FC = () => {
   };
 
   const getCreditValue = () => {
-    if (
-      getCreditQueryResponse.state === RequestState.SUCCESS &&
-      stage === Stage.COMPLETE
-    ) {
-      return getCreditQueryResponse.data.totalCredit;
+    if (getCreditResponse.state === RequestState.SUCCESS && stage === Stage.COMPLETE) {
+      return getCreditResponse.data.totalCredit;
     }
 
     return 0;
   };
 
   const getContent = () => {
-    if (
-      getCreditQueryResponse.state === RequestState.LOADING ||
-      getLedgerResponse.state === RequestState.LOADING
-    ) {
+    if (getCreditResponse.state === RequestState.LOADING || getLedgerResponse.state === RequestState.LOADING) {
       return (
         <Card height="474px">
           <Skeleton />
@@ -99,26 +77,13 @@ export const CardScreen: FC = () => {
       );
     }
 
-    if (
-      getCreditQueryResponse.state === RequestState.ERROR ||
-      getLedgerResponse.state === RequestState.ERROR
-    ) {
-      return (
-        <Navigate to="/onboarding/error" state={{ prevPath: '/onboarding' }} />
-      );
+    if (getCreditResponse.state === RequestState.ERROR || getLedgerResponse.state === RequestState.ERROR) {
+      return <Navigate to="/onboarding/error" state={{ prevPath: '/onboarding' }} />;
     }
 
-    if (
-      getCreditQueryResponse.state === RequestState.SUCCESS &&
-      getLedgerResponse.state === RequestState.SUCCESS
-    ) {
+    if (getCreditResponse.state === RequestState.SUCCESS && getLedgerResponse.state === RequestState.SUCCESS) {
       return (
-        <Card
-          column
-          alignItems="center"
-          padding="1.5rem 10% 2.5rem"
-          mobilePadding="1.5rem 1.5rem 2.5rem"
-        >
+        <Card column alignItems="center" padding="1.5rem 10% 2.5rem" mobilePadding="1.5rem 1.5rem 2.5rem">
           <TitleL className="title">{getTitle()}</TitleL>
           <BodyM className="subtitle">
             {stage === Stage.COMPLETE && (
@@ -136,11 +101,7 @@ export const CardScreen: FC = () => {
           <div className="image">
             <img src={imgCardReady} alt={t('card_step.img_alt')} />
           </div>
-          <ButtonPrimary
-            width="250px"
-            isDisabled={stage !== Stage.COMPLETE}
-            onClick={() => navigate('/collateral')}
-          >
+          <ButtonPrimary width="250px" isDisabled={stage !== Stage.COMPLETE} onClick={() => navigate('/collateral')}>
             {t('card_step.btn')}
           </ButtonPrimary>
         </Card>

@@ -11,7 +11,6 @@ import { Setup2faBannerStyled } from './setup-2fa.styled';
 
 export const Setup2faBanner: FC = () => {
   const { t } = useTranslation();
-
   const startMfaEnrollmentMutation = useStartMfaEnrollment();
 
   useEffect(() => {

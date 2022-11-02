@@ -2,22 +2,12 @@ import { FC, useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
-import { EmailVerificationResponse } from '@archie/ui/shared/data-access/archie-api/user/api/get-email-verification';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-get-email-verification';
 import { usePollEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
 import { useResendEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
 import { useAuthenticatedSession } from '@archie/ui/shared/data-access/session';
-import {
-  ButtonPrimary,
-  Card,
-  Skeleton,
-  TitleL,
-  BodyM,
-} from '@archie/ui/shared/design-system';
+import { ButtonPrimary, Card, Skeleton, TitleL, BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
 import { VerifyEmailScreenStyled } from './verify-email-screen.styled';
@@ -32,8 +22,7 @@ export const VerifyEmailScreen: FC = () => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [counter, setCounter] = useState(30);
 
-  const getEmailVerificationResponse: QueryResponse<EmailVerificationResponse> =
-    useGetEmailVerification();
+  const getEmailVerificationResponse = useGetEmailVerification();
   const mutationResponse = useResendEmailVerification();
   usePollEmailVerification();
 
@@ -83,9 +72,7 @@ export const VerifyEmailScreen: FC = () => {
     }
 
     if (getEmailVerificationResponse.state === RequestState.ERROR) {
-      return (
-        <Navigate to="/onboarding/error" state={{ prevPath: '/onboarding' }} />
-      );
+      return <Navigate to="/onboarding/error" state={{ prevPath: '/onboarding' }} />;
     }
 
     if (getEmailVerificationResponse.state === RequestState.SUCCESS) {

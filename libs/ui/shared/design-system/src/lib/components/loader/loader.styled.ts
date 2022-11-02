@@ -16,7 +16,7 @@ const stretchdelay = keyframes`
 
 export const LoaderStyled = styled.div<LoaderProps>`
   width: 50px;
-  height: 35px;
+  height: 32px;
   margin: ${({ marginAuto }) => marginAuto && 'auto'};
 
   .rect {
