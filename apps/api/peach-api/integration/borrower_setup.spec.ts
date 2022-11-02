@@ -7,8 +7,8 @@ import {
   initializeTestingModule,
   queueStub,
   TestDatabase,
-  user,
 } from '@archie/test/integration';
+import { queueStub, user } from '@archie/test/integration';
 import { AppModule } from '../src/app.module';
 import {
   Balances,

@@ -1,6 +1,4 @@
-import { QueueUtilService } from '@archie/api/utils/queue';
-
-export const GLOBAL_EXCHANGE_NAME = QueueUtilService.GLOBAL_EXCHANGE.name;
+export const GLOBAL_EXCHANGE_NAME = 'archie.microservice.tx';
 
 export const queueStub = {
   publishEvent: jest.fn(),

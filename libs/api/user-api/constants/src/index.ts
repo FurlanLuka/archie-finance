@@ -4,7 +4,7 @@ import {
   MfaRemovedPayload,
   MfaEnrolledPayload,
 } from '@archie/api/user-api/data-transfer-objects';
-import { Event } from '@archie/api/utils/queue';
+import { Event } from '@archie/api/utils/queue/events';
 
 export const SERVICE_NAME = 'user-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;

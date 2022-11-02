@@ -2,7 +2,7 @@ import {
   CreditLineUpdatedPayload,
   CreditLineCreatedPayload,
 } from '@archie/api/credit-line-api/data-transfer-objects';
-import { user } from '@archie/test/integration';
+import { user } from '@archie/test/integration/stubs';
 
 export const creditLineCreatedDataFactory = (
   override?: Partial<CreditLineCreatedPayload>,

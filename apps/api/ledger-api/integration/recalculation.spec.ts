@@ -8,6 +8,7 @@ import {
   queueStub,
   TestDatabase,
 } from '@archie/test/integration';
+import { queueStub } from '@archie/test/integration/stubs';
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';
 import { collateralDepositTransactionCompletedPayloadFactory } from '@archie/api/fireblocks-api/test-data';

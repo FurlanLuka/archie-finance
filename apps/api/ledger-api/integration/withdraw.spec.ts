@@ -6,10 +6,9 @@ import {
   createTestingModule,
   generateUserAccessToken,
   initializeTestingModule,
-  queueStub,
   TestDatabase,
-  user,
 } from '@archie/test/integration';
+import { queueStub, user } from '@archie/test/integration';
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';
 import { AssetPrices } from '@archie/api/ledger-api/assets';
