@@ -4,9 +4,11 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:webpack",
+      "executor": "@nrwl/webpack:webpack",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
+        "compiler": "babel",
         "outputPath": "dist/apps/tests/stress",
         "tsConfig": "apps/tests/stress/tsconfig.json",
         "assets": ["apps/tests/stress/src/assets"],

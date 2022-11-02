@@ -21,6 +21,7 @@ import {
 } from '@archie/api/user-api/test-data';
 import { creditLineCreatedDataFactory } from '@archie/api/credit-line-api/test-data';
 import { cardActivatedDataFactory } from '@archie/api/credit-api/test-data';
+import { sign } from 'jsonwebtoken';
 
 export let options: Options = getOptions();
 
@@ -28,10 +29,20 @@ export function setup() {
   createAmqpConnection();
 }
 
+function generateUserAccessToken(userId: string): string {
+  return sign({}, 'ACTIONS_SIGNING_SECRET', {
+    expiresIn: 300,
+    issuer: 'AUTH0_DOMAIN',
+    subject: userId,
+  });
+}
+
 export default function () {
   group('Onboarding flow', () => {
     const userId: string = uuidv4();
     const controllerQueuePrefix: string = `${SERVICE_QUEUE_NAME}-onboarding`;
+    const accessToken = generateUserAccessToken(userId);
+    console.log(accessToken);
 
     // Create onboarding record
 
