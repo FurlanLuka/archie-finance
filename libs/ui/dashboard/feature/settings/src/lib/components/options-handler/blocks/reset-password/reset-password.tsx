@@ -14,15 +14,8 @@ export const ResetPassword: FC = () => {
   const getEmailVerificationResponse = useGetEmailVerification();
   const changePasswordMutation = useChangePassword();
 
-  const [email, setEmail] = useState('');
   const [resetPasswordSent, setResetPasswordSent] = useState(false);
   const [resetPasswordConfirmationModalOpen, setResetPasswordConfirmationModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (getEmailVerificationResponse.state === RequestState.SUCCESS) {
-      setEmail(getEmailVerificationResponse.data.email);
-    }
-  }, [getEmailVerificationResponse]);
 
   useEffect(() => {
     if (changePasswordMutation.state === RequestState.SUCCESS) {
@@ -32,9 +25,12 @@ export const ResetPassword: FC = () => {
   }, [changePasswordMutation.state]);
 
   const handleClick = () => {
-    if (changePasswordMutation.state === RequestState.IDLE) {
+    if (
+      getEmailVerificationResponse.state === RequestState.SUCCESS &&
+      changePasswordMutation.state === RequestState.IDLE
+    ) {
       changePasswordMutation.mutate({
-        email,
+        email: getEmailVerificationResponse.data.email,
         connection: 'Username-Password-Authentication',
         client_id: CLIENT_ID,
       });

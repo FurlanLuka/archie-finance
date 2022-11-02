@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
@@ -24,8 +24,10 @@ export const Change2FA: FC = () => {
   const removeMfaEnrollmentMutation = useRemoveMfaEnrollment();
   const startMfaEnrollmentMutation = useStartMfaEnrollment();
 
-  const isMfaSet =
-    getOnboardingResponse.state === RequestState.SUCCESS && getOnboardingResponse.data.mfaEnrollmentStage;
+  const isMfaSet = useMemo(
+    () => getOnboardingResponse.state === RequestState.SUCCESS && getOnboardingResponse.data.mfaEnrollmentStage,
+    [getOnboardingResponse],
+  );
 
   useEffect(() => {
     queryClient.invalidateQueries(MFA_ENROLLMENTS_RECORD_QUERY_KEY);
