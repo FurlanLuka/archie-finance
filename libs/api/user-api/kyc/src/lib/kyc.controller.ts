@@ -5,16 +5,11 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
 import { RPCResponse, RPCResponseType } from '@archie/api/utils/queue';
-import {
-  GET_USER_KYC_RPC,
-  SERVICE_QUEUE_NAME,
-} from '@archie/api/user-api/constants';
+import { GET_USER_KYC_RPC, SERVICE_QUEUE_NAME } from '@archie/api/user-api/constants';
 import { RequestHandler } from '@archie/api/utils/queue/decorators/request_handler';
 import { KycDto } from '@archie/api/user-api/data-transfer-objects';
-import {
-  KycResponse,
-  GetKycPayload,
-} from '@archie/api/user-api/data-transfer-objects/types';
+import { GetKycPayload } from '@archie/api/user-api/data-transfer-objects/types';
+import { KycResponseDto } from '@archie/api/user-api/data-transfer-objects';
 
 @Controller('v1/kyc')
 export class KycController {
@@ -24,7 +19,7 @@ export class KycController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @ApiErrorResponse([KycNotFoundError])
-  async getKyc(@Req() request): Promise<KycResponse> {
+  async getKyc(@Req() request): Promise<KycResponseDto> {
     return this.kycService.getKyc(request.user.sub);
   }
 
@@ -32,7 +27,7 @@ export class KycController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @ApiErrorResponse([KycAlreadySubmitted])
-  async createKyc(@Body() body: KycDto, @Req() request): Promise<KycResponse> {
+  async createKyc(@Body() body: KycDto, @Req() request): Promise<KycResponseDto> {
     return this.kycService.createKyc(body, request.user.sub);
   }
 }
@@ -44,7 +39,7 @@ export class KycQueueController {
   constructor(private readonly kycService: KycService) {}
 
   @RequestHandler(GET_USER_KYC_RPC, KycQueueController.CONTROLLER_QUEUE_NAME)
-  async getKyc(payload: GetKycPayload): Promise<RPCResponse<KycResponse>> {
+  async getKyc(payload: GetKycPayload): Promise<RPCResponse<KycResponseDto>> {
     try {
       const data = await this.kycService.getKyc(payload.userId);
 
