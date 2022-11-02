@@ -3,11 +3,8 @@ import { User } from 'auth0';
 import { Auth0Service } from '@archie/api/user-api/auth0';
 import { EMAIL_VERIFIED_TOPIC } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
-import {
-  GetEmailAddressResponse,
-  GetEmailVerificationResponse,
-} from '@archie/api/user-api/data-transfer-objects';
 import { EmailAlreadyVerifiedError, EmailNotFoundError } from './email.errors';
+import { EmailAddress, EmailVerification } from '@archie/api/user-api/data-transfer-objects/types';
 
 @Injectable()
 export class EmailService {
@@ -16,7 +13,7 @@ export class EmailService {
     private queueService: QueueService,
   ) {}
 
-  async isEmailVerified(userId: string): Promise<GetEmailVerificationResponse> {
+  async isEmailVerified(userId: string): Promise<EmailVerification> {
     const user: User = await this.auth0Service.getManagmentClient().getUser({
       id: userId,
     });
@@ -36,7 +33,7 @@ export class EmailService {
     };
   }
 
-  async getEmailAddress(userId: string): Promise<GetEmailAddressResponse> {
+  async getEmailAddress(userId: string): Promise<EmailAddress> {
     const user: User = await this.auth0Service.getManagmentClient().getUser({
       id: userId,
     });

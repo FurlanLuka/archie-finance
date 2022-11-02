@@ -1,24 +1,13 @@
+import { AuthMethod, EnrollmentStatus } from 'auth0';
 import {
-  AuthMethod,
+  EmailAddress,
+  EmailVerification,
   Enrollment,
-  EnrollmentStatus,
+  MfaEnrollment,
   SendEnrollmentTicketResponse,
-} from 'auth0';
+} from './user.interfaces';
 
-export class MfaEnrolledPayload {
-  userId: string;
-}
-
-export class MfaRemovedPayload {
-  userId: string;
-}
-
-export class EmailVerifiedPayload {
-  userId: string;
-  email: string;
-}
-
-export class GetEnrollmentResponse implements Enrollment {
+export class EnrollmentDto implements Enrollment {
   id: string;
   status: EnrollmentStatus;
   enrolled_at: string;
@@ -27,26 +16,20 @@ export class GetEnrollmentResponse implements Enrollment {
   auth_method: AuthMethod;
 }
 
-export class GetEmailVerificationResponse {
+export class EmailVerificationDto implements EmailVerification {
   isVerified: boolean;
   email: string;
 }
 
-export class GetMfaEnrollmentResponse {
+export class MfaEnrollmentDto implements MfaEnrollment {
   isEnrolled: boolean;
 }
 
-export class GetEmailAddressResponse {
+export class EmailAddressDto implements EmailAddress {
   email: string;
 }
 
-export class GetSendEnrollmentTicketResponse
-  implements SendEnrollmentTicketResponse
-{
+export class GetSendEnrollmentTicketResponseDto implements SendEnrollmentTicketResponse {
   ticket_id: string;
   ticket_url: string;
-}
-
-export class GetEmailAddressPayload {
-  userId: string;
 }

@@ -2,7 +2,7 @@ import {
   EmailVerifiedPayload,
   MfaRemovedPayload,
   MfaEnrolledPayload,
-} from '@archie/api/user-api/data-transfer-objects';
+} from '@archie/api/user-api/data-transfer-objects/types';
 import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 import { Event } from '@archie/api/utils/queue';
 
@@ -25,31 +25,17 @@ export enum ConfigVariables {
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
-export const KYC_SUBMITTED_TOPIC = new Event<KycSubmittedPayload>(
-  'user.kyc.submitted',
-  1,
-  {
-    isSensitive: true,
-  },
-);
+export const KYC_SUBMITTED_TOPIC = new Event<KycSubmittedPayload>('user.kyc.submitted', 1, {
+  isSensitive: true,
+});
 
-export const EMAIL_VERIFIED_TOPIC = new Event<EmailVerifiedPayload>(
-  'user.email.verified',
-  1,
-  {
-    isSensitive: true,
-  },
-);
+export const EMAIL_VERIFIED_TOPIC = new Event<EmailVerifiedPayload>('user.email.verified', 1, {
+  isSensitive: true,
+});
 
-export const MFA_ENROLLED_TOPIC = new Event<MfaEnrolledPayload>(
-  'user.mfa.enrolled',
-  1,
-);
+export const MFA_ENROLLED_TOPIC = new Event<MfaEnrolledPayload>('user.mfa.enrolled', 1);
 
-export const MFA_REMOVED_TOPIC = new Event<MfaRemovedPayload>(
-  'user.mfa.removed',
-  1,
-);
+export const MFA_REMOVED_TOPIC = new Event<MfaRemovedPayload>('user.mfa.removed', 1);
 
 export const GET_USER_KYC_RPC = 'get.user.kyc.rpc';
 export const GET_USER_EMAIL_ADDRESS_RPC = 'get.user.email_address.rpc';

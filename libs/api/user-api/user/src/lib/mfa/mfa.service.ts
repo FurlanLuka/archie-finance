@@ -1,46 +1,36 @@
 import { Injectable } from '@nestjs/common';
-import { Enrollment, SendEnrollmentTicketResponse } from 'auth0';
 import { Auth0Service } from '@archie/api/user-api/auth0';
-import {
-  MFA_REMOVED_TOPIC,
-  MFA_ENROLLED_TOPIC,
-} from '@archie/api/user-api/constants';
+import { MFA_REMOVED_TOPIC, MFA_ENROLLED_TOPIC } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
-import { GetMfaEnrollmentResponse } from '@archie/api/user-api/data-transfer-objects';
 import { EnrollmentNotFoundError } from './mfa.errors';
+import {
+  Enrollment,
+  SendEnrollmentTicketResponse,
+  MfaEnrollment,
+} from '@archie/api/user-api/data-transfer-objects/types';
 
 @Injectable()
 export class MfaService {
-  constructor(
-    private auth0Service: Auth0Service,
-    private queueService: QueueService,
-  ) {}
+  constructor(private auth0Service: Auth0Service, private queueService: QueueService) {}
 
   async enrollMfa(userId: string): Promise<SendEnrollmentTicketResponse> {
-    return this.auth0Service
-      .getManagmentClient()
-      .createGuardianEnrollmentTicket({
-        user_id: userId,
-      });
+    return this.auth0Service.getManagmentClient().createGuardianEnrollmentTicket({
+      user_id: userId,
+    });
   }
 
-  async isMfaEnrolled(userId: string): Promise<GetMfaEnrollmentResponse> {
-    const enrollments: Enrollment[] = await this.auth0Service
-      .getManagmentClient()
-      .getGuardianEnrollments({
-        id: userId,
-      });
+  async isMfaEnrolled(userId: string): Promise<MfaEnrollment> {
+    const enrollments: Enrollment[] = await this.auth0Service.getManagmentClient().getGuardianEnrollments({
+      id: userId,
+    });
 
-    const hasEnrolledAuthenticator: Enrollment | undefined = enrollments.find(
-      (enrollment) => {
-        return (
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          enrollment.auth_method === 'authenticator' &&
-          enrollment.status === 'confirmed'
-        );
-      },
-    );
+    const hasEnrolledAuthenticator: Enrollment | undefined = enrollments.find((enrollment) => {
+      return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        enrollment.auth_method === 'authenticator' && enrollment.status === 'confirmed'
+      );
+    });
 
     if (hasEnrolledAuthenticator !== undefined) {
       this.queueService.publishEvent(MFA_ENROLLED_TOPIC, {
@@ -59,15 +49,10 @@ export class MfaService {
     });
   }
 
-  async deleteMfaEnrollment(
-    userId: string,
-    enrollmentId: string,
-  ): Promise<void> {
+  async deleteMfaEnrollment(userId: string, enrollmentId: string): Promise<void> {
     const enrollments: Enrollment[] = await this.getMfaEnrollments(userId);
 
-    const enrollmentExists: boolean = enrollments.some(
-      (enrollment) => enrollment.id === enrollmentId,
-    );
+    const enrollmentExists: boolean = enrollments.some((enrollment) => enrollment.id === enrollmentId);
 
     if (!enrollmentExists) {
       throw new EnrollmentNotFoundError();
