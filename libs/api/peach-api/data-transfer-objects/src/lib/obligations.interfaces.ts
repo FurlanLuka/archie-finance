@@ -1,4 +1,4 @@
-class Obligation {
+export interface ObligationResponse {
   capitalizedAmount: number;
   dueDate: string;
   fulfilledAmount: number;
@@ -9,7 +9,7 @@ class Obligation {
   remainingAmount: number;
 }
 
-export class ObligationsResponseDto {
+export interface ObligationsResponse {
   outstandingBalances: {
     outstandingFeesAmount: number;
     outstandingInterestAmount: number;
@@ -28,6 +28,6 @@ export class ObligationsResponseDto {
     duePrincipalAmount: number;
     dueTotalAmount: number;
   };
-  statementObligations: Obligation[];
-  futureObligations: Obligation[];
+  statementObligations: ObligationResponse[];
+  futureObligations: ObligationResponse[];
 }

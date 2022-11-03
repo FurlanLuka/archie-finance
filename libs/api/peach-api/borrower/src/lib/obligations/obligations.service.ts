@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Borrower } from '../borrower.entity';
-import { Balances, Obligation, Obligations } from '@archie/api/peach-api/data-transfer-objects/types';
-import { ObligationsResponseDto } from './obligations.dto';
+import {
+  Balances,
+  Obligation,
+  Obligations,
+  ObligationsResponse,
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -18,7 +22,7 @@ export class ObligationsService {
     private obligationsResponseFactory: ObligationsResponseFactory,
   ) {}
 
-  public async getObligations(userId: string): Promise<ObligationsResponseDto> {
+  public async getObligations(userId: string): Promise<ObligationsResponse> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });

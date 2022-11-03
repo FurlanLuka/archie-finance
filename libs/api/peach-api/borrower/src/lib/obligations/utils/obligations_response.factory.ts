@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ObligationsResponseDto } from '../obligations.dto';
+import { ObligationsResponse } from '@archie/api/peach-api/data-transfer-objects/types';
 import { Balances, Obligation } from '@archie/api/peach-api/data-transfer-objects/types';
 
 @Injectable()
@@ -8,7 +8,7 @@ export class ObligationsResponseFactory {
     balances: Balances,
     dueObligations: Obligation[],
     futureObligations: Obligation[],
-  ): ObligationsResponseDto {
+  ): ObligationsResponse {
     return {
       outstandingBalances: balances.outstandingBalances,
       overdueBalances: balances.overdueBalances,
