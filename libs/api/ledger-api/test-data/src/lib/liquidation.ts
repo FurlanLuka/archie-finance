@@ -1,5 +1,5 @@
 import { InitiateLedgerAssetLiquidationCommandPayload } from '@archie/api/ledger-api/data-transfer-objects';
-import { user } from '../../../../test/integration/src/lib/data-stubs';
+import { user } from '@archie/test/integration/data-stubs';
 import { v4 } from 'uuid';
 
 export const initiateLedgerAssetLiquidationCommandPayloadFactory = (

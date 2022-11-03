@@ -6,6 +6,8 @@ import {
   group,
   httpGet,
   check,
+  getApiBaseUrl,
+  getAccessToken,
 } from '../utils';
 import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
 import {
@@ -22,20 +24,13 @@ import {
 } from '@archie/api/user-api/test-data';
 import { creditLineCreatedDataFactory } from '@archie/api/credit-line-api/test-data';
 import { cardActivatedDataFactory } from '@archie/api/credit-api/test-data';
-import { getAccessToken } from '../utils/access-token';
 
 export let options = getOptions();
 
-let API_BASE_URL: string | undefined;
+let API_BASE_URL: string | undefined = getApiBaseUrl();
 
 export function setup() {
   createAmqpConnection();
-
-  API_BASE_URL = __ENV.API_BASE_URL;
-
-  if (API_BASE_URL === undefined) {
-    throw new Error('API_BASE_URL_ENV_VARIABLE_MISSING');
-  }
 }
 
 export default function () {

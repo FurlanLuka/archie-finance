@@ -14,7 +14,7 @@ import {
 } from '@archie/api/user-api/data-transfer-objects';
 import { RequestBodyMatcher } from 'nock';
 import { CreditLineCreatedPayload } from '@archie/api/credit-line-api/data-transfer-objects';
-import { user } from '../../../../test/integration/src/lib/data-stubs';
+import { user } from '@archie/test/integration/data-stubs';
 
 export type PeachRequestBody = RequestBodyMatcher;
 export type PeachResponse = Record<string, unknown>;

@@ -1,4 +1,4 @@
-import { user } from '../../../../test/integration/src/lib/data-stubs';
+import { user } from '@archie/test/integration/data-stubs';
 import { CollateralDepositTransactionCompletedPayload } from '@archie/api/fireblocks-api/data-transfer-objects';
 
 export const collateralDepositTransactionCompletedPayloadFactory = (

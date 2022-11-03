@@ -14,3 +14,13 @@ export function getOptions(): Options {
       }
     : defaultOptions;
 }
+
+export function getApiBaseUrl(): string {
+  const apibaseurl: string | undefined = __ENV.API_BASE_URL;
+
+  if (apibaseurl === undefined) {
+    throw new Error('API_BASE_URL_ENV_VARIABLE_MISSING');
+  }
+
+  return apibaseurl;
+}
