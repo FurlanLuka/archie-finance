@@ -8,7 +8,8 @@ import {
   Payments,
   PeachOneTimePaymentStatus,
 } from '@archie/api/peach-api/data-transfer-objects/types';
-import { GetPaymentsQueryDto, PaymentsResponseDto, ScheduleTransactionDto } from './payments.dto';
+import { GetPaymentsQueryDto } from '@archie/api/peach-api/data-transfer-objects';
+import { PaymentsResponse, ScheduleTransaction } from '@archie/api/peach-api/data-transfer-objects/types';
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
 import { PeachPaymentUpdatedPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { PaymentType } from '@archie/api/peach-api/data-transfer-objects';
@@ -30,7 +31,7 @@ export class PaymentsService {
     private borrowerValidation: BorrowerValidation,
   ) {}
 
-  public async getPayments(userId: string, query: GetPaymentsQueryDto): Promise<PaymentsResponseDto> {
+  public async getPayments(userId: string, query: GetPaymentsQueryDto): Promise<PaymentsResponse> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
@@ -41,7 +42,7 @@ export class PaymentsService {
     return this.paymentsResponseFactory.create(payments, query.limit);
   }
 
-  public async scheduleTransaction(userId: string, transaction: ScheduleTransactionDto): Promise<void> {
+  public async scheduleTransaction(userId: string, transaction: ScheduleTransaction): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });

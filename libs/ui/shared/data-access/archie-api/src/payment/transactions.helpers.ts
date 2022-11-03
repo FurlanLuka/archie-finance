@@ -1,14 +1,8 @@
-import { PaymentResponseData, PaymentStatus } from './api/get-loan-payments';
-import {
-  NetAsset,
-  Transaction,
-  TransactionStatus,
-  TransactionType,
-} from './api/get-transactions';
+import { PaymentResponseData, PaymentStatus } from '@archie/api/peach-api/data-transfer-objects/types';
 
-export const getTransactionsDateRange = (
-  transactions: Transaction[],
-): { fromDate: string; toDate: string } | null => {
+import { NetAsset, Transaction, TransactionStatus, TransactionType } from './api/get-transactions';
+
+export const getTransactionsDateRange = (transactions: Transaction[]): { fromDate: string; toDate: string } | null => {
   if (transactions.length === 0) {
     return null;
   }
@@ -31,9 +25,7 @@ const paymentStatusMap = new Map<PaymentStatus, TransactionStatus>([
   [PaymentStatus.chargeback, TransactionStatus.SETTLED],
 ]);
 
-export const transformLoanPaymentIntoTransaction = (
-  loanPayment: PaymentResponseData,
-): Transaction => ({
+export const transformLoanPaymentIntoTransaction = (loanPayment: PaymentResponseData): Transaction => ({
   description: 'Archie credit payment',
   type: TransactionType.BALANCE_PAYMENT,
   status: paymentStatusMap.get(loanPayment.status) || TransactionStatus.PENDING,
@@ -53,9 +45,7 @@ export const mergeTransactionsWithLoanPayments = (
   transactions: Transaction[],
   loanPayments: PaymentResponseData[],
 ): Transaction[] => {
-  const transformedPayments = loanPayments.map((payment) =>
-    transformLoanPaymentIntoTransaction(payment),
-  );
+  const transformedPayments = loanPayments.map((payment) => transformLoanPaymentIntoTransaction(payment));
 
   return [...transactions, ...transformedPayments].sort((a, b) => {
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
