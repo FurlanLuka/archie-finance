@@ -20,7 +20,7 @@ export function publishQueueMessage<T extends object>(
   exchange: string = 'archie.microservice.tx',
 ): void {
   const queueName = `${serviceQueueName}-${exchange}_${event.getRoutingKey()}`;
-  console.log(queueName);
+
   Amqp.publish({
     queue_name: queueName,
     body: JSON.stringify(message),
