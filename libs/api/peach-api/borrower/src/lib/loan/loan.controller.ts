@@ -4,7 +4,7 @@ import { SERVICE_QUEUE_NAME } from '@archie/api/peach-api/constants';
 import { CREDIT_LINE_UPDATED_TOPIC, CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-line-api/constants';
 import { PeachBorrowerService } from './loan.service';
 import { EMAIL_VERIFIED_TOPIC, KYC_SUBMITTED_TOPIC } from '@archie/api/user-api/constants';
-import { EmailVerifiedPayload } from '@archie/api/user-api/data-transfer-objects';
+import { EmailVerifiedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 import {
   CreditLineUpdatedPayload,
