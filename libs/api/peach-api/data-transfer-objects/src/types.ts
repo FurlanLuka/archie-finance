@@ -49,3 +49,4 @@ export {
 export type { AutopayResponse, CreateAutopayDocument, AutopayAgreement, CreateAutopay } from './lib/autopay.interfaces';
 export type { PaymentResponseData, PaymentsResponse, ScheduleTransaction } from './lib/payments.interfaces';
 export type { ObligationResponse, ObligationsResponse } from './lib/obligations.interfaces';
+export type { LoanDocument } from './lib/statements.interfaces';
