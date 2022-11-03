@@ -1,11 +1,5 @@
-import {
-  IsDateString,
-  IsNumber,
-  IsOptional,
-  IsPositive,
-  Matches,
-} from 'class-validator';
-import { PEACH_ID_REGEX } from '../utils/validation';
+import { PEACH_ID_REGEX } from '@archie/api/peach-api/constants';
+import { IsDateString, IsNumber, IsOptional, IsPositive, Matches } from 'class-validator';
 
 class Obligation {
   capitalizedAmount: number;

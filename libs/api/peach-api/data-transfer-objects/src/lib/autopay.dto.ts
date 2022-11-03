@@ -1,8 +1,11 @@
 import { IsBoolean, IsEnum, IsNumber, IsOptional, IsPositive, IsString, Matches } from 'class-validator';
-import { PEACH_ID_REGEX } from '../utils/validation';
-import { AmountType, AutopayOptions, PaymentFrequency } from '@archie/api/peach-api/data-transfer-objects/types';
+import { AmountType, PaymentFrequency } from './peach-api.interfaces';
+import { AutopayAgreement, AutopayResponse, CreateAutopay, CreateAutopayDocument } from './autopay.interfaces';
 
-export class CreateAutopayDto implements AutopayOptions {
+// TODO solve this and peach-api/constants circular dependency
+const PEACH_ID_REGEX = /^ext-|^[A-Z]{2}-[A-Z0-9]+-[A-Z0-9]+|^\d+$/;
+
+export class CreateAutopayDto implements CreateAutopay {
   @IsEnum(AmountType)
   amountType: AmountType;
 
@@ -25,17 +28,17 @@ export class CreateAutopayDto implements AutopayOptions {
   agreementDocumentId: string;
 }
 
-export class CreateAutopayDocumentDto {
+export class CreateAutopayDocumentDto implements CreateAutopayDocument {
   @Matches(PEACH_ID_REGEX)
   paymentInstrumentId: string;
 }
 
-export class AutopayAgreementDto {
+export class AutopayAgreementDto implements AutopayAgreement {
   id: string;
   document: string;
 }
 
-export class AutopayDto {
+export class AutopayDto implements AutopayResponse {
   type: AmountType;
   extraAmount: number;
   isAlignedToDueDates: boolean;

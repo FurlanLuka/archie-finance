@@ -2,8 +2,15 @@ import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Borrower } from '../borrower.entity';
 import { Repository } from 'typeorm';
-import { AutopayAgreementDto, AutopayDto, CreateAutopayDocumentDto, CreateAutopayDto } from './autopay.dto';
-import { Autopay, Document, PeachPaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
+import {
+  Autopay,
+  Document,
+  PeachPaymentInstrument,
+  AutopayAgreement,
+  AutopayResponse,
+  CreateAutopayDocument,
+  CreateAutopay,
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { BorrowerValidation } from '../utils/borrower.validation';
 
 export class AutopayService {
@@ -14,7 +21,7 @@ export class AutopayService {
     private borrowerValidation: BorrowerValidation,
   ) {}
 
-  public async setupAutopay(userId: string, autopayConfiguration: CreateAutopayDto): Promise<void> {
+  public async setupAutopay(userId: string, autopayConfiguration: CreateAutopay): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
@@ -60,7 +67,7 @@ export class AutopayService {
     await this.peachApiService.cancelAutopay(borrower.personId, borrower.creditLineId);
   }
 
-  public async getConfiguredAutopay(userId: string): Promise<AutopayDto> {
+  public async getConfiguredAutopay(userId: string): Promise<AutopayResponse> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
@@ -87,10 +94,7 @@ export class AutopayService {
     };
   }
 
-  public async createAutopayAgreement(
-    userId: string,
-    agreement: CreateAutopayDocumentDto,
-  ): Promise<AutopayAgreementDto> {
+  public async createAutopayAgreement(userId: string, agreement: CreateAutopayDocument): Promise<AutopayAgreement> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });

@@ -134,16 +134,16 @@ export class PeachApiService {
     await this.peachClient.delete(`/people/${personId}/payment-instruments/${paymentInstrumentId}`);
   }
 
-  public async getPaymentInstruments(personId: string): Promise<PaymentInstrument[]> {
-    const response = await this.peachClient.get<PeachResponseData<PaymentInstrument[]>>(
+  public async getPaymentInstruments(personId: string): Promise<PeachPaymentInstrument[]> {
+    const response = await this.peachClient.get<PeachResponseData<PeachPaymentInstrument[]>>(
       `/people/${personId}/payment-instruments`,
     );
 
     return response.data.data;
   }
-  public async getPaymentInstrument(personId: string, paymentInstrumentId: string): Promise<PaymentInstrument> {
+  public async getPaymentInstrument(personId: string, paymentInstrumentId: string): Promise<PeachPaymentInstrument> {
     try {
-      const response = await this.peachClient.get<PeachResponseData<PaymentInstrument>>(
+      const response = await this.peachClient.get<PeachResponseData<PeachPaymentInstrument>>(
         `/people/${personId}/payment-instruments/${paymentInstrumentId}`,
       );
 

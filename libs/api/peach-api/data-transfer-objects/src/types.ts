@@ -46,3 +46,4 @@ export {
   AutopayScheduleStatus,
   PeachOneTimePaymentStatus,
 } from './lib/peach-api.interfaces';
+export type { AutopayResponse, CreateAutopayDocument, AutopayAgreement, CreateAutopay } from './lib/autopay.interfaces';
