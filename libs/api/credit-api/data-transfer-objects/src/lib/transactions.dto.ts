@@ -1,15 +1,14 @@
+import { IsNumber, Max } from 'class-validator';
+import { Type } from 'class-transformer';
+
 import {
+  NetAsset,
   PaginationMeta,
   Transaction,
   TransactionResponse,
-} from './rize.interfaces';
-import { IsNumber, Max } from 'class-validator';
-import { Type } from 'class-transformer';
-import {
-  NetAsset,
   TransactionStatus,
   TransactionType,
-} from './api/rize_api.interfaces';
+} from './transactions.interfaces';
 
 export class TransactionResponseDto implements TransactionResponse {
   meta: PaginationMetaDto;

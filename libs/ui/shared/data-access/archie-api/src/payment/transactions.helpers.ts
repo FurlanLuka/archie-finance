@@ -1,6 +1,10 @@
+import {
+  NetAsset,
+  Transaction,
+  TransactionStatus,
+  TransactionType,
+} from '@archie/api/credit-api/data-transfer-objects/types';
 import { PaymentResponseData, PaymentStatus } from '@archie/api/peach-api/data-transfer-objects/types';
-
-import { NetAsset, Transaction, TransactionStatus, TransactionType } from './api/get-transactions';
 
 export const getTransactionsDateRange = (transactions: Transaction[]): { fromDate: string; toDate: string } | null => {
   if (transactions.length === 0) {
@@ -15,20 +19,20 @@ export const getTransactionsDateRange = (transactions: Transaction[]): { fromDat
 
 // TODO check if everything is matching
 const paymentStatusMap = new Map<PaymentStatus, TransactionStatus>([
-  [PaymentStatus.scheduled, TransactionStatus.QUEUED],
-  [PaymentStatus.initiated, TransactionStatus.PENDING],
-  [PaymentStatus.pending, TransactionStatus.PENDING],
-  [PaymentStatus.succeeded, TransactionStatus.SETTLED],
-  [PaymentStatus.failed, TransactionStatus.FAILED],
-  [PaymentStatus.inDispute, TransactionStatus.PENDING],
-  [PaymentStatus.canceled, TransactionStatus.SETTLED],
-  [PaymentStatus.chargeback, TransactionStatus.SETTLED],
+  [PaymentStatus.scheduled, TransactionStatus.queued],
+  [PaymentStatus.initiated, TransactionStatus.pending],
+  [PaymentStatus.pending, TransactionStatus.pending],
+  [PaymentStatus.succeeded, TransactionStatus.settled],
+  [PaymentStatus.failed, TransactionStatus.failed],
+  [PaymentStatus.inDispute, TransactionStatus.pending],
+  [PaymentStatus.canceled, TransactionStatus.settled],
+  [PaymentStatus.chargeback, TransactionStatus.settled],
 ]);
 
 export const transformLoanPaymentIntoTransaction = (loanPayment: PaymentResponseData): Transaction => ({
   description: 'Archie credit payment',
   type: TransactionType.BALANCE_PAYMENT,
-  status: paymentStatusMap.get(loanPayment.status) || TransactionStatus.PENDING,
+  status: paymentStatusMap.get(loanPayment.status) || TransactionStatus.pending,
   us_dollar_amount: loanPayment.actualAmount.toString(),
   settled_at: loanPayment.timestamps.succeededAt ?? '',
   created_at: loanPayment.timestamps.createdAt,
@@ -38,7 +42,7 @@ export const transformLoanPaymentIntoTransaction = (loanPayment: PaymentResponse
   merchant_name: loanPayment.paymentDetails.paymentNetworkName,
   merchant_number: null,
   denial_reason: null,
-  net_asset: NetAsset.POSITIVE,
+  net_asset: NetAsset.positive,
 });
 
 export const mergeTransactionsWithLoanPayments = (

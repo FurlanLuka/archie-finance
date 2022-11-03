@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import {
-  ComplianceDocumentAcknowledgementRequest,
-} from '../api/rize_api.interfaces';
-import { GetKycResponse } from '@archie/api/user-api/data-transfer-objects';
+import { ComplianceDocumentAcknowledgementRequest } from '../api/rize_api.interfaces';
+import { KycResponse } from '@archie/api/user-api/data-transfer-objects/types';
 import { CustomerDetailsParams } from '@rizefinance/rize-js/types/lib/core/customer';
 
 @Injectable()
@@ -20,7 +18,7 @@ export class RizeFactoryService {
     };
   }
 
-  public createCustomerDetails(kyc: GetKycResponse): CustomerDetailsParams {
+  public createCustomerDetails(kyc: KycResponse): CustomerDetailsParams {
     return {
       address: {
         city: kyc.addressLocality,
