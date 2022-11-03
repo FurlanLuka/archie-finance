@@ -34,7 +34,40 @@ spec:
         {{- else }}
         helm-revision: '{{ .Release.Revision }}'
         {{- end }}
+      {{- if not .Values.local }}
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/role: "ledger-api"
+        vault.hashicorp.com/agent-inject-secret-config: "database/creds/ledger-api"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{`
+          {{- with secret "database/creds/fireblocks-api"}}
+          export TYPEORM_USERNAME="{{ .Data.username }}"
+          export TYPEORM_PASSWORD="{{ .Data.password }}"
+          {{- end }}
+          {{- with secret "kv/data/database" }}
+          export TYPEORM_PORT="{{ .Data.data.port }}"
+          export TYPEORM_HOST="{{ .Data.data.hostname }}"
+          {{- end }}
+          export TYPEORM_DATABASE="fireblocks-api"
+          {{- with secret "kv/data/auth0" }}
+          export AUTH0_DOMAIN="{{ .Data.data.domain }}"
+          export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
+          {{- end }}
+          {{- with secret "kv/data/fireblocks-api" }}
+          export ASSET_LIST="{{ .Data.data.asset_list }}"
+          export FIREBLOCKS_API_KEY="{{ .Data.data.fireblocks_api_key }}"
+          export FIREBLOCKS_PRIVATE_KEY="{{ .Data.data.fireblocks_private_key }}"
+          {{- end }}
+          {{- with secret "kv/data/queue" }}
+          export QUEUE_URL="{{ .Data.data.url }}"
+          {{- end }}
+          `}}
+      {{- end }}
     spec:
+      serviceAccountName: fireblocks-api
       containers:
         - name: archie-fireblocks-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
@@ -43,6 +76,8 @@ spec:
           {{- else }}
           imagePullPolicy: Never
           {{- end }}
+          args:
+            ['sh', '-c', '. /vault/secrets/config && node service/main.js']
           ports:
             - containerPort: 80
           livenessProbe:
@@ -78,61 +113,6 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
-            - name: QUEUE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: queue-shared-secrets
-                  key: queue-url
-            - name: TYPEORM_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-api-secrets
-                  key: db-username
-            - name: TYPEORM_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-api-secrets
-                  key: db-password
-            - name: TYPEORM_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-api-secrets
-                  key: db-hostname
-            - name: TYPEORM_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-api-secrets
-                  key: db-port
-            - name: TYPEORM_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-api-secrets
-                  key: db-database
-            - name: ASSET_LIST
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-api-secrets
-                  key: asset-list
-            - name: FIREBLOCKS_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-api-secrets
-                  key: fireblocks-api-key
-            - name: FIREBLOCKS_PRIVATE_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: fireblocks-api-secrets
-                  key: fireblocks-private-key
-            - name: AUTH0_DOMAIN
-              valueFrom:
-                secretKeyRef:
-                  name: auth0-shared-secrets
-                  key: domain
-            - name: AUTH0_AUDIENCE
-              valueFrom:
-                secretKeyRef:
-                  name: auth0-shared-secrets
-                  key: audience
           {{- end }}
       imagePullSecrets:
         - name: regcred
