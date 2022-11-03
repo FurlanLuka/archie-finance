@@ -12,7 +12,14 @@
         "outputPath": "dist/apps/tests/stress",
         "tsConfig": "apps/tests/stress/tsconfig.json",
         "assets": ["apps/tests/stress/src/assets"],
-        "externalDependencies": ["https://jslib.k6.io/k6-utils/1.4.0/index.js", "k6/x/amqp", "k6/http", "k6", "k6/options"]
+        "externalDependencies": [
+          "https://jslib.k6.io/k6-utils/1.4.0/index.js",
+          "k6/x/amqp",
+          "k6/http",
+          "k6",
+          "k6/options"
+        ],
+        "webpackConfig": "apps/tests/stress/webpack.config.js"
       }
     },
     "lint": {
