@@ -1,15 +1,23 @@
-import http, { RefinedResponse } from 'k6/http';
+import http, { RefinedResponse, RequestBody, ResponseType } from 'k6/http';
 
 interface RequestOptions {
   uri: string;
-  token?: string;
-  payload?: object;
+  accessToken?: string;
+  body?: RequestBody;
 }
 
-export function httpGet(request: RequestOptions): RefinedResponse<undefined> {
-  return http.get<undefined>(request.uri, {
+export function httpGet(request: RequestOptions): RefinedResponse<'text'> {
+  return http.get(request.uri, {
     headers: {
-      Authorization: `Bearer ${request.token}`,
+      Authorization: `Bearer ${request.accessToken}`,
+    },
+  });
+}
+
+export function httpPost(request: RequestOptions): RefinedResponse<'text'> {
+  return http.post(request.uri, request.body, {
+    headers: {
+      Authorization: `Bearer ${request.accessToken}`,
     },
   });
 }
