@@ -1,16 +1,12 @@
+import { CardStatus } from '@archie/api/credit-api/data-transfer-objects/types';
 import { theme } from '@archie/ui/shared/theme';
 
-export enum CardStatus {
-  ACTIVE = 'active',
-  FROZEN = 'frozen',
-}
-
 export const CardStatusText = {
-  [CardStatus.ACTIVE]: 'Active',
-  [CardStatus.FROZEN]: 'Frozen',
+  [CardStatus.active]: 'Active',
+  [CardStatus.frozen]: 'Frozen',
 };
 
 export const CardStatusColor = {
-  [CardStatus.ACTIVE]: theme.textSuccess,
-  [CardStatus.FROZEN]: theme.textSecondary,
+  [CardStatus.active]: theme.textSuccess,
+  [CardStatus.frozen]: theme.textSecondary,
 };

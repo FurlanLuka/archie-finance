@@ -2,6 +2,8 @@ import { IsNumber, Max } from 'class-validator';
 import { Type } from 'class-transformer';
 
 import {
+  CardResponse,
+  CardStatus,
   NetAsset,
   PaginationMeta,
   Transaction,
@@ -48,12 +50,7 @@ export class GetTransactionsQueryDto {
   limit = 100;
 }
 
-export enum CardStatus {
-  active = 'active',
-  frozen = 'frozen',
-}
-
-export class CardResponseDto {
+export class CardResponseDto implements CardResponse {
   image: string;
   status: CardStatus;
   freezeReason: string | null;

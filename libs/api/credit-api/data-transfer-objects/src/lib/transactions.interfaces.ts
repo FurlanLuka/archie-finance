@@ -78,3 +78,14 @@ export interface RizeTransaction {
   uid: string;
   us_dollar_amount: string;
 }
+
+export enum CardStatus {
+  active = 'active',
+  frozen = 'frozen',
+}
+
+export interface CardResponse {
+  image: string;
+  status: CardStatus;
+  freezeReason: string | null;
+}

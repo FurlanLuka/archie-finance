@@ -3,7 +3,6 @@ import { Navigate } from 'react-router-dom';
 
 import { CardStatusColor, CardStatusText } from '@archie/ui/shared/constants';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
-import { CardsCredit } from '@archie/ui/shared/data-access/archie-api/rize/api/get-cards-credit';
 import { useGetCardsCredit } from '@archie/ui/shared/data-access/archie-api/rize/hooks/use-cards-credit';
 import { Card, Skeleton, BodyL, BodyS } from '@archie/ui/shared/design-system';
 

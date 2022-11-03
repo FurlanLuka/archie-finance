@@ -42,7 +42,7 @@ import {
   GetKycPayload,
   KycResponse,
 } from '@archie/api/user-api/data-transfer-objects/types';
-import { CardResponseDto, CardStatus } from '@archie/api/credit-api/data-transfer-objects';
+import { CardResponse, CardStatus } from '@archie/api/credit-api/data-transfer-objects/types';
 
 @Injectable()
 export class RizeService {
@@ -147,7 +147,7 @@ export class RizeService {
     }
   }
 
-  public async getVirtualCard(userId: string): Promise<CardResponseDto> {
+  public async getVirtualCard(userId: string): Promise<CardResponse> {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(userId);
     this.rizeValidatorService.validateCustomerExists(customer);
 

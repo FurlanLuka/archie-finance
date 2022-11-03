@@ -7,5 +7,11 @@ export type {
   CollateralWithdrawInitializedPayload,
   TransactionUpdatedPayload,
 } from './lib/queue.interfaces';
-export { NetAsset, TransactionStatus, TransactionType } from './lib/transactions.interfaces';
-export type { RizeTransaction, PaginationMeta, Transaction, TransactionResponse } from './lib/transactions.interfaces';
+export { NetAsset, TransactionStatus, TransactionType, CardStatus } from './lib/transactions.interfaces';
+export type {
+  RizeTransaction,
+  PaginationMeta,
+  Transaction,
+  TransactionResponse,
+  CardResponse,
+} from './lib/transactions.interfaces';

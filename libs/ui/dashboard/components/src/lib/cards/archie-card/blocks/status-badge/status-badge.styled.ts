@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-import { CardStatus, CardStatusColor } from '@archie/ui/shared/constants';
+import { CardStatus } from '@archie/api/credit-api/data-transfer-objects/types';
+import { CardStatusColor } from '@archie/ui/shared/constants';
 import { breakpoints } from '@archie/ui/shared/theme';
 
 export interface StatusBadgeStyledProps {
