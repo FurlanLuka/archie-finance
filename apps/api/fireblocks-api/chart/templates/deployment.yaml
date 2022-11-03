@@ -39,7 +39,7 @@ spec:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-status: "update"
         vault.hashicorp.com/agent-init-first: "true"
-        vault.hashicorp.com/role: "ledger-api"
+        vault.hashicorp.com/role: "fireblocks-api"
         vault.hashicorp.com/agent-inject-secret-config: "database/creds/fireblocks-api"
         vault.hashicorp.com/agent-inject-template-config: |
           {{`
@@ -64,7 +64,7 @@ spec:
           {{- with secret "kv/data/queue" }}
           export QUEUE_URL="{{ .Data.data.url }}"
           {{- end }}
-          `}}
+          `}kubec}
       {{- end }}
     spec:
       serviceAccountName: fireblocks-api
