@@ -64,7 +64,7 @@ spec:
           {{- with secret "kv/data/queue" }}
           export QUEUE_URL="{{ .Data.data.url }}"
           {{- end }}
-          `}kubec}
+          `}}
       {{- end }}
     spec:
       serviceAccountName: fireblocks-api
