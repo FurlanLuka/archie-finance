@@ -20,5 +20,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:tests:lib:utils-api"]
 }

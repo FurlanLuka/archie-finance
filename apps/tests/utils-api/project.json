@@ -43,5 +43,5 @@
       "executor": "@archie/plugin/deployment:docker-build"
     }
   },
-  "tags": []
+  "tags": ["scope:tests:app:utils-api", "scope:tests:app"]
 }

@@ -12,5 +12,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:tests:lib:utils-api:shared", "scope:tests:lib:shared"]
 }

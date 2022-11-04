@@ -10,6 +10,7 @@
       "options": {
         "compiler": "babel",
         "outputPath": "dist/apps/tests/stress",
+        "main": "apps/tests/stress/src/onboarding/full-onboarding.ts",
         "tsConfig": "apps/tests/stress/tsconfig.json",
         "assets": ["apps/tests/stress/src/assets"],
         "externalDependencies": [
@@ -30,5 +31,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:tests:app:stress"]
 }

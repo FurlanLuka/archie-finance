@@ -351,6 +351,40 @@
                 "onlyDependOnLibsWithTags": [
                   "scope:ui:lib:shared"
                 ]
+              },
+
+              {
+                "sourceTag": "scope:tests:app:utils-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:tests:lib:utils-api",
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:tests:lib:utils-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:tests:lib:utils-api",
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:tests:app:stress",
+                "onlyDependOnLibsWithTags": [
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data"
+                ]
+              },
+              {
+                "sourceTag": "scope:tests:lib:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared"
+                ]
               }
             ]
           }
