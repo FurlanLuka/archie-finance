@@ -12,13 +12,15 @@ import { EmailAddress, GetEmailAddressPayload } from '@archie/api/user-api/data-
 
 @Controller('v1/user/email-verification')
 export class EmailController {
-  constructor(private userService: EmailService) {}
+  constructor(private emailService: EmailService) {}
 
   @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async checkEmailVerification(@Req() request): Promise<EmailVerificationDto> {
-    return this.userService.isEmailVerified(request.user.sub);
+  async checkEmailVerification(
+    @Req() request,
+  ): Promise<EmailVerificationDto> {
+    return this.emailService.isEmailVerified(request.user.sub);
   }
 
   @Post('resend')
@@ -26,7 +28,7 @@ export class EmailController {
   @ApiBearerAuth()
   @ApiErrorResponse([EmailAlreadyVerifiedError])
   async resendEmailVerification(@Req() request): Promise<void> {
-    return this.userService.resendEmailVerification(request.user.sub);
+    return this.emailService.resendEmailVerification(request.user.sub);
   }
 }
 

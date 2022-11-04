@@ -12,7 +12,12 @@ import {
   CollateralWithdrawalTransactionUpdatedPayload,
 } from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
-import { AuthGuard } from '@archie/api/utils/auth0';
+import {
+  AuthGuard,
+  AuthScopes,
+  ScopeGuard,
+  Scopes,
+} from '@archie/api/utils/auth0';
 import {
   WithdrawPayloadDto,
   WithdrawResponseDto,
@@ -27,7 +32,8 @@ export class WithdrawController {
   constructor(private withdrawService: WithdrawService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ScopeGuard)
+  @Scopes(AuthScopes.mfa)
   @ApiBearerAuth()
   @ApiErrorResponse([InvalidWithdrawalAmountError, WithdrawalAmountTooHighError, InvalidAssetError])
   async withdraw(

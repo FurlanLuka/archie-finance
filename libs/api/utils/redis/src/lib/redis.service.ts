@@ -26,14 +26,27 @@ export class RedisService implements OnModuleInit {
     key: string,
     value: string,
     expirySeconds: number,
+    keyPrefix = this.options.keyPrefix,
   ): Promise<void> {
-    const prefixedKey = `${this.options.keyPrefix}_${key}`;
+    const prefixedKey = `${keyPrefix}_${key}`;
 
     await this.redisClient.setex(prefixedKey, expirySeconds, value);
   }
 
-  public async getAndDelete(key: string): Promise<string | null> {
-    const prefixedKey = `${this.options.keyPrefix}_${key}`;
+  public async get(
+    key: string,
+    keyPrefix = this.options.keyPrefix,
+  ): Promise<string | null> {
+    const prefixedKey = `${keyPrefix}_${key}`;
+
+    return this.redisClient.get(prefixedKey);
+  }
+
+  public async getAndDelete(
+    key: string,
+    keyPrefix = this.options.keyPrefix,
+  ): Promise<string | null> {
+    const prefixedKey = `${keyPrefix}_${key}`;
 
     return this.redisClient.getdel(prefixedKey);
   }

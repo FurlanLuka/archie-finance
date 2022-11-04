@@ -2,6 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { Auth0Service } from '@archie/api/user-api/auth0';
 import { MFA_REMOVED_TOPIC, MFA_ENROLLED_TOPIC } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
+import {
+  GetEnrollmentsQuery,
+} from '@archie/api/user-api/data-transfer-objects';
 import { EnrollmentNotFoundError } from './mfa.errors';
 import {
   Enrollment,
@@ -43,14 +46,37 @@ export class MfaService {
     };
   }
 
-  async getMfaEnrollments(userId: string): Promise<Enrollment[]> {
-    return this.auth0Service.getManagmentClient().getGuardianEnrollments({
-      id: userId,
+  async getMfaEnrollments(
+    userId: string,
+    enrollmentFilters: GetEnrollmentsQuery,
+  ): Promise<Enrollment[]> {
+    const enrollments: Enrollment[] = await this.auth0Service
+      .getManagmentClient()
+      .getGuardianEnrollments({
+        id: userId,
+      });
+
+    return enrollments.filter((enrollment: Enrollment): boolean => {
+      const statusMatches: boolean =
+        enrollmentFilters.status === null ||
+        enrollment.status === enrollmentFilters.status;
+      const typeMatches: boolean =
+        enrollmentFilters.type === null ||
+        enrollment.type === enrollmentFilters.type;
+
+      return statusMatches && typeMatches;
     });
   }
 
-  async deleteMfaEnrollment(userId: string, enrollmentId: string): Promise<void> {
-    const enrollments: Enrollment[] = await this.getMfaEnrollments(userId);
+  async deleteMfaEnrollment(
+    userId: string,
+    enrollmentId: string,
+  ): Promise<void> {
+    const enrollments: Enrollment[] = await this.auth0Service
+      .getManagmentClient()
+      .getGuardianEnrollments({
+        id: userId,
+      });
 
     const enrollmentExists: boolean = enrollments.some((enrollment) => enrollment.id === enrollmentId);
 
