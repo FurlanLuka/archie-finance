@@ -5,6 +5,7 @@ import * as winston from 'winston';
 import { AllExceptionsFilter } from '@archie/api/utils/tracing';
 import { BigNumber } from 'bignumber.js';
 import { WsAdapter } from '@archie/api/websocket-event-api/websocket-event';
+import { ScopeGuard } from '@archie/api/utils/auth0';
 
 export interface StartServiceOptions {
   enableWs?: boolean;

@@ -8,7 +8,9 @@ import { CryptoModule } from '@archie/api/utils/crypto';
 import { KycModule } from '@archie/api/user-api/kyc';
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
+import { RedisModule } from '@archie/api/utils/redis';
 import { EmailModule, MfaModule } from '@archie/api/user-api/user';
+import { RolesModule } from '@archie/api/user-api/user';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { EmailModule, MfaModule } from '@archie/api/user-api/user';
         ConfigVariables.TYPEORM_DATABASE,
         ConfigVariables.QUEUE_URL,
         ConfigVariables.ENCRYPTION_KEY,
+        ConfigVariables.REDIS_URL,
+        ConfigVariables.DEFAULT_ROLE_ID,
       ],
       parse: (_configVariable, value) => value,
     }),
@@ -66,7 +70,16 @@ import { EmailModule, MfaModule } from '@archie/api/user-api/user';
     HealthModule,
     EmailModule,
     MfaModule,
+    RolesModule,
     QueueModule.register(),
+    RedisModule.register({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        url: configService.get(ConfigVariables.REDIS_URL),
+        keyPrefix: SERVICE_NAME,
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [],
   providers: [],

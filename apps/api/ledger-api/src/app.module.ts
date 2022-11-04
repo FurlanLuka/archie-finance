@@ -14,6 +14,7 @@ import {
 import { AuthModule } from '@archie/api/utils/auth0';
 import { RedisModule } from '@archie/api/utils/redis';
 import { SERVICE_NAME } from '@archie/api/credit-api/constants';
+import { CryptoModule } from '@archie/api/utils/crypto';
 
 @Module({
   imports: [
@@ -78,6 +79,7 @@ import { SERVICE_NAME } from '@archie/api/credit-api/constants';
       }),
       inject: [ConfigService],
     }),
+    CryptoModule.register(),
   ],
   controllers: [],
   providers: [],

@@ -20,11 +20,13 @@ export class Auth0Service {
           });
         } else if (log.data.type === Auth0Events.MFA_ENROLLED) {
           this.queueService.publishEvent(MFA_ENROLLED_TOPIC, {
-            userId: log.data.details.query.user_id,
+            userId: log.data.user_id,
           });
         }
-      } catch {
-        Logger.error('Failed processing auth0 webhook');
+      } catch (error) {
+        Logger.error('Failed processing auth0 webhook', error);
+
+        throw error;
       }
     });
   }

@@ -12,7 +12,7 @@ export class VaultAccountController {
   async getOrCreateDepositAddresss(
     @Req() request,
     @Param('assetId') assetId: string,
-  ): Promise<GetDepositAddressResponse> {
+): Promise<GetDepositAddressResponse> {
     return this.vaultAccountService.getOrCreateDepositAddress(
       assetId,
       request.user.sub,

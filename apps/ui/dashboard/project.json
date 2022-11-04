@@ -72,5 +72,5 @@
       "executor": "@archie/plugin/deployment:ui-deploy-configuration"
     }
   },
-  "tags": ["dashboard"]
+  "tags": ["scope:ui:app:ui-dashboard"]
 }

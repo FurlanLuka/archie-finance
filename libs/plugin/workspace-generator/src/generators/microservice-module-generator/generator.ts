@@ -43,6 +43,25 @@ export async function microserviceModuleGenerator(
 ): Promise<GeneratorCallback> {
   const normalizedOptions = normalizeOptions(tree, options);
 
+  const tags: string[] = [];
+
+  if (options.moduleType === 'NORMAL') {
+    tags.push(`scope:api:lib:${options.projectName}`);
+  } else if (options.moduleType === 'SHARED') {
+    tags.push(
+      `scope:api:lib:${options.projectName}:shared`,
+      `scope:api:lib:shared`,
+    );
+  } else if (options.moduleType === 'SHARED_WITH_UI') {
+    tags.push(
+      `scope:api:lib:${options.projectName}:shared`,
+      `scope:api:lib:shared`,
+      'scope:ui:lib:shared',
+    );
+  } else {
+    tags.push(`scope:api:lib:test-data`);
+  }
+
   const libraryGeneratorTask = await libraryGenerator(tree, {
     name: normalizedOptions.name,
     standaloneConfig: true,
@@ -53,6 +72,7 @@ export async function microserviceModuleGenerator(
     linter: Linter.EsLint,
     service: true,
     publishable: false,
+    tags: tags.join(','),
   });
 
   deleteFiles(tree, normalizedOptions);
