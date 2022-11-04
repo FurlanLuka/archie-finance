@@ -3,7 +3,7 @@ import Amqp from 'k6/x/amqp';
 import { Event } from '@archie/api/utils/queue/events';
 import { uuidv4 } from './k6-libs';
 
-export function createAmqpConnection(): Amqp {
+export function setupAmqpConnection(): Amqp {
   const url: string | undefined = __ENV.QUEUE_URL;
 
   if (url === undefined) throw new Error('QUEUE_URL_ENV_VARIABLE_MISSING');

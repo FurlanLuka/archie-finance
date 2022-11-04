@@ -1,5 +1,5 @@
 import {
-  createAmqpConnection,
+  setupAmqpConnection,
   getOptions,
   publishQueueMessage,
   uuidv4,
@@ -7,7 +7,7 @@ import {
   httpGet,
   check,
   getApiBaseUrl,
-  getAccessToken,
+  createAccessToken,
 } from '../utils';
 import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
 import {
@@ -30,12 +30,12 @@ export let options = getOptions();
 let API_BASE_URL: string | undefined = getApiBaseUrl();
 
 export function setup() {
-  createAmqpConnection();
+  setupAmqpConnection();
 }
 
 export default function () {
   const userId: string = uuidv4();
-  const accessToken: string = getAccessToken(userId);
+  const accessToken: string = createAccessToken(userId);
 
   group('Onboarding flow', () => {
     const controllerQueuePrefix: string = `${SERVICE_QUEUE_NAME}-onboarding`;

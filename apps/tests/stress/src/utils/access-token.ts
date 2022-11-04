@@ -1,6 +1,6 @@
 import { httpPost } from './http';
 
-export function getAccessToken(userId: string): string {
+export function createAccessToken(userId: string): string {
   const authBaseUrl: string | undefined = __ENV.AUTH_BASE_URL;
 
   if (authBaseUrl === undefined) {
