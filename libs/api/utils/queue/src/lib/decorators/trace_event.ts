@@ -2,15 +2,8 @@ import { Logger } from '@nestjs/common';
 import tracer, { Span } from 'dd-trace';
 import { QueueMessageMeta } from './queue_decorators.interfaces';
 
-export function TraceEvent(
-  queueName: string,
-  logBody: boolean,
-): MethodDecorator {
-  return (
-    target: object,
-    _key?: string | symbol,
-    descriptor?: PropertyDescriptor,
-  ) => {
+export function TraceEvent(queueName: string, logBody: boolean): MethodDecorator {
+  return (target: object, _key?: string | symbol, descriptor?: PropertyDescriptor) => {
     if (descriptor === undefined) {
       Logger.warn('Incorrect decorator usage, descriptor is undefined');
       return;
@@ -29,6 +22,7 @@ export function TraceEvent(
       return tracer.trace(
         queueName,
         {
+          type: 'queue.handler',
           childOf: childOf ?? undefined,
         },
         async (span: Span) => {
