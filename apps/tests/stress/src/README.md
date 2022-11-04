@@ -43,7 +43,7 @@
   - Clone [xamqp project](https://github.com/acuderman/xk6-amqp/blob/feature/amqp-wth-headers-docker-image)
   - Run make build
   - Copy generated k6 binary to archie-microservices root and rename file to k6bin
-- Run `ngrok http 91` and set https domain as `AUTH0_DOMAIN=<ngrok domain>/internal/test/authorization` on both tested api and authorization api
+- Run `ngrok http 91` and set https domain as `AUTH0_DOMAIN=<ngrok domain>` on both tested api and authorization api
 - Start test utils api: `PORT=91 npm run start tests-utils-api`
 - Start tested api at port 90 (onboarding api for `onboarding/full-onboarding.ts` script).
 - Start script:
