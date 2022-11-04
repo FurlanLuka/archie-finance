@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'tests-utils-api-auth',
+  displayName: 'tests-utils-test-api-auth',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -12,5 +12,5 @@ export default {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../../../coverage/libs/tests/utils-api/auth',
+  coverageDirectory: '../../../../coverage/libs/tests/utils-test-api/auth',
 };

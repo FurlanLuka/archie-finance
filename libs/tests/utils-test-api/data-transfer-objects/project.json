@@ -1,7 +1,7 @@
 {
-  "name": "tests-utils-api-data-transfer-objects",
+  "name": "tests-utils-test-api-data-transfer-objects",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/tests/utils-api/data-transfer-objects/src",
+  "sourceRoot": "libs/tests/utils-test-api/data-transfer-objects/src",
   "projectType": "library",
   "targets": {
     "lint": {
@@ -9,10 +9,10 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": [
-          "libs/tests/utils-api/data-transfer-objects/**/*.ts"
+          "libs/tests/utils-test-api/data-transfer-objects/**/*.ts"
         ]
       }
     }
   },
-  "tags": ["scope:tests:lib:utils-api:shared", "scope:tests:lib:shared"]
+  "tags": ["scope:tests:lib:utils-test-api:shared", "scope:tests:lib:shared"]
 }

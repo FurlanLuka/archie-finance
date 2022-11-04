@@ -1,24 +1,24 @@
 {
-  "name": "tests-utils-api-auth",
+  "name": "tests-utils-test-api-auth",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/tests/utils-api/auth/src",
+  "sourceRoot": "libs/tests/utils-test-api/auth/src",
   "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["libs/tests/utils-api/auth/**/*.ts"]
+        "lintFilePatterns": ["libs/tests/utils-test-api/auth/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/tests/utils-api/auth/jest.config.ts",
+        "jestConfig": "libs/tests/utils-test-api/auth/jest.config.ts",
         "passWithNoTests": true
       }
     }
   },
-  "tags": ["scope:tests:lib:utils-api"]
+  "tags": ["scope:tests:lib:utils-test-api"]
 }

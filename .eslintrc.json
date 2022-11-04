@@ -354,18 +354,18 @@
               },
 
               {
-                "sourceTag": "scope:tests:app:utils-api",
+                "sourceTag": "scope:tests:app:utils-test-api",
                 "onlyDependOnLibsWithTags": [
-                  "scope:tests:lib:utils-api",
+                  "scope:tests:lib:utils-test-api",
                   "scope:tests:lib:shared",
                   "scope:api:lib:shared",
                   "scope:api:lib:test-data"
                 ]
               },
               {
-                "sourceTag": "scope:tests:lib:utils-api",
+                "sourceTag": "scope:tests:lib:utils-test-api",
                 "onlyDependOnLibsWithTags": [
-                  "scope:tests:lib:utils-api",
+                  "scope:tests:lib:utils-test-api",
                   "scope:tests:lib:shared",
                   "scope:api:lib:shared",
                   "scope:api:lib:test-data"

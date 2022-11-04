@@ -1,7 +1,7 @@
 # Stress tests
 
 ## Run the test using k6 operator
-- Start test utils api: `PORT=91 npm run start tests-utils-api`
+- Start test utils api: `PORT=91 npm run start tests-utils-test-api`
 - Start tested api at port 90 (`PORT=90 npm run start onboarding-api` for `onboarding/full-onboarding.ts` script).
 - Start minikube
 - Follow [guide](https://k6.io/blog/running-distributed-tests-on-k8s/) to set up k6 operator (up to make deploy command)
@@ -44,7 +44,7 @@
   - Run make build
   - Copy generated k6 binary to archie-microservices root and rename file to k6bin
 - Run `ngrok http 91` and set https domain as `AUTH0_DOMAIN=<ngrok domain>` on both tested api and authorization api
-- Start test utils api: `PORT=91 npm run start tests-utils-api`
+- Start test utils api: `PORT=91 npm run start tests-utils-test-api`
 - Start tested api at port 90 (onboarding api for `onboarding/full-onboarding.ts` script).
 - Start script:
   - Build k6 script using: `nx run stress-tests:build --main=apps/tests/stress/src/<path_to_file>`

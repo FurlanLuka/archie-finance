@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sign } from 'jsonwebtoken';
 import { ConfigService } from '@archie/api/utils/config';
-import { ConfigVariables } from '@archie/tests/utils-api/constants';
+import { ConfigVariables } from '@archie/tests/utils-test-api/constants';
 
 @Injectable()
 export class AuthService {
@@ -57,9 +57,7 @@ export class AuthService {
       {
         expiresIn: 1800,
         audience: this.configService.get(ConfigVariables.AUTH0_AUDIENCE),
-        issuer: `https://${this.configService.get(
-          ConfigVariables.AUTH0_DOMAIN,
-        )}/`,
+        issuer: `https://${this.configService.get(ConfigVariables.AUTH0_DOMAIN)}/`,
         subject: userId,
         algorithm: 'RS256',
         keyid: this.PUBLIC_JWK.keys[0].kid,

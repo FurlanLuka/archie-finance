@@ -1,7 +1,7 @@
 import { AppModule } from './app.module';
 import './tracer';
 import { start } from '@archie/api/utils/microservice';
-import { SERVICE_NAME } from '@archie/tests/utils-api/constants';
+import { SERVICE_NAME } from '@archie/tests/utils-test-api/constants';
 import { Logger } from '@nestjs/common';
 
 async function bootstrap(): Promise<void> {

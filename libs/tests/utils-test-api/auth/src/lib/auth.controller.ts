@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { AuthDto } from '@archie/tests/utils-api/data-transfer-objects';
+import { AuthDto } from '@archie/tests/utils-test-api/data-transfer-objects';
 import { AuthService } from './auth.service';
 
 @Controller('')

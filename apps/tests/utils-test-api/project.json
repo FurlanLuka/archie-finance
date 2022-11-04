@@ -1,16 +1,16 @@
 {
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/tests/utils-api/src",
+  "sourceRoot": "apps/tests/utils-test-api/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/tests/utils-api/src",
-        "main": "apps/tests/utils-api/src/main.ts",
-        "tsConfig": "apps/tests/utils-api/tsconfig.app.json",
-        "assets": ["apps/tests/utils-api/src/assets"]
+        "outputPath": "dist/apps/tests/utils-test-api/src",
+        "main": "apps/tests/utils-test-api/src/main.ts",
+        "tsConfig": "apps/tests/utils-test-api/tsconfig.app.json",
+        "assets": ["apps/tests/utils-test-api/src/assets"]
       },
       "configurations": {
         "production": {
@@ -19,8 +19,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/tests/utils-api/src/environments/environment.ts",
-              "with": "apps/tests/utils-api/src/environments/environment.prod.ts"
+              "replace": "apps/tests/utils-test-api/src/environments/environment.ts",
+              "with": "apps/tests/utils-test-api/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -29,19 +29,19 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "tests-utils-api:build"
+        "buildTarget": "tests-utils-test-api:build"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/tests/utils-api/**/*.ts"]
+        "lintFilePatterns": ["apps/tests/utils-test-api/**/*.ts"]
       }
     },
     "build-docker": {
       "executor": "@archie/plugin/deployment:docker-build"
     }
   },
-  "tags": ["scope:tests:app:utils-api", "scope:tests:app"]
+  "tags": ["scope:tests:app:utils-test-api", "scope:tests:app"]
 }
