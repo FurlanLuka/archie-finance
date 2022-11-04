@@ -34,7 +34,7 @@ export {
   IdentityType,
   PaymentStatus,
   TransactionType,
-  PaymentType,
+  TransactionPaymentType,
   PaymentReason,
   PurchaseType,
   PurchaseStatus,
@@ -50,3 +50,9 @@ export type { AutopayResponse, CreateAutopayDocument, AutopayAgreement, CreateAu
 export type { PaymentResponseData, PaymentsResponse, ScheduleTransaction } from './lib/payments.interfaces';
 export type { ObligationResponse, ObligationsResponse } from './lib/obligations.interfaces';
 export type { LoanDocument } from './lib/statements.interfaces';
+export { PaymentType } from './lib/queue.interfaces';
+export type {
+  CreditBalanceUpdatedPayload,
+  GetLoanBalancesPayload,
+  GetLoanBalancesResponse,
+} from './lib/queue.interfaces';

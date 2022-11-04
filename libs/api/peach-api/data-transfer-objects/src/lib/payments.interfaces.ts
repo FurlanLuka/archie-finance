@@ -1,4 +1,4 @@
-import { PaymentReason, PaymentStatus, PaymentType, TransactionType } from './peach-api.interfaces';
+import { PaymentReason, PaymentStatus, TransactionPaymentType, TransactionType } from './peach-api.interfaces';
 
 export interface PaymentResponseData {
   id: string;
@@ -6,7 +6,7 @@ export interface PaymentResponseData {
   status: PaymentStatus;
   transactionType: TransactionType;
   paymentDetails: {
-    type: PaymentType;
+    type: TransactionPaymentType;
     reason: PaymentReason;
     fromInstrumentId: string;
     paymentNetworkName: string;

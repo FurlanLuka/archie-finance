@@ -4,7 +4,7 @@ export enum PaymentType {
   purchase = 'purchase',
 }
 
-export class CreditBalanceUpdatedPayload {
+export interface CreditBalanceUpdatedPayload {
   userId: string;
   availableCreditAmount: number;
   creditLimitAmount: number;
@@ -18,7 +18,7 @@ export class CreditBalanceUpdatedPayload {
   };
 }
 
-export class GetLoanBalancesPayload {
+export interface GetLoanBalancesPayload {
   userId: string;
 }
 

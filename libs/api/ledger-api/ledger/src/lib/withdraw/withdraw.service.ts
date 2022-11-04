@@ -9,12 +9,7 @@ import {
   Ledger,
   LedgerActionType,
 } from '@archie/api/ledger-api/data-transfer-objects/types';
-import {
-  InvalidAssetError,
-  InvalidWithdrawalAmountError,
-  WithdrawalAmountTooHighError,
-  WithdrawalRecordNotFoundError,
-} from './withdraw.errors';
+import { InvalidAssetError, InvalidWithdrawalAmountError, WithdrawalAmountTooHighError } from './withdraw.errors';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Withdrawal, WithdrawalStatus } from './withdrawal.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -23,16 +18,12 @@ import {
   CollateralWithdrawalTransactionSubmittedPayload,
   CollateralWithdrawalTransactionUpdatedPayload,
   CollateralWithdrawalTransactionUpdatedStatus,
-  InitiateCollateralWithdrawalCommandPayload,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
+} from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import { INITIATE_COLLATERAL_WITHDRAWAL_COMMAND } from '@archie/api/fireblocks-api/constants';
 import { v4 } from 'uuid';
 import { AssetInformation, AssetsService } from '@archie/api/ledger-api/assets';
 import { Lock } from '@archie/api/utils/redis';
-import {
-  MaxWithdrawalAmountResponse,
-  WithdrawResponse,
-} from '@archie/api/ledger-api/data-transfer-objects/types';
+import { MaxWithdrawalAmountResponse, WithdrawResponse } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 @Injectable()
 export class WithdrawService {
@@ -47,14 +38,12 @@ export class WithdrawService {
 
   static MIN_LTV = 0.3;
 
-  public async getMaxWithdrawalAmount(
-    userId: string,
-    assetId: string,
-  ): Promise<MaxWithdrawalAmountResponse> {
+  public async getMaxWithdrawalAmount(userId: string, assetId: string): Promise<MaxWithdrawalAmountResponse> {
     const ledger: Ledger = await this.ledgerService.getLedger(userId);
 
-    const ledgerAccount: InternalLedgerAccountData | undefined =
-      ledger.accounts.find((account) => account.assetId === assetId);
+    const ledgerAccount: InternalLedgerAccountData | undefined = ledger.accounts.find(
+      (account) => account.assetId === assetId,
+    );
 
     if (ledgerAccount === undefined) {
       return {
@@ -62,10 +51,9 @@ export class WithdrawService {
       };
     }
 
-    const loanBalances: GetLoanBalancesResponse =
-      await this.queueService.request(GET_LOAN_BALANCES_RPC, {
-        userId,
-      });
+    const loanBalances: GetLoanBalancesResponse = await this.queueService.request(GET_LOAN_BALANCES_RPC, {
+      userId,
+    });
 
     if (loanBalances.utilizationAmount === 0) {
       return {
@@ -73,20 +61,12 @@ export class WithdrawService {
       };
     }
 
-    const amountRequiredForMinimumLtv = BigNumber(
-      loanBalances.utilizationAmount,
-    ).dividedBy(WithdrawService.MIN_LTV);
+    const amountRequiredForMinimumLtv = BigNumber(loanBalances.utilizationAmount).dividedBy(WithdrawService.MIN_LTV);
 
-    const maxWithdrawableAmount = BigNumber.max(
-      BigNumber(ledger.value).minus(amountRequiredForMinimumLtv),
-      0,
-    );
+    const maxWithdrawableAmount = BigNumber.max(BigNumber(ledger.value).minus(amountRequiredForMinimumLtv), 0);
 
     return {
-      maxAmount: BigNumber.min(
-        maxWithdrawableAmount,
-        ledgerAccount.accountValue,
-      )
+      maxAmount: BigNumber.min(maxWithdrawableAmount, ledgerAccount.accountValue)
         .dividedBy(ledgerAccount.assetPrice)
         .toString(),
     };
@@ -99,8 +79,7 @@ export class WithdrawService {
     amount: string,
     destinationAddress: string,
   ): Promise<WithdrawResponse> {
-    const assetInformation: AssetInformation | undefined =
-      this.assetService.getAssetInformation(assetId);
+    const assetInformation: AssetInformation | undefined = this.assetService.getAssetInformation(assetId);
 
     if (assetInformation === undefined) {
       throw new InvalidAssetError({
@@ -110,9 +89,7 @@ export class WithdrawService {
       });
     }
 
-    const withdrawalAmount = BigNumber(amount).decimalPlaces(
-      assetInformation.decimalPlaces,
-    );
+    const withdrawalAmount = BigNumber(amount).decimalPlaces(assetInformation.decimalPlaces);
 
     if (withdrawalAmount.lte(0)) {
       throw new InvalidWithdrawalAmountError({
@@ -122,8 +99,7 @@ export class WithdrawService {
       });
     }
 
-    const maxWithdrawalAmount: MaxWithdrawalAmountResponse =
-      await this.getMaxWithdrawalAmount(userId, assetId);
+    const maxWithdrawalAmount: MaxWithdrawalAmountResponse = await this.getMaxWithdrawalAmount(userId, assetId);
 
     if (withdrawalAmount.gt(BigNumber(maxWithdrawalAmount.maxAmount))) {
       throw new WithdrawalAmountTooHighError({
@@ -147,14 +123,9 @@ export class WithdrawService {
         status: WithdrawalStatus.INITIATED,
       });
 
-      await this.ledgerService.decrementLedgerAccount(
-        userId,
-        assetInformation,
-        amount,
-        {
-          type: LedgerActionType.WITHDRAWAL,
-        },
-      );
+      await this.ledgerService.decrementLedgerAccount(userId, assetInformation, amount, {
+        type: LedgerActionType.WITHDRAWAL,
+      });
 
       await queryRunner.commitTransaction();
     } catch {
@@ -181,10 +152,9 @@ export class WithdrawService {
     transactionId,
     userId,
   }: CollateralWithdrawalTransactionSubmittedPayload): Promise<void> {
-    const withdrawalRecord: Withdrawal | null =
-      await this.withdrawalRepository.findOneBy({
-        internalTransactionId,
-      });
+    const withdrawalRecord: Withdrawal | null = await this.withdrawalRepository.findOneBy({
+      internalTransactionId,
+    });
 
     if (withdrawalRecord === null) {
       Logger.error({
@@ -219,8 +189,7 @@ export class WithdrawService {
     assetId,
     networkFee,
   }: CollateralWithdrawalTransactionUpdatedPayload): Promise<void> {
-    const assetInformation: AssetInformation | undefined =
-      this.assetService.getAssetInformation(assetId);
+    const assetInformation: AssetInformation | undefined = this.assetService.getAssetInformation(assetId);
 
     if (assetInformation === undefined) {
       throw new InvalidAssetError({
@@ -229,15 +198,14 @@ export class WithdrawService {
       });
     }
 
-    const withdrawalRecord: Withdrawal | null =
-      await this.withdrawalRepository.findOne({
-        where: [
-          { externalTransactionId: transactionId },
-          {
-            internalTransactionId,
-          },
-        ],
-      });
+    const withdrawalRecord: Withdrawal | null = await this.withdrawalRepository.findOne({
+      where: [
+        { externalTransactionId: transactionId },
+        {
+          internalTransactionId,
+        },
+      ],
+    });
 
     if (withdrawalRecord === null) {
       Logger.error({
@@ -269,14 +237,9 @@ export class WithdrawService {
       );
     } else {
       if (withdrawalRecord.status === WithdrawalStatus.SUBMITTED) {
-        await this.ledgerService.decrementLedgerAccount(
-          userId,
-          assetInformation,
-          networkFee,
-          {
-            type: LedgerActionType.FEE,
-          },
-        );
+        await this.ledgerService.decrementLedgerAccount(userId, assetInformation, networkFee, {
+          type: LedgerActionType.FEE,
+        });
 
         await this.withdrawalRepository.update(
           {
@@ -298,8 +261,7 @@ export class WithdrawService {
     userId,
     assetId,
   }: CollateralWithdrawalTransactionErrorPayload): Promise<void> {
-    const assetInformation: AssetInformation | undefined =
-      this.assetService.getAssetInformation(assetId);
+    const assetInformation: AssetInformation | undefined = this.assetService.getAssetInformation(assetId);
 
     if (assetInformation === undefined) {
       throw new InvalidAssetError({
@@ -308,15 +270,14 @@ export class WithdrawService {
       });
     }
 
-    const withdrawalRecord: Withdrawal | null =
-      await this.withdrawalRepository.findOne({
-        where: [
-          { externalTransactionId: transactionId },
-          {
-            internalTransactionId,
-          },
-        ],
-      });
+    const withdrawalRecord: Withdrawal | null = await this.withdrawalRepository.findOne({
+      where: [
+        { externalTransactionId: transactionId },
+        {
+          internalTransactionId,
+        },
+      ],
+    });
 
     if (withdrawalRecord === null) {
       Logger.error({

@@ -5,7 +5,7 @@ import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
 import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { EventService } from './event.service';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
-import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
 import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
 import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects/types';
 import { ONBOARDING_UPDATED_TOPIC } from '@archie/api/onboarding-api/constants';

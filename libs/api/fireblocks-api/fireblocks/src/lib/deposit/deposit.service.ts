@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { FireblocksDepositTransactionPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { VaultAccountService } from '../vault-account/vault_account.service';
 import { AssetInformation, AssetsService } from '@archie/api/fireblocks-api/assets';
-import { CollateralDepositTransactionCompletedPayload } from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Deposit } from './deposit.entity';

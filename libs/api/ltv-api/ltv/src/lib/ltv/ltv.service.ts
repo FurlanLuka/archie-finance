@@ -4,7 +4,7 @@ import { QueueService } from '@archie/api/utils/queue';
 import { LtvUtilService } from './utils/ltv.service';
 import { LedgerService } from '../ledger/ledger.service';
 import { LedgerAccountUpdatedPayload, LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects/types';
-import { CreditBalanceUpdatedPayload, PaymentType } from '@archie/api/peach-api/data-transfer-objects';
+import { CreditBalanceUpdatedPayload, PaymentType } from '@archie/api/peach-api/data-transfer-objects/types';
 import { CreditLineCreatedPayload } from '@archie/api/credit-line-api/data-transfer-objects/types';
 import { CreditService } from '../credit/credit.service';
 import { Lock } from '@archie/api/utils/redis';

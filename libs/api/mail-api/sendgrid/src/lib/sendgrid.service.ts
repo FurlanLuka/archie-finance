@@ -9,7 +9,7 @@ import {
   MarginCallLtvLimitApproachingPayload,
   MarginCallCompletedPayload,
   MarginCallStartedPayload,
-} from '@archie/api/ltv-api/data-transfer-objects';
+} from '@archie/api/ltv-api/data-transfer-objects/types';
 import { SalesConnectDto } from '@archie/api/referral-system-api/sales-connect';
 
 @Injectable()
@@ -20,63 +20,40 @@ export class SendgridService {
     private contactService: ContactService,
   ) {}
 
-  public async sendMarginCallCompletedMail(
-    marginCall: MarginCallCompletedPayload,
-  ): Promise<void> {
-    const contact: DecryptedContact = await this.contactService.getContact(
-      marginCall.userId,
-    );
+  public async sendMarginCallCompletedMail(marginCall: MarginCallCompletedPayload): Promise<void> {
+    const contact: DecryptedContact = await this.contactService.getContact(marginCall.userId);
 
     if (marginCall.liquidationAmount > 0) {
       await this.sendEmail(
         contact.email,
-        this.configService.get(
-          ConfigVariables.SENDGRID_COLLATERAL_LIQUIDATED_TEMPLATE_ID,
-        ),
-        this.emailDataFactory.createCollateralLiquidatedMail(
-          contact.firstName,
-          marginCall,
-        ),
+        this.configService.get(ConfigVariables.SENDGRID_COLLATERAL_LIQUIDATED_TEMPLATE_ID),
+        this.emailDataFactory.createCollateralLiquidatedMail(contact.firstName, marginCall),
       );
     } else {
       await this.sendEmail(
         contact.email,
-        this.configService.get(
-          ConfigVariables.SENDGRID_MARGIN_CALL_EXITED_TEMPLATE_ID,
-        ),
+        this.configService.get(ConfigVariables.SENDGRID_MARGIN_CALL_EXITED_TEMPLATE_ID),
         this.emailDataFactory.createInfoData(contact.firstName, marginCall),
       );
     }
   }
 
-  public async sendMarginCallStartedMail(
-    marginCall: MarginCallStartedPayload,
-  ): Promise<void> {
-    const contact: DecryptedContact = await this.contactService.getContact(
-      marginCall.userId,
-    );
+  public async sendMarginCallStartedMail(marginCall: MarginCallStartedPayload): Promise<void> {
+    const contact: DecryptedContact = await this.contactService.getContact(marginCall.userId);
 
     await this.sendEmail(
       contact.email,
-      this.configService.get(
-        ConfigVariables.SENDGRID_MARGIN_CALL_REACHED_TEMPLATE_ID,
-      ),
+      this.configService.get(ConfigVariables.SENDGRID_MARGIN_CALL_REACHED_TEMPLATE_ID),
       this.emailDataFactory.createInfoData(contact.firstName, marginCall),
     );
   }
 
-  public async sendLtvLimitApproachingMail(
-    marginCall: MarginCallLtvLimitApproachingPayload,
-  ): Promise<void> {
-    const contact: DecryptedContact = await this.contactService.getContact(
-      marginCall.userId,
-    );
+  public async sendLtvLimitApproachingMail(marginCall: MarginCallLtvLimitApproachingPayload): Promise<void> {
+    const contact: DecryptedContact = await this.contactService.getContact(marginCall.userId);
 
     await this.sendEmail(
       contact.email,
-      this.configService.get(
-        ConfigVariables.SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID,
-      ),
+      this.configService.get(ConfigVariables.SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID),
       this.emailDataFactory.createInfoData(contact.firstName, marginCall),
     );
   }
@@ -84,48 +61,34 @@ export class SendgridService {
   public async sendSalesConnectEmail(payload: SalesConnectDto): Promise<void> {
     await this.sendEmail(
       'sales@archie.finance',
-      this.configService.get(
-        ConfigVariables.SENDGRID_CONNECT_SALES_TEMPLATE_ID,
-      ),
+      this.configService.get(ConfigVariables.SENDGRID_CONNECT_SALES_TEMPLATE_ID),
       payload,
     );
   }
 
   public async addToWaitlist(emailAddress: string): Promise<void> {
     await axios.put(
-      `${this.configService.get(
-        ConfigVariables.SENDGRID_API_URL,
-      )}/v3/marketing/contacts`,
+      `${this.configService.get(ConfigVariables.SENDGRID_API_URL)}/v3/marketing/contacts`,
       {
         contacts: [
           {
             email: emailAddress,
           },
         ],
-        list_ids: [
-          this.configService.get(ConfigVariables.SENDGRID_MAILING_LIST_ID),
-        ],
+        list_ids: [this.configService.get(ConfigVariables.SENDGRID_MAILING_LIST_ID)],
       },
       {
         headers: {
-          Authorization: `Bearer ${this.configService.get(
-            ConfigVariables.SENDGRID_API_KEY,
-          )}`,
+          Authorization: `Bearer ${this.configService.get(ConfigVariables.SENDGRID_API_KEY)}`,
         },
       },
     );
   }
 
-  public async sendEmail(
-    emailAddress: string,
-    emailTemplateId: string,
-    emailData: unknown,
-  ): Promise<void> {
+  public async sendEmail(emailAddress: string, emailTemplateId: string, emailData: unknown): Promise<void> {
     try {
       await axios.post(
-        `${this.configService.get(
-          ConfigVariables.SENDGRID_API_URL,
-        )}/v3/mail/send`,
+        `${this.configService.get(ConfigVariables.SENDGRID_API_URL)}/v3/mail/send`,
         {
           from: {
             email: 'no-reply@archie.finance',
@@ -144,9 +107,7 @@ export class SendgridService {
         },
         {
           headers: {
-            Authorization: `Bearer ${this.configService.get(
-              ConfigVariables.SENDGRID_API_KEY,
-            )}`,
+            Authorization: `Bearer ${this.configService.get(ConfigVariables.SENDGRID_API_KEY)}`,
           },
         },
       );

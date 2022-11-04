@@ -9,11 +9,7 @@ import {
   LedgerActionType,
 } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { LedgerService } from '../ledger/ledger.service';
-import {
-  AssetInformation,
-  AssetList,
-  AssetsService,
-} from '@archie/api/ledger-api/assets';
+import { AssetInformation, AssetList, AssetsService } from '@archie/api/ledger-api/assets';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Liquidation, LiquidationStatus } from './liquidation.entity';
 import { Repository } from 'typeorm';
@@ -25,7 +21,7 @@ import {
   CollateralLiquidationTransactionSubmittedPayload,
   CollateralLiquidationTransactionUpdatedPayload,
   CollateralLiquidationTransactionUpdatedStatus,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
+} from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import BigNumber from 'bignumber.js';
 import { Lock } from '@archie/api/utils/redis';
 
@@ -50,26 +46,20 @@ export class LiquidationService {
   ) {}
 
   public async getliquidations(userId: string): Promise<ILiquidation[]> {
-    const liquidations: Liquidation[] = await this.liquidationRepository.findBy(
-      {
-        userId,
-      },
-    );
+    const liquidations: Liquidation[] = await this.liquidationRepository.findBy({
+      userId,
+    });
 
-    return liquidations.map(
-      ({ assetId, amount, networkFee, updatedAt, createdAt, status }) => ({
-        assetId,
-        amount: BigNumber(amount).plus(networkFee).toString(),
-        updatedAt: updatedAt.toISOString(),
-        createdAt: createdAt.toISOString(),
-        status,
-      }),
-    );
+    return liquidations.map(({ assetId, amount, networkFee, updatedAt, createdAt, status }) => ({
+      assetId,
+      amount: BigNumber(amount).plus(networkFee).toString(),
+      updatedAt: updatedAt.toISOString(),
+      createdAt: createdAt.toISOString(),
+      status,
+    }));
   }
 
-  @Lock(
-    (payload: InitiateLedgerAssetLiquidationCommandPayload) => payload.userId,
-  )
+  @Lock((payload: InitiateLedgerAssetLiquidationCommandPayload) => payload.userId)
   public async initiateLedgerAssetLiquidation({
     userId,
     amount,
@@ -79,28 +69,21 @@ export class LiquidationService {
 
     const assetList: AssetList = this.assetsService.getSupportedAssetList();
 
-    const sortedLedgerAccounts: InternalLedgerAccountData[] =
-      ledger.accounts.sort((firstAccount, secondAccount) => {
-        const firstAccountAsset: AssetInformation | undefined = assetList.find(
-          (asset) => asset.id === firstAccount.assetId,
-        );
+    const sortedLedgerAccounts: InternalLedgerAccountData[] = ledger.accounts.sort((firstAccount, secondAccount) => {
+      const firstAccountAsset: AssetInformation | undefined = assetList.find(
+        (asset) => asset.id === firstAccount.assetId,
+      );
 
-        const secondAccountAsset: AssetInformation | undefined = assetList.find(
-          (asset) => asset.id === secondAccount.assetId,
-        );
+      const secondAccountAsset: AssetInformation | undefined = assetList.find(
+        (asset) => asset.id === secondAccount.assetId,
+      );
 
-        if (
-          firstAccountAsset === undefined ||
-          secondAccountAsset === undefined
-        ) {
-          return 0;
-        }
+      if (firstAccountAsset === undefined || secondAccountAsset === undefined) {
+        return 0;
+      }
 
-        return (
-          secondAccountAsset.liquidationWeight -
-          firstAccountAsset.liquidationWeight
-        );
-      });
+      return secondAccountAsset.liquidationWeight - firstAccountAsset.liquidationWeight;
+    });
 
     const accountsLiquidationReducerResult = sortedLedgerAccounts.reduce(
       (previousValue, ledgerAccount): AccountsLiquidationReducer => {
@@ -108,25 +91,21 @@ export class LiquidationService {
           return previousValue;
         }
 
-        const assetInformation: AssetInformation | undefined =
-          this.assetsService.getAssetInformation(ledgerAccount.assetId);
+        const assetInformation: AssetInformation | undefined = this.assetsService.getAssetInformation(
+          ledgerAccount.assetId,
+        );
 
         if (assetInformation === undefined) {
           return previousValue;
         }
 
-        const newLedgerAccountValue = BigNumber(
-          ledgerAccount.accountValue,
-        ).minus(previousValue.amountLeftToLiquidate);
+        const newLedgerAccountValue = BigNumber(ledgerAccount.accountValue).minus(previousValue.amountLeftToLiquidate);
 
         if (newLedgerAccountValue.gte(0)) {
           const amountToTake = BigNumber(ledgerAccount.accountValue)
             .minus(newLedgerAccountValue)
             .dividedBy(ledgerAccount.assetPrice)
-            .decimalPlaces(
-              assetInformation.decimalPlaces,
-              BigNumber.ROUND_DOWN,
-            );
+            .decimalPlaces(assetInformation.decimalPlaces, BigNumber.ROUND_DOWN);
 
           return {
             amountLeftToLiquidate: '0',
@@ -172,29 +151,24 @@ export class LiquidationService {
     );
 
     await Promise.all(
-      accountsLiquidationReducerResult.accountsToLiquidate.map(
-        async ({ asset, amount: assetAmount }) => {
-          const internalTransactionId = v4();
+      accountsLiquidationReducerResult.accountsToLiquidate.map(async ({ asset, amount: assetAmount }) => {
+        const internalTransactionId = v4();
 
-          await this.liquidationRepository.insert({
-            userId,
-            amount: assetAmount,
-            assetId: asset.id,
-            internalTransactionId,
-            status: LiquidationStatus.INITIATED,
-          });
+        await this.liquidationRepository.insert({
+          userId,
+          amount: assetAmount,
+          assetId: asset.id,
+          internalTransactionId,
+          status: LiquidationStatus.INITIATED,
+        });
 
-          this.queueService.publishEvent(
-            INITIATE_COLLATERAL_LIQUIDATION_COMMAND,
-            {
-              userId,
-              amount: assetAmount,
-              assetId: asset.id,
-              internalTransactionId,
-            },
-          );
-        },
-      ),
+        this.queueService.publishEvent(INITIATE_COLLATERAL_LIQUIDATION_COMMAND, {
+          userId,
+          amount: assetAmount,
+          assetId: asset.id,
+          internalTransactionId,
+        });
+      }),
     );
   }
 
@@ -203,10 +177,9 @@ export class LiquidationService {
     transactionId,
     userId,
   }: CollateralLiquidationTransactionSubmittedPayload): Promise<void> {
-    const liquidationRecord: Liquidation | null =
-      await this.liquidationRepository.findOneBy({
-        internalTransactionId,
-      });
+    const liquidationRecord: Liquidation | null = await this.liquidationRepository.findOneBy({
+      internalTransactionId,
+    });
 
     if (liquidationRecord === null) {
       Logger.error({
@@ -239,15 +212,14 @@ export class LiquidationService {
     transactionId,
     status,
   }: CollateralLiquidationTransactionUpdatedPayload): Promise<void> {
-    const liquidationRecord: Liquidation | null =
-      await this.liquidationRepository.findOne({
-        where: [
-          { externalTransactionId: transactionId },
-          {
-            internalTransactionId,
-          },
-        ],
-      });
+    const liquidationRecord: Liquidation | null = await this.liquidationRepository.findOne({
+      where: [
+        { externalTransactionId: transactionId },
+        {
+          internalTransactionId,
+        },
+      ],
+    });
 
     if (liquidationRecord === null) {
       Logger.error({
@@ -283,15 +255,14 @@ export class LiquidationService {
     transactionId,
     userId,
   }: CollateralLiquidationTransactionErrorPayload): Promise<void> {
-    const liquidationRecord: Liquidation | null =
-      await this.liquidationRepository.findOne({
-        where: [
-          { externalTransactionId: transactionId },
-          {
-            internalTransactionId,
-          },
-        ],
-      });
+    const liquidationRecord: Liquidation | null = await this.liquidationRepository.findOne({
+      where: [
+        { externalTransactionId: transactionId },
+        {
+          internalTransactionId,
+        },
+      ],
+    });
 
     if (liquidationRecord === null) {
       Logger.error({
@@ -307,8 +278,9 @@ export class LiquidationService {
       return;
     }
 
-    const assetInformation: AssetInformation | undefined =
-      this.assetsService.getAssetInformation(liquidationRecord.assetId);
+    const assetInformation: AssetInformation | undefined = this.assetsService.getAssetInformation(
+      liquidationRecord.assetId,
+    );
 
     if (assetInformation === undefined) {
       return;

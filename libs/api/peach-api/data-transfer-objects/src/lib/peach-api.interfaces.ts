@@ -50,7 +50,7 @@ export enum TransactionType {
   serviceCredit = 'serviceCredit',
 }
 
-export enum PaymentType {
+export enum TransactionPaymentType {
   ach = 'ach',
   debitCard = 'debitCard',
   creditCard = 'creditCard',
@@ -108,7 +108,7 @@ export interface Payment {
   status: PaymentStatus;
   transactionType: TransactionType;
   paymentDetails: {
-    type: PaymentType;
+    type: TransactionPaymentType;
     reason: PaymentReason;
     fromInstrumentId: string;
     fromInstrument: {

@@ -1,4 +1,4 @@
-export class MarginCallLtvLimitApproachingPayload {
+export interface MarginCallLtvLimitApproachingPayload {
   userId: string;
   ltv: number;
   priceForMarginCall: number;
@@ -6,7 +6,7 @@ export class MarginCallLtvLimitApproachingPayload {
   collateralBalance: number;
 }
 
-export class MarginCallCompletedPayload {
+export interface MarginCallCompletedPayload {
   completedAt: string;
   userId: string;
   liquidationAmount: number;
@@ -16,7 +16,7 @@ export class MarginCallCompletedPayload {
   collateralBalance: number;
 }
 
-export class MarginCallStartedPayload {
+export interface MarginCallStartedPayload {
   userId: string;
   startedAt: string;
   ltv: number;

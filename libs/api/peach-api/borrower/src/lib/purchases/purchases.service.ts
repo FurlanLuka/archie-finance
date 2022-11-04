@@ -7,8 +7,8 @@ import { BorrowerValidation } from '../utils/borrower.validation';
 import { PurchasesResponseFactory } from './utils/purchases_response.factory';
 import { GetPurchasesQueryDto, PurchasesResponseDto } from './purchases.dto';
 import { Injectable } from '@nestjs/common';
-import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
-import { PaymentType } from '@archie/api/peach-api/data-transfer-objects';
+import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects/types';
+import { PaymentType } from '@archie/api/peach-api/data-transfer-objects/types';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 
