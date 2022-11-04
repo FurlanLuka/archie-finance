@@ -83,7 +83,7 @@
     "plugin-workspace-generator": "libs/plugin/workspace-generator",
     "referral-system-api": "apps/api/referral-system-api",
     "stress-tests": "apps/tests/stress",
-    "tests-utils-test-api": "apps/tests/utils-test-api",
+    "utils-test-api": "apps/tests/utils-test-api",
     "tests-utils-test-api-auth": "libs/tests/utils-test-api/auth",
     "tests-utils-test-api-constants": "libs/tests/utils-test-api/constants",
     "tests-utils-test-api-data-transfer-objects": "libs/tests/utils-test-api/data-transfer-objects",

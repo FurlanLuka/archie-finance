@@ -29,7 +29,7 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "tests-utils-test-api:build"
+        "buildTarget": "utils-test-api:build"
       }
     },
     "lint": {

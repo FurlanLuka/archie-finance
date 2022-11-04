@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: archie-tests-utils-test-api
+  name: archie-utils-test-api
   labels:
-    app: archie-tests-utils-test-api
+    app: archie-utils-test-api
     {{- if not .Values.local }}
     tags.datadoghq.com/env: '{{ .Values.environment }}'
-    tags.datadoghq.com/service: 'archie-tests-utils-test-api'
+    tags.datadoghq.com/service: 'archie-utils-test-api'
     tags.datadoghq.com/version: '{{ .Values.tag }}'
     {{- end }}
 spec:
   selector:
     matchLabels:
-      app: archie-tests-utils-test-api
+      app: archie-utils-test-api
   {{- if not .Values.local }}
   replicas: 1
   {{- else }}
@@ -26,17 +26,17 @@ spec:
   template:
     metadata:
       labels:
-        app: archie-tests-utils-test-api
+        app: archie-utils-test-api
         {{- if not .Values.local }}
         tags.datadoghq.com/env: '{{ .Values.environment }}'
-        tags.datadoghq.com/service: 'archie-tests-utils-test-api'
+        tags.datadoghq.com/service: 'archie-utils-test-api'
         tags.datadoghq.com/version: '{{ .Values.tag }}'
         {{- else }}
         helm-revision: '{{ .Release.Revision }}'
         {{- end }}
     spec:
       containers:
-        - name: archie-tests-utils-test-api
+        - name: archie-utils-test-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
           {{- if not .Values.local }}
           imagePullPolicy: Always
@@ -95,13 +95,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: archie-tests-utils-test-api-service
+  name: archie-utils-test-api-service
   labels:
-    app: archie-tests-utils-test-api-service
+    app: archie-utils-test-api-service
 spec:
   type: NodePort
   ports:
     - port: 80
       targetPort: 80
   selector:
-    app: archie-tests-utils-test-api
+    app: archie-utils-test-api
