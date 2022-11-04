@@ -25,20 +25,20 @@ import {
 import { creditLineCreatedDataFactory } from '@archie/api/credit-line-api/test-data';
 import { cardActivatedDataFactory } from '@archie/api/credit-api/test-data';
 
-export let options = getOptions();
+export const options = getOptions();
 
-let API_BASE_URL: string | undefined = getApiBaseUrl();
+const API_BASE_URL: string = getApiBaseUrl();
 
-export function setup() {
+export function setup(): void {
   setupAmqpConnection();
 }
 
-export default function () {
+export default function (): void {
   const userId: string = uuidv4();
   const accessToken: string = createAccessToken(userId);
 
   group('Onboarding flow', () => {
-    const controllerQueuePrefix: string = `${SERVICE_QUEUE_NAME}-onboarding`;
+    const controllerQueuePrefix = `${SERVICE_QUEUE_NAME}-onboarding`;
 
     group('Create onboarding record', () => {
       const response = httpGet({

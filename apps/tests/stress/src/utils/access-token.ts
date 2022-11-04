@@ -1,14 +1,13 @@
 import { httpPost } from './http';
+import { AUTH_BASE_URL } from '../config';
 
 export function createAccessToken(userId: string): string {
-  const authBaseUrl: string | undefined = __ENV.AUTH_BASE_URL;
-
-  if (authBaseUrl === undefined) {
+  if (AUTH_BASE_URL === undefined) {
     throw new Error('AUTH_BASE_URL_ENV_VARIABLE_MISSING');
   }
 
   return httpPost({
-    uri: 'http://localhost:91/internal/test/authorization',
+    uri: `${AUTH_BASE_URL}/internal/test/authorization`,
     body: {
       userId,
     },

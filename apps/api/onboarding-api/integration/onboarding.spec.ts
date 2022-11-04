@@ -8,7 +8,7 @@ import {
   initializeTestingModule,
   TestDatabase,
 } from '@archie/test/integration';
-import { queueStub } from '../../../../libs/api/test/integration/src/lib/data-stubs';
+import { queueStub } from '@archie/test/integration/module-stubs';
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';
 import {

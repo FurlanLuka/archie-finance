@@ -1,4 +1,5 @@
 import { Options } from 'k6/options';
+import { API_BASE_URL, LOAD_OPTIONS } from '../config';
 
 export function getOptions(): Options {
   const defaultOptions: Options = {
@@ -7,20 +8,16 @@ export function getOptions(): Options {
     userAgent: 'k6-stress-test',
   };
 
-  return __ENV.LOAD_OPTIONS !== undefined
-    ? {
-        ...defaultOptions,
-        ...JSON.parse(__ENV.LOAD_OPTIONS),
-      }
-    : defaultOptions;
+  return {
+    ...defaultOptions,
+    ...LOAD_OPTIONS,
+  };
 }
 
 export function getApiBaseUrl(): string {
-  const apibaseurl: string | undefined = __ENV.API_BASE_URL;
-
-  if (apibaseurl === undefined) {
+  if (API_BASE_URL === undefined) {
     throw new Error('API_BASE_URL_ENV_VARIABLE_MISSING');
   }
 
-  return apibaseurl;
+  return API_BASE_URL;
 }
