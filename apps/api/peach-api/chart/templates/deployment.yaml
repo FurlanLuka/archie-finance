@@ -34,7 +34,48 @@ spec:
         {{- else }}
         helm-revision: '{{ .Release.Revision }}'
         {{- end }}
+      {{- if not .Values.local }}
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/role: "peach-api"
+        vault.hashicorp.com/agent-inject-secret-config: "database/creds/peach-api"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{`{{- with secret "database/creds/peach-api"}}
+          export TYPEORM_USERNAME="{{ .Data.username }}"
+          export TYPEORM_PASSWORD="{{ .Data.password }}"
+          {{- end }}
+          {{- with secret "kv/data/database" }}
+          export TYPEORM_PORT="{{ .Data.data.port }}"
+          export TYPEORM_HOST="{{ .Data.data.hostname }}"
+          {{- end }}
+          export TYPEORM_DATABASE="peach-api"
+          {{- with secret "kv/data/auth0" }}
+          export AUTH0_DOMAIN="{{ .Data.data.domain }}"
+          export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
+          {{- end }}
+          {{- with secret "kv/data/queue" }}
+          export QUEUE_URL="{{ .Data.data.url }}"
+          {{- end }}
+          {{- with secret "kv/data/redis" }}
+          export REDIS_URL="{{ .Data.data.url }}"
+          {{- end }}
+          {{- with secret "kv/data/shared" }}
+          export API_BASE_URL="{{ .Data.data.api_base_url }}"
+          {{- end }}
+          {{- with secret "kv/data/peach-api" }}
+          export PEACH_API_KEY="{{ .Data.data.peach_api_key }}"
+          export PEACH_BASE_URL="{{ .Data.data.peach_base_url }}"
+          export PEACH_COMPANY_ID="{{ .Data.data.peach_company_id }}"
+          export PEACH_BORROWER_ROLE_ID="{{ .Data.data.peach_borrower_role_id }}"
+          export PEACH_LOAN_ID="{{ .Data.data.peach_loan_id }}"
+          export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
+          {{- end }}
+          `}}
+      {{- end }}
     spec:
+      serviceAccountName: peach-api
       containers:
         - name: archie-peach-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
@@ -43,6 +84,8 @@ spec:
           {{- else }}
           imagePullPolicy: Never
           {{- end }}
+          args:
+            ['sh', '-c', '. /vault/secrets/config && node service/main.js']
           ports:
             - containerPort: 80
           livenessProbe:
@@ -78,86 +121,6 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
-            - name: AUTH0_DOMAIN
-              valueFrom:
-                secretKeyRef:
-                  name: auth0-shared-secrets
-                  key: domain
-            - name: AUTH0_AUDIENCE
-              valueFrom:
-                secretKeyRef:
-                  name: auth0-shared-secrets
-                  key: audience
-            - name: TYPEORM_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: db-username
-            - name: TYPEORM_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: db-password
-            - name: TYPEORM_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: db-hostname
-            - name: TYPEORM_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: db-port
-            - name: TYPEORM_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: db-database
-            - name: PEACH_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: peach-api-key
-            - name: PEACH_BASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: peach-base-url
-            - name: PEACH_COMPANY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: peach-company-id
-            - name: PEACH_BORROWER_ROLE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: peach-borrower-role-id
-            - name: PEACH_LOAN_ID
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: peach-loan-id
-            - name: QUEUE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: queue-shared-secrets
-                  key: queue-url
-            - name: ENCRYPTION_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: peach-api-secrets
-                  key: encryption-key
-            - name: API_BASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: api-shared-secrets
-                  key: api-base-url
-            - name: REDIS_URL
-              valueFrom:
-                secretKeyRef:
-                  name: redis-shared-secrets
-                  key: redis-url
           {{- end }}
       imagePullSecrets:
         - name: regcred

@@ -38,7 +38,33 @@ spec:
         {{- else }}
         helm-revision: '{{ .Release.Revision }}'
         {{- end }}
+      {{- if not .Values.local }}
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/role: "referral-system-api"
+        vault.hashicorp.com/agent-inject-secret-config: "database/creds/referral-system-api"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{`{{- with secret "database/creds/referral-system-api"}}
+          export TYPEORM_USERNAME="{{ .Data.username }}"
+          export TYPEORM_PASSWORD="{{ .Data.password }}"
+          {{- end }}
+          {{- with secret "kv/data/database" }}
+          export TYPEORM_PORT="{{ .Data.data.port }}"
+          export TYPEORM_HOST="{{ .Data.data.hostname }}"
+          {{- end }}
+          export TYPEORM_DATABASE="referral-system-api"
+          {{- with secret "kv/data/queue" }}
+          export QUEUE_URL="{{ .Data.data.url }}"
+          {{- end }}
+          {{- with secret "kv/data/referral-system-api" }}
+          export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
+          {{- end }}
+          `}}
+      {{- end }}
     spec:
+      serviceAccountName: referral-system-api
       containers:
         - name: archie-referral-system-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
@@ -47,6 +73,8 @@ spec:
           {{- else }}
           imagePullPolicy: Never
           {{- end }}
+          args:
+            ['sh', '-c', '. /vault/secrets/config && node service/main.js']
           ports:
             - containerPort: 80
           livenessProbe:
@@ -82,41 +110,6 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
-            - name: TYPEORM_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: referral-system-api-secrets
-                  key: db-username
-            - name: TYPEORM_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: referral-system-api-secrets
-                  key: db-password
-            - name: TYPEORM_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: referral-system-api-secrets
-                  key: db-hostname
-            - name: TYPEORM_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: referral-system-api-secrets
-                  key: db-port
-            - name: TYPEORM_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: referral-system-api-secrets
-                  key: db-database
-            - name: QUEUE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: queue-shared-secrets
-                  key: queue-url
-            - name: ENCRYPTION_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: referral-system-api-secrets
-                  key: encryption-key
           {{- end }}
       imagePullSecrets:
         - name: regcred
