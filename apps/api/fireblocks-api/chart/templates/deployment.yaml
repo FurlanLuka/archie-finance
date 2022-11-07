@@ -60,7 +60,7 @@ spec:
           export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
           {{- end }}
           {{- with secret "kv/data/fireblocks-api" }}
-          export ASSET_LIST="{{ .Data.data.asset_list }}"
+          export ASSET_LIST='{{ .Data.data.asset_list }}'
           export FIREBLOCKS_API_KEY="{{ .Data.data.fireblocks_api_key }}"
           export FIREBLOCKS_PRIVATE_KEY="{{ .Data.data.fireblocks_private_key }}"
           {{- end }}

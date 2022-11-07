@@ -65,7 +65,7 @@ spec:
           export REDIS_URL="{{ .Data.data.url }}"
           {{- end }}
           {{- with secret "kv/data/credit-line-api" }}
-          export ASSET_LIST="{{ .Data.data.asset_list }}"
+          export ASSET_LIST='{{ .Data.data.asset_list }}'
           {{- end }}
           `}}
       {{- end }}
