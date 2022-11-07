@@ -43,7 +43,7 @@ import {
 import { DateTime } from 'luxon';
 import { omitBy, isNil } from 'lodash';
 import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
-import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects/types';
 import { BorrowerWithCreditLine } from '../utils/borrower.validation.interfaces';
 
 @Injectable()

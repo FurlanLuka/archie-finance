@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import { Injectable, Logger } from '@nestjs/common';
 import { RizeApiService } from './api/rize_api.service';
 import {
@@ -31,7 +30,7 @@ import {
   GetLoanBalancesPayload,
   GetLoanBalancesResponse,
   PaymentType,
-} from '@archie/api/peach-api/data-transfer-objects';
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LastDebitCardUpdateMeta } from './last_debit_card_update_meta.entity';

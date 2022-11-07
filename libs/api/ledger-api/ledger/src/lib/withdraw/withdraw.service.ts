@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { QueueService } from '@archie/api/utils/queue';
-import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects';
+import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects/types';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 import { LedgerService } from '../ledger/ledger.service';
 import { BigNumber } from 'bignumber.js';

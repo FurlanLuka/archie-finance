@@ -5,7 +5,7 @@ import { PeachApiService } from '../api/peach_api.service';
 import { Borrower } from '../borrower.entity';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import { LoanBalances } from '@archie/api/peach-api/data-transfer-objects/types';
-import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects';
+import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects/types';
 
 @Injectable()
 export class LoanBalancesService {

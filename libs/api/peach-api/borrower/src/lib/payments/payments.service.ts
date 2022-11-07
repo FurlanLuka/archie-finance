@@ -12,7 +12,7 @@ import { GetPaymentsQueryDto } from '@archie/api/peach-api/data-transfer-objects
 import { PaymentsResponse, ScheduleTransaction } from '@archie/api/peach-api/data-transfer-objects/types';
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
 import { PeachPaymentUpdatedPayload } from '@archie/api/webhook-api/data-transfer-objects';
-import { PaymentType } from '@archie/api/peach-api/data-transfer-objects';
+import { PaymentType } from '@archie/api/peach-api/data-transfer-objects/types';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import { BorrowerValidation } from '../utils/borrower.validation';
