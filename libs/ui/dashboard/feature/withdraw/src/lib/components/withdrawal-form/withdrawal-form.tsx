@@ -8,14 +8,9 @@ import { useNavigate } from 'react-router-dom';
 import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { calculateLedgerCreditValue } from '@archie/ui/dashboard/utils';
 import { CollateralAssets } from '@archie/ui/shared/constants';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useCreateWithdrawal } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-create-withdrawal';
-import {
-  ButtonOutline,
-  ButtonPrimary,
-  InputText,
-  BodyM,
-} from '@archie/ui/shared/design-system';
+import { ButtonOutline, ButtonPrimary, InputText, BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
 import { SuccessfullWithdrawalModal } from '../modals/successfull-withdrawal/successfull-withdrawal';
@@ -35,11 +30,7 @@ interface WithdrawalFormProps {
   maxAmount: string;
 }
 
-export const WithdrawalForm: FC<WithdrawalFormProps> = ({
-  currentAsset,
-  ledger,
-  maxAmount,
-}) => {
+export const WithdrawalForm: FC<WithdrawalFormProps> = ({ currentAsset, ledger, maxAmount }) => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
@@ -65,7 +56,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   useEffect(() => {
-    if (createWithdrawal.state === RequestState.SUCCESS) {
+    if (createWithdrawal.state === MutationState.SUCCESS) {
       setIsSuccessModalOpen(true);
     }
   }, [createWithdrawal.state]);
@@ -82,7 +73,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({
   });
 
   const onSubmit = handleSubmit((data) => {
-    if (createWithdrawal.state === RequestState.IDLE) {
+    if (createWithdrawal.state === MutationState.IDLE) {
       createWithdrawal.mutate({
         assetId: currentAsset,
         amount: data.withdrawAmount,
@@ -118,33 +109,24 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({
               {t(errors.withdrawAmount.message, { maxAmount })}
             </BodyM>
           )}
-          {maxAmountBN.isGreaterThan(0) &&
-            maxAmountBN.isGreaterThanOrEqualTo(withdrawalAmount) && (
-              <BodyM
-                color={theme.textSecondary}
-                weight={500}
-                className="credit-limit"
-              >
-                {t('dashboard_withdraw.form.credit_change', {
-                  initialCollateralValue: ledger.value,
-                  initialCreditValue: initialCreditValue,
-                  updatedCollateralValue: updatedLedgerValue,
-                  updatedCreditValue: updatedCreditValue,
-                })}
-              </BodyM>
-            )}
+          {maxAmountBN.isGreaterThan(0) && maxAmountBN.isGreaterThanOrEqualTo(withdrawalAmount) && (
+            <BodyM color={theme.textSecondary} weight={500} className="credit-limit">
+              {t('dashboard_withdraw.form.credit_change', {
+                initialCollateralValue: ledger.value,
+                initialCreditValue: initialCreditValue,
+                updatedCollateralValue: updatedLedgerValue,
+                updatedCreditValue: updatedCreditValue,
+              })}
+            </BodyM>
+          )}
         </InputText>
         <div className="address">
           <div className="address-title">
-            <BodyM weight={700}>
-              {t('dashboard_withdraw.address_title', { currentAsset })}
-            </BodyM>
+            <BodyM weight={700}>{t('dashboard_withdraw.address_title', { currentAsset })}</BodyM>
           </div>
           <div className="address-input">
             <label htmlFor="withdrawAddress">
-              <BodyM weight={700}>
-                {t('dashboard_withdraw.form.address_label', { currentAsset })}
-              </BodyM>
+              <BodyM weight={700}>{t('dashboard_withdraw.form.address_label', { currentAsset })}</BodyM>
             </label>
             <input
               id="withdrawAddress"
@@ -160,13 +142,8 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({
           </div>
         </div>
         <div className="btn-group">
-          <ButtonOutline onClick={() => navigate('/collateral')}>
-            {t('btn_cancel')}
-          </ButtonOutline>
-          <ButtonPrimary
-            isDisabled={!isValid}
-            isLoading={createWithdrawal.state === RequestState.LOADING}
-          >
+          <ButtonOutline onClick={() => navigate('/collateral')}>{t('btn_cancel')}</ButtonOutline>
+          <ButtonPrimary isDisabled={!isValid} isLoading={createWithdrawal.state === MutationState.LOADING}>
             {t('dashboard_withdraw.btn')}
           </ButtonPrimary>
         </div>
