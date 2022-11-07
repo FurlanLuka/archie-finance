@@ -1,7 +1,4 @@
-import {
-  CreditLimitAssetAllocation,
-  CreditLine,
-} from './credit_line.interfaces';
+import { CreditLimitAssetAllocation, CreditLine } from './credit_line.interfaces';
 
 export class CreditLimitAssetAllocationDto implements CreditLimitAssetAllocation {
   assetId: string;
