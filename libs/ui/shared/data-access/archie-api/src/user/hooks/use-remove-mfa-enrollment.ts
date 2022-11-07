@@ -6,7 +6,7 @@ import { removeMfaEnrollment, RemoveMfaEnrollmentBody } from '../api/remove-mfa-
 
 export const MFA_ENROLLMENT_QUERY_KEY = 'mfa_enrollment';
 
-export const useRemoveMfaEnrollment = (): MutationQueryResponse<RemoveMfaEnrollmentBody, void> => {
+export const useRemoveMfaEnrollment = (): MutationQueryResponse<void, RemoveMfaEnrollmentBody> => {
   const queryClient = useQueryClient();
 
   return useExtendedMutation<void, RemoveMfaEnrollmentBody>('remove_mfa_enrollment', removeMfaEnrollment, {
