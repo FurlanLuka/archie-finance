@@ -39,6 +39,7 @@ spec:
         vault.hashicorp.com/agent-inject: "true"
         vault.hashicorp.com/agent-inject-status: "update"
         vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-cache-enable: "true"
         vault.hashicorp.com/role: "fireblocks-api"
         vault.hashicorp.com/agent-requests-cpu: "50m"
         vault.hashicorp.com/agent-limits-cpu: ""
