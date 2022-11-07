@@ -7,9 +7,7 @@ import { disconnectAccount } from '../api/disconnect-account';
 
 import { CONNECTED_ACCOUNTS_RECORD_QUERY_KEY } from './use-get-connected-accounts';
 
-export const useDisconnectAccount = (
-  accountId: string,
-): MutationQueryResponse<void, void> => {
+export const useDisconnectAccount = (accountId: string): MutationQueryResponse<void, DefaultVariables> => {
   const queryClient = useQueryClient();
   return useExtendedMutation<void, DefaultVariables>(
     `disconnect_account_${accountId}`,
