@@ -1,5 +1,15 @@
 import { ObligationResponse, ObligationsResponse } from './obligations.interfaces';
 
+export class ObligationResponseDto implements ObligationResponse {
+  capitalizedAmount: number;
+  dueDate: string;
+  fulfilledAmount: number;
+  gracePeriod: string | null;
+  isOverdue: boolean;
+  obligationAmount: number;
+  overpaymentsAmount: number;
+  remainingAmount: number;
+}
 export class ObligationsResponseDto implements ObligationsResponse {
   outstandingBalances: {
     outstandingFeesAmount: number;
@@ -19,6 +29,6 @@ export class ObligationsResponseDto implements ObligationsResponse {
     duePrincipalAmount: number;
     dueTotalAmount: number;
   };
-  statementObligations: ObligationResponse[];
-  futureObligations: ObligationResponse[];
+  statementObligations: ObligationResponseDto[];
+  futureObligations: ObligationResponseDto[];
 }
