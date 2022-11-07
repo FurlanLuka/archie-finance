@@ -1,6 +1,7 @@
 import { IsDateString, IsNumber, IsOptional, IsPositive, IsString, Matches } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PaymentResponseData, PaymentsResponse } from './payments.interfaces';
+import { PaymentReason, PaymentStatus, TransactionPaymentType, TransactionType } from './peach-api.interfaces';
 
 // TODO solve this and peach-api/constants circular dependency
 const PEACH_ID_REGEX = /^ext-|^[A-Z]{2}-[A-Z0-9]+-[A-Z0-9]+|^\d+$/;
@@ -27,6 +28,32 @@ export class GetPaymentsQueryDto {
   toEffectiveDate?: string | null;
 }
 
+export class PaymentResponseDataDto implements PaymentResponseData {
+  id: string;
+  isExternal: boolean;
+  status: PaymentStatus;
+  transactionType: TransactionType;
+  paymentDetails: {
+    type: TransactionPaymentType;
+    reason: PaymentReason;
+    fromInstrumentId: string;
+    paymentNetworkName: string;
+    accountNumberLastFour?: string;
+  };
+  actualAmount: number;
+  currency: string;
+  failureDescriptionShort: string | null;
+  failureDescriptionLong: string | null;
+  autopayPlanId: string | null;
+  cancelReason: string | null;
+  timestamps: {
+    createdAt: string;
+    scheduledDate: string | null;
+    succeededAt: string | null;
+    failedAt: string | null;
+    chargebackAt: string | null;
+  };
+}
 export class PaymentsResponseDto implements PaymentsResponse {
   meta: {
     total: number;
@@ -34,7 +61,7 @@ export class PaymentsResponseDto implements PaymentsResponse {
     nextUrl: string | null;
     previousUrl: string | null;
   };
-  data: PaymentResponseData[];
+  data: PaymentResponseDataDto[];
 }
 
 export class ScheduleTransactionDto {
