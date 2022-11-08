@@ -32,6 +32,7 @@
     "@nestjs/microservices": "^9.1.4",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.1.4",
+    "@nestjs/platform-fastify": "^9.2.0",
     "@nestjs/platform-ws": "^9.1.4",
     "@nestjs/swagger": "^6.1.2",
     "@nestjs/typeorm": "^9.0.1",
