@@ -1,6 +1,7 @@
 import { IsBoolean, IsEnum, IsNumber, IsOptional, IsPositive, IsString, Matches } from 'class-validator';
-import { AmountType, PaymentFrequency, PEACH_ID_REGEX } from './peach-api.interfaces';
+import { AmountType, PaymentFrequency } from './peach-api.interfaces';
 import { AutopayAgreement, AutopayResponse, CreateAutopay, CreateAutopayDocument } from './autopay.interfaces';
+import { PEACH_ID_REGEX } from './shared.dto';
 
 export class CreateAutopayDto implements CreateAutopay {
   @IsEnum(AmountType)
