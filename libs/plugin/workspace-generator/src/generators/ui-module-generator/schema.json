@@ -27,8 +27,14 @@
         "items": [
           { "value": "PROJECT", "label": "Top level project module" },
           { "value": "PROJECT_FEATURE", "label": "Project feature module" },
-          { "value": "SHARED", "label": "Top level shared module (does not require projectName to be selected)" },
-          { "value": "SHARED_DATA_ACCESS", "label": "Shared data access module (does not require projectName to be selected)" }
+          {
+            "value": "SHARED",
+            "label": "Top level shared module (does not require projectName to be selected)"
+          },
+          {
+            "value": "SHARED_DATA_ACCESS",
+            "label": "Shared data access module (does not require projectName to be selected)"
+          }
         ]
       }
     }

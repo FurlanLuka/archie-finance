@@ -1,4 +1,7 @@
-import { TransactionStatus, TransactionType } from '@archie/api/credit-api/data-transfer-objects/types';
+import {
+  TransactionStatus,
+  TransactionType,
+} from '@archie/api/credit-api/data-transfer-objects/types';
 import { theme } from '@archie/ui/shared/theme';
 
 export const TransactionStatusText = {

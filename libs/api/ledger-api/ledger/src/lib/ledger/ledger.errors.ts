@@ -1,4 +1,8 @@
-import { BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 
 export class LedgerAccountNotFoundError extends NotFoundException {
   metadata: object;

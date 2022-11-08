@@ -5,7 +5,11 @@ import { getRequest } from '../../helpers';
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const getLoanPayments = (accessToken: string, fromDate: string, toDate: string) => {
+export const getLoanPayments = (
+  accessToken: string,
+  fromDate: string,
+  toDate: string,
+) => {
   return getRequest<PaymentsResponse>(
     `${API_URL}/v1/loan_payments?fromEffectiveDate=${fromDate}&toEffectiveDate=${toDate}`,
     {

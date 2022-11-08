@@ -1,6 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
-import { EMAIL_VERIFIED_TOPIC, KYC_SUBMITTED_TOPIC } from '@archie/api/user-api/constants';
+import {
+  EMAIL_VERIFIED_TOPIC,
+  KYC_SUBMITTED_TOPIC,
+} from '@archie/api/user-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/mail-api/constants';
 
 import { ContactService } from './contact.service';

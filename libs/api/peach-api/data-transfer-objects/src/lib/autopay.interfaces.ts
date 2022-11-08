@@ -1,4 +1,8 @@
-import { AmountType, AutopayOptions, PaymentFrequency } from './peach-api.interfaces';
+import {
+  AmountType,
+  AutopayOptions,
+  PaymentFrequency,
+} from './peach-api.interfaces';
 
 export type CreateAutopay = AutopayOptions;
 

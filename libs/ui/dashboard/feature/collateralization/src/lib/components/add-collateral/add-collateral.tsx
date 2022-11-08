@@ -19,7 +19,6 @@ import { CollateralUpdatedModal } from '../../components/modals/collateral-updat
 
 import { CollateralizationForm } from './blocks/collaterization-form/collaterization-form';
 
-
 interface AddCollateralProps {
   selectedAsset: string;
 }

@@ -5,7 +5,9 @@ import { getRequest } from '../../helpers';
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const getCardsCredit = async (accessToken: string): Promise<CardResponse> => {
+export const getCardsCredit = async (
+  accessToken: string,
+): Promise<CardResponse> => {
   return getRequest<CardResponse>(
     `${API_URL}/v1/rize/users/cards/credit`,
     {

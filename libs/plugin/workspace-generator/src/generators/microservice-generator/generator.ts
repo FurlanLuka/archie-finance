@@ -1,4 +1,9 @@
-import { GeneratorCallback, getWorkspaceLayout, joinPathFragments, Tree } from '@nrwl/devkit';
+import {
+  GeneratorCallback,
+  getWorkspaceLayout,
+  joinPathFragments,
+  Tree,
+} from '@nrwl/devkit';
 import { MicroserviceGenerator } from './schema';
 import { initGenerator } from '@nrwl/nest';
 import { applicationGenerator as nodeApplicationGenerator } from '@nrwl/node';
@@ -13,8 +18,15 @@ export interface NormalizedSchema extends MicroserviceGenerator {
   projectRoot: string;
 }
 
-function normalizeOptions(tree: Tree, options: MicroserviceGenerator): NormalizedSchema {
-  const projectRoot = joinPathFragments(getWorkspaceLayout(tree).appsDir, 'api', options.name);
+function normalizeOptions(
+  tree: Tree,
+  options: MicroserviceGenerator,
+): NormalizedSchema {
+  const projectRoot = joinPathFragments(
+    getWorkspaceLayout(tree).appsDir,
+    'api',
+    options.name,
+  );
 
   return {
     ...options,
@@ -22,7 +34,10 @@ function normalizeOptions(tree: Tree, options: MicroserviceGenerator): Normalize
   };
 }
 
-export default async function (tree: Tree, options: MicroserviceGenerator): Promise<GeneratorCallback> {
+export default async function (
+  tree: Tree,
+  options: MicroserviceGenerator,
+): Promise<GeneratorCallback> {
   const normalizedOptions = normalizeOptions(tree, options);
 
   const initTask = await initGenerator(tree, {
@@ -46,11 +61,12 @@ export default async function (tree: Tree, options: MicroserviceGenerator): Prom
     moduleType: 'SHARED',
   });
 
-  const createDataTransferObjectsLibraryTask = await microserviceModuleGenerator(tree, {
-    projectName: options.name,
-    name: 'data-transfer-objects',
-    moduleType: 'SHARED_WITH_UI',
-  });
+  const createDataTransferObjectsLibraryTask =
+    await microserviceModuleGenerator(tree, {
+      projectName: options.name,
+      name: 'data-transfer-objects',
+      moduleType: 'SHARED_WITH_UI',
+    });
 
   const createTestDataLibraryTask = await microserviceModuleGenerator(tree, {
     projectName: options.name,

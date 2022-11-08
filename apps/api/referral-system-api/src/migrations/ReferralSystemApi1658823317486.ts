@@ -1,11 +1,10 @@
-
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class ReferralSystemApi1658823317486 implements MigrationInterface {
-name = 'ReferralSystemApi1658823317486'
+  name = 'ReferralSystemApi1658823317486';
 
-public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             CREATE TABLE "waitlist" (
                 "id" uuid NOT NULL,
                 "emailAddress" character varying NOT NULL,
@@ -18,13 +17,11 @@ public async up(queryRunner: QueryRunner): Promise<void> {
                 CONSTRAINT "PK_973cfbedc6381485681d6a6916c" PRIMARY KEY ("id")
             )
         `);
-}
+  }
 
-public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             DROP TABLE "waitlist"
         `);
+  }
 }
-
-}
-

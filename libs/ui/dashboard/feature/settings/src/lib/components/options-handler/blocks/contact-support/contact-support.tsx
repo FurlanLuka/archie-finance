@@ -8,7 +8,10 @@ export const ContactSupport: FC = () => {
 
   return (
     <a href="mailto:support@archie.finance?subject=I need help with my Archie account">
-      <OptionsItem title={t('dashboard_settings.support.title')} subtitle={t('dashboard_settings.support.subtitle')} />
+      <OptionsItem
+        title={t('dashboard_settings.support.title')}
+        subtitle={t('dashboard_settings.support.subtitle')}
+      />
     </a>
   );
 };

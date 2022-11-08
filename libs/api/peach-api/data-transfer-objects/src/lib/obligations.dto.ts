@@ -1,4 +1,7 @@
-import { ObligationResponse, ObligationsResponse } from './obligations.interfaces';
+import {
+  ObligationResponse,
+  ObligationsResponse,
+} from './obligations.interfaces';
 
 export class ObligationResponseDto implements ObligationResponse {
   capitalizedAmount: number;

@@ -39,7 +39,11 @@ export const Danger: FC<DangerProps> = ({ withButton }) => {
     const creditData = getCreditResponse.data;
     const collateralTotalValue = getLedgerResponse.data.value;
 
-    const getDate = () => format(parseISO(marginCallsData.automaticLiquidationAt), 'MMM dd, yyyy HH:mm');
+    const getDate = () =>
+      format(
+        parseISO(marginCallsData.automaticLiquidationAt),
+        'MMM dd, yyyy HH:mm',
+      );
     const getCollateralMinValue = calculateCollateralValue(
       MINIMUM_LTV,
       creditData.utilizationAmount,
@@ -66,7 +70,10 @@ export const Danger: FC<DangerProps> = ({ withButton }) => {
           </BodyM>
           <BodyM color={theme.textLight}>{t('margin_call_alert.text_2')}</BodyM>
           {withButton && (
-            <ButtonLight color={theme.textDanger} onClick={() => navigate('/collateral')}>
+            <ButtonLight
+              color={theme.textDanger}
+              onClick={() => navigate('/collateral')}
+            >
               {t('margin_call_alert.btn')}
             </ButtonLight>
           )}

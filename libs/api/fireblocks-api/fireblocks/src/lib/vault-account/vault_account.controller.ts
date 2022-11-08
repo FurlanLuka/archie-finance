@@ -9,7 +9,13 @@ export class VaultAccountController {
 
   @Get('deposit_address/:assetId')
   @UseGuards(AuthGuard)
-  async getOrCreateDepositAddresss(@Req() request, @Param('assetId') assetId: string): Promise<DepositAddressDto> {
-    return this.vaultAccountService.getOrCreateDepositAddress(assetId, request.user.sub);
+  async getOrCreateDepositAddresss(
+    @Req() request,
+    @Param('assetId') assetId: string,
+  ): Promise<DepositAddressDto> {
+    return this.vaultAccountService.getOrCreateDepositAddress(
+      assetId,
+      request.user.sub,
+    );
   }
 }

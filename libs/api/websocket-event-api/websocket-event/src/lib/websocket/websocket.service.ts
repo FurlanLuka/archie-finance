@@ -9,15 +9,27 @@ import { SERVICE_INSTANCE_ID } from '@archie/api/websocket-event-api/constants';
 export class WebsocketService {
   AUTH_TOKEN_BYTE_SIZE = 16;
   AUTH_EXPIRY_SECONDS = 30;
-  userClients: Map<string, ExtendedWebSocket[]> = new Map<string, ExtendedWebSocket[]>();
+  userClients: Map<string, ExtendedWebSocket[]> = new Map<
+    string,
+    ExtendedWebSocket[]
+  >();
   clientUser: Map<string, string> = new Map<string, string>();
 
-  constructor(private redisService: RedisService, private cryptoService: CryptoService) {}
+  constructor(
+    private redisService: RedisService,
+    private cryptoService: CryptoService,
+  ) {}
 
   public async createAuthToken(userId: string): Promise<AuthToken> {
-    const authToken = this.cryptoService.randomBytes(this.AUTH_TOKEN_BYTE_SIZE).toString('hex');
+    const authToken = this.cryptoService
+      .randomBytes(this.AUTH_TOKEN_BYTE_SIZE)
+      .toString('hex');
 
-    await this.redisService.setWithExpiry(authToken, userId, this.AUTH_EXPIRY_SECONDS);
+    await this.redisService.setWithExpiry(
+      authToken,
+      userId,
+      this.AUTH_EXPIRY_SECONDS,
+    );
 
     return {
       authToken,
@@ -29,9 +41,12 @@ export class WebsocketService {
     this.clientUser.delete(client.id);
 
     if (userId !== undefined) {
-      const userClients: ExtendedWebSocket[] = this.userClients.get(userId) ?? [];
+      const userClients: ExtendedWebSocket[] =
+        this.userClients.get(userId) ?? [];
 
-      const activeUserClients: ExtendedWebSocket[] = userClients.filter((userClient) => userClient.id !== client.id);
+      const activeUserClients: ExtendedWebSocket[] = userClients.filter(
+        (userClient) => userClient.id !== client.id,
+      );
 
       if (activeUserClients.length === 0) {
         this.userClients.delete(userId);
@@ -46,8 +61,13 @@ export class WebsocketService {
     });
   }
 
-  public async handleWsConnectionRequest(authToken: string, client: ExtendedWebSocket): Promise<void> {
-    const userId: string | null = await this.redisService.getAndDelete(authToken);
+  public async handleWsConnectionRequest(
+    authToken: string,
+    client: ExtendedWebSocket,
+  ): Promise<void> {
+    const userId: string | null = await this.redisService.getAndDelete(
+      authToken,
+    );
 
     if (userId === null) {
       Logger.warn('Invalid websocket connection token');
@@ -65,7 +85,8 @@ export class WebsocketService {
   }
 
   private addNewActiveClient(userId: string, client: ExtendedWebSocket): void {
-    const existingUserClients: ExtendedWebSocket[] = this.userClients.get(userId) ?? [];
+    const existingUserClients: ExtendedWebSocket[] =
+      this.userClients.get(userId) ?? [];
 
     this.userClients.set(userId, [...existingUserClients, client]);
     this.clientUser.set(client.id, userId);

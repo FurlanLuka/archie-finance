@@ -27,7 +27,12 @@ export const InterestRate: FC = () => {
     const loanInterestsData = getLoanInterestsResponse.data;
 
     return (
-      <Card column alignItems="flex-start" justifyContent="space-between" padding="1.5rem">
+      <Card
+        column
+        alignItems="flex-start"
+        justifyContent="space-between"
+        padding="1.5rem"
+      >
         <BodyM weight={700} className="card-title">
           {t('interest_rate_card.title')}
         </BodyM>
