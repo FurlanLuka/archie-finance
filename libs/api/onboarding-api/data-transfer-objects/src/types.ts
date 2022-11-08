@@ -1,4 +1,1 @@
-export type {
-  Onboarding,
-  OnboardingUpdatedPayload,
-} from './lib/onboarding.interfaces';
+export * from './lib/onboarding.interfaces';

@@ -1,1 +1,1 @@
-export type { AppliedToWaitlistPayload, JoinedToWaitlistPayload } from './lib/queue.interfaces';
+export * from './lib/queue.interfaces';
