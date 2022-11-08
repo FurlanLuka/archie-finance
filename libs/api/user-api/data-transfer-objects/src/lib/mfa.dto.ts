@@ -1,9 +1,11 @@
+import { AuthMethod, EnrollmentStatus } from 'auth0';
 import {
-  AuthMethod,
+  EmailAddress,
+  EmailVerification,
   Enrollment,
-  EnrollmentStatus,
+  MfaEnrollment,
   SendEnrollmentTicketResponse,
-} from 'auth0';
+} from './user.interfaces';
 import { IsEnum, IsOptional } from 'class-validator';
 
 export class MfaEnrolledPayload {
@@ -23,6 +25,23 @@ export class GetEnrollmentResponse implements Enrollment {
   auth_method: AuthMethod;
 }
 
+export class EmailVerificationDto implements EmailVerification {
+  isVerified: boolean;
+  email: string;
+}
+
+export class MfaEnrollmentDto implements MfaEnrollment {
+  isEnrolled: boolean;
+}
+
+export class EmailAddressDto implements EmailAddress {
+  email: string;
+}
+
+export class GetSendEnrollmentTicketResponseDto implements SendEnrollmentTicketResponse {
+  ticket_id: string;
+  ticket_url: string;
+}
 export class GetMfaEnrollmentResponse {
   isEnrolled: boolean;
 }

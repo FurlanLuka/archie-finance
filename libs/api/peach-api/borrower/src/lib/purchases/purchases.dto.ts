@@ -2,7 +2,7 @@ import {
   PurchaseStatus,
   PurchaseTransactionType,
   PurchaseType,
-} from '../api/peach_api.interfaces';
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';

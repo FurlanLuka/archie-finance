@@ -99,7 +99,6 @@
     "ui-dashboard-utils": "libs/ui/dashboard/utils",
     "ui-shared-constants": "libs/ui/shared/constants",
     "ui-shared-data-access-archie-api": "libs/ui/shared/data-access/archie-api",
-    "ui-shared-data-access-archie-api-dtos": "libs/ui/shared/data-access/archie-api-dtos",
     "ui-shared-data-access-query-client": "libs/ui/shared/data-access/query-client",
     "ui-shared-data-access-session": "libs/ui/shared/data-access/session",
     "ui-shared-data-access-websocket-instance": "libs/ui/shared/data-access/websocket-instance",

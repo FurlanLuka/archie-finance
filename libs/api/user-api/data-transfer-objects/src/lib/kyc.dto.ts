@@ -1,30 +1,7 @@
-import {
-  Equals,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Length,
-  MaxDate,
-} from 'class-validator';
+import { Equals, IsNumber, IsOptional, IsString, Length, MaxDate } from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { DateTime } from 'luxon';
-
-export class KycSubmittedPayload {
-  userId: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: Date;
-  addressStreet: string;
-  addressStreetNumber: string;
-  addressLocality: string;
-  addressRegion: string;
-  addressPostalCode: string;
-  addressCountry: string;
-  phoneNumber: string;
-  phoneNumberCountryCode: string;
-  aptUnit: string | null;
-  ssn: string;
-}
+import { KycResponse } from './kyc.interfaces';
 
 export class KycDto {
   @IsString()
@@ -75,26 +52,20 @@ export class KycDto {
   aptUnit: string | null = null;
 }
 
-export class GetKycResponse {
+export class KycResponseDto implements KycResponse {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
   addressStreet: string;
   addressStreetNumber: string;
   addressLocality: string;
-  addressCountry: string;
   addressRegion: string;
   addressPostalCode: string;
-  phoneNumberCountryCode: string;
+  addressCountry: string;
   phoneNumber: string;
+  phoneNumberCountryCode: string;
   ssn: string;
   income: number;
   aptUnit: string | null;
-  createdAt: Date;
+  createdAt: string;
 }
-
-export class GetKycPayload {
-  userId: string;
-}
-
-export class CreateKycResponse extends GetKycResponse {}

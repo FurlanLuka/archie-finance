@@ -1,17 +1,12 @@
+import { AutopayAgreement } from '@archie/api/peach-api/data-transfer-objects/types';
+
 import { useExtendedMutation } from '../../helper-hooks';
 import { MutationQueryResponse } from '../../interface';
-import {
-  createAutopayDocument,
-  CreateAutopayDocumentBody,
-  CreateAutopayDocumentResponse,
-} from '../api/create-autopay-document';
+import { createAutopayDocument, CreateAutopayDocumentBody } from '../api/create-autopay-document';
 
-export const useCreateAutopayDocument = (): MutationQueryResponse<
-  CreateAutopayDocumentBody,
-  CreateAutopayDocumentResponse
-> => {
-  return useExtendedMutation<
-    CreateAutopayDocumentResponse,
-    CreateAutopayDocumentBody
-  >('create_autopay_document', createAutopayDocument);
+export const useCreateAutopayDocument = (): MutationQueryResponse<CreateAutopayDocumentBody, AutopayAgreement> => {
+  return useExtendedMutation<AutopayAgreement, CreateAutopayDocumentBody>(
+    'create_autopay_document',
+    createAutopayDocument,
+  );
 };

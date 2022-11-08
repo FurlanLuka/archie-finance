@@ -3,8 +3,6 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 import { OnboardingStep } from '@archie/ui/dashboard/constants';
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
-import { GetCreditResponse } from '@archie/ui/shared/data-access/archie-api/credit/api/get-credit';
 import { useCreateRizeUser } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
 import { useGetCredit } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
@@ -50,14 +48,6 @@ export const CardScreen: FC = () => {
       case Stage.COMPLETE:
         return `${t('card_step.title.complete')}`;
     }
-  };
-
-  const getCollateralTotalValue = () => {
-    if (getLedgerResponse.state === RequestState.SUCCESS && stage === Stage.COMPLETE) {
-      return getLedgerResponse.data.value;
-    }
-
-    return 0;
   };
 
   const getCreditValue = () => {

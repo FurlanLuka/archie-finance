@@ -2,8 +2,8 @@ import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
+import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
-import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { useCreateLinkToken } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
 import { TitleS, BodyM } from '@archie/ui/shared/design-system';
 
@@ -15,7 +15,7 @@ import { PlaidLinkStyled } from './plaid-link.styled';
 interface PlaidLinkProps {
   onLinkSuccess: (
     publicToken: string,
-    availableAccounts: AccountResponse[],
+    availableAccounts: PaymentInstrument[],
   ) => void;
 }
 

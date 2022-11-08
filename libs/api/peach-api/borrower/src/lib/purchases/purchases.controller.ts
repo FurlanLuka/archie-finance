@@ -6,13 +6,9 @@ import { PurchasesService } from './purchases.service';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
-import {
-  BorrowerNotFoundError,
-  CreditLineNotFoundError,
-  DrawNotFoundError,
-} from '../borrower.errors';
+import { BorrowerNotFoundError, CreditLineNotFoundError, DrawNotFoundError } from '../borrower.errors';
 import { GetPurchasesQueryDto, PurchasesResponseDto } from './purchases.dto';
-import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects/types';
 
 @Controller('v1/card_purchases')
 export class PurchasesController {
@@ -21,15 +17,8 @@ export class PurchasesController {
   @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  @ApiErrorResponse([
-    BorrowerNotFoundError,
-    CreditLineNotFoundError,
-    DrawNotFoundError,
-  ])
-  async getPurchases(
-    @Req() request,
-    @Query() query: GetPurchasesQueryDto,
-  ): Promise<PurchasesResponseDto> {
+  @ApiErrorResponse([BorrowerNotFoundError, CreditLineNotFoundError, DrawNotFoundError])
+  async getPurchases(@Req() request, @Query() query: GetPurchasesQueryDto): Promise<PurchasesResponseDto> {
     return this.purchasesController.getPurchases(request.user.sub, query);
   }
 }
@@ -40,13 +29,8 @@ export class PurchasesQueueController {
 
   constructor(private purchasesController: PurchasesService) {}
 
-  @Subscribe(
-    TRANSACTION_UPDATED_TOPIC,
-    PurchasesQueueController.CONTROLLER_QUEUE_NAME,
-  )
-  async transactionUpdatedHandler(
-    payload: TransactionUpdatedPayload,
-  ): Promise<void> {
+  @Subscribe(TRANSACTION_UPDATED_TOPIC, PurchasesQueueController.CONTROLLER_QUEUE_NAME)
+  async transactionUpdatedHandler(payload: TransactionUpdatedPayload): Promise<void> {
     await this.purchasesController.handleTransactionsEvent(payload);
   }
 }

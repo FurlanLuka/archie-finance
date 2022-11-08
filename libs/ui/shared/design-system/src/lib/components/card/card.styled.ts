@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-import { LTVStatus, LTVColor } from '@archie/ui/shared/constants';
+import { LtvStatus } from '@archie/api/ltv-api/data-transfer-objects/types';
+import { LTVColor } from '@archie/ui/shared/constants';
 import { breakpoints } from '@archie/ui/shared/theme';
 
 export interface CardProps {
@@ -17,7 +18,7 @@ export interface CardProps {
   mobileAlignItems?: string;
   mobilePadding?: string;
   backgroundImage?: string;
-  status?: LTVStatus;
+  status?: LtvStatus;
 }
 
 export const Card = styled.div<CardProps>`

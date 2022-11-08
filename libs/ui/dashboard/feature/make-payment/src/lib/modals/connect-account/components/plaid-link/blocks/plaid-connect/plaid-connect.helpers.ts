@@ -1,13 +1,13 @@
 import { PlaidAccount } from 'react-plaid-link';
 
-import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
 
 export const transformAccounts = (
   accountsBase: PlaidAccount[],
-): AccountResponse[] =>
+): PaymentInstrument[] =>
   accountsBase.map((account) => ({
     id: account.id,
     name: account.name,
     mask: account.mask,
-    subtype: account.subtype,
+    subType: account.subtype,
   }));

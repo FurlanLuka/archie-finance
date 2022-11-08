@@ -1,15 +1,18 @@
 import {
+  InternalLedgerAccountData,
   LedgerAccountData,
-  LedgerAccountDataWs,
-} from '@archie/ui/shared/data-access/archie-api-dtos';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 
 export const mergeLedgerWithWsUpdate = (
-  initialLedgerAccounts: LedgerAccountData[],
-  wsAccounts: LedgerAccountDataWs[],
-): LedgerAccountData[] => {
-  const updatedExistingAccounts: LedgerAccountData[] =
+  initialLedgerAccounts: InternalLedgerAccountData[],
+  wsAccounts: LedgerAccountData[],
+): InternalLedgerAccountData[] => {
+  const updatedExistingAccounts: InternalLedgerAccountData[] =
     initialLedgerAccounts.reduce(
-      (newAccounts: LedgerAccountData[], account: LedgerAccountData) => {
+      (
+        newAccounts: InternalLedgerAccountData[],
+        account: InternalLedgerAccountData,
+      ) => {
         const updatedAccount = wsAccounts.find(
           (a) => a.assetId === account.assetId,
         );
@@ -31,7 +34,7 @@ export const mergeLedgerWithWsUpdate = (
       [],
     );
 
-  const newAccounts: LedgerAccountData[] = wsAccounts
+  const newAccounts: InternalLedgerAccountData[] = wsAccounts
     .filter(
       (wsAccount) =>
         !updatedExistingAccounts.find(
@@ -49,7 +52,7 @@ export const mergeLedgerWithWsUpdate = (
 };
 
 export const calculateLedgerTotalValue = (
-  ledgerAccounts: LedgerAccountData[],
+  ledgerAccounts: InternalLedgerAccountData[],
 ): number =>
   ledgerAccounts.reduce(
     (sum, account): number => sum + Number(account.accountValue),

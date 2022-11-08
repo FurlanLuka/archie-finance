@@ -1,11 +1,11 @@
+import { ConnectAccountBody as ConnectAccountParams } from '@archie/api/peach-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
 
 import { DefaultVariables, postRequest } from '../../helpers';
 
-export interface ConnectAccountBody extends DefaultVariables {
-  publicToken: string;
-  accountId: string;
-}
+export interface ConnectAccountBody
+  extends DefaultVariables,
+    ConnectAccountParams {}
 
 export const ERROR_LIST = new Map<string, string>([]);
 

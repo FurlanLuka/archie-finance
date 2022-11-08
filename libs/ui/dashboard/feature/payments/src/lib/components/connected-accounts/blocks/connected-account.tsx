@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
-import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { useDisconnectAccount } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-disconnect-account';
 import { ButtonOutline, BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
@@ -10,7 +10,7 @@ import { theme } from '@archie/ui/shared/theme';
 import { ConnectedAccountStyled } from './connected-account.styled';
 
 interface ConnectedAccountProps {
-  account: AccountResponse;
+  account: PaymentInstrument;
 }
 
 export const ConnectedAccount: FC<ConnectedAccountProps> = ({ account }) => {

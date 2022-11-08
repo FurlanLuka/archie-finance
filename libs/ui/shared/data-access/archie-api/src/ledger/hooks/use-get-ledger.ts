@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
+import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
 import {
   websocketInstance,
   WsEventTopic,

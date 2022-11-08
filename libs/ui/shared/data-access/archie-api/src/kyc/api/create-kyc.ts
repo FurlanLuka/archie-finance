@@ -1,25 +1,26 @@
+import { KycResponse } from '@archie/api/user-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
 
 import { DefaultVariables, postRequest } from '../../helpers';
 
-export interface CreateKycPayload extends DefaultVariables {
+export interface CreateKycParams {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
   addressStreet: string;
   addressStreetNumber: string;
   addressLocality: string;
-  addressCountry: string;
   addressRegion: string;
   addressPostalCode: string;
-  aptUnit: string;
-  phoneNumberCountryCode: string;
+  addressCountry: string;
   phoneNumber: string;
+  phoneNumberCountryCode: string;
   ssn: string;
   income: number;
+  aptUnit: string | null;
 }
 
-export type CreateKycResponse = CreateKycPayload;
+export interface CreateKycPayload extends DefaultVariables, CreateKycParams {}
 
 export const ERROR_LIST = new Map([
   [
@@ -35,8 +36,8 @@ export const ERROR_LIST = new Map([
 export const createKyc = async ({
   accessToken,
   ...payload
-}: DefaultVariables): Promise<CreateKycResponse> => {
-  return postRequest<typeof payload, CreateKycResponse>(
+}: CreateKycPayload): Promise<KycResponse> => {
+  return postRequest<CreateKycParams, KycResponse>(
     `${API_URL}/v1/kyc`,
     payload,
     {

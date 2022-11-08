@@ -3,7 +3,7 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { MarginService } from './margin.service';
-import { MarginCallQueryDto, MarginCallsDto } from './margin.dto';
+import { MarginCallDto, MarginCallQueryDto } from '@archie/api/ltv-api/data-transfer-objects';
 
 @Controller('v1/margin_calls')
 export class MarginController {
@@ -13,10 +13,7 @@ export class MarginController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([])
-  async getMarginCalls(
-    @Request() req,
-    @Query() query: MarginCallQueryDto,
-  ): Promise<MarginCallsDto[]> {
+  async getMarginCalls(@Request() req, @Query() query: MarginCallQueryDto): Promise<MarginCallDto[]> {
     return this.marginService.getMarginCalls(req.user.sub, query);
   }
 }

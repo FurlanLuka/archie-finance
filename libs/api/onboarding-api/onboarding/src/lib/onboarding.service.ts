@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Onboarding } from './onboarding.entity';
-import { GetOnboardingResponse } from './onboarding.interfaces';
+import { Onboarding as OnboardingResponse } from '@archie/api/onboarding-api/data-transfer-objects/types';
 import { QueueService } from '@archie/api/utils/queue';
 import { ONBOARDING_UPDATED_TOPIC } from '@archie/api/onboarding-api/constants';
 
@@ -16,7 +16,7 @@ export class OnboardingService {
 
   async getOrCreateOnboardingRecord(
     userId: string,
-  ): Promise<GetOnboardingResponse> {
+  ): Promise<OnboardingResponse> {
     const onboardingRecord: Onboarding | null =
       await this.onboardingRepository.findOneBy({
         userId,

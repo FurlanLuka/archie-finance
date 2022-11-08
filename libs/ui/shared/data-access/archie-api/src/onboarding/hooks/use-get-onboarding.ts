@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { Onboarding } from '@archie/api/onboarding-api/data-transfer-objects/types';
 import {
   websocketInstance,
   WsEventTopic,
@@ -7,15 +8,13 @@ import {
 
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';
-import { getOnboarding, GetOnboardingResponse } from '../api/get-onboarding';
+import { getOnboarding } from '../api/get-onboarding';
 import { handleOnboardingUpdatedEvent } from '../event-handlers/handle-onboarding-updated';
 
 export const ONBOARDING_RECORD_QUERY_KEY = 'onboarding_record';
 const ONBOARDING_UPDATED_HANDLER_ID = 'useGetOnboarding.onboarding-updated';
 
-export const useGetOnboarding = (
-  enabled = true,
-): QueryResponse<GetOnboardingResponse> => {
+export const useGetOnboarding = (enabled = true): QueryResponse<Onboarding> => {
   useEffect(() => {
     websocketInstance.addHandler(
       WsEventTopic.ONBOARDING_UPDATED_TOPIC,

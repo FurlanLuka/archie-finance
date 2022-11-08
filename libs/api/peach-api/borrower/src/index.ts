@@ -5,5 +5,3 @@ export * from './lib/borrower.errors';
 export * from './lib/last_credit_limit_update.entity';
 
 export * from './lib/loan/loan.controller';
-
-export * from './lib/api/peach_api.interfaces';

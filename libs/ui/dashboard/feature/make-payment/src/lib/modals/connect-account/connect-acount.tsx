@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 
-import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
 import { Modal } from '@archie/ui/shared/design-system';
 
 import { ConnectableAccountSelect } from './components/connectable-account-select/connectable-account-select';
@@ -11,14 +11,14 @@ interface ConnectAccountProps {
 }
 
 export const ConnectAccountModal: FC<ConnectAccountProps> = ({ close }) => {
-  const [availableAccounts, setAvailableAccounts] = useState<AccountResponse[]>(
-    [],
-  );
+  const [availableAccounts, setAvailableAccounts] = useState<
+    PaymentInstrument[]
+  >([]);
   const [publicToken, setPublicToken] = useState<string | null>(null);
 
   const onLinkSuccess = (
     publicToken: string,
-    availableAccounts: AccountResponse[],
+    availableAccounts: PaymentInstrument[],
   ) => {
     setAvailableAccounts(availableAccounts);
     setPublicToken(publicToken);

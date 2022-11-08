@@ -144,7 +144,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PlaidLinkTokenDto"
                 }
               }
             }
@@ -167,7 +167,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetOnboardingResponseDto"
+                  "$ref": "#/components/schemas/OnboardingDto"
                 }
               }
             }
@@ -190,7 +190,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetKycResponse"
+                  "$ref": "#/components/schemas/KycResponseDto"
                 }
               }
             }
@@ -240,7 +240,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateKycResponse"
+                  "$ref": "#/components/schemas/KycResponseDto"
                 }
               }
             }
@@ -282,7 +282,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetEmailVerificationResponse"
+                  "$ref": "#/components/schemas/EmailVerificationDto"
                 }
               }
             }
@@ -340,7 +340,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetSendEnrollmentTicketResponse"
+                  "$ref": "#/components/schemas/GetSendEnrollmentTicketResponseDto"
                 }
               }
             }
@@ -1047,7 +1047,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InterestsDto"
+                  "$ref": "#/components/schemas/LoanInterestsDto"
                 }
               }
             }
@@ -1348,7 +1348,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetLoanBalancesDto"
+                  "$ref": "#/components/schemas/LoanBalancesDto"
                 }
               }
             }
@@ -1405,7 +1405,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/StatementDto"
                   }
                 }
               }
@@ -1464,7 +1464,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetLoanDocumentDto"
+                  "$ref": "#/components/schemas/LoanDocumentDto"
                 }
               }
             }
@@ -1557,7 +1557,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/MarginCallsDto"
+                    "$ref": "#/components/schemas/MarginCallDto"
                   }
                 }
               }
@@ -1686,7 +1686,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ledger"
+                  "$ref": "#/components/schemas/LedgerDto"
                 }
               }
             }
@@ -1717,7 +1717,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AssetPrice"
+                    "$ref": "#/components/schemas/AssetPriceDto"
                   }
                 }
               }
@@ -1745,7 +1745,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AssetPrice"
+                  "$ref": "#/components/schemas/AssetPriceDto"
                 }
               }
             }
@@ -1875,7 +1875,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MaxWithdrawalAmountResponse"
+                  "$ref": "#/components/schemas/MaxWithdrawalAmountResponseDto"
                 }
               }
             }
@@ -1907,7 +1907,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetDepositAddressResponse"
+                  "$ref": "#/components/schemas/DepositAddressDto"
                 }
               }
             }
@@ -1925,7 +1925,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreditLine"
+                  "$ref": "#/components/schemas/CreditLineDto"
                 }
               }
             }
@@ -1984,7 +1984,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreditLine"
+                  "$ref": "#/components/schemas/CreditLineDto"
                 }
               }
             }
@@ -2108,7 +2108,8 @@
               "internal_transfer",
               "other",
               "reversed_transfer",
-              "third_party_transfer"
+              "third_party_transfer",
+              "BALANCE_PAYMENT"
             ]
           },
           "status": {
@@ -2195,6 +2196,17 @@
           "data"
         ]
       },
+      "PlaidLinkTokenDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
       "ErrorResponse": {
         "type": "object",
         "properties": {
@@ -2213,7 +2225,7 @@
           "message"
         ]
       },
-      "GetOnboardingResponseDto": {
+      "OnboardingDto": {
         "type": "object",
         "properties": {
           "kycStage": {
@@ -2244,7 +2256,7 @@
           "completed"
         ]
       },
-      "GetKycResponse": {
+      "KycResponseDto": {
         "type": "object",
         "properties": {
           "firstName": {
@@ -2265,19 +2277,19 @@
           "addressLocality": {
             "type": "string"
           },
-          "addressCountry": {
-            "type": "string"
-          },
           "addressRegion": {
             "type": "string"
           },
           "addressPostalCode": {
             "type": "string"
           },
-          "phoneNumberCountryCode": {
+          "addressCountry": {
             "type": "string"
           },
           "phoneNumber": {
+            "type": "string"
+          },
+          "phoneNumberCountryCode": {
             "type": "string"
           },
           "ssn": {
@@ -2291,7 +2303,6 @@
             "nullable": true
           },
           "createdAt": {
-            "format": "date-time",
             "type": "string"
           }
         },
@@ -2302,11 +2313,11 @@
           "addressStreet",
           "addressStreetNumber",
           "addressLocality",
-          "addressCountry",
           "addressRegion",
           "addressPostalCode",
-          "phoneNumberCountryCode",
+          "addressCountry",
           "phoneNumber",
+          "phoneNumberCountryCode",
           "ssn",
           "income",
           "aptUnit",
@@ -2381,76 +2392,7 @@
           "aptUnit"
         ]
       },
-      "CreateKycResponse": {
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "dateOfBirth": {
-            "type": "string"
-          },
-          "addressStreet": {
-            "type": "string"
-          },
-          "addressStreetNumber": {
-            "type": "string"
-          },
-          "addressLocality": {
-            "type": "string"
-          },
-          "addressCountry": {
-            "type": "string"
-          },
-          "addressRegion": {
-            "type": "string"
-          },
-          "addressPostalCode": {
-            "type": "string"
-          },
-          "phoneNumberCountryCode": {
-            "type": "string"
-          },
-          "phoneNumber": {
-            "type": "string"
-          },
-          "ssn": {
-            "type": "string"
-          },
-          "income": {
-            "type": "number"
-          },
-          "aptUnit": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string"
-          }
-        },
-        "required": [
-          "firstName",
-          "lastName",
-          "dateOfBirth",
-          "addressStreet",
-          "addressStreetNumber",
-          "addressLocality",
-          "addressCountry",
-          "addressRegion",
-          "addressPostalCode",
-          "phoneNumberCountryCode",
-          "phoneNumber",
-          "ssn",
-          "income",
-          "aptUnit",
-          "createdAt"
-        ]
-      },
-      "GetEmailVerificationResponse": {
+      "EmailVerificationDto": {
         "type": "object",
         "properties": {
           "isVerified": {
@@ -2465,7 +2407,7 @@
           "email"
         ]
       },
-      "GetSendEnrollmentTicketResponse": {
+      "GetSendEnrollmentTicketResponseDto": {
         "type": "object",
         "properties": {
           "ticket_id": {
@@ -2958,7 +2900,7 @@
           "data"
         ]
       },
-      "Obligation": {
+      "ObligationResponseDto": {
         "type": "object",
         "properties": {
           "capitalizedAmount": {
@@ -3067,13 +3009,13 @@
           "statementObligations": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Obligation"
+              "$ref": "#/components/schemas/ObligationResponseDto"
             }
           },
           "futureObligations": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Obligation"
+              "$ref": "#/components/schemas/ObligationResponseDto"
             }
           }
         },
@@ -3085,7 +3027,7 @@
           "futureObligations"
         ]
       },
-      "InterestsDto": {
+      "LoanInterestsDto": {
         "type": "object",
         "properties": {
           "aprNominal": {
@@ -3251,7 +3193,7 @@
           "document"
         ]
       },
-      "GetLoanBalancesDto": {
+      "LoanBalancesDto": {
         "type": "object",
         "properties": {
           "isBalanceChangeInProgress": {
@@ -3274,7 +3216,71 @@
           "utilizationAmount"
         ]
       },
-      "GetLoanDocumentDto": {
+      "StatementDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "deletedAt": {
+            "type": "string",
+            "nullable": true
+          },
+          "periodId": {
+            "type": "string"
+          },
+          "version": {
+            "type": "number"
+          },
+          "billingCycleStartDate": {
+            "type": "string"
+          },
+          "billingCycleEndDate": {
+            "type": "string"
+          },
+          "paymentDueDate": {
+            "type": "string"
+          },
+          "documentDescriptorId": {
+            "type": "string"
+          },
+          "statementDate": {
+            "type": "string"
+          },
+          "minimumDueAmount": {
+            "type": "number"
+          },
+          "overdueAmount": {
+            "type": "number"
+          },
+          "newBalanceAmount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "periodId",
+          "version",
+          "billingCycleStartDate",
+          "billingCycleEndDate",
+          "paymentDueDate",
+          "documentDescriptorId",
+          "statementDate",
+          "minimumDueAmount",
+          "overdueAmount",
+          "newBalanceAmount"
+        ]
+      },
+      "LoanDocumentDto": {
         "type": "object",
         "properties": {
           "url": {
@@ -3306,7 +3312,7 @@
           "status"
         ]
       },
-      "MarginCallsDto": {
+      "MarginCallDto": {
         "type": "object",
         "properties": {
           "status": {
@@ -3379,7 +3385,7 @@
           "amount"
         ]
       },
-      "InternalLedgerAccountData": {
+      "InternalLedgerAccountDataDto": {
         "type": "object",
         "properties": {
           "assetId": {
@@ -3402,7 +3408,7 @@
           "accountValue"
         ]
       },
-      "Ledger": {
+      "LedgerDto": {
         "type": "object",
         "properties": {
           "value": {
@@ -3411,7 +3417,7 @@
           "accounts": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/InternalLedgerAccountData"
+              "$ref": "#/components/schemas/InternalLedgerAccountDataDto"
             }
           }
         },
@@ -3420,7 +3426,7 @@
           "accounts"
         ]
       },
-      "AssetPrice": {
+      "AssetPriceDto": {
         "type": "object",
         "properties": {
           "assetId": {
@@ -3501,7 +3507,7 @@
           "id"
         ]
       },
-      "MaxWithdrawalAmountResponse": {
+      "MaxWithdrawalAmountResponseDto": {
         "type": "object",
         "properties": {
           "maxAmount": {
@@ -3512,7 +3518,7 @@
           "maxAmount"
         ]
       },
-      "GetDepositAddressResponse": {
+      "DepositAddressDto": {
         "type": "object",
         "properties": {
           "address": {
@@ -3527,7 +3533,7 @@
           "asset"
         ]
       },
-      "CreditLimitAssetAllocation": {
+      "CreditLimitAssetAllocationDto": {
         "type": "object",
         "properties": {
           "assetId": {
@@ -3546,7 +3552,7 @@
           "allocatedAssetValue"
         ]
       },
-      "CreditLine": {
+      "CreditLineDto": {
         "type": "object",
         "properties": {
           "creditLimit": {
@@ -3555,7 +3561,7 @@
           "creditLimitAssetAllocation": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CreditLimitAssetAllocation"
+              "$ref": "#/components/schemas/CreditLimitAssetAllocationDto"
             }
           }
         },

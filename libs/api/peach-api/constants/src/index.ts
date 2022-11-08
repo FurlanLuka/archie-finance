@@ -1,5 +1,5 @@
 import { Event } from '@archie/api/utils/queue';
-import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'peach-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
@@ -24,7 +24,6 @@ export enum ConfigVariables {
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
-export const CREDIT_BALANCE_UPDATED_TOPIC =
-  new Event<CreditBalanceUpdatedPayload>('peach.credit_balance.updated', 1);
+export const CREDIT_BALANCE_UPDATED_TOPIC = new Event<CreditBalanceUpdatedPayload>('peach.credit_balance.updated', 1);
 
 export const GET_LOAN_BALANCES_RPC = 'get.loan.balances.rpc';

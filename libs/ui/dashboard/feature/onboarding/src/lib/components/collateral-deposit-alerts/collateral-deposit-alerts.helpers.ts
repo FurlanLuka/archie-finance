@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 
+import { InternalLedgerAccountData } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { MIN_LINE_OF_CREDIT } from '@archie/ui/dashboard/constants';
-import { LedgerAccountData } from '@archie/ui/shared/data-access/archie-api-dtos';
 
 export enum CollateralDepositState {
   COLLATERAL_RECEIVED_MODAL = 'collateral_received_modal',
@@ -14,7 +14,7 @@ export enum CollateralDepositState {
 export const getCollateralDepositState = (
   isModalOpen: boolean,
   collateralTotalValue: string,
-  ledgerAccounts: LedgerAccountData[],
+  ledgerAccounts: InternalLedgerAccountData[],
 ): CollateralDepositState => {
   if (isModalOpen) {
     if (BigNumber(collateralTotalValue).gt(MIN_LINE_OF_CREDIT)) {

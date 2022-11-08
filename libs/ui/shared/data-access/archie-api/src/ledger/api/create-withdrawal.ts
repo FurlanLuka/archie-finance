@@ -1,23 +1,19 @@
+import {
+  WithdrawPayload,
+  WithdrawResponse,
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
 
 import { DefaultVariables, postRequest } from '../../helpers';
 
-export interface CreateWithdrawalBody extends DefaultVariables {
-  assetId: string;
-  destinationAddress: string;
-  amount: string;
-}
-
-export interface WithdrawalResponse {
-  id: string;
-}
+export type CreateWithdrawalBody = DefaultVariables & WithdrawPayload;
 
 const ERROR_LIST = new Map<string, string>([]);
 
 export const createWithdrawal = async ({
   accessToken,
   ...body
-}: CreateWithdrawalBody): Promise<WithdrawalResponse> => {
+}: CreateWithdrawalBody): Promise<WithdrawResponse> => {
   return postRequest(
     `${API_URL}/v1/ledger/withdraw`,
     body,

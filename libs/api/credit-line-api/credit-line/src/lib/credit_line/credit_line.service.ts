@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects';
+import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { LedgerService } from '../ledger/ledger.service';
 import { LedgerAccount } from '../ledger/ledger_account.entity';
 import { AssetsService } from '../assets/assets.service';
@@ -11,11 +11,7 @@ import {
   CREDIT_LINE_UPDATED_TOPIC,
   CREDIT_LINE_CREATED_TOPIC,
 } from '@archie/api/credit-line-api/constants';
-import {
-  CreditLine as CreditLineResponse,
-  CreditLineCreatedPayload,
-  CreditLineUpdatedPayload,
-} from '@archie/api/credit-line-api/data-transfer-objects';
+import { CreditLine as CreditLineResponse } from '@archie/api/credit-line-api/data-transfer-objects/types';
 import {
   CreditLineAlreadyExistsError,
   CreditLineNotFoundError,
@@ -93,14 +89,11 @@ export class CreditLineService {
         },
       );
 
-      this.queueService.publishEvent(
-        CREDIT_LINE_UPDATED_TOPIC,
-        {
-          userId,
-          creditLimit: updatedCreditLimit,
-          calculatedAt,
-        },
-      );
+      this.queueService.publishEvent(CREDIT_LINE_UPDATED_TOPIC, {
+        userId,
+        creditLimit: updatedCreditLimit,
+        calculatedAt,
+      });
     }
   }
 
@@ -141,15 +134,12 @@ export class CreditLineService {
       creditLimit,
     });
 
-    this.queueService.publishEvent(
-      CREDIT_LINE_CREATED_TOPIC,
-      {
-        userId,
-        creditLimit,
-        calculatedAt,
-        ledgerValue,
-      },
-    );
+    this.queueService.publishEvent(CREDIT_LINE_CREATED_TOPIC, {
+      userId,
+      creditLimit,
+      calculatedAt,
+      ledgerValue,
+    });
 
     return {
       creditLimit,

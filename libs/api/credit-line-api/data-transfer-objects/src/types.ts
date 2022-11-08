@@ -1,1 +1,1 @@
-export type { CreditLine } from './lib/credit_line.interfaces';
+export * from './lib/credit_line.interfaces';

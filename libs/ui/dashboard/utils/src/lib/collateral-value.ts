@@ -1,11 +1,10 @@
-// TODO move to shared? it's used for calculation in events
 import { BigNumber } from 'bignumber.js';
 
+import { InternalLedgerAccountData } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { CollateralAssets } from '@archie/ui/shared/constants';
-import { LedgerAccountData } from '@archie/ui/shared/data-access/archie-api-dtos';
 
 export const calculateLedgerCreditValue = (
-  ledgerAccounts: LedgerAccountData[],
+  ledgerAccounts: InternalLedgerAccountData[],
 ): string => {
   const result = ledgerAccounts.reduce((sum, ledgerAccount) => {
     const assetInfo = CollateralAssets[ledgerAccount.assetId];
@@ -38,7 +37,7 @@ export const calculateCollateralValue = (
 };
 
 export const formatLedgerAccountsToString = (
-  ledgerAccounts: LedgerAccountData[],
+  ledgerAccounts: InternalLedgerAccountData[],
 ): string =>
   ledgerAccounts.reduce((text, ledgerAccount, i) => {
     if (i === 0) {

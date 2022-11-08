@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { BigNumberTrimEndingZerosTransformer } from '@archie/api/utils/typeorm-transformers';
-import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects';
+import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 export enum LedgerAction {
   LEDGER_ACCOUNT_CREATED = 'LEDGER_ACCOUNT_CREATED',
