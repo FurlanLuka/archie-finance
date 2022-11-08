@@ -14,6 +14,7 @@
     "build:referral-system-api": "nx run referral-system-api:build",
     "build:user-api": "nx run user-api:build",
     "build:webhook-api": "nx run webhook-api:build",
+    "build:utils-test-api": "nx run utils-test-api:build",
     "lint-affected": "npx nx affected --base=origin/develop --target=lint --parallel=3",
     "local-deploy": "node ./deploy-localhost.js",
     "nx": "nx",

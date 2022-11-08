@@ -62,11 +62,9 @@ async function cleanup(debugEnabled) {
 
 async function getMicroservices(debugEnabled) {
   try {
-    const { stdout } = await exec('ls apps');
+    const { stdout } = await exec('ls apps/api');
 
-    const microservices = stdout
-      .split(/\r?\n/)
-      .filter((service) => service.length > 0);
+    const microservices = stdout.split(/\r?\n/).filter((service) => service.length > 0);
 
     if (debugEnabled) {
       console.log('Microservices ', microservices);
@@ -94,24 +92,14 @@ async function buildMicroservices(microservices, debugEnabled) {
     }
 
     console.log(
-      `Building ${
-        microservices.length === 1 ? 'microservice' : 'microservices'
-      }...(this might take a while)`,
+      `Building ${microservices.length === 1 ? 'microservice' : 'microservices'}...(this might take a while)`,
     );
 
     if (debugEnabled) {
-      console.log(
-        `eval $(minikube docker-env) ${buildCommands
-          .map((command) => `&& ${command}`)
-          .join(' ')}`,
-      );
+      console.log(`eval $(minikube docker-env) ${buildCommands.map((command) => `&& ${command}`).join(' ')}`);
     }
 
-    await exec(
-      `eval $(minikube docker-env) ${buildCommands
-        .map((command) => `&& ${command}`)
-        .join(' ')}`,
-    );
+    await exec(`eval $(minikube docker-env) ${buildCommands.map((command) => `&& ${command}`).join(' ')}`);
 
     console.log('Build successful ✅');
   } catch (error) {
@@ -130,7 +118,7 @@ async function deployMicroservices(microservices, debugEnabled) {
       console.log(`Deploying ${microservice}...`);
 
       await exec(
-        `helm upgrade --install ${microservice} apps/api/${microservice}/chart --set tag=latest --set image=${microservice} --set local=true --force`,
+        `helm upgrade --install ${microservice} apps/api/${microservice}/chart --set tag=latest --set image=${microservice} --set local=true --set environment=local --force`,
       );
       console.log(`${microservice} deployed ✅`);
     }
@@ -152,9 +140,7 @@ async function deployIngressController(install = true, debugEnabled) {
     }
 
     console.log('Installing ingress controller');
-    await exec(
-      'helm upgrade --install ingress charts/ingress-controller --set local=true',
-    );
+    await exec('helm upgrade --install ingress charts/ingress-controller --set local=true');
   } catch (error) {
     if (debugEnabled) {
       console.error(error);
@@ -176,9 +162,7 @@ program
   .action(async ({ debug }) => {
     clear();
 
-    console.log(
-      chalk.inverse.bold('Starting local microservice deployment...'),
-    );
+    console.log(chalk.inverse.bold('Starting local microservice deployment...'));
 
     try {
       await checkRequirements(debug);

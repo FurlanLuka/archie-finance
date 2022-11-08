@@ -55,9 +55,9 @@ export class AuthService {
       },
       this.PRIVATE_SIGNING_KEY,
       {
-        expiresIn: 1800,
+        expiresIn: 86400,
         audience: this.configService.get(ConfigVariables.AUTH0_AUDIENCE),
-        issuer: `https://${this.configService.get(ConfigVariables.AUTH0_DOMAIN)}/`,
+        issuer: `${this.configService.get(ConfigVariables.AUTH0_DOMAIN)}/`,
         subject: userId,
         algorithm: 'RS256',
         keyid: this.PUBLIC_JWK.keys[0].kid,

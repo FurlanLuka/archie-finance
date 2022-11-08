@@ -3,8 +3,8 @@ import { API_BASE_URL, LOAD_OPTIONS } from '../config';
 
 export function getOptions(): Options {
   const defaultOptions: Options = {
-    vus: 1,
-    duration: '5s',
+    vus: 20,
+    duration: '5m',
     userAgent: 'k6-stress-test',
   };
 

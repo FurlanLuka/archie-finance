@@ -1,0 +1,24 @@
+apiVersion: k6.io/v1alpha1
+kind: K6
+metadata:
+  name: k6-stress-test
+spec:
+  parallelism: 4
+  arguments: --out statsd
+  script:
+    configMap:
+      name: stress-test
+      file: main.js
+  runner:
+    image: cudr12/k6-amqp:latest
+    env:
+      - name: QUEUE_URL
+        value: amqp://guest:guest@rabbitmq.default.svc.cluster.local:5672/
+      - name: K6_STATSD_ENABLE_TAGS
+        value: 'true'
+      - name: K6_STATSD_ADDR
+        value: datadog:8125
+      - name: API_BASE_URL
+        value: http://archie-onboarding-api-service:80
+      - name: AUTH_BASE_URL
+        value: http://archie-utils-test-api-service:80

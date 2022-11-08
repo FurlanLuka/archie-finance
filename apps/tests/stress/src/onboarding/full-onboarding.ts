@@ -10,11 +10,7 @@ import {
   createAccessToken,
 } from '../utils';
 import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
-import {
-  EMAIL_VERIFIED_TOPIC,
-  KYC_SUBMITTED_TOPIC,
-  MFA_ENROLLED_TOPIC,
-} from '@archie/api/user-api/constants';
+import { EMAIL_VERIFIED_TOPIC, KYC_SUBMITTED_TOPIC, MFA_ENROLLED_TOPIC } from '@archie/api/user-api/constants';
 import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-line-api/constants';
 import { CARD_ACTIVATED_TOPIC } from '@archie/api/credit-api/constants';
 import {
@@ -27,13 +23,12 @@ import { cardActivatedDataFactory } from '@archie/api/credit-api/test-data';
 
 export const options = getOptions();
 
-const API_BASE_URL: string = getApiBaseUrl();
-
 export function setup(): void {
   setupAmqpConnection();
 }
 
 export default function (): void {
+  const API_BASE_URL: string = getApiBaseUrl();
   const userId: string = uuidv4();
   const accessToken: string = createAccessToken(userId);
 

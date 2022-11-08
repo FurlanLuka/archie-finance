@@ -4,11 +4,9 @@ metadata:
   name: archie-onboarding-api
   labels:
     app: archie-onboarding-api
-    {{- if not .Values.local }}
     tags.datadoghq.com/env: '{{ .Values.environment }}'
     tags.datadoghq.com/service: 'archie-onboarding-api'
     tags.datadoghq.com/version: '{{ .Values.tag }}'
-    {{- end }}
 spec:
   selector:
     matchLabels:
@@ -27,13 +25,10 @@ spec:
     metadata:
       labels:
         app: archie-onboarding-api
-        {{- if not .Values.local }}
         tags.datadoghq.com/env: '{{ .Values.environment }}'
         tags.datadoghq.com/service: 'archie-onboarding-api'
         tags.datadoghq.com/version: '{{ .Values.tag }}'
-        {{- else }}
         helm-revision: '{{ .Release.Revision }}'
-        {{- end }}
     spec:
       containers:
         - name: archie-onboarding-api
@@ -58,7 +53,6 @@ spec:
             limits:
               memory: '256Mi'
               cpu: '500m'
-          {{- if not .Values.local }}
           env:
             - name: DD_AGENT_HOST
               valueFrom:
@@ -78,7 +72,8 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
-            - name: AUTH0_DOMAIN
+          {{- if not .Values.local }}
+          - name: AUTH0_DOMAIN
               valueFrom:
                 secretKeyRef:
                   name: auth0-shared-secrets
