@@ -1,9 +1,6 @@
 import { IsBoolean, IsEnum, IsNumber, IsOptional, IsPositive, IsString, Matches } from 'class-validator';
-import { AmountType, PaymentFrequency } from './peach-api.interfaces';
+import { AmountType, PaymentFrequency, PEACH_ID_REGEX } from './peach-api.interfaces';
 import { AutopayAgreement, AutopayResponse, CreateAutopay, CreateAutopayDocument } from './autopay.interfaces';
-
-// TODO solve this and peach-api/constants circular dependency
-const PEACH_ID_REGEX = /^ext-|^[A-Z]{2}-[A-Z0-9]+-[A-Z0-9]+|^\d+$/;
 
 export class CreateAutopayDto implements CreateAutopay {
   @IsEnum(AmountType)
