@@ -44,7 +44,7 @@ export async function startService(
     app.useWebSocketAdapter(new WsAdapter(app));
   }
 
-  await app.listen(process.env.PORT ?? 80);
+  await app.listen(process.env.PORT ?? 80, '0.0.0.0');
 
   return app;
 }
