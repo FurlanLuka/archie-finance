@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CLIENT_ID } from '@archie/ui/shared/constants';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState, RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useChangePassword } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-change-password';
 import { useGetEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-get-email-verification';
 
@@ -18,7 +18,7 @@ export const ResetPassword: FC = () => {
   const [resetPasswordConfirmationModalOpen, setResetPasswordConfirmationModalOpen] = useState(false);
 
   useEffect(() => {
-    if (changePasswordMutation.state === RequestState.SUCCESS) {
+    if (changePasswordMutation.state === MutationState.SUCCESS) {
       setResetPasswordConfirmationModalOpen(true);
       setResetPasswordSent(true);
     }
@@ -27,7 +27,7 @@ export const ResetPassword: FC = () => {
   const handleClick = () => {
     if (
       getEmailVerificationResponse.state === RequestState.SUCCESS &&
-      changePasswordMutation.state === RequestState.IDLE
+      changePasswordMutation.state === MutationState.IDLE
     ) {
       changePasswordMutation.mutate({
         email: getEmailVerificationResponse.data.email,
