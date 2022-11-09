@@ -7,14 +7,12 @@ import {
   IdentityType,
   Person,
   PersonStatus,
-} from '@archie/api/peach-api/borrower';
-import {
-  EmailVerifiedPayload,
-  KycSubmittedPayload,
-} from '@archie/api/user-api/data-transfer-objects';
+} from '@archie/api/peach-api/data-transfer-objects/types';
+import { EmailVerifiedPayload } from '@archie/api/user-api/data-transfer-objects';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 import { RequestBodyMatcher } from 'nock';
-import { CreditLineCreatedPayload } from '@archie/api/credit-line-api/data-transfer-objects';
 import { user } from '@archie/test/integration/data-stubs';
+import { CreditLineCreatedPayload } from '@archie/api/credit-line-api/data-transfer-objects/types';
 
 export type PeachRequestBody = RequestBodyMatcher;
 export type PeachResponse = Record<string, unknown>;

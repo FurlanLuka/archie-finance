@@ -1,11 +1,10 @@
-
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreditApi1663168364110 implements MigrationInterface {
-name = 'CreditApi1663168364110'
+  name = 'CreditApi1663168364110';
 
-public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             CREATE TABLE "last_adjustment" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "userId" character varying NOT NULL,
@@ -15,19 +14,17 @@ public async up(queryRunner: QueryRunner): Promise<void> {
                 CONSTRAINT "PK_11f37363f0c238d7d636b93f7ab" PRIMARY KEY ("id")
             )
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE UNIQUE INDEX "IDX_cd5cfe2bf67c59118c3dd18043" ON "last_adjustment" ("userId")
         `);
-}
+  }
 
-public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             DROP TABLE "last_adjustment"
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP INDEX "public"."IDX_cd5cfe2bf67c59118c3dd18043"
         `);
+  }
 }
-
-}
-

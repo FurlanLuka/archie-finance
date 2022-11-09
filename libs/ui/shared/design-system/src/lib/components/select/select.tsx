@@ -17,7 +17,16 @@ export interface SelectProps<T> {
   children: ReactElement<SelectOptionProps<T>>[];
 }
 
-export function Select<T>({ id, header, onChange, isLoading, isDisabled, width, small, children }: SelectProps<T>) {
+export function Select<T>({
+  id,
+  header,
+  onChange,
+  isLoading,
+  isDisabled,
+  width,
+  small,
+  children,
+}: SelectProps<T>) {
   const [selectOpen, setSelectOpen] = useState(false);
 
   const handleSelect = (value: T) => {
@@ -26,13 +35,23 @@ export function Select<T>({ id, header, onChange, isLoading, isDisabled, width, 
   };
 
   return (
-    <SelectStyled id={id} isLoading={isLoading} isDisabled={isDisabled} width={width} small={small}>
+    <SelectStyled
+      id={id}
+      isLoading={isLoading}
+      isDisabled={isDisabled}
+      width={width}
+      small={small}
+    >
       <div className="select-header" onClick={() => setSelectOpen(!selectOpen)}>
         {header}
         <Icon
           name="caret"
-          fill={isLoading || isDisabled ? theme.textDisabled : theme.textHighlight}
-          className={selectOpen ? 'select-header-caret open' : 'select-header-caret'}
+          fill={
+            isLoading || isDisabled ? theme.textDisabled : theme.textHighlight
+          }
+          className={
+            selectOpen ? 'select-header-caret open' : 'select-header-caret'
+          }
         />
       </div>
       {selectOpen && (

@@ -16,7 +16,9 @@ export const ERROR_LIST = new Map<string, string>([
   [CREDIT_LINE_NOT_FOUND_ERROR, 'obligation_api.credit_line_not_found'],
 ]);
 
-export const getObligations = async (accessToken: string): Promise<ObligationsResponse> => {
+export const getObligations = async (
+  accessToken: string,
+): Promise<ObligationsResponse> => {
   return getRequest<ObligationsResponse>(
     `${API_URL}/v1/loan_obligations`,
     {

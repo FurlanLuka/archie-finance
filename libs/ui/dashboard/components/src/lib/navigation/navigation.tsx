@@ -15,9 +15,15 @@ export const Navigation: FC = () => (
         {({ isActive }) => (
           <>
             <div className="nav-item-icon">
-              <Icon name={item.icon} fill={isActive ? theme.navItemActive : theme.navItem} />
+              <Icon
+                name={item.icon}
+                fill={isActive ? theme.navItemActive : theme.navItem}
+              />
             </div>
-            <BodyS color={isActive ? theme.navItemActive : theme.navItem} weight={700}>
+            <BodyS
+              color={isActive ? theme.navItemActive : theme.navItem}
+              weight={700}
+            >
               {item.name}
             </BodyS>
           </>

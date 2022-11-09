@@ -15,7 +15,7 @@ import * as request from 'supertest';
 import { AssetPrices } from '@archie/api/ledger-api/assets';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects';
+import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects/types';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 import { when } from 'jest-when';
 import {
@@ -32,10 +32,10 @@ import { BigNumber } from 'bignumber.js';
 import {
   Ledger,
   LedgerActionType,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { INITIATE_COLLATERAL_WITHDRAWAL_COMMAND } from '@archie/api/fireblocks-api/constants';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
-import { CollateralWithdrawalTransactionUpdatedStatus } from '@archie/api/fireblocks-api/data-transfer-objects';
+import { CollateralWithdrawalTransactionUpdatedStatus } from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import { AuthScopes } from '@archie/api/utils/auth0';
 
 describe('Ledger api withdrawal tests', () => {

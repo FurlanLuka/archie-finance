@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 import { Event } from '@archie/api/utils/queue/events';
 import { CardActivatedPayload, TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects/types';
+=======
+import { Event } from '@archie/api/utils/queue';
+import {
+  CardActivatedPayload,
+  TransactionUpdatedPayload,
+} from '@archie/api/credit-api/data-transfer-objects/types';
+>>>>>>> develop
 
 export const SERVICE_NAME = 'credit-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
@@ -29,6 +37,12 @@ export enum ConfigVariables {
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
-export const CARD_ACTIVATED_TOPIC = new Event<CardActivatedPayload>('credit.card.activated', 1);
+export const CARD_ACTIVATED_TOPIC = new Event<CardActivatedPayload>(
+  'credit.card.activated',
+  1,
+);
 
-export const TRANSACTION_UPDATED_TOPIC = new Event<TransactionUpdatedPayload>('credit.transaction.updated', 1);
+export const TRANSACTION_UPDATED_TOPIC = new Event<TransactionUpdatedPayload>(
+  'credit.transaction.updated',
+  1,
+);

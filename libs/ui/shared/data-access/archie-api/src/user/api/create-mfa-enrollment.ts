@@ -5,7 +5,9 @@ import { DefaultVariables, postRequest } from '../../helpers';
 
 const ERROR_LIST = new Map<string, string>([]);
 
-export const createMfaEnrollment = async ({ accessToken }: DefaultVariables): Promise<SendEnrollmentTicketResponse> => {
+export const createMfaEnrollment = async ({
+  accessToken,
+}: DefaultVariables): Promise<SendEnrollmentTicketResponse> => {
   return postRequest(
     `${API_URL}/v1/user/mfa/enroll`,
     {},

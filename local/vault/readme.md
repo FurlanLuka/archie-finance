@@ -8,7 +8,6 @@ mkdir volumes/file
 mkdir volumes/logs
 ```
 
-
 After everything is created run `docker-compose up`. When docker container is running navigate to [http://localhost:8200/](http://localhost:8200/https:/) to start the setup process.
 
 When setting up master keys, set keyshares and key treshold to `1`. After that you should be given your initial root token and Key 1. Save these.

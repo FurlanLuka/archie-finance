@@ -11,7 +11,7 @@ export function createAppFiles(tree: Tree, options: NormalizedSchema): void {
       tmpl: '',
       projectName: options.name,
       root: options.projectRoot,
-    }
+    },
   );
 }
 
@@ -23,6 +23,6 @@ export function createLibFiles(tree: Tree, options: NormalizedSchema): void {
     {
       tmpl: '',
       projectName: options.name,
-    }
+    },
   );
 }

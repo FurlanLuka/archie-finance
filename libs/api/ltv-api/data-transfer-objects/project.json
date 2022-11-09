@@ -21,5 +21,9 @@
       }
     }
   },
-  "tags": ["scope:api:lib:shared", "scope:api:lib:ltv-api:shared", "scope:ui:lib:shared"]
+  "tags": [
+    "scope:api:lib:shared",
+    "scope:api:lib:ltv-api:shared",
+    "scope:ui:lib:shared"
+  ]
 }

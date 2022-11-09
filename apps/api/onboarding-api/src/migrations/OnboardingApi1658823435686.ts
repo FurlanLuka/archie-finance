@@ -1,11 +1,10 @@
-
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class OnboardingApi1658823435686 implements MigrationInterface {
-name = 'OnboardingApi1658823435686'
+  name = 'OnboardingApi1658823435686';
 
-public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             CREATE TABLE "onboarding" (
                 "userId" character varying NOT NULL,
                 "kycStage" boolean NOT NULL DEFAULT false,
@@ -19,13 +18,11 @@ public async up(queryRunner: QueryRunner): Promise<void> {
                 CONSTRAINT "PK_f2baf27f040b7c72a6d93a0cf9a" PRIMARY KEY ("userId")
             )
         `);
-}
+  }
 
-public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             DROP TABLE "onboarding"
         `);
+  }
 }
-
-}
-

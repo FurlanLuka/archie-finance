@@ -9,18 +9,24 @@ import { AUTOPAY_NOT_CONFIGURED } from '../autopay.interfaces';
 export const AUTOPAY_RECORD_QUERY_KEY = 'autopay_record';
 
 export const useGetAutopay = (): QueryResponse<AutopayResponse | null> => {
-  return useExtendedQuery(AUTOPAY_RECORD_QUERY_KEY, async (accessToken: string) => {
-    try {
-      const response = await getAutopay(accessToken);
-      return response;
-    } catch (err) {
-      if (err instanceof ApiError) {
-        if (err.statusCode === 404 && err.message === AUTOPAY_NOT_CONFIGURED) {
-          return null;
+  return useExtendedQuery(
+    AUTOPAY_RECORD_QUERY_KEY,
+    async (accessToken: string) => {
+      try {
+        const response = await getAutopay(accessToken);
+        return response;
+      } catch (err) {
+        if (err instanceof ApiError) {
+          if (
+            err.statusCode === 404 &&
+            err.message === AUTOPAY_NOT_CONFIGURED
+          ) {
+            return null;
+          }
         }
-      }
 
-      throw err;
-    }
-  });
+        throw err;
+      }
+    },
+  );
 };

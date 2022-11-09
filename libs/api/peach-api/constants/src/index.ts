@@ -24,6 +24,7 @@ export enum ConfigVariables {
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
-export const CREDIT_BALANCE_UPDATED_TOPIC = new Event<CreditBalanceUpdatedPayload>('peach.credit_balance.updated', 1);
+export const CREDIT_BALANCE_UPDATED_TOPIC =
+  new Event<CreditBalanceUpdatedPayload>('peach.credit_balance.updated', 1);
 
 export const GET_LOAN_BALANCES_RPC = 'get.loan.balances.rpc';

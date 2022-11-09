@@ -1,12 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateTransactionResponse, VaultAccountResponse } from 'fireblocks-sdk';
+import {
+  CreateTransactionResponse,
+  VaultAccountResponse,
+} from 'fireblocks-sdk';
 import { Repository } from 'typeorm';
 import { VaultAccount } from './vault_account.entity';
 import { DepositAddress } from './deposit_address.entity';
-import { AssetInformation, AssetsService } from '@archie/api/fireblocks-api/assets';
+import {
+  AssetInformation,
+  AssetsService,
+} from '@archie/api/fireblocks-api/assets';
 import { DepositAddress as DepositAddressResponse } from '@archie/api/fireblocks-api/data-transfer-objects/types';
-import { DepositAddressNotFoundError, UnknownAssetError, VaultAccountNotFoundError } from './vault_account.errors';
+import {
+  DepositAddressNotFoundError,
+  UnknownAssetError,
+  VaultAccountNotFoundError,
+} from './vault_account.errors';
 import { FireblocksApiService } from '../api/fireblocks_api.service';
 
 @Injectable()
@@ -20,8 +30,11 @@ export class VaultAccountService {
     private assetsService: AssetsService,
   ) {}
 
-  public async createVaultAccount(userId: string): Promise<VaultAccountResponse> {
-    const createVaultAccountResponse: VaultAccountResponse = await this.fireblocksApiService.createVaultAccount(userId);
+  public async createVaultAccount(
+    userId: string,
+  ): Promise<VaultAccountResponse> {
+    const createVaultAccountResponse: VaultAccountResponse =
+      await this.fireblocksApiService.createVaultAccount(userId);
 
     await this.vaultAccountRepository.save({
       userId,
@@ -31,22 +44,32 @@ export class VaultAccountService {
     return createVaultAccountResponse;
   }
 
-  public async getOrCreateVaultAccount(userId: string): Promise<VaultAccountResponse> {
-    const vaultAccount: VaultAccount | null = await this.vaultAccountRepository.findOneBy({
-      userId,
-    });
+  public async getOrCreateVaultAccount(
+    userId: string,
+  ): Promise<VaultAccountResponse> {
+    const vaultAccount: VaultAccount | null =
+      await this.vaultAccountRepository.findOneBy({
+        userId,
+      });
 
     if (vaultAccount) {
-      return this.fireblocksApiService.getVaultAccount(vaultAccount.vaultAccountId);
+      return this.fireblocksApiService.getVaultAccount(
+        vaultAccount.vaultAccountId,
+      );
     }
 
     return this.createVaultAccount(userId);
   }
 
-  public async createDepositAddress(assetId: string, userId: string): Promise<string> {
-    const vaultAccount: VaultAccountResponse = await this.getOrCreateVaultAccount(userId);
+  public async createDepositAddress(
+    assetId: string,
+    userId: string,
+  ): Promise<string> {
+    const vaultAccount: VaultAccountResponse =
+      await this.getOrCreateVaultAccount(userId);
 
-    const assetInformation: AssetInformation | undefined = this.assetsService.getAssetInformation(assetId);
+    const assetInformation: AssetInformation | undefined =
+      this.assetsService.getAssetInformation(assetId);
 
     if (assetInformation === undefined) {
       throw new UnknownAssetError({
@@ -54,10 +77,11 @@ export class VaultAccountService {
       });
     }
 
-    const createVaultAssetResponse = await this.fireblocksApiService.createVaultAsset(
-      vaultAccount.id,
-      assetInformation.fireblocksId,
-    );
+    const createVaultAssetResponse =
+      await this.fireblocksApiService.createVaultAsset(
+        vaultAccount.id,
+        assetInformation.fireblocksId,
+      );
 
     await this.depositAddressRepository.save({
       userId,
@@ -68,14 +92,19 @@ export class VaultAccountService {
     return createVaultAssetResponse.address;
   }
 
-  public async getOrCreateDepositAddress(assetId: string, userId: string): Promise<DepositAddressResponse> {
-    const depositAddress: DepositAddress | null = await this.depositAddressRepository.findOneBy({
-      asset: assetId,
-      userId,
-    });
+  public async getOrCreateDepositAddress(
+    assetId: string,
+    userId: string,
+  ): Promise<DepositAddressResponse> {
+    const depositAddress: DepositAddress | null =
+      await this.depositAddressRepository.findOneBy({
+        asset: assetId,
+        userId,
+      });
 
     if (depositAddress === null) {
-      const createDepositAddressResponse: string = await this.createDepositAddress(assetId, userId);
+      const createDepositAddressResponse: string =
+        await this.createDepositAddress(assetId, userId);
 
       return {
         address: createDepositAddressResponse,
@@ -89,10 +118,13 @@ export class VaultAccountService {
     };
   }
 
-  public async getUserIdForDepositAddress(depositAddress: string): Promise<string> {
-    const record: DepositAddress | null = await this.depositAddressRepository.findOneBy({
-      address: depositAddress,
-    });
+  public async getUserIdForDepositAddress(
+    depositAddress: string,
+  ): Promise<string> {
+    const record: DepositAddress | null =
+      await this.depositAddressRepository.findOneBy({
+        address: depositAddress,
+      });
 
     if (record === null) {
       throw new DepositAddressNotFoundError({
@@ -104,9 +136,10 @@ export class VaultAccountService {
   }
 
   public async getVaultAccount(vaultAccountId: string): Promise<VaultAccount> {
-    const vaultAccount: VaultAccount | null = await this.vaultAccountRepository.findOneBy({
-      vaultAccountId,
-    });
+    const vaultAccount: VaultAccount | null =
+      await this.vaultAccountRepository.findOneBy({
+        vaultAccountId,
+      });
 
     if (vaultAccount === null) {
       throw new VaultAccountNotFoundError({
@@ -124,7 +157,8 @@ export class VaultAccountService {
     destinationAddress: string,
     internalTransactionId: string,
   ): Promise<CreateTransactionResponse> {
-    const assetInformation: AssetInformation | undefined = this.assetsService.getAssetInformation(assetId);
+    const assetInformation: AssetInformation | undefined =
+      this.assetsService.getAssetInformation(assetId);
 
     if (assetInformation === undefined) {
       throw new UnknownAssetError({
@@ -147,7 +181,8 @@ export class VaultAccountService {
     amount: string,
     internalTransactionId: string,
   ): Promise<CreateTransactionResponse> {
-    const assetInformation: AssetInformation | undefined = this.assetsService.getAssetInformation(assetId);
+    const assetInformation: AssetInformation | undefined =
+      this.assetsService.getAssetInformation(assetId);
 
     if (assetInformation === undefined) {
       throw new UnknownAssetError({

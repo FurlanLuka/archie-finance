@@ -33,40 +33,55 @@ export enum ConfigVariables {
  * Withdrawal
  */
 export const COLLATERAL_WITHDRAWAL_TRANSACTION_SUBMITTED_TOPIC =
-  new Event<CollateralWithdrawalTransactionSubmittedPayload>('collateral.withdrawal.submitted', 1);
-export const COLLATERAL_WITHDRAWAL_TRANSACTION_UPDATED_TOPIC = new Event<CollateralWithdrawalTransactionUpdatedPayload>(
-  'collateral.withdrawal.updated',
-  1,
-);
-export const COLLATERAL_WITHDRAWAL_TRANSACTION_ERROR_TOPIC = new Event<CollateralWithdrawalTransactionErrorPayload>(
-  'collateral.withdrawal.error',
-  1,
-);
-export const INITIATE_COLLATERAL_WITHDRAWAL_COMMAND = new Event<InitiateCollateralWithdrawalCommandPayload>(
-  'initiate.collateral.withdrawal',
-  1,
-);
+  new Event<CollateralWithdrawalTransactionSubmittedPayload>(
+    'collateral.withdrawal.submitted',
+    1,
+  );
+export const COLLATERAL_WITHDRAWAL_TRANSACTION_UPDATED_TOPIC =
+  new Event<CollateralWithdrawalTransactionUpdatedPayload>(
+    'collateral.withdrawal.updated',
+    1,
+  );
+export const COLLATERAL_WITHDRAWAL_TRANSACTION_ERROR_TOPIC =
+  new Event<CollateralWithdrawalTransactionErrorPayload>(
+    'collateral.withdrawal.error',
+    1,
+  );
+export const INITIATE_COLLATERAL_WITHDRAWAL_COMMAND =
+  new Event<InitiateCollateralWithdrawalCommandPayload>(
+    'initiate.collateral.withdrawal',
+    1,
+  );
 
 /**
  * Liquidation
  */
 export const COLLATERAL_LIQUIDATION_TRANSACTION_SUBMITTED_TOPIC =
-  new Event<CollateralLiquidationTransactionSubmittedPayload>('collateral.liquidation.submitted', 1);
+  new Event<CollateralLiquidationTransactionSubmittedPayload>(
+    'collateral.liquidation.submitted',
+    1,
+  );
 export const COLLATERAL_LIQUIDATION_TRANSACTION_UPDATED_TOPIC =
-  new Event<CollateralLiquidationTransactionUpdatedPayload>('collateral.liquidation.updated', 1);
-export const COLLATERAL_LIQUIDATION_TRANSACTION_ERROR_TOPIC = new Event<CollateralLiquidationTransactionErrorPayload>(
-  'collateral.liquidation.error',
-  1,
-);
-export const INITIATE_COLLATERAL_LIQUIDATION_COMMAND = new Event<InitiateCollateralLiquidationCommandPayload>(
-  'initiate.collateral.liquidation',
-  1,
-);
+  new Event<CollateralLiquidationTransactionUpdatedPayload>(
+    'collateral.liquidation.updated',
+    1,
+  );
+export const COLLATERAL_LIQUIDATION_TRANSACTION_ERROR_TOPIC =
+  new Event<CollateralLiquidationTransactionErrorPayload>(
+    'collateral.liquidation.error',
+    1,
+  );
+export const INITIATE_COLLATERAL_LIQUIDATION_COMMAND =
+  new Event<InitiateCollateralLiquidationCommandPayload>(
+    'initiate.collateral.liquidation',
+    1,
+  );
 
 /**
  * Deposit
  */
-export const COLLATERAL_DEPOSIT_TRANSACTION_COMPLETED_TOPIC = new Event<CollateralDepositTransactionCompletedPayload>(
-  'collateral.deposit.completed',
-  1,
-);
+export const COLLATERAL_DEPOSIT_TRANSACTION_COMPLETED_TOPIC =
+  new Event<CollateralDepositTransactionCompletedPayload>(
+    'collateral.deposit.completed',
+    1,
+  );

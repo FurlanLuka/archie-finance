@@ -1,4 +1,11 @@
-import { Equals, IsNumber, IsOptional, IsString, Length, MaxDate } from 'class-validator';
+import {
+  Equals,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+  MaxDate,
+} from 'class-validator';
 import { Transform, Type } from 'class-transformer';
 import { DateTime } from 'luxon';
 import { KycResponse } from './kyc.interfaces';

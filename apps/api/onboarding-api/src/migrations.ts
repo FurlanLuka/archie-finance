@@ -4,4 +4,4 @@ import { OnboardingApi1665667224532 } from './migrations/OnboardingApi1665667224
 export const migrations = [
   OnboardingApi1658823435686,
   OnboardingApi1665667224532,
-  ]
+];

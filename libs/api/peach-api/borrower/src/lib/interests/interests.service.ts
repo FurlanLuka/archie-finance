@@ -22,7 +22,10 @@ export class InterestsService {
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    const creditLine: CreditLine = await this.peachApiService.getCreditLine(borrower.personId, borrower.creditLineId);
+    const creditLine: CreditLine = await this.peachApiService.getCreditLine(
+      borrower.personId,
+      borrower.creditLineId,
+    );
 
     return {
       aprEffective: creditLine.atOrigination.aprEffective ?? 0,

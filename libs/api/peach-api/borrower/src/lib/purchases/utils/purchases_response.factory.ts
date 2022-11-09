@@ -9,7 +9,8 @@ export class PurchasesResponseFactory {
   constructor(private configService: ConfigService) {}
 
   public create(purchases: Purchases, limit: number): PurchasesResponseDto {
-    const lastPurchaseId: string | undefined = purchases.data[purchases.data.length - 1]?.id;
+    const lastPurchaseId: string | undefined =
+      purchases.data[purchases.data.length - 1]?.id;
     const firstPurchaseId: string | undefined = purchases.data[0]?.id;
 
     return {
@@ -45,7 +46,8 @@ export class PurchasesResponseFactory {
           merchantLocation: purchase.purchaseDetails.merchantCity,
           merchantName: purchase.purchaseDetails.merchantName,
           merchantNumber: purchase.purchaseDetails.merchantId,
-          transactionType: purchase.purchaseDetails.metadata?.transactionType ?? null,
+          transactionType:
+            purchase.purchaseDetails.metadata?.transactionType ?? null,
         },
       })),
     };

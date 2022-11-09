@@ -9,7 +9,8 @@ export class PaymentsResponseFactory {
   constructor(private configService: ConfigService) {}
 
   public create(payments: Payments, limit: number): PaymentsResponse {
-    const lastPaymentId: string | undefined = payments.data[payments.data.length - 1]?.id;
+    const lastPaymentId: string | undefined =
+      payments.data[payments.data.length - 1]?.id;
     const firstPaymentId: string | undefined = payments.data[0]?.id;
 
     return {
@@ -45,8 +46,10 @@ export class PaymentsResponseFactory {
           type: payment.paymentDetails.type,
           reason: payment.paymentDetails.reason,
           fromInstrumentId: payment.paymentDetails.fromInstrumentId,
-          paymentNetworkName: payment.paymentDetails.fromInstrument.paymentNetworkName,
-          accountNumberLastFour: payment.paymentDetails.fromInstrument.accountNumberLastFour,
+          paymentNetworkName:
+            payment.paymentDetails.fromInstrument.paymentNetworkName,
+          accountNumberLastFour:
+            payment.paymentDetails.fromInstrument.accountNumberLastFour,
         },
         actualAmount: payment.actualAmount,
         currency: payment.currency,

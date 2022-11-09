@@ -13,7 +13,11 @@ import { SettingsScreen } from '@archie/ui/dashboard/feature/settings';
 import { WithdrawScreen } from '@archie/ui/dashboard/feature/withdraw';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetOnboarding } from '@archie/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
-import { LoaderFullScreen, Page, Container } from '@archie/ui/shared/design-system';
+import {
+  LoaderFullScreen,
+  Page,
+  Container,
+} from '@archie/ui/shared/design-system';
 
 import { Setup2faBanner } from '../../components/banners/setup-2fa/setup-2fa';
 
@@ -21,7 +25,8 @@ export const DashboardRoute: FC = () => {
   const getOnboardingResponse = useGetOnboarding();
 
   const isMfaSet =
-    getOnboardingResponse.state === RequestState.SUCCESS && getOnboardingResponse.data.mfaEnrollmentStage;
+    getOnboardingResponse.state === RequestState.SUCCESS &&
+    getOnboardingResponse.data.mfaEnrollmentStage;
 
   if (getOnboardingResponse.state === RequestState.LOADING) {
     return <LoaderFullScreen />;
@@ -45,8 +50,14 @@ export const DashboardRoute: FC = () => {
               <Route path="" element={<HomeScreen />} />
               <Route path="home" element={<HomeScreen />} />
               <Route path="collateral" element={<CollateralScreen />} />
-              <Route path="collateral/withdraw/:asset" element={<WithdrawScreen />} />
-              <Route path="collateral/add/:asset" element={<CollateralizationScreen />} />
+              <Route
+                path="collateral/withdraw/:asset"
+                element={<WithdrawScreen />}
+              />
+              <Route
+                path="collateral/add/:asset"
+                element={<CollateralizationScreen />}
+              />
               {/* <Route path="/rewards" element={<RewardsScreen />} /> */}
               <Route path="payment" element={<PaymentScreen />} />
               <Route path="history" element={<HistoryScreen />} />

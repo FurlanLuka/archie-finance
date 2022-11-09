@@ -13,10 +13,22 @@ import {
   UseQueryOptions,
 } from 'react-query';
 
-import { SessionState, useAuthenticatedSession } from '@archie/ui/shared/data-access/session';
+import {
+  SessionState,
+  useAuthenticatedSession,
+} from '@archie/ui/shared/data-access/session';
 
-import { ApiError, ApiErrors, UnauthenticatedApiError, UnauthorizedApiError } from './api-error';
-import { DefaultVariables, sessionRefreshWrapper, sessionRefreshWrapperMutation } from './helpers';
+import {
+  ApiError,
+  ApiErrors,
+  UnauthenticatedApiError,
+  UnauthorizedApiError,
+} from './api-error';
+import {
+  DefaultVariables,
+  sessionRefreshWrapper,
+  sessionRefreshWrapperMutation,
+} from './helpers';
 import {
   InfiniteQueryResponse,
   MutationQueryResponse,
@@ -28,9 +40,13 @@ import {
 export const useExtendedQuery = <TQueryFnData>(
   queryKey: string,
   queryFn: (accessToken: string) => Promise<TQueryFnData>,
-  options?: Omit<UseQueryOptions<TQueryFnData, ApiErrors, TQueryFnData, QueryKey>, 'queryKey' | 'queryFn'>,
+  options?: Omit<
+    UseQueryOptions<TQueryFnData, ApiErrors, TQueryFnData, QueryKey>,
+    'queryKey' | 'queryFn'
+  >,
 ): QueryResponse<TQueryFnData> => {
-  const { setAccessToken, setSessionState, accessToken } = useAuthenticatedSession();
+  const { setAccessToken, setSessionState, accessToken } =
+    useAuthenticatedSession();
 
   const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 
@@ -80,15 +96,28 @@ export const useExtendedQuery = <TQueryFnData>(
 
 export const useExtendedInfiniteQuery = <TQueryFnData>(
   queryKey: string,
-  getNextPage: (lastPage: TQueryFnData, allPages: TQueryFnData[]) => number | undefined,
-  queryFn: (accessToken: string, paginationParams: PaginationParams) => Promise<TQueryFnData>,
+  getNextPage: (
+    lastPage: TQueryFnData,
+    allPages: TQueryFnData[],
+  ) => number | undefined,
+  queryFn: (
+    accessToken: string,
+    paginationParams: PaginationParams,
+  ) => Promise<TQueryFnData>,
   options?: Omit<
-    UseInfiniteQueryOptions<TQueryFnData, ApiErrors, TQueryFnData, TQueryFnData, QueryKey>,
+    UseInfiniteQueryOptions<
+      TQueryFnData,
+      ApiErrors,
+      TQueryFnData,
+      TQueryFnData,
+      QueryKey
+    >,
     'queryKey' | 'queryFn'
   >,
 ): InfiniteQueryResponse<TQueryFnData> => {
   const [isFetchingNextPageError, setIsFetchingNextPageError] = useState(false);
-  const { setAccessToken, setSessionState, accessToken } = useAuthenticatedSession();
+  const { setAccessToken, setSessionState, accessToken } =
+    useAuthenticatedSession();
 
   const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 
@@ -194,9 +223,13 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
 export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
   mutationKey: MutationKey,
   mutationFn: MutationFunction<TData, TVariables>,
-  options?: Omit<UseMutationOptions<TData, ApiErrors, TVariables, unknown>, 'mutationKey' | 'mutationFn'>,
+  options?: Omit<
+    UseMutationOptions<TData, ApiErrors, TVariables, unknown>,
+    'mutationKey' | 'mutationFn'
+  >,
 ): MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData> => {
-  const { setAccessToken, setSessionState, accessToken } = useAuthenticatedSession();
+  const { setAccessToken, setSessionState, accessToken } =
+    useAuthenticatedSession();
 
   const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 

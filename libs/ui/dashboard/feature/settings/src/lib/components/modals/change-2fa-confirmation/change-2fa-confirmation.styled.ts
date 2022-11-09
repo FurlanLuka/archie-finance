@@ -12,7 +12,7 @@ export const Change2faConfirmationModalStyled = styled.div`
   .modal-text {
     margin-bottom: 2rem;
   }
-  
+
   .btn-group {
     display: flex;
     gap: 0.5rem;

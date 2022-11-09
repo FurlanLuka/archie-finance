@@ -1,3 +1,4 @@
-export interface CurrentAssetRouteParams extends Record<string, string | undefined> {
+export interface CurrentAssetRouteParams
+  extends Record<string, string | undefined> {
   asset: string;
 }

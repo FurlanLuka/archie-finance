@@ -27,11 +27,19 @@ export const LTV_MARGIN_CALL_LIMIT = 75;
 export const LIQUIDATION_TARGET_LTV = 60;
 export const MARGIN_CALL_LIQUIDATION_AFTER_HOURS = 72;
 
-export const MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC = new Event<MarginCallLtvLimitApproachingPayload>(
-  'margin.margin_call.ltv_limit_approaching',
+export const MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC =
+  new Event<MarginCallLtvLimitApproachingPayload>(
+    'margin.margin_call.ltv_limit_approaching',
+    1,
+  );
+export const MARGIN_CALL_COMPLETED_TOPIC =
+  new Event<MarginCallCompletedPayload>('margin.margin_call.completed', 1);
+export const MARGIN_CALL_STARTED_TOPIC = new Event<MarginCallStartedPayload>(
+  'margin.margin_call.started',
   1,
 );
-export const MARGIN_CALL_COMPLETED_TOPIC = new Event<MarginCallCompletedPayload>('margin.margin_call.completed', 1);
-export const MARGIN_CALL_STARTED_TOPIC = new Event<MarginCallStartedPayload>('margin.margin_call.started', 1);
 
-export const LTV_UPDATED_TOPIC = new Event<LtvUpdatedPayload>('ltv.ltv.updated', 1);
+export const LTV_UPDATED_TOPIC = new Event<LtvUpdatedPayload>(
+  'ltv.ltv.updated',
+  1,
+);

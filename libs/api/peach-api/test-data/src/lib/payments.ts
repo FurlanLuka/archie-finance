@@ -2,7 +2,7 @@ import { user } from '@archie/test/integration/data-stubs';
 import {
   CreditBalanceUpdatedPayload,
   PaymentType,
-} from '@archie/api/peach-api/data-transfer-objects';
+} from '@archie/api/peach-api/data-transfer-objects/types';
 
 export const creditBalanceUpdatedFactory = (
   override?: Partial<CreditBalanceUpdatedPayload>,

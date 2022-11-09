@@ -9,7 +9,10 @@ import {
   PeachOneTimePaymentStatus,
 } from '@archie/api/peach-api/data-transfer-objects/types';
 import { GetPaymentsQueryDto } from '@archie/api/peach-api/data-transfer-objects';
-import { PaymentsResponse, ScheduleTransaction } from '@archie/api/peach-api/data-transfer-objects/types';
+import {
+  PaymentsResponse,
+  ScheduleTransaction,
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
 import { PeachPaymentUpdatedPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { PaymentType } from '@archie/api/peach-api/data-transfer-objects/types';
@@ -18,7 +21,10 @@ import { QueueService } from '@archie/api/utils/queue';
 import { BorrowerValidation } from '../utils/borrower.validation';
 import { Injectable } from '@nestjs/common';
 import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
-import { LedgerAccountUpdatedPayload, LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects/types';
+import {
+  LedgerAccountUpdatedPayload,
+  LedgerActionType,
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 
 @Injectable()
 export class PaymentsService {
@@ -31,18 +37,28 @@ export class PaymentsService {
     private borrowerValidation: BorrowerValidation,
   ) {}
 
-  public async getPayments(userId: string, query: GetPaymentsQueryDto): Promise<PaymentsResponse> {
+  public async getPayments(
+    userId: string,
+    query: GetPaymentsQueryDto,
+  ): Promise<PaymentsResponse> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    const payments: Payments = await this.peachApiService.getPayments(borrower.personId, borrower.creditLineId, query);
+    const payments: Payments = await this.peachApiService.getPayments(
+      borrower.personId,
+      borrower.creditLineId,
+      query,
+    );
 
     return this.paymentsResponseFactory.create(payments, query.limit);
   }
 
-  public async scheduleTransaction(userId: string, transaction: ScheduleTransaction): Promise<void> {
+  public async scheduleTransaction(
+    userId: string,
+    transaction: ScheduleTransaction,
+  ): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
@@ -56,7 +72,10 @@ export class PaymentsService {
     );
   }
 
-  public async handleCollateralLiquidationEvent({ userId, action }: LedgerAccountUpdatedPayload): Promise<void> {
+  public async handleCollateralLiquidationEvent({
+    userId,
+    action,
+  }: LedgerAccountUpdatedPayload): Promise<void> {
     if (action.type !== LedgerActionType.LIQUIDATION) {
       return;
     }
@@ -66,12 +85,14 @@ export class PaymentsService {
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    let liquidationInstrumentId: string | null = borrower.liquidationInstrumentId;
+    let liquidationInstrumentId: string | null =
+      borrower.liquidationInstrumentId;
 
     if (liquidationInstrumentId === null) {
-      const paymentInstrument: PeachPaymentInstrument = await this.peachApiService.createLiquidationPaymentInstrument(
-        borrower.personId,
-      );
+      const paymentInstrument: PeachPaymentInstrument =
+        await this.peachApiService.createLiquidationPaymentInstrument(
+          borrower.personId,
+        );
       liquidationInstrumentId = paymentInstrument.id;
 
       await this.borrowerRepository.update(
@@ -93,7 +114,9 @@ export class PaymentsService {
     );
   }
 
-  public async handlePaypalPaymentReceivedEvent(payload: PaypalPaymentReceivedPayload): Promise<void> {
+  public async handlePaypalPaymentReceivedEvent(
+    payload: PaypalPaymentReceivedPayload,
+  ): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: payload.userId,
     });
@@ -103,9 +126,10 @@ export class PaymentsService {
     let paypalInstrumentId: string | null = borrower.paypalInstrumentId;
 
     if (paypalInstrumentId === null) {
-      const paymentInstrument: PeachPaymentInstrument = await this.peachApiService.createPaypalPaymentInstrument(
-        borrower.personId,
-      );
+      const paymentInstrument: PeachPaymentInstrument =
+        await this.peachApiService.createPaypalPaymentInstrument(
+          borrower.personId,
+        );
 
       paypalInstrumentId = paymentInstrument.id;
 
@@ -128,20 +152,27 @@ export class PaymentsService {
     );
   }
 
-  public async handlePaymentUpdatedEvent({ userId, transaction }: PeachPaymentUpdatedPayload): Promise<void> {
+  public async handlePaymentUpdatedEvent({
+    userId,
+    transaction,
+  }: PeachPaymentUpdatedPayload): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    const credit: Credit = await this.peachApiService.getCreditBalance(borrower.personId, borrower.creditLineId);
+    const credit: Credit = await this.peachApiService.getCreditBalance(
+      borrower.personId,
+      borrower.creditLineId,
+    );
 
     return this.queueService.publishEvent(CREDIT_BALANCE_UPDATED_TOPIC, {
       ...credit,
       userId,
       paymentDetails: {
         type:
-          transaction.paymentDetails.fromInstrumentId === borrower.liquidationInstrumentId
+          transaction.paymentDetails.fromInstrumentId ===
+          borrower.liquidationInstrumentId
             ? PaymentType.liquidation
             : PaymentType.payment,
         amount: transaction.actualAmount,
