@@ -2,6 +2,8 @@
 
 ## Run the test using k6 operator
 
+**Note: Check root level README for setup via pre-prepared script**
+
 - Start test utils api: `PORT=91 npm run start utils-test-api`
 - Start tested api at port 90 (`PORT=90 npm run start onboarding-api` for `onboarding/full-onboarding.ts` script).
 - Start minikube
@@ -43,11 +45,11 @@
 
 - Build k6 binary with amqp extension.
   - Clone [xamqp project](https://github.com/acuderman/xk6-amqp/blob/feature/amqp-wth-headers-docker-image)
-  - Run make build
+  - Run `make build`
   - Copy generated k6 binary to archie-microservices root and rename file to k6bin
-- Run `ngrok http 91` and set https domain as `AUTH0_DOMAIN=<ngrok domain>` on both tested api and authorization api
+- Set `AUTH0_DOMAIN='http://localhost:91'` env variable on both tested api and authorization api
 - Start test utils api: `PORT=91 npm run start utils-test-api`
-- Start tested api at port 90 (onboarding api for `onboarding/full-onboarding.ts` script).
+- Start tested api at port 90 (onboarding-api for `onboarding/full-onboarding.ts` script).
 - Start script:
   - Build k6 script using: `nx run stress-tests:build --main=apps/tests/stress/src/<path_to_file>`
   - Run `./k6bin run ./dist/apps/tests/stress/main.js -e QUEUE_URL=amqp://guest:guest@host.minikube.internal:5672/ -e API_BASE_URL="http://localhost:90" -e AUTH_BASE_URL="http://localhost:91"`

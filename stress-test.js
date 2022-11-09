@@ -30,6 +30,12 @@ async function checkRequirements(debugEnabled) {
   } catch {
     throw new Error('Kubectl missing');
   }
+
+  try {
+    await exec('go');
+  } catch {
+    throw new Error('Go missing');
+  }
 }
 
 async function setupCluster(debugEnabled) {
@@ -57,10 +63,16 @@ async function setupInfrastructureServices(debugEnabled) {
     console.log('Helm setup completed ✅');
 
     console.log('Starting Datadog...');
-    await exec(
-      `helm install datadog -f local/k6-cluster/datadog-values.yml datadog/datadog`,
-    );
-    console.log('Datadog running ✅');
+    try {
+      await exec(
+        `helm install datadog -f local/k6-cluster/datadog-values.yml datadog/datadog`,
+      );
+      console.log('Datadog running ✅');
+    } catch (error) {
+      console.error(
+        'Datadog is not set up correctly ❌. Cluster will be set up without It...',
+      );
+    }
 
     console.log('Starting RabbitMQ...');
     await exec(

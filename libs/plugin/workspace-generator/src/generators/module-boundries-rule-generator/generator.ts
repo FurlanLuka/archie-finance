@@ -24,17 +24,15 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
     return [];
   });
 
-  const testsProjects = Object.keys(workspace.projects).flatMap(
-    (projectKey) => {
-      const project = workspace.projects[projectKey];
+  const testProjects = Object.keys(workspace.projects).flatMap((projectKey) => {
+    const project = workspace.projects[projectKey];
 
-      if (project.root.includes('apps/tests')) {
-        return [projectKey];
-      }
+    if (project.root.includes('apps/tests')) {
+      return [projectKey];
+    }
 
-      return [];
-    },
-  );
+    return [];
+  });
 
   const defaultLintConfiguration = [
     {
@@ -106,7 +104,7 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
     ];
   });
 
-  const testsProjectLintConfiguration = testsProjects.flatMap((project) => {
+  const testsProjectLintConfiguration = testProjects.flatMap((project) => {
     return [
       {
         sourceTag: `scope:tests:app:${project}`,

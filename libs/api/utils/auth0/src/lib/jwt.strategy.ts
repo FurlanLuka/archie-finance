@@ -12,9 +12,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'auth0-auth') {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        // jwksUri: `${authOptions.domain}/.well-known/jwks.json`,
-        jwksUri:
-          'https://raw.githubusercontent.com/acuderman/test-didcomm/main/test-jwk1.pub.json',
+        jwksUri: `${authOptions.domain}/.well-known/jwks.json`,
       }),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       audience: authOptions.audience,
