@@ -24,6 +24,16 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
     return [];
   });
 
+  const testsProjects = Object.keys(workspace.projects).flatMap((projectKey) => {
+    const project = workspace.projects[projectKey];
+
+    if (project.root.includes('apps/tests')) {
+      return [projectKey];
+    }
+
+    return [];
+  });
+
   const defaultLintConfiguration = [
     {
       sourceTag: 'scope:api:lib:shared',
@@ -36,6 +46,10 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
     {
       sourceTag: 'scope:ui:lib:shared',
       onlyDependOnLibsWithTags: ['scope:ui:lib:shared'],
+    },
+    {
+      sourceTag: 'scope:tests:lib:shared',
+      onlyDependOnLibsWithTags: ['scope:tests:lib:shared', 'scope:api:lib:shared'],
     },
   ];
 
@@ -52,18 +66,12 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
       },
       {
         sourceTag: `scope:api:lib:${project}`,
-        onlyDependOnLibsWithTags: [
-          `scope:api:lib:${project}:shared`,
-          'scope:api:lib:shared',
-        ],
+        onlyDependOnLibsWithTags: [`scope:api:lib:${project}:shared`, 'scope:api:lib:shared'],
       },
       {
         sourceTag: `scope:api:lib:${project}:shared`,
-        onlyDependOnLibsWithTags: [
-          `scope:api:lib:${project}:shared`,
-          'scope:api:lib:shared',
-        ],
-      }
+        onlyDependOnLibsWithTags: [`scope:api:lib:${project}:shared`, 'scope:api:lib:shared'],
+      },
     ];
   });
 
@@ -71,17 +79,34 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
     return [
       {
         sourceTag: `scope:ui:app:${project}`,
-        onlyDependOnLibsWithTags: [
-          `scope:ui:lib:${project}`,
-          `scope:ui:lib:${project}:shared`,
-          `scope:ui:lib:shared`,
-        ],
+        onlyDependOnLibsWithTags: [`scope:ui:lib:${project}`, `scope:ui:lib:${project}:shared`, `scope:ui:lib:shared`],
       },
       {
         sourceTag: `scope:ui:lib:${project}`,
+        onlyDependOnLibsWithTags: [`scope:ui:lib:${project}:shared`, 'scope:ui:lib:shared'],
+      },
+    ];
+  });
+
+  const testsProjectLintConfiguration = testsProjects.flatMap((project) => {
+    return [
+      {
+        sourceTag: `scope:tests:app:${project}`,
         onlyDependOnLibsWithTags: [
-          `scope:ui:lib:${project}:shared`,
-          'scope:ui:lib:shared',
+          'scope:tests:lib:shared',
+          'scope:api:lib:shared',
+          'scope:api:lib:test-data',
+          `scope:tests:lib:${project}`,
+        ],
+      },
+      {
+        sourceTag: `scope:tests:lib:${project}`,
+        onlyDependOnLibsWithTags: [
+          `scope:tests:lib:${project}`,
+          'scope:tests:lib:shared',
+          'scope:api:lib:shared',
+          'scope:api:lib:test-data',
+          `scope:tests:lib:${project}:shared`,
         ],
       },
     ];
@@ -89,22 +114,19 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updater = (json: any): any => {
-    const hasBoundariesRule =
-      json['overrides'][0].rules['@nrwl/nx/enforce-module-boundaries'] !==
-      undefined;
+    const hasBoundariesRule = json['overrides'][0].rules['@nrwl/nx/enforce-module-boundaries'] !== undefined;
 
     if (hasBoundariesRule) {
-      json['overrides'][0].rules[
-        '@nrwl/nx/enforce-module-boundaries'
-      ][1].depConstraints = [
+      json['overrides'][0].rules['@nrwl/nx/enforce-module-boundaries'][1].depConstraints = [
         ...apiProjectLintConfiguration,
         ...uiProjectLintConfiguration,
+        ...testsProjectLintConfiguration,
         ...defaultLintConfiguration,
       ];
     }
 
     return json;
-  }
+  };
 
   updateJson(tree, joinPathFragments('./', '.eslintrc.json'), updater);
   updateJson(tree, joinPathFragments('./', '.eslintrc.ui.json'), updater);

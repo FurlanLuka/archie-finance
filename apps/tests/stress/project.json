@@ -31,5 +31,5 @@
       }
     }
   },
-  "tags": ["scope:tests:app:stress"]
+  "tags": ["scope:tests:app:stress-tests"]
 }

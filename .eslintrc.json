@@ -335,6 +335,44 @@
                 ]
               },
               {
+                "sourceTag": "scope:tests:app:stress-tests",
+                "onlyDependOnLibsWithTags": [
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data",
+                  "scope:tests:lib:stress-tests"
+                ]
+              },
+              {
+                "sourceTag": "scope:tests:lib:stress-tests",
+                "onlyDependOnLibsWithTags": [
+                  "scope:tests:lib:stress-tests",
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data",
+                  "scope:tests:lib:stress-tests:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:tests:app:utils-test-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data",
+                  "scope:tests:lib:utils-test-api"
+                ]
+              },
+              {
+                "sourceTag": "scope:tests:lib:utils-test-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:tests:lib:utils-test-api",
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data",
+                  "scope:tests:lib:utils-test-api:shared"
+                ]
+              },
+              {
                 "sourceTag": "scope:api:lib:shared",
                 "onlyDependOnLibsWithTags": [
                   "scope:api:lib:shared"
@@ -350,33 +388,6 @@
                 "sourceTag": "scope:ui:lib:shared",
                 "onlyDependOnLibsWithTags": [
                   "scope:ui:lib:shared"
-                ]
-              },
-
-              {
-                "sourceTag": "scope:tests:app:utils-test-api",
-                "onlyDependOnLibsWithTags": [
-                  "scope:tests:lib:utils-test-api",
-                  "scope:tests:lib:shared",
-                  "scope:api:lib:shared",
-                  "scope:api:lib:test-data"
-                ]
-              },
-              {
-                "sourceTag": "scope:tests:lib:utils-test-api",
-                "onlyDependOnLibsWithTags": [
-                  "scope:tests:lib:utils-test-api",
-                  "scope:tests:lib:shared",
-                  "scope:api:lib:shared",
-                  "scope:api:lib:test-data"
-                ]
-              },
-              {
-                "sourceTag": "scope:tests:app:stress",
-                "onlyDependOnLibsWithTags": [
-                  "scope:tests:lib:shared",
-                  "scope:api:lib:shared",
-                  "scope:api:lib:test-data"
                 ]
               },
               {
