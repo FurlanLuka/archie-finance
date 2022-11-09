@@ -1,10 +1,20 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*"],
-  "plugins": ["@nrwl/nx", "import"],
+  "ignorePatterns": [
+    "**/*"
+  ],
+  "plugins": [
+    "@nrwl/nx",
+    "import"
+  ],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "files": [
+        "*.ts",
+        "*.tsx",
+        "*.js",
+        "*.jsx"
+      ],
       "rules": {
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
@@ -366,12 +376,28 @@
               },
               {
                 "sourceTag": "scope:api:lib:shared",
-                "onlyDependOnLibsWithTags": ["scope:api:lib:shared"]
+                "onlyDependOnLibsWithTags": [
+                  "scope:api:lib:shared"
+                ]
               },
               {
                 "sourceTag": "scope:api:lib:test-data",
-                "onlyDependOnLibsWithTags": ["*"]
+                "onlyDependOnLibsWithTags": [
+                  "*"
+                ]
               },
+              {
+                "sourceTag": "scope:ui:lib:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:ui:lib:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:tests:lib:shared",
+                "onlyDependOnLibsWithTags": [
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared"
+                ]
               }
             ]
           }
@@ -384,13 +410,19 @@
               "order": "asc"
             },
             "groups": [
-              ["builtin", "external", "internal"],
+              [
+                "builtin",
+                "external",
+                "internal"
+              ],
               "parent",
               "sibling",
               "index"
             ],
             "newlines-between": "always",
-            "pathGroupsExcludedImportTypes": ["internal"],
+            "pathGroupsExcludedImportTypes": [
+              "internal"
+            ],
             "pathGroups": [
               {
                 "pattern": "@archie/**",
@@ -403,13 +435,23 @@
       }
     },
     {
-      "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nrwl/nx/typescript"],
+      "files": [
+        "*.ts",
+        "*.tsx"
+      ],
+      "extends": [
+        "plugin:@nrwl/nx/typescript"
+      ],
       "rules": {}
     },
     {
-      "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nrwl/nx/javascript"],
+      "files": [
+        "*.js",
+        "*.jsx"
+      ],
+      "extends": [
+        "plugin:@nrwl/nx/javascript"
+      ],
       "rules": {}
     }
   ]
