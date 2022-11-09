@@ -3,7 +3,7 @@ import {
   LedgerAccountData,
   LedgerAccountUpdatedPayload,
   LedgerActionType,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { user } from '@archie/test/integration';
 
 export const initiateLedgerRecalcuationCommandPayloadFactory = (

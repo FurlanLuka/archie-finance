@@ -5,7 +5,7 @@ import {
   CreditLimit,
   Draw,
   Person,
-} from '@archie/api/peach-api/borrower';
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { BaseNock } from '@archie/test/integration';
 
 export class PeachNock extends BaseNock {

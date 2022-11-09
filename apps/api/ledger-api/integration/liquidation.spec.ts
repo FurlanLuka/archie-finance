@@ -27,7 +27,7 @@ import { INITIATE_COLLATERAL_LIQUIDATION_COMMAND } from '@archie/api/fireblocks-
 import {
   Ledger,
   LedgerActionType,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 
 describe('Ledger api liquidation tests', () => {
   let app: INestApplication;
