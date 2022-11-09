@@ -1,5 +1,15 @@
-import { Inject, Injectable, Logger, OnApplicationBootstrap, Optional } from '@nestjs/common';
-import { AmqpConnection, RabbitHandlerConfig, RequestOptions } from '@golevelup/nestjs-rabbitmq';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  OnApplicationBootstrap,
+  Optional,
+} from '@nestjs/common';
+import {
+  AmqpConnection,
+  RabbitHandlerConfig,
+  RequestOptions,
+} from '@golevelup/nestjs-rabbitmq';
 import { QueueUtilService } from './queue-util.service';
 import { Options } from 'amqplib';
 import { RPCResponse, RPCResponseType } from './queue.interfaces';
@@ -93,14 +103,24 @@ export class QueueService implements OnApplicationBootstrap {
   async onApplicationBootstrap(): Promise<void> {
     Logger.log('Initializing retry and dead letter queues');
     const retryHandlers = [
-      ...(await this.discover.providerMethodsWithMetaAtKey<RabbitHandlerConfig>(RABBIT_RETRY_HANDLER)),
-      ...(await this.discover.controllerMethodsWithMetaAtKey<RabbitHandlerConfig>(RABBIT_RETRY_HANDLER)),
+      ...(await this.discover.providerMethodsWithMetaAtKey<RabbitHandlerConfig>(
+        RABBIT_RETRY_HANDLER,
+      )),
+      ...(await this.discover.controllerMethodsWithMetaAtKey<RabbitHandlerConfig>(
+        RABBIT_RETRY_HANDLER,
+      )),
     ];
     await Promise.all(
       retryHandlers.map(async ({ discoveredMethod, meta }) => {
-        const handler = discoveredMethod.handler.bind(discoveredMethod.parentClass.instance);
+        const handler = discoveredMethod.handler.bind(
+          discoveredMethod.parentClass.instance,
+        );
 
-        await this.amqpConnection.createSubscriber(handler, meta, discoveredMethod.methodName);
+        await this.amqpConnection.createSubscriber(
+          handler,
+          meta,
+          discoveredMethod.methodName,
+        );
         this.createDeadLetterQueue(meta);
       }),
     );
@@ -109,13 +129,18 @@ export class QueueService implements OnApplicationBootstrap {
 
   private createDeadLetterQueue(meta: RabbitHandlerConfig): void {
     if (meta.queue === undefined || meta.queueOptions === undefined) {
-      Logger.error('Invalid queue configuration. queue or queueOptions are not missing');
+      Logger.error(
+        'Invalid queue configuration. queue or queueOptions are not missing',
+      );
       return;
     }
 
-    const { queue } = this.amqpConnection.channel.assertQueue(QueueUtilService.getDeadLetterQueueName(meta.queue), {
-      durable: true,
-    });
+    const { queue } = this.amqpConnection.channel.assertQueue(
+      QueueUtilService.getDeadLetterQueueName(meta.queue),
+      {
+        durable: true,
+      },
+    );
     this.amqpConnection.channel.bindQueue(
       queue,
       meta.queueOptions.arguments['x-dead-letter-exchange'],

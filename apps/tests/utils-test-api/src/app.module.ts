@@ -7,7 +7,10 @@ import { AuthModule } from '@archie/tests/utils-test-api/auth';
 @Module({
   imports: [
     ConfigModule.register({
-      requiredEnvironmentVariables: [ConfigVariables.AUTH0_AUDIENCE, ConfigVariables.AUTH0_DOMAIN],
+      requiredEnvironmentVariables: [
+        ConfigVariables.AUTH0_AUDIENCE,
+        ConfigVariables.AUTH0_DOMAIN,
+      ],
     }),
     HealthModule,
     AuthModule,

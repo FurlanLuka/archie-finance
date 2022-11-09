@@ -57,11 +57,15 @@ async function setupInfrastructureServices(debugEnabled) {
     console.log('Helm setup completed ✅');
 
     console.log('Starting Datadog...');
-    await exec(`helm install datadog -f local/k6-cluster/datadog-values.yml datadog/datadog`);
+    await exec(
+      `helm install datadog -f local/k6-cluster/datadog-values.yml datadog/datadog`,
+    );
     console.log('Datadog running ✅');
 
     console.log('Starting RabbitMQ...');
-    await exec(`helm install rabbitmq -f local/k6-cluster/rabbitmq-values.yml bitnami/rabbitmq`);
+    await exec(
+      `helm install rabbitmq -f local/k6-cluster/rabbitmq-values.yml bitnami/rabbitmq`,
+    );
     console.log('RabbitMQ running ✅');
 
     console.log('Starting K6 operator...');
@@ -73,7 +77,9 @@ async function setupInfrastructureServices(debugEnabled) {
     if (debugEnabled) {
       console.error(error);
     }
-    throw new Error('Issue while setting up infrastructure services, is your docker running?');
+    throw new Error(
+      'Issue while setting up infrastructure services, is your docker running?',
+    );
   }
 }
 
@@ -95,7 +101,9 @@ async function setupTestUtilApi(debugEnabled) {
     if (debugEnabled) {
       console.error(error);
     }
-    throw new Error('Issue while setting up infrastructure services, is your docker running?');
+    throw new Error(
+      'Issue while setting up infrastructure services, is your docker running?',
+    );
   }
 }
 
@@ -112,7 +120,10 @@ program
     try {
       await checkRequirements(debug);
       await setupCluster(debug);
-      await Promise.all([setupInfrastructureServices(debug), setupTestUtilApi(debug)]);
+      await Promise.all([
+        setupInfrastructureServices(debug),
+        setupTestUtilApi(debug),
+      ]);
       await deployIngress(debug);
     } catch (error) {
       console.log(chalk.red.bold(error.message));
@@ -123,7 +134,10 @@ program
 
 program
   .command('run')
-  .requiredOption('-s, --script <script>', 'Path to script to build and execute')
+  .requiredOption(
+    '-s, --script <script>',
+    'Path to script to build and execute',
+  )
   .option('-d, --debug')
   .action(async ({ script, debug }) => {
     const scriptPath = `apps/tests/stress/src/${script}`;
@@ -131,7 +145,9 @@ program
     try {
       console.log(`Removing previous test config...`);
       try {
-        await exec('kubectl delete -f local/k6-cluster/k6-operator-custom-resource.yml');
+        await exec(
+          'kubectl delete -f local/k6-cluster/k6-operator-custom-resource.yml',
+        );
       } catch (error) {
         console.warn(
           'Error deleting k6 custom resource. This is expected in case you run this script on clean cluster',
@@ -149,7 +165,9 @@ program
       console.log(`Test config removed ✅`);
 
       console.log(`Building script at path: ${scriptPath}`);
-      await exec(`nx run stress-tests:build --main=${scriptPath} --skip-nx-cache`);
+      await exec(
+        `nx run stress-tests:build --main=${scriptPath} --skip-nx-cache`,
+      );
       console.log(`Script built ✅`);
 
       console.log(`Starting script`);
@@ -157,7 +175,9 @@ program
         'kubectl create configmap stress-test --from-file dist/apps/tests/stress/main.js --from-file dist/apps/tests/stress/main.js.map',
       );
 
-      await exec('kubectl apply -f local/k6-cluster/k6-operator-custom-resource.yml');
+      await exec(
+        'kubectl apply -f local/k6-cluster/k6-operator-custom-resource.yml',
+      );
       console.log(`Script started ✅. Check kubernetes pods for more info.`);
     } catch (error) {
       console.log(chalk.red.bold(error.message));

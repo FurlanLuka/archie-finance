@@ -20,5 +20,8 @@
       }
     }
   },
-  "tags": ["scope:tests:lib:utils-test-api:shared", "scope:tests:lib:utils-test-api"]
+  "tags": [
+    "scope:tests:lib:utils-test-api:shared",
+    "scope:tests:lib:utils-test-api"
+  ]
 }

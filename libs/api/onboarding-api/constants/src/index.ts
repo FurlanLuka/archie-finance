@@ -16,4 +16,7 @@ export enum ConfigVariables {
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
-export const ONBOARDING_UPDATED_TOPIC = new Event<OnboardingUpdatedPayload>('onboarding.onboarding.updated', 1);
+export const ONBOARDING_UPDATED_TOPIC = new Event<OnboardingUpdatedPayload>(
+  'onboarding.onboarding.updated',
+  1,
+);

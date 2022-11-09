@@ -189,7 +189,9 @@
       ],
       "@archie/api/utils/openapi": ["libs/api/utils/openapi/src/index.ts"],
       "@archie/api/utils/queue": ["libs/api/utils/queue/src/index.ts"],
-      "@archie/api/utils/queue/events": ["libs/api/utils/queue/src/lib/event/event.ts"],
+      "@archie/api/utils/queue/events": [
+        "libs/api/utils/queue/src/lib/event/event.ts"
+      ],
       "@archie/api/utils/queue/decorators/*": [
         "libs/api/utils/queue/src/lib/decorators/*"
       ],

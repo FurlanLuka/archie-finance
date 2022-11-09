@@ -23,14 +23,17 @@ export enum ConfigVariables {
   REDIS_URL = 'REDIS_URL',
 }
 
-export const LEDGER_ACCOUNT_UPDATED_TOPIC = new Event<LedgerAccountUpdatedPayload>('ledger.account.updated', 1);
+export const LEDGER_ACCOUNT_UPDATED_TOPIC =
+  new Event<LedgerAccountUpdatedPayload>('ledger.account.updated', 1);
 
-export const INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND = new Event<InitiateLedgerAssetLiquidationCommandPayload>(
-  'initiate.ledger.asset.liquidation',
-  1,
-);
+export const INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND =
+  new Event<InitiateLedgerAssetLiquidationCommandPayload>(
+    'initiate.ledger.asset.liquidation',
+    1,
+  );
 
-export const INITIATE_LEDGER_RECALCULATION_COMMAND = new Event<InitiateLedgerRecalculationCommandPayload>(
-  'initiate.ledger.recalculation',
-  1,
-);
+export const INITIATE_LEDGER_RECALCULATION_COMMAND =
+  new Event<InitiateLedgerRecalculationCommandPayload>(
+    'initiate.ledger.recalculation',
+    1,
+  );
