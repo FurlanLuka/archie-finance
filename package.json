@@ -19,7 +19,7 @@
     "nx": "nx",
     "start": "nx serve",
     "test": "nx test",
-    "preinstall": "git config --local blame.ignoreRevsFile .git-blame-ignore-revs"
+    "prepare": "git config --local blame.ignoreRevsFile .git-blame-ignore-revs"
   },
   "dependencies": {
     "@actions/core": "^1.10.0",
