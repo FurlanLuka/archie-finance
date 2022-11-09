@@ -4,7 +4,13 @@ import { useNavigate, Navigate } from 'react-router-dom';
 
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import { ButtonOutline, Card, Skeleton, TitleM, BodyM } from '@archie/ui/shared/design-system';
+import {
+  ButtonOutline,
+  Card,
+  Skeleton,
+  TitleM,
+  BodyM,
+} from '@archie/ui/shared/design-system';
 
 export const CollateralValue: FC = () => {
   const { t } = useTranslation();
@@ -26,7 +32,12 @@ export const CollateralValue: FC = () => {
 
   if (getLedgerResponse.state === RequestState.SUCCESS) {
     return (
-      <Card column alignItems="flex-start" justifyContent="space-between" padding="1.5rem">
+      <Card
+        column
+        alignItems="flex-start"
+        justifyContent="space-between"
+        padding="1.5rem"
+      >
         <div>
           <BodyM weight={700} className="card-title">
             {t('collateral_value_card.title')}

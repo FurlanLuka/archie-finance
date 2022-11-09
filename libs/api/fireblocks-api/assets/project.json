@@ -19,5 +19,8 @@
       }
     }
   },
-  "tags": ["scope:api:lib:fireblocks-api", "scope:api:lib:fireblocks-api:shared"]
+  "tags": [
+    "scope:api:lib:fireblocks-api",
+    "scope:api:lib:fireblocks-api:shared"
+  ]
 }

@@ -38,7 +38,9 @@ export class EmailAddressDto implements EmailAddress {
   email: string;
 }
 
-export class GetSendEnrollmentTicketResponseDto implements SendEnrollmentTicketResponse {
+export class GetSendEnrollmentTicketResponseDto
+  implements SendEnrollmentTicketResponse
+{
   ticket_id: string;
   ticket_url: string;
 }

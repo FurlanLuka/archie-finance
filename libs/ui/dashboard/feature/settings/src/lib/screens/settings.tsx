@@ -5,7 +5,13 @@ import { Navigate } from 'react-router-dom';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetKyc } from '@archie/ui/shared/data-access/archie-api/kyc/hooks/use-get-kyc';
 import { useGetEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-get-email-verification';
-import { Card, Skeleton, TitleM, TitleS, BodyM } from '@archie/ui/shared/design-system';
+import {
+  Card,
+  Skeleton,
+  TitleM,
+  TitleS,
+  BodyM,
+} from '@archie/ui/shared/design-system';
 
 import { OptionsHandler } from '../components/options-handler/options-handler';
 
@@ -18,7 +24,10 @@ export const SettingsScreen: FC = () => {
   const getEmailVerificationResponse = useGetEmailVerification();
 
   const getContent = () => {
-    if (getKycResponse.state === RequestState.LOADING || getEmailVerificationResponse.state === RequestState.LOADING) {
+    if (
+      getKycResponse.state === RequestState.LOADING ||
+      getEmailVerificationResponse.state === RequestState.LOADING
+    ) {
       return (
         <Card height="608px">
           <Skeleton />
@@ -26,11 +35,17 @@ export const SettingsScreen: FC = () => {
       );
     }
 
-    if (getKycResponse.state === RequestState.ERROR || getEmailVerificationResponse.state === RequestState.ERROR) {
+    if (
+      getKycResponse.state === RequestState.ERROR ||
+      getEmailVerificationResponse.state === RequestState.ERROR
+    ) {
       return <Navigate to="/error" state={{ prevPath: '/settings' }} />;
     }
 
-    if (getKycResponse.state === RequestState.SUCCESS && getEmailVerificationResponse.state === RequestState.SUCCESS) {
+    if (
+      getKycResponse.state === RequestState.SUCCESS &&
+      getEmailVerificationResponse.state === RequestState.SUCCESS
+    ) {
       const kycData = getKycResponse.data;
       const emailVerificationData = getEmailVerificationResponse.data;
 

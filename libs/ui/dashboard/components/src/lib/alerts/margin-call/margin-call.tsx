@@ -1,8 +1,6 @@
 import { FC } from 'react';
 
-import {
-  LtvStatus,
-} from '@archie/api/ltv-api/data-transfer-objects/types';
+import { LtvStatus } from '@archie/api/ltv-api/data-transfer-objects/types';
 import { LTVColor } from '@archie/ui/shared/constants';
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';

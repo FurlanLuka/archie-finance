@@ -7,4 +7,7 @@ import { getMfaEnrollments } from '../api/get-mfa-enrollments';
 export const MFA_ENROLLMENTS_RECORD_QUERY_KEY = 'mfa_enrollments_record';
 
 export const useGetMfaEnrollments = (): QueryResponse<Enrollment[]> =>
-  useExtendedQuery(MFA_ENROLLMENTS_RECORD_QUERY_KEY, async (accessToken: string) => getMfaEnrollments(accessToken));
+  useExtendedQuery(
+    MFA_ENROLLMENTS_RECORD_QUERY_KEY,
+    async (accessToken: string) => getMfaEnrollments(accessToken),
+  );

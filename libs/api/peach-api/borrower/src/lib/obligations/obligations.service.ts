@@ -29,8 +29,14 @@ export class ObligationsService {
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
     const [obligations, balances]: [Obligations, Balances] = await Promise.all([
-      this.peachApiService.getLoanObligations(borrower.personId, borrower.creditLineId),
-      this.peachApiService.getLoanBalances(borrower.personId, borrower.creditLineId),
+      this.peachApiService.getLoanObligations(
+        borrower.personId,
+        borrower.creditLineId,
+      ),
+      this.peachApiService.getLoanBalances(
+        borrower.personId,
+        borrower.creditLineId,
+      ),
     ]);
 
     const dueObligations: Obligation[] = obligations.obligations.filter(
@@ -40,6 +46,10 @@ export class ObligationsService {
       (obligation: Obligation) => obligation.isOpen,
     );
 
-    return this.obligationsResponseFactory.create(balances, dueObligations, futureObligations);
+    return this.obligationsResponseFactory.create(
+      balances,
+      dueObligations,
+      futureObligations,
+    );
   }
 }

@@ -11,7 +11,13 @@ import {
   MISSING_PAYMENT_INFO_ERROR,
 } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import { useGetObligations } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
-import { ButtonOutline, Card, Skeleton, TitleM, BodyM } from '@archie/ui/shared/design-system';
+import {
+  ButtonOutline,
+  Card,
+  Skeleton,
+  TitleM,
+  BodyM,
+} from '@archie/ui/shared/design-system';
 
 import { NextPaymentChart } from '../../charts/next-payment/next-payment';
 
@@ -82,7 +88,9 @@ export const NextPayment: FC<NextPaymentProps> = ({ withBtn }) => {
             </div>
           )}
         </Card>
-        {makePaymentModalOpen && <MakePaymentModal close={() => setMakePaymentModalOpen(false)} />}
+        {makePaymentModalOpen && (
+          <MakePaymentModal close={() => setMakePaymentModalOpen(false)} />
+        )}
       </>
     );
   }

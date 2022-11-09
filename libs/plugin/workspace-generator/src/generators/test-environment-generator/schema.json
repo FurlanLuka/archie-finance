@@ -4,7 +4,6 @@
   "$id": "TestEnvironmentGenerator",
   "title": "",
   "type": "object",
-  "properties": {
-  },
+  "properties": {},
   "required": []
 }

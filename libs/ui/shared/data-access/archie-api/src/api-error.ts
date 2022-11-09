@@ -37,4 +37,7 @@ export class UnauthorizedApiError extends Error {
   }
 }
 
-export type ApiErrors = ApiError | UnauthenticatedApiError | UnauthorizedApiError;
+export type ApiErrors =
+  | ApiError
+  | UnauthenticatedApiError
+  | UnauthorizedApiError;

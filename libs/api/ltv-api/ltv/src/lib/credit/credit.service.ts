@@ -12,7 +12,9 @@ export class CreditService {
     private ltvCreditRepository: Repository<Credit>,
   ) {}
 
-  public async updateCreditBalance(credit: CreditBalanceUpdatedPayload): Promise<void> {
+  public async updateCreditBalance(
+    credit: CreditBalanceUpdatedPayload,
+  ): Promise<void> {
     await this.ltvCreditRepository.manager.update(
       Credit,
       {

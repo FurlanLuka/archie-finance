@@ -1,4 +1,7 @@
-import { AmountType, CreateAutopay } from '@archie/api/peach-api/data-transfer-objects/types';
+import {
+  AmountType,
+  CreateAutopay,
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
 
 import { DefaultVariables, postRequest } from '../../helpers';

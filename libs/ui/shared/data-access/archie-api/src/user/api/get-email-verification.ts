@@ -5,7 +5,9 @@ import { getRequest } from '../../helpers';
 
 const ERROR_LIST = new Map<string, string>([]);
 
-export const getEmailVerification = async (accessToken: string): Promise<EmailVerification> => {
+export const getEmailVerification = async (
+  accessToken: string,
+): Promise<EmailVerification> => {
   return getRequest<EmailVerification>(
     `${API_URL}/v1/user/email-verification`,
     {

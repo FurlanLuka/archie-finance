@@ -1,5 +1,8 @@
 import { Controller } from '@nestjs/common';
-import { SERVICE_INSTANCE_ID, SERVICE_NAME } from '@archie/api/websocket-event-api/constants';
+import {
+  SERVICE_INSTANCE_ID,
+  SERVICE_NAME,
+} from '@archie/api/websocket-event-api/constants';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
 import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
@@ -29,7 +32,10 @@ export class EventQueueController {
     EventQueueController.CONTROLLER_QUEUE_NAME,
     EventQueueController.CONTROLLER_QUEUE_SETTINGS,
   )
-  async ledgerAccountUpdatedHandler({ userId, ...payload }: LedgerAccountUpdatedPayload): Promise<void> {
+  async ledgerAccountUpdatedHandler({
+    userId,
+    ...payload
+  }: LedgerAccountUpdatedPayload): Promise<void> {
     this.eventService.publishToClient(userId, {
       topic: LEDGER_ACCOUNT_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
@@ -41,7 +47,10 @@ export class EventQueueController {
     EventQueueController.CONTROLLER_QUEUE_NAME,
     EventQueueController.CONTROLLER_QUEUE_SETTINGS,
   )
-  async creditBalanceUpdatedHandler({ userId, ...payload }: CreditBalanceUpdatedPayload): Promise<void> {
+  async creditBalanceUpdatedHandler({
+    userId,
+    ...payload
+  }: CreditBalanceUpdatedPayload): Promise<void> {
     this.eventService.publishToClient(userId, {
       topic: CREDIT_BALANCE_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
@@ -53,7 +62,10 @@ export class EventQueueController {
     EventQueueController.CONTROLLER_QUEUE_NAME,
     EventQueueController.CONTROLLER_QUEUE_SETTINGS,
   )
-  async onboardingUpdatedHandler({ userId, ...payload }: OnboardingUpdatedPayload): Promise<void> {
+  async onboardingUpdatedHandler({
+    userId,
+    ...payload
+  }: OnboardingUpdatedPayload): Promise<void> {
     this.eventService.publishToClient(userId, {
       topic: ONBOARDING_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
@@ -65,7 +77,10 @@ export class EventQueueController {
     EventQueueController.CONTROLLER_QUEUE_NAME,
     EventQueueController.CONTROLLER_QUEUE_SETTINGS,
   )
-  async ltvUpdatedHandler({ userId, ...payload }: LtvUpdatedPayload): Promise<void> {
+  async ltvUpdatedHandler({
+    userId,
+    ...payload
+  }: LtvUpdatedPayload): Promise<void> {
     this.eventService.publishToClient(userId, {
       topic: LTV_UPDATED_TOPIC.getRoutingKey(),
       data: payload,
@@ -77,7 +92,10 @@ export class EventQueueController {
     EventQueueController.CONTROLLER_QUEUE_NAME,
     EventQueueController.CONTROLLER_QUEUE_SETTINGS,
   )
-  async transactionUpdatedHandler({ userId, ...payload }: TransactionUpdatedPayload): Promise<void> {
+  async transactionUpdatedHandler({
+    userId,
+    ...payload
+  }: TransactionUpdatedPayload): Promise<void> {
     this.eventService.publishToClient(userId, {
       topic: TRANSACTION_UPDATED_TOPIC.getRoutingKey(),
       data: payload,

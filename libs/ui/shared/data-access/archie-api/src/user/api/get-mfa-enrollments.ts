@@ -5,7 +5,9 @@ import { getRequest } from '../../helpers';
 
 const ERROR_LIST = new Map<string, string>([]);
 
-export const getMfaEnrollments = async (accessToken: string): Promise<Enrollment[]> => {
+export const getMfaEnrollments = async (
+  accessToken: string,
+): Promise<Enrollment[]> => {
   return getRequest<Enrollment[]>(
     `${API_URL}/v1/user/mfa/enrollments`,
     {

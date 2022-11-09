@@ -5,7 +5,10 @@ import { getRequest } from '../../helpers';
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const getStatementDocument = async (accessToken: string, documentId: string): Promise<LoanDocument> => {
+export const getStatementDocument = async (
+  accessToken: string,
+  documentId: string,
+): Promise<LoanDocument> => {
   return getRequest<LoanDocument>(
     `${API_URL}/v1/loan_statements/${documentId}`,
     {

@@ -1,7 +1,19 @@
-import { IsDateString, IsNumber, IsOptional, IsPositive, IsString, Matches } from 'class-validator';
+import {
+  IsDateString,
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  IsString,
+  Matches,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { PaymentResponseData, PaymentsResponse } from './payments.interfaces';
-import { PaymentReason, PaymentStatus, TransactionPaymentType, TransactionType } from './peach-api.interfaces';
+import {
+  PaymentReason,
+  PaymentStatus,
+  TransactionPaymentType,
+  TransactionType,
+} from './peach-api.interfaces';
 import { PEACH_ID_REGEX } from './shared.dto';
 
 export class GetPaymentsQueryDto {

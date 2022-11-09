@@ -8,4 +8,4 @@ export const migrations = [
   PeachApi1662463384055,
   PeachApi1664290112298,
   PeachApi1665667264433,
-  ]
+];

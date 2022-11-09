@@ -11,7 +11,7 @@ export async function start(
   const generateMigrations: boolean = process.argv.some(
     (arg) => arg === 'generate-migration',
   );
-  
+
   const buildSwagger: boolean = process.argv.some(
     (arg) => arg === 'build-swagger',
   );

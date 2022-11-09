@@ -14,7 +14,11 @@ import {
   AdjustmentType,
 } from './rize_api.interfaces';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
-import { DEFAULT_BASE_PATH, DEFAULT_HOST, DEFAULT_TIMEOUT } from '@rizefinance/rize-js/lib/constants';
+import {
+  DEFAULT_BASE_PATH,
+  DEFAULT_HOST,
+  DEFAULT_TIMEOUT,
+} from '@rizefinance/rize-js/lib/constants';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import * as rs from 'jsrsasign';
 import { CustomerDetailsParams } from '@rizefinance/rize-js/types/lib/core/customer';
@@ -31,12 +35,15 @@ export class RizeApiService {
     data: undefined,
     timestamp: undefined,
     isExpired(tokenMaxAge = this.DEFAULT_TOKEN_MAX_AGE) {
-      return !this.timestamp || new Date().getTime() - this.timestamp > tokenMaxAge;
+      return (
+        !this.timestamp || new Date().getTime() - this.timestamp > tokenMaxAge
+      );
     },
   };
 
   constructor(private configService: ConfigService) {
-    const environment: 'production' | 'integration' | 'sandbox' = configService.get(ConfigVariables.RIZE_ENVIRONMENT);
+    const environment: 'production' | 'integration' | 'sandbox' =
+      configService.get(ConfigVariables.RIZE_ENVIRONMENT);
 
     this.rizeClient = new Rize(
       configService.get(ConfigVariables.RIZE_PROGRAM_ID),
@@ -86,23 +93,31 @@ export class RizeApiService {
 
   public subscribeToTopic(
     client,
-    topic: 'customer' | 'debit_card' | 'synthetic_account' | 'transfer' | 'transaction',
+    topic:
+      | 'customer'
+      | 'debit_card'
+      | 'synthetic_account'
+      | 'transfer'
+      | 'transaction',
     listener: (err: Error, msg, ack, nack) => void,
   ): void {
     client.subscribeToRizeTopic(topic, topic, listener, 'client-individual');
   }
 
   public async searchCustomers(userId: string): Promise<Customer | null> {
-    const customers: RizeList<Customer> = await this.rizeClient.customer.getList({
-      external_uid: userId,
-      include_initiated: true,
-    });
+    const customers: RizeList<Customer> =
+      await this.rizeClient.customer.getList({
+        external_uid: userId,
+        include_initiated: true,
+      });
 
     return customers.data[0] ?? null;
   }
 
   public async getTransaction(txnId: string): Promise<RizeTransaction> {
-    const transaction: RizeTransaction = <RizeTransaction>(<unknown>await this.rizeClient.transaction.get(txnId));
+    const transaction: RizeTransaction = <RizeTransaction>(
+      (<unknown>await this.rizeClient.transaction.get(txnId))
+    );
 
     return transaction;
   }
@@ -132,12 +147,17 @@ export class RizeApiService {
     await this.rizeClient.customer.update(customerUid, email, customerDetails);
   }
 
-  public async createCheckingComplianceWorkflow(customerId: string): Promise<ComplianceWorkflow> {
+  public async createCheckingComplianceWorkflow(
+    customerId: string,
+  ): Promise<ComplianceWorkflow> {
     const products: RizeList<Product> = await this.rizeClient.product.getList();
 
     const product: Product = products.data[0];
 
-    return this.rizeClient.complianceWorkflow.create(customerId, product.product_compliance_plan_uid);
+    return this.rizeClient.complianceWorkflow.create(
+      customerId,
+      product.product_compliance_plan_uid,
+    );
   }
 
   public async acceptComplianceDocuments(
@@ -152,31 +172,43 @@ export class RizeApiService {
     );
   }
 
-  public async getLatestComplianceWorkflow(customerId: string): Promise<ComplianceWorkflow> {
+  public async getLatestComplianceWorkflow(
+    customerId: string,
+  ): Promise<ComplianceWorkflow> {
     return this.rizeClient.complianceWorkflow.viewLatest(customerId);
   }
 
-  public async createCustomerProduct(customerId: string, productId: string): Promise<void> {
+  public async createCustomerProduct(
+    customerId: string,
+    productId: string,
+  ): Promise<void> {
     await this.rizeClient.customerProduct.create(customerId, productId);
   }
 
   public async getDebitCard(customerId: string): Promise<DebitCard | null> {
-    const debitCards: RizeList<DebitCard> = await this.rizeClient.debitCard.getList({ customer_uid: [customerId] });
+    const debitCards: RizeList<DebitCard> =
+      await this.rizeClient.debitCard.getList({ customer_uid: [customerId] });
 
     return debitCards.data[0] ?? null;
   }
 
-  public async getDebitCardAccessToken(cardID: string): Promise<DebitCardAccessToken> {
-    const debitCardAccessToken: DebitCardAccessToken = await this.rizeClient.debitCard.getAccessTokenData(cardID);
+  public async getDebitCardAccessToken(
+    cardID: string,
+  ): Promise<DebitCardAccessToken> {
+    const debitCardAccessToken: DebitCardAccessToken =
+      await this.rizeClient.debitCard.getAccessTokenData(cardID);
 
     return debitCardAccessToken;
   }
 
-  public async getVirtualCardImage(debitCardAccessToken: DebitCardAccessToken): Promise<string> {
-    const virtualCardImage: string = await this.rizeClient.debitCard.getVirtualCardImage(
-      debitCardAccessToken.config_id,
-      debitCardAccessToken.token,
-    );
+  public async getVirtualCardImage(
+    debitCardAccessToken: DebitCardAccessToken,
+  ): Promise<string> {
+    const virtualCardImage: string =
+      await this.rizeClient.debitCard.getVirtualCardImage(
+        debitCardAccessToken.config_id,
+        debitCardAccessToken.token,
+      );
 
     return virtualCardImage;
   }
@@ -208,18 +240,21 @@ export class RizeApiService {
     await this.rizeClient.debitCard.unlock(cardId);
   }
 
-  public async loadFunds(customerId: string, adjustmentAmount: number): Promise<void> {
-    const adjustmentTypesResponse: AxiosResponse<RizeList<AdjustmentType>> = await this.rizeApiClient.get(
-      'adjustment_types',
-      {
+  public async loadFunds(
+    customerId: string,
+    adjustmentAmount: number,
+  ): Promise<void> {
+    const adjustmentTypesResponse: AxiosResponse<RizeList<AdjustmentType>> =
+      await this.rizeApiClient.get('adjustment_types', {
         headers: {
           Authorization: await this.getToken(),
         },
-      },
-    );
-    const increaseCreditAdjustmentType: AdjustmentType | undefined = adjustmentTypesResponse.data.data.find(
-      (adjustmentType: AdjustmentType) => adjustmentType.name === 'credit_limit_update_increase',
-    );
+      });
+    const increaseCreditAdjustmentType: AdjustmentType | undefined =
+      adjustmentTypesResponse.data.data.find(
+        (adjustmentType: AdjustmentType) =>
+          adjustmentType.name === 'credit_limit_update_increase',
+      );
 
     if (increaseCreditAdjustmentType === undefined) {
       Logger.warn('Rize credit_limit_update_increase is not set up');
@@ -241,18 +276,21 @@ export class RizeApiService {
     );
   }
 
-  public async decreaseCreditLimit(customerId: string, adjustmentAmount: number): Promise<void> {
-    const adjustmentTypesResponse: AxiosResponse<RizeList<AdjustmentType>> = await this.rizeApiClient.get(
-      'adjustment_types',
-      {
+  public async decreaseCreditLimit(
+    customerId: string,
+    adjustmentAmount: number,
+  ): Promise<void> {
+    const adjustmentTypesResponse: AxiosResponse<RizeList<AdjustmentType>> =
+      await this.rizeApiClient.get('adjustment_types', {
         headers: {
           Authorization: await this.getToken(),
         },
-      },
-    );
-    const decreaseCreditAdjustmentType: AdjustmentType | undefined = adjustmentTypesResponse.data.data.find(
-      (adjustmentType: AdjustmentType) => adjustmentType.name === 'credit_limit_update_decrease',
-    );
+      });
+    const decreaseCreditAdjustmentType: AdjustmentType | undefined =
+      adjustmentTypesResponse.data.data.find(
+        (adjustmentType: AdjustmentType) =>
+          adjustmentType.name === 'credit_limit_update_decrease',
+      );
 
     if (decreaseCreditAdjustmentType === undefined) {
       Logger.warn('Rize credit_limit_update_decrease is not set up');
@@ -284,7 +322,10 @@ export class RizeApiService {
   }
 
   private async getToken(): Promise<string> {
-    if (!this.tokenCache.data || this.tokenCache.isExpired(this.DEFAULT_TOKEN_MAX_AGE)) {
+    if (
+      !this.tokenCache.data ||
+      this.tokenCache.isExpired(this.DEFAULT_TOKEN_MAX_AGE)
+    ) {
       const header = {
         alg: 'HS512',
       };

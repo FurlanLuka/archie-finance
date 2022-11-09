@@ -1,9 +1,21 @@
 import { AuthGuard } from '@archie/api/utils/auth0';
-import { Controller, Get, HttpCode, Post, Request, UseGuards, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Request,
+  UseGuards,
+  Query,
+} from '@nestjs/common';
 import { RizeService } from './rize.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
-import { CustomerAlreadyExists, ActiveCustomerDoesNotExist, DebitCardDoesNotExist } from './rize.errors';
+import {
+  CustomerAlreadyExists,
+  ActiveCustomerDoesNotExist,
+  DebitCardDoesNotExist,
+} from './rize.errors';
 import {
   CardResponseDto,
   GetTransactionsQueryDto,
@@ -11,8 +23,14 @@ import {
 } from '@archie/api/credit-api/data-transfer-objects';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { SERVICE_QUEUE_NAME } from '@archie/api/credit-api/constants';
-import { MARGIN_CALL_COMPLETED_TOPIC, MARGIN_CALL_STARTED_TOPIC } from '@archie/api/ltv-api/constants';
-import { MarginCallCompletedPayload, MarginCallStartedPayload } from '@archie/api/ltv-api/data-transfer-objects/types';
+import {
+  MARGIN_CALL_COMPLETED_TOPIC,
+  MARGIN_CALL_STARTED_TOPIC,
+} from '@archie/api/ltv-api/constants';
+import {
+  MarginCallCompletedPayload,
+  MarginCallStartedPayload,
+} from '@archie/api/ltv-api/data-transfer-objects/types';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
 
@@ -26,7 +44,10 @@ export class RizeController {
   @ApiBearerAuth()
   @ApiErrorResponse([CustomerAlreadyExists])
   public async createUser(@Request() req): Promise<void> {
-    return this.rizeService.createUser(req.user.sub, req.headers['x-forwarded-for']);
+    return this.rizeService.createUser(
+      req.user.sub,
+      req.headers['x-forwarded-for'],
+    );
   }
 
   @Get('cards/credit')
@@ -45,7 +66,11 @@ export class RizeController {
     @Request() req,
     @Query() query: GetTransactionsQueryDto,
   ): Promise<TransactionResponseDto> {
-    return this.rizeService.getTransactions(req.user.sub, query.page, query.limit);
+    return this.rizeService.getTransactions(
+      req.user.sub,
+      query.page,
+      query.limit,
+    );
   }
 }
 
@@ -55,18 +80,33 @@ export class RizeQueueController {
 
   constructor(private rizeService: RizeService) {}
 
-  @Subscribe(MARGIN_CALL_STARTED_TOPIC, RizeQueueController.CONTROLLER_QUEUE_NAME)
-  async marginCallStartedHandler(payload: MarginCallStartedPayload): Promise<void> {
+  @Subscribe(
+    MARGIN_CALL_STARTED_TOPIC,
+    RizeQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async marginCallStartedHandler(
+    payload: MarginCallStartedPayload,
+  ): Promise<void> {
     await this.rizeService.lockCard(payload.userId, payload.startedAt);
   }
 
-  @Subscribe(MARGIN_CALL_COMPLETED_TOPIC, RizeQueueController.CONTROLLER_QUEUE_NAME)
-  async marginCallCompletedHandler(payload: MarginCallCompletedPayload): Promise<void> {
+  @Subscribe(
+    MARGIN_CALL_COMPLETED_TOPIC,
+    RizeQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async marginCallCompletedHandler(
+    payload: MarginCallCompletedPayload,
+  ): Promise<void> {
     await this.rizeService.unlockCard(payload.userId, payload.completedAt);
   }
 
-  @Subscribe(CREDIT_BALANCE_UPDATED_TOPIC, RizeQueueController.CONTROLLER_QUEUE_NAME)
-  async creditLimitDecreasedHandler(payload: CreditBalanceUpdatedPayload): Promise<void> {
+  @Subscribe(
+    CREDIT_BALANCE_UPDATED_TOPIC,
+    RizeQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async creditLimitDecreasedHandler(
+    payload: CreditBalanceUpdatedPayload,
+  ): Promise<void> {
     await this.rizeService.updateAvailableCredit(payload);
   }
 }

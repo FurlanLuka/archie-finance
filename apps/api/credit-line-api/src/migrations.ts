@@ -6,4 +6,4 @@ export const migrations = [
   CreditLineApi1664908742357,
   CreditLineApi1664995505310,
   CreditLineApi1665666856171,
-  ]
+];

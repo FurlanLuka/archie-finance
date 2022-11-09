@@ -1,7 +1,5 @@
-import {
-  KycDto,
-  KycSubmittedPayload,
-} from '@archie/api/user-api/data-transfer-objects';
+import { KycDto } from '@archie/api/user-api/data-transfer-objects';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 import { user } from '@archie/test/integration';
 import { DateTime } from 'luxon';
 
@@ -23,6 +21,7 @@ export const kycSubmittedDataFactory = (
     phoneNumberCountryCode: 'US',
     ssn: '3324234234',
     aptUnit: '6',
+    income: 100000,
     ...override,
   };
 };

@@ -3,7 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { Waitlist } from './waitlist.entity';
-import { GetWaitlistRecordResponse, ReferralRankQueryResult } from './waitlist.interfaces';
+import {
+  GetWaitlistRecordResponse,
+  ReferralRankQueryResult,
+} from './waitlist.interfaces';
 import { ConfigService } from '@archie/api/utils/config';
 import {
   ConfigVariables,
@@ -41,7 +44,9 @@ export class WaitlistService {
 
     this.queueService.publishEvent(APPLIED_TO_WAITLIST_TOPIC, {
       emailAddress,
-      verifyAddress: `${this.configService.get(ConfigVariables.ARCHIE_MARKETING_WEBSITE_URL)}/verify?id=${id}`,
+      verifyAddress: `${this.configService.get(
+        ConfigVariables.ARCHIE_MARKETING_WEBSITE_URL,
+      )}/verify?id=${id}`,
     });
 
     await this.waitlist.insert({
@@ -61,7 +66,8 @@ export class WaitlistService {
       throw new NotFoundException();
     }
 
-    const referralRankData: ReferralRankQueryResult = await this.getReferralRankData(waitlistEntity.id);
+    const referralRankData: ReferralRankQueryResult =
+      await this.getReferralRankData(waitlistEntity.id);
 
     return {
       numberOfReferrals: Number(referralRankData.referralcount),
@@ -71,7 +77,9 @@ export class WaitlistService {
     };
   }
 
-  private async getReferralRankData(waitlistEntityId): Promise<ReferralRankQueryResult> {
+  private async getReferralRankData(
+    waitlistEntityId,
+  ): Promise<ReferralRankQueryResult> {
     const queryResult: ReferralRankQueryResult[] = await this.dataSource.query(
       `
       SELECT 
@@ -115,7 +123,9 @@ export class WaitlistService {
     }
 
     try {
-      const emailAddress = this.cryptoService.decrypt(waitlistEntity.emailAddress);
+      const emailAddress = this.cryptoService.decrypt(
+        waitlistEntity.emailAddress,
+      );
 
       this.queueService.publishEvent(JOINED_WAITLIST_TOPIC, {
         emailAddress,

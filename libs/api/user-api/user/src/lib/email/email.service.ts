@@ -4,11 +4,17 @@ import { Auth0Service } from '@archie/api/user-api/auth0';
 import { EMAIL_VERIFIED_TOPIC } from '@archie/api/user-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import { EmailAlreadyVerifiedError, EmailNotFoundError } from './email.errors';
-import { EmailAddress, EmailVerification } from '@archie/api/user-api/data-transfer-objects/types';
+import {
+  EmailAddress,
+  EmailVerification,
+} from '@archie/api/user-api/data-transfer-objects/types';
 
 @Injectable()
 export class EmailService {
-  constructor(private auth0Service: Auth0Service, private queueService: QueueService) {}
+  constructor(
+    private auth0Service: Auth0Service,
+    private queueService: QueueService,
+  ) {}
 
   async isEmailVerified(userId: string): Promise<EmailVerification> {
     const user: User = await this.auth0Service.getManagmentClient().getUser({

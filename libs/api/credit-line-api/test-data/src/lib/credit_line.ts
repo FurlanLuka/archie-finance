@@ -1,7 +1,7 @@
 import {
   CreditLineUpdatedPayload,
   CreditLineCreatedPayload,
-} from '@archie/api/credit-line-api/data-transfer-objects';
+} from '@archie/api/credit-line-api/data-transfer-objects/types';
 import { user } from '@archie/test/integration';
 
 export const creditLineCreatedDataFactory = (

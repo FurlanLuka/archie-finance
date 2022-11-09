@@ -5,7 +5,9 @@ import { getRequest } from '../../helpers';
 
 export const ERROR_LIST = new Map<string, string>([]);
 
-export const getStatements = async (accessToken: string): Promise<Statement[]> => {
+export const getStatements = async (
+  accessToken: string,
+): Promise<Statement[]> => {
   return getRequest<Statement[]>(
     `${API_URL}/v1/loan_statements`,
     {
