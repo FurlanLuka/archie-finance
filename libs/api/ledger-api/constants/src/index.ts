@@ -1,9 +1,9 @@
 import { Event } from '@archie/api/utils/queue/events';
+import { InitiateLedgerAssetLiquidationCommandPayload } from '@archie/api/ledger-api/data-transfer-objects';
 import {
-  InitiateLedgerAssetLiquidationCommandPayload,
-  InitiateLedgerRecalculationCommandPayload,
   LedgerAccountUpdatedPayload,
-} from '@archie/api/ledger-api/data-transfer-objects';
+  InitiateLedgerRecalculationCommandPayload,
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'ledger-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
@@ -23,17 +23,14 @@ export enum ConfigVariables {
   REDIS_URL = 'REDIS_URL',
 }
 
-export const LEDGER_ACCOUNT_UPDATED_TOPIC =
-  new Event<LedgerAccountUpdatedPayload>('ledger.account.updated', 1);
+export const LEDGER_ACCOUNT_UPDATED_TOPIC = new Event<LedgerAccountUpdatedPayload>('ledger.account.updated', 1);
 
-export const INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND =
-  new Event<InitiateLedgerAssetLiquidationCommandPayload>(
-    'initiate.ledger.asset.liquidation',
-    1,
-  );
+export const INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND = new Event<InitiateLedgerAssetLiquidationCommandPayload>(
+  'initiate.ledger.asset.liquidation',
+  1,
+);
 
-export const INITIATE_LEDGER_RECALCULATION_COMMAND =
-  new Event<InitiateLedgerRecalculationCommandPayload>(
-    'initiate.ledger.recalculation',
-    1,
-  );
+export const INITIATE_LEDGER_RECALCULATION_COMMAND = new Event<InitiateLedgerRecalculationCommandPayload>(
+  'initiate.ledger.recalculation',
+  1,
+);

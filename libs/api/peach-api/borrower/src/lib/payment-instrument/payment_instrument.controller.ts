@@ -11,12 +11,12 @@ import {
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
+import {
+  PaymentInstrumentDto,
+  ConnectAccountDto,
+} from '@archie/api/peach-api/data-transfer-objects';
 import { PeachPaymentInstrumentsService } from './payment_instrument.service';
 import { BorrowerNotFoundError } from '../borrower.errors';
-import {
-  ConnectAccountDto,
-  PaymentInstrumentDto,
-} from './payment_instruments.dto';
 
 @Controller('v1/payment_instruments')
 export class PeachPaymentInstrumentsController {

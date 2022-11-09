@@ -6,19 +6,17 @@ import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { QueueService } from '@archie/api/utils/queue';
 import { BorrowerValidation } from '../utils/borrower.validation';
-import {
-  EmailVerifiedPayload,
-  KycSubmittedPayload,
-} from '@archie/api/user-api/data-transfer-objects';
+import { EmailVerifiedPayload } from '@archie/api/user-api/data-transfer-objects/types';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 import { BorrowerWithHomeAddress } from '../utils/borrower.validation.interfaces';
-import { Credit, Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
+import { Credit, Draw, HomeAddress, Person } from '@archie/api/peach-api/data-transfer-objects/types';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { LastCreditLimitUpdate } from '../last_credit_limit_update.entity';
 import { Lock } from '@archie/api/utils/redis';
 import {
   CreditLineUpdatedPayload,
   CreditLineCreatedPayload,
-} from '@archie/api/credit-line-api/data-transfer-objects';
+} from '@archie/api/credit-line-api/data-transfer-objects/types';
 
 @Injectable()
 export class PeachBorrowerService {
@@ -33,9 +31,7 @@ export class PeachBorrowerService {
     private borrowerValidation: BorrowerValidation,
   ) {}
 
-  public async handleKycSubmittedEvent(
-    kyc: KycSubmittedPayload,
-  ): Promise<void> {
+  public async handleKycSubmittedEvent(kyc: KycSubmittedPayload): Promise<void> {
     let borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: kyc.userId,
     });
@@ -49,8 +45,7 @@ export class PeachBorrowerService {
     }
 
     await this.peachApiService.addMobilePhoneContact(borrower.personId, kyc);
-    const homeAddress: HomeAddress =
-      await this.peachApiService.addHomeAddressContact(borrower.personId, kyc);
+    const homeAddress: HomeAddress = await this.peachApiService.addHomeAddressContact(borrower.personId, kyc);
 
     await this.borrowerRepository.update(
       { userId: kyc.userId },
@@ -60,9 +55,7 @@ export class PeachBorrowerService {
     );
   }
 
-  public async handleEmailVerifiedEvent(
-    email: EmailVerifiedPayload,
-  ): Promise<void> {
+  public async handleEmailVerifiedEvent(email: EmailVerifiedPayload): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: email.userId,
     });
@@ -72,16 +65,11 @@ export class PeachBorrowerService {
       await this.peachApiService.addMailContact(borrower.personId, email.email);
 
       const encryptedEmail: string = this.cryptoService.encrypt(email.email);
-      await this.borrowerRepository.update(
-        { userId: email.userId },
-        { encryptedEmail },
-      );
+      await this.borrowerRepository.update({ userId: email.userId }, { encryptedEmail });
     }
   }
 
-  public async handleCreditLineCreatedEvent(
-    createdCreditLine: CreditLineCreatedPayload,
-  ): Promise<void> {
+  public async handleCreditLineCreatedEvent(createdCreditLine: CreditLineCreatedPayload): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: createdCreditLine.userId,
     });
@@ -92,10 +80,7 @@ export class PeachBorrowerService {
 
     await this.peachApiService.createUser(borrower.personId, email);
 
-    const creditLineId = await this.createActiveCreditLine(
-      borrower,
-      createdCreditLine,
-    );
+    const creditLineId = await this.createActiveCreditLine(borrower, createdCreditLine);
 
     await this.createActiveDraw(borrower, creditLineId);
   }
@@ -135,25 +120,16 @@ export class PeachBorrowerService {
       },
     );
 
-    await this.peachApiService.activateCreditLine(
-      borrower.personId,
-      creditLineId,
-    );
+    await this.peachApiService.activateCreditLine(borrower.personId, creditLineId);
 
     return creditLineId;
   }
 
-  private async createActiveDraw(
-    borrower: Borrower,
-    creditLineId: string,
-  ): Promise<void> {
+  private async createActiveDraw(borrower: Borrower, creditLineId: string): Promise<void> {
     let drawId: string | null = borrower.drawId;
 
     if (drawId === null) {
-      const draw: Draw = await this.peachApiService.createDraw(
-        borrower.personId,
-        creditLineId,
-      );
+      const draw: Draw = await this.peachApiService.createDraw(borrower.personId, creditLineId);
       drawId = draw.id;
       await this.borrowerRepository.update(
         {
@@ -165,44 +141,30 @@ export class PeachBorrowerService {
       );
     }
 
-    await this.peachApiService.activateDraw(
-      borrower.personId,
-      creditLineId,
-      drawId,
-    );
+    await this.peachApiService.activateDraw(borrower.personId, creditLineId, drawId);
   }
 
   @Lock((payload: CreditLineUpdatedPayload) => payload.userId)
-  public async handleCreditLineUpdatedEvent(
-    creditLimit: CreditLineUpdatedPayload,
-  ): Promise<void> {
+  public async handleCreditLineUpdatedEvent(creditLimit: CreditLineUpdatedPayload): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId: creditLimit.userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    const updatedResult: UpdateResult =
-      await this.lastCreditLimitUpdateRepository.update(
-        {
-          borrower: { uuid: borrower.uuid },
-          calculatedAt: LessThanOrEqual(creditLimit.calculatedAt),
-        },
-        {
-          calculatedAt: creditLimit.calculatedAt,
-        },
-      );
+    const updatedResult: UpdateResult = await this.lastCreditLimitUpdateRepository.update(
+      {
+        borrower: { uuid: borrower.uuid },
+        calculatedAt: LessThanOrEqual(creditLimit.calculatedAt),
+      },
+      {
+        calculatedAt: creditLimit.calculatedAt,
+      },
+    );
 
     if (updatedResult.affected !== 0) {
-      await this.peachApiService.updateCreditLimit(
-        borrower.personId,
-        borrower.creditLineId,
-        creditLimit.creditLimit,
-      );
+      await this.peachApiService.updateCreditLimit(borrower.personId, borrower.creditLineId, creditLimit.creditLimit);
 
-      const credit: Credit = await this.peachApiService.getCreditBalance(
-        borrower.personId,
-        borrower.creditLineId,
-      );
+      const credit: Credit = await this.peachApiService.getCreditBalance(borrower.personId, borrower.creditLineId);
 
       this.queueService.publishEvent(CREDIT_BALANCE_UPDATED_TOPIC, {
         ...credit,

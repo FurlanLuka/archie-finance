@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Kyc } from '@archie/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { KycResponse } from '@archie/api/user-api/data-transfer-objects/types';
 import { UserObligations } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import {
   ButtonPrimary,
@@ -15,7 +15,7 @@ import { PaymentScheduledStyled } from './payment-scheduled.styled';
 interface PaymentScheduledProps {
   onConfirm: () => void;
   obligations: UserObligations;
-  kycData: Kyc;
+  kycData: KycResponse;
   text: string;
 }
 

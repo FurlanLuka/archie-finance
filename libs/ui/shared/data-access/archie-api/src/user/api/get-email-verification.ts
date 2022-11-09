@@ -1,18 +1,12 @@
+import { EmailVerification } from '@archie/api/user-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
 
-export interface EmailVerificationResponse {
-  isVerified: boolean;
-  email: string;
-}
-
 const ERROR_LIST = new Map<string, string>([]);
 
-export const getEmailVerification = async (
-  accessToken: string,
-): Promise<EmailVerificationResponse> => {
-  return getRequest<EmailVerificationResponse>(
+export const getEmailVerification = async (accessToken: string): Promise<EmailVerification> => {
+  return getRequest<EmailVerification>(
     `${API_URL}/v1/user/email-verification`,
     {
       headers: {

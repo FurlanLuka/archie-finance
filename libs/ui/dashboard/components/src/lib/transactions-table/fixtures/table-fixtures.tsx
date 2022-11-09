@@ -3,16 +3,12 @@ import { FC, PropsWithChildren } from 'react';
 import { Column } from 'react-table';
 
 import {
-  TransactionStatusColor,
-  TransactionStatusText,
-  TransactionTypeText,
-} from '@archie/ui/dashboard/constants';
-import {
   NetAsset,
   Transaction,
   TransactionStatus,
   TransactionType,
-} from '@archie/ui/shared/data-access/archie-api/payment/api/get-transactions';
+} from '@archie/api/credit-api/data-transfer-objects/types';
+import { TransactionStatusColor, TransactionStatusText, TransactionTypeText } from '@archie/ui/dashboard/constants';
 import { BodyL, BodyM, BodyS } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
@@ -22,9 +18,7 @@ interface DateCellProps {
   date: string;
 }
 
-const DateCell: FC<DateCellProps> = ({ date }) => (
-  <BodyM weight={500}>{format(new Date(date), 'M/d')}</BodyM>
-);
+const DateCell: FC<DateCellProps> = ({ date }) => <BodyM weight={500}>{format(new Date(date), 'M/d')}</BodyM>;
 
 interface DescriptionCellProps {
   title: string;
@@ -44,9 +38,7 @@ type TypeCellProps = PropsWithChildren<{
   type: TransactionType;
 }>;
 
-const TypeCell: FC<TypeCellProps> = ({ type }) => (
-  <BodyM weight={500}>{TransactionTypeText[type]}</BodyM>
-);
+const TypeCell: FC<TypeCellProps> = ({ type }) => <BodyM weight={500}>{TransactionTypeText[type]}</BodyM>;
 
 type StatusCellProps = PropsWithChildren<{
   status: TransactionStatus;
@@ -66,10 +58,7 @@ const AmountCell: FC<AmountCellProps> = ({ amount }) => {
   const isPositive = amount > 0;
 
   return (
-    <BodyM
-      color={isPositive ? theme.textSuccess : theme.textDanger}
-      weight={500}
-    >
+    <BodyM color={isPositive ? theme.textSuccess : theme.textDanger} weight={500}>
       {isPositive ? '+' : '-'}${Math.abs(amount)}
     </BodyM>
   );
@@ -113,10 +102,7 @@ export const tableColumns: Column<Transaction>[] = [
       },
       {
         Header: 'Amount',
-        accessor: (row) =>
-          row.net_asset === NetAsset.NEGATIVE
-            ? -row.us_dollar_amount
-            : row.us_dollar_amount,
+        accessor: (row) => (row.net_asset === NetAsset.negative ? -row.us_dollar_amount : row.us_dollar_amount),
         width: 1,
         Cell: ({ value }: any) => {
           return <AmountCell amount={value} />;

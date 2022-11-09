@@ -1,10 +1,10 @@
 import { BigNumber } from 'bignumber.js';
 
-import { calculateLedgerCreditValue } from '@archie/ui/dashboard/utils';
 import {
+  InternalLedgerAccountData,
   Ledger,
-  LedgerAccountData,
-} from '@archie/ui/shared/data-access/archie-api-dtos';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
+import { calculateLedgerCreditValue } from '@archie/ui/dashboard/utils';
 
 interface GetUpdatedCreditAndTotalResult {
   updatedCreditValue: string;
@@ -18,7 +18,7 @@ export function getUpdatedCreditAndTotal({
 }: {
   asset: string;
   withdrawalAmount: string;
-  ledgerAccounts: LedgerAccountData[];
+  ledgerAccounts: InternalLedgerAccountData[];
 }): GetUpdatedCreditAndTotalResult {
   const updatedLedgerAccounts = ledgerAccounts.map((ledgerAccount) => {
     if (ledgerAccount.assetId !== asset) {

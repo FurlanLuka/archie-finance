@@ -1,13 +1,8 @@
-import {
-  NetAsset,
-  Transaction,
-} from '@archie/ui/shared/data-access/archie-api/payment/api/get-transactions';
+import { NetAsset, Transaction } from '@archie/api/credit-api/data-transfer-objects/types';
 
-export const getRowDescription = (
-  transaction: Transaction,
-): { title: string; code: string } => {
+export const getRowDescription = (transaction: Transaction): { title: string; code: string } => {
   if (transaction.is_adjustment) {
-    if (transaction.net_asset === NetAsset.POSITIVE) {
+    if (transaction.net_asset === NetAsset.positive) {
       return {
         title: 'Archie credit deposit',
         code: '',

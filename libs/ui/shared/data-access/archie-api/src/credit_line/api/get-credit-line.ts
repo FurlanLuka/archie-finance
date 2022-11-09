@@ -1,17 +1,7 @@
+import { CreditLine } from '@archie/api/credit-line-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
-
-export interface CreditLimitAssetAllocation {
-  assetId: string;
-  allocationPercentage: number;
-  allocatedAssetValue: number;
-}
-
-export interface CreditLine {
-  creditLimit: number;
-  creditLimitAssetAllocation: CreditLimitAssetAllocation[];
-}
 
 export const ERROR_LIST = new Map<string, string>([]);
 

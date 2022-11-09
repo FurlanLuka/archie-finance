@@ -4,8 +4,8 @@ import { Repository } from 'typeorm';
 import { PeachApiService } from '../api/peach_api.service';
 import { Borrower } from '../borrower.entity';
 import { BorrowerValidation } from '../utils/borrower.validation';
-import { GetLoanBalancesDto } from './loan-balances.dto';
-import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects';
+import { LoanBalances } from '@archie/api/peach-api/data-transfer-objects/types';
+import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects/types';
 
 @Injectable()
 export class LoanBalancesService {
@@ -16,16 +16,13 @@ export class LoanBalancesService {
     private borrowerValidation: BorrowerValidation,
   ) {}
 
-  public async getLoanBalances(userId: string): Promise<GetLoanBalancesDto> {
+  public async getLoanBalances(userId: string): Promise<LoanBalances> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    const balance = await this.peachApiService.getLoanBalances(
-      borrower.personId,
-      borrower.creditLineId,
-    );
+    const balance = await this.peachApiService.getLoanBalances(borrower.personId, borrower.creditLineId);
 
     return {
       isBalanceChangeInProgress: balance.isLocked,
@@ -35,18 +32,13 @@ export class LoanBalancesService {
     };
   }
 
-  public async getLatestLoanBalance(
-    userId: string,
-  ): Promise<GetLoanBalancesResponse> {
+  public async getLatestLoanBalance(userId: string): Promise<GetLoanBalancesResponse> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    const balance = await this.peachApiService.getCreditBalance(
-      borrower.personId,
-      borrower.creditLineId,
-    );
+    const balance = await this.peachApiService.getCreditBalance(borrower.personId, borrower.creditLineId);
 
     return {
       availableCredit: balance.availableCreditAmount,

@@ -1,6 +1,9 @@
 import { FC } from 'react';
 
-import { LTVStatus, LTVColor } from '@archie/ui/shared/constants';
+import {
+  LtvStatus,
+} from '@archie/api/ltv-api/data-transfer-objects/types';
+import { LTVColor } from '@archie/ui/shared/constants';
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 
@@ -18,7 +21,7 @@ export const MarginCallAlert: FC<MarginCallAlertProps> = ({ withButton }) => {
   if (getLTVResponse.state === RequestState.SUCCESS) {
     const ltvData = getLTVResponse.data;
 
-    if (ltvData.status === LTVStatus.WARNING) {
+    if (ltvData.status === LtvStatus.warning) {
       return (
         <MarginCallAlertStyled bgColor={LTVColor[ltvData.status]}>
           <Warning withButton={withButton} />
@@ -26,7 +29,7 @@ export const MarginCallAlert: FC<MarginCallAlertProps> = ({ withButton }) => {
       );
     }
 
-    if (ltvData.status === LTVStatus.MARGIN_CALL) {
+    if (ltvData.status === LtvStatus.margin_call) {
       return (
         <MarginCallAlertStyled bgColor={LTVColor[ltvData.status]}>
           <Danger withButton={withButton} />

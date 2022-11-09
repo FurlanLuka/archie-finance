@@ -1,13 +1,7 @@
+import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
-
-export interface AssetPrice {
-  assetId: string;
-  price: number;
-  dailyChange: number;
-  currency: string;
-}
 
 export const ERROR_LIST = new Map<string, string>([]);
 

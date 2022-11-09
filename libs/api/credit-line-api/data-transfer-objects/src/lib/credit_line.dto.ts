@@ -1,23 +1,11 @@
-export class CreditLimitAssetAllocation {
+import { CreditLimitAssetAllocation, CreditLine } from './credit_line.interfaces';
+
+export class CreditLimitAssetAllocationDto implements CreditLimitAssetAllocation {
   assetId: string;
   allocationPercentage: number;
   allocatedAssetValue: number;
 }
-
-export class CreditLine {
+export class CreditLineDto implements CreditLine {
   creditLimit: number;
-  creditLimitAssetAllocation: CreditLimitAssetAllocation[];
-}
-
-export class CreditLineUpdatedPayload {
-  userId: string;
-  creditLimit: number;
-  calculatedAt: string;
-}
-
-export class CreditLineCreatedPayload {
-  userId: string;
-  creditLimit: number;
-  ledgerValue: number;
-  calculatedAt: string;
+  creditLimitAssetAllocation: CreditLimitAssetAllocationDto[];
 }

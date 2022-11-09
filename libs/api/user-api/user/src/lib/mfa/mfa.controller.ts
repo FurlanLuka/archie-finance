@@ -22,6 +22,7 @@ import {
   GetEnrollmentsQuery,
   GetMfaEnrollmentResponse,
   GetSendEnrollmentTicketResponse,
+  GetSendEnrollmentTicketResponseDto,
 } from '@archie/api/user-api/data-transfer-objects';
 import { EnrollmentNotFoundError } from './mfa.errors';
 
@@ -32,7 +33,7 @@ export class MfaController {
   @Post('enroll')
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async enrollMfa(@Req() request): Promise<GetSendEnrollmentTicketResponse> {
+  async enrollMfa(@Req() request): Promise<GetSendEnrollmentTicketResponseDto> {
     return this.mfaService.enrollMfa(request.user.sub);
   }
 

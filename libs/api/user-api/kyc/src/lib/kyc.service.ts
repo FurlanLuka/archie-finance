@@ -7,12 +7,8 @@ import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
 import { KYC_SUBMITTED_TOPIC } from '@archie/api/user-api/constants';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { QueueService } from '@archie/api/utils/queue';
-import {
-  CreateKycResponse,
-  GetKycResponse,
-  KycDto,
-  KycSubmittedPayload,
-} from '@archie/api/user-api/data-transfer-objects';
+import { KycResponse } from '@archie/api/user-api/data-transfer-objects/types';
+import { KycDto } from '@archie/api/user-api/data-transfer-objects';
 
 @Injectable()
 export class KycService {
@@ -22,7 +18,7 @@ export class KycService {
     private cryptoService: CryptoService,
   ) {}
 
-  async getKyc(userId: string): Promise<GetKycResponse> {
+  async getKyc(userId: string): Promise<KycResponse> {
     const kycRecord: Kyc | null = await this.kycRepository.findOneBy({
       userId,
     });
@@ -66,11 +62,11 @@ export class KycService {
       ssn: decryptedData[11],
       income: Number(decryptedData[12]),
       aptUnit: decryptedAptUnit,
-      createdAt: kycRecord.createdAt,
+      createdAt: DateTime.fromJSDate(kycRecord.createdAt).toISODate(),
     };
   }
 
-  async createKyc(payload: KycDto, userId: string): Promise<CreateKycResponse> {
+  async createKyc(payload: KycDto, userId: string): Promise<KycResponse> {
     const kycRecord: Kyc | null = await this.kycRepository.findOneBy({
       userId,
     });
@@ -137,7 +133,7 @@ export class KycService {
       ssn: payload.ssn,
       income: payload.income,
       aptUnit: payload.aptUnit,
-      createdAt: kyc.createdAt,
+      createdAt: DateTime.fromJSDate(kyc.createdAt).toISODate(),
     };
   }
 }

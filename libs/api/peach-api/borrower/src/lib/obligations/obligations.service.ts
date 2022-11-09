@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Borrower } from '../borrower.entity';
-import { Balances, Obligation, Obligations } from '../api/peach_api.interfaces';
-import { ObligationsResponseDto } from './obligations.dto';
+import {
+  Balances,
+  Obligation,
+  Obligations,
+  ObligationsResponse,
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { PeachApiService } from '../api/peach_api.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -18,21 +22,15 @@ export class ObligationsService {
     private obligationsResponseFactory: ObligationsResponseFactory,
   ) {}
 
-  public async getObligations(userId: string): Promise<ObligationsResponseDto> {
+  public async getObligations(userId: string): Promise<ObligationsResponse> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
     const [obligations, balances]: [Obligations, Balances] = await Promise.all([
-      this.peachApiService.getLoanObligations(
-        borrower.personId,
-        borrower.creditLineId,
-      ),
-      this.peachApiService.getLoanBalances(
-        borrower.personId,
-        borrower.creditLineId,
-      ),
+      this.peachApiService.getLoanObligations(borrower.personId, borrower.creditLineId),
+      this.peachApiService.getLoanBalances(borrower.personId, borrower.creditLineId),
     ]);
 
     const dueObligations: Obligation[] = obligations.obligations.filter(
@@ -42,10 +40,6 @@ export class ObligationsService {
       (obligation: Obligation) => obligation.isOpen,
     );
 
-    return this.obligationsResponseFactory.create(
-      balances,
-      dueObligations,
-      futureObligations,
-    );
+    return this.obligationsResponseFactory.create(balances, dueObligations, futureObligations);
   }
 }

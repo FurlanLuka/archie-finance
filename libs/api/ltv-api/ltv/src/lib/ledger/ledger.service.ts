@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LedgerAccountData } from '@archie/api/ledger-api/data-transfer-objects';
+import { LedgerAccountData } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LedgerAccount } from './ledger_account.entity';
 import { DataSource, Repository } from 'typeorm';

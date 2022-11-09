@@ -1,7 +1,8 @@
 import { ResponsivePie } from '@nivo/pie';
 import { FC } from 'react';
 
-import { LTVStatus, LTVText, LTVColor } from '@archie/ui/shared/constants';
+import { LtvStatus } from '@archie/api/ltv-api/data-transfer-objects/types';
+import { LTVText, LTVColor } from '@archie/ui/shared/constants';
 import { Badge, TitleL, BodyS } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
@@ -9,7 +10,7 @@ import { LoanToValueChartStyled } from './loan-to-value.styled';
 
 interface LoanToValueChartProps {
   ltv: number;
-  status: LTVStatus;
+  status: LtvStatus;
 }
 
 export const LoanToValueChart: FC<LoanToValueChartProps> = ({
@@ -18,7 +19,7 @@ export const LoanToValueChart: FC<LoanToValueChartProps> = ({
 }) => {
   const data = [
     {
-      id: LTVStatus.GOOD,
+      id: LtvStatus.good,
       value: ltv.toFixed(2),
       color: LTVColor[status],
     },

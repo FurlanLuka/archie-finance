@@ -1,18 +1,11 @@
+import { AmountType, CreateAutopay } from '@archie/api/peach-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
 
 import { DefaultVariables, postRequest } from '../../helpers';
 
-export interface SetAutopayBody extends DefaultVariables {
-  paymentInstrumentId: string;
-  agreementDocumentId: string;
-}
-
-interface SetAutopayAPIBody {
-  amountType: string;
-  paymentInstrumentId: string;
-  isAlignedToDueDates: boolean;
-  agreementDocumentId: string;
-}
+export interface SetAutopayBody
+  extends DefaultVariables,
+    Pick<CreateAutopay, 'paymentInstrumentId' | 'agreementDocumentId'> {}
 
 export const ERROR_LIST = new Map<string, string>([]);
 
@@ -21,12 +14,12 @@ export const setAutopay = async ({
   paymentInstrumentId,
   agreementDocumentId,
 }: SetAutopayBody): Promise<void> => {
-  return postRequest<SetAutopayAPIBody, void>(
+  return postRequest<CreateAutopay, void>(
     `${API_URL}/v1/loan_autopay`,
     {
       paymentInstrumentId,
       agreementDocumentId,
-      amountType: 'statementMinimumAmount',
+      amountType: AmountType.statementMinimumAmount,
       isAlignedToDueDates: true,
     },
     {
