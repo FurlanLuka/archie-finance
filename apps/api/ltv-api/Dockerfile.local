@@ -7,8 +7,8 @@ COPY . /service
 
 ENV NX_DAEMON=false
 
-RUN npm i
-RUN npm run build:ltv-api --skip-nx-cache
+RUN npm i --ignore-scripts
+RUN npx nx run ltv-api:build --skip-nx-cache
 RUN if [ "$LOCAL" != "" ] ; then cp apps/api/ltv-api/.env dist/apps/api/ltv-api ; fi
 RUN npm prune --production
 

@@ -7,8 +7,8 @@ COPY . /service
 
 ENV NX_DAEMON=false
 
-RUN npm i
-RUN nx run fireblocks-api:build --skip-nx-cache
+RUN npm i --ignore-scripts
+RUN npx nx run fireblocks-api:build --skip-nx-cache
 RUN if [ "$LOCAL" != "" ] ; then cp apps/api/fireblocks-api/.env dist/apps/api/fireblocks-api ; fi
 RUN npm prune --production
 

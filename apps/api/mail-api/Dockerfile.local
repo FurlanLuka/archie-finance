@@ -7,8 +7,8 @@ COPY . /service
 
 ENV NX_DAEMON=false
 
-RUN npm i
-RUN npm run build:mail-api --skip-nx-cache
+RUN npm i --ignore-scripts
+RUN npx nx run mail-api:build --skip-nx-cache
 RUN if [ "$LOCAL" != "" ] ; then cp apps/api/mail-api/.env dist/apps/api/mail-api ; fi
 RUN npm prune --production
 
