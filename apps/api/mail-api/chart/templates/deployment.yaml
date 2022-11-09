@@ -4,11 +4,9 @@ metadata:
   name: mail-api
   labels:
     app: mail-api
-    {{- if not .Values.local }}
     tags.datadoghq.com/env: '{{ .Values.environment }}'
     tags.datadoghq.com/service: 'mail-api'
     tags.datadoghq.com/version: '{{ .Values.tag }}'
-    {{- end }}
 spec:
   selector:
     matchLabels:
@@ -59,10 +57,9 @@ spec:
             requests:
               memory: '64Mi'
               cpu: '50m'
-            limits:
-              memory: '256Mi'
-              cpu: '500m'
-          {{- if not .Values.local }}
+#            limits:
+#              memory: '256Mi'
+#              cpu: '500m'
           env:
             - name: DD_AGENT_HOST
               valueFrom:
@@ -78,6 +75,7 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
             - name: DD_LOGS_INJECTION
               value: 'true'
+            {{- if not .Values.local }}
             - name: TYPEORM_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -163,7 +161,7 @@ spec:
                 secretKeyRef:
                   name: mail-api-secrets
                   key: encryption-key
-          {{- end }}
+            {{- end }}
       imagePullSecrets:
         - name: regcred
 ---

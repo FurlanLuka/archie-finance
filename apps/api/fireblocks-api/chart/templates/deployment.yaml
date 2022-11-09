@@ -4,11 +4,9 @@ metadata:
   name: archie-fireblocks-api
   labels:
     app: archie-fireblocks-api
-    {{- if not .Values.local }}
     tags.datadoghq.com/env: '{{ .Values.environment }}'
     tags.datadoghq.com/service: 'archie-fireblocks-api'
     tags.datadoghq.com/version: '{{ .Values.tag }}'
-    {{- end }}
 spec:
   selector:
     matchLabels:
@@ -27,13 +25,10 @@ spec:
     metadata:
       labels:
         app: archie-fireblocks-api
-        {{- if not .Values.local }}
         tags.datadoghq.com/env: '{{ .Values.environment }}'
         tags.datadoghq.com/service: 'archie-fireblocks-api'
         tags.datadoghq.com/version: '{{ .Values.tag }}'
-        {{- else }}
         helm-revision: '{{ .Release.Revision }}'
-        {{- end }}
     spec:
       containers:
         - name: archie-fireblocks-api
@@ -55,10 +50,9 @@ spec:
             requests:
               memory: '64Mi'
               cpu: '50m'
-            limits:
-              memory: '256Mi'
-              cpu: '500m'
-          {{- if not .Values.local }}
+#            limits:
+#              memory: '256Mi'
+#              cpu: '500m'
           env:
             - name: DD_AGENT_HOST
               valueFrom:
@@ -78,6 +72,7 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
+            {{- if not .Values.local }}
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:
@@ -133,7 +128,7 @@ spec:
                 secretKeyRef:
                   name: auth0-shared-secrets
                   key: audience
-          {{- end }}
+            {{- end }}
       imagePullSecrets:
         - name: regcred
 ---

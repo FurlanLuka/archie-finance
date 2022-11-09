@@ -55,9 +55,9 @@ spec:
             requests:
               memory: '64Mi'
               cpu: '50m'
-            limits:
-              memory: '256Mi'
-              cpu: '500m'
+#            limits:
+#              memory: '256Mi'
+#              cpu: '500m'
           {{- if not .Values.local }}
           env:
             - name: DD_AGENT_HOST
