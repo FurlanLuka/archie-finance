@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # ArchieMicroservices
 
 This project was generated using [Nx](https://nx.dev).
@@ -45,7 +44,17 @@ Minikube has issue with ingress that makes it impossible to access ingress endpo
 
 First run this command to get the minikube port `docker port minikube | grep 22` the response will look something like `22/tcp -> 127.0.0.1:50341`
 Now that we know minikube port we can map it to our localhost:3000 using this command `sudo ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -N docker@127.0.0.1 -p <minikube_port> -i /Users/<user>/.minikube/machines/minikube/id_rsa -L 3000:127.0.0.1:80` - Replace <minikube-port> with the port returned from docker port command and <user> with your username. After this is running, your local cluster should be accessable through localhost:3000.
-=======
+
+# Local stress test execution deployment
+
+## Installation steps
+### 1. Add minikube url to the hosts file ()
+
+Because services that run in Minikube can't access localhost directly, they use `host.minikube.internal` url to access the localhost. Add `127.0.0.1 host.minikube.internal` to hosts file (/etc/hosts) the minikube url to your localhost. This is required because when you locally deploy microservices, it uses .env files for config, and by mapping the minikube url to localhost, you don't have to change .env from localhost to minikube url every time you have to deploy and test everything locally.
+
+### 3. Setup environment variables
+
+Each microservice has its own set of environment variables, by default they are all located in env.dev files. Rename this file to .env and update variables that are specific to your machine (database details)
 
 
 # ArchieWebapps
