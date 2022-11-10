@@ -1,24 +1,14 @@
 import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
+import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects/types';
+import { OnboardingUpdatedPayload } from '@archie/api/onboarding-api/data-transfer-objects/types';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
 
+// TODO use BE topics when https://github.com/microsoft/TypeScript/pull/50528 is merged
 export enum WsEventTopic {
   ONBOARDING_UPDATED_TOPIC = 'onboarding.onboarding.updated.v1',
   LTV_UPDATED_TOPIC = 'ltv.ltv.updated.v1',
   LEDGER_UPDATED_TOPIC = 'ledger.account.updated.v1',
-}
-
-export interface OnboardingUpdatedPayload {
-  userId: string;
-  kycStage: boolean;
-  emailVerificationStage: boolean;
-  collateralizationStage: boolean;
-  cardActivationStage: boolean;
-  mfaEnrollmentStage: boolean;
-  completed: boolean;
-}
-
-export interface LtvUpdatedPayload {
-  userId: string;
-  ltv: number;
+  CREDIT_BALANCE_UPDATED_TOPIC = 'peach.credit_balance.updated.v1',
 }
 
 export interface OnboardingUpdatedWsEvent {
@@ -36,4 +26,12 @@ export interface LedgerUpdatedWsEvent {
   data: LedgerAccountUpdatedPayload;
 }
 
-export type WsEvent = OnboardingUpdatedWsEvent | LtvUpdatedWsEvent;
+export interface CreditBalanceUpdatedWsEvent {
+  topic: WsEventTopic.CREDIT_BALANCE_UPDATED_TOPIC;
+  data: CreditBalanceUpdatedPayload;
+}
+
+export type WsEvent =
+  | OnboardingUpdatedWsEvent
+  | LtvUpdatedWsEvent
+  | LedgerUpdatedWsEvent;
