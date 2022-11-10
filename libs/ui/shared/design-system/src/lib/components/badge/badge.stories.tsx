@@ -1,10 +1,7 @@
-import type { StoryDecorator } from '@ladle/react';
-import { Story } from '@storybook/react';
-import { ThemeProvider } from 'styled-components';
+import { Story, Meta } from '@storybook/react';
 
 import { LtvStatus } from '@archie/api/ltv-api/data-transfer-objects/types';
 import { LTVText, LTVColor } from '@archie/ui/shared/constants';
-import { GlobalStyles, theme } from '@archie/ui/shared/theme';
 
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
@@ -13,17 +10,11 @@ import { Badge, BadgeProps } from './badge.styled';
 
 export default {
   title: 'Components/Badge',
-  decorators: [
-    (Component) => (
-      <>
-        <GlobalStyles />
-        <ThemeProvider theme={theme}>
-          <Component />
-        </ThemeProvider>
-      </>
-    ),
-  ] as StoryDecorator[],
-};
+  parameters: {
+    layout: 'fullscreen',
+    options: { showPanel: true },
+  },
+} as Meta;
 
 export const Good: Story<BadgeProps> = (props) => (
   <StoriesContainer>

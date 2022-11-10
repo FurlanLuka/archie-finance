@@ -31,5 +31,5 @@ export const WithCustomColor: Story<LoaderProps> = (props) => (
 );
 
 WithCustomColor.args = {
-  color: theme.loadingBackground,
+  color: theme.loadingBorder,
 };
