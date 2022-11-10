@@ -27,9 +27,8 @@ export function TraceEvent(
       const childOf = tracer.extract('text_map', headers);
 
       return tracer.trace(
-        queueName,
+        'queue.handler',
         {
-          type: 'queue.handler',
           childOf: childOf ?? undefined,
         },
         async (span: Span) => {
@@ -40,6 +39,7 @@ export function TraceEvent(
           });
 
           span.setTag('payload', payloadToLog);
+          span.setTag('resource.name', queueName);
           try {
             const response: unknown = await originalMethod.apply(this, args);
             return response;

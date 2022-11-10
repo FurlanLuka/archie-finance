@@ -74,8 +74,6 @@ async function setupInfrastructureServices(debugEnabled) {
       'git clone https://github.com/grafana/k6-operator --depth 1 && cd k6-operator && make deploy && cd .. && rm -rf k6-operator',
     );
     console.log('K6 operator running ✅');
-
-    // TODO: start db
   } catch (error) {
     if (debugEnabled) {
       console.error(error);
@@ -154,6 +152,29 @@ async function deployApi(service, build, debugEnabled) {
   readline.close();
 }
 
+async function cleanupK6Script() {
+  console.log(`Removing previous test config...`);
+  try {
+    await exec(
+      'kubectl delete -f local/k6-cluster/k6-operator-custom-resource.yml',
+    );
+  } catch (error) {
+    console.warn(
+      'Error deleting k6 custom resource. This is expected in case you run this script on clean cluster',
+      error.message,
+    );
+  }
+  try {
+    await exec('kubectl delete configmap stress-test');
+  } catch (error) {
+    console.warn(
+      'Error stress test config map. This is expected in case you run this script on clean cluster',
+      error.message,
+    );
+  }
+  console.log(`Test config removed ✅`);
+}
+
 program
   .command('setup')
   .alias('s')
@@ -178,15 +199,7 @@ program
   .option('-d, --debug')
   .action(async ({ debug }) => {
     console.log(chalk.inverse.bold(`Starting cluster cleanup...`));
-    try {
-      console.log('Uninstalling k6 test config...');
-      await exec(
-        'kubectl delete -f local/k6-cluster/k6-operator-custom-resource.yml',
-      );
-      console.log('k6 test config uninstalled ✅');
-    } catch (error) {
-      console.error('k6 test config could not be cleaned ❌', error);
-    }
+    await cleanupK6Script();
 
     try {
       console.log('Uninstalling K6 operator...');
@@ -200,7 +213,7 @@ program
     }
 
     try {
-      console.log('Uninstalling all Helm services in default namespace...');
+      console.log('Uninstalling all Helm services...');
       await exec('helm uninstall $(helm list --short)');
       console.log('All services uninstalled ✅');
     } catch (error) {
@@ -231,26 +244,7 @@ program
     const scriptPath = `apps/tests/stress/src/${script}`;
 
     try {
-      console.log(`Removing previous test config...`);
-      try {
-        await exec(
-          'kubectl delete -f local/k6-cluster/k6-operator-custom-resource.yml',
-        );
-      } catch (error) {
-        console.warn(
-          'Error deleting k6 custom resource. This is expected in case you run this script on clean cluster',
-          error.message,
-        );
-      }
-      try {
-        await exec('kubectl delete configmap stress-test');
-      } catch (error) {
-        console.warn(
-          'Error stress test config map. This is expected in case you run this script on clean cluster',
-          error.message,
-        );
-      }
-      console.log(`Test config removed ✅`);
+      await cleanupK6Script();
 
       console.log(`Building script at path: ${scriptPath}`);
       await exec(
@@ -277,16 +271,8 @@ program
   .option('-d, --debug')
   .action(async ({ debug }) => {
     console.log(`Stopping test execution...`);
-    try {
-      await exec(
-        'kubectl delete -f local/k6-cluster/k6-operator-custom-resource.yml',
-      );
-    } catch (error) {
-      console.warn(
-        'Error stress test config map. This is expected in case you run this script on clean cluster',
-        error.message,
-      );
-    }
+    await cleanupK6Script();
+
     console.log(`Script stopped ✅`);
   });
 

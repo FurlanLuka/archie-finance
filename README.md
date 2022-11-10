@@ -45,7 +45,7 @@ Minikube has issue with ingress that makes it impossible to access ingress endpo
 First run this command to get the minikube port `docker port minikube | grep 22` the response will look something like `22/tcp -> 127.0.0.1:50341`
 Now that we know minikube port we can map it to our localhost:3000 using this command `sudo ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -N docker@127.0.0.1 -p <minikube_port> -i /Users/<user>/.minikube/machines/minikube/id_rsa -L 3000:127.0.0.1:80` - Replace <minikube-port> with the port returned from docker port command and <user> with your username. After this is running, your local cluster should be accessable through localhost:3000.
 
-# Local stress test execution deployment
+# Local stress test execution deployment (Minikube)
 
 ## Installation steps
 
@@ -64,7 +64,7 @@ Datadog helm values are located under `local/k6-cluster/datadog-values.example.y
 
 ### 4. Setup K6 cluster
 
-Run the setup script using `node ./stress-test.js setup -d`.
+Run the setup script using `node ./stress-test-minikube.js setup -d`.
 
 ### 5. Deploy required services
 
@@ -76,11 +76,34 @@ K6 settings are located under: `local/k6-cluster/k6-operator-custom-resource.yml
 
 ### 7. Run the script
 
-To run the script execute the following command `node ./stress-test.js run --script=onboarding/full-onboarding.ts`. As result of the script, new Kubernetes pods should be spawned, which should be observed and succeed.
+To run the script execute the following command `node ./stress-test-minikube.js run --script=onboarding/full-onboarding.ts`. As result of the script, new Kubernetes pods should be spawned, which should be observed and succeed.
 
 ### 8. Cleanup (Optional)
 
-K6 is cleaned up every time, the `./stress-test.js run` command is executed. Clean up can also be accomplished by running `kubectl delete -f local/k6-cluster/k6-operator-custom-resource.yml`
+K6 is cleaned up every time, the `./stress-test-minikube.js run` command is executed. Clean up can also be accomplished by running `kubectl delete -f local/k6-cluster/k6-operator-custom-resource.yml`
+
+# EKS stress test deployment
+
+### 1. Setup infrastructure (Optional)
+
+In case the cluster is empty or missing some resources deployed run: `node ./stress-test-eks.js setup -d`. In case this is the first time you are running this command or the test-api-service was updated also add `--build` argument
+
+### 2. Deploy tested services
+
+Deploy services using `node ./stress-test-eks.js deploy --service=<service_name> -d --build`.
+
+### 3. Run the stress test
+
+After all services are deployed, test can be ran using: `node ./stress-test-eks.js run --script=<path to script>`
+
+### 4. Stop the script (Optional)
+
+In case you want to stop the script during the execution run: `node ./stress-test-eks.js stop`
+
+### 5. Cleanup the cluster
+
+After you are finished with testing run `node ./stress-test-eks.js clean`. The command will clean up all the resources. Some "Not found" errors during this command are expected. Please check running pods to validate that the services were cleaned up.
+
 
 # ArchieWebapps
 

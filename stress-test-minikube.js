@@ -85,6 +85,12 @@ async function setupInfrastructureServices(debugEnabled) {
       'git clone https://github.com/grafana/k6-operator --branch v0.0.7 --depth 1 && cd k6-operator && make deploy && cd .. && rm -rf k6-operator',
     );
     console.log('K6 operator running ✅');
+
+    console.log('Starting PostgresSQL...');
+    await exec(
+      `helm upgrade --install postgresql -f local/k6-cluster/postgresql-values.yml bitnami/postgresql`,
+    );
+    console.log('PostgresSQL running ✅');
   } catch (error) {
     if (debugEnabled) {
       console.error(error);

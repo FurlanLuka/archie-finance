@@ -44,7 +44,7 @@ export class QueueService implements OnApplicationBootstrap {
 
     try {
       tracer.trace('queue_event_publish', (span: Span) => {
-        span.setTag('eventName', event.getRoutingKey());
+        span.setTag('resource.name', event.getRoutingKey());
 
         tracer.inject(span, 'text_map', headers);
       });
@@ -70,34 +70,28 @@ export class QueueService implements OnApplicationBootstrap {
     exchange: string = QueueUtilService.GLOBAL_EXCHANGE.name,
     options?: RequestOptions,
   ): Promise<K> {
-    return tracer.trace(
-      'rpc_request',
-      {
-        type: 'rpc.request',
-      },
-      async (span: Span) => {
-        span.setTag('eventName', routingKey);
-        const headers = options?.headers !== undefined ? options.headers : {};
-        tracer.inject(span, 'text_map', headers);
+    return tracer.trace('rpc_request', async (span: Span) => {
+      span.setTag('resource.name', routingKey);
+      const headers = options?.headers !== undefined ? options.headers : {};
+      tracer.inject(span, 'text_map', headers);
 
-        const response = await this.amqpConnection.request<RPCResponse<K>>({
-          exchange,
-          routingKey,
-          payload: payload,
-          timeout: 10_000,
-          ...options,
-          headers,
-        });
+      const response = await this.amqpConnection.request<RPCResponse<K>>({
+        exchange,
+        routingKey,
+        payload: payload,
+        timeout: 10_000,
+        ...options,
+        headers,
+      });
 
-        if (response.type === RPCResponseType.ERROR) {
-          span.setTag('error', response.message);
+      if (response.type === RPCResponseType.ERROR) {
+        span.setTag('error', response.message);
 
-          throw new Error(response.message);
-        }
+        throw new Error(response.message);
+      }
 
-        return response.data;
-      },
-    );
+      return response.data;
+    });
   }
 
   async onApplicationBootstrap(): Promise<void> {
