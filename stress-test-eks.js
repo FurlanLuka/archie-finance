@@ -272,4 +272,22 @@ program
     }
   });
 
+program
+  .command('stop')
+  .option('-d, --debug')
+  .action(async ({ debug }) => {
+    console.log(`Stopping test execution...`);
+    try {
+      await exec(
+        'kubectl delete -f local/k6-cluster/k6-operator-custom-resource.yml',
+      );
+    } catch (error) {
+      console.warn(
+        'Error stress test config map. This is expected in case you run this script on clean cluster',
+        error.message,
+      );
+    }
+    console.log(`Script stopped ✅`);
+  });
+
 program.parse();
