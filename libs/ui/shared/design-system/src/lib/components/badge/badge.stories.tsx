@@ -1,6 +1,10 @@
-import { Story, Meta } from '@storybook/react';
+import type { StoryDecorator } from '@ladle/react';
+import { Story } from '@storybook/react';
+import { ThemeProvider } from 'styled-components';
 
-import { LTVStatus, LTVText, LTVColor } from '@archie/ui/shared/constants';
+import { LtvStatus } from '@archie/api/ltv-api/data-transfer-objects/types';
+import { LTVText, LTVColor } from '@archie/ui/shared/constants';
+import { GlobalStyles, theme } from '@archie/ui/shared/theme';
 
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
@@ -9,52 +13,58 @@ import { Badge, BadgeProps } from './badge.styled';
 
 export default {
   title: 'Components/Badge',
-  parameters: {
-    layout: 'fullscreen',
-    options: { showPanel: true },
-  },
-} as Meta;
+  decorators: [
+    (Component) => (
+      <>
+        <GlobalStyles />
+        <ThemeProvider theme={theme}>
+          <Component />
+        </ThemeProvider>
+      </>
+    ),
+  ] as StoryDecorator[],
+};
 
 export const Good: Story<BadgeProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Badge" subtitle="good" />
-    <Badge {...props}>{LTVText[LTVStatus.GOOD]}</Badge>
+    <Badge {...props}>{LTVText[LtvStatus.good]}</Badge>
   </StoriesContainer>
 );
 
 Good.args = {
-  statusColor: LTVColor[LTVStatus.GOOD],
+  statusColor: LTVColor[LtvStatus.good],
 };
 
 export const Ok: Story<BadgeProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Badge" subtitle="ok" />
-    <Badge {...props}>{LTVText[LTVStatus.OK]}</Badge>
+    <Badge {...props}>{LTVText[LtvStatus.ok]}</Badge>
   </StoriesContainer>
 );
 
 Ok.args = {
-  statusColor: LTVColor[LTVStatus.OK],
+  statusColor: LTVColor[LtvStatus.ok],
 };
 
 export const Warning: Story<BadgeProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Badge" subtitle="warning" />
-    <Badge {...props}>{LTVText[LTVStatus.WARNING]}</Badge>
+    <Badge {...props}>{LTVText[LtvStatus.warning]}</Badge>
   </StoriesContainer>
 );
 
 Warning.args = {
-  statusColor: LTVColor[LTVStatus.WARNING],
+  statusColor: LTVColor[LtvStatus.warning],
 };
 
 export const MarginCall: Story<BadgeProps> = (props) => (
   <StoriesContainer>
     <StoriesTitle title="Badge" subtitle="margin call" />
-    <Badge {...props}>{LTVText[LTVStatus.MARGIN_CALL]}</Badge>
+    <Badge {...props}>{LTVText[LtvStatus.margin_call]}</Badge>
   </StoriesContainer>
 );
 
 MarginCall.args = {
-  statusColor: LTVColor[LTVStatus.MARGIN_CALL],
+  statusColor: LTVColor[LtvStatus.margin_call],
 };

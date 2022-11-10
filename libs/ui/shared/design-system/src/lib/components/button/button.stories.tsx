@@ -1,6 +1,8 @@
-import { Story, Meta } from '@storybook/react';
+import type { StoryDecorator } from '@ladle/react';
+import { Story } from '@storybook/react';
+import { ThemeProvider } from 'styled-components';
 
-import { theme } from '@archie/ui/shared/theme';
+import { GlobalStyles, theme } from '@archie/ui/shared/theme';
 
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
@@ -15,11 +17,17 @@ import {
 
 export default {
   title: 'Components/Button',
-  parameters: {
-    layout: 'fullscreen',
-    options: { showPanel: true },
-  },
-} as Meta;
+  decorators: [
+    (Component) => (
+      <>
+        <GlobalStyles />
+        <ThemeProvider theme={theme}>
+          <Component />
+        </ThemeProvider>
+      </>
+    ),
+  ] as StoryDecorator[],
+};
 
 export const Primary: Story<ButtonProps> = (props) => (
   <StoriesContainer>
