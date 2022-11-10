@@ -66,7 +66,7 @@ async function getMicroservices(debugEnabled) {
 
     const microservices = stdout
       .split(/\r?\n/)
-      .filter((service) => service.length > 0 && service !== 'ui');
+      .filter((service) => service.length > 0);
 
     if (debugEnabled) {
       console.log('Microservices ', microservices);
