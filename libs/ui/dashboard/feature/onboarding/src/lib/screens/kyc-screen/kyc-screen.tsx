@@ -6,7 +6,7 @@ import Autocomplete from 'react-google-autocomplete';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useCreateKyc } from '@archie/ui/shared/data-access/archie-api/kyc/hooks/use-create-kyc';
 import {
   ButtonPrimary,
@@ -44,7 +44,7 @@ interface KycFormData {
 export const KycScreen: FC = () => {
   const { t } = useTranslation();
 
-  const mutationRequest = useCreateKyc();
+  const createKycMutation = useCreateKyc();
 
   const {
     control,
@@ -70,8 +70,8 @@ export const KycScreen: FC = () => {
   const phoneNumberCountryCode = '+1';
 
   const onSubmit = handleSubmit((data) => {
-    if (mutationRequest.state === RequestState.IDLE) {
-      mutationRequest.mutate({
+    if (createKycMutation.state === MutationState.IDLE) {
+      createKycMutation.mutate({
         firstName: data.firstName,
         lastName: data.lastName,
         dateOfBirth: parseDate(data.dateOfBirth).toISOString(),
@@ -250,7 +250,7 @@ export const KycScreen: FC = () => {
           <ButtonPrimary
             type="submit"
             width="100%"
-            isLoading={mutationRequest.state === RequestState.LOADING}
+            isLoading={createKycMutation.state === MutationState.LOADING}
           >
             {t('btn_next')}
             <Icon name="arrow-right" fill={theme.textLight} />

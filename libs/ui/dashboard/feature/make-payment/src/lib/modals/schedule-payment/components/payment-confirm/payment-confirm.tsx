@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ScheduleTransaction } from '@archie/api/peach-api/data-transfer-objects/types';
 import { KycResponse } from '@archie/api/user-api/data-transfer-objects/types';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { UserObligations } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import { useScheduleTransaction } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-schedule-transaction';
 import {
@@ -37,15 +37,15 @@ export const PaymentConfirm: FC<PaymentConfirmProps> = ({
   const scheduleTransactionMutation = useScheduleTransaction();
 
   useEffect(() => {
-    if (scheduleTransactionMutation.state === RequestState.SUCCESS) {
+    if (scheduleTransactionMutation.state === MutationState.SUCCESS) {
       onConfirm();
     }
   }, [scheduleTransactionMutation.state, onConfirm]);
 
   const handleConfirm = () => {
     if (
-      scheduleTransactionMutation.state === RequestState.IDLE ||
-      scheduleTransactionMutation.state === RequestState.ERROR
+      scheduleTransactionMutation.state === MutationState.IDLE ||
+      scheduleTransactionMutation.state === MutationState.ERROR
     ) {
       scheduleTransactionMutation.mutate(scheduledTransactionParams);
     }
@@ -76,7 +76,7 @@ export const PaymentConfirm: FC<PaymentConfirmProps> = ({
         ${scheduledTransactionParams.amount}
       </TitleM>
       <BodyM>{t('payment_modal.payment_confirm.time_note')}</BodyM>
-      {scheduleTransactionMutation.state === RequestState.ERROR && (
+      {scheduleTransactionMutation.state === MutationState.ERROR && (
         <FormError>{t('error.try_again')}</FormError>
       )}
       <div className="btn-group">
@@ -87,7 +87,7 @@ export const PaymentConfirm: FC<PaymentConfirmProps> = ({
           width="100%"
           onClick={handleBack}
           isDisabled={
-            scheduleTransactionMutation.state === RequestState.LOADING
+            scheduleTransactionMutation.state === MutationState.LOADING
           }
         >
           {t('btn_back')}

@@ -7,8 +7,8 @@ import {
 } from '../api/pay-with-paypal';
 
 export const usePayWithPaypal = (): MutationQueryResponse<
-  PayWithPaypalPayload,
-  PayWithPaypalResponse
+  PayWithPaypalResponse,
+  PayWithPaypalPayload
 > => {
   return useExtendedMutation<PayWithPaypalResponse, PayWithPaypalPayload>(
     'paypal_record',

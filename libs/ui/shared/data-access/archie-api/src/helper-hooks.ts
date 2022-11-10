@@ -32,6 +32,7 @@ import {
 import {
   InfiniteQueryResponse,
   MutationQueryResponse,
+  MutationState,
   PaginationParams,
   QueryResponse,
   RequestState,
@@ -227,7 +228,7 @@ export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
     UseMutationOptions<TData, ApiErrors, TVariables, unknown>,
     'mutationKey' | 'mutationFn'
   >,
-): MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData> => {
+): MutationQueryResponse<TData, Omit<TVariables, 'accessToken'>> => {
   const { setAccessToken, setSessionState, accessToken } =
     useAuthenticatedSession();
 
@@ -248,28 +249,28 @@ export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
 
   if (request.status === 'error') {
     return {
-      state: RequestState.ERROR,
+      state: MutationState.ERROR,
       error: request.error,
       mutate: request.mutate,
-    } as MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData>;
+    } as MutationQueryResponse<TData, Omit<TVariables, 'accessToken'>>;
   }
 
   if (request.status === 'loading') {
     return {
-      state: RequestState.LOADING,
+      state: MutationState.LOADING,
     };
   }
 
   if (request.status === 'success') {
     return {
-      state: RequestState.SUCCESS,
+      state: MutationState.SUCCESS,
       data: request.data,
       mutate: request.mutate,
-    } as MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData>;
+    } as MutationQueryResponse<TData, Omit<TVariables, 'accessToken'>>;
   }
 
   return {
-    state: RequestState.IDLE,
+    state: MutationState.IDLE,
     mutate: request.mutate,
-  } as MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData>;
+  } as MutationQueryResponse<TData, Omit<TVariables, 'accessToken'>>;
 };

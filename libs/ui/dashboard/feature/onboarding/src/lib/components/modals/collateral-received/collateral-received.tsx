@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCreateCreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/hooks/use-create-credit-line';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import {
   ButtonPrimary,
   ButtonOutline,
@@ -32,7 +32,7 @@ export const CollateralReceivedModal: FC<CollateralReceivedModalProps> = ({
   const createCreditLine = useCreateCreditLine();
 
   const handleConfirm = () => {
-    if (createCreditLine.state === RequestState.IDLE) {
+    if (createCreditLine.state === MutationState.IDLE) {
       createCreditLine.mutate({});
     }
     onConfirm();

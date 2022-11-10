@@ -7,8 +7,8 @@ import { setAutopay, SetAutopayBody } from '../api/set-autopay';
 import { AUTOPAY_RECORD_QUERY_KEY } from './use-get-autopay';
 
 export const useSetAutopay = (): MutationQueryResponse<
-  SetAutopayBody,
-  void
+  void,
+  SetAutopayBody
 > => {
   const queryClient = useQueryClient();
 

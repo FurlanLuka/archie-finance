@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
 import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useCreateLinkToken } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-create-link-token';
 import { TitleS, BodyM } from '@archie/ui/shared/design-system';
 
@@ -24,21 +24,21 @@ export const PlaidLink: FC<PlaidLinkProps> = ({ onLinkSuccess }) => {
   const createLinkTokenMutation = useCreateLinkToken();
 
   useEffect(() => {
-    if (createLinkTokenMutation.state === RequestState.IDLE) {
+    if (createLinkTokenMutation.state === MutationState.IDLE) {
       createLinkTokenMutation.mutate({});
     }
   }, [createLinkTokenMutation]);
 
   const getContent = () => {
-    if (createLinkTokenMutation.state === RequestState.ERROR) {
+    if (createLinkTokenMutation.state === MutationState.ERROR) {
       return <Navigate to="/error" state={{ prevPath: '/payment' }} />;
     }
 
-    if (createLinkTokenMutation.state === RequestState.LOADING) {
+    if (createLinkTokenMutation.state === MutationState.LOADING) {
       return <PlaidConnectLoading />;
     }
 
-    if (createLinkTokenMutation.state === RequestState.SUCCESS) {
+    if (createLinkTokenMutation.state === MutationState.SUCCESS) {
       return (
         <PlaidConnect
           onLinkSuccess={onLinkSuccess}

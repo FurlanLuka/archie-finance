@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
 import { ConnectedAccountItem } from '@archie/ui/dashboard/components';
 import { useSetAutopay } from '@archie/ui/shared/data-access/archie-api/autopay/hooks/use-set-autopay';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import {
   TitleS,
   BodyM,
@@ -52,7 +52,7 @@ export const SetupAutopay: FC<AutopayModalProps> = ({
   }, [accounts]);
 
   useEffect(() => {
-    if (setAutopayMutation.state === RequestState.SUCCESS) {
+    if (setAutopayMutation.state === MutationState.SUCCESS) {
       onSuccess();
     }
   }, [onSuccess, setAutopayMutation.state]);
@@ -61,7 +61,7 @@ export const SetupAutopay: FC<AutopayModalProps> = ({
     hasConsent &&
     selectedAccount !== null &&
     consentDocumentId !== null &&
-    setAutopayMutation.state === RequestState.IDLE;
+    setAutopayMutation.state === MutationState.IDLE;
 
   return (
     <SetupAutopayStyled>
@@ -100,7 +100,7 @@ export const SetupAutopay: FC<AutopayModalProps> = ({
       <ButtonPrimary
         width="16rem"
         isDisabled={!canSubmit}
-        isLoading={setAutopayMutation.state === RequestState.LOADING}
+        isLoading={setAutopayMutation.state === MutationState.LOADING}
         onClick={() => {
           if (canSubmit) {
             setAutopayMutation.mutate({

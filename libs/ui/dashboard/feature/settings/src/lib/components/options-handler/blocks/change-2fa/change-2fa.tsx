@@ -1,7 +1,10 @@
 import { FC, useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import {
+  MutationState,
+  RequestState,
+} from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetOnboarding } from '@archie/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
 import {
   useGetMfaEnrollments,
@@ -37,16 +40,16 @@ export const Change2FA: FC = () => {
   }, [isMfaSet]);
 
   useEffect(() => {
-    if (removeMfaEnrollmentMutation.state === RequestState.SUCCESS) {
-      if (startMfaEnrollmentMutation.state === RequestState.IDLE) {
+    if (removeMfaEnrollmentMutation.state === MutationState.SUCCESS) {
+      if (startMfaEnrollmentMutation.state === MutationState.IDLE) {
         startMfaEnrollmentMutation.mutate({});
       }
 
-      if (startMfaEnrollmentMutation.state === RequestState.SUCCESS) {
+      if (startMfaEnrollmentMutation.state === MutationState.SUCCESS) {
         window.open(startMfaEnrollmentMutation.data.ticket_url, '_blank');
       }
     }
-  }, [removeMfaEnrollmentMutation.state, startMfaEnrollmentMutation.state]);
+  }, [removeMfaEnrollmentMutation, startMfaEnrollmentMutation]);
 
   const handleClick = () => {
     if (
@@ -54,8 +57,8 @@ export const Change2FA: FC = () => {
       getMfaEnrollmentsResponse.data.length > 0
     ) {
       if (
-        removeMfaEnrollmentMutation.state === RequestState.IDLE ||
-        removeMfaEnrollmentMutation.state === RequestState.SUCCESS
+        removeMfaEnrollmentMutation.state === MutationState.IDLE ||
+        removeMfaEnrollmentMutation.state === MutationState.SUCCESS
       ) {
         removeMfaEnrollmentMutation.mutate({
           mfaEnrollmentId: getMfaEnrollmentsResponse.data[0].id,

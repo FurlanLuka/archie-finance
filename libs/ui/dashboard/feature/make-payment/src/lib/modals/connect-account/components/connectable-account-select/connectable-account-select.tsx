@@ -2,7 +2,7 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useConnectAccount } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-connect-account';
 import {
   ButtonPrimary,
@@ -33,7 +33,7 @@ export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({
     useState<PaymentInstrument | null>(null);
 
   useEffect(() => {
-    if (connectAccountMutation.state === RequestState.SUCCESS) {
+    if (connectAccountMutation.state === MutationState.SUCCESS) {
       onConnect?.();
     }
   }, [connectAccountMutation, onConnect]);
@@ -43,7 +43,7 @@ export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({
       return;
     }
 
-    if (connectAccountMutation.state === RequestState.IDLE) {
+    if (connectAccountMutation.state === MutationState.IDLE) {
       connectAccountMutation.mutate({
         publicToken,
         accountId: selectedAccount.id,
@@ -82,7 +82,7 @@ export const ConnectableAccountSelect: FC<ConnectableAccountSelectProps> = ({
       <ButtonPrimary
         onClick={handleConfirmClick}
         disabled={!selectedAccount}
-        isLoading={connectAccountMutation.state === RequestState.LOADING}
+        isLoading={connectAccountMutation.state === MutationState.LOADING}
       >
         {t('dashboard_payment.account_select.btn_connect')}
       </ButtonPrimary>
