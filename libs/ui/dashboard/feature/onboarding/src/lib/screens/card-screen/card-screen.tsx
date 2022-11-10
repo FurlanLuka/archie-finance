@@ -5,7 +5,10 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { OnboardingStep } from '@archie/ui/dashboard/constants';
 import { useCreateRizeUser } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
 import { useGetCredit } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import {
+  MutationState,
+  RequestState,
+} from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import {
   ButtonPrimary,
@@ -38,11 +41,11 @@ export const CardScreen: FC = () => {
 
   useEffect(() => {
     if (stage === Stage.CREATE_USER) {
-      if (createUserMutation.state === RequestState.IDLE) {
+      if (createUserMutation.state === MutationState.IDLE) {
         createUserMutation.mutate({});
       }
 
-      if (createUserMutation.state === RequestState.SUCCESS) {
+      if (createUserMutation.state === MutationState.SUCCESS) {
         setStage(Stage.COMPLETE);
       }
     }

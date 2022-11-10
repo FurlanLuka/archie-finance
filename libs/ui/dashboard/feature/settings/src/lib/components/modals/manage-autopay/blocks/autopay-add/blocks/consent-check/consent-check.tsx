@@ -3,9 +3,8 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
 import { useCreateAutopayDocument } from '@archie/ui/shared/data-access/archie-api/autopay/hooks/use-create-autopay-document';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import {
-  Loader,
   Modal,
   InputCheckbox,
   ButtonPrimary,
@@ -35,7 +34,7 @@ export const ConsentCheck: FC<ConsentCheckProps> = ({
   useEffect(() => {
     if (
       selectedAccount !== null &&
-      createAutopayDocumentMutation.state === RequestState.IDLE
+      createAutopayDocumentMutation.state === MutationState.IDLE
     ) {
       createAutopayDocumentMutation.mutate({
         paymentInstrumentId: selectedAccount.id,
@@ -44,7 +43,7 @@ export const ConsentCheck: FC<ConsentCheckProps> = ({
   }, [selectedAccount, createAutopayDocumentMutation]);
 
   useEffect(() => {
-    if (createAutopayDocumentMutation.state === RequestState.SUCCESS) {
+    if (createAutopayDocumentMutation.state === MutationState.SUCCESS) {
       setDocumentId(createAutopayDocumentMutation.data.id);
     }
   }, [createAutopayDocumentMutation, setDocumentId]);
@@ -63,7 +62,7 @@ export const ConsentCheck: FC<ConsentCheckProps> = ({
       );
     }
 
-    if (createAutopayDocumentMutation.state === RequestState.LOADING) {
+    if (createAutopayDocumentMutation.state === MutationState.LOADING) {
       return (
         <InputCheckbox>
           <input type="checkbox" checked={false} disabled />
@@ -76,7 +75,7 @@ export const ConsentCheck: FC<ConsentCheckProps> = ({
       );
     }
 
-    if (createAutopayDocumentMutation.state === RequestState.SUCCESS) {
+    if (createAutopayDocumentMutation.state === MutationState.SUCCESS) {
       return (
         <>
           <InputCheckbox>

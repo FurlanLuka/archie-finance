@@ -2,7 +2,7 @@ import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { KycResponse } from '@archie/api/user-api/data-transfer-objects/types';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { UserObligations } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import { usePayWithPaypal } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-pay-with-paypal';
 import {
@@ -36,15 +36,15 @@ export const PayWithPaypalConfirm: FC<PayWithPaypalConfirmProps> = ({
   const payWithPaypalMutation = usePayWithPaypal();
 
   useEffect(() => {
-    if (payWithPaypalMutation.state === RequestState.SUCCESS) {
+    if (payWithPaypalMutation.state === MutationState.SUCCESS) {
       onConfirm();
     }
   }, [payWithPaypalMutation.state, onConfirm]);
 
   const handleConfirm = () => {
     if (
-      payWithPaypalMutation.state === RequestState.IDLE ||
-      payWithPaypalMutation.state === RequestState.ERROR
+      payWithPaypalMutation.state === MutationState.IDLE ||
+      payWithPaypalMutation.state === MutationState.ERROR
     ) {
       payWithPaypalMutation.mutate({ paymentAmount });
     }
@@ -75,7 +75,7 @@ export const PayWithPaypalConfirm: FC<PayWithPaypalConfirmProps> = ({
         ${paymentAmount}
       </TitleM>
       <BodyM>{t('payment_modal.pay_with_paypal_form.time_note')}</BodyM>
-      {payWithPaypalMutation.state === RequestState.ERROR && (
+      {payWithPaypalMutation.state === MutationState.ERROR && (
         <FormError>{t('error.try_again')}</FormError>
       )}
       <div className="btn-group">
@@ -85,7 +85,7 @@ export const PayWithPaypalConfirm: FC<PayWithPaypalConfirmProps> = ({
         <ButtonOutline
           width="100%"
           onClick={handleBack}
-          isDisabled={payWithPaypalMutation.state === RequestState.LOADING}
+          isDisabled={payWithPaypalMutation.state === MutationState.LOADING}
         >
           {t('btn_back')}
         </ButtonOutline>
