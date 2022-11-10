@@ -5,6 +5,12 @@ import { DefaultVariables } from '../../helpers';
 import { MutationQueryResponse } from '../../interface';
 import { createCreditLine } from '../api/create-credit-line';
 
-export const useCreateCreditLine = (): MutationQueryResponse<CreditLine, DefaultVariables> => {
-  return useExtendedMutation<CreditLine, DefaultVariables>('credit_line', createCreditLine);
+export const useCreateCreditLine = (): MutationQueryResponse<
+  CreditLine,
+  DefaultVariables
+> => {
+  return useExtendedMutation<CreditLine, DefaultVariables>(
+    'credit_line',
+    createCreditLine,
+  );
 };

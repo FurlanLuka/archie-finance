@@ -1,7 +1,10 @@
 import { FC, useEffect, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MutationState, RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import {
+  MutationState,
+  RequestState,
+} from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetOnboarding } from '@archie/ui/shared/data-access/archie-api/onboarding/hooks/use-get-onboarding';
 import {
   useGetMfaEnrollments,

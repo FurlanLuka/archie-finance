@@ -2,7 +2,10 @@ import { FC, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { CLIENT_ID } from '@archie/ui/shared/constants';
-import { MutationState, RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import {
+  MutationState,
+  RequestState,
+} from '@archie/ui/shared/data-access/archie-api/interface';
 import { useChangePassword } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-change-password';
 import { useGetEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-get-email-verification';
 

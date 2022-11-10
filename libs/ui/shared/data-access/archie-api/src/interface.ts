@@ -77,7 +77,6 @@ export interface PaginationMeta {
   limit: number;
 }
 
-
 export enum MutationState {
   LOADING = 'LOADING',
   ERROR = 'ERROR',
