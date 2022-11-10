@@ -10,8 +10,8 @@ import {
 export const MFA_ENROLLMENT_QUERY_KEY = 'mfa_enrollment';
 
 export const useRemoveMfaEnrollment = (): MutationQueryResponse<
-  RemoveMfaEnrollmentBody,
-  void
+  void,
+  RemoveMfaEnrollmentBody
 > => {
   const queryClient = useQueryClient();
 

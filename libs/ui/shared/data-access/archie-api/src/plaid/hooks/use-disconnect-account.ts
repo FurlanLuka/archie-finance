@@ -9,7 +9,7 @@ import { CONNECTED_ACCOUNTS_RECORD_QUERY_KEY } from './use-get-connected-account
 
 export const useDisconnectAccount = (
   accountId: string,
-): MutationQueryResponse<void, void> => {
+): MutationQueryResponse<void, DefaultVariables> => {
   const queryClient = useQueryClient();
   return useExtendedMutation<void, DefaultVariables>(
     `disconnect_account_${accountId}`,

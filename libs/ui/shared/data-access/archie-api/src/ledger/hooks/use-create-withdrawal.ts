@@ -12,8 +12,8 @@ import {
 import { getMaxWithdrawalAmountQueryKey } from './use-get-max-withdrawal-amount';
 
 export const useCreateWithdrawal = (): MutationQueryResponse<
-  CreateWithdrawalBody,
-  WithdrawResponse
+  WithdrawResponse,
+  CreateWithdrawalBody
 > => {
   const queryClient = useQueryClient();
 
