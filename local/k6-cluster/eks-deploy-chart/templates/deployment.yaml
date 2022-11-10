@@ -41,7 +41,7 @@ spec:
           resources:
             requests:
               memory: '256Mi'
-              cpu: '500m'
+              cpu: '300m'
             limits:
               memory: '512Mi'
           env:
@@ -61,6 +61,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
+            - name: DD_LOGS_INJECTION
+              value: 'true'
             - name: AUTH0_DOMAIN
               value: 'http://archie-utils-test-api-service'
             - name: AUTH0_AUDIENCE
@@ -76,7 +78,7 @@ spec:
             - name: TYPEORM_DATABASE
               value: 'postgres'
             - name: TYPEORM_PORT
-              value: 5432
+              value: '5432'
       imagePullSecrets:
         - name: regcred
 ---

@@ -52,6 +52,10 @@ async function setupInfrastructureServices(debugEnabled) {
       );
       console.log('Datadog running ✅');
     } catch (error) {
+      if (debugEnabled) {
+        console.log(error);
+      }
+
       console.error(
         'Datadog is not set up correctly ❌. Cluster will be set up without It...',
       );
@@ -135,12 +139,13 @@ async function deployApi(service, build, debugEnabled) {
     await exec(`docker push ${ecrImageName}`);
     console.log(`Docker image pushed ✅. Image name: ${ecrImageName}`);
 
-    console.log('Pushing docker image...');
+    console.log('Deploying service ...');
     await exec(
       `helm upgrade --install ${service} local/k6-cluster/eks-deploy-chart --set environment=stress-test --set service=${service} --set tag=${imageTag} --set image=${repositoryUrl}`,
     );
     console.log(chalk.inverse.bold('Service deployed'));
   } catch (error) {
+    readline.close();
     if (debugEnabled) {
       console.error(error);
     }
