@@ -7,7 +7,13 @@ import { useGetEmailVerification } from '@archie/ui/shared/data-access/archie-ap
 import { usePollEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
 import { useResendEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
 import { useAuthenticatedSession } from '@archie/ui/shared/data-access/session';
-import { ButtonPrimary, Card, Skeleton, TitleL, BodyM } from '@archie/ui/shared/design-system';
+import {
+  ButtonPrimary,
+  Card,
+  Skeleton,
+  TitleL,
+  BodyM,
+} from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
 import { VerifyEmailScreenStyled } from './verify-email-screen.styled';
@@ -72,7 +78,9 @@ export const VerifyEmailScreen: FC = () => {
     }
 
     if (getEmailVerificationResponse.state === RequestState.ERROR) {
-      return <Navigate to="/onboarding/error" state={{ prevPath: '/onboarding' }} />;
+      return (
+        <Navigate to="/onboarding/error" state={{ prevPath: '/onboarding' }} />
+      );
     }
 
     if (getEmailVerificationResponse.state === RequestState.SUCCESS) {

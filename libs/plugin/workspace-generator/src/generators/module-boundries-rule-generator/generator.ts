@@ -63,7 +63,7 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
           `scope:api:lib:${project}:shared`,
           'scope:api:lib:shared',
         ],
-      }
+      },
     ];
   });
 
@@ -104,7 +104,7 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
     }
 
     return json;
-  }
+  };
 
   updateJson(tree, joinPathFragments('./', '.eslintrc.json'), updater);
   updateJson(tree, joinPathFragments('./', '.eslintrc.ui.json'), updater);

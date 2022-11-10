@@ -1,6 +1,11 @@
-import { NetAsset, Transaction } from '@archie/api/credit-api/data-transfer-objects/types';
+import {
+  NetAsset,
+  Transaction,
+} from '@archie/api/credit-api/data-transfer-objects/types';
 
-export const getRowDescription = (transaction: Transaction): { title: string; code: string } => {
+export const getRowDescription = (
+  transaction: Transaction,
+): { title: string; code: string } => {
   if (transaction.is_adjustment) {
     if (transaction.net_asset === NetAsset.positive) {
       return {

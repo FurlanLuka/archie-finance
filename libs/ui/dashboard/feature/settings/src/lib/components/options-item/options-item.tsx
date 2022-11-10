@@ -13,14 +13,23 @@ interface OptionsItemProps {
   onClick?: () => void;
 }
 
-export const OptionsItem: FC<OptionsItemProps> = ({ title, subtitle, isDisabled, onClick }) => (
+export const OptionsItem: FC<OptionsItemProps> = ({
+  title,
+  subtitle,
+  isDisabled,
+  onClick,
+}) => (
   <OptionsItemStyled isDisabled={isDisabled} onClick={onClick}>
     <div className="content">
       <BodyL weight={500} className="item-title">
         {title}
       </BodyL>
       {subtitle && (
-        <BodyS color={theme.textSecondary} weight={500} className="item-subtitle">
+        <BodyS
+          color={theme.textSecondary}
+          weight={500}
+          className="item-subtitle"
+        >
           {subtitle}
         </BodyS>
       )}

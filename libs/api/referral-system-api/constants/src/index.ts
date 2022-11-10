@@ -19,8 +19,14 @@ export enum ConfigVariables {
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
-export const APPLIED_TO_WAITLIST_TOPIC = new Event<AppliedToWaitlistPayload>('waitlist.applied', 1);
+export const APPLIED_TO_WAITLIST_TOPIC = new Event<AppliedToWaitlistPayload>(
+  'waitlist.applied',
+  1,
+);
 
-export const JOINED_WAITLIST_TOPIC = new Event<JoinedToWaitlistPayload>('waitlist.joined', 1);
+export const JOINED_WAITLIST_TOPIC = new Event<JoinedToWaitlistPayload>(
+  'waitlist.joined',
+  1,
+);
 
 export const SALES_CONNECT_TOPIC = new Event('sales.connect', 1);

@@ -23,5 +23,9 @@
       }
     }
   },
-  "tags": ["scope:api:lib:ledger-api:shared", "scope:api:lib:shared", "scope:ui:lib:shared"]
+  "tags": [
+    "scope:api:lib:ledger-api:shared",
+    "scope:api:lib:shared",
+    "scope:ui:lib:shared"
+  ]
 }

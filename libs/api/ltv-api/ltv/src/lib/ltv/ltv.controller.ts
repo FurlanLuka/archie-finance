@@ -33,18 +33,31 @@ export class LtvQueueController {
 
   constructor(private ltvService: LtvService) {}
 
-  @Subscribe(LEDGER_ACCOUNT_UPDATED_TOPIC, LtvQueueController.CONTROLLER_QUEUE_NAME)
+  @Subscribe(
+    LEDGER_ACCOUNT_UPDATED_TOPIC,
+    LtvQueueController.CONTROLLER_QUEUE_NAME,
+  )
   async ledgerUpdated(payload: LedgerAccountUpdatedPayload): Promise<void> {
     return this.ltvService.handleLedgerAccountUpdatedEvent(payload);
   }
 
-  @Subscribe(CREDIT_BALANCE_UPDATED_TOPIC, LtvQueueController.CONTROLLER_QUEUE_NAME)
-  async creditBalanceUpdatedHandler(payload: CreditBalanceUpdatedPayload): Promise<void> {
+  @Subscribe(
+    CREDIT_BALANCE_UPDATED_TOPIC,
+    LtvQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async creditBalanceUpdatedHandler(
+    payload: CreditBalanceUpdatedPayload,
+  ): Promise<void> {
     await this.ltvService.handleCreditBalanceUpdatedEvent(payload);
   }
 
-  @Subscribe(CREDIT_LINE_CREATED_TOPIC, LtvQueueController.CONTROLLER_QUEUE_NAME)
-  async creditLineCreatedHandler(payload: CreditLineCreatedPayload): Promise<void> {
+  @Subscribe(
+    CREDIT_LINE_CREATED_TOPIC,
+    LtvQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async creditLineCreatedHandler(
+    payload: CreditLineCreatedPayload,
+  ): Promise<void> {
     await this.ltvService.handleCreditLineCreatedEvent(payload);
   }
 }

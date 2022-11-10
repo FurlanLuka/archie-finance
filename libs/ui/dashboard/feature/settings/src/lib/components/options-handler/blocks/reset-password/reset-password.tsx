@@ -15,7 +15,10 @@ export const ResetPassword: FC = () => {
   const changePasswordMutation = useChangePassword();
 
   const [resetPasswordSent, setResetPasswordSent] = useState(false);
-  const [resetPasswordConfirmationModalOpen, setResetPasswordConfirmationModalOpen] = useState(false);
+  const [
+    resetPasswordConfirmationModalOpen,
+    setResetPasswordConfirmationModalOpen,
+  ] = useState(false);
 
   useEffect(() => {
     if (changePasswordMutation.state === MutationState.SUCCESS) {

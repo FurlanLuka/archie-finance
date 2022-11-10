@@ -1,7 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { FireblocksDepositTransactionPayload } from '@archie/api/webhook-api/data-transfer-objects';
 import { VaultAccountService } from '../vault-account/vault_account.service';
-import { AssetInformation, AssetsService } from '@archie/api/fireblocks-api/assets';
+import {
+  AssetInformation,
+  AssetsService,
+} from '@archie/api/fireblocks-api/assets';
 import { TransactionStatus } from 'fireblocks-sdk';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Deposit } from './deposit.entity';
@@ -31,7 +34,10 @@ export class DepositService {
       return;
     }
 
-    const userId: string = await this.vaultAccountService.getUserIdForDepositAddress(destinationAddress);
+    const userId: string =
+      await this.vaultAccountService.getUserIdForDepositAddress(
+        destinationAddress,
+      );
 
     const assetInformation: AssetInformation | undefined =
       this.assetsService.getAssetInformationForFireblocksId(assetId);
@@ -57,10 +63,13 @@ export class DepositService {
       fee: networkFee.toString(),
     });
 
-    this.queueService.publishEvent(COLLATERAL_DEPOSIT_TRANSACTION_COMPLETED_TOPIC, {
-      userId,
-      assetId: assetInformation.id,
-      amount: netAmount.toString(),
-    });
+    this.queueService.publishEvent(
+      COLLATERAL_DEPOSIT_TRANSACTION_COMPLETED_TOPIC,
+      {
+        userId,
+        assetId: assetInformation.id,
+        amount: netAmount.toString(),
+      },
+    );
   }
 }

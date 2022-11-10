@@ -1,5 +1,8 @@
 import { Controller } from '@nestjs/common';
-import { KYC_SUBMITTED_TOPIC, SERVICE_QUEUE_NAME } from '@archie/api/user-api/constants';
+import {
+  KYC_SUBMITTED_TOPIC,
+  SERVICE_QUEUE_NAME,
+} from '@archie/api/user-api/constants';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 import { RolesService } from './roles.service';

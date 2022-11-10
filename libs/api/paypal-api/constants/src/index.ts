@@ -19,7 +19,9 @@ export enum ConfigVariables {
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
-export const PAYPAL_PAYMENT_RECEIVED_TOPIC =
-  new Event('paypal.payment.received', 1);
+export const PAYPAL_PAYMENT_RECEIVED_TOPIC = new Event(
+  'paypal.payment.received',
+  1,
+);
 
 export const PAYPAL_PAYMENT_CURRENCY = 'USD';

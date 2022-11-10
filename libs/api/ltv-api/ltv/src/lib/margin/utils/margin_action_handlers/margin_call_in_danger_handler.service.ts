@@ -19,16 +19,11 @@ export class MarginCallInDangerHandlerService {
   public async send(
     actionPayload: MarginActionHandlerPayload,
   ): Promise<MarginActionHandlerPayload> {
-    this.queueService.publishEvent(
-      MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC,
-      {
-        userId: actionPayload.userId,
-        ltv: actionPayload.ltv,
-        ...this.marginCallPriceFactory.getMarginCallPrices(
-          actionPayload.ltvMeta,
-        ),
-      },
-    );
+    this.queueService.publishEvent(MARGIN_CALL_LTV_LIMIT_APPROACHING_TOPIC, {
+      userId: actionPayload.userId,
+      ltv: actionPayload.ltv,
+      ...this.marginCallPriceFactory.getMarginCallPrices(actionPayload.ltvMeta),
+    });
     await this.marginNotificationsRepository.upsert(
       {
         userId: actionPayload.userId,

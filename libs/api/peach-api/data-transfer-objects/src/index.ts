@@ -5,3 +5,4 @@ export * from './lib/autopay.dto';
 export * from './lib/payments.dto';
 export * from './lib/obligations.dto';
 export * from './lib/statements.dto';
+export * from './lib/shared.dto';

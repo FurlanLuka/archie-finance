@@ -31,17 +31,12 @@ export class MarginCallHandlerService {
       userId: actionPayload.userId,
     });
 
-    this.queueService.publishEvent(
-      MARGIN_CALL_STARTED_TOPIC,
-      {
-        userId: actionPayload.userId,
-        startedAt: marginCall.createdAt.toISOString(),
-        ltv: actionPayload.ltv,
-        ...this.marginCallPriceFactory.getMarginCallPrices(
-          actionPayload.ltvMeta,
-        ),
-      },
-    );
+    this.queueService.publishEvent(MARGIN_CALL_STARTED_TOPIC, {
+      userId: actionPayload.userId,
+      startedAt: marginCall.createdAt.toISOString(),
+      ltv: actionPayload.ltv,
+      ...this.marginCallPriceFactory.getMarginCallPrices(actionPayload.ltvMeta),
+    });
 
     return {
       ...actionPayload,
@@ -60,18 +55,13 @@ export class MarginCallHandlerService {
       throw new Error('Incorrect margin call deactivate handler usage');
     }
 
-    this.queueService.publishEvent(
-      MARGIN_CALL_COMPLETED_TOPIC,
-      {
-        completedAt: marginCall.updatedAt.toISOString(),
-        userId: actionPayload.userId,
-        liquidationAmount: 0,
-        ltv: actionPayload.ltv,
-        ...this.marginCallPriceFactory.getMarginCallPrices(
-          actionPayload.ltvMeta,
-        ),
-      },
-    );
+    this.queueService.publishEvent(MARGIN_CALL_COMPLETED_TOPIC, {
+      completedAt: marginCall.updatedAt.toISOString(),
+      userId: actionPayload.userId,
+      liquidationAmount: 0,
+      ltv: actionPayload.ltv,
+      ...this.marginCallPriceFactory.getMarginCallPrices(actionPayload.ltvMeta),
+    });
 
     return {
       ...actionPayload,
@@ -99,14 +89,11 @@ export class MarginCallHandlerService {
       amount: loanRepaymentAmount,
     });
 
-    this.queueService.publishEvent(
-      INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND,
-      {
-        userId: actionPayload.userId,
-        amount: loanRepaymentAmount.toString(),
-        liquidationId: liquidation.id,
-      },
-    );
+    this.queueService.publishEvent(INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND, {
+      userId: actionPayload.userId,
+      amount: loanRepaymentAmount.toString(),
+      liquidationId: liquidation.id,
+    });
 
     return {
       ...actionPayload,
@@ -132,18 +119,13 @@ export class MarginCallHandlerService {
       throw new Error('Incorrect complete margin call handler usage');
     }
 
-    this.queueService.publishEvent(
-      MARGIN_CALL_COMPLETED_TOPIC,
-      {
-        completedAt: marginCall.updatedAt.toISOString(),
-        userId: actionPayload.userId,
-        liquidationAmount: actionPayload.marginCall.liquidation.amount,
-        ltv: actionPayload.ltv,
-        ...this.marginCallPriceFactory.getMarginCallPrices(
-          actionPayload.ltvMeta,
-        ),
-      },
-    );
+    this.queueService.publishEvent(MARGIN_CALL_COMPLETED_TOPIC, {
+      completedAt: marginCall.updatedAt.toISOString(),
+      userId: actionPayload.userId,
+      liquidationAmount: actionPayload.marginCall.liquidation.amount,
+      ltv: actionPayload.ltv,
+      ...this.marginCallPriceFactory.getMarginCallPrices(actionPayload.ltvMeta),
+    });
 
     return {
       ...actionPayload,

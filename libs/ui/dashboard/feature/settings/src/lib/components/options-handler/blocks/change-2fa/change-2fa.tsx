@@ -17,7 +17,8 @@ import { OptionsItem } from '../../../options-item/options-item';
 export const Change2FA: FC = () => {
   const { t } = useTranslation();
 
-  const [change2faConfirmationModalOpen, setChange2faConfirmationModalOpen] = useState(false);
+  const [change2faConfirmationModalOpen, setChange2faConfirmationModalOpen] =
+    useState(false);
 
   const getOnboardingResponse = useGetOnboarding();
   const getMfaEnrollmentsResponse = useGetMfaEnrollments();
@@ -25,7 +26,9 @@ export const Change2FA: FC = () => {
   const startMfaEnrollmentMutation = useStartMfaEnrollment();
 
   const isMfaSet = useMemo(
-    () => getOnboardingResponse.state === RequestState.SUCCESS && getOnboardingResponse.data.mfaEnrollmentStage,
+    () =>
+      getOnboardingResponse.state === RequestState.SUCCESS &&
+      getOnboardingResponse.data.mfaEnrollmentStage,
     [getOnboardingResponse],
   );
 
@@ -46,12 +49,17 @@ export const Change2FA: FC = () => {
   }, [removeMfaEnrollmentMutation, startMfaEnrollmentMutation]);
 
   const handleClick = () => {
-    if (getMfaEnrollmentsResponse.state === RequestState.SUCCESS && getMfaEnrollmentsResponse.data.length > 0) {
+    if (
+      getMfaEnrollmentsResponse.state === RequestState.SUCCESS &&
+      getMfaEnrollmentsResponse.data.length > 0
+    ) {
       if (
         removeMfaEnrollmentMutation.state === MutationState.IDLE ||
         removeMfaEnrollmentMutation.state === MutationState.SUCCESS
       ) {
-        removeMfaEnrollmentMutation.mutate({ mfaEnrollmentId: getMfaEnrollmentsResponse.data[0].id });
+        removeMfaEnrollmentMutation.mutate({
+          mfaEnrollmentId: getMfaEnrollmentsResponse.data[0].id,
+        });
         setChange2faConfirmationModalOpen(false);
       }
     }

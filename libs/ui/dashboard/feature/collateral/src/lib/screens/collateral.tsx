@@ -8,7 +8,14 @@ import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/h
 import { useGetCreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/hooks/use-get-credit-line';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
-import { Card, Skeleton, Badge, TitleM, TitleS, BodyM } from '@archie/ui/shared/design-system';
+import {
+  Card,
+  Skeleton,
+  Badge,
+  TitleM,
+  TitleS,
+  BodyM,
+} from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
 import { CollateralInfo } from '../components/collateral-info/collateral-info';
@@ -54,7 +61,9 @@ export const CollateralScreen: FC = () => {
       return (
         <Card column padding="1.5rem 1.5rem 2rem">
           <div className="subtitle-group">
-            <TitleS className="subtitle">{t('dashboard_collateral.subtitle')}</TitleS>
+            <TitleS className="subtitle">
+              {t('dashboard_collateral.subtitle')}
+            </TitleS>
             <TitleM weight={400} className="total">
               ${getLedgerResponse.data.value}
             </TitleM>
@@ -65,7 +74,9 @@ export const CollateralScreen: FC = () => {
                 </BodyM>
                 <TitleS weight={400}>{ltvData.ltv.toFixed(2)}%</TitleS>
               </div>
-              <Badge statusColor={LTVColor[ltvData.status]}>{LTVText[ltvData.status]}</Badge>
+              <Badge statusColor={LTVColor[ltvData.status]}>
+                {LTVText[ltvData.status]}
+              </Badge>
             </div>
           </div>
           <CollateralInfo

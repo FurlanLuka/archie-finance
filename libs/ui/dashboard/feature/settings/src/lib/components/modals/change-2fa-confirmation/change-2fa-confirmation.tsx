@@ -1,7 +1,13 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Modal, BodyM, ButtonPrimary, TitleS, ButtonOutline } from '@archie/ui/shared/design-system';
+import {
+  Modal,
+  BodyM,
+  ButtonPrimary,
+  TitleS,
+  ButtonOutline,
+} from '@archie/ui/shared/design-system';
 
 import { Change2faConfirmationModalStyled } from './change-2fa-confirmation.styled';
 
@@ -11,7 +17,9 @@ interface Change2faConfirmationModalProps {
   close: VoidFunction;
 }
 
-export const Change2faConfirmationModal: FC<Change2faConfirmationModalProps> = ({ isOpen, onConfirm, close }) => {
+export const Change2faConfirmationModal: FC<
+  Change2faConfirmationModalProps
+> = ({ isOpen, onConfirm, close }) => {
   const { t } = useTranslation();
 
   return (

@@ -1,9 +1,13 @@
-import { AutopayAgreement, CreateAutopayDocument } from '@archie/api/peach-api/data-transfer-objects/types';
+import {
+  AutopayAgreement,
+  CreateAutopayDocument,
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
 
 import { DefaultVariables, postRequest } from '../../helpers';
 
-export type CreateAutopayDocumentBody = DefaultVariables & CreateAutopayDocument;
+export type CreateAutopayDocumentBody = DefaultVariables &
+  CreateAutopayDocument;
 
 export const ERROR_LIST = new Map<string, string>([]);
 

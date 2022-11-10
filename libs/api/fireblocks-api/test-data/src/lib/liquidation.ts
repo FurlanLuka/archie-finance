@@ -5,7 +5,7 @@ import {
   CollateralLiquidationTransactionUpdatedPayload,
   CollateralLiquidationTransactionUpdatedStatus,
   InitiateCollateralLiquidationCommandPayload,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
+} from '@archie/api/fireblocks-api/data-transfer-objects/types';
 
 export const collateralLiquidationTransactionSubmittedPayloadFactory = (
   overrides?: Partial<CollateralLiquidationTransactionSubmittedPayload>,

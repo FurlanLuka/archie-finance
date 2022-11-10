@@ -2050,21 +2050,14 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "active",
-              "frozen"
-            ]
+            "enum": ["active", "frozen"]
           },
           "freezeReason": {
             "type": "string",
             "nullable": true
           }
         },
-        "required": [
-          "image",
-          "status",
-          "freezeReason"
-        ]
+        "required": ["image", "status", "freezeReason"]
       },
       "PaginationMetaDto": {
         "type": "object",
@@ -2082,12 +2075,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "totalCount",
-          "count",
-          "page",
-          "limit"
-        ]
+        "required": ["totalCount", "count", "page", "limit"]
       },
       "TransactionDto": {
         "type": "object",
@@ -2114,12 +2102,7 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "queued",
-              "pending",
-              "settled",
-              "failed"
-            ]
+            "enum": ["queued", "pending", "settled", "failed"]
           },
           "us_dollar_amount": {
             "type": "string"
@@ -2156,10 +2139,7 @@
           },
           "net_asset": {
             "type": "string",
-            "enum": [
-              "positive",
-              "negative"
-            ]
+            "enum": ["positive", "negative"]
           }
         },
         "required": [
@@ -2191,10 +2171,7 @@
             }
           }
         },
-        "required": [
-          "meta",
-          "data"
-        ]
+        "required": ["meta", "data"]
       },
       "PlaidLinkTokenDto": {
         "type": "object",
@@ -2203,9 +2180,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "token"
-        ]
+        "required": ["token"]
       },
       "ErrorResponse": {
         "type": "object",
@@ -2220,10 +2195,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "statusCode",
-          "message"
-        ]
+        "required": ["statusCode", "message"]
       },
       "OnboardingDto": {
         "type": "object",
@@ -2402,10 +2374,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "isVerified",
-          "email"
-        ]
+        "required": ["isVerified", "email"]
       },
       "GetSendEnrollmentTicketResponseDto": {
         "type": "object",
@@ -2417,10 +2386,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "ticket_id",
-          "ticket_url"
-        ]
+        "required": ["ticket_id", "ticket_url"]
       },
       "GetEnrollmentResponse": {
         "type": "object",
@@ -2460,9 +2426,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "isEnrolled"
-        ]
+        "required": ["isEnrolled"]
       },
       "CreateDto": {
         "type": "object",
@@ -2474,9 +2438,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "emailAddress"
-        ]
+        "required": ["emailAddress"]
       },
       "GetWaitlistRecordResponseDto": {
         "type": "object",
@@ -2514,11 +2476,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "emailAddress",
-          "fullName",
-          "company"
-        ]
+        "required": ["emailAddress", "fullName", "company"]
       },
       "Auth0Logs": {
         "type": "object",
@@ -2540,12 +2498,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "name",
-          "mask",
-          "subType"
-        ]
+        "required": ["id", "name", "mask", "subType"]
       },
       "ConnectAccountDto": {
         "type": "object",
@@ -2557,10 +2510,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "accountId",
-          "publicToken"
-        ]
+        "required": ["accountId", "publicToken"]
       },
       "PaymentResponseDataDto": {
         "type": "object",
@@ -2586,10 +2536,7 @@
           },
           "transactionType": {
             "type": "string",
-            "enum": [
-              "payment",
-              "serviceCredit"
-            ]
+            "enum": ["payment", "serviceCredit"]
           },
           "paymentDetails": {
             "type": "object",
@@ -2732,10 +2679,7 @@
             }
           }
         },
-        "required": [
-          "meta",
-          "data"
-        ]
+        "required": ["meta", "data"]
       },
       "ScheduleTransactionDto": {
         "type": "object",
@@ -2753,10 +2697,7 @@
             "pattern": "PEACH_ID_REGEX"
           }
         },
-        "required": [
-          "amount",
-          "paymentInstrumentId"
-        ]
+        "required": ["amount", "paymentInstrumentId"]
       },
       "PurchaseDetailsDto": {
         "type": "object",
@@ -2810,21 +2751,11 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "regular",
-              "refund",
-              "cashBack"
-            ]
+            "enum": ["regular", "refund", "cashBack"]
           },
           "status": {
             "type": "string",
-            "enum": [
-              "settled",
-              "pending",
-              "canceled",
-              "declined",
-              "disputed"
-            ]
+            "enum": ["settled", "pending", "canceled", "declined", "disputed"]
           },
           "amount": {
             "type": "number"
@@ -2895,10 +2826,7 @@
             }
           }
         },
-        "required": [
-          "meta",
-          "data"
-        ]
+        "required": ["meta", "data"]
       },
       "ObligationResponseDto": {
         "type": "object",
@@ -3037,10 +2965,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "aprNominal",
-          "aprEffective"
-        ]
+        "required": ["aprNominal", "aprEffective"]
       },
       "CreateAutopayDto": {
         "type": "object",
@@ -3137,11 +3062,7 @@
           },
           "paymentFrequency": {
             "type": "string",
-            "enum": [
-              "twiceMonthly",
-              "everyTwoWeeks",
-              "monthly"
-            ]
+            "enum": ["twiceMonthly", "everyTwoWeeks", "monthly"]
           },
           "paymentInstrumentId": {
             "type": "string"
@@ -3174,9 +3095,7 @@
             "pattern": "PEACH_ID_REGEX"
           }
         },
-        "required": [
-          "paymentInstrumentId"
-        ]
+        "required": ["paymentInstrumentId"]
       },
       "AutopayAgreementDto": {
         "type": "object",
@@ -3188,10 +3107,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "document"
-        ]
+        "required": ["id", "document"]
       },
       "LoanBalancesDto": {
         "type": "object",
@@ -3287,9 +3203,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "url"
-        ]
+        "required": ["url"]
       },
       "LtvDto": {
         "type": "object",
@@ -3299,28 +3213,17 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "good",
-              "ok",
-              "warning",
-              "margin_call"
-            ]
+            "enum": ["good", "ok", "warning", "margin_call"]
           }
         },
-        "required": [
-          "ltv",
-          "status"
-        ]
+        "required": ["ltv", "status"]
       },
       "MarginCallDto": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "active",
-              "completed"
-            ]
+            "enum": ["active", "completed"]
           },
           "automaticLiquidationAt": {
             "type": "string"
@@ -3329,11 +3232,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "status",
-          "automaticLiquidationAt",
-          "createdAt"
-        ]
+        "required": ["status", "automaticLiquidationAt", "createdAt"]
       },
       "CreateOrderDto": {
         "type": "object",
@@ -3343,9 +3242,7 @@
             "minimum": 1
           }
         },
-        "required": [
-          "paymentAmount"
-        ]
+        "required": ["paymentAmount"]
       },
       "CreateOrderResponseDto": {
         "type": "object",
@@ -3357,10 +3254,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "paymentUrl"
-        ]
+        "required": ["id", "paymentUrl"]
       },
       "GetOrderResponseDto": {
         "type": "object",
@@ -3369,21 +3263,14 @@
             "type": "string"
           },
           "status": {
-            "enum": [
-              "CREATED",
-              "COMPLETED"
-            ],
+            "enum": ["CREATED", "COMPLETED"],
             "type": "string"
           },
           "amount": {
             "type": "number"
           }
         },
-        "required": [
-          "id",
-          "status",
-          "amount"
-        ]
+        "required": ["id", "status", "amount"]
       },
       "InternalLedgerAccountDataDto": {
         "type": "object",
@@ -3401,12 +3288,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "assetId",
-          "assetAmount",
-          "assetPrice",
-          "accountValue"
-        ]
+        "required": ["assetId", "assetAmount", "assetPrice", "accountValue"]
       },
       "LedgerDto": {
         "type": "object",
@@ -3421,10 +3303,7 @@
             }
           }
         },
-        "required": [
-          "value",
-          "accounts"
-        ]
+        "required": ["value", "accounts"]
       },
       "AssetPriceDto": {
         "type": "object",
@@ -3442,12 +3321,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "assetId",
-          "price",
-          "dailyChange",
-          "currency"
-        ]
+        "required": ["assetId", "price", "dailyChange", "currency"]
       },
       "Liquidation": {
         "type": "object",
@@ -3468,13 +3342,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "status",
-          "assetId",
-          "amount",
-          "createdAt",
-          "updatedAt"
-        ]
+        "required": ["status", "assetId", "amount", "createdAt", "updatedAt"]
       },
       "WithdrawPayloadDto": {
         "type": "object",
@@ -3490,11 +3358,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "assetId",
-          "amount",
-          "destinationAddress"
-        ]
+        "required": ["assetId", "amount", "destinationAddress"]
       },
       "WithdrawResponseDto": {
         "type": "object",
@@ -3503,9 +3367,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id"
-        ]
+        "required": ["id"]
       },
       "MaxWithdrawalAmountResponseDto": {
         "type": "object",
@@ -3514,9 +3376,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "maxAmount"
-        ]
+        "required": ["maxAmount"]
       },
       "DepositAddressDto": {
         "type": "object",
@@ -3528,10 +3388,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "address",
-          "asset"
-        ]
+        "required": ["address", "asset"]
       },
       "CreditLimitAssetAllocationDto": {
         "type": "object",
@@ -3546,11 +3403,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "assetId",
-          "allocationPercentage",
-          "allocatedAssetValue"
-        ]
+        "required": ["assetId", "allocationPercentage", "allocatedAssetValue"]
       },
       "CreditLineDto": {
         "type": "object",
@@ -3565,10 +3418,7 @@
             }
           }
         },
-        "required": [
-          "creditLimit",
-          "creditLimitAssetAllocation"
-        ]
+        "required": ["creditLimit", "creditLimitAssetAllocation"]
       },
       "AuthTokenDto": {
         "type": "object",
@@ -3577,9 +3427,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "authToken"
-        ]
+        "required": ["authToken"]
       }
     },
     "securitySchemes": {

@@ -8,7 +8,7 @@ export const ResetPasswordConfirmationModalStyled = styled.div`
   .modal-title {
     margin-bottom: 1rem;
   }
-  
+
   .modal-text {
     margin-bottom: 2rem;
   }

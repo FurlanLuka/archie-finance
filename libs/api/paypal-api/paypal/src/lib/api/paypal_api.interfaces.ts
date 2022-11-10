@@ -23,8 +23,8 @@ export interface Captures {
 
 export interface PurchaseUnit {
   payments: {
-    captures: Captures[]
-  }
+    captures: Captures[];
+  };
 }
 
 export interface CaptureOrderResponse {

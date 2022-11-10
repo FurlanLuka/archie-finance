@@ -1,19 +1,10 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "**/*"
-  ],
-  "plugins": [
-    "@nrwl/nx"
-  ],
+  "ignorePatterns": ["**/*"],
+  "plugins": ["@nrwl/nx"],
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
@@ -336,21 +327,15 @@
               },
               {
                 "sourceTag": "scope:api:lib:shared",
-                "onlyDependOnLibsWithTags": [
-                  "scope:api:lib:shared"
-                ]
+                "onlyDependOnLibsWithTags": ["scope:api:lib:shared"]
               },
               {
                 "sourceTag": "scope:api:lib:test-data",
-                "onlyDependOnLibsWithTags": [
-                  "*"
-                ]
+                "onlyDependOnLibsWithTags": ["*"]
               },
               {
                 "sourceTag": "scope:ui:lib:shared",
-                "onlyDependOnLibsWithTags": [
-                  "scope:ui:lib:shared"
-                ]
+                "onlyDependOnLibsWithTags": ["scope:ui:lib:shared"]
               }
             ]
           }
@@ -358,18 +343,10 @@
       }
     },
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
-      "extends": [
-        "plugin:@nrwl/nx/typescript",
-        "prettier"
-      ],
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nrwl/nx/typescript", "prettier"],
       "parserOptions": {
-        "project": [
-          "./tsconfig.base.json"
-        ]
+        "project": ["./tsconfig.base.json"]
       },
       "rules": {
         "@typescript-eslint/no-floating-promises": "error",
@@ -382,39 +359,23 @@
         "@typescript-eslint/no-unnecessary-type-assertion": "error",
         "@typescript-eslint/prefer-optional-chain": "warn",
         "return-await": "off",
-        "@typescript-eslint/return-await": [
-          "error",
-          "in-try-catch"
-        ],
-        "@typescript-eslint/strict-boolean-expressions": [
-          "error"
-        ],
+        "@typescript-eslint/return-await": ["error", "in-try-catch"],
+        "@typescript-eslint/strict-boolean-expressions": ["error"],
         "@typescript-eslint/naming-convention": [
           "error",
           {
             "selector": "default",
-            "format": [
-              "camelCase",
-              "UPPER_CASE",
-              "snake_case",
-              "PascalCase"
-            ],
+            "format": ["camelCase", "UPPER_CASE", "snake_case", "PascalCase"],
             "leadingUnderscore": "allow"
           },
           {
             "selector": "enumMember",
-            "format": [
-              "camelCase",
-              "snake_case",
-              "UPPER_CASE"
-            ],
+            "format": ["camelCase", "snake_case", "UPPER_CASE"],
             "leadingUnderscore": "allow"
           },
           {
             "selector": "typeLike",
-            "format": [
-              "PascalCase"
-            ]
+            "format": ["PascalCase"]
           },
           {
             "selector": [
@@ -428,9 +389,7 @@
               "enumMember"
             ],
             "format": null,
-            "modifiers": [
-              "requiresQuotes"
-            ]
+            "modifiers": ["requiresQuotes"]
           }
         ],
         "@typescript-eslint/no-dynamic-delete": "error",
@@ -468,13 +427,8 @@
       }
     },
     {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
-      "extends": [
-        "plugin:@nrwl/nx/javascript"
-      ],
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nrwl/nx/javascript"],
       "rules": {}
     },
     {

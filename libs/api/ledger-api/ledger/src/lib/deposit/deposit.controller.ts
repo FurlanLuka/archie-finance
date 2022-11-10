@@ -11,8 +11,13 @@ export class DepositQueueController {
 
   constructor(private depositService: DepositService) {}
 
-  @Subscribe(COLLATERAL_DEPOSIT_TRANSACTION_COMPLETED_TOPIC, DepositQueueController.CONTROLLER_QUEUE_NAME)
-  async depositHandler(payload: CollateralDepositTransactionCompletedPayload): Promise<void> {
+  @Subscribe(
+    COLLATERAL_DEPOSIT_TRANSACTION_COMPLETED_TOPIC,
+    DepositQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async depositHandler(
+    payload: CollateralDepositTransactionCompletedPayload,
+  ): Promise<void> {
     await this.depositService.depositHandler(payload);
   }
 }

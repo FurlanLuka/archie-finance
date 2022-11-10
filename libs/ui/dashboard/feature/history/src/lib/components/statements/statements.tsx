@@ -34,7 +34,8 @@ export const Statements: FC = () => {
             {[]}
           </Select>
           <ButtonOutline small width="175px" isLoading>
-            {t('dashboard_history.btn_statements')} <Icon name="download" fill={theme.textDisabled} />
+            {t('dashboard_history.btn_statements')}{' '}
+            <Icon name="download" fill={theme.textDisabled} />
           </ButtonOutline>
         </>
       );
@@ -59,7 +60,8 @@ export const Statements: FC = () => {
               {[]}
             </Select>
             <ButtonOutline small width="175px" isDisabled>
-              {t('dashboard_history.btn_statements')} <Icon name="download" fill={theme.textDisabled} />
+              {t('dashboard_history.btn_statements')}{' '}
+              <Icon name="download" fill={theme.textDisabled} />
             </ButtonOutline>
           </>
         );

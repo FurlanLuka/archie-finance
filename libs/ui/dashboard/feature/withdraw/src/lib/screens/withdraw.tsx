@@ -32,7 +32,10 @@ export const WithdrawScreen: FC = () => {
       );
     }
 
-    if (getMaxWithdrawalAmountResponse.state === RequestState.ERROR || getLedgerResponse.state === RequestState.ERROR) {
+    if (
+      getMaxWithdrawalAmountResponse.state === RequestState.ERROR ||
+      getLedgerResponse.state === RequestState.ERROR
+    ) {
       return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
     }
 
@@ -46,7 +49,9 @@ export const WithdrawScreen: FC = () => {
 
       return (
         <Card column alignItems="center" padding="2.5rem 1.5rem">
-          <TitleS className="title">{t('dashboard_withdraw.title', { currentAsset: asset })}</TitleS>
+          <TitleS className="title">
+            {t('dashboard_withdraw.title', { currentAsset: asset })}
+          </TitleS>
           <BodyL className="subtitle">
             {selectedLedgerAccount ? (
               t('dashboard_withdraw.subtitle', {

@@ -24,9 +24,7 @@ export enum ConfigVariables {
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
 }
 
-export const CREDIT_BALANCE_UPDATED_TOPIC = new Event<CreditBalanceUpdatedPayload>('peach.credit_balance.updated', 1);
+export const CREDIT_BALANCE_UPDATED_TOPIC =
+  new Event<CreditBalanceUpdatedPayload>('peach.credit_balance.updated', 1);
 
 export const GET_LOAN_BALANCES_RPC = 'get.loan.balances.rpc';
-
-// eslint-disable-next-line @typescript-eslint/no-inferrable-types
-export const PEACH_ID_REGEX: RegExp = /^ext-|^[A-Z]{2}-[A-Z0-9]+-[A-Z0-9]+|^\d+$/;
