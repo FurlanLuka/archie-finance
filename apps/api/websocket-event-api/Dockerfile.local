@@ -7,8 +7,8 @@ COPY . /service
 
 ENV NX_DAEMON=false
 
-RUN npm i
-RUN nx run websocket-event-api:build --skip-nx-cache
+RUN npm i --ignore-scripts
+RUN npx nx run websocket-event-api:build --skip-nx-cache
 RUN if [ "$LOCAL" != "" ] ; then cp apps/api/websocket-event-api/.env dist/apps/api/websocket-event-api ; fi
 RUN npm prune --production
 
