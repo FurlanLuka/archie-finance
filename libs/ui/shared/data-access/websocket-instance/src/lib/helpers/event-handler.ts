@@ -1,4 +1,5 @@
 import {
+  CreditBalanceUpdatedWsEvent,
   LedgerUpdatedWsEvent,
   LtvUpdatedWsEvent,
   OnboardingUpdatedWsEvent,
@@ -28,10 +29,20 @@ const isLedgerUpdatedWsEvent = (event: any): event is LedgerUpdatedWsEvent => {
   );
 };
 
+const isCreditBalanceUpdatedWsEvent = (
+  event: any,
+): event is CreditBalanceUpdatedWsEvent => {
+  return (
+    event?.topic === WsEventTopic.CREDIT_BALANCE_UPDATED_TOPIC &&
+    event.data !== undefined
+  );
+};
+
 const eventGuards = new Map<WsEventTopic, (event: any) => boolean>([
   [WsEventTopic.ONBOARDING_UPDATED_TOPIC, isOnboardingUpdatedWsEvent],
   [WsEventTopic.LTV_UPDATED_TOPIC, isLtvUpdatedWsEvent],
   [WsEventTopic.LEDGER_UPDATED_TOPIC, isLedgerUpdatedWsEvent],
+  [WsEventTopic.CREDIT_BALANCE_UPDATED_TOPIC, isCreditBalanceUpdatedWsEvent],
 ]);
 
 export const parseWsEvent = (event: any): WsEvent | undefined => {

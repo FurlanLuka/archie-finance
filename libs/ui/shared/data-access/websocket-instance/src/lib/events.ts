@@ -34,4 +34,5 @@ export interface CreditBalanceUpdatedWsEvent {
 export type WsEvent =
   | OnboardingUpdatedWsEvent
   | LtvUpdatedWsEvent
-  | LedgerUpdatedWsEvent;
+  | LedgerUpdatedWsEvent
+  | CreditBalanceUpdatedWsEvent;
