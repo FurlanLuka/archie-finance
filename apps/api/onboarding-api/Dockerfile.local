@@ -5,10 +5,10 @@ ARG LOCAL
 
 COPY . /service
 
-ENV NX_DEAMON=false
+ENV NX_DAEMON=false
 
-RUN npm i
-RUN npx run onboarding-api:build --skip-nx-cache
+RUN npm i --ignore-scripts
+RUN npx nx run onboarding-api:build --skip-nx-cache
 RUN if [ "$LOCAL" != "" ] ; then cp apps/api/onboarding-api/.env dist/apps/api/onboarding-api ; fi
 RUN npm prune --production
 
