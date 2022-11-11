@@ -10,6 +10,7 @@ import {
   RabbitHandlerConfig,
   RequestOptions,
 } from '@golevelup/nestjs-rabbitmq';
+import { ChannelWrapper } from 'amqp-connection-manager';
 import { QueueUtilService } from './queue-util.service';
 import { Options } from 'amqplib';
 import { RPCResponse, RPCResponseType } from './queue.interfaces';
@@ -36,7 +37,6 @@ export class QueueService implements OnApplicationBootstrap {
     options?: Options.Publish,
   ): void {
     const eventId = v4();
-
     const headers = {
       'event-id': eventId,
       ...options?.headers,
@@ -95,7 +95,6 @@ export class QueueService implements OnApplicationBootstrap {
   }
 
   async onApplicationBootstrap(): Promise<void> {
-    Logger.log('Initializing retry and dead letter queues');
     const retryHandlers = [
       ...(await this.discover.providerMethodsWithMetaAtKey<RabbitHandlerConfig>(
         RABBIT_RETRY_HANDLER,
@@ -104,24 +103,33 @@ export class QueueService implements OnApplicationBootstrap {
         RABBIT_RETRY_HANDLER,
       )),
     ];
-    await Promise.all(
-      retryHandlers.map(async ({ discoveredMethod, meta }) => {
-        const handler = discoveredMethod.handler.bind(
-          discoveredMethod.parentClass.instance,
-        );
 
-        await this.amqpConnection.createSubscriber(
-          handler,
-          meta,
-          discoveredMethod.methodName,
+    await this.amqpConnection.managedChannel.addSetup(
+      async (channel: ChannelWrapper) => {
+        Logger.log('Retry and dead letter queue setup started');
+
+        await Promise.all(
+          retryHandlers.map(async ({ discoveredMethod, meta }) => {
+            const handler = discoveredMethod.handler.bind(
+              discoveredMethod.parentClass.instance,
+            );
+            await this.amqpConnection.createSubscriber(
+              handler,
+              meta,
+              discoveredMethod.methodName,
+            );
+
+            await this.createDeadLetterQueue(channel, meta);
+          }),
         );
-        this.createDeadLetterQueue(meta);
-      }),
+      },
     );
-    Logger.log('Retry and dead letter queues initialized');
   }
 
-  private createDeadLetterQueue(meta: RabbitHandlerConfig): void {
+  private async createDeadLetterQueue(
+    channel: ChannelWrapper,
+    meta: RabbitHandlerConfig,
+  ): Promise<void> {
     if (meta.queue === undefined || meta.queueOptions === undefined) {
       Logger.error(
         'Invalid queue configuration. queue or queueOptions are not missing',
@@ -129,16 +137,22 @@ export class QueueService implements OnApplicationBootstrap {
       return;
     }
 
-    const { queue } = this.amqpConnection.channel.assertQueue(
+    const { queue } = await channel.assertQueue(
       QueueUtilService.getDeadLetterQueueName(meta.queue),
       {
         durable: true,
       },
     );
-    this.amqpConnection.channel.bindQueue(
+    await channel.bindQueue(
       queue,
       meta.queueOptions.arguments['x-dead-letter-exchange'],
       meta.queueOptions.arguments['x-dead-letter-routing-key'],
     );
+
+    Logger.log({
+      message: 'Dead letter queue initialized',
+      exchange: meta.queueOptions.arguments['x-dead-letter-exchange'],
+      routingKey: meta.queueOptions.arguments['x-dead-letter-routing-key'],
+    });
   }
 }

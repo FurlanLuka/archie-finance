@@ -61,6 +61,12 @@ async function setupInfrastructureServices(debugEnabled) {
       );
     }
 
+    console.log('Starting Kubernetes metrics server...');
+    await exec(
+      `helm upgrade --install metrics-server -f local/k6-cluster/metrics-server.values.yml bitnami/metrics-server`,
+    );
+    console.log('Metrics server running ✅');
+
     console.log('Starting RabbitMQ...');
     await exec(
       `helm upgrade --install rabbitmq -f local/k6-cluster/rabbitmq-values.yml bitnami/rabbitmq`,
@@ -96,7 +102,7 @@ async function deployApi(service, build, debugEnabled) {
   const inputQuestion = util.promisify(readline.question).bind(readline);
 
   try {
-    const platformTag = 'linux';
+    const platformTag = 'linux-amd64';
     const repositoryUrl =
       '108827241267.dkr.ecr.us-east-1.amazonaws.com/archie-testing-container-repository';
 
