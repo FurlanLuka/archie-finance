@@ -34,7 +34,45 @@ spec:
         {{- else }}
         helm-revision: '{{ .Release.Revision }}'
         {{- end }}
+      {{- if not .Values.local }}
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-cache-enable: "true"
+        vault.hashicorp.com/role: "ledger-api"
+        vault.hashicorp.com/agent-requests-cpu: "50m"
+        vault.hashicorp.com/agent-limits-cpu: ""
+        vault.hashicorp.com/agent-inject-secret-config: "database/creds/ledger-api"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{`
+          {{- with secret "database/creds/ledger-api"}}
+          export TYPEORM_USERNAME="{{ .Data.username }}"
+          export TYPEORM_PASSWORD="{{ .Data.password }}"
+          {{- end }}
+          {{- with secret "kv/data/database" }}
+          export TYPEORM_PORT="{{ .Data.data.port }}"
+          export TYPEORM_HOST="{{ .Data.data.hostname }}"
+          {{- end }}
+          export TYPEORM_DATABASE="ledger-api"
+          {{- with secret "kv/data/auth0" }}
+          export AUTH0_DOMAIN="{{ .Data.data.domain }}"
+          export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
+          {{- end }}
+          {{- with secret "kv/data/ledger-api" }}
+          export ASSET_LIST='{{ .Data.data.asset_list }}'
+          export COINGECKO_API_URI="{{ .Data.data.coingecko_api_url }}"
+          {{- end }}
+          {{- with secret "kv/data/queue" }}
+          export QUEUE_URL="{{ .Data.data.url }}"
+          {{- end }}
+          {{- with secret "kv/data/redis" }}
+          export REDIS_URL="{{ .Data.data.url }}"
+          {{- end }}
+          `}}
+      {{- end }}
     spec:
+      serviceAccountName: ledger-api
       containers:
         - name: archie-ledger-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
@@ -43,6 +81,8 @@ spec:
           {{- else }}
           imagePullPolicy: Never
           {{- end }}
+          args:
+            ['sh', '-c', '. /vault/secrets/config && node service/main.js']
           ports:
             - containerPort: 80
           livenessProbe:
@@ -55,9 +95,6 @@ spec:
             requests:
               memory: '64Mi'
               cpu: '50m'
-            limits:
-              memory: '256Mi'
-              cpu: '500m'
           {{- if not .Values.local }}
           env:
             - name: DD_AGENT_HOST
@@ -78,61 +115,6 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
-            - name: QUEUE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: queue-shared-secrets
-                  key: queue-url
-            - name: TYPEORM_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: ledger-api-secrets
-                  key: db-username
-            - name: TYPEORM_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: ledger-api-secrets
-                  key: db-password
-            - name: TYPEORM_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: ledger-api-secrets
-                  key: db-hostname
-            - name: TYPEORM_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: ledger-api-secrets
-                  key: db-port
-            - name: TYPEORM_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: ledger-api-secrets
-                  key: db-database
-            - name: ASSET_LIST
-              valueFrom:
-                secretKeyRef:
-                  name: ledger-api-secrets
-                  key: asset-list
-            - name: COINGECKO_API_URI
-              valueFrom:
-                secretKeyRef:
-                  name: ledger-api-secrets
-                  key: coingecko-api-url
-            - name: AUTH0_DOMAIN
-              valueFrom:
-                secretKeyRef:
-                  name: auth0-shared-secrets
-                  key: domain
-            - name: AUTH0_AUDIENCE
-              valueFrom:
-                secretKeyRef:
-                  name: auth0-shared-secrets
-                  key: audience
-            - name: REDIS_URL
-              valueFrom:
-                secretKeyRef:
-                  name: redis-shared-secrets
-                  key: redis-url
           {{- end }}
       imagePullSecrets:
         - name: regcred
