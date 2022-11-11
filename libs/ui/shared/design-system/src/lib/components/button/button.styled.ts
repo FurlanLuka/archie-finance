@@ -13,7 +13,7 @@ export interface ButtonProps {
   color?: string;
 }
 
-const Button = styled.button<ButtonProps>`
+export const Button = styled.button<ButtonProps>`
   position: relative;
   display: flex;
   align-items: center;

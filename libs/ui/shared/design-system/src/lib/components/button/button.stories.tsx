@@ -6,6 +6,7 @@ import { StoriesContainer } from '../../utils/stories-container/stories-containe
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
 
 import {
+  Button,
   ButtonProps,
   ButtonPrimary,
   ButtonOutline,
@@ -15,6 +16,7 @@ import {
 
 export default {
   title: 'Components/Button',
+  component: Button,
   parameters: {
     layout: 'fullscreen',
     options: { showPanel: true },

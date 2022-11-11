@@ -10,6 +10,7 @@ import { Badge, BadgeProps } from './badge.styled';
 
 export default {
   title: 'Components/Badge',
+  component: Badge,
   parameters: {
     layout: 'fullscreen',
     options: { showPanel: true },
