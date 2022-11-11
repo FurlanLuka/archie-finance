@@ -16,7 +16,7 @@
     "build:webhook-api": "nx run webhook-api:build",
     "lint-affected": "npx nx affected --base=origin/develop --target=lint --parallel=3",
     "local-deploy": "node ./deploy-localhost.js",
-    "stories": "npx ladle serve --stories='libs/**/*.stories.@(js|jsx|ts|tsx)'",
+    "stories": "npx ladle serve",
     "nx": "nx",
     "start": "nx serve",
     "test": "nx test",
