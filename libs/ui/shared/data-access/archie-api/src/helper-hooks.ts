@@ -1,6 +1,4 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { AxiosError } from 'axios';
-import { useState } from 'react';
 import {
   MutationFunction,
   MutationKey,
@@ -11,7 +9,9 @@ import {
   UseMutationOptions,
   useQuery,
   UseQueryOptions,
-} from 'react-query';
+} from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { useState } from 'react';
 
 import {
   SessionState,
@@ -39,7 +39,7 @@ import {
 } from './interface';
 
 export const useExtendedQuery = <TQueryFnData>(
-  queryKey: string,
+  queryKey: QueryKey,
   queryFn: (accessToken: string) => Promise<TQueryFnData>,
   options?: Omit<
     UseQueryOptions<TQueryFnData, ApiErrors, TQueryFnData, QueryKey>,
@@ -76,12 +76,6 @@ export const useExtendedQuery = <TQueryFnData>(
     };
   }
 
-  if (request.status === 'loading') {
-    return {
-      state: RequestState.LOADING,
-    };
-  }
-
   if (request.status === 'success') {
     return {
       state: RequestState.SUCCESS,
@@ -89,14 +83,20 @@ export const useExtendedQuery = <TQueryFnData>(
     };
   }
 
+  if (request.fetchStatus === 'idle') {
+    return {
+      state: RequestState.IDLE,
+      fetch: request.refetch,
+    };
+  }
+
   return {
-    state: RequestState.IDLE,
-    fetch: request.refetch,
+    state: RequestState.LOADING,
   };
 };
 
 export const useExtendedInfiniteQuery = <TQueryFnData>(
-  queryKey: string,
+  queryKey: QueryKey,
   getNextPage: (
     lastPage: TQueryFnData,
     allPages: TQueryFnData[],
@@ -200,12 +200,6 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
     };
   }
 
-  if (request.status === 'loading') {
-    return {
-      state: RequestState.LOADING,
-    };
-  }
-
   if (request.status === 'success') {
     return {
       state: RequestState.SUCCESS,
@@ -215,9 +209,15 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
     };
   }
 
+  if (request.fetchStatus === 'idle') {
+    return {
+      state: RequestState.IDLE,
+      fetch,
+    };
+  }
+
   return {
-    state: RequestState.IDLE,
-    fetch,
+    state: RequestState.LOADING,
   };
 };
 

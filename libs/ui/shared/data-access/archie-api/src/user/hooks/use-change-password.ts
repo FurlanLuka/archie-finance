@@ -7,7 +7,7 @@ export const useChangePassword = (): MutationQueryResponse<
   ChangePasswordPayload
 > => {
   return useExtendedMutation<void, ChangePasswordPayload>(
-    'change_password_record',
+    ['change_password_record'],
     changePassword,
   );
 };

@@ -9,7 +9,7 @@ export const useCreateKyc = (): MutationQueryResponse<
   CreateKycPayload
 > => {
   return useExtendedMutation<KycResponse, CreateKycPayload>(
-    'kyc_record',
+    ['kyc_record'],
     createKyc,
   );
 };
