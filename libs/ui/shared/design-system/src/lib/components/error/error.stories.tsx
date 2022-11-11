@@ -1,5 +1,4 @@
 import { Story, Meta } from '@storybook/react';
-import { withRouter } from 'storybook-addon-react-router-v6';
 
 import { theme } from '@archie/ui/shared/theme';
 
@@ -12,7 +11,6 @@ import { Error, ErrorProps } from './error';
 export default {
   title: 'Layout/Error',
   component: Error,
-  decorators: [withRouter],
   parameters: {
     layout: 'fullscreen',
     options: { showPanel: true },
