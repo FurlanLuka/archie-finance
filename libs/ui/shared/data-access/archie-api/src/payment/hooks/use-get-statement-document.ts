@@ -13,6 +13,5 @@ export const useGetStatementDocument = (
     STATEMENT_DOCUMENT_RECORD_QUERY_KEY,
     async (accessToken: string) =>
       getStatementDocument(accessToken, documentId),
-    { enabled: false },
   );
 };
