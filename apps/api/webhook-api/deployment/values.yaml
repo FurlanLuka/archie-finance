@@ -1,0 +1,24 @@
+service:
+  name: "webhook-api"
+
+vault:
+  secretConfig: "database/creds/webhook-api"
+  templateConfig: |
+    {{`{{- with secret "database/creds/webhook-api"}}
+    export TYPEORM_USERNAME="{{ .Data.username }}"
+    export TYPEORM_PASSWORD="{{ .Data.password }}"
+    {{- end }}
+    {{- with secret "kv/data/database" }}
+    export TYPEORM_PORT="{{ .Data.data.port }}"
+    export TYPEORM_HOST="{{ .Data.data.hostname }}"
+    {{- end }}
+    export TYPEORM_DATABASE="webhook-api"
+    {{- with secret "kv/data/queue" }}
+    export QUEUE_URL="{{ .Data.data.url }}"
+    {{- end }}
+    {{- with secret "kv/data/webhook-api" }}
+    export FIREBLOCKS_PUBLIC_KEY="{{ .Data.data.fireblocks_public_key }}"
+    export AUTH0_WEBHOOK_SECRET="{{ .Data.data.auth0_secret_key }}"
+    export PEACH_HMAC_SECRET="{{ .Data.data.peach_hmac_secret }}"
+    {{- end }}
+    `}}

@@ -1,0 +1,17 @@
+service:
+  name: "websocket-event-api"
+
+vault:
+  secretConfig: "database/creds/websocket-event-api"
+  templateConfig: |
+    {{`{{- with secret "kv/data/auth0" }}
+    export AUTH0_DOMAIN="{{ .Data.data.domain }}"
+    export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
+    {{- end }}
+    {{- with secret "kv/data/queue" }}
+    export QUEUE_URL="{{ .Data.data.url }}"
+    {{- end }}
+    {{- with secret "kv/data/redis" }}
+    export REDIS_URL="{{ .Data.data.url }}"
+    {{- end }}
+    `}}

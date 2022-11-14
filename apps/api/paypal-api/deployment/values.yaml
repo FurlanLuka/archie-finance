@@ -1,0 +1,29 @@
+service:
+  name: "paypal-api"
+
+vault:
+  secretConfig: "database/creds/paypal-api"
+  templateConfig: |
+    {{`{{- with secret "database/creds/paypal-api"}}
+    export TYPEORM_USERNAME="{{ .Data.username }}"
+    export TYPEORM_PASSWORD="{{ .Data.password }}"
+    {{- end }}
+    {{- with secret "kv/data/database" }}
+    export TYPEORM_PORT="{{ .Data.data.port }}"
+    export TYPEORM_HOST="{{ .Data.data.hostname }}"
+    {{- end }}
+    export TYPEORM_DATABASE="paypal-api"
+    {{- with secret "kv/data/auth0" }}
+    export AUTH0_DOMAIN="{{ .Data.data.domain }}"
+    export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
+    {{- end }}
+    {{- with secret "kv/data/queue" }}
+    export QUEUE_URL="{{ .Data.data.url }}"
+    {{- end }}
+    {{- with secret "kv/data/paypal-api" }}
+    export PAYPAL_CLIENT_ID="{{ .Data.data.client_id }}"
+    export PAYPAL_CLIENT_SECRET="{{ .Data.data.client_secret }}"
+    export PAYPAL_API_URL="{{ .Data.data.api_url }}"
+    export PAYPAL_RETURN_URL="{{ .Data.data.return_url }}"
+    {{- end }}
+    `}}

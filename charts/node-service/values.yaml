@@ -1,0 +1,29 @@
+service:
+#  name: "" per service
+  command: "node service/main.js"
+
+replicas: 1
+
+resources:
+  request:
+    memory: "256Mi"
+    cpu: '250m'
+  limits:
+    memory: "292Mi"
+
+autoscaling:
+  enabled: true
+  resource: true
+  queue: true
+  maxReplicas: 3
+
+# Per service
+#vault:
+#  secret-config: ""
+#  template-config: ""
+
+#cronJobs:
+#  curl:
+#    - name: 'example'
+#      schedule: "* * * * *"
+#      command: "curl -X POST ${INTERNAL_API_URL}/api"

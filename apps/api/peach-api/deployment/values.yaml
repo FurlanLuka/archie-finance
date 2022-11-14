@@ -1,0 +1,37 @@
+service:
+  name: "peach-api"
+
+vault:
+  secretConfig: "database/creds/peach-api"
+  templateConfig: |
+    {{`{{- with secret "database/creds/peach-api"}}
+    export TYPEORM_USERNAME="{{ .Data.username }}"
+    export TYPEORM_PASSWORD="{{ .Data.password }}"
+    {{- end }}
+    {{- with secret "kv/data/database" }}
+    export TYPEORM_PORT="{{ .Data.data.port }}"
+    export TYPEORM_HOST="{{ .Data.data.hostname }}"
+    {{- end }}
+    export TYPEORM_DATABASE="peach-api"
+    {{- with secret "kv/data/auth0" }}
+    export AUTH0_DOMAIN="{{ .Data.data.domain }}"
+    export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
+    {{- end }}
+    {{- with secret "kv/data/queue" }}
+    export QUEUE_URL="{{ .Data.data.url }}"
+    {{- end }}
+    {{- with secret "kv/data/redis" }}
+    export REDIS_URL="{{ .Data.data.url }}"
+    {{- end }}
+    {{- with secret "kv/data/shared" }}
+    export API_BASE_URL="{{ .Data.data.api_base_url }}"
+    {{- end }}
+    {{- with secret "kv/data/peach-api" }}
+    export PEACH_API_KEY="{{ .Data.data.peach_api_key }}"
+    export PEACH_BASE_URL="{{ .Data.data.peach_base_url }}"
+    export PEACH_COMPANY_ID="{{ .Data.data.peach_company_id }}"
+    export PEACH_BORROWER_ROLE_ID="{{ .Data.data.peach_borrower_role_id }}"
+    export PEACH_LOAN_ID="{{ .Data.data.peach_loan_id }}"
+    export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
+    {{- end }}
+    `}}

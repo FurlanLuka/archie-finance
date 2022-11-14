@@ -1,0 +1,11 @@
+environment: "production"
+
+resources:
+  request:
+    memory: "256Mi"
+    cpu: '300m'
+  limits:
+    memory: "292Mi"
+
+autoscaling:
+  maxReplicas: 5

@@ -1,0 +1,11 @@
+environment: "development"
+
+resources:
+  request:
+    memory: "256Mi"
+    cpu: '150m'
+  limits:
+    memory: "292Mi"
+
+autoscaling:
+  maxReplicas: 2

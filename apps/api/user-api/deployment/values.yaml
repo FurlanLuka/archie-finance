@@ -1,0 +1,33 @@
+service:
+  name: "user-api"
+
+vault:
+  secretConfig: "database/creds/user-api"
+  templateConfig: |
+    {{`{{- with secret "database/creds/user-api"}}
+    export TYPEORM_USERNAME="{{ .Data.username }}"
+    export TYPEORM_PASSWORD="{{ .Data.password }}"
+    {{- end }}
+    {{- with secret "kv/data/database" }}
+    export TYPEORM_PORT="{{ .Data.data.port }}"
+    export TYPEORM_HOST="{{ .Data.data.hostname }}"
+    {{- end }}
+    export TYPEORM_DATABASE="user-api"
+    {{- with secret "kv/data/auth0" }}
+    export AUTH0_DOMAIN="{{ .Data.data.domain }}"
+    export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
+    export AUTH0_M2M_CLIENT_ID="{{ .Data.data.m2m_client_id }}"
+    export AUTH0_M2M_CLIENT_SECRET="{{ .Data.data.m2m_client_secret }}"
+    export AUTH0_M2M_DOMAIN="{{ .Data.data.m2m_domain }}"
+    {{- end }}
+    {{- with secret "kv/data/queue" }}
+    export QUEUE_URL="{{ .Data.data.url }}"
+    {{- end }}
+    {{- with secret "kv/data/redis" }}
+    export REDIS_URL="{{ .Data.data.url }}"
+    {{- end }}
+    {{- with secret "kv/data/user-api" }}
+    export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
+    export DEFAULT_ROLE_ID="{{ .Data.data.default_role_id }}"
+    {{- end }}
+    `}}
