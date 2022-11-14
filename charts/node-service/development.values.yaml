@@ -2,8 +2,8 @@ environment: "development"
 
 resources:
   request:
-    memory: "256Mi"
-    cpu: '150m'
+    memory: "128Mi"
+    cpu: '64m'
   limits:
     memory: "292Mi"
 

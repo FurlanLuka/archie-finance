@@ -120,7 +120,6 @@ async function setupTestUtilApi(debugEnabled) {
     await exec(
       `helm upgrade --install ${utilsTestApiMicroservice} local/k6-cluster/eks-deploy-chart --set environment=stress-test --set service=${utilsTestApiMicroservice} --set tag=latest --set image=${utilsTestApiMicroservice}`,
     );
-
     console.log('Utils test api running ✅');
   } catch (error) {
     if (debugEnabled) {

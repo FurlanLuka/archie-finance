@@ -1,5 +1,6 @@
 service:
-#  name: "" per service
+  # Set per service
+  #name: ""
   command: "node service/main.js"
 
 replicas: 1
@@ -17,11 +18,12 @@ autoscaling:
   queue: true
   maxReplicas: 3
 
-# Per service
+# Set per service
 #vault:
 #  secret-config: ""
 #  template-config: ""
 
+# Set per service
 #cronJobs:
 #  curl:
 #    - name: 'example'
