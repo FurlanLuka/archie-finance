@@ -1,6 +1,9 @@
 service:
   name: "paypal-api"
 
+autoscaling:
+  queue: false
+
 vault:
   secretConfig: "database/creds/paypal-api"
   templateConfig: |+

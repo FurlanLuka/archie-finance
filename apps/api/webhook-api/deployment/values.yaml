@@ -1,6 +1,9 @@
 service:
   name: "webhook-api"
 
+autoscaling:
+  queue: false
+
 vault:
   secretConfig: "database/creds/webhook-api"
   templateConfig: |+

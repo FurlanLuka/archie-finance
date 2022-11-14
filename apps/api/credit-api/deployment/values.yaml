@@ -1,6 +1,10 @@
 service:
   name: "credit-api"
 
+autoscaling:
+  # Disabled due to Rize queue
+  enabled: false
+
 vault:
   secretConfig: "database/creds/credit-api"
   templateConfig: |+
