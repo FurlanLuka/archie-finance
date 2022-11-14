@@ -3,7 +3,7 @@ service:
 
 vault:
   secretConfig: "database/creds/fireblocks-api"
-  templateConfig: |
+  templateConfig: >+
     {{`
     {{- with secret "database/creds/fireblocks-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"

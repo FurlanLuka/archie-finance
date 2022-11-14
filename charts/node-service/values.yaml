@@ -5,7 +5,7 @@ service:
 ## Service name. Service name MUST be specified by each service
 #  name: ""
 ## Service start / entrypoint command
-  command: ". /vault/secrets/config && node service/main.js"
+  command: "node service/main.js"
 
 ## Minimum number of replicas
 replicas: 1

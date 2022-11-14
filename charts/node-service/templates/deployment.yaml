@@ -39,7 +39,7 @@ spec:
         vault.hashicorp.com/agent-requests-cpu: "50m"
         vault.hashicorp.com/agent-limits-cpu: ""
         vault.hashicorp.com/agent-inject-secret-config: '{{ .Values.vault.secretConfig }}'
-        vault.hashicorp.com/agent-inject-template-config: {{ .Values.vault.templateConfig | toYaml | indent 8 }}
+        vault.hashicorp.com/agent-inject-template-config: {{ .Values.vault.templateConfig | toYaml }}
       {{- end }}
     spec:
       serviceAccountName: '{{ .Values.service.name }}'
@@ -52,7 +52,7 @@ spec:
           imagePullPolicy: Never
           {{- end }}
           args:
-            ['sh', '-c', '{{ .Values.service.command }}']
+            ['sh', '-c', '. /vault/secrets/config && {{ .Values.service.command }}']
           ports:
             - containerPort: 80
           livenessProbe:
