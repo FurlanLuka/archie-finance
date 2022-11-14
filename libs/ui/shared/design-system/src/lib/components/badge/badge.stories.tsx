@@ -1,5 +1,3 @@
-import { Story, Meta } from '@storybook/react';
-
 import { LtvStatus } from '@archie/api/ltv-api/data-transfer-objects/types';
 import { LTVText, LTVColor } from '@archie/ui/shared/constants';
 
@@ -15,7 +13,7 @@ export default {
     layout: 'fullscreen',
     options: { showPanel: true },
   },
-} as Meta;
+};
 
 export const Good: Story<BadgeProps> = (props) => (
   <StoriesContainer>
