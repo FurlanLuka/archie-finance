@@ -8,8 +8,8 @@ import {
 } from '../api/create-autopay-document';
 
 export const useCreateAutopayDocument = (): MutationQueryResponse<
-  CreateAutopayDocumentBody,
-  AutopayAgreement
+  AutopayAgreement,
+  CreateAutopayDocumentBody
 > => {
   return useExtendedMutation<AutopayAgreement, CreateAutopayDocumentBody>(
     'create_autopay_document',

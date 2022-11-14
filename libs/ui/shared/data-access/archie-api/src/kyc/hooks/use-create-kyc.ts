@@ -5,8 +5,8 @@ import { MutationQueryResponse } from '../../interface';
 import { createKyc, CreateKycPayload } from '../api/create-kyc';
 
 export const useCreateKyc = (): MutationQueryResponse<
-  CreateKycPayload,
-  KycResponse
+  KycResponse,
+  CreateKycPayload
 > => {
   return useExtendedMutation<KycResponse, CreateKycPayload>(
     'kyc_record',

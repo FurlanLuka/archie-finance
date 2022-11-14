@@ -4,9 +4,11 @@ metadata:
   name: archie-webhook-api
   labels:
     app: archie-webhook-api
+    {{- if not .Values.local }}
     tags.datadoghq.com/env: '{{ .Values.environment }}'
     tags.datadoghq.com/service: 'archie-webhook-api'
     tags.datadoghq.com/version: '{{ .Values.tag }}'
+    {{- end }}
 spec:
   selector:
     matchLabels:
@@ -25,11 +27,45 @@ spec:
     metadata:
       labels:
         app: archie-webhook-api
+        {{- if not .Values.local }}
         tags.datadoghq.com/env: '{{ .Values.environment }}'
         tags.datadoghq.com/service: 'archie-webhook-api'
         tags.datadoghq.com/version: '{{ .Values.tag }}'
+        {{- else }}
         helm-revision: '{{ .Release.Revision }}'
+        {{- end }}
+      {{- if not .Values.local }}
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-cache-enable: "true"
+        vault.hashicorp.com/role: "webhook-api"
+        vault.hashicorp.com/agent-requests-cpu: "50m"
+        vault.hashicorp.com/agent-limits-cpu: ""
+        vault.hashicorp.com/agent-inject-secret-config: "database/creds/webhook-api"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{`{{- with secret "database/creds/webhook-api"}}
+          export TYPEORM_USERNAME="{{ .Data.username }}"
+          export TYPEORM_PASSWORD="{{ .Data.password }}"
+          {{- end }}
+          {{- with secret "kv/data/database" }}
+          export TYPEORM_PORT="{{ .Data.data.port }}"
+          export TYPEORM_HOST="{{ .Data.data.hostname }}"
+          {{- end }}
+          export TYPEORM_DATABASE="webhook-api"
+          {{- with secret "kv/data/queue" }}
+          export QUEUE_URL="{{ .Data.data.url }}"
+          {{- end }}
+          {{- with secret "kv/data/webhook-api" }}
+          export FIREBLOCKS_PUBLIC_KEY="{{ .Data.data.fireblocks_public_key }}"
+          export AUTH0_WEBHOOK_SECRET="{{ .Data.data.auth0_secret_key }}"
+          export PEACH_HMAC_SECRET="{{ .Data.data.peach_hmac_secret }}"
+          {{- end }}
+          `}}
+      {{- end }}
     spec:
+      serviceAccountName: webhook-api
       containers:
         - name: archie-webhook-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
@@ -38,6 +74,8 @@ spec:
           {{- else }}
           imagePullPolicy: Never
           {{- end }}
+          args:
+            ['sh', '-c', '. /vault/secrets/config && node service/main.js']
           ports:
             - containerPort: 80
           livenessProbe:
@@ -48,10 +86,9 @@ spec:
               port: 80
           resources:
             requests:
-              memory: '256Mi'
-              cpu: '300m'
-            limits:
-              memory: '292Mi'
+              memory: '64Mi'
+              cpu: '50m'
+          {{- if not .Values.local }}
           env:
             - name: DD_AGENT_HOST
               valueFrom:
@@ -71,53 +108,7 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
-            {{- if not .Values.local }}
-            - name: TYPEORM_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: webhook-api-secrets
-                  key: db-username
-            - name: TYPEORM_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: webhook-api-secrets
-                  key: db-password
-            - name: TYPEORM_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: webhook-api-secrets
-                  key: db-hostname
-            - name: TYPEORM_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: webhook-api-secrets
-                  key: db-port
-            - name: TYPEORM_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: webhook-api-secrets
-                  key: db-database
-            - name: FIREBLOCKS_PUBLIC_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: webhook-api-secrets
-                  key: fireblocks-public-key
-            - name: AUTH0_WEBHOOK_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: webhook-api-secrets
-                  key: auth0-secret-key
-            - name: QUEUE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: queue-shared-secrets
-                  key: queue-url
-            - name: PEACH_HMAC_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: webhook-api-secrets
-                  key: peach-hmac-secret
-            {{- end }}
+          {{- end }}
       imagePullSecrets:
         - name: regcred
 ---

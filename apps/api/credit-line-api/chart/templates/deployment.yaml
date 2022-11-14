@@ -4,9 +4,11 @@ metadata:
   name: archie-credit-line-api
   labels:
     app: archie-credit-line-api
+    {{- if not .Values.local }}
     tags.datadoghq.com/env: '{{ .Values.environment }}'
     tags.datadoghq.com/service: 'archie-credit-line-api'
     tags.datadoghq.com/version: '{{ .Values.tag }}'
+    {{- end }}
 spec:
   selector:
     matchLabels:
@@ -25,11 +27,50 @@ spec:
     metadata:
       labels:
         app: archie-credit-line-api
+        {{- if not .Values.local }}
         tags.datadoghq.com/env: '{{ .Values.environment }}'
         tags.datadoghq.com/service: 'archie-credit-line-api'
         tags.datadoghq.com/version: '{{ .Values.tag }}'
+        {{- else }}
         helm-revision: '{{ .Release.Revision }}'
+        {{- end }}
+      {{- if not .Values.local }}
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-cache-enable: "true"
+        vault.hashicorp.com/role: "credit-line-api"
+        vault.hashicorp.com/agent-requests-cpu: "50m"
+        vault.hashicorp.com/agent-limits-cpu: ""
+        vault.hashicorp.com/agent-inject-secret-config: "database/creds/credit-line-api"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{`{{- with secret "database/creds/credit-line-api"}}
+          export TYPEORM_USERNAME="{{ .Data.username }}"
+          export TYPEORM_PASSWORD="{{ .Data.password }}"
+          {{- end }}
+          {{- with secret "kv/data/database" }}
+          export TYPEORM_PORT="{{ .Data.data.port }}"
+          export TYPEORM_HOST="{{ .Data.data.hostname }}"
+          {{- end }}
+          export TYPEORM_DATABASE="credit-line-api"
+          {{- with secret "kv/data/auth0" }}
+          export AUTH0_DOMAIN="{{ .Data.data.domain }}"
+          export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
+          {{- end }}
+          {{- with secret "kv/data/queue" }}
+          export QUEUE_URL="{{ .Data.data.url }}"
+          {{- end }}
+          {{- with secret "kv/data/redis" }}
+          export REDIS_URL="{{ .Data.data.url }}"
+          {{- end }}
+          {{- with secret "kv/data/credit-line-api" }}
+          export ASSET_LIST='{{ .Data.data.asset_list }}'
+          {{- end }}
+          `}}
+      {{- end }}
     spec:
+      serviceAccountName: credit-line-api
       containers:
         - name: archie-credit-line-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
@@ -38,6 +79,8 @@ spec:
           {{- else }}
           imagePullPolicy: Never
           {{- end }}
+          args:
+            ['sh', '-c', '. /vault/secrets/config && node service/main.js']
           ports:
             - containerPort: 80
           livenessProbe:
@@ -48,10 +91,9 @@ spec:
               port: 80
           resources:
             requests:
-              memory: '256Mi'
-              cpu: '300m'
-            limits:
-              memory: '292Mi'
+              memory: '64Mi'
+              cpu: '50m'
+          {{- if not .Values.local }}
           env:
             - name: DD_AGENT_HOST
               valueFrom:
@@ -71,58 +113,7 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
-            {{- if not .Values.local }}
-            - name: QUEUE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: queue-shared-secrets
-                  key: queue-url
-            - name: TYPEORM_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: credit-line-api-secrets
-                  key: db-username
-            - name: TYPEORM_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: credit-line-api-secrets
-                  key: db-password
-            - name: TYPEORM_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: credit-line-api-secrets
-                  key: db-hostname
-            - name: TYPEORM_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: credit-line-api-secrets
-                  key: db-port
-            - name: TYPEORM_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: credit-line-api-secrets
-                  key: db-database
-            - name: ASSET_LIST
-              valueFrom:
-                secretKeyRef:
-                  name: credit-line-api-secrets
-                  key: asset-list
-            - name: AUTH0_DOMAIN
-              valueFrom:
-                secretKeyRef:
-                  name: auth0-shared-secrets
-                  key: domain
-            - name: AUTH0_AUDIENCE
-              valueFrom:
-                secretKeyRef:
-                  name: auth0-shared-secrets
-                  key: audience
-            - name: REDIS_URL
-              valueFrom:
-                secretKeyRef:
-                  name: redis-shared-secrets
-                  key: redis-url
-            {{- end }}
+          {{- end }}
       imagePullSecrets:
         - name: regcred
 ---

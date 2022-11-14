@@ -8,8 +8,8 @@ import {
 } from '../api/create-link-token';
 
 export const useCreateLinkToken = (): MutationQueryResponse<
-  CreatePlaidLinkTokenBody,
-  PlaidLinkToken
+  PlaidLinkToken,
+  CreatePlaidLinkTokenBody
 > => {
   return useExtendedMutation<PlaidLinkToken, CreatePlaidLinkTokenBody>(
     'create_link_token',

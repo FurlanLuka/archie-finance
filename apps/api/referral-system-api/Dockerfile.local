@@ -5,10 +5,10 @@ ARG LOCAL
 
 COPY . /service
 
-ENV NX_DEAMON=false
+ENV NX_DAEMON=false
 
-RUN npm i
-RUN npm run build:referral-system-api --skip-nx-cache
+RUN npm i --ignore-scripts
+RUN npx nx run referral-system-api:build --skip-nx-cache
 RUN if [ "$LOCAL" != "" ] ; then cp apps/api/referral-system-api/.env dist/apps/api/referral-system-api ; fi
 RUN npm prune --production
 

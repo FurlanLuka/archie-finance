@@ -14,7 +14,7 @@ import { queueStub } from '@archie/test/integration/module-stubs';
 import * as request from 'supertest';
 import { createKycBodyFactory } from '@archie/api/user-api/test-data';
 import { KycDto } from '@archie/api/user-api/data-transfer-objects';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../src/app.module';
 import { DateTime } from 'luxon';
 import { KYC_SUBMITTED_TOPIC } from '@archie/api/user-api/constants';
 
@@ -36,8 +36,7 @@ describe('User api kyc tests', () => {
     accessToken = generateUserAccessToken();
   };
 
-  const cleanup = async (): Promise<void> =>
-    cleanUpTestingModule(app, module, testDatabase);
+  const cleanup = async (): Promise<void> => cleanUpTestingModule(app, module, testDatabase);
 
   describe('Kyc submission', () => {
     beforeAll(setup);
@@ -67,8 +66,7 @@ describe('User api kyc tests', () => {
       expect(response.body).toStrictEqual({
         statusCode: 404,
         message: 'KYC_NOT_FOUND',
-        error:
-          'KYC record not found. Please submit your KYC or contact support.',
+        error: 'KYC record not found. Please submit your KYC or contact support.',
       });
     });
 
@@ -119,8 +117,7 @@ describe('User api kyc tests', () => {
       expect(response.body).toStrictEqual({
         statusCode: 409,
         message: 'KYC_ALREADY_SUBMITTED',
-        error:
-          'You have already submitted your KYC. If you made a mistake, please contact support.',
+        error: 'You have already submitted your KYC. If you made a mistake, please contact support.',
       });
     });
   });

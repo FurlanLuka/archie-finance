@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useStartMfaEnrollment } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-start-mfa-enrollment';
 import { ButtonGhost, BodyL, BodyM } from '@archie/ui/shared/design-system';
 
@@ -14,17 +14,17 @@ export const Setup2faBanner: FC = () => {
   const startMfaEnrollmentMutation = useStartMfaEnrollment();
 
   useEffect(() => {
-    if (startMfaEnrollmentMutation.state === RequestState.SUCCESS) {
+    if (startMfaEnrollmentMutation.state === MutationState.SUCCESS) {
       window.open(startMfaEnrollmentMutation.data.ticket_url, '_blank');
     }
-  }, [startMfaEnrollmentMutation.state]);
+  }, [startMfaEnrollmentMutation]);
 
   const handleClick = () => {
-    if (startMfaEnrollmentMutation.state === RequestState.IDLE) {
+    if (startMfaEnrollmentMutation.state === MutationState.IDLE) {
       startMfaEnrollmentMutation.mutate({});
     }
 
-    if (startMfaEnrollmentMutation.state === RequestState.SUCCESS) {
+    if (startMfaEnrollmentMutation.state === MutationState.SUCCESS) {
       window.open(startMfaEnrollmentMutation.data.ticket_url, '_blank');
     }
   };
