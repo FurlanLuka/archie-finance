@@ -52,7 +52,7 @@ spec:
           imagePullPolicy: Never
           {{- end }}
           args:
-            ['sh', '-c', '. /vault/secrets/config && {{ .Values.service.command }}']
+            ['sh', '-c', '{{ .Values.service.command }}']
           ports:
             - containerPort: 80
           livenessProbe:

@@ -130,7 +130,7 @@ async function deployMicroservices(microservices, debugEnabled) {
       console.log(`Deploying ${microservice}...`);
 
       await exec(
-        `helm upgrade --install ${microservice} charts/node-service --values charts/node-service/values.yaml --values charts/node-service/development.values.yaml --values apps/api/${microservice}/deployment/values.yaml --values apps/api/${microservice}/deployment/development.values.yaml --set tag=latest --set image=${microservice} --set local=true --set environment=local --set autoscaling.enabled=false  --force`,
+        `helm upgrade --install ${microservice} charts/node-service --values charts/node-service/values.yaml --values charts/node-service/development.values.yaml --values apps/api/${microservice}/deployment/values.yaml --values apps/api/${microservice}/deployment/development.values.yaml --set tag=latest --set image=${microservice} --set local=true --set environment=local --set autoscaling.enabled=false --set service.command="node service/main.js"  --force`,
       );
       console.log(`${microservice} deployed ✅`);
     }
