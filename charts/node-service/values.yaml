@@ -14,7 +14,8 @@ resources:
 
 autoscaling:
   enabled: true
-  resource: true
+  memory: true
+  cpu: true
   queue: true
   maxReplicas: 3
 

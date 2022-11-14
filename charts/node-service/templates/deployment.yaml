@@ -134,13 +134,15 @@ spec:
           type: Value
           value: 50
     {{- end }}
-    {{- if .Values.autoscaling.resource }}
+    {{- if .Values.autoscaling.memory }}
     - type: Resource
       resource:
         name: memory
         target:
           type: Utilization
           averageUtilization: 80
+    {{- end }}
+    {{- if .Values.autoscaling.cpu }}
     - type: Resource
       resource:
         name: cpu
