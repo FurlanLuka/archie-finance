@@ -91,6 +91,7 @@
     "use-async-effect": "^2.2.7",
     "uuid": "^9.0.0",
     "validator": "^13.7.0",
+    "vite-plugin-svgr": "^2.2.2",
     "winston": "^3.8.2",
     "yup": "^0.32.11"
   },

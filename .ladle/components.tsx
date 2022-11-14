@@ -1,7 +1,7 @@
-import type { GlobalProvider } from '@ladle/react';
 import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
+import type { GlobalProvider } from '@ladle/react';
 
 import { GlobalStyles, theme } from '@archie/ui/shared/theme';
 
