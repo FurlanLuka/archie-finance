@@ -1,5 +1,5 @@
 import { JwtPayload, sign, verify } from 'jsonwebtoken';
-import { user } from './stubs/user.stubs';
+import { user } from './data-stubs/user.stubs';
 import { AuthScopes } from '@archie/api/utils/auth0';
 import { v4 } from 'uuid';
 

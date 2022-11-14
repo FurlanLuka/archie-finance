@@ -1,4 +1,4 @@
-import { user } from '@archie/test/integration';
+import { user } from '@archie/test/integration/data-stubs';
 import {
   CollateralLiquidationTransactionErrorPayload,
   CollateralLiquidationTransactionSubmittedPayload,

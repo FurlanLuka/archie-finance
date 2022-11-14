@@ -189,6 +189,9 @@
       ],
       "@archie/api/utils/openapi": ["libs/api/utils/openapi/src/index.ts"],
       "@archie/api/utils/queue": ["libs/api/utils/queue/src/index.ts"],
+      "@archie/api/utils/queue/events": [
+        "libs/api/utils/queue/src/lib/event/event.ts"
+      ],
       "@archie/api/utils/queue/decorators/*": [
         "libs/api/utils/queue/src/lib/decorators/*"
       ],
@@ -232,6 +235,21 @@
         "libs/plugin/workspace-generator/src/index.ts"
       ],
       "@archie/test/integration": ["libs/api/test/integration/src/index.ts"],
+      "@archie/test/integration/data-stubs": [
+        "libs/api/test/integration/src/lib/data-stubs/index.ts"
+      ],
+      "@archie/test/integration/module-stubs": [
+        "libs/api/test/integration/src/lib/module-stubs/index.ts"
+      ],
+      "@archie/tests/utils-test-api/auth": [
+        "libs/tests/utils-test-api/auth/src/index.ts"
+      ],
+      "@archie/tests/utils-test-api/constants": [
+        "libs/tests/utils-test-api/constants/src/index.ts"
+      ],
+      "@archie/tests/utils-test-api/data-transfer-objects": [
+        "libs/tests/utils-test-api/data-transfer-objects/src/index.ts"
+      ],
       "@archie/ui/dashboard/components": [
         "libs/ui/dashboard/components/src/index.ts"
       ],

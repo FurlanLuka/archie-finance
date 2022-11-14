@@ -62,7 +62,7 @@ async function cleanup(debugEnabled) {
 
 async function getMicroservices(debugEnabled) {
   try {
-    const { stdout } = await exec('ls apps');
+    const { stdout } = await exec('ls apps/api');
 
     const microservices = stdout
       .split(/\r?\n/)
@@ -130,7 +130,7 @@ async function deployMicroservices(microservices, debugEnabled) {
       console.log(`Deploying ${microservice}...`);
 
       await exec(
-        `helm upgrade --install ${microservice} apps/api/${microservice}/chart --set tag=latest --set image=${microservice} --set local=true --force`,
+        `helm upgrade --install ${microservice} apps/api/${microservice}/chart --set tag=latest --set image=${microservice} --set local=true --set environment=local --force`,
       );
       console.log(`${microservice} deployed ✅`);
     }
