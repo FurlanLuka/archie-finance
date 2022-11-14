@@ -3,6 +3,4 @@ service:
 
 vault:
   secretConfig: "database/creds/utils-test-api"
-  templateConfig: |
-    {{`
-    `}}
+  templateConfig: ""

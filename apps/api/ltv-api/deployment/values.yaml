@@ -3,8 +3,8 @@ service:
 
 vault:
   secretConfig: "database/creds/ltv-api"
-  templateConfig: |
-    {{`{{- with secret "database/creds/ltv-api"}}
+  templateConfig: |+
+    {{- with secret "database/creds/ltv-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"
     export TYPEORM_PASSWORD="{{ .Data.password }}"
     {{- end }}
@@ -23,4 +23,3 @@ vault:
     {{- with secret "kv/data/redis" }}
     export REDIS_URL="{{ .Data.data.url }}"
     {{- end }}
-    `}}

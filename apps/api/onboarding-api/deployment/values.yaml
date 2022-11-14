@@ -3,8 +3,7 @@ service:
 
 vault:
   secretConfig: "database/creds/onboarding-api"
-  templateConfig: |
-    {{`
+  templateConfig: |+
     {{- with secret "database/creds/onboarding-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"
     export TYPEORM_PASSWORD="{{ .Data.password }}"
@@ -22,4 +21,3 @@ vault:
     {{- with secret "kv/data/queue" }}
     export QUEUE_URL="{{ .Data.data.url }}"
     {{- end }}
-    `}}

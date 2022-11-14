@@ -3,8 +3,8 @@ service:
 
 vault:
   secretConfig: "database/creds/paypal-api"
-  templateConfig: |
-    {{`{{- with secret "database/creds/paypal-api"}}
+  templateConfig: |+
+    {{- with secret "database/creds/paypal-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"
     export TYPEORM_PASSWORD="{{ .Data.password }}"
     {{- end }}
@@ -26,4 +26,3 @@ vault:
     export PAYPAL_API_URL="{{ .Data.data.api_url }}"
     export PAYPAL_RETURN_URL="{{ .Data.data.return_url }}"
     {{- end }}
-    `}}

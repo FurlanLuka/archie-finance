@@ -3,8 +3,8 @@ service:
 
 vault:
   secretConfig: "database/creds/user-api"
-  templateConfig: |
-    {{`{{- with secret "database/creds/user-api"}}
+  templateConfig: |+
+    {{- with secret "database/creds/user-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"
     export TYPEORM_PASSWORD="{{ .Data.password }}"
     {{- end }}
@@ -30,4 +30,3 @@ vault:
     export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
     export DEFAULT_ROLE_ID="{{ .Data.data.default_role_id }}"
     {{- end }}
-    `}}

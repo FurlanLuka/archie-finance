@@ -3,8 +3,8 @@ service:
 
 vault:
   secretConfig: "database/creds/webhook-api"
-  templateConfig: |
-    {{`{{- with secret "database/creds/webhook-api"}}
+  templateConfig: |+
+    {{- with secret "database/creds/webhook-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"
     export TYPEORM_PASSWORD="{{ .Data.password }}"
     {{- end }}
@@ -21,4 +21,3 @@ vault:
     export AUTH0_WEBHOOK_SECRET="{{ .Data.data.auth0_secret_key }}"
     export PEACH_HMAC_SECRET="{{ .Data.data.peach_hmac_secret }}"
     {{- end }}
-    `}}

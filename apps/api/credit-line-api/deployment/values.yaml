@@ -3,8 +3,8 @@ service:
 
 vault:
   secretConfig: "database/creds/credit-line-api"
-  templateConfig: |
-    {{`{{- with secret "database/creds/credit-line-api"}}
+  templateConfig: |+
+    {{- with secret "database/creds/credit-line-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"
     export TYPEORM_PASSWORD="{{ .Data.password }}"
     {{- end }}
@@ -26,4 +26,3 @@ vault:
     {{- with secret "kv/data/credit-line-api" }}
     export ASSET_LIST='{{ .Data.data.asset_list }}'
     {{- end }}
-    `}}

@@ -3,8 +3,8 @@ service:
 
 vault:
   secretConfig: "database/creds/credit-api"
-  templateConfig: | 
-    {{`{{- with secret "database/creds/credit-api"}}
+  templateConfig: |+
+    {{- with secret "database/creds/credit-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"
     export TYPEORM_PASSWORD="{{ .Data.password }}"
     {{- end }}
@@ -36,4 +36,3 @@ vault:
     export PLAID_CLIENT_ID="{{ .Data.data.plaid_client_id }}"
     export PLAID_SECRET="{{ .Data.data.plaid_secret }}"
     {{- end }}
-    `}}

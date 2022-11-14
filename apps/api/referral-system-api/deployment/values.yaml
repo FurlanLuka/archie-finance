@@ -3,8 +3,8 @@ service:
 
 vault:
   secretConfig: "database/creds/referral-system-api"
-  templateConfig: |
-    {{`{{- with secret "database/creds/referral-system-api"}}
+  templateConfig: |+
+    {{- with secret "database/creds/referral-system-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"
     export TYPEORM_PASSWORD="{{ .Data.password }}"
     {{- end }}
@@ -19,4 +19,3 @@ vault:
     {{- with secret "kv/data/referral-system-api" }}
     export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
     {{- end }}
-    `}}

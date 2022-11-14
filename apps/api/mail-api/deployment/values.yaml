@@ -3,8 +3,8 @@ service:
 
 vault:
   secretConfig: "database/creds/mail-api"
-  templateConfig: |
-    {{`{{- with secret "database/creds/mail-api"}}
+  templateConfig: |+
+    {{- with secret "database/creds/mail-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"
     export TYPEORM_PASSWORD="{{ .Data.password }}"
     {{- end }}
@@ -29,4 +29,3 @@ vault:
     export SENDGRID_CONNECT_SALES_TEMPLATE_ID="{{ .Data.data.sendgrid_connect_sales_template_id }}"
     export ARCHIE_MARKETING_WEBSITE_URL="{{ .Data.data.marketing_website_url }}"
     {{- end }}
-    `}}

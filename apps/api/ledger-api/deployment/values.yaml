@@ -12,8 +12,7 @@ cronJobs:
 
 vault:
   secretConfig: "database/creds/ledger-api"
-  templateConfig: |
-    {{`
+  templateConfig: |+
     {{- with secret "database/creds/ledger-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"
     export TYPEORM_PASSWORD="{{ .Data.password }}"
@@ -37,4 +36,3 @@ vault:
     {{- with secret "kv/data/redis" }}
     export REDIS_URL="{{ .Data.data.url }}"
     {{- end }}
-    `}}

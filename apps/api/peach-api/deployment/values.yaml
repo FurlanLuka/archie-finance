@@ -3,8 +3,8 @@ service:
 
 vault:
   secretConfig: "database/creds/peach-api"
-  templateConfig: |
-    {{`{{- with secret "database/creds/peach-api"}}
+  templateConfig: |+
+    {{- with secret "database/creds/peach-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"
     export TYPEORM_PASSWORD="{{ .Data.password }}"
     {{- end }}
@@ -34,4 +34,3 @@ vault:
     export PEACH_LOAN_ID="{{ .Data.data.peach_loan_id }}"
     export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
     {{- end }}
-    `}}
