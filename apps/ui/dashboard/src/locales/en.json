@@ -273,7 +273,7 @@
     "title": "History",
     "subtitle": "Recent Transactions",
     "btn_load_more": "Load more",
-    "btn_statements": "Download Statement",
+    "btn_statements": "Download",
     "fetch_statements": "Fetching statements...",
     "no_statements": "No statements"
   },
