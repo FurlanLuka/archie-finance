@@ -4,7 +4,6 @@ service:
 vault:
   secretConfig: "database/creds/fireblocks-api"
   templateConfig: |+
-    {{`
     {{- with secret "database/creds/fireblocks-api"}}
     export TYPEORM_USERNAME="{{ .Data.username }}"
     export TYPEORM_PASSWORD="{{ .Data.password }}"
@@ -26,4 +25,3 @@ vault:
     {{- with secret "kv/data/queue" }}
     export QUEUE_URL="{{ .Data.data.url }}"
     {{- end }}
-    `}}
