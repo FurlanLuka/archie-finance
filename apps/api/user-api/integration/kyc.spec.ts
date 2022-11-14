@@ -6,10 +6,11 @@ import {
   createTestingModule,
   generateUserAccessToken,
   initializeTestingModule,
-  queueStub,
   TestDatabase,
-  user,
 } from '@archie/test/integration';
+import { user } from '@archie/test/integration/data-stubs';
+import { queueStub } from '@archie/test/integration/module-stubs';
+
 import * as request from 'supertest';
 import { createKycBodyFactory } from '@archie/api/user-api/test-data';
 import { KycDto } from '@archie/api/user-api/data-transfer-objects';

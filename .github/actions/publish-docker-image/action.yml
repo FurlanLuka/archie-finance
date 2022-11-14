@@ -20,6 +20,9 @@ inputs:
   image-tag:
     description: 'Image tag name'
     required: true
+  app-path:
+    description: 'App path'
+    required: true
 
 runs:
   using: composite
@@ -44,7 +47,7 @@ runs:
       with:
         context: ./
         push: true
-        file: ./apps/api/${{ inputs.projectName }}/Dockerfile.ci
+        file: ./apps/${{ inputs.app-path }}/${{ inputs.projectName }}/Dockerfile.ci
         cache-from: type=gha,scope=${{ github.sha }}
         build-args: BASE_IMAGE=${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr-repository }}:prebuild-${{ github.sha }}
         cache-to: type=gha,scope=${{ github.sha }}

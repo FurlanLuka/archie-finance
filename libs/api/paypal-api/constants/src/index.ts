@@ -1,4 +1,4 @@
-import { Event } from '@archie/api/utils/queue';
+import { Event } from '@archie/api/utils/queue/events';
 
 export const SERVICE_NAME = 'paypal-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;

@@ -1,6 +1,6 @@
+import { user } from '@archie/test/integration/data-stubs';
 import { KycDto } from '@archie/api/user-api/data-transfer-objects';
 import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
-import { user } from '@archie/test/integration';
 import { DateTime } from 'luxon';
 
 export const kycSubmittedDataFactory = (

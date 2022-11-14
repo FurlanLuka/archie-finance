@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/tests/stress/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "outputPath": "dist/apps/tests/stress",
+        "main": "apps/tests/stress/src/onboarding/full-onboarding.ts",
+        "tsConfig": "apps/tests/stress/tsconfig.json",
+        "assets": ["apps/tests/stress/src/assets"],
+        "externalDependencies": [
+          "https://jslib.k6.io/k6-utils/1.4.0/index.js",
+          "k6/x/amqp",
+          "k6/http",
+          "k6",
+          "k6/options"
+        ],
+        "webpackConfig": "apps/tests/stress/webpack.config.js"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/tests/stress/**/*.ts"]
+      }
+    }
+  },
+  "tags": ["scope:tests:app:stress-tests"]
+}
