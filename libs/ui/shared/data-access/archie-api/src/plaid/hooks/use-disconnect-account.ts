@@ -11,6 +11,7 @@ export const useDisconnectAccount = (
   accountId: string,
 ): MutationQueryResponse<void, DefaultVariables> => {
   const queryClient = useQueryClient();
+
   return useExtendedMutation<void, DefaultVariables>(
     ['disconnect_account', accountId],
     async ({ accessToken }) => {
