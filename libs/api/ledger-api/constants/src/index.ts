@@ -1,8 +1,8 @@
-import { Event } from '@archie/api/utils/queue';
+import { Event } from '@archie/api/utils/queue/events';
 import { InitiateLedgerAssetLiquidationCommandPayload } from '@archie/api/ledger-api/data-transfer-objects';
 import {
-  InitiateLedgerRecalculationCommandPayload,
   LedgerAccountUpdatedPayload,
+  InitiateLedgerRecalculationCommandPayload,
 } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'ledger-api';

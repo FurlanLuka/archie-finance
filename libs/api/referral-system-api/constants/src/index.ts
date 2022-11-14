@@ -1,4 +1,4 @@
-import { Event } from '@archie/api/utils/queue';
+import { Event } from '@archie/api/utils/queue/events';
 import {
   AppliedToWaitlistPayload,
   JoinedToWaitlistPayload,

@@ -5,10 +5,10 @@ import {
   createTestDatabase,
   createTestingModule,
   initializeTestingModule,
-  queueStub,
   TestDatabase,
-  user,
 } from '@archie/test/integration';
+import { user } from '@archie/test/integration/data-stubs';
+import { queueStub } from '@archie/test/integration/module-stubs';
 import { AppModule } from '../src/app.module';
 import {
   emailVerifiedDataFactory,

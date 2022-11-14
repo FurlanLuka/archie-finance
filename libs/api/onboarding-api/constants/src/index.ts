@@ -1,4 +1,4 @@
-import { Event } from '@archie/api/utils/queue';
+import { Event } from '@archie/api/utils/queue/events';
 import { OnboardingUpdatedPayload } from '@archie/api/onboarding-api/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'onboarding-api';

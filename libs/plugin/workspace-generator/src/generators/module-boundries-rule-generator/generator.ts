@@ -24,6 +24,16 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
     return [];
   });
 
+  const testProjects = Object.keys(workspace.projects).flatMap((projectKey) => {
+    const project = workspace.projects[projectKey];
+
+    if (project.root.includes('apps/tests')) {
+      return [projectKey];
+    }
+
+    return [];
+  });
+
   const defaultLintConfiguration = [
     {
       sourceTag: 'scope:api:lib:shared',
@@ -36,6 +46,13 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
     {
       sourceTag: 'scope:ui:lib:shared',
       onlyDependOnLibsWithTags: ['scope:ui:lib:shared'],
+    },
+    {
+      sourceTag: 'scope:tests:lib:shared',
+      onlyDependOnLibsWithTags: [
+        'scope:tests:lib:shared',
+        'scope:api:lib:shared',
+      ],
     },
   ];
 
@@ -87,6 +104,30 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
     ];
   });
 
+  const testsProjectLintConfiguration = testProjects.flatMap((project) => {
+    return [
+      {
+        sourceTag: `scope:tests:app:${project}`,
+        onlyDependOnLibsWithTags: [
+          'scope:tests:lib:shared',
+          'scope:api:lib:shared',
+          'scope:api:lib:test-data',
+          `scope:tests:lib:${project}`,
+        ],
+      },
+      {
+        sourceTag: `scope:tests:lib:${project}`,
+        onlyDependOnLibsWithTags: [
+          `scope:tests:lib:${project}`,
+          'scope:tests:lib:shared',
+          'scope:api:lib:shared',
+          'scope:api:lib:test-data',
+          `scope:tests:lib:${project}:shared`,
+        ],
+      },
+    ];
+  });
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updater = (json: any): any => {
     const hasBoundariesRule =
@@ -99,6 +140,7 @@ export function microserviceProjectTargetGenerator(tree: Tree): void {
       ][1].depConstraints = [
         ...apiProjectLintConfiguration,
         ...uiProjectLintConfiguration,
+        ...testsProjectLintConfiguration,
         ...defaultLintConfiguration,
       ];
     }

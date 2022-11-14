@@ -150,23 +150,23 @@ spec:
       template:
         spec:
           containers:
-          - name: fetch-asset-prices-v2-job
-            image: curlimages/curl
-            imagePullPolicy: IfNotPresent
-            env:
-            - name: INTERNAL_API_URL
-              {{- if not .Values.local }}
-              valueFrom:
-                secretKeyRef:
-                  name: internal-api-shared-secrets
-                  key: internal-api-url
-              {{- else }}
-              value: http://host.minikube.internal
-              {{- end }}
-            command:
-            - /bin/sh
-            - -c
-            - curl -X POST ${INTERNAL_API_URL}/internal/asset/price/fetch
+            - name: fetch-asset-prices-v2-job
+              image: curlimages/curl
+              imagePullPolicy: IfNotPresent
+              env:
+                - name: INTERNAL_API_URL
+                  {{- if not .Values.local }}
+                  valueFrom:
+                    secretKeyRef:
+                      name: internal-api-shared-secrets
+                      key: internal-api-url
+                  {{- else }}
+                  value: http://host.minikube.internal
+                  {{- end }}
+              command:
+                - /bin/sh
+                - -c
+                - curl -X POST ${INTERNAL_API_URL}/internal/asset/price/fetch
           restartPolicy: OnFailure
 ---
 apiVersion: batch/v1

@@ -21,11 +21,17 @@ const run = () => {
   core.notice(`isAffected: ${affectedProjects.length > 0}`);
 
   const hasAffectedApi =
-    affectedProjects.find((project) => project.indexOf('-api') > -1) !==
-    undefined;
+    affectedProjects.find(
+      (project) =>
+        project.indexOf('-api') > -1 && project.indexOf('-test-api') === -1,
+    ) !== undefined;
 
   const hasAffectedUi =
     affectedProjects.find((project) => project.indexOf('ui-') > -1) !==
+    undefined;
+
+  const hasAffectedTestApi =
+    affectedProjects.find((project) => project.indexOf('-test-api') > -1) !==
     undefined;
 
   core.setOutput('hasAffectedApi', hasAffectedApi);
@@ -33,6 +39,9 @@ const run = () => {
 
   core.setOutput('hasAffectedUi', hasAffectedUi);
   core.notice(`hasAffectedUi: ${hasAffectedUi}`);
+
+  core.setOutput('hasAffectedTestApi', hasAffectedTestApi);
+  core.notice(`hasAffectedTestApi: ${hasAffectedTestApi}`);
 };
 
 run();

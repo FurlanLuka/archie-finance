@@ -7,7 +7,7 @@ import {
 import { Test, TestingModule, TestingModuleBuilder } from '@nestjs/testing';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { verifyAccessToken } from './auth.utils';
-import { queueStub } from './stubs/queue.stubs';
+import { queueStub } from './module-stubs/queue.stubs';
 import { QueueService } from '@archie/api/utils/queue';
 import { DataSource } from 'typeorm';
 import {
