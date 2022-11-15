@@ -110,9 +110,9 @@ metadata:
   name: 'archie-{{ .Values.service.name }}-queue-messages-ready'
 spec:
   query: 'sum:rabbitmq.queue.messages_ready{rabbitmq_queue:{{ .Values.service.name }}-*}.rollup(30)'
----
 {{- end }}
 {{- if .Values.autoscaling.enabled }}
+---
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
