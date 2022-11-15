@@ -10,7 +10,7 @@ export const useCompleteAptoVerification = (): MutationQueryResponse<
   CompleteAptoVerificationPayload
 > => {
   return useExtendedMutation<unknown, CompleteAptoVerificationPayload>(
-    'apto_verification_complete',
+    ['apto_verification_complete'],
     completeAptoVerification,
   );
 };

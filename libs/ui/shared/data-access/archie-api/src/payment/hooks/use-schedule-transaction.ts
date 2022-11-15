@@ -10,7 +10,7 @@ export const useScheduleTransaction = (): MutationQueryResponse<
   ScheduleTransactionBody
 > => {
   return useExtendedMutation<void, ScheduleTransactionBody>(
-    'connect_account',
+    ['connect_account'],
     scheduleTransaction,
   );
 };

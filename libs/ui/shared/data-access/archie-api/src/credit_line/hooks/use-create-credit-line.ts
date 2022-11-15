@@ -10,7 +10,7 @@ export const useCreateCreditLine = (): MutationQueryResponse<
   DefaultVariables
 > => {
   return useExtendedMutation<CreditLine, DefaultVariables>(
-    'credit_line',
+    ['credit_line'],
     createCreditLine,
   );
 };

@@ -4,7 +4,7 @@ import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';
 import { getMfaEnrollments } from '../api/get-mfa-enrollments';
 
-export const MFA_ENROLLMENTS_RECORD_QUERY_KEY = 'mfa_enrollments_record';
+export const MFA_ENROLLMENTS_RECORD_QUERY_KEY = ['mfa_enrollments_record'];
 
 export const useGetMfaEnrollments = (): QueryResponse<Enrollment[]> =>
   useExtendedQuery(

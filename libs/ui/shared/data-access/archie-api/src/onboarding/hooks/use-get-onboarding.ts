@@ -11,10 +11,10 @@ import { QueryResponse } from '../../interface';
 import { getOnboarding } from '../api/get-onboarding';
 import { handleOnboardingUpdatedEvent } from '../event-handlers/handle-onboarding-updated';
 
-export const ONBOARDING_RECORD_QUERY_KEY = 'onboarding_record';
+export const ONBOARDING_RECORD_QUERY_KEY = ['onboarding_record'];
 const ONBOARDING_UPDATED_HANDLER_ID = 'useGetOnboarding.onboarding-updated';
 
-export const useGetOnboarding = (enabled = true): QueryResponse<Onboarding> => {
+export const useGetOnboarding = (): QueryResponse<Onboarding> => {
   useEffect(() => {
     websocketInstance.addHandler(
       WsEventTopic.ONBOARDING_UPDATED_TOPIC,
@@ -26,8 +26,5 @@ export const useGetOnboarding = (enabled = true): QueryResponse<Onboarding> => {
   return useExtendedQuery(
     ONBOARDING_RECORD_QUERY_KEY,
     async (accessToken: string) => getOnboarding(accessToken),
-    {
-      enabled,
-    },
   );
 };

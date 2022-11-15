@@ -8,7 +8,7 @@ export const useResendEmailVerification = (): MutationQueryResponse<
   DefaultVariables
 > => {
   return useExtendedMutation(
-    'resend_email_verification',
+    ['resend_email_verification'],
     resendEmailVerification,
   );
 };
