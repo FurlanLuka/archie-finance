@@ -19,3 +19,6 @@ vault:
     {{- with secret "kv/data/referral-system-api" }}
     export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
     {{- end }}
+
+autoscaling:
+  queue: false
