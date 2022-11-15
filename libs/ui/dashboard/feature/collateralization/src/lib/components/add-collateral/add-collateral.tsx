@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 
 import { CollateralAssets } from '@archie/ui/shared/constants';
+import { useGetAssetPrice } from '@archie/ui/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import {
@@ -29,8 +30,12 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
   const assetInfo = CollateralAssets[selectedAsset];
 
   const getLedgerResponse = useGetLedger();
+  const getAssetPriceResponse = useGetAssetPrice();
 
-  if (getLedgerResponse.state === RequestState.LOADING) {
+  if (
+    getLedgerResponse.state === RequestState.LOADING ||
+    getAssetPriceResponse.state === RequestState.LOADING
+  ) {
     return (
       <Card height="782px">
         <Skeleton />
@@ -38,17 +43,26 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
     );
   }
 
-  if (getLedgerResponse.state === RequestState.ERROR) {
+  if (
+    getLedgerResponse.state === RequestState.ERROR ||
+    getAssetPriceResponse.state === RequestState.ERROR
+  ) {
     return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
   }
 
-  if (getLedgerResponse.state === RequestState.SUCCESS) {
+  if (
+    getLedgerResponse.state === RequestState.SUCCESS &&
+    getAssetPriceResponse.state === RequestState.SUCCESS
+  ) {
     const ledger = getLedgerResponse.data;
+    const assetPrice = getAssetPriceResponse.data.find(
+      (asset) => asset.assetId === assetInfo.id,
+    );
     const currentLedgerAccount = ledger.accounts.find(
       (ledgerAccount) => ledgerAccount.assetId === selectedAsset,
     );
 
-    if (!currentLedgerAccount) {
+    if (!assetPrice) {
       return (
         <Navigate
           to="/error"
@@ -83,7 +97,7 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
           )}
           <CollateralizationForm
             assetInfo={assetInfo}
-            assetPrice={BigNumber(currentLedgerAccount.assetPrice).toNumber()}
+            assetPrice={BigNumber(assetPrice.price).toNumber()}
           />
           <Link to="/collateral" className="cancel-btn">
             <ButtonOutline>{t('btn_cancel')}</ButtonOutline>

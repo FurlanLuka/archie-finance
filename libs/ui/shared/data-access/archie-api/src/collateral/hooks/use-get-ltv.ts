@@ -11,7 +11,7 @@ import { QueryResponse } from '../../interface';
 import { getLTV } from '../api/get-ltv';
 import { handleLtvUpdatedEvent } from '../event-handlers/handle-ltv-updated';
 
-export const LTV_RECORD_QUERY_KEY = 'ltv_record';
+export const LTV_RECORD_QUERY_KEY = ['ltv_record'];
 const LTV_UPDATED_HANDLER_ID = 'useGetLTV.ltv-updated';
 
 export const useGetLTV = (): QueryResponse<Ltv> => {

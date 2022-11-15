@@ -1,4 +1,4 @@
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useExtendedMutation } from '../../helper-hooks';
 import { DefaultVariables } from '../../helpers';
@@ -11,14 +11,17 @@ export const useDisconnectAccount = (
   accountId: string,
 ): MutationQueryResponse<void, DefaultVariables> => {
   const queryClient = useQueryClient();
+
   return useExtendedMutation<void, DefaultVariables>(
-    `disconnect_account_${accountId}`,
+    ['disconnect_account', accountId],
     async ({ accessToken }) => {
       return disconnectAccount(accessToken, accountId);
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(CONNECTED_ACCOUNTS_RECORD_QUERY_KEY);
+        queryClient.invalidateQueries({
+          queryKey: CONNECTED_ACCOUNTS_RECORD_QUERY_KEY,
+        });
       },
     },
   );

@@ -10,7 +10,7 @@ export const useStartMfaEnrollment = (): MutationQueryResponse<
   DefaultVariables
 > => {
   return useExtendedMutation<SendEnrollmentTicketResponse, DefaultVariables>(
-    'start_mfa_enrollment',
+    ['start_mfa_enrollment'],
     createMfaEnrollment,
   );
 };

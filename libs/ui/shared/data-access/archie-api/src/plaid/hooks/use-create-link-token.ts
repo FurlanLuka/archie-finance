@@ -12,7 +12,7 @@ export const useCreateLinkToken = (): MutationQueryResponse<
   CreatePlaidLinkTokenBody
 > => {
   return useExtendedMutation<PlaidLinkToken, CreatePlaidLinkTokenBody>(
-    'create_link_token',
+    ['create_link_token'],
     createLinkToken,
   );
 };

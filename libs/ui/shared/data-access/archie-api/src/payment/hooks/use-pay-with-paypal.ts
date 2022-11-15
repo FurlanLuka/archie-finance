@@ -11,7 +11,7 @@ export const usePayWithPaypal = (): MutationQueryResponse<
   PayWithPaypalPayload
 > => {
   return useExtendedMutation<PayWithPaypalResponse, PayWithPaypalPayload>(
-    'paypal_record',
+    ['paypal_record'],
     payWithPaypal,
     {
       onSuccess: (data) => {

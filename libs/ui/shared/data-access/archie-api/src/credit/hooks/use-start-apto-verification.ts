@@ -8,7 +8,7 @@ export const useStartAptoVerification = (): MutationQueryResponse<
   DefaultVariables
 > => {
   return useExtendedMutation<unknown, DefaultVariables>(
-    'apto_verification_start',
+    ['apto_verification_start'],
     startAptoVerification,
   );
 };

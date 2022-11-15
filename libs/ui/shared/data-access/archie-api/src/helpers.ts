@@ -1,6 +1,10 @@
 import { GetTokenWithPopupOptions } from '@auth0/auth0-react';
+import {
+  MutationFunction,
+  QueryFunction,
+  QueryKey,
+} from '@tanstack/react-query';
 import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
-import { MutationFunction, QueryFunction, QueryKey } from 'react-query';
 
 import { SessionState } from '@archie/ui/shared/data-access/session';
 

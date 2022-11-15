@@ -13,7 +13,7 @@ import {
 
 const MISSING_DATE = 'MISSING_DATE';
 
-export const OBLIGATIONS_RECORD_QUERY_KEY = 'obligations_record';
+export const OBLIGATIONS_RECORD_QUERY_KEY = ['obligations_record'];
 
 export const useGetObligations = (): QueryResponse<UserObligations> => {
   const queryResponse = useExtendedQuery(
