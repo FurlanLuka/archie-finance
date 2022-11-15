@@ -1,6 +1,6 @@
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { FC, PropsWithChildren } from 'react';
-import { Column } from 'react-table';
 
 import {
   NetAsset,
@@ -75,53 +75,49 @@ const AmountCell: FC<AmountCellProps> = ({ amount }) => {
   );
 };
 
-export const tableColumns: Column<Transaction>[] = [
-  {
-    Header: '',
-    id: 'hidden',
-    columns: [
-      {
-        Header: 'Date',
-        accessor: 'created_at',
-        Cell: ({ value }: any) => {
-          return <DateCell date={value} />;
-        },
+const columnHelper = createColumnHelper<Transaction>();
+
+export const tableColumns: ColumnDef<Transaction, any>[] = [
+  columnHelper.accessor('created_at', {
+    header: 'Date',
+    cell: ({ getValue }) => {
+      return <DateCell date={getValue()} />;
+    },
+  }),
+  columnHelper.accessor((row) => getRowDescription(row), {
+    header: 'Description',
+    cell: ({ getValue }) => {
+      const { title, code } = getValue();
+
+      return <DescriptionCell title={title} code={code} />;
+    },
+  }),
+  columnHelper.accessor('type', {
+    header: 'Type',
+    cell: ({ getValue }) => {
+      const value = getValue();
+
+      return <TypeCell type={value}>{value}</TypeCell>;
+    },
+  }),
+  columnHelper.accessor('status', {
+    header: 'Status',
+    cell: ({ getValue }) => {
+      const value = getValue();
+
+      return <StatusCell status={value}>{value}</StatusCell>;
+    },
+  }),
+  columnHelper.accessor(
+    (row) =>
+      row.net_asset === NetAsset.negative
+        ? -row.us_dollar_amount
+        : row.us_dollar_amount,
+    {
+      header: 'Amount',
+      cell: ({ getValue }) => {
+        return <AmountCell amount={getValue()} />;
       },
-      {
-        Header: 'Description',
-        width: 2,
-        accessor: (row) => getRowDescription(row),
-        Cell: ({ value: { title, code } }: any) => {
-          return <DescriptionCell title={title} code={code} />;
-        },
-      },
-      {
-        Header: 'Type',
-        accessor: 'type',
-        width: 1,
-        Cell: ({ value }: any) => {
-          return <TypeCell type={value}>{value}</TypeCell>;
-        },
-      },
-      {
-        Header: 'Status',
-        accessor: 'status',
-        width: 1,
-        Cell: ({ value }: any) => {
-          return <StatusCell status={value}>{value}</StatusCell>;
-        },
-      },
-      {
-        Header: 'Amount',
-        accessor: (row) =>
-          row.net_asset === NetAsset.negative
-            ? -row.us_dollar_amount
-            : row.us_dollar_amount,
-        width: 1,
-        Cell: ({ value }: any) => {
-          return <AmountCell amount={value} />;
-        },
-      },
-    ],
-  },
+    },
+  ),
 ];

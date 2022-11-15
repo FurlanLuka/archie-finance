@@ -13,6 +13,7 @@ import { theme } from '@archie/ui/shared/theme';
 
 import { CollaterizationFormStyled } from './collaterization-form.styled';
 import { tableColumns } from './fixtures/table-fixtures';
+import { LtvTableEntry } from './interfaces';
 
 interface CollateralizationFormProps {
   assetInfo: CollateralAsset;
@@ -30,7 +31,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
 }) => {
   const [customLtv, setCustomLtv] = useState(OK_LTV);
 
-  const getRequiredCollateral = (targetLtv: number) => {
+  const getRequiredCollateral = (targetLtv: number): number => {
     const collateral = calculateCollateralValue(
       targetLtv,
       creditBalance,
@@ -52,11 +53,11 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
     }
   };
 
-  const tableData = useMemo(() => {
+  const tableData: LtvTableEntry[] = useMemo(() => {
     return [
       {
-        target_ltv: `${SUGGESTED_LTV}%`,
-        asset_to_add: {
+        targetLtv: `${SUGGESTED_LTV}%`,
+        assetToAdd: {
           id: 'suggested_collateral',
           amount: getRequiredCollateral(SUGGESTED_LTV),
           asset: assetInfo.short,
@@ -67,8 +68,8 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
         },
       },
       {
-        target_ltv: `${MINIMUM_LTV}%`,
-        asset_to_add: {
+        targetLtv: `${MINIMUM_LTV}%`,
+        assetToAdd: {
           id: 'minimum_collateral',
           amount: getRequiredCollateral(MINIMUM_LTV),
           asset: assetInfo.short,
@@ -79,7 +80,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
         },
       },
       {
-        target_ltv: (
+        targetLtv: (
           <InputText small className="custom-ltv">
             <input
               type="number"
@@ -90,7 +91,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
             />
           </InputText>
         ),
-        asset_to_add: {
+        assetToAdd: {
           id: 'custom_collateral',
           amount: getRequiredCollateral(customLtv),
           asset: assetInfo.short,
