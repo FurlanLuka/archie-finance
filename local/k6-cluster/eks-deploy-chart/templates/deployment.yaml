@@ -75,8 +75,8 @@ spec:
               value: 'postgres'
             - name: TYPEORM_PASSWORD
               value: 'postgres'
-            - name: TYPEORM_DATABASE
-              value: 'postgres'
+#            - name: TYPEORM_DATABASE
+#              value: 'postgres'
             - name: TYPEORM_PORT
               value: '5432'
       imagePullSecrets:

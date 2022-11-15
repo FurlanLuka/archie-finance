@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThan, Repository } from 'typeorm';
+import { LessThan, Repository, UpdateResult } from 'typeorm';
 import { Credit } from './credit.entity';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
 import { DateTime } from 'luxon';
@@ -15,6 +15,14 @@ export class CreditService {
   public async updateCreditBalance(
     credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
+    const existingCreditLine: Credit | null =
+      await this.ltvCreditRepository.findOneBy({
+        userId: credit?.userId,
+      });
+
+    if (existingCreditLine === null)
+      throw new Error('CREDIT_LINE_NOT_CREATED_YET_RETRY');
+
     await this.ltvCreditRepository.manager.update(
       Credit,
       {
@@ -36,10 +44,13 @@ export class CreditService {
     return credit?.utilizationAmount ?? 0;
   }
 
-  public async createCreditBalance(userId: string): Promise<void> {
+  public async createCreditBalance(
+    userId: string,
+    calculatedAt: string,
+  ): Promise<void> {
     await this.ltvCreditRepository.insert({
       userId,
-      calculatedAt: DateTime.now().toISO(),
+      calculatedAt: calculatedAt,
       utilizationAmount: 0,
     });
   }

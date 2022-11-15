@@ -123,7 +123,8 @@ export class LtvService {
 
   public async handleCreditLineCreatedEvent({
     userId,
+    calculatedAt,
   }: CreditLineCreatedPayload): Promise<void> {
-    await this.creditService.createCreditBalance(userId);
+    await this.creditService.createCreditBalance(userId, calculatedAt);
   }
 }

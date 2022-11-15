@@ -79,6 +79,12 @@ async function setupInfrastructureServices(debugEnabled) {
     );
     console.log('PostgresSQL running ✅');
 
+    console.log('Starting Redis...');
+    await exec(
+      `helm upgrade --install redis -f local/k6-cluster/redis-values.yml  bitnami/redis`,
+    );
+    console.log('Redis running ✅');
+
     console.log('Starting K6 operator...');
     await exec(
       'git clone https://github.com/grafana/k6-operator --depth 1 && cd k6-operator && make deploy && cd .. && rm -rf k6-operator',
