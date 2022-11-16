@@ -18,7 +18,6 @@ import { theme } from '@archie/ui/shared/theme';
 
 import {
   AlignCenterCellStyled,
-  AlignEndCellStyled,
   ChangeCellStyled,
   ActionsCellStyled,
 } from './table-fixtures.styled';
@@ -75,7 +74,7 @@ interface AllocationCellProps {
 }
 
 const AllocationCell: FC<AllocationCellProps> = ({ value }) => (
-  <AlignEndCellStyled>
+  <AlignCenterCellStyled>
     <span data-tip={`${value}%`}>{value.toFixed(2)}%</span>
     <ReactTooltip
       textColor={theme.tooltipText}
@@ -83,7 +82,7 @@ const AllocationCell: FC<AllocationCellProps> = ({ value }) => (
       effect="solid"
       delayHide={1000}
     />
-  </AlignEndCellStyled>
+  </AlignCenterCellStyled>
 );
 
 interface ActionsCellProps {
@@ -141,11 +140,13 @@ export const tableColumns = [
         width: 2,
       },
       {
-        Header: <AlignCenterCellStyled>Credit limit</AlignCenterCellStyled>,
-        accessor: 'credit_limit',
+        Header: (
+          <AlignCenterCellStyled>Allocation Percentage</AlignCenterCellStyled>
+        ),
+        accessor: 'allocation',
         width: 1,
         Cell: ({ value }: any) => {
-          return <AlignCenterCellStyled>{value}</AlignCenterCellStyled>;
+          return <AllocationCell value={value} />;
         },
       },
       {
@@ -154,14 +155,6 @@ export const tableColumns = [
         width: 1,
         Cell: ({ value: { collateral_asset } }: any) => {
           return <ChangeCell id={collateral_asset} />;
-        },
-      },
-      {
-        Header: <AlignEndCellStyled>Allocation</AlignEndCellStyled>,
-        accessor: 'allocation',
-        width: 1,
-        Cell: ({ value }: any) => {
-          return <AllocationCell value={value} />;
         },
       },
       {

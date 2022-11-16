@@ -5,11 +5,6 @@ export const AlignCenterCellStyled = styled.div`
   justify-content: center;
 `;
 
-export const AlignEndCellStyled = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-
 export const ChangeCellStyled = styled(AlignCenterCellStyled)<{
   isPositive: boolean;
 }>`
