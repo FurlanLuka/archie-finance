@@ -45,7 +45,6 @@ export async function startService(
   if (options.enableWs === true) {
     app.useWebSocketAdapter(new WsAdapter(app));
   }
-
   await app.listen(process.env.PORT ?? 80);
 
   return app;
