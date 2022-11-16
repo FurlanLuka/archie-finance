@@ -51,9 +51,9 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({
       }
 
       const creditLimitAssetAllocation =
-        creditLine.creditLimitAssetAllocation.find((item) => {
-          item.assetId = ledgerAccount.assetId;
-        });
+        creditLine.creditLimitAssetAllocation.find(
+          (item) => item.assetId === ledgerAccount.assetId,
+        );
 
       return {
         ...previousValue,
@@ -61,15 +61,12 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({
           collateral_asset: ledgerAccount.assetId,
           balance: `$${ledgerAccount.accountValue}`,
           holdings: `${ledgerAccount.assetAmount} ${ledgerAccount.assetId}`,
-          credit_limit: `${
-            creditLimitAssetAllocation?.allocationPercentage ?? 0
-          }%`,
           change: {
             collateral_asset: ledgerAccount.assetId,
           },
-          allocation: BigNumber(ledgerAccount.accountValue)
-            .dividedBy(ledger.value)
-            .multipliedBy(100),
+          allocation: Math.round(
+            creditLimitAssetAllocation?.allocationPercentage ?? 0,
+          ),
           actions: {
             collateral_asset: ledgerAccount.assetId,
             isHolding: true,
@@ -78,12 +75,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({
         },
       };
     }, {} as AssetMap);
-  }, [
-    creditLine.creditLimitAssetAllocation,
-    isInMarginCall,
-    ledger.accounts,
-    ledger.value,
-  ]);
+  }, [creditLine, isInMarginCall, ledger.accounts]);
 
   const tableData = useMemo(() => {
     const notAddedAssets = Object.values(CollateralAssets).filter(
@@ -95,7 +87,6 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({
         collateral_asset: item.id,
         balance: '$0',
         holdings: `0 ${item.short}`,
-        credit_limit: '$0',
         change: {
           collateral_asset: item.id,
         },

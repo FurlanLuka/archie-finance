@@ -142,10 +142,10 @@ export const tableColumns = [
       },
       {
         Header: <AlignCenterCellStyled>Credit limit</AlignCenterCellStyled>,
-        accessor: 'credit_limit',
+        accessor: 'allocation',
         width: 1,
         Cell: ({ value }: any) => {
-          return <AlignCenterCellStyled>{value}</AlignCenterCellStyled>;
+          return <AlignCenterCellStyled>{value}%</AlignCenterCellStyled>;
         },
       },
       {
@@ -154,14 +154,6 @@ export const tableColumns = [
         width: 1,
         Cell: ({ value: { collateral_asset } }: any) => {
           return <ChangeCell id={collateral_asset} />;
-        },
-      },
-      {
-        Header: <AlignEndCellStyled>Allocation</AlignEndCellStyled>,
-        accessor: 'allocation',
-        width: 1,
-        Cell: ({ value }: any) => {
-          return <AllocationCell value={value} />;
         },
       },
       {
