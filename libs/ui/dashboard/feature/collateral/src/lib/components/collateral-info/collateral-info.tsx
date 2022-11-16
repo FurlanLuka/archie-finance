@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import { FC, useMemo } from 'react';
 
 import {
@@ -64,9 +63,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({
           change: {
             collateral_asset: ledgerAccount.assetId,
           },
-          allocation: Math.round(
-            creditLimitAssetAllocation?.allocationPercentage ?? 0,
-          ),
+          allocation: creditLimitAssetAllocation?.allocationPercentage ?? 0,
           actions: {
             collateral_asset: ledgerAccount.assetId,
             isHolding: true,
