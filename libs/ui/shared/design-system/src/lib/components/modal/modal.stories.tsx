@@ -1,4 +1,4 @@
-import { Story, Meta } from '@storybook/react';
+import { Story } from '@ladle/react';
 import { useState } from 'react';
 
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
@@ -15,7 +15,7 @@ export default {
     layout: 'fullscreen',
     options: { showPanel: true },
   },
-} as Meta;
+};
 
 export const Default: Story<ModalProps> = (props) => {
   const [modalOpen, setModalOpen] = useState(true);

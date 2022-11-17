@@ -1,8 +1,8 @@
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 
 import { StoriesContainerStyled } from './stories-container.styled';
 
-interface StoriesContainerProps {
+export interface StoriesContainerProps extends PropsWithChildren {
   bgColor?: string;
 }
 
