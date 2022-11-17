@@ -1,4 +1,4 @@
-import { Story, Meta } from '@storybook/react';
+import { Story } from '@ladle/react';
 
 import { Card } from '../card/card.styled';
 import { TitleL } from '../typography/typography.styled';
@@ -12,7 +12,7 @@ export default {
     layout: 'fullscreen',
     options: { showPanel: false },
   },
-} as Meta;
+};
 
 export const Default: Story = () => (
   <Page>

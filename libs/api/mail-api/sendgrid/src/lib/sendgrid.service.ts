@@ -9,7 +9,7 @@ import {
   MarginCallLtvLimitApproachingPayload,
   MarginCallCompletedPayload,
   MarginCallStartedPayload,
-} from '@archie/api/ltv-api/data-transfer-objects';
+} from '@archie/api/ltv-api/data-transfer-objects/types';
 import { SalesConnectDto } from '@archie/api/referral-system-api/sales-connect';
 
 @Injectable()

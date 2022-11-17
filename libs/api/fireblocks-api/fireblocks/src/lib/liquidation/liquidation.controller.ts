@@ -3,7 +3,7 @@ import {
   INITIATE_COLLATERAL_LIQUIDATION_COMMAND,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/fireblocks-api/constants';
-import { InitiateCollateralLiquidationCommandPayload } from '@archie/api/fireblocks-api/data-transfer-objects';
+import { InitiateCollateralLiquidationCommandPayload } from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import { WEBHOOK_FIREBLOCKS_INTERNAL_TRANSACTION_TOPIC } from '@archie/api/webhook-api/constants';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { FireblocksInternalTransactionPayload } from '@archie/api/webhook-api/data-transfer-objects';

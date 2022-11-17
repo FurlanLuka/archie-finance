@@ -1,19 +1,17 @@
 import { IsString, Matches } from 'class-validator';
+import {
+  MaxWithdrawalAmountResponse,
+  WithdrawPayload,
+  WithdrawResponse,
+} from './withdraw.interfaces';
 
-export class MaxWithdrawalAmountResponse {
+export class MaxWithdrawalAmountResponseDto
+  implements MaxWithdrawalAmountResponse
+{
   maxAmount: string;
 }
 
-export interface WithdrawalRecord {
-  assetId: string;
-  status: string;
-  networkFee: string | null;
-  amount: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export class WithdrawPayloadDto {
+export class WithdrawPayloadDto implements WithdrawPayload {
   @IsString()
   assetId: string;
 
@@ -24,6 +22,6 @@ export class WithdrawPayloadDto {
   destinationAddress: string;
 }
 
-export class WithdrawResponseDto {
+export class WithdrawResponseDto implements WithdrawResponse {
   id: string;
 }

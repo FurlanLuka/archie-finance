@@ -1,5 +1,5 @@
+import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
 import { PaymentStep } from '@archie/ui/dashboard/constants';
-import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 
 export enum PaymentStepsActionType {
   MOVE_TO_SCHEDULE_STEP = 'MOVE_TO_SCHEDULE_STEP',
@@ -11,7 +11,7 @@ export type PaymentStepsAction =
   | {
       type: PaymentStepsActionType.MOVE_TO_SCHEDULE_STEP;
       // payload: {
-      //   selectedAccount: AccountResponse;
+      //   selectedAccount: PaymentInstrument ;
       // };
     }
   | {
@@ -20,7 +20,7 @@ export type PaymentStepsAction =
       // payload: {
       //   amount: number;
       //   scheduledDate: string;
-      //   selectedAccount: AccountResponse;
+      //   selectedAccount: PaymentInstrument ;
       // };
     }
   | {
@@ -29,7 +29,7 @@ export type PaymentStepsAction =
       // payload: {
       //   amount: number;
       //   scheduledDate: string;
-      //   selectedAccount: AccountResponse;
+      //   selectedAccount: PaymentInstrument ;
       // };
     };
 
@@ -42,19 +42,19 @@ export type PaymentStepsState =
   //   }
   | {
       step: PaymentStep.SCHEDULE;
-      // selectedAccount: AccountResponse;
+      // selectedAccount: PaymentInstrument ;
       amount: null;
       // scheduledDate: null;
     }
   | {
       step: PaymentStep.CONFIRM;
-      // selectedAccount: AccountResponse;
+      // selectedAccount: PaymentInstrument ;
       amount: number;
       // scheduledDate: string;
     }
   | {
       step: PaymentStep.SCHEDULED;
-      // selectedAccount: AccountResponse;
+      // selectedAccount: PaymentInstrument ;
       amount: number;
       // scheduledDate: string;
     };

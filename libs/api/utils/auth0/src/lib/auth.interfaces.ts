@@ -19,5 +19,7 @@ export interface AuthOptions {
 export interface RequestWithUser extends Request {
   user?: {
     sub: string;
+    scope: string;
+    exp: number;
   };
 }

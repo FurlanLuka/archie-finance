@@ -2,6 +2,7 @@
   "name": "ui-shared-data-access-query-client",
   "$schema": "../../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ui/shared/data-access/query-client/src",
+  "projectType": "library",
   "targets": {
     "lint": {
       "executor": "@nrwl/linter:eslint",

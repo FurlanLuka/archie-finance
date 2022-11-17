@@ -12,7 +12,7 @@ import {
   DrawNotFoundError,
 } from '../borrower.errors';
 import { GetPurchasesQueryDto, PurchasesResponseDto } from './purchases.dto';
-import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects/types';
 
 @Controller('v1/card_purchases')
 export class PurchasesController {

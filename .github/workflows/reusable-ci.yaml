@@ -138,7 +138,7 @@ jobs:
         name: Checkout
       - uses: ./.github/actions/install-dependencies
         name: Install dependencies
-      - if: contains(matrix.project, 'api')
+      - if: contains(matrix.project, 'api') && !contains(matrix.project, 'test-api')
         uses: ./.github/actions/publish-docker-image
         name: Build and publish docker image
         with:
@@ -148,6 +148,18 @@ jobs:
           aws-region: ${{ inputs.AWS_REGION }}
           ecr-repository: ${{ inputs.ECR_REPOSITORY }}
           image-tag: ${{ needs.setup_and_check.outputs.imageTag }}
+          app-path: 'api'
+#      - if: contains(matrix.project, 'test-api')
+#        uses: ./.github/actions/publish-docker-image
+#        name: Build and publish docker image
+#        with:
+#          projectName: ${{ matrix.project }}
+#          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#          aws-region: ${{ inputs.AWS_REGION }}
+#          ecr-repository: ${{ inputs.ECR_REPOSITORY }}
+#          image-tag: ${{ needs.setup_and_check.outputs.imageTag }}
+#          app-path: 'tests'
       - if: contains(matrix.project, 'ui')
         uses: ./.github/actions/build-ui
         name: Build UI and save artifacts
@@ -170,9 +182,7 @@ jobs:
       run: exit 1
     - uses: actions/checkout@v2
       name: Checkout
-    - uses: ./.github/actions/install-dependencies
-      name: Install dependencies
-    - if: contains(matrix.project, 'api')
+    - if: contains(matrix.project, 'api') && !contains(matrix.project, 'test-api')
       uses: ./.github/actions/deploy-api
       name: Deploy API
       with:

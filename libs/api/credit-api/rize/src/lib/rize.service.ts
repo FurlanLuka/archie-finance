@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 import { Injectable, Logger } from '@nestjs/common';
 import { RizeApiService } from './api/rize_api.service';
 import {
@@ -10,13 +9,9 @@ import {
   DebitCard,
   DebitCardAccessToken,
   RizeList,
-  RizeTransaction,
   TransactionEvent,
   TransactionEventDetails,
-  TransactionStatus,
-  TransactionType,
 } from './api/rize_api.interfaces';
-import { Transaction, TransactionResponse } from './rize.interfaces';
 import { RizeFactoryService } from './factory/rize_factory.service';
 import { RizeValidatorService } from './validator/rize_validator.service';
 import {
@@ -29,27 +24,33 @@ import {
   GET_USER_KYC_RPC,
 } from '@archie/api/user-api/constants';
 import {
-  CardActivatedPayload,
-  TransactionUpdatedPayload,
-} from '@archie/api/credit-api/data-transfer-objects';
-import { CardResponseDto, CardStatus } from './rize.dto';
+  RizeTransaction,
+  Transaction,
+  TransactionResponse,
+  TransactionStatus,
+  TransactionType,
+} from '@archie/api/credit-api/data-transfer-objects/types';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 import {
   CreditBalanceUpdatedPayload,
   GetLoanBalancesPayload,
   GetLoanBalancesResponse,
   PaymentType,
-} from '@archie/api/peach-api/data-transfer-objects';
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { LessThanOrEqual, Repository, UpdateResult } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LastDebitCardUpdateMeta } from './last_debit_card_update_meta.entity';
 import { Lock } from '@archie/api/utils/redis';
 import {
+  EmailAddress,
   GetEmailAddressPayload,
-  GetEmailAddressResponse,
   GetKycPayload,
-  GetKycResponse,
-} from '@archie/api/user-api/data-transfer-objects';
+  KycResponse,
+} from '@archie/api/user-api/data-transfer-objects/types';
+import {
+  CardResponse,
+  CardStatus,
+} from '@archie/api/credit-api/data-transfer-objects/types';
 
 @Injectable()
 export class RizeService {
@@ -143,14 +144,11 @@ export class RizeService {
       const transaction: RizeTransaction =
         await this.rizeApiService.getTransaction(transactionId);
 
-      this.queueService.publishEvent(
-        TRANSACTION_UPDATED_TOPIC,
-        {
-          ...transaction,
-          userId,
-          status: newStatus,
-        },
-      );
+      this.queueService.publishEvent(TRANSACTION_UPDATED_TOPIC, {
+        ...transaction,
+        userId,
+        status: newStatus,
+      });
     }
   }
 
@@ -163,7 +161,7 @@ export class RizeService {
     }
   }
 
-  public async getVirtualCard(userId: string): Promise<CardResponseDto> {
+  public async getVirtualCard(userId: string): Promise<CardResponse> {
     const customer: Customer | null = await this.rizeApiService.searchCustomers(
       userId,
     );
@@ -241,20 +239,19 @@ export class RizeService {
       await this.rizeApiService.searchCustomers(userId);
     this.rizeValidatorService.validateCustomerDoesNotExist(existingCustomer);
 
-    const kyc: GetKycResponse = await this.queueService.request<
-      GetKycResponse,
+    const kyc: KycResponse = await this.queueService.request<
+      KycResponse,
       GetKycPayload
     >(GET_USER_KYC_RPC, {
       userId: `${userId}`,
     });
 
-    const emailAddressResponse: GetEmailAddressResponse =
-      await this.queueService.request<
-        GetEmailAddressResponse,
-        GetEmailAddressPayload
-      >(GET_USER_EMAIL_ADDRESS_RPC, {
-        userId: `${userId}`,
-      });
+    const emailAddressResponse: EmailAddress = await this.queueService.request<
+      EmailAddress,
+      GetEmailAddressPayload
+    >(GET_USER_EMAIL_ADDRESS_RPC, {
+      userId: `${userId}`,
+    });
 
     const customerId: string =
       existingCustomer !== null

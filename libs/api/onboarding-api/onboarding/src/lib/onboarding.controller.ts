@@ -1,7 +1,7 @@
 import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { OnboardingService } from './onboarding.service';
 import { AuthGuard } from '@archie/api/utils/auth0';
-import { GetOnboardingResponseDto } from './onboarding.dto';
+import { OnboardingDto } from '@archie/api/onboarding-api/data-transfer-objects';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import {
   KYC_SUBMITTED_TOPIC,
@@ -14,14 +14,14 @@ import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import {
   EmailVerifiedPayload,
-  KycSubmittedPayload,
   MfaRemovedPayload,
   MfaEnrolledPayload,
-} from '@archie/api/user-api/data-transfer-objects';
+} from '@archie/api/user-api/data-transfer-objects/types';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 import {
   CardActivatedPayload,
   CollateralReceivedPayload,
-} from '@archie/api/credit-api/data-transfer-objects';
+} from '@archie/api/credit-api/data-transfer-objects/types';
 import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-line-api/constants';
 
 @Controller('v1/onboarding')
@@ -31,7 +31,7 @@ export class OnboardingController {
   @Get()
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
-  async getOnboardingRecord(@Request() req): Promise<GetOnboardingResponseDto> {
+  async getOnboardingRecord(@Request() req): Promise<OnboardingDto> {
     return this.onboardingService.getOrCreateOnboardingRecord(req.user.sub);
   }
 }

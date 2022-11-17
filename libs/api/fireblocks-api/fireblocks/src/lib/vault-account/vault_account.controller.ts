@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { VaultAccountService } from './vault_account.service';
-import { GetDepositAddressResponse } from '@archie/api/fireblocks-api/data-transfer-objects';
+import { DepositAddressDto } from '@archie/api/fireblocks-api/data-transfer-objects';
 
 @Controller('/v1/vault_account')
 export class VaultAccountController {
@@ -12,7 +12,7 @@ export class VaultAccountController {
   async getOrCreateDepositAddresss(
     @Req() request,
     @Param('assetId') assetId: string,
-): Promise<GetDepositAddressResponse> {
+  ): Promise<DepositAddressDto> {
     return this.vaultAccountService.getOrCreateDepositAddress(
       assetId,
       request.user.sub,

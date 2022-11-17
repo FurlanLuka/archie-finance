@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Statement } from '../api/peach_api.interfaces';
+import {
+  LoanDocument,
+  Statement,
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { PeachApiService } from '../api/peach_api.service';
 import { Borrower } from '../borrower.entity';
 import { BorrowerValidation } from '../utils/borrower.validation';
-import { GetLoanDocumentDto } from './statements.dto';
 
 @Injectable()
 export class LoanStatementsService {
@@ -33,7 +35,7 @@ export class LoanStatementsService {
   public async getLoanDocumentUrl(
     userId: string,
     documentId: string,
-  ): Promise<GetLoanDocumentDto> {
+  ): Promise<LoanDocument> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });

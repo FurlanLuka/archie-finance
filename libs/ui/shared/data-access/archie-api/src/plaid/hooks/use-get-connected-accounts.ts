@@ -5,7 +5,9 @@ import {
   GetConnectedAccountsResponse,
 } from '../api/get-connected-accounts';
 
-export const CONNECTED_ACCOUNTS_RECORD_QUERY_KEY = 'connected_accounts_record';
+export const CONNECTED_ACCOUNTS_RECORD_QUERY_KEY = [
+  'connected_accounts_record',
+];
 
 export const useGetConnectedAccounts =
   (): QueryResponse<GetConnectedAccountsResponse> => {

@@ -1,29 +1,30 @@
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
+
+import { WithdrawResponse } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 import { useExtendedMutation } from '../../helper-hooks';
 import { MutationQueryResponse } from '../../interface';
 import {
   createWithdrawal,
   CreateWithdrawalBody,
-  WithdrawalResponse,
 } from '../api/create-withdrawal';
 
 import { getMaxWithdrawalAmountQueryKey } from './use-get-max-withdrawal-amount';
 
 export const useCreateWithdrawal = (): MutationQueryResponse<
-  CreateWithdrawalBody,
-  WithdrawalResponse
+  WithdrawResponse,
+  CreateWithdrawalBody
 > => {
   const queryClient = useQueryClient();
 
-  return useExtendedMutation<WithdrawalResponse, CreateWithdrawalBody>(
-    'collateral_withdraw',
+  return useExtendedMutation<WithdrawResponse, CreateWithdrawalBody>(
+    ['collateral_withdraw'],
     createWithdrawal,
     {
       onSuccess: async (_data, body) => {
-        queryClient.invalidateQueries(
-          getMaxWithdrawalAmountQueryKey(body.assetId),
-        );
+        queryClient.invalidateQueries({
+          queryKey: getMaxWithdrawalAmountQueryKey(body.assetId),
+        });
       },
     },
   );

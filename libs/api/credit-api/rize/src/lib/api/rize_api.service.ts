@@ -11,7 +11,6 @@ import {
   Product,
   DebitCard,
   DebitCardAccessToken,
-  RizeTransaction,
   AdjustmentType,
 } from './rize_api.interfaces';
 import { ConfigVariables } from '@archie/api/credit-api/constants';
@@ -23,6 +22,7 @@ import {
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import * as rs from 'jsrsasign';
 import { CustomerDetailsParams } from '@rizefinance/rize-js/types/lib/core/customer';
+import { RizeTransaction } from '@archie/api/credit-api/data-transfer-objects/types';
 
 @Injectable()
 export class RizeApiService {
@@ -144,11 +144,7 @@ export class RizeApiService {
     email: string,
     customerDetails: CustomerDetailsParams,
   ): Promise<void> {
-    await this.rizeClient.customer.update(
-      customerUid,
-      email,
-      customerDetails,
-    );
+    await this.rizeClient.customer.update(customerUid, email, customerDetails);
   }
 
   public async createCheckingComplianceWorkflow(

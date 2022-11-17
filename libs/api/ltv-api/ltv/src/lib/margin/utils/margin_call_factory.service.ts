@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { MarginCall } from '../margin_calls.entity';
-import { MarginCallsDto, MarginCallStatus } from '../margin.dto';
+import {
+  MarginCall as MarginCallResponse,
+  MarginCallStatus,
+} from '@archie/api/ltv-api/data-transfer-objects/types';
 import { DateTime } from 'luxon';
 import { MARGIN_CALL_LIQUIDATION_AFTER_HOURS } from '@archie/api/ltv-api/constants';
 
 @Injectable()
 export class MarginCallFactory {
-  public create(marginCall: MarginCall): MarginCallsDto {
+  public create(marginCall: MarginCall): MarginCallResponse {
     return {
       createdAt: marginCall.createdAt.toISOString(),
       automaticLiquidationAt: DateTime.fromISO(

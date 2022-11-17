@@ -3,10 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
 import {
-  QueryResponse,
+  MutationState,
   RequestState,
 } from '@archie/ui/shared/data-access/archie-api/interface';
-import { EmailVerificationResponse } from '@archie/ui/shared/data-access/archie-api/user/api/get-email-verification';
 import { useGetEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-get-email-verification';
 import { usePollEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-poll-email-verification';
 import { useResendEmailVerification } from '@archie/ui/shared/data-access/archie-api/user/hooks/use-resend-email-verification';
@@ -32,8 +31,7 @@ export const VerifyEmailScreen: FC = () => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [counter, setCounter] = useState(30);
 
-  const getEmailVerificationResponse: QueryResponse<EmailVerificationResponse> =
-    useGetEmailVerification();
+  const getEmailVerificationResponse = useGetEmailVerification();
   const mutationResponse = useResendEmailVerification();
   usePollEmailVerification();
 
@@ -50,7 +48,7 @@ export const VerifyEmailScreen: FC = () => {
   }, []);
 
   const handleResend = () => {
-    if (mutationResponse.state === RequestState.IDLE) {
+    if (mutationResponse.state === MutationState.IDLE) {
       mutationResponse.mutate({});
     }
 

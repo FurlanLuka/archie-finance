@@ -7,7 +7,7 @@ import {
   CreditLineNotFoundError,
 } from '../borrower.errors';
 import { InterestsService } from './interests.service';
-import { InterestsDto } from './interests.dto';
+import { LoanInterestsDto } from '@archie/api/peach-api/data-transfer-objects';
 
 @Controller('v1/loan_interests')
 export class InterestsController {
@@ -17,7 +17,7 @@ export class InterestsController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth()
   @ApiErrorResponse([BorrowerNotFoundError, CreditLineNotFoundError])
-  async getInterests(@Req() request): Promise<InterestsDto> {
+  async getInterests(@Req() request): Promise<LoanInterestsDto> {
     return this.interestsService.getInterests(request.user.sub);
   }
 }

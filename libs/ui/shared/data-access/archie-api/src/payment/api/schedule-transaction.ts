@@ -1,16 +1,11 @@
+import { ScheduleTransaction } from '@archie/api/peach-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
 
 import { DefaultVariables, postRequest } from '../../helpers';
 
-export interface ScheduleTransactionParams {
-  amount: number;
-  scheduledDate: string;
-  paymentInstrumentId: string;
-}
-
 export interface ScheduleTransactionBody
   extends DefaultVariables,
-    ScheduleTransactionParams {}
+    ScheduleTransaction {}
 
 export const ERROR_LIST = new Map<string, string>([]);
 

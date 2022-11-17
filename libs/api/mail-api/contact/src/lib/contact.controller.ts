@@ -7,10 +7,8 @@ import {
 import { SERVICE_QUEUE_NAME } from '@archie/api/mail-api/constants';
 
 import { ContactService } from './contact.service';
-import {
-  EmailVerifiedPayload,
-  KycSubmittedPayload,
-} from '@archie/api/user-api/data-transfer-objects';
+import { EmailVerifiedPayload } from '@archie/api/user-api/data-transfer-objects';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 
 @Controller()
 export class ContactQueueController {
@@ -18,18 +16,12 @@ export class ContactQueueController {
 
   constructor(private contactService: ContactService) {}
 
-  @Subscribe(
-    KYC_SUBMITTED_TOPIC,
-    ContactQueueController.CONTROLLER_QUEUE_NAME,
-  )
+  @Subscribe(KYC_SUBMITTED_TOPIC, ContactQueueController.CONTROLLER_QUEUE_NAME)
   async kycSubmittedHandler(payload: KycSubmittedPayload): Promise<void> {
     await this.contactService.saveFirstName(payload.userId, payload.firstName);
   }
 
-  @Subscribe(
-    EMAIL_VERIFIED_TOPIC,
-    ContactQueueController.CONTROLLER_QUEUE_NAME,
-  )
+  @Subscribe(EMAIL_VERIFIED_TOPIC, ContactQueueController.CONTROLLER_QUEUE_NAME)
   async emailVerifiedHandler(payload: EmailVerifiedPayload): Promise<void> {
     await this.contactService.saveEmail(payload.userId, payload.email);
   }

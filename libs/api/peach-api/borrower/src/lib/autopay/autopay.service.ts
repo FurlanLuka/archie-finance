@@ -3,16 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Borrower } from '../borrower.entity';
 import { Repository } from 'typeorm';
 import {
-  AutopayAgreementDto,
-  AutopayDto,
-  CreateAutopayDocumentDto,
-  CreateAutopayDto,
-} from './autopay.dto';
-import {
   Autopay,
   Document,
-  PaymentInstrument,
-} from '../api/peach_api.interfaces';
+  PeachPaymentInstrument,
+  AutopayAgreement,
+  AutopayResponse,
+  CreateAutopayDocument,
+  CreateAutopay,
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { BorrowerValidation } from '../utils/borrower.validation';
 
 export class AutopayService {
@@ -25,14 +23,14 @@ export class AutopayService {
 
   public async setupAutopay(
     userId: string,
-    autopayConfiguration: CreateAutopayDto,
+    autopayConfiguration: CreateAutopay,
   ): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    const paymentInstrument: PaymentInstrument =
+    const paymentInstrument: PeachPaymentInstrument =
       await this.peachApiService.getPaymentInstrument(
         borrower.personId,
         autopayConfiguration.paymentInstrumentId,
@@ -83,7 +81,7 @@ export class AutopayService {
     );
   }
 
-  public async getConfiguredAutopay(userId: string): Promise<AutopayDto> {
+  public async getConfiguredAutopay(userId: string): Promise<AutopayResponse> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
@@ -115,14 +113,14 @@ export class AutopayService {
 
   public async createAutopayAgreement(
     userId: string,
-    agreement: CreateAutopayDocumentDto,
-  ): Promise<AutopayAgreementDto> {
+    agreement: CreateAutopayDocument,
+  ): Promise<AutopayAgreement> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
     this.borrowerValidation.isBorrowerCreditLineDefined(borrower);
 
-    const paymentInstrument: PaymentInstrument =
+    const paymentInstrument: PeachPaymentInstrument =
       await this.peachApiService.getPaymentInstrument(
         borrower.personId,
         agreement.paymentInstrumentId,

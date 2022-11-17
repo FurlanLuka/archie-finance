@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { QueueService } from '@archie/api/utils/queue';
-import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects';
+import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects/types';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 import { LedgerService } from '../ledger/ledger.service';
 import { BigNumber } from 'bignumber.js';
@@ -8,15 +8,11 @@ import {
   InternalLedgerAccountData,
   Ledger,
   LedgerActionType,
-  MaxWithdrawalAmountResponse,
-  WithdrawalRecord,
-  WithdrawResponseDto,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import {
   InvalidAssetError,
   InvalidWithdrawalAmountError,
   WithdrawalAmountTooHighError,
-  WithdrawalRecordNotFoundError,
 } from './withdraw.errors';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Withdrawal, WithdrawalStatus } from './withdrawal.entity';
@@ -26,12 +22,15 @@ import {
   CollateralWithdrawalTransactionSubmittedPayload,
   CollateralWithdrawalTransactionUpdatedPayload,
   CollateralWithdrawalTransactionUpdatedStatus,
-  InitiateCollateralWithdrawalCommandPayload,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
+} from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import { INITIATE_COLLATERAL_WITHDRAWAL_COMMAND } from '@archie/api/fireblocks-api/constants';
 import { v4 } from 'uuid';
 import { AssetInformation, AssetsService } from '@archie/api/ledger-api/assets';
 import { Lock } from '@archie/api/utils/redis';
+import {
+  MaxWithdrawalAmountResponse,
+  WithdrawResponse,
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 
 @Injectable()
 export class WithdrawService {
@@ -97,7 +96,7 @@ export class WithdrawService {
     assetId: string,
     amount: string,
     destinationAddress: string,
-  ): Promise<WithdrawResponseDto> {
+  ): Promise<WithdrawResponse> {
     const assetInformation: AssetInformation | undefined =
       this.assetService.getAssetInformation(assetId);
 
@@ -162,16 +161,13 @@ export class WithdrawService {
       await queryRunner.release();
     }
 
-    this.queueService.publishEvent(
-      INITIATE_COLLATERAL_WITHDRAWAL_COMMAND,
-      {
-        userId,
-        assetId,
-        amount,
-        internalTransactionId,
-        destinationAddress,
-      },
-    );
+    this.queueService.publishEvent(INITIATE_COLLATERAL_WITHDRAWAL_COMMAND, {
+      userId,
+      assetId,
+      amount,
+      internalTransactionId,
+      destinationAddress,
+    });
 
     return {
       id: internalTransactionId,

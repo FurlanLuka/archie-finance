@@ -1,18 +1,17 @@
+import { TransactionResponse } from '@archie/api/credit-api/data-transfer-objects/types';
+
 import { useExtendedInfiniteQuery } from '../../helper-hooks';
 import { InfiniteQueryResponse, PaginationParams } from '../../interface';
 import { getLoanPayments } from '../api/get-loan-payments';
-import {
-  getTransactions,
-  GetTransactionsResponse,
-} from '../api/get-transactions';
+import { getTransactions } from '../api/get-transactions';
 import {
   getTransactionsDateRange,
   mergeTransactionsWithLoanPayments,
 } from '../transactions.helpers';
 
-const TRANSACTIONS_RECORD_QUERY_KEY = 'transactions_record';
+const TRANSACTIONS_RECORD_QUERY_KEY = ['transactions_record'];
 
-const getNextPage = ({ meta }: GetTransactionsResponse) => {
+const getNextPage = ({ meta }: TransactionResponse) => {
   if (meta.page * meta.limit + meta.count < meta.totalCount) {
     return meta.page + 1;
   }
@@ -23,7 +22,7 @@ const getNextPage = ({ meta }: GetTransactionsResponse) => {
 const PAGE_SIZE = 10;
 
 export const useGetTransactions =
-  (): InfiniteQueryResponse<GetTransactionsResponse> => {
+  (): InfiniteQueryResponse<TransactionResponse> => {
     return useExtendedInfiniteQuery(
       TRANSACTIONS_RECORD_QUERY_KEY,
       getNextPage,

@@ -9,6 +9,6 @@ export function createLibFiles(tree: Tree, options: NormalizedSchema): void {
     joinPathFragments(options.libraryRoot, 'src'),
     {
       tmpl: '',
-    }
+    },
   );
 }

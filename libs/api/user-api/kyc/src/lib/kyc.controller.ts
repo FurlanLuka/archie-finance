@@ -1,32 +1,18 @@
 import { AuthGuard } from '@archie/api/utils/auth0';
-import {
-  Body,
-  Controller,
-  Get,
-  Logger,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { KycService } from './kyc.service';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { KycAlreadySubmitted, KycNotFoundError } from './kyc.errors';
-import {
-  RPCResponse,
-  RPCResponseType,
-} from '@archie/api/utils/queue';
+import { RPCResponse, RPCResponseType } from '@archie/api/utils/queue';
 import {
   GET_USER_KYC_RPC,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/user-api/constants';
 import { RequestHandler } from '@archie/api/utils/queue/decorators/request_handler';
-import {
-  CreateKycResponse,
-  GetKycPayload,
-  GetKycResponse,
-  KycDto,
-} from '@archie/api/user-api/data-transfer-objects';
+import { KycDto } from '@archie/api/user-api/data-transfer-objects';
+import { GetKycPayload } from '@archie/api/user-api/data-transfer-objects/types';
+import { KycResponseDto } from '@archie/api/user-api/data-transfer-objects';
 
 @Controller('v1/kyc')
 export class KycController {
@@ -36,7 +22,7 @@ export class KycController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @ApiErrorResponse([KycNotFoundError])
-  async getKyc(@Req() request): Promise<GetKycResponse> {
+  async getKyc(@Req() request): Promise<KycResponseDto> {
     return this.kycService.getKyc(request.user.sub);
   }
 
@@ -47,7 +33,7 @@ export class KycController {
   async createKyc(
     @Body() body: KycDto,
     @Req() request,
-  ): Promise<CreateKycResponse> {
+  ): Promise<KycResponseDto> {
     return this.kycService.createKyc(body, request.user.sub);
   }
 }
@@ -59,7 +45,7 @@ export class KycQueueController {
   constructor(private readonly kycService: KycService) {}
 
   @RequestHandler(GET_USER_KYC_RPC, KycQueueController.CONTROLLER_QUEUE_NAME)
-  async getKyc(payload: GetKycPayload): Promise<RPCResponse<GetKycResponse>> {
+  async getKyc(payload: GetKycPayload): Promise<RPCResponse<KycResponseDto>> {
     try {
       const data = await this.kycService.getKyc(payload.userId);
 

@@ -2,8 +2,8 @@ import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
+import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
-import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
 import { useGetConnectedAccounts } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-get-connected-accounts';
 import {
   ButtonPrimary,
@@ -18,7 +18,7 @@ import { ConnectedAccountItem } from './blocks/connected-account-item/connected-
 import { ChooseAccountStyled } from './choose-account.styled';
 
 interface ChooseAccountProps {
-  onConfirm: (account: AccountResponse) => void;
+  onConfirm: (account: PaymentInstrument) => void;
 }
 
 export const ChooseAccount: FC<ChooseAccountProps> = ({ onConfirm }) => {
@@ -26,7 +26,7 @@ export const ChooseAccount: FC<ChooseAccountProps> = ({ onConfirm }) => {
   const getConnectedAccountsResponse = useGetConnectedAccounts();
 
   const [selectedAccount, setSelectedAccount] =
-    useState<AccountResponse | null>(null);
+    useState<PaymentInstrument | null>(null);
 
   const handleConfirmClick = () => {
     if (!selectedAccount) {
@@ -81,7 +81,7 @@ export const ChooseAccount: FC<ChooseAccountProps> = ({ onConfirm }) => {
             <Select
               id="accounts"
               header={header}
-              onChange={(account: AccountResponse) =>
+              onChange={(account: PaymentInstrument) =>
                 setSelectedAccount(account)
               }
             >

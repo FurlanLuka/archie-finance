@@ -5,10 +5,10 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { calculateLedgerCreditValue } from '@archie/ui/dashboard/utils';
 import { CollateralAssets } from '@archie/ui/shared/constants';
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useCreateWithdrawal } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-create-withdrawal';
 import {
   ButtonOutline,
@@ -65,7 +65,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   useEffect(() => {
-    if (createWithdrawal.state === RequestState.SUCCESS) {
+    if (createWithdrawal.state === MutationState.SUCCESS) {
       setIsSuccessModalOpen(true);
     }
   }, [createWithdrawal.state]);
@@ -82,7 +82,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({
   });
 
   const onSubmit = handleSubmit((data) => {
-    if (createWithdrawal.state === RequestState.IDLE) {
+    if (createWithdrawal.state === MutationState.IDLE) {
       createWithdrawal.mutate({
         assetId: currentAsset,
         amount: data.withdrawAmount,
@@ -165,7 +165,7 @@ export const WithdrawalForm: FC<WithdrawalFormProps> = ({
           </ButtonOutline>
           <ButtonPrimary
             isDisabled={!isValid}
-            isLoading={createWithdrawal.state === RequestState.LOADING}
+            isLoading={createWithdrawal.state === MutationState.LOADING}
           >
             {t('dashboard_withdraw.btn')}
           </ButtonPrimary>

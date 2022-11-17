@@ -7,7 +7,7 @@ import {
   CreditLineNotFoundError,
 } from '../borrower.errors';
 import { ObligationsService } from './obligations.service';
-import { ObligationsResponseDto } from './obligations.dto';
+import { ObligationsResponseDto } from '@archie/api/peach-api/data-transfer-objects';
 
 @Controller('v1/loan_obligations')
 export class ObligationsController {

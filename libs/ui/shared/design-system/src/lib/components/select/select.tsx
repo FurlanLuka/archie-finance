@@ -17,7 +17,6 @@ export interface SelectProps<T> {
   children: ReactElement<SelectOptionProps<T>>[];
 }
 
-// TODO: Refactor Select component to nest styled header and options and prevent passing many props
 export function Select<T>({
   id,
   header,

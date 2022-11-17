@@ -1,12 +1,12 @@
 import { FC, useMemo } from 'react';
 
+import { CreditLine } from '@archie/api/credit-line-api/data-transfer-objects/types';
+import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
+import { LtvStatus } from '@archie/api/ltv-api/data-transfer-objects/types';
 import {
   CollateralAssets,
   CollateralCurrency,
-  LTVStatus,
 } from '@archie/ui/shared/constants';
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
-import { CreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/api/get-credit-line';
 import { Table } from '@archie/ui/shared/design-system';
 
 import { tableColumns } from '../../fixtures/table-fixtures';
@@ -32,7 +32,7 @@ type AssetMap = Record<
 interface CollateralInfoProps {
   ledger: Ledger;
   creditLine: CreditLine;
-  ltvStatus: LTVStatus;
+  ltvStatus: LtvStatus;
 }
 
 export const CollateralInfo: FC<CollateralInfoProps> = ({
@@ -41,7 +41,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({
   ltvStatus,
 }) => {
   const columns = useMemo(() => tableColumns, []);
-  const isInMarginCall = ltvStatus === LTVStatus.MARGIN_CALL;
+  const isInMarginCall = ltvStatus === LtvStatus.margin_call;
 
   const assetMap: AssetMap = useMemo(() => {
     return ledger.accounts.reduce((previousValue, ledgerAccount) => {

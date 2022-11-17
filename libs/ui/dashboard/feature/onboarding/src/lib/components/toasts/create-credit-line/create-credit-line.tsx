@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useCreateCreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/hooks/use-create-credit-line';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import {
   Toast,
   ToastList,
@@ -23,7 +23,7 @@ export const CreateCreditLine: FC<CreateCreditLineProps> = ({
   const { t } = useTranslation();
 
   const handleClick = () => {
-    if (createCreditLine.state === RequestState.IDLE) {
+    if (createCreditLine.state === MutationState.IDLE) {
       createCreditLine.mutate({});
     }
   };
@@ -32,7 +32,7 @@ export const CreateCreditLine: FC<CreateCreditLineProps> = ({
     <ToastList>
       <Toast>
         <BodyM weight={700}>
-          {t('collateral_credit_line_popup.text', {
+          {t('collateral_credit_line_toast.text', {
             collateral: collateralText,
             creditValue: creditValue,
           })}

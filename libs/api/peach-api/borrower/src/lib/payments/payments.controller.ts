@@ -24,7 +24,7 @@ import {
   GetPaymentsQueryDto,
   PaymentsResponseDto,
   ScheduleTransactionDto,
-} from './payments.dto';
+} from '@archie/api/peach-api/data-transfer-objects';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { WEBHOOK_PEACH_PAYMENT_UPDATED_TOPIC } from '@archie/api/webhook-api/constants';
 import { PeachPaymentUpdatedPayload } from '@archie/api/webhook-api/data-transfer-objects';
@@ -32,7 +32,7 @@ import { SERVICE_QUEUE_NAME } from '@archie/api/peach-api/constants';
 import { PAYPAL_PAYMENT_RECEIVED_TOPIC } from '@archie/api/paypal-api/constants';
 import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
-import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects';
+import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 @Controller('v1/loan_payments')
 export class PaymentsController {

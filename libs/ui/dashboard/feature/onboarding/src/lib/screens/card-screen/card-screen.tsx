@@ -3,13 +3,10 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 import { OnboardingStep } from '@archie/ui/dashboard/constants';
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
-import { GetCreditResponse } from '@archie/ui/shared/data-access/archie-api/credit/api/get-credit';
 import { useCreateRizeUser } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-create-rize-user';
 import { useGetCredit } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
 import {
-  MutationQueryResponse,
-  QueryResponse,
+  MutationState,
   RequestState,
 } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
@@ -34,27 +31,25 @@ enum Stage {
 
 export const CardScreen: FC = () => {
   const { t } = useTranslation();
-
   const navigate = useNavigate();
 
   const [stage, setStage] = useState(Stage.CREATE_USER);
 
-  const createUserQuery: MutationQueryResponse = useCreateRizeUser();
-  const getCreditQueryResponse: QueryResponse<GetCreditResponse> =
-    useGetCredit();
-  const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
+  const createUserMutation = useCreateRizeUser();
+  const getCreditResponse = useGetCredit();
+  const getLedgerResponse = useGetLedger();
 
   useEffect(() => {
     if (stage === Stage.CREATE_USER) {
-      if (createUserQuery.state === RequestState.IDLE) {
-        createUserQuery.mutate({});
+      if (createUserMutation.state === MutationState.IDLE) {
+        createUserMutation.mutate({});
       }
 
-      if (createUserQuery.state === RequestState.SUCCESS) {
+      if (createUserMutation.state === MutationState.SUCCESS) {
         setStage(Stage.COMPLETE);
       }
     }
-  }, [stage, createUserQuery]);
+  }, [stage, createUserMutation]);
 
   const getTitle = () => {
     switch (stage) {
@@ -65,23 +60,12 @@ export const CardScreen: FC = () => {
     }
   };
 
-  const getCollateralTotalValue = () => {
-    if (
-      getLedgerResponse.state === RequestState.SUCCESS &&
-      stage === Stage.COMPLETE
-    ) {
-      return getLedgerResponse.data.value;
-    }
-
-    return 0;
-  };
-
   const getCreditValue = () => {
     if (
-      getCreditQueryResponse.state === RequestState.SUCCESS &&
+      getCreditResponse.state === RequestState.SUCCESS &&
       stage === Stage.COMPLETE
     ) {
-      return getCreditQueryResponse.data.totalCredit;
+      return getCreditResponse.data.totalCredit;
     }
 
     return 0;
@@ -89,7 +73,7 @@ export const CardScreen: FC = () => {
 
   const getContent = () => {
     if (
-      getCreditQueryResponse.state === RequestState.LOADING ||
+      getCreditResponse.state === RequestState.LOADING ||
       getLedgerResponse.state === RequestState.LOADING
     ) {
       return (
@@ -100,7 +84,7 @@ export const CardScreen: FC = () => {
     }
 
     if (
-      getCreditQueryResponse.state === RequestState.ERROR ||
+      getCreditResponse.state === RequestState.ERROR ||
       getLedgerResponse.state === RequestState.ERROR
     ) {
       return (
@@ -109,7 +93,7 @@ export const CardScreen: FC = () => {
     }
 
     if (
-      getCreditQueryResponse.state === RequestState.SUCCESS &&
+      getCreditResponse.state === RequestState.SUCCESS &&
       getLedgerResponse.state === RequestState.SUCCESS
     ) {
       return (

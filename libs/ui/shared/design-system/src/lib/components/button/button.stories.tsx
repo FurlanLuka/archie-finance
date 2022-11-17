@@ -1,4 +1,4 @@
-import { Story, Meta } from '@storybook/react';
+import { Story } from '@ladle/react';
 
 import { theme } from '@archie/ui/shared/theme';
 
@@ -6,6 +6,7 @@ import { StoriesContainer } from '../../utils/stories-container/stories-containe
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
 
 import {
+  Button,
   ButtonProps,
   ButtonPrimary,
   ButtonOutline,
@@ -15,11 +16,12 @@ import {
 
 export default {
   title: 'Components/Button',
+  component: Button,
   parameters: {
     layout: 'fullscreen',
     options: { showPanel: true },
   },
-} as Meta;
+};
 
 export const Primary: Story<ButtonProps> = (props) => (
   <StoriesContainer>

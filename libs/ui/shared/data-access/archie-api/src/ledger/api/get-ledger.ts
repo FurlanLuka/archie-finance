@@ -1,5 +1,5 @@
+import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
 
 import { getRequest } from '../../helpers';
 

@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { RedisService } from '@archie/api/utils/redis';
 import { CryptoService } from '@archie/api/utils/crypto';
-import { AuthTokenDto } from '@archie/api/websocket-event-api/data-transfer-objects';
+import { AuthToken } from '@archie/api/websocket-event-api/data-transfer-objects/types';
 import { ExtendedWebSocket, WsEvent } from './websocket.interfaces';
 import { SERVICE_INSTANCE_ID } from '@archie/api/websocket-event-api/constants';
 
@@ -20,7 +20,7 @@ export class WebsocketService {
     private cryptoService: CryptoService,
   ) {}
 
-  public async createAuthToken(userId: string): Promise<AuthTokenDto> {
+  public async createAuthToken(userId: string): Promise<AuthToken> {
     const authToken = this.cryptoService
       .randomBytes(this.AUTH_TOKEN_BYTE_SIZE)
       .toString('hex');

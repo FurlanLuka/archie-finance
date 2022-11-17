@@ -38,7 +38,46 @@ spec:
         {{- else }}
         helm-revision: '{{ .Release.Revision }}'
         {{- end }}
+      {{- if not .Values.local }}
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-cache-enable: "true"
+        vault.hashicorp.com/role: "mail-api"
+        vault.hashicorp.com/agent-requests-cpu: "50m"
+        vault.hashicorp.com/agent-limits-cpu: ""
+        vault.hashicorp.com/agent-inject-secret-config: "database/creds/mail-api"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{`{{- with secret "database/creds/mail-api"}}
+          export TYPEORM_USERNAME="{{ .Data.username }}"
+          export TYPEORM_PASSWORD="{{ .Data.password }}"
+          {{- end }}
+          {{- with secret "kv/data/database" }}
+          export TYPEORM_PORT="{{ .Data.data.port }}"
+          export TYPEORM_HOST="{{ .Data.data.hostname }}"
+          {{- end }}
+          export TYPEORM_DATABASE="mail-api"
+          {{- with secret "kv/data/queue" }}
+          export QUEUE_URL="{{ .Data.data.url }}"
+          {{- end }}
+          {{- with secret "kv/data/mail-api" }}
+          export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
+          export SENDGRID_API_KEY="{{ .Data.data.sendgrid_api_key }}"
+          export SENDGRID_API_URL="{{ .Data.data.sendgrid_api_url }}"
+          export SENDGRID_MAILING_LIST_ID="{{ .Data.data.sendgrid_mailing_list_id }}"
+          export SENDGRID_VERIFY_EMAIL_TEMPLATAE_ID="{{ .Data.data.sendgrid_verify_email_template_id }}"
+          export SENDGRID_MARGIN_CALL_EXITED_TEMPLATE_ID="{{ .Data.data.sendgrid_margin_call_exited_template_id }}"
+          export SENDGRID_MARGIN_CALL_REACHED_TEMPLATE_ID="{{ .Data.data.sendgrid_margin_call_reached_template_id }}"
+          export SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID="{{ .Data.data.sendgrid_margin_call_in_danger_template_id }}"
+          export SENDGRID_COLLATERAL_LIQUIDATED_TEMPLATE_ID="{{ .Data.data.sendgrid_collateral_liquidated_template_id }}"
+          export SENDGRID_CONNECT_SALES_TEMPLATE_ID="{{ .Data.data.sendgrid_connect_sales_template_id }}"
+          export ARCHIE_MARKETING_WEBSITE_URL="{{ .Data.data.marketing_website_url }}"
+          {{- end }}
+          `}}
+      {{- end }}
     spec:
+      serviceAccountName: mail-api
       containers:
         - name: mail-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
@@ -47,6 +86,8 @@ spec:
           {{- else }}
           imagePullPolicy: Never
           {{- end }}
+          args:
+            ['sh', '-c', '. /vault/secrets/config && node service/main.js']
           ports:
             - containerPort: 80
           livenessProbe:
@@ -59,9 +100,6 @@ spec:
             requests:
               memory: '64Mi'
               cpu: '50m'
-            limits:
-              memory: '256Mi'
-              cpu: '500m'
           {{- if not .Values.local }}
           env:
             - name: DD_AGENT_HOST
@@ -78,91 +116,6 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
             - name: DD_LOGS_INJECTION
               value: 'true'
-            - name: TYPEORM_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: db-username
-            - name: TYPEORM_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: db-password
-            - name: TYPEORM_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: db-hostname
-            - name: TYPEORM_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: db-port
-            - name: TYPEORM_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: db-database
-            - name: SENDGRID_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: sendgrid-api-key
-            - name: SENDGRID_API_URL
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: sendgrid-api-url
-            - name: SENDGRID_MAILING_LIST_ID
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: sendgrid-mailing-list-id
-            - name: SENDGRID_VERIFY_EMAIL_TEMPLATAE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: sendgrid-verify-email-template-id
-            - name: SENDGRID_MARGIN_CALL_EXITED_TEMPLATE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: sendgrid-margin-call-exited-template-id
-            - name: SENDGRID_MARGIN_CALL_REACHED_TEMPLATE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: sendgrid-margin-call-reached-template-id
-            - name: SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: sendgrid-margin-call-in-danger-template-id
-            - name: SENDGRID_COLLATERAL_LIQUIDATED_TEMPLATE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: sendgrid-collateral-liquidated-template-id
-            - name: SENDGRID_CONNECT_SALES_TEMPLATE_ID
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: sendgrid-connect-sales-template-id
-            - name: ARCHIE_MARKETING_WEBSITE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: marketing-website-url
-            - name: QUEUE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: queue-shared-secrets
-                  key: queue-url
-            - name: ENCRYPTION_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: mail-api-secrets
-                  key: encryption-key
           {{- end }}
       imagePullSecrets:
         - name: regcred

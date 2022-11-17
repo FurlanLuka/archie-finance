@@ -34,7 +34,43 @@ spec:
         {{- else }}
         helm-revision: '{{ .Release.Revision }}'
         {{- end }}
+      {{- if not .Values.local }}
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-cache-enable: "true"
+        vault.hashicorp.com/role: "paypal-api"
+        vault.hashicorp.com/agent-requests-cpu: "50m"
+        vault.hashicorp.com/agent-limits-cpu: ""
+        vault.hashicorp.com/agent-inject-secret-config: "database/creds/paypal-api"
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{`{{- with secret "database/creds/paypal-api"}}
+          export TYPEORM_USERNAME="{{ .Data.username }}"
+          export TYPEORM_PASSWORD="{{ .Data.password }}"
+          {{- end }}
+          {{- with secret "kv/data/database" }}
+          export TYPEORM_PORT="{{ .Data.data.port }}"
+          export TYPEORM_HOST="{{ .Data.data.hostname }}"
+          {{- end }}
+          export TYPEORM_DATABASE="paypal-api"
+          {{- with secret "kv/data/auth0" }}
+          export AUTH0_DOMAIN="{{ .Data.data.domain }}"
+          export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
+          {{- end }}
+          {{- with secret "kv/data/queue" }}
+          export QUEUE_URL="{{ .Data.data.url }}"
+          {{- end }}
+          {{- with secret "kv/data/paypal-api" }}
+          export PAYPAL_CLIENT_ID="{{ .Data.data.client_id }}"
+          export PAYPAL_CLIENT_SECRET="{{ .Data.data.client_secret }}"
+          export PAYPAL_API_URL="{{ .Data.data.api_url }}"
+          export PAYPAL_RETURN_URL="{{ .Data.data.return_url }}"
+          {{- end }}
+          `}}
+      {{- end }}
     spec:
+      serviceAccountName: paypal-api
       containers:
         - name: archie-paypal-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
@@ -43,6 +79,8 @@ spec:
           {{- else }}
           imagePullPolicy: Never
           {{- end }}
+          args:
+            ['sh', '-c', '. /vault/secrets/config && node service/main.js']
           ports:
             - containerPort: 80
           livenessProbe:
@@ -55,9 +93,6 @@ spec:
             requests:
               memory: '64Mi'
               cpu: '50m'
-            limits:
-              memory: '256Mi'
-              cpu: '500m'
           {{- if not .Values.local }}
           env:
             - name: DD_AGENT_HOST
@@ -78,66 +113,6 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
-            - name: AUTH0_DOMAIN
-              valueFrom:
-                secretKeyRef:
-                  name: auth0-shared-secrets
-                  key: domain
-            - name: AUTH0_AUDIENCE
-              valueFrom:
-                secretKeyRef:
-                  name: auth0-shared-secrets
-                  key: audience
-            - name: TYPEORM_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: paypal-api-secrets
-                  key: db-username
-            - name: TYPEORM_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: paypal-api-secrets
-                  key: db-password
-            - name: TYPEORM_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: paypal-api-secrets
-                  key: db-hostname
-            - name: TYPEORM_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: paypal-api-secrets
-                  key: db-port
-            - name: TYPEORM_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: paypal-api-secrets
-                  key: db-database
-            - name: QUEUE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: queue-shared-secrets
-                  key: queue-url
-            - name: PAYPAL_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: paypal-api-secrets
-                  key: client-id
-            - name: PAYPAL_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: paypal-api-secrets
-                  key: client-secret
-            - name: PAYPAL_API_URL
-              valueFrom:
-                secretKeyRef:
-                  name: paypal-api-secrets
-                  key: api-url
-            - name: PAYPAL_RETURN_URL
-              valueFrom:
-                secretKeyRef:
-                  name: paypal-api-secrets
-                  key: return-url
           {{- end }}
       imagePullSecrets:
         - name: regcred

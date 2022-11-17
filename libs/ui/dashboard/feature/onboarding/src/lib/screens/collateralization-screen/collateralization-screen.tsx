@@ -14,12 +14,8 @@ import {
 } from '@archie/ui/dashboard/constants';
 import { copyToClipboard } from '@archie/ui/dashboard/utils';
 import { CollateralAsset } from '@archie/ui/shared/constants';
-import { AssetPrice } from '@archie/ui/shared/data-access/archie-api/asset_price/api/get-asset-price';
 import { useGetAssetPrice } from '@archie/ui/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import {
   Container,
   Card,
@@ -43,7 +39,7 @@ export const CollateralizationScreen: FC = () => {
     useState<CollateralAsset>();
   const [requiredCollateral, setRequiredCollateral] = useState(0);
 
-  const getAssetPriceResponse: QueryResponse<AssetPrice[]> = useGetAssetPrice();
+  const getAssetPriceResponse = useGetAssetPrice();
 
   useEffect(() => {
     if (getAssetPriceResponse.state === RequestState.SUCCESS) {

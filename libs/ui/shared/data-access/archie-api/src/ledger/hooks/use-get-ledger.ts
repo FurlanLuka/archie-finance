@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
+import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
 import {
   websocketInstance,
   WsEventTopic,
@@ -11,7 +11,7 @@ import { QueryResponse } from '../../interface';
 import { getLedger } from '../api/get-ledger';
 import { handleLedgerUpdatedEvent } from '../event-handlers/handle-ledger-updated';
 
-export const LEDGER_QUERY_KEY = 'ledger';
+export const LEDGER_QUERY_KEY = ['ledger'];
 const LEDGER_UPDATED_HANDLER_ID = 'useGetLedger.ledger-updated';
 
 export const useGetLedger = (): QueryResponse<Ledger> => {

@@ -6,16 +6,16 @@ import {
   createTestingModule,
   generateUserAccessToken,
   initializeTestingModule,
-  queueStub,
   TestDatabase,
-  user,
 } from '@archie/test/integration';
+import { user } from '@archie/test/integration/data-stubs';
+import { queueStub } from '@archie/test/integration/module-stubs';
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';
 import { AssetPrices } from '@archie/api/ledger-api/assets';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects';
+import { GetLoanBalancesResponse } from '@archie/api/peach-api/data-transfer-objects/types';
 import { GET_LOAN_BALANCES_RPC } from '@archie/api/peach-api/constants';
 import { when } from 'jest-when';
 import {
@@ -32,10 +32,11 @@ import { BigNumber } from 'bignumber.js';
 import {
   Ledger,
   LedgerActionType,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { INITIATE_COLLATERAL_WITHDRAWAL_COMMAND } from '@archie/api/fireblocks-api/constants';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
-import { CollateralWithdrawalTransactionUpdatedStatus } from '@archie/api/fireblocks-api/data-transfer-objects';
+import { CollateralWithdrawalTransactionUpdatedStatus } from '@archie/api/fireblocks-api/data-transfer-objects/types';
+import { AuthScopes } from '@archie/api/utils/auth0';
 
 describe('Ledger api withdrawal tests', () => {
   let app: INestApplication;
@@ -77,8 +78,6 @@ describe('Ledger api withdrawal tests', () => {
 
     app = await initializeTestingModule(module);
 
-    accessToken = generateUserAccessToken();
-
     await setAssetPrices([
       {
         assetId: 'BTC',
@@ -98,6 +97,9 @@ describe('Ledger api withdrawal tests', () => {
       },
     ]);
   };
+  const beforeEachSetup = (): void => {
+    accessToken = generateUserAccessToken(user, [AuthScopes.mfa]);
+  };
 
   const cleanup = async (): Promise<void> =>
     cleanUpTestingModule(app, module, testDatabase);
@@ -113,6 +115,7 @@ describe('Ledger api withdrawal tests', () => {
   describe('Deposit the collateral and withdraw full amount because credit utilization is at 0', () => {
     beforeAll(setup);
     afterAll(cleanup);
+    beforeEach(beforeEachSetup);
 
     const assetId = 'ETH';
     const assetAmount = '1';
@@ -172,6 +175,43 @@ describe('Ledger api withdrawal tests', () => {
       };
 
       expect(response.body).toStrictEqual<Ledger>(initialLedger);
+    });
+
+    it(`should return 403 because access token does not have mfa scope`, async () => {
+      const response = await request(app.getHttpServer())
+        .post('/v1/ledger/withdraw')
+        .send({})
+        .set('Authorization', `Bearer ${generateUserAccessToken(user, [])}`)
+        .expect(403);
+
+      expect(response.body).toStrictEqual({
+        error:
+          'Missing scopes. Please try again with token that contains all required scopes.',
+        message: 'FORBIDDEN_RESOURCE_ACCESS',
+        requiredScopes: [AuthScopes.mfa],
+        statusCode: 403,
+      });
+    });
+
+    it(`should return 403 in case the same token is used twice`, async () => {
+      await request(app.getHttpServer())
+        .post('/v1/ledger/withdraw')
+        .send({})
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(400);
+      const response = await request(app.getHttpServer())
+        .post('/v1/ledger/withdraw')
+        .send({})
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(403);
+
+      expect(response.body).toStrictEqual({
+        error:
+          'Missing scopes. Please try again with token that contains all required scopes.',
+        message: 'FORBIDDEN_RESOURCE_ACCESS',
+        requiredScopes: [AuthScopes.mfa],
+        statusCode: 403,
+      });
     });
 
     it(`should return 400 because requested asset is not supported`, async () => {

@@ -7,10 +7,11 @@ export const ContactSupport: FC = () => {
   const { t } = useTranslation();
 
   return (
-    <OptionsItem
-      title={t('dashboard_settings.support.title')}
-      subtitle={t('dashboard_settings.support.subtitle')}
-      onClick={() => console.log('clicked')}
-    />
+    <a href="mailto:support@archie.finance?subject=I need help with my Archie account">
+      <OptionsItem
+        title={t('dashboard_settings.support.title')}
+        subtitle={t('dashboard_settings.support.subtitle')}
+      />
+    </a>
   );
 };

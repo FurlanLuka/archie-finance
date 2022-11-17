@@ -2,11 +2,7 @@ import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, Navigate } from 'react-router-dom';
 
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import {
   ButtonOutline,
@@ -20,7 +16,7 @@ export const CollateralValue: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
+  const getLedgerResponse = useGetLedger();
 
   if (getLedgerResponse.state === RequestState.LOADING) {
     return (

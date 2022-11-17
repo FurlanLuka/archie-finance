@@ -3,7 +3,7 @@ import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Kyc } from '@archie/ui/shared/data-access/archie-api/kyc/api/get-kyc';
+import { KycResponse } from '@archie/api/user-api/data-transfer-objects/types';
 import { UserObligations } from '@archie/ui/shared/data-access/archie-api/payment/api/get-obligations';
 import {
   ButtonPrimary,
@@ -25,7 +25,7 @@ import { PayWithPaypalFormStyled } from './pay-with-paypal-form.styled';
 interface PayWithPaypalFormProps {
   onConfirm: (amount: number) => void;
   obligations: UserObligations;
-  kycData: Kyc;
+  kycData: KycResponse;
 }
 
 export const PayWithPaypalForm: FC<PayWithPaypalFormProps> = ({

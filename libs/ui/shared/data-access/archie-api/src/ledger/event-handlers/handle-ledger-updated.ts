@@ -1,7 +1,7 @@
 import {
+  InternalLedgerAccountData,
   Ledger,
-  LedgerAccountData,
-} from '@archie/ui/shared/data-access/archie-api-dtos';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { queryClient } from '@archie/ui/shared/data-access/query-client';
 import { LedgerUpdatedWsEvent } from '@archie/ui/shared/data-access/websocket-instance';
 import {
@@ -21,7 +21,10 @@ export const handleLedgerUpdatedEvent = (event: LedgerUpdatedWsEvent): void => {
           event.data.ledgerAccounts,
         );
         data.accounts.reduce(
-          (newAccounts: LedgerAccountData[], account: LedgerAccountData) => {
+          (
+            newAccounts: InternalLedgerAccountData[],
+            account: InternalLedgerAccountData,
+          ) => {
             const updatedAccount = event.data.ledgerAccounts.find(
               (a) => a.assetId === account.assetId,
             );

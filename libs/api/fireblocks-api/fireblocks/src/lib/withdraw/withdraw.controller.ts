@@ -3,7 +3,7 @@ import {
   INITIATE_COLLATERAL_WITHDRAWAL_COMMAND,
   SERVICE_QUEUE_NAME,
 } from '@archie/api/fireblocks-api/constants';
-import { InitiateCollateralWithdrawalCommandPayload } from '@archie/api/fireblocks-api/data-transfer-objects';
+import { InitiateCollateralWithdrawalCommandPayload } from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import { WithdrawService } from './withdraw.service';
 import { WEBHOOK_FIREBLOCKS_WITHDRAWAL_TRANSACTION_TOPIC } from '@archie/api/webhook-api/constants';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';

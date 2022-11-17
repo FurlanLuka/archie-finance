@@ -1,5 +1,5 @@
-import { Event } from '@archie/api/utils/queue';
-import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { Event } from '@archie/api/utils/queue/events';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'peach-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;

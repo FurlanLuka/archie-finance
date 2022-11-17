@@ -1,10 +1,10 @@
-import { Event } from '@archie/api/utils/queue';
+import { Event } from '@archie/api/utils/queue/events';
 import {
-  LtvUpdatedPayload,
   MarginCallCompletedPayload,
   MarginCallLtvLimitApproachingPayload,
   MarginCallStartedPayload,
-} from '@archie/api/ltv-api/data-transfer-objects';
+} from '@archie/api/ltv-api/data-transfer-objects/types';
+import { LtvUpdatedPayload } from '@archie/api/ltv-api/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'ltv-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;

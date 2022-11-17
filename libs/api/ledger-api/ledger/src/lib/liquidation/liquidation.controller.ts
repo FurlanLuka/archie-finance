@@ -14,7 +14,7 @@ import {
   CollateralLiquidationTransactionErrorPayload,
   CollateralLiquidationTransactionSubmittedPayload,
   CollateralLiquidationTransactionUpdatedPayload,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
+} from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import {
   InitiateLedgerAssetLiquidationCommandPayload,
   Liquidation,

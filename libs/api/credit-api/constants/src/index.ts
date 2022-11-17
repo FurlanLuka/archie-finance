@@ -1,8 +1,8 @@
-import { Event } from '@archie/api/utils/queue';
+import { Event } from '@archie/api/utils/queue/events';
 import {
   CardActivatedPayload,
   TransactionUpdatedPayload,
-} from '@archie/api/credit-api/data-transfer-objects';
+} from '@archie/api/credit-api/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'credit-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;

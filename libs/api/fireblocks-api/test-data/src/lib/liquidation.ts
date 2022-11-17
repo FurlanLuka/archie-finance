@@ -1,11 +1,11 @@
-import { user } from '@archie/test/integration';
+import { user } from '@archie/test/integration/data-stubs';
 import {
   CollateralLiquidationTransactionErrorPayload,
   CollateralLiquidationTransactionSubmittedPayload,
   CollateralLiquidationTransactionUpdatedPayload,
   CollateralLiquidationTransactionUpdatedStatus,
   InitiateCollateralLiquidationCommandPayload,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
+} from '@archie/api/fireblocks-api/data-transfer-objects/types';
 
 export const collateralLiquidationTransactionSubmittedPayloadFactory = (
   overrides?: Partial<CollateralLiquidationTransactionSubmittedPayload>,

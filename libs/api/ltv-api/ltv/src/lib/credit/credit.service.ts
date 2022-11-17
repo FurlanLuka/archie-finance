@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LessThan, Repository } from 'typeorm';
 import { Credit } from './credit.entity';
-import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
 import { DateTime } from 'luxon';
 
 @Injectable()

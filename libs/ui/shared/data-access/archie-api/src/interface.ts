@@ -4,6 +4,7 @@ export interface ApiErrorResponse {
   statusCode: number;
   message: string;
   error?: string;
+  requiredScopes?: string[];
 }
 
 export enum RequestState {
@@ -40,32 +41,6 @@ export type QueryResponse<T> =
   | SuccessQueryResponse<T>
   | IdleQueryResponse;
 
-interface LoadingMutationQueryResponse {
-  state: RequestState.LOADING;
-}
-
-interface ErrorMutationQueryResponse<T> {
-  state: RequestState.ERROR;
-  error: ApiError;
-  mutate: (payload: Omit<T, 'accessToken'>) => void;
-}
-
-interface SuccessMutationQueryResponse<T = any> {
-  state: RequestState.SUCCESS;
-  data: T;
-}
-
-interface IdleMutationQueryResponse<T = any> {
-  state: RequestState.IDLE;
-  mutate: (payload: Omit<T, 'accessToken'>) => void;
-}
-
-export type MutationQueryResponse<Payload = any, Response = any> =
-  | LoadingMutationQueryResponse
-  | ErrorMutationQueryResponse<Payload>
-  | SuccessMutationQueryResponse<Response>
-  | IdleMutationQueryResponse<Payload>;
-
 interface SuccessInfiniteQueryResponse<T> {
   state: RequestState.SUCCESS;
   pages: T[];
@@ -101,3 +76,37 @@ export interface PaginationMeta {
   page: number;
   limit: number;
 }
+
+export enum MutationState {
+  LOADING = 'LOADING',
+  ERROR = 'ERROR',
+  SUCCESS = 'SUCCESS',
+  IDLE = 'IDLE',
+}
+
+interface ErrorMutationQueryResponse<T> {
+  state: MutationState.ERROR;
+  error: ApiError;
+  mutate: (payload: Omit<T, 'accessToken'>) => void;
+}
+
+interface SuccessMutationQueryResponse<T = any, P = any> {
+  state: MutationState.SUCCESS;
+  data: T;
+  mutate: (payload: Omit<P, 'accessToken'>) => void;
+}
+
+interface IdleMutationQueryResponse<T = any> {
+  state: MutationState.IDLE;
+  mutate: (payload: Omit<T, 'accessToken'>) => void;
+}
+
+interface LoadingMutationQueryResponse {
+  state: MutationState.LOADING;
+}
+
+export type MutationQueryResponse<Response = any, Payload = any> =
+  | LoadingMutationQueryResponse
+  | ErrorMutationQueryResponse<Payload>
+  | SuccessMutationQueryResponse<Response, Payload>
+  | IdleMutationQueryResponse<Payload>;

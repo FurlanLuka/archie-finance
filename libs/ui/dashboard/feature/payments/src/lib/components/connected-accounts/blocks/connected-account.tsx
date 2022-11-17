@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
-import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useDisconnectAccount } from '@archie/ui/shared/data-access/archie-api/plaid/hooks/use-disconnect-account';
 import { ButtonOutline, BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
@@ -10,7 +10,7 @@ import { theme } from '@archie/ui/shared/theme';
 import { ConnectedAccountStyled } from './connected-account.styled';
 
 interface ConnectedAccountProps {
-  account: AccountResponse;
+  account: PaymentInstrument;
 }
 
 export const ConnectedAccount: FC<ConnectedAccountProps> = ({ account }) => {
@@ -18,7 +18,7 @@ export const ConnectedAccount: FC<ConnectedAccountProps> = ({ account }) => {
   const disconnectAccountMutation = useDisconnectAccount(account.id);
 
   const handleRemoveClick = () => {
-    if (disconnectAccountMutation.state === RequestState.IDLE) {
+    if (disconnectAccountMutation.state === MutationState.IDLE) {
       disconnectAccountMutation.mutate({});
     }
   };
@@ -32,7 +32,7 @@ export const ConnectedAccount: FC<ConnectedAccountProps> = ({ account }) => {
         color={theme.textPositive}
         className="remove-account"
         onClick={handleRemoveClick}
-        isLoading={disconnectAccountMutation.state === RequestState.LOADING}
+        isLoading={disconnectAccountMutation.state === MutationState.LOADING}
       >
         {t('dashboard_payment.connected_accounts.btn_disconnect')}
       </ButtonOutline>

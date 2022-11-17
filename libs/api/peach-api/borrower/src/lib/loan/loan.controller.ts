@@ -10,14 +10,12 @@ import {
   EMAIL_VERIFIED_TOPIC,
   KYC_SUBMITTED_TOPIC,
 } from '@archie/api/user-api/constants';
-import {
-  EmailVerifiedPayload,
-  KycSubmittedPayload,
-} from '@archie/api/user-api/data-transfer-objects';
+import { EmailVerifiedPayload } from '@archie/api/user-api/data-transfer-objects/types';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 import {
   CreditLineUpdatedPayload,
   CreditLineCreatedPayload,
-} from '@archie/api/credit-line-api/data-transfer-objects';
+} from '@archie/api/credit-line-api/data-transfer-objects/types';
 
 @Controller()
 export class PeachBorrowerQueueController {

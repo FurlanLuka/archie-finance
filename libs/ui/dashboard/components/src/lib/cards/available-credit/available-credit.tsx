@@ -5,14 +5,9 @@ import { Navigate } from 'react-router-dom';
 
 import { MakePaymentModal } from '@archie/ui/dashboard/feature/make-payment';
 import { canUserSchedulePayment } from '@archie/ui/dashboard/utils';
-import { LTV } from '@archie/ui/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { GetCreditResponse } from '@archie/ui/shared/data-access/archie-api/credit/api/get-credit';
 import { useGetCredit } from '@archie/ui/shared/data-access/archie-api/credit/hooks/use-get-credit';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetObligations } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-obligations';
 import {
   ButtonOutline,
@@ -31,13 +26,12 @@ export const AvailableCredit: FC = () => {
 
   const [makePaymentModalOpen, setMakePaymentModalOpen] = useState(false);
 
-  const getCreditQueryResponse: QueryResponse<GetCreditResponse> =
-    useGetCredit();
-  const getLTVResponse: QueryResponse<LTV> = useGetLTV();
+  const getCreditResponse = useGetCredit();
+  const getLTVResponse = useGetLTV();
   const getObligationsResponse = useGetObligations();
 
   if (
-    getCreditQueryResponse.state === RequestState.LOADING ||
+    getCreditResponse.state === RequestState.LOADING ||
     getLTVResponse.state === RequestState.LOADING ||
     getObligationsResponse.state === RequestState.LOADING
   ) {
@@ -49,17 +43,17 @@ export const AvailableCredit: FC = () => {
   }
 
   if (
-    getCreditQueryResponse.state === RequestState.ERROR ||
+    getCreditResponse.state === RequestState.ERROR ||
     getLTVResponse.state === RequestState.ERROR
   ) {
     return <Navigate to="/error" state={{ prevPath: '/home' }} />;
   }
 
   if (
-    getCreditQueryResponse.state === RequestState.SUCCESS &&
+    getCreditResponse.state === RequestState.SUCCESS &&
     getLTVResponse.state === RequestState.SUCCESS
   ) {
-    const creditData = getCreditQueryResponse.data;
+    const creditData = getCreditResponse.data;
     const ltvData = getLTVResponse.data;
 
     return (

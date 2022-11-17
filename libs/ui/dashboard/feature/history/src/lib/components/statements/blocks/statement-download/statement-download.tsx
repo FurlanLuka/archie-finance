@@ -1,7 +1,9 @@
 import { FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Statement } from '@archie/ui/shared/data-access/archie-api/payment/api/get-statements';
+import { Statement } from '@archie/api/peach-api/data-transfer-objects/types';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
+import { useGetStatementDocument } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-statement-document';
 import {
   ButtonOutline,
   Select,
@@ -12,7 +14,7 @@ import {
 import { Icon } from '@archie/ui/shared/icons';
 import { theme } from '@archie/ui/shared/theme';
 
-import { useDownloadStatement } from './use-download-statement';
+import { StatementDocumentLink } from './statement-download.styled';
 
 interface StatementDownloadProps {
   statements: Statement[];
@@ -27,7 +29,7 @@ export const StatementDownload: FC<StatementDownloadProps> = ({
     statements[0],
   );
 
-  const { isLoading, downloadDocument } = useDownloadStatement(
+  const getStatementDocumentResponse = useGetStatementDocument(
     selectedStatement.documentDescriptorId,
   );
 
@@ -46,6 +48,39 @@ export const StatementDownload: FC<StatementDownloadProps> = ({
     </SelectOption>
   ));
 
+  // TODO add link to design system and stop using button
+  const getDownloadLink = () => {
+    if (getStatementDocumentResponse.state === RequestState.LOADING) {
+      return (
+        <ButtonOutline small width="175px" isLoading>
+          {t('dashboard_history.btn_statements')}{' '}
+          <Icon name="download" fill={theme.textDisabled} />
+        </ButtonOutline>
+      );
+    }
+
+    if (getStatementDocumentResponse.state === RequestState.SUCCESS) {
+      return (
+        <StatementDocumentLink
+          href={getStatementDocumentResponse.data.url}
+          download
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {t('dashboard_history.btn_statements')}{' '}
+          <Icon name="download" fill={theme.textHighlight} />
+        </StatementDocumentLink>
+      );
+    }
+
+    return (
+      <ButtonOutline small width="175px" isDisabled>
+        {t('dashboard_history.btn_statements')}{' '}
+        <Icon name="download" fill={theme.textDisabled} />
+      </ButtonOutline>
+    );
+  };
+
   return (
     <>
       <Select
@@ -57,14 +92,7 @@ export const StatementDownload: FC<StatementDownloadProps> = ({
       >
         {options}
       </Select>
-      <ButtonOutline
-        small
-        width="175px"
-        isLoading={isLoading}
-        onClick={downloadDocument}
-      >
-        {t('dashboard_history.btn_statements')} <Icon name="download" />
-      </ButtonOutline>
+      {getDownloadLink()}
     </>
   );
 };

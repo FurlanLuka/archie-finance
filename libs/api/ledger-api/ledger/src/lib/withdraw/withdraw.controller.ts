@@ -18,13 +18,18 @@ import {
   CollateralWithdrawalTransactionErrorPayload,
   CollateralWithdrawalTransactionSubmittedPayload,
   CollateralWithdrawalTransactionUpdatedPayload,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
+} from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
-import { AuthGuard } from '@archie/api/utils/auth0';
+import {
+  AuthGuard,
+  AuthScopes,
+  ScopeGuard,
+  Scopes,
+} from '@archie/api/utils/auth0';
 import {
   WithdrawPayloadDto,
   WithdrawResponseDto,
-  MaxWithdrawalAmountResponse,
+  MaxWithdrawalAmountResponseDto,
 } from '@archie/api/ledger-api/data-transfer-objects';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
@@ -39,7 +44,8 @@ export class WithdrawController {
   constructor(private withdrawService: WithdrawService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ScopeGuard)
+  @Scopes(AuthScopes.mfa)
   @ApiBearerAuth()
   @ApiErrorResponse([
     InvalidWithdrawalAmountError,
@@ -64,7 +70,7 @@ export class WithdrawController {
   async getMaxWithdrawalAmount(
     @Param('assetId') assetId: string,
     @Req() request,
-  ): Promise<MaxWithdrawalAmountResponse> {
+  ): Promise<MaxWithdrawalAmountResponseDto> {
     return this.withdrawService.getMaxWithdrawalAmount(
       request.user.sub,
       assetId,

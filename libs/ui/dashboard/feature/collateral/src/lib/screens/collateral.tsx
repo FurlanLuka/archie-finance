@@ -4,15 +4,9 @@ import { Navigate } from 'react-router-dom';
 
 import { MarginCallAlert } from '@archie/ui/dashboard/components';
 import { LTVText, LTVColor } from '@archie/ui/shared/constants';
-import { Ledger } from '@archie/ui/shared/data-access/archie-api-dtos';
-import { LTV } from '@archie/ui/shared/data-access/archie-api/collateral/api/get-ltv';
 import { useGetLTV } from '@archie/ui/shared/data-access/archie-api/collateral/hooks/use-get-ltv';
-import { CreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/api/get-credit-line';
 import { useGetCreditLine } from '@archie/ui/shared/data-access/archie-api/credit_line/hooks/use-get-credit-line';
-import {
-  QueryResponse,
-  RequestState,
-} from '@archie/ui/shared/data-access/archie-api/interface';
+import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import {
   Card,
@@ -31,9 +25,9 @@ import { CollateralStyled } from './collateral.styled';
 export const CollateralScreen: FC = () => {
   const { t } = useTranslation();
 
-  const getLedgerResponse: QueryResponse<Ledger> = useGetLedger();
-  const getLTVResponse: QueryResponse<LTV> = useGetLTV();
-  const getCreditLineResponse: QueryResponse<CreditLine> = useGetCreditLine();
+  const getLedgerResponse = useGetLedger();
+  const getLTVResponse = useGetLTV();
+  const getCreditLineResponse = useGetCreditLine();
 
   const getContent = () => {
     // TODO: Think of optimizing these

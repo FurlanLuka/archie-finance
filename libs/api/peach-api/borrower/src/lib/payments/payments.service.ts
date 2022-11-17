@@ -4,18 +4,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import {
   Credit,
-  PaymentInstrument,
+  PeachPaymentInstrument,
   Payments,
   PeachOneTimePaymentStatus,
-} from '../api/peach_api.interfaces';
+} from '@archie/api/peach-api/data-transfer-objects/types';
+import { GetPaymentsQueryDto } from '@archie/api/peach-api/data-transfer-objects';
 import {
-  GetPaymentsQueryDto,
-  PaymentsResponseDto,
-  ScheduleTransactionDto,
-} from './payments.dto';
+  PaymentsResponse,
+  ScheduleTransaction,
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { PaymentsResponseFactory } from './utils/payments_response.factory';
 import { PeachPaymentUpdatedPayload } from '@archie/api/webhook-api/data-transfer-objects';
-import { PaymentType } from '@archie/api/peach-api/data-transfer-objects';
+import { PaymentType } from '@archie/api/peach-api/data-transfer-objects/types';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { QueueService } from '@archie/api/utils/queue';
 import { BorrowerValidation } from '../utils/borrower.validation';
@@ -24,7 +24,7 @@ import { PaypalPaymentReceivedPayload } from '@archie/api/paypal-api/paypal';
 import {
   LedgerAccountUpdatedPayload,
   LedgerActionType,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 
 @Injectable()
 export class PaymentsService {
@@ -40,7 +40,7 @@ export class PaymentsService {
   public async getPayments(
     userId: string,
     query: GetPaymentsQueryDto,
-  ): Promise<PaymentsResponseDto> {
+  ): Promise<PaymentsResponse> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
     });
@@ -57,7 +57,7 @@ export class PaymentsService {
 
   public async scheduleTransaction(
     userId: string,
-    transaction: ScheduleTransactionDto,
+    transaction: ScheduleTransaction,
   ): Promise<void> {
     const borrower: Borrower | null = await this.borrowerRepository.findOneBy({
       userId,
@@ -89,7 +89,7 @@ export class PaymentsService {
       borrower.liquidationInstrumentId;
 
     if (liquidationInstrumentId === null) {
-      const paymentInstrument: PaymentInstrument =
+      const paymentInstrument: PeachPaymentInstrument =
         await this.peachApiService.createLiquidationPaymentInstrument(
           borrower.personId,
         );
@@ -126,7 +126,7 @@ export class PaymentsService {
     let paypalInstrumentId: string | null = borrower.paypalInstrumentId;
 
     if (paypalInstrumentId === null) {
-      const paymentInstrument: PaymentInstrument =
+      const paymentInstrument: PeachPaymentInstrument =
         await this.peachApiService.createPaypalPaymentInstrument(
           borrower.personId,
         );

@@ -3,7 +3,7 @@ import {
   MfaRemovedPayload,
   MfaEnrolledPayload,
 } from '@archie/api/user-api/data-transfer-objects';
-import { user } from '@archie/test/integration';
+import { user } from '@archie/test/integration/data-stubs';
 
 export const mfaEnrolledDataFactory = (
   override?: Partial<MfaEnrolledPayload>,

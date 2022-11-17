@@ -16,10 +16,7 @@ export interface NormalizedSchema extends UiModuleGeneratorSchema {
   projectFolder: string;
 }
 
-function getProjectFolder(
-  moduleType: string,
-  projectName?: string,
-): string {
+function getProjectFolder(moduleType: string, projectName?: string): string {
   if (moduleType === 'PROJECT') {
     return projectName!.replace('ui-', '');
   }

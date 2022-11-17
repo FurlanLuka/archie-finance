@@ -1,18 +1,19 @@
 import { parse } from 'date-fns';
 
+import { ObligationResponse } from '@archie/api/peach-api/data-transfer-objects/types';
+
 import { ApiError } from '../../api-error';
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse, RequestState } from '../../interface';
 import {
   getObligations,
-  Obligation,
   UserObligations,
   MISSING_PAYMENT_INFO_ERROR,
 } from '../api/get-obligations';
 
 const MISSING_DATE = 'MISSING_DATE';
 
-export const OBLIGATIONS_RECORD_QUERY_KEY = 'obligations_record';
+export const OBLIGATIONS_RECORD_QUERY_KEY = ['obligations_record'];
 
 export const useGetObligations = (): QueryResponse<UserObligations> => {
   const queryResponse = useExtendedQuery(
@@ -25,7 +26,8 @@ export const useGetObligations = (): QueryResponse<UserObligations> => {
         dueDate:
           obligationsResponse.futureObligations[0]?.dueDate ?? MISSING_DATE,
         balanceOwed: obligationsResponse.statementObligations.reduce(
-          (sum, obligation: Obligation) => sum + obligation.remainingAmount,
+          (sum, obligation: ObligationResponse) =>
+            sum + obligation.remainingAmount,
           0,
         ),
         fullBalance:

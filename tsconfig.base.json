@@ -22,6 +22,9 @@
       "@archie/api/credit-api/data-transfer-objects": [
         "libs/api/credit-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/credit-api/data-transfer-objects/types": [
+        "libs/api/credit-api/data-transfer-objects/src/types.ts"
+      ],
       "@archie/api/credit-api/plaid": [
         "libs/api/credit-api/plaid/src/index.ts"
       ],
@@ -38,6 +41,9 @@
       "@archie/api/credit-line-api/data-transfer-objects": [
         "libs/api/credit-line-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/credit-line-api/data-transfer-objects/types": [
+        "libs/api/credit-line-api/data-transfer-objects/src/types.ts"
+      ],
       "@archie/api/credit-line-api/test-data": [
         "libs/api/credit-line-api/test-data/src/index.ts"
       ],
@@ -49,6 +55,9 @@
       ],
       "@archie/api/fireblocks-api/data-transfer-objects": [
         "libs/api/fireblocks-api/data-transfer-objects/src/index.ts"
+      ],
+      "@archie/api/fireblocks-api/data-transfer-objects/types": [
+        "libs/api/fireblocks-api/data-transfer-objects/src/types.ts"
       ],
       "@archie/api/fireblocks-api/fireblocks": [
         "libs/api/fireblocks-api/fireblocks/src/index.ts"
@@ -68,6 +77,9 @@
       "@archie/api/ledger-api/data-transfer-objects": [
         "libs/api/ledger-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/ledger-api/data-transfer-objects/types": [
+        "libs/api/ledger-api/data-transfer-objects/src/types.ts"
+      ],
       "@archie/api/ledger-api/ledger": [
         "libs/api/ledger-api/ledger/src/index.ts"
       ],
@@ -79,6 +91,9 @@
       ],
       "@archie/api/ltv-api/data-transfer-objects": [
         "libs/api/ltv-api/data-transfer-objects/src/index.ts"
+      ],
+      "@archie/api/ltv-api/data-transfer-objects/types": [
+        "libs/api/ltv-api/data-transfer-objects/src/types.ts"
       ],
       "@archie/api/ltv-api/ltv": ["libs/api/ltv-api/ltv/src/index.ts"],
       "@archie/api/ltv-api/test-data": [
@@ -102,6 +117,9 @@
       "@archie/api/onboarding-api/data-transfer-objects": [
         "libs/api/onboarding-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/onboarding-api/data-transfer-objects/types": [
+        "libs/api/onboarding-api/data-transfer-objects/src/types.ts"
+      ],
       "@archie/api/onboarding-api/onboarding": [
         "libs/api/onboarding-api/onboarding/src/index.ts"
       ],
@@ -123,6 +141,9 @@
       "@archie/api/peach-api/data-transfer-objects": [
         "libs/api/peach-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/peach-api/data-transfer-objects/types": [
+        "libs/api/peach-api/data-transfer-objects/src/types.ts"
+      ],
       "@archie/api/peach-api/test-data": [
         "libs/api/peach-api/test-data/src/index.ts"
       ],
@@ -131,6 +152,9 @@
       ],
       "@archie/api/referral-system-api/data-transfer-objects": [
         "libs/api/referral-system-api/data-transfer-objects/src/index.ts"
+      ],
+      "@archie/api/referral-system-api/data-transfer-objects/types": [
+        "libs/api/referral-system-api/data-transfer-objects/src/types.ts"
       ],
       "@archie/api/referral-system-api/sales-connect": [
         "libs/api/referral-system-api/sales-connect/src/index.ts"
@@ -144,6 +168,9 @@
       ],
       "@archie/api/user-api/data-transfer-objects": [
         "libs/api/user-api/data-transfer-objects/src/index.ts"
+      ],
+      "@archie/api/user-api/data-transfer-objects/types": [
+        "libs/api/user-api/data-transfer-objects/src/types.ts"
       ],
       "@archie/api/user-api/kyc": ["libs/api/user-api/kyc/src/index.ts"],
       "@archie/api/user-api/test-data": [
@@ -162,6 +189,9 @@
       ],
       "@archie/api/utils/openapi": ["libs/api/utils/openapi/src/index.ts"],
       "@archie/api/utils/queue": ["libs/api/utils/queue/src/index.ts"],
+      "@archie/api/utils/queue/events": [
+        "libs/api/utils/queue/src/lib/event/event.ts"
+      ],
       "@archie/api/utils/queue/decorators/*": [
         "libs/api/utils/queue/src/lib/decorators/*"
       ],
@@ -191,6 +221,9 @@
       "@archie/api/websocket-event-api/data-transfer-objects": [
         "libs/api/websocket-event-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/websocket-event-api/data-transfer-objects/types": [
+        "libs/api/websocket-event-api/data-transfer-objects/src/types.ts"
+      ],
       "@archie/api/websocket-event-api/websocket-event": [
         "libs/api/websocket-event-api/websocket-event/src/index.ts"
       ],
@@ -202,6 +235,21 @@
         "libs/plugin/workspace-generator/src/index.ts"
       ],
       "@archie/test/integration": ["libs/api/test/integration/src/index.ts"],
+      "@archie/test/integration/data-stubs": [
+        "libs/api/test/integration/src/lib/data-stubs/index.ts"
+      ],
+      "@archie/test/integration/module-stubs": [
+        "libs/api/test/integration/src/lib/module-stubs/index.ts"
+      ],
+      "@archie/tests/utils-test-api/auth": [
+        "libs/tests/utils-test-api/auth/src/index.ts"
+      ],
+      "@archie/tests/utils-test-api/constants": [
+        "libs/tests/utils-test-api/constants/src/index.ts"
+      ],
+      "@archie/tests/utils-test-api/data-transfer-objects": [
+        "libs/tests/utils-test-api/data-transfer-objects/src/index.ts"
+      ],
       "@archie/ui/dashboard/components": [
         "libs/ui/dashboard/components/src/index.ts"
       ],
@@ -241,9 +289,6 @@
       "@archie/ui/dashboard/hooks": ["libs/ui/dashboard/hooks/src/index.ts"],
       "@archie/ui/dashboard/utils": ["libs/ui/dashboard/utils/src/index.ts"],
       "@archie/ui/shared/constants": ["libs/ui/shared/constants/src/index.ts"],
-      "@archie/ui/shared/data-access/archie-api-dtos": [
-        "libs/ui/shared/data-access/archie-api-dtos/src/index.ts"
-      ],
       "@archie/ui/shared/data-access/archie-api/*": [
         "libs/ui/shared/data-access/archie-api/src/*"
       ],

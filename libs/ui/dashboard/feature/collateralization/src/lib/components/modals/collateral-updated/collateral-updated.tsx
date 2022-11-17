@@ -1,8 +1,8 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { calculateLedgerCreditValue } from '@archie/ui/dashboard/utils';
-import { LedgerActionType } from '@archie/ui/shared/data-access/archie-api-dtos';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetLedger } from '@archie/ui/shared/data-access/archie-api/ledger/hooks/use-get-ledger';
 import {

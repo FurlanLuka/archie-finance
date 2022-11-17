@@ -21,7 +21,7 @@ jobs:
       - name: Install and Build 🔧
         run: |
           yarn
-          NODE_ENV=production yarn nx run ui-design-system:build-storybook
+          NODE_ENV=production npm run npx ladle serve
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -29,6 +29,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
       - name: Deploy
+        # Luka to update the path
         run: |
           aws s3 sync dist/storybook/ui-design-system s3://${{ env.BUCKET }}/
       - name: Invalidate Cloudfront Cache

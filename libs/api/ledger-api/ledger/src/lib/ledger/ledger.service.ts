@@ -11,13 +11,12 @@ import {
   AssetsService,
 } from '@archie/api/ledger-api/assets';
 import {
-  AssetPrice,
   InitiateLedgerRecalculationCommandPayload,
   InternalLedgerAccountData,
   Ledger,
   LedgerAccountAction,
   LedgerActionType,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { QueueService } from '@archie/api/utils/queue';
 import {
   INITIATE_LEDGER_RECALCULATION_COMMAND,
@@ -25,6 +24,7 @@ import {
 } from '@archie/api/ledger-api/constants';
 import { BatchDecrementLedgerAccounts } from './ledger.interfaces';
 import { LedgerUser } from './ledger_user.entity';
+import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 @Injectable()
 export class LedgerService {

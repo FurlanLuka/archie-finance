@@ -144,7 +144,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object"
+                  "$ref": "#/components/schemas/PlaidLinkTokenDto"
                 }
               }
             }
@@ -167,7 +167,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetOnboardingResponseDto"
+                  "$ref": "#/components/schemas/OnboardingDto"
                 }
               }
             }
@@ -190,7 +190,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetKycResponse"
+                  "$ref": "#/components/schemas/KycResponseDto"
                 }
               }
             }
@@ -240,13 +240,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreateKycResponse"
+                  "$ref": "#/components/schemas/KycResponseDto"
                 }
               }
             }
           },
-          "400": {
-            "description": "Error response with 400 status code.",
+          "409": {
+            "description": "Error response with 409 status code.",
             "content": {
               "application/json": {
                 "schema": {
@@ -255,7 +255,7 @@
                 "examples": {
                   "KYC_ALREADY_SUBMITTED": {
                     "value": {
-                      "statusCode": 400,
+                      "statusCode": 409,
                       "message": "KYC_ALREADY_SUBMITTED",
                       "error": "You have already submitted your KYC. If you made a mistake, please contact support."
                     }
@@ -274,7 +274,7 @@
     },
     "/v1/user/email-verification": {
       "get": {
-        "operationId": "UserController_checkEmailVerification",
+        "operationId": "EmailController_checkEmailVerification",
         "parameters": [],
         "responses": {
           "200": {
@@ -282,7 +282,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetEmailVerificationResponse"
+                  "$ref": "#/components/schemas/EmailVerificationDto"
                 }
               }
             }
@@ -297,24 +297,25 @@
     },
     "/v1/user/email-verification/resend": {
       "post": {
-        "operationId": "UserController_resendEmailVerification",
+        "operationId": "EmailController_resendEmailVerification",
         "parameters": [],
         "responses": {
           "201": {
             "description": ""
           },
-          "400": {
-            "description": "Error response with 400 status code.",
+          "409": {
+            "description": "Error response with 409 status code.",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
                 },
                 "examples": {
-                  "Bad Request": {
+                  "EMAIL_ALREADY_VERIFIED": {
                     "value": {
-                      "statusCode": 400,
-                      "message": "Bad Request"
+                      "statusCode": 409,
+                      "message": "EMAIL_ALREADY_VERIFIED",
+                      "error": "Your email has already been verified."
                     }
                   }
                 }
@@ -331,7 +332,7 @@
     },
     "/v1/user/mfa/enroll": {
       "post": {
-        "operationId": "UserController_enrollMfa",
+        "operationId": "MfaController_enrollMfa",
         "parameters": [],
         "responses": {
           "201": {
@@ -339,7 +340,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetSendEnrollmentTicketResponse"
+                  "$ref": "#/components/schemas/GetSendEnrollmentTicketResponseDto"
                 }
               }
             }
@@ -354,7 +355,7 @@
     },
     "/v1/user/mfa/enrollments/{enrollmentId}": {
       "delete": {
-        "operationId": "UserController_deleteMfaEnrollment",
+        "operationId": "MfaController_deleteMfaEnrollment",
         "parameters": [
           {
             "name": "enrollmentId",
@@ -398,8 +399,19 @@
     },
     "/v1/user/mfa/enrollments": {
       "get": {
-        "operationId": "UserController_getMfaEnrollments",
-        "parameters": [],
+        "operationId": "MfaController_getMfaEnrollments",
+        "parameters": [
+          {
+            "name": "type",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "nullable": true,
+              "default": null,
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "",
@@ -424,7 +436,7 @@
     },
     "/v1/user/mfa/enrollment": {
       "get": {
-        "operationId": "UserController_isMfaEnrolled",
+        "operationId": "MfaController_isMfaEnrolled",
         "parameters": [],
         "responses": {
           "200": {
@@ -1035,7 +1047,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/InterestsDto"
+                  "$ref": "#/components/schemas/LoanInterestsDto"
                 }
               }
             }
@@ -1336,7 +1348,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetLoanBalancesDto"
+                  "$ref": "#/components/schemas/LoanBalancesDto"
                 }
               }
             }
@@ -1393,7 +1405,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "$ref": "#/components/schemas/StatementDto"
                   }
                 }
               }
@@ -1452,7 +1464,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetLoanDocumentDto"
+                  "$ref": "#/components/schemas/LoanDocumentDto"
                 }
               }
             }
@@ -1545,7 +1557,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/MarginCallsDto"
+                    "$ref": "#/components/schemas/MarginCallDto"
                   }
                 }
               }
@@ -1674,7 +1686,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ledger"
+                  "$ref": "#/components/schemas/LedgerDto"
                 }
               }
             }
@@ -1705,7 +1717,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/AssetPrice"
+                    "$ref": "#/components/schemas/AssetPriceDto"
                   }
                 }
               }
@@ -1733,7 +1745,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AssetPrice"
+                  "$ref": "#/components/schemas/AssetPriceDto"
                 }
               }
             }
@@ -1863,7 +1875,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MaxWithdrawalAmountResponse"
+                  "$ref": "#/components/schemas/MaxWithdrawalAmountResponseDto"
                 }
               }
             }
@@ -1895,7 +1907,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetDepositAddressResponse"
+                  "$ref": "#/components/schemas/DepositAddressDto"
                 }
               }
             }
@@ -1913,7 +1925,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreditLine"
+                  "$ref": "#/components/schemas/CreditLineDto"
                 }
               }
             }
@@ -1972,7 +1984,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CreditLine"
+                  "$ref": "#/components/schemas/CreditLineDto"
                 }
               }
             }
@@ -2038,21 +2050,14 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "active",
-              "frozen"
-            ]
+            "enum": ["active", "frozen"]
           },
           "freezeReason": {
             "type": "string",
             "nullable": true
           }
         },
-        "required": [
-          "image",
-          "status",
-          "freezeReason"
-        ]
+        "required": ["image", "status", "freezeReason"]
       },
       "PaginationMetaDto": {
         "type": "object",
@@ -2070,12 +2075,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "totalCount",
-          "count",
-          "page",
-          "limit"
-        ]
+        "required": ["totalCount", "count", "page", "limit"]
       },
       "TransactionDto": {
         "type": "object",
@@ -2096,17 +2096,13 @@
               "internal_transfer",
               "other",
               "reversed_transfer",
-              "third_party_transfer"
+              "third_party_transfer",
+              "BALANCE_PAYMENT"
             ]
           },
           "status": {
             "type": "string",
-            "enum": [
-              "queued",
-              "pending",
-              "settled",
-              "failed"
-            ]
+            "enum": ["queued", "pending", "settled", "failed"]
           },
           "us_dollar_amount": {
             "type": "string"
@@ -2143,10 +2139,7 @@
           },
           "net_asset": {
             "type": "string",
-            "enum": [
-              "positive",
-              "negative"
-            ]
+            "enum": ["positive", "negative"]
           }
         },
         "required": [
@@ -2178,10 +2171,16 @@
             }
           }
         },
-        "required": [
-          "meta",
-          "data"
-        ]
+        "required": ["meta", "data"]
+      },
+      "PlaidLinkTokenDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": ["token"]
       },
       "ErrorResponse": {
         "type": "object",
@@ -2196,13 +2195,9 @@
             "type": "string"
           }
         },
-        "required": [
-          "statusCode",
-          "message",
-          "error"
-        ]
+        "required": ["statusCode", "message"]
       },
-      "GetOnboardingResponseDto": {
+      "OnboardingDto": {
         "type": "object",
         "properties": {
           "kycStage": {
@@ -2233,7 +2228,7 @@
           "completed"
         ]
       },
-      "GetKycResponse": {
+      "KycResponseDto": {
         "type": "object",
         "properties": {
           "firstName": {
@@ -2254,19 +2249,19 @@
           "addressLocality": {
             "type": "string"
           },
-          "addressCountry": {
-            "type": "string"
-          },
           "addressRegion": {
             "type": "string"
           },
           "addressPostalCode": {
             "type": "string"
           },
-          "phoneNumberCountryCode": {
+          "addressCountry": {
             "type": "string"
           },
           "phoneNumber": {
+            "type": "string"
+          },
+          "phoneNumberCountryCode": {
             "type": "string"
           },
           "ssn": {
@@ -2280,7 +2275,6 @@
             "nullable": true
           },
           "createdAt": {
-            "format": "date-time",
             "type": "string"
           }
         },
@@ -2291,11 +2285,11 @@
           "addressStreet",
           "addressStreetNumber",
           "addressLocality",
-          "addressCountry",
           "addressRegion",
           "addressPostalCode",
-          "phoneNumberCountryCode",
+          "addressCountry",
           "phoneNumber",
+          "phoneNumberCountryCode",
           "ssn",
           "income",
           "aptUnit",
@@ -2370,76 +2364,7 @@
           "aptUnit"
         ]
       },
-      "CreateKycResponse": {
-        "type": "object",
-        "properties": {
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "dateOfBirth": {
-            "type": "string"
-          },
-          "addressStreet": {
-            "type": "string"
-          },
-          "addressStreetNumber": {
-            "type": "string"
-          },
-          "addressLocality": {
-            "type": "string"
-          },
-          "addressCountry": {
-            "type": "string"
-          },
-          "addressRegion": {
-            "type": "string"
-          },
-          "addressPostalCode": {
-            "type": "string"
-          },
-          "phoneNumberCountryCode": {
-            "type": "string"
-          },
-          "phoneNumber": {
-            "type": "string"
-          },
-          "ssn": {
-            "type": "string"
-          },
-          "income": {
-            "type": "number"
-          },
-          "aptUnit": {
-            "type": "string",
-            "nullable": true
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string"
-          }
-        },
-        "required": [
-          "firstName",
-          "lastName",
-          "dateOfBirth",
-          "addressStreet",
-          "addressStreetNumber",
-          "addressLocality",
-          "addressCountry",
-          "addressRegion",
-          "addressPostalCode",
-          "phoneNumberCountryCode",
-          "phoneNumber",
-          "ssn",
-          "income",
-          "aptUnit",
-          "createdAt"
-        ]
-      },
-      "GetEmailVerificationResponse": {
+      "EmailVerificationDto": {
         "type": "object",
         "properties": {
           "isVerified": {
@@ -2449,12 +2374,9 @@
             "type": "string"
           }
         },
-        "required": [
-          "isVerified",
-          "email"
-        ]
+        "required": ["isVerified", "email"]
       },
-      "GetSendEnrollmentTicketResponse": {
+      "GetSendEnrollmentTicketResponseDto": {
         "type": "object",
         "properties": {
           "ticket_id": {
@@ -2464,10 +2386,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "ticket_id",
-          "ticket_url"
-        ]
+        "required": ["ticket_id", "ticket_url"]
       },
       "GetEnrollmentResponse": {
         "type": "object",
@@ -2507,9 +2426,7 @@
             "type": "boolean"
           }
         },
-        "required": [
-          "isEnrolled"
-        ]
+        "required": ["isEnrolled"]
       },
       "CreateDto": {
         "type": "object",
@@ -2521,9 +2438,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "emailAddress"
-        ]
+        "required": ["emailAddress"]
       },
       "GetWaitlistRecordResponseDto": {
         "type": "object",
@@ -2561,11 +2476,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "emailAddress",
-          "fullName",
-          "company"
-        ]
+        "required": ["emailAddress", "fullName", "company"]
       },
       "Auth0Logs": {
         "type": "object",
@@ -2587,12 +2498,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "name",
-          "mask",
-          "subType"
-        ]
+        "required": ["id", "name", "mask", "subType"]
       },
       "ConnectAccountDto": {
         "type": "object",
@@ -2604,10 +2510,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "accountId",
-          "publicToken"
-        ]
+        "required": ["accountId", "publicToken"]
       },
       "PaymentResponseDataDto": {
         "type": "object",
@@ -2633,10 +2536,7 @@
           },
           "transactionType": {
             "type": "string",
-            "enum": [
-              "payment",
-              "serviceCredit"
-            ]
+            "enum": ["payment", "serviceCredit"]
           },
           "paymentDetails": {
             "type": "object",
@@ -2779,10 +2679,7 @@
             }
           }
         },
-        "required": [
-          "meta",
-          "data"
-        ]
+        "required": ["meta", "data"]
       },
       "ScheduleTransactionDto": {
         "type": "object",
@@ -2800,10 +2697,7 @@
             "pattern": "PEACH_ID_REGEX"
           }
         },
-        "required": [
-          "amount",
-          "paymentInstrumentId"
-        ]
+        "required": ["amount", "paymentInstrumentId"]
       },
       "PurchaseDetailsDto": {
         "type": "object",
@@ -2857,21 +2751,11 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "regular",
-              "refund",
-              "cashBack"
-            ]
+            "enum": ["regular", "refund", "cashBack"]
           },
           "status": {
             "type": "string",
-            "enum": [
-              "settled",
-              "pending",
-              "canceled",
-              "declined",
-              "disputed"
-            ]
+            "enum": ["settled", "pending", "canceled", "declined", "disputed"]
           },
           "amount": {
             "type": "number"
@@ -2942,12 +2826,9 @@
             }
           }
         },
-        "required": [
-          "meta",
-          "data"
-        ]
+        "required": ["meta", "data"]
       },
-      "Obligation": {
+      "ObligationResponseDto": {
         "type": "object",
         "properties": {
           "capitalizedAmount": {
@@ -3056,13 +2937,13 @@
           "statementObligations": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Obligation"
+              "$ref": "#/components/schemas/ObligationResponseDto"
             }
           },
           "futureObligations": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Obligation"
+              "$ref": "#/components/schemas/ObligationResponseDto"
             }
           }
         },
@@ -3074,7 +2955,7 @@
           "futureObligations"
         ]
       },
-      "InterestsDto": {
+      "LoanInterestsDto": {
         "type": "object",
         "properties": {
           "aprNominal": {
@@ -3084,10 +2965,7 @@
             "type": "number"
           }
         },
-        "required": [
-          "aprNominal",
-          "aprEffective"
-        ]
+        "required": ["aprNominal", "aprEffective"]
       },
       "CreateAutopayDto": {
         "type": "object",
@@ -3184,11 +3062,7 @@
           },
           "paymentFrequency": {
             "type": "string",
-            "enum": [
-              "twiceMonthly",
-              "everyTwoWeeks",
-              "monthly"
-            ]
+            "enum": ["twiceMonthly", "everyTwoWeeks", "monthly"]
           },
           "paymentInstrumentId": {
             "type": "string"
@@ -3221,9 +3095,7 @@
             "pattern": "PEACH_ID_REGEX"
           }
         },
-        "required": [
-          "paymentInstrumentId"
-        ]
+        "required": ["paymentInstrumentId"]
       },
       "AutopayAgreementDto": {
         "type": "object",
@@ -3235,12 +3107,9 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "document"
-        ]
+        "required": ["id", "document"]
       },
-      "GetLoanBalancesDto": {
+      "LoanBalancesDto": {
         "type": "object",
         "properties": {
           "isBalanceChangeInProgress": {
@@ -3263,16 +3132,78 @@
           "utilizationAmount"
         ]
       },
-      "GetLoanDocumentDto": {
+      "StatementDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "deletedAt": {
+            "type": "string",
+            "nullable": true
+          },
+          "periodId": {
+            "type": "string"
+          },
+          "version": {
+            "type": "number"
+          },
+          "billingCycleStartDate": {
+            "type": "string"
+          },
+          "billingCycleEndDate": {
+            "type": "string"
+          },
+          "paymentDueDate": {
+            "type": "string"
+          },
+          "documentDescriptorId": {
+            "type": "string"
+          },
+          "statementDate": {
+            "type": "string"
+          },
+          "minimumDueAmount": {
+            "type": "number"
+          },
+          "overdueAmount": {
+            "type": "number"
+          },
+          "newBalanceAmount": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "deletedAt",
+          "periodId",
+          "version",
+          "billingCycleStartDate",
+          "billingCycleEndDate",
+          "paymentDueDate",
+          "documentDescriptorId",
+          "statementDate",
+          "minimumDueAmount",
+          "overdueAmount",
+          "newBalanceAmount"
+        ]
+      },
+      "LoanDocumentDto": {
         "type": "object",
         "properties": {
           "url": {
             "type": "string"
           }
         },
-        "required": [
-          "url"
-        ]
+        "required": ["url"]
       },
       "LtvDto": {
         "type": "object",
@@ -3282,28 +3213,17 @@
           },
           "status": {
             "type": "string",
-            "enum": [
-              "good",
-              "ok",
-              "warning",
-              "margin_call"
-            ]
+            "enum": ["good", "ok", "warning", "margin_call"]
           }
         },
-        "required": [
-          "ltv",
-          "status"
-        ]
+        "required": ["ltv", "status"]
       },
-      "MarginCallsDto": {
+      "MarginCallDto": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
-            "enum": [
-              "active",
-              "completed"
-            ]
+            "enum": ["active", "completed"]
           },
           "automaticLiquidationAt": {
             "type": "string"
@@ -3312,11 +3232,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "status",
-          "automaticLiquidationAt",
-          "createdAt"
-        ]
+        "required": ["status", "automaticLiquidationAt", "createdAt"]
       },
       "CreateOrderDto": {
         "type": "object",
@@ -3326,9 +3242,7 @@
             "minimum": 1
           }
         },
-        "required": [
-          "paymentAmount"
-        ]
+        "required": ["paymentAmount"]
       },
       "CreateOrderResponseDto": {
         "type": "object",
@@ -3340,10 +3254,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "id",
-          "paymentUrl"
-        ]
+        "required": ["id", "paymentUrl"]
       },
       "GetOrderResponseDto": {
         "type": "object",
@@ -3352,23 +3263,16 @@
             "type": "string"
           },
           "status": {
-            "enum": [
-              "CREATED",
-              "COMPLETED"
-            ],
+            "enum": ["CREATED", "COMPLETED"],
             "type": "string"
           },
           "amount": {
             "type": "number"
           }
         },
-        "required": [
-          "id",
-          "status",
-          "amount"
-        ]
+        "required": ["id", "status", "amount"]
       },
-      "InternalLedgerAccountData": {
+      "InternalLedgerAccountDataDto": {
         "type": "object",
         "properties": {
           "assetId": {
@@ -3384,14 +3288,9 @@
             "type": "string"
           }
         },
-        "required": [
-          "assetId",
-          "assetAmount",
-          "assetPrice",
-          "accountValue"
-        ]
+        "required": ["assetId", "assetAmount", "assetPrice", "accountValue"]
       },
-      "Ledger": {
+      "LedgerDto": {
         "type": "object",
         "properties": {
           "value": {
@@ -3400,16 +3299,13 @@
           "accounts": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/InternalLedgerAccountData"
+              "$ref": "#/components/schemas/InternalLedgerAccountDataDto"
             }
           }
         },
-        "required": [
-          "value",
-          "accounts"
-        ]
+        "required": ["value", "accounts"]
       },
-      "AssetPrice": {
+      "AssetPriceDto": {
         "type": "object",
         "properties": {
           "assetId": {
@@ -3425,12 +3321,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "assetId",
-          "price",
-          "dailyChange",
-          "currency"
-        ]
+        "required": ["assetId", "price", "dailyChange", "currency"]
       },
       "Liquidation": {
         "type": "object",
@@ -3451,13 +3342,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "status",
-          "assetId",
-          "amount",
-          "createdAt",
-          "updatedAt"
-        ]
+        "required": ["status", "assetId", "amount", "createdAt", "updatedAt"]
       },
       "WithdrawPayloadDto": {
         "type": "object",
@@ -3473,11 +3358,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "assetId",
-          "amount",
-          "destinationAddress"
-        ]
+        "required": ["assetId", "amount", "destinationAddress"]
       },
       "WithdrawResponseDto": {
         "type": "object",
@@ -3486,22 +3367,18 @@
             "type": "string"
           }
         },
-        "required": [
-          "id"
-        ]
+        "required": ["id"]
       },
-      "MaxWithdrawalAmountResponse": {
+      "MaxWithdrawalAmountResponseDto": {
         "type": "object",
         "properties": {
           "maxAmount": {
             "type": "string"
           }
         },
-        "required": [
-          "maxAmount"
-        ]
+        "required": ["maxAmount"]
       },
-      "GetDepositAddressResponse": {
+      "DepositAddressDto": {
         "type": "object",
         "properties": {
           "address": {
@@ -3511,12 +3388,9 @@
             "type": "string"
           }
         },
-        "required": [
-          "address",
-          "asset"
-        ]
+        "required": ["address", "asset"]
       },
-      "CreditLimitAssetAllocation": {
+      "CreditLimitAssetAllocationDto": {
         "type": "object",
         "properties": {
           "assetId": {
@@ -3529,13 +3403,9 @@
             "type": "number"
           }
         },
-        "required": [
-          "assetId",
-          "allocationPercentage",
-          "allocatedAssetValue"
-        ]
+        "required": ["assetId", "allocationPercentage", "allocatedAssetValue"]
       },
-      "CreditLine": {
+      "CreditLineDto": {
         "type": "object",
         "properties": {
           "creditLimit": {
@@ -3544,14 +3414,11 @@
           "creditLimitAssetAllocation": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CreditLimitAssetAllocation"
+              "$ref": "#/components/schemas/CreditLimitAssetAllocationDto"
             }
           }
         },
-        "required": [
-          "creditLimit",
-          "creditLimitAssetAllocation"
-        ]
+        "required": ["creditLimit", "creditLimitAssetAllocation"]
       },
       "AuthTokenDto": {
         "type": "object",
@@ -3560,9 +3427,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "authToken"
-        ]
+        "required": ["authToken"]
       }
     },
     "securitySchemes": {

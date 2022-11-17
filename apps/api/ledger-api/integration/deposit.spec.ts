@@ -6,16 +6,16 @@ import {
   createTestingModule,
   generateUserAccessToken,
   initializeTestingModule,
-  queueStub,
   TestDatabase,
-  user,
 } from '@archie/test/integration';
+import { user } from '@archie/test/integration/data-stubs';
+import { queueStub } from '@archie/test/integration/module-stubs';
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';
 import {
   Ledger,
   LedgerActionType,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { collateralDepositTransactionCompletedPayloadFactory } from '@archie/api/fireblocks-api/test-data';
 import { DepositQueueController } from '@archie/api/ledger-api/ledger';
 import { AssetPrices } from '@archie/api/ledger-api/assets';

@@ -9,7 +9,7 @@ import {
   HomeAddress,
   IdentityType,
   Credit,
-  PaymentInstrument,
+  PeachPaymentInstrument,
   PeachErrorData,
   PeachErrorResponse,
   PeachTransactionStatus,
@@ -30,7 +30,7 @@ import {
   DocumentUrl,
   PeachOneTimePaymentStatus,
   Payment,
-} from './peach_api.interfaces';
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { Borrower } from '../borrower.entity';
 import {
   PaymentInstrumentNotFoundError,
@@ -42,8 +42,8 @@ import {
 } from '../borrower.errors';
 import { DateTime } from 'luxon';
 import { omitBy, isNil } from 'lodash';
-import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects';
-import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
+import { TransactionUpdatedPayload } from '@archie/api/credit-api/data-transfer-objects/types';
 import { BorrowerWithCreditLine } from '../utils/borrower.validation.interfaces';
 
 @Injectable()
@@ -89,9 +89,9 @@ export class PeachApiService {
 
   public async createLiquidationPaymentInstrument(
     personId: string,
-  ): Promise<PaymentInstrument> {
+  ): Promise<PeachPaymentInstrument> {
     const response = await this.peachClient.post<
-      PeachResponseData<PaymentInstrument[]>
+      PeachResponseData<PeachPaymentInstrument[]>
     >(`/people/${personId}/payment-instruments`, {
       status: 'active',
       instrumentType: 'paymentNetwork',
@@ -106,9 +106,9 @@ export class PeachApiService {
     accountId: string,
     publicToken: string,
     fullName: string,
-  ): Promise<PaymentInstrument> {
+  ): Promise<PeachPaymentInstrument> {
     const response = await this.peachClient.post<
-      PeachResponseData<PaymentInstrument[]>
+      PeachResponseData<PeachPaymentInstrument[]>
     >(`/people/${personId}/payment-instruments`, {
       instrumentType: 'plaid',
       accessToken: publicToken,
@@ -122,7 +122,7 @@ export class PeachApiService {
 
   public async createPaypalPaymentInstrument(
     personId: string,
-  ): Promise<PaymentInstrument> {
+  ): Promise<PeachPaymentInstrument> {
     const response = await this.peachClient.post(
       `/people/${personId}/payment-instruments`,
       {
@@ -146,9 +146,9 @@ export class PeachApiService {
 
   public async getPaymentInstruments(
     personId: string,
-  ): Promise<PaymentInstrument[]> {
+  ): Promise<PeachPaymentInstrument[]> {
     const response = await this.peachClient.get<
-      PeachResponseData<PaymentInstrument[]>
+      PeachResponseData<PeachPaymentInstrument[]>
     >(`/people/${personId}/payment-instruments`);
 
     return response.data.data;
@@ -156,10 +156,10 @@ export class PeachApiService {
   public async getPaymentInstrument(
     personId: string,
     paymentInstrumentId: string,
-  ): Promise<PaymentInstrument> {
+  ): Promise<PeachPaymentInstrument> {
     try {
       const response = await this.peachClient.get<
-        PeachResponseData<PaymentInstrument>
+        PeachResponseData<PeachPaymentInstrument>
       >(`/people/${personId}/payment-instruments/${paymentInstrumentId}`);
 
       return response.data.data;
@@ -785,7 +785,9 @@ export class PeachApiService {
   ): Promise<DocumentUrl> {
     const response = await this.peachClient.get<DocumentUrl>(
       `/people/${personId}/documents/${documentId}/content`,
-      { params: { returnUrl: true } },
+      {
+        params: { returnUrl: true },
+      },
     );
 
     return response.data;

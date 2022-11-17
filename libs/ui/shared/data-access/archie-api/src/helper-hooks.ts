@@ -1,5 +1,4 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { useState } from 'react';
 import {
   MutationFunction,
   MutationKey,
@@ -10,14 +9,21 @@ import {
   UseMutationOptions,
   useQuery,
   UseQueryOptions,
-} from 'react-query';
+} from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { useState } from 'react';
 
 import {
   SessionState,
   useAuthenticatedSession,
 } from '@archie/ui/shared/data-access/session';
 
-import { ApiError, ApiErrors, UnauthenticatedApiError } from './api-error';
+import {
+  ApiError,
+  ApiErrors,
+  UnauthenticatedApiError,
+  UnauthorizedApiError,
+} from './api-error';
 import {
   DefaultVariables,
   sessionRefreshWrapper,
@@ -26,13 +32,14 @@ import {
 import {
   InfiniteQueryResponse,
   MutationQueryResponse,
+  MutationState,
   PaginationParams,
   QueryResponse,
   RequestState,
 } from './interface';
 
 export const useExtendedQuery = <TQueryFnData>(
-  queryKey: string,
+  queryKey: QueryKey,
   queryFn: (accessToken: string) => Promise<TQueryFnData>,
   options?: Omit<
     UseQueryOptions<TQueryFnData, ApiErrors, TQueryFnData, QueryKey>,
@@ -42,7 +49,7 @@ export const useExtendedQuery = <TQueryFnData>(
   const { setAccessToken, setSessionState, accessToken } =
     useAuthenticatedSession();
 
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 
   const request = useQuery<TQueryFnData, ApiErrors>(
     queryKey,
@@ -52,6 +59,7 @@ export const useExtendedQuery = <TQueryFnData>(
       setAccessToken,
       setSessionState,
       getAccessTokenSilently,
+      getAccessTokenWithPopup,
     ),
     {
       ...options,
@@ -68,12 +76,6 @@ export const useExtendedQuery = <TQueryFnData>(
     };
   }
 
-  if (request.status === 'loading') {
-    return {
-      state: RequestState.LOADING,
-    };
-  }
-
   if (request.status === 'success') {
     return {
       state: RequestState.SUCCESS,
@@ -81,14 +83,20 @@ export const useExtendedQuery = <TQueryFnData>(
     };
   }
 
+  if (request.fetchStatus === 'idle') {
+    return {
+      state: RequestState.IDLE,
+      fetch: request.refetch,
+    };
+  }
+
   return {
-    state: RequestState.IDLE,
-    fetch: request.refetch,
+    state: RequestState.LOADING,
   };
 };
 
 export const useExtendedInfiniteQuery = <TQueryFnData>(
-  queryKey: string,
+  queryKey: QueryKey,
   getNextPage: (
     lastPage: TQueryFnData,
     allPages: TQueryFnData[],
@@ -112,7 +120,7 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
   const { setAccessToken, setSessionState, accessToken } =
     useAuthenticatedSession();
 
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 
   const request = useInfiniteQuery<TQueryFnData, ApiErrors>(
     queryKey,
@@ -132,6 +140,18 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
           } catch (error) {
             setSessionState(SessionState.NOT_AUTHENTICATED);
             throw new Error('TOKEN_REFRESH_FAILED');
+          }
+        }
+
+        if (error instanceof UnauthorizedApiError) {
+          try {
+            const accessToken = await getAccessTokenWithPopup({
+              scope: error.requiredScopes,
+            });
+
+            return queryFn(accessToken, paginationParams);
+          } catch (error) {
+            throw new Error('TOKEN_WITH_SCOPES_FLOW_FAILED');
           }
         }
 
@@ -180,12 +200,6 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
     };
   }
 
-  if (request.status === 'loading') {
-    return {
-      state: RequestState.LOADING,
-    };
-  }
-
   if (request.status === 'success') {
     return {
       state: RequestState.SUCCESS,
@@ -195,9 +209,15 @@ export const useExtendedInfiniteQuery = <TQueryFnData>(
     };
   }
 
+  if (request.fetchStatus === 'idle') {
+    return {
+      state: RequestState.IDLE,
+      fetch,
+    };
+  }
+
   return {
-    state: RequestState.IDLE,
-    fetch,
+    state: RequestState.LOADING,
   };
 };
 
@@ -208,11 +228,11 @@ export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
     UseMutationOptions<TData, ApiErrors, TVariables, unknown>,
     'mutationKey' | 'mutationFn'
   >,
-): MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData> => {
+): MutationQueryResponse<TData, Omit<TVariables, 'accessToken'>> => {
   const { setAccessToken, setSessionState, accessToken } =
     useAuthenticatedSession();
 
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, getAccessTokenWithPopup } = useAuth0();
 
   const request = useMutation<TData, ApiError, TVariables>(
     mutationKey,
@@ -222,33 +242,35 @@ export const useExtendedMutation = <TData, TVariables extends DefaultVariables>(
       setAccessToken,
       setSessionState,
       getAccessTokenSilently,
+      getAccessTokenWithPopup,
     ),
     options,
   );
 
   if (request.status === 'error') {
     return {
-      state: RequestState.ERROR,
+      state: MutationState.ERROR,
       error: request.error,
       mutate: request.mutate,
-    } as MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData>;
+    } as MutationQueryResponse<TData, Omit<TVariables, 'accessToken'>>;
   }
 
   if (request.status === 'loading') {
     return {
-      state: RequestState.LOADING,
+      state: MutationState.LOADING,
     };
   }
 
   if (request.status === 'success') {
     return {
-      state: RequestState.SUCCESS,
+      state: MutationState.SUCCESS,
       data: request.data,
-    };
+      mutate: request.mutate,
+    } as MutationQueryResponse<TData, Omit<TVariables, 'accessToken'>>;
   }
 
   return {
-    state: RequestState.IDLE,
+    state: MutationState.IDLE,
     mutate: request.mutate,
-  } as MutationQueryResponse<Omit<TVariables, 'accessToken'>, TData>;
+  } as MutationQueryResponse<TData, Omit<TVariables, 'accessToken'>>;
 };

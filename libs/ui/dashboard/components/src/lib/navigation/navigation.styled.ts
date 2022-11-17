@@ -25,29 +25,11 @@ export const NavigationStyled = styled.div`
     cursor: pointer;
 
     p {
-      color: ${({ theme }) => theme.navItem};
-    }
-  }
+      padding-bottom: 0.2rem;
 
-  .nav-item[aria-current] {
-    p {
-      color: ${({ theme }) => theme.navItemActive};
-    }
-
-    svg path {
-      fill: ${({ theme }) => theme.navItemActive};
-    }
-
-    svg circle {
-      stroke: ${({ theme }) => theme.navItemActive};
-    }
-  }
-
-  .nav-item-title {
-    padding-bottom: 0.2rem;
-
-    @media (max-width: ${breakpoints.screenLG}) {
-      display: none;
+      @media (max-width: ${breakpoints.screenLG}) {
+        display: none;
+      }
     }
   }
 `;

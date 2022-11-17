@@ -10,13 +10,13 @@ import { MarginActionHandlersUtilService } from './utils/margin_action_handlers.
 import { MarginNotification } from './margin_notifications.entity';
 import { LtvMeta } from './margin.interfaces';
 import { Liquidation } from './liquidation.entity';
-import {
-  MarginCallQueryDto,
-  MarginCallsDto,
-  MarginCallStatus,
-} from './margin.dto';
+import { MarginCallQueryDto } from '@archie/api/ltv-api/data-transfer-objects';
 import { MarginCallFactory } from './utils/margin_call_factory.service';
 import { BigNumber } from 'bignumber.js';
+import {
+  MarginCallStatus,
+  MarginCall as MarginCallResponse,
+} from '@archie/api/ltv-api/data-transfer-objects/types';
 
 @Injectable()
 export class MarginService {
@@ -38,7 +38,7 @@ export class MarginService {
   public async getMarginCalls(
     userId: string,
     filters: MarginCallQueryDto,
-  ): Promise<MarginCallsDto[]> {
+  ): Promise<MarginCallResponse[]> {
     const statusFilter = {
       [MarginCallStatus.active]: IsNull(),
       [MarginCallStatus.completed]: Not(IsNull()),

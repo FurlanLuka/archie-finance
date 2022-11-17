@@ -2,7 +2,7 @@ import { PurchasesResponseDto } from '../purchases.dto';
 import { ConfigVariables } from '@archie/api/peach-api/constants';
 import { ConfigService } from '@archie/api/utils/config';
 import { Injectable } from '@nestjs/common';
-import { Purchases } from '../../api/peach_api.interfaces';
+import { Purchases } from '@archie/api/peach-api/data-transfer-objects/types';
 
 @Injectable()
 export class PurchasesResponseFactory {

@@ -11,13 +11,23 @@ import { NavigationStyled } from './navigation.styled';
 export const Navigation: FC = () => (
   <NavigationStyled>
     {dashboardNavItems.map((item, index) => (
-      <NavLink key={index} to={item.path} className="nav-item">
-        <div className="nav-item-icon">
-          <Icon name={item.icon} fill={theme.navItem} />
-        </div>
-        <BodyS weight={700} className="nav-item-title">
-          {item.name}
-        </BodyS>
+      <NavLink key={index} to={item.path} end={item.end} className="nav-item">
+        {({ isActive }) => (
+          <>
+            <div className="nav-item-icon">
+              <Icon
+                name={item.icon}
+                fill={isActive ? theme.navItemActive : theme.navItem}
+              />
+            </div>
+            <BodyS
+              color={isActive ? theme.navItemActive : theme.navItem}
+              weight={700}
+            >
+              {item.name}
+            </BodyS>
+          </>
+        )}
       </NavLink>
     ))}
   </NavigationStyled>

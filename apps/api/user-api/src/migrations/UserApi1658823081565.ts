@@ -1,11 +1,10 @@
-
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class UserApi1658823081565 implements MigrationInterface {
-name = 'UserApi1658823081565'
+  name = 'UserApi1658823081565';
 
-public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             CREATE TABLE "kyc" (
                 "userId" character varying NOT NULL,
                 "firstName" character varying NOT NULL,
@@ -25,13 +24,11 @@ public async up(queryRunner: QueryRunner): Promise<void> {
                 CONSTRAINT "PK_ca948073ed4a3ba22030d37b3db" PRIMARY KEY ("userId")
             )
         `);
-}
+  }
 
-public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             DROP TABLE "kyc"
         `);
+  }
 }
-
-}
-

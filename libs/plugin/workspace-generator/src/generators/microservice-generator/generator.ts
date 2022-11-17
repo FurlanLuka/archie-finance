@@ -49,7 +49,7 @@ export default async function (
     unitTestRunner: 'jest',
     name: normalizedOptions.name,
     directory: 'api',
-    tags: `scope:api:app:${normalizedOptions.name}`
+    tags: `scope:api:app:${normalizedOptions.name}`,
   });
 
   createAppFiles(tree, normalizedOptions);

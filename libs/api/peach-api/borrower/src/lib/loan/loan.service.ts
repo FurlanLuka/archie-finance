@@ -6,19 +6,22 @@ import { Borrower } from '../borrower.entity';
 import { CryptoService } from '@archie/api/utils/crypto';
 import { QueueService } from '@archie/api/utils/queue';
 import { BorrowerValidation } from '../utils/borrower.validation';
-import {
-  EmailVerifiedPayload,
-  KycSubmittedPayload,
-} from '@archie/api/user-api/data-transfer-objects';
+import { EmailVerifiedPayload } from '@archie/api/user-api/data-transfer-objects/types';
+import { KycSubmittedPayload } from '@archie/api/user-api/data-transfer-objects/types';
 import { BorrowerWithHomeAddress } from '../utils/borrower.validation.interfaces';
-import { Credit, Draw, HomeAddress, Person } from '../api/peach_api.interfaces';
+import {
+  Credit,
+  Draw,
+  HomeAddress,
+  Person,
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { LastCreditLimitUpdate } from '../last_credit_limit_update.entity';
 import { Lock } from '@archie/api/utils/redis';
 import {
   CreditLineUpdatedPayload,
   CreditLineCreatedPayload,
-} from '@archie/api/credit-line-api/data-transfer-objects';
+} from '@archie/api/credit-line-api/data-transfer-objects/types';
 
 @Injectable()
 export class PeachBorrowerService {

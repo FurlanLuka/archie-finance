@@ -4,7 +4,6 @@
   "$id": "DeploymentConfigGenerator",
   "title": "",
   "type": "object",
-  "properties": {
-  },
+  "properties": {},
   "required": []
 }

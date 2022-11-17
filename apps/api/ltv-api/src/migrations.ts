@@ -16,4 +16,4 @@ export const migrations = [
   MarginApi1663318696195,
   MarginApi1663337821962,
   LtvApi1665667047865,
-  ]
+];

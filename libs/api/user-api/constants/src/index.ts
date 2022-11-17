@@ -1,10 +1,10 @@
+import { Event } from '@archie/api/utils/queue/events';
 import {
   EmailVerifiedPayload,
   KycSubmittedPayload,
-  MfaRemovedPayload,
   MfaEnrolledPayload,
-} from '@archie/api/user-api/data-transfer-objects';
-import { Event } from '@archie/api/utils/queue';
+  MfaRemovedPayload,
+} from '@archie/api/user-api/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'user-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
@@ -23,6 +23,8 @@ export enum ConfigVariables {
   QUEUE_URL = 'QUEUE_URL',
   ENCRYPTION_KEY = 'ENCRYPTION_KEY',
   RUN_MIGRATIONS = 'RUN_MIGRATIONS',
+  REDIS_URL = 'REDIS_URL',
+  DEFAULT_ROLE_ID = 'DEFAULT_ROLE_ID',
 }
 
 export const KYC_SUBMITTED_TOPIC = new Event<KycSubmittedPayload>(

@@ -6,19 +6,19 @@ import {
   createTestingModule,
   generateUserAccessToken,
   initializeTestingModule,
-  queueStub,
   TestDatabase,
-  user,
 } from '@archie/test/integration';
+import { user } from '@archie/test/integration/data-stubs';
+import { queueStub } from '@archie/test/integration/module-stubs';
 import { AppModule } from '../src/app.module';
 import * as request from 'supertest';
-import {
-  LtvDto,
-  LtvQueueController,
-  LtvStatus,
-  MarginCallsDto,
-  MarginCallStatus,
-} from '@archie/api/ltv-api/ltv';
+import { LtvQueueController } from '@archie/api/ltv-api/ltv';
+import { MarginCallDto } from '@archie/api/ltv-api/data-transfer-objects';
+
+import { MarginCallStatus } from '@archie/api/ltv-api/data-transfer-objects/types';
+
+import { LtvDto } from '@archie/api/ltv-api/data-transfer-objects';
+import { LtvStatus } from '@archie/api/ltv-api/data-transfer-objects/types';
 import {
   ledgerAccountDataFactory,
   ledgerAccountUpdatedPayloadFactory,
@@ -40,11 +40,11 @@ import { INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND } from '@archie/api/ledger-ap
 import {
   LedgerAccountUpdatedPayload,
   LedgerActionType,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import {
   CreditBalanceUpdatedPayload,
   PaymentType,
-} from '@archie/api/peach-api/data-transfer-objects';
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { MarginCall, MarginPrices } from '@archie/api/ltv-api/ltv';
@@ -460,7 +460,7 @@ describe('Ltv api tests', () => {
           ltv: afterLiquidationLtv,
           status: LtvStatus.ok,
         });
-        expect(marginCallResponse.body).toStrictEqual<MarginCallsDto[]>([
+        expect(marginCallResponse.body).toStrictEqual<MarginCallDto[]>([
           {
             status: MarginCallStatus.active,
             automaticLiquidationAt: DateTime.fromISO(

@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import {
   CollateralLiquidationTransactionUpdatedStatus,
   InitiateCollateralLiquidationCommandPayload,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
+} from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import { Liquidation } from './liquidation.entity';
 import {
   CreateTransactionResponse,

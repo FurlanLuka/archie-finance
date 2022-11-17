@@ -1,11 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
   InitiateLedgerAssetLiquidationCommandPayload,
+  Liquidation as ILiquidation,
+} from '@archie/api/ledger-api/data-transfer-objects';
+import {
   InternalLedgerAccountData,
   Ledger,
   LedgerActionType,
-  Liquidation as ILiquidation,
-} from '@archie/api/ledger-api/data-transfer-objects';
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { LedgerService } from '../ledger/ledger.service';
 import {
   AssetInformation,
@@ -23,7 +25,7 @@ import {
   CollateralLiquidationTransactionSubmittedPayload,
   CollateralLiquidationTransactionUpdatedPayload,
   CollateralLiquidationTransactionUpdatedStatus,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
+} from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import BigNumber from 'bignumber.js';
 import { Lock } from '@archie/api/utils/redis';
 

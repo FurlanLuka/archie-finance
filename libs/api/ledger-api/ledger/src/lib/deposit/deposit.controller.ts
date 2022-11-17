@@ -1,7 +1,7 @@
 import { SERVICE_QUEUE_NAME } from '@archie/api/ledger-api/constants';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { COLLATERAL_DEPOSIT_TRANSACTION_COMPLETED_TOPIC } from '@archie/api/fireblocks-api/constants';
-import { CollateralDepositTransactionCompletedPayload } from '@archie/api/fireblocks-api/data-transfer-objects';
+import { CollateralDepositTransactionCompletedPayload } from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import { Controller } from '@nestjs/common';
 import { DepositService } from './deposit.service';
 

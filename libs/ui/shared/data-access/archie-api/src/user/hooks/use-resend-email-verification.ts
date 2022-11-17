@@ -4,11 +4,11 @@ import { MutationQueryResponse } from '../../interface';
 import { resendEmailVerification } from '../api/resend-email-verification';
 
 export const useResendEmailVerification = (): MutationQueryResponse<
-  DefaultVariables,
-  void
+  void,
+  DefaultVariables
 > => {
   return useExtendedMutation(
-    'resend_email_verification',
+    ['resend_email_verification'],
     resendEmailVerification,
   );
 };

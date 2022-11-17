@@ -1,23 +1,7 @@
+import { Statement } from '@archie/api/peach-api/data-transfer-objects/types';
 import { API_URL } from '@archie/ui/shared/constants';
 
 import { getRequest } from '../../helpers';
-
-export interface Statement {
-  id: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-  periodId: string;
-  version: number;
-  billingCycleStartDate: string;
-  billingCycleEndDate: string;
-  paymentDueDate: string;
-  documentDescriptorId: string;
-  statementDate: string;
-  minimumDueAmount: number;
-  overdueAmount: number;
-  newBalanceAmount: number;
-}
 
 export const ERROR_LIST = new Map<string, string>([]);
 

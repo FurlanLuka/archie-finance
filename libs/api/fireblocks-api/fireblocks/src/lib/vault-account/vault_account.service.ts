@@ -11,7 +11,7 @@ import {
   AssetInformation,
   AssetsService,
 } from '@archie/api/fireblocks-api/assets';
-import { GetDepositAddressResponse } from '@archie/api/fireblocks-api/data-transfer-objects';
+import { DepositAddress as DepositAddressResponse } from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import {
   DepositAddressNotFoundError,
   UnknownAssetError,
@@ -95,7 +95,7 @@ export class VaultAccountService {
   public async getOrCreateDepositAddress(
     assetId: string,
     userId: string,
-  ): Promise<GetDepositAddressResponse> {
+  ): Promise<DepositAddressResponse> {
     const depositAddress: DepositAddress | null =
       await this.depositAddressRepository.findOneBy({
         asset: assetId,

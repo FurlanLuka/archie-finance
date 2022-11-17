@@ -16,10 +16,7 @@ import {
   PaypalWebhookBody,
   WebhookHeaders,
 } from './paypal.interfaces';
-import {
-  CreateOrderResponseDto,
-  GetOrderResponseDto,
-} from './paypal.dto';
+import { CreateOrderResponseDto, GetOrderResponseDto } from './paypal.dto';
 import { QueueService } from '@archie/api/utils/queue';
 import {
   PAYPAL_PAYMENT_CURRENCY,
@@ -145,14 +142,11 @@ export class PaypalService {
       },
     );
 
-    this.queueService.publishEvent(
-      PAYPAL_PAYMENT_RECEIVED_TOPIC,
-      {
-        userId: order.userId,
-        amount: order.paymentAmount,
-        orderId: order.orderId,
-        currency: PAYPAL_PAYMENT_CURRENCY,
-      },
-    );
+    this.queueService.publishEvent(PAYPAL_PAYMENT_RECEIVED_TOPIC, {
+      userId: order.userId,
+      amount: order.paymentAmount,
+      orderId: order.orderId,
+      currency: PAYPAL_PAYMENT_CURRENCY,
+    });
   }
 }

@@ -1,10 +1,10 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { PaymentInstrument } from '@archie/api/peach-api/data-transfer-objects/types';
 import { ConnectedAccountItem } from '@archie/ui/dashboard/components';
 import { useSetAutopay } from '@archie/ui/shared/data-access/archie-api/autopay/hooks/use-set-autopay';
-import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
-import { AccountResponse } from '@archie/ui/shared/data-access/archie-api/plaid/api/get-connected-accounts';
+import { MutationState } from '@archie/ui/shared/data-access/archie-api/interface';
 import {
   TitleS,
   BodyM,
@@ -18,7 +18,7 @@ import { ConsentCheck } from '../consent-check/consent-check';
 import { SetupAutopayStyled } from './setup-autopay.styled';
 
 interface AutopayModalProps {
-  accounts: AccountResponse[];
+  accounts: PaymentInstrument[];
   onSuccess: VoidFunction;
 }
 
@@ -31,7 +31,7 @@ export const SetupAutopay: FC<AutopayModalProps> = ({
   const setAutopayMutation = useSetAutopay();
 
   const [selectedAccount, setSelectedAccount] =
-    useState<AccountResponse | null>(null);
+    useState<PaymentInstrument | null>(null);
   const [hasConsent, setHasConsent] = useState<boolean>(false);
   const [consentDocumentId, setConsentDocumentId] = useState<string | null>(
     null,
@@ -52,7 +52,7 @@ export const SetupAutopay: FC<AutopayModalProps> = ({
   }, [accounts]);
 
   useEffect(() => {
-    if (setAutopayMutation.state === RequestState.SUCCESS) {
+    if (setAutopayMutation.state === MutationState.SUCCESS) {
       onSuccess();
     }
   }, [onSuccess, setAutopayMutation.state]);
@@ -61,7 +61,7 @@ export const SetupAutopay: FC<AutopayModalProps> = ({
     hasConsent &&
     selectedAccount !== null &&
     consentDocumentId !== null &&
-    setAutopayMutation.state === RequestState.IDLE;
+    setAutopayMutation.state === MutationState.IDLE;
 
   return (
     <SetupAutopayStyled>
@@ -75,7 +75,7 @@ export const SetupAutopay: FC<AutopayModalProps> = ({
       <Select
         id="accounts"
         header={header}
-        onChange={(account: AccountResponse) => {
+        onChange={(account: PaymentInstrument) => {
           // if we change, we need to get consent anew
           if (account !== selectedAccount) {
             setHasConsent(false);
@@ -100,7 +100,7 @@ export const SetupAutopay: FC<AutopayModalProps> = ({
       <ButtonPrimary
         width="16rem"
         isDisabled={!canSubmit}
-        isLoading={setAutopayMutation.state === RequestState.LOADING}
+        isLoading={setAutopayMutation.state === MutationState.LOADING}
         onClick={() => {
           if (canSubmit) {
             setAutopayMutation.mutate({

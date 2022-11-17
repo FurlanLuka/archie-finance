@@ -1,13 +1,13 @@
+import { Ltv } from '@archie/api/ltv-api/data-transfer-objects/types';
 import { queryClient } from '@archie/ui/shared/data-access/query-client';
 import { LtvUpdatedWsEvent } from '@archie/ui/shared/data-access/websocket-instance';
 
-import { LTV } from '../api/get-ltv';
 import { LTV_RECORD_QUERY_KEY } from '../hooks/use-get-ltv';
 
 export const handleLtvUpdatedEvent = (event: LtvUpdatedWsEvent): void => {
-  queryClient.setQueryData<LTV | undefined>(
+  queryClient.setQueryData<Ltv | undefined>(
     LTV_RECORD_QUERY_KEY,
-    (data): LTV | undefined => {
+    (data): Ltv | undefined => {
       if (data !== undefined) {
         return {
           ...data,

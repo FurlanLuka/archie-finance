@@ -4,11 +4,9 @@ metadata:
   name: archie-<%= projectName %>
   labels:
     app: archie-<%= projectName %>
-    {{- if not .Values.local }}
     tags.datadoghq.com/env: '{{ .Values.environment }}'
     tags.datadoghq.com/service: 'archie-<%= projectName %>'
     tags.datadoghq.com/version: '{{ .Values.tag }}'
-    {{- end }}
 spec:
   selector:
     matchLabels:
@@ -27,13 +25,10 @@ spec:
     metadata:
       labels:
         app: archie-<%= projectName %>
-        {{- if not .Values.local }}
         tags.datadoghq.com/env: '{{ .Values.environment }}'
         tags.datadoghq.com/service: 'archie-<%= projectName %>'
         tags.datadoghq.com/version: '{{ .Values.tag }}'
-        {{- else }}
         helm-revision: '{{ .Release.Revision }}'
-        {{- end }}
     spec:
       containers:
         - name: archie-<%= projectName %>
@@ -53,12 +48,10 @@ spec:
               port: 80
           resources:
             requests:
-              memory: '64Mi'
-              cpu: '50m'
-            limits:
               memory: '256Mi'
-              cpu: '500m'
-          {{- if not .Values.local }}
+              cpu: '300m'
+            limits:
+              memory: '292Mi'
           env:
             - name: DD_AGENT_HOST
               valueFrom:
@@ -78,6 +71,7 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
+            {{- if not .Values.local }}
             - name: QUEUE_URL
               valueFrom:
                 secretKeyRef:
@@ -108,7 +102,7 @@ spec:
                 secretKeyRef:
                   name: <%= projectName %>-secrets
                   key: db-database
-          {{- end }}
+            {{- end }}
       imagePullSecrets:
         - name: regcred
 ---

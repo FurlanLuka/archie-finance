@@ -1,17 +1,18 @@
-import { QueryClient, useQueryClient } from 'react-query';
+import { QueryClient, useQueryClient } from '@tanstack/react-query';
+
+import { EmailVerification } from '@archie/api/user-api/data-transfer-objects/types';
 
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';
 import { ONBOARDING_RECORD_QUERY_KEY } from '../../onboarding/hooks/use-get-onboarding';
-import {
-  getEmailVerification,
-  EmailVerificationResponse,
-} from '../api/get-email-verification';
+import { getEmailVerification } from '../api/get-email-verification';
 
-export const EMAIL_VERIFICATION_RECORD_QUERY_KEY = 'email_verification_record';
+export const EMAIL_VERIFICATION_RECORD_QUERY_KEY = [
+  'email_verification_record',
+];
 
 export const usePollEmailVerification =
-  (): QueryResponse<EmailVerificationResponse> => {
+  (): QueryResponse<EmailVerification> => {
     const queryClient: QueryClient = useQueryClient();
 
     return useExtendedQuery(
@@ -27,7 +28,9 @@ export const usePollEmailVerification =
         },
         onSuccess: (data) => {
           if (data.isVerified) {
-            queryClient.invalidateQueries(ONBOARDING_RECORD_QUERY_KEY);
+            queryClient.invalidateQueries({
+              queryKey: ONBOARDING_RECORD_QUERY_KEY,
+            });
           }
         },
       },

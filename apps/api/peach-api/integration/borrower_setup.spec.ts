@@ -5,15 +5,11 @@ import {
   createTestDatabase,
   createTestingModule,
   initializeTestingModule,
-  queueStub,
   TestDatabase,
-  user,
 } from '@archie/test/integration';
+import { user } from '@archie/test/integration/data-stubs';
+import { queueStub } from '@archie/test/integration/module-stubs';
 import { AppModule } from '../src/app.module';
-import {
-  Balances,
-  PeachBorrowerQueueController,
-} from '@archie/api/peach-api/borrower';
 import {
   emailVerifiedDataFactory,
   kycSubmittedDataFactory,
@@ -29,15 +25,19 @@ import {
   CREDIT_BALANCE_UPDATED_TOPIC,
 } from '@archie/api/peach-api/constants';
 import {
+  BorrowerMailNotFoundError,
+  BorrowerNotFoundError,
+  CreditLineNotFoundError,
+  PeachBorrowerQueueController,
+} from '@archie/api/peach-api/borrower';
+import {
+  Balances,
   CreditLimit,
   CreditLine,
   Draw,
   HomeAddress,
   Person,
-  BorrowerMailNotFoundError,
-  BorrowerNotFoundError,
-  CreditLineNotFoundError,
-} from '@archie/api/peach-api/borrower';
+} from '@archie/api/peach-api/data-transfer-objects/types';
 import {
   homeAddressContactRequestBodyFactory,
   creditLineFactory,

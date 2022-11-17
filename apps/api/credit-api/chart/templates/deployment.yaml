@@ -34,7 +34,53 @@ spec:
         {{- else }}
         helm-revision: '{{ .Release.Revision }}'
         {{- end }}
+      {{- if not .Values.local }}
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-init-first: "true"
+        vault.hashicorp.com/agent-cache-enable: "true"
+        vault.hashicorp.com/role: "credit-api"
+        vault.hashicorp.com/agent-inject-secret-config: "database/creds/credit-api"
+        vault.hashicorp.com/agent-requests-cpu: "50m"
+        vault.hashicorp.com/agent-limits-cpu: ""
+        vault.hashicorp.com/agent-inject-template-config: |
+          {{`{{- with secret "database/creds/credit-api"}}
+          export TYPEORM_USERNAME="{{ .Data.username }}"
+          export TYPEORM_PASSWORD="{{ .Data.password }}"
+          {{- end }}
+          {{- with secret "kv/data/database" }}
+          export TYPEORM_PORT="{{ .Data.data.port }}"
+          export TYPEORM_HOST="{{ .Data.data.hostname }}"
+          {{- end }}
+          export TYPEORM_DATABASE="credit-api"
+          {{- with secret "kv/data/auth0" }}
+          export AUTH0_DOMAIN="{{ .Data.data.domain }}"
+          export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
+          {{- end }}
+          {{- with secret "kv/data/queue" }}
+          export QUEUE_URL="{{ .Data.data.url }}"
+          {{- end }}
+          {{- with secret "kv/data/redis" }}
+          export REDIS_URL="{{ .Data.data.url }}"
+          {{- end }}
+          {{- with secret "kv/data/credit-api" }}
+          export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
+          export RIZE_PROGRAM_ID="{{ .Data.data.rize_program_id }}"
+          export RIZE_HMAC_KEY="{{ .Data.data.rize_hmac_key }}"
+          export RIZE_ENVIRONMENT="{{ .Data.data.rize_environment }}"
+          export RIZE_MQ_HOST="{{ .Data.data.rize_mq_host }}"
+          export RIZE_MQ_TOPIC_PREFIX="{{ .Data.data.rize_mq_topic_prefix }}"
+          export RIZE_MQ_USERNAME="{{ .Data.data.rize_mq_username }}"
+          export RIZE_MQ_PASSWORD="{{ .Data.data.rize_mq_password }}"
+          export PLAID_ENVIRONMENT="{{ .Data.data.plaid_environment }}"
+          export PLAID_CLIENT_ID="{{ .Data.data.plaid_client_id }}"
+          export PLAID_SECRET="{{ .Data.data.plaid_secret }}"
+          {{- end }}
+          `}}
+      {{- end }}
     spec:
+      serviceAccountName: credit-api
       containers:
         - name: archie-credit-api
           image: '{{ .Values.image }}:{{ .Values.tag }}'
@@ -43,6 +89,8 @@ spec:
           {{- else }}
           imagePullPolicy: Never
           {{- end }}
+          args:
+            ['sh', '-c', '. /vault/secrets/config && node service/main.js']
           ports:
             - containerPort: 80
           livenessProbe:
@@ -55,9 +103,6 @@ spec:
             requests:
               memory: '64Mi'
               cpu: '50m'
-            limits:
-              memory: '256Mi'
-              cpu: '500m'
           {{- if not .Values.local }}
           env:
             - name: DD_AGENT_HOST
@@ -78,106 +123,6 @@ spec:
                   fieldPath: metadata.labels['tags.datadoghq.com/service']
             - name: DD_LOGS_INJECTION
               value: 'true'
-            - name: AUTH0_DOMAIN
-              valueFrom:
-                secretKeyRef:
-                  name: auth0-shared-secrets
-                  key: domain
-            - name: AUTH0_AUDIENCE
-              valueFrom:
-                secretKeyRef:
-                  name: auth0-shared-secrets
-                  key: audience
-            - name: TYPEORM_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: db-username
-            - name: TYPEORM_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: db-password
-            - name: TYPEORM_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: db-hostname
-            - name: TYPEORM_PORT
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: db-port
-            - name: TYPEORM_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: db-database
-            - name: RIZE_PROGRAM_ID
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: rize-program-id
-            - name: RIZE_HMAC_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: rize-hmac-key
-            - name: RIZE_ENVIRONMENT
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: rize-environment
-            - name: RIZE_MQ_HOST
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: rize-mq-host
-            - name: RIZE_MQ_TOPIC_PREFIX
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: rize-mq-topic-prefix
-            - name: RIZE_MQ_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: rize-mq-username
-            - name: RIZE_MQ_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: rize-mq-password
-            - name: QUEUE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: queue-shared-secrets
-                  key: queue-url
-            - name: ENCRYPTION_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: encryption-key
-            - name: PLAID_ENVIRONMENT
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: plaid-environment
-            - name: PLAID_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: plaid-client-id
-            - name: PLAID_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: credit-api-secrets
-                  key: plaid-secret
-            - name: REDIS_URL
-              valueFrom:
-                secretKeyRef:
-                  name: redis-shared-secrets
-                  key: redis-url
           {{- end }}
       imagePullSecrets:
         - name: regcred

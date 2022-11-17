@@ -14,7 +14,7 @@ import { VaultAccount } from '../vault-account/vault_account.entity';
 import {
   CollateralWithdrawalTransactionUpdatedStatus,
   InitiateCollateralWithdrawalCommandPayload,
-} from '@archie/api/fireblocks-api/data-transfer-objects';
+} from '@archie/api/fireblocks-api/data-transfer-objects/types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Withdraw } from './withdraw.entity';
 import { Repository } from 'typeorm';

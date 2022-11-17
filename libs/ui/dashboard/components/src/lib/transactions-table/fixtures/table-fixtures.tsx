@@ -3,16 +3,16 @@ import { FC, PropsWithChildren } from 'react';
 import { Column } from 'react-table';
 
 import {
-  TransactionStatusColor,
-  TransactionStatusText,
-  TransactionTypeText,
-} from '@archie/ui/dashboard/constants';
-import {
   NetAsset,
   Transaction,
   TransactionStatus,
   TransactionType,
-} from '@archie/ui/shared/data-access/archie-api/payment/api/get-transactions';
+} from '@archie/api/credit-api/data-transfer-objects/types';
+import {
+  TransactionStatusColor,
+  TransactionStatusText,
+  TransactionTypeText,
+} from '@archie/ui/dashboard/constants';
 import { BodyL, BodyM, BodyS } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
@@ -40,17 +40,17 @@ const DescriptionCell: FC<DescriptionCellProps> = ({ title, code }) => (
   </>
 );
 
-type TypeCellProps = PropsWithChildren<{
+interface TypeCellProps extends PropsWithChildren {
   type: TransactionType;
-}>;
+}
 
 const TypeCell: FC<TypeCellProps> = ({ type }) => (
   <BodyM weight={500}>{TransactionTypeText[type]}</BodyM>
 );
 
-type StatusCellProps = PropsWithChildren<{
+interface StatusCellProps extends PropsWithChildren {
   status: TransactionStatus;
-}>;
+}
 
 const StatusCell: FC<StatusCellProps> = ({ status }) => (
   <BodyM color={TransactionStatusColor[status]} weight={500}>
@@ -114,7 +114,7 @@ export const tableColumns: Column<Transaction>[] = [
       {
         Header: 'Amount',
         accessor: (row) =>
-          row.net_asset === NetAsset.NEGATIVE
+          row.net_asset === NetAsset.negative
             ? -row.us_dollar_amount
             : row.us_dollar_amount,
         width: 1,

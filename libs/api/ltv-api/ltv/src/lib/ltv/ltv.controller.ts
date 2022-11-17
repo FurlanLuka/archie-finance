@@ -1,18 +1,18 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { LtvDto } from '@archie/api/ltv-api/data-transfer-objects';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { LtvService } from './ltv.service';
-import { LtvDto } from './ltv.dto';
 import { ApiErrorResponse } from '@archie/api/utils/openapi';
 import { CreditNotSetUpError } from './ltv.errors';
 import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-line-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/ltv-api/constants';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
-import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects';
+import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
-import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects';
-import { CreditLineCreatedPayload } from '@archie/api/credit-line-api/data-transfer-objects';
+import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
+import { CreditLineCreatedPayload } from '@archie/api/credit-line-api/data-transfer-objects/types';
 
 @Controller('v1/ltv')
 export class LtvController {

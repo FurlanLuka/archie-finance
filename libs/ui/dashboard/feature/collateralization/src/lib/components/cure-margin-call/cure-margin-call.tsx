@@ -30,11 +30,11 @@ export const CureMarginCall: FC<CureMarginCallProps> = ({ selectedAsset }) => {
   const assetInfo = CollateralAssets[selectedAsset];
 
   const getLedgerResponse = useGetLedger();
-  const getCreditQueryResponse = useGetCredit();
+  const getCreditResponse = useGetCredit();
 
   if (
     getLedgerResponse.state === RequestState.LOADING ||
-    getCreditQueryResponse.state === RequestState.LOADING
+    getCreditResponse.state === RequestState.LOADING
   ) {
     return (
       <Card height="782px">
@@ -45,20 +45,20 @@ export const CureMarginCall: FC<CureMarginCallProps> = ({ selectedAsset }) => {
 
   if (
     getLedgerResponse.state === RequestState.ERROR ||
-    getCreditQueryResponse.state === RequestState.ERROR
+    getCreditResponse.state === RequestState.ERROR
   ) {
     return <Navigate to="/error" state={{ prevPath: '/collateral' }} />;
   }
 
   if (
     getLedgerResponse.state === RequestState.SUCCESS &&
-    getCreditQueryResponse.state === RequestState.SUCCESS
+    getCreditResponse.state === RequestState.SUCCESS
   ) {
     const ledger = getLedgerResponse.data;
     const currentLedgerAccount = ledger.accounts.find(
       (ledgerAccount) => ledgerAccount.assetId === selectedAsset,
     );
-    const creditData = getCreditQueryResponse.data;
+    const creditData = getCreditResponse.data;
 
     if (!currentLedgerAccount) {
       return (

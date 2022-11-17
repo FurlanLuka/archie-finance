@@ -1,20 +1,10 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "**/*"
-  ],
-  "plugins": [
-    "@nrwl/nx",
-    "import"
-  ],
+  "ignorePatterns": ["**/*"],
+  "plugins": ["@nrwl/nx", "import"],
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
         "@nrwl/nx/enforce-module-boundaries": [
           "error",
@@ -337,21 +327,60 @@
                 ]
               },
               {
-                "sourceTag": "scope:api:lib:shared",
+                "sourceTag": "scope:tests:app:stress-tests",
                 "onlyDependOnLibsWithTags": [
-                  "scope:api:lib:shared"
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data",
+                  "scope:tests:lib:stress-tests"
                 ]
+              },
+              {
+                "sourceTag": "scope:tests:lib:stress-tests",
+                "onlyDependOnLibsWithTags": [
+                  "scope:tests:lib:stress-tests",
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data",
+                  "scope:tests:lib:stress-tests:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:tests:app:utils-test-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data",
+                  "scope:tests:lib:utils-test-api"
+                ]
+              },
+              {
+                "sourceTag": "scope:tests:lib:utils-test-api",
+                "onlyDependOnLibsWithTags": [
+                  "scope:tests:lib:utils-test-api",
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared",
+                  "scope:api:lib:test-data",
+                  "scope:tests:lib:utils-test-api:shared"
+                ]
+              },
+              {
+                "sourceTag": "scope:api:lib:shared",
+                "onlyDependOnLibsWithTags": ["scope:api:lib:shared"]
               },
               {
                 "sourceTag": "scope:api:lib:test-data",
-                "onlyDependOnLibsWithTags": [
-                  "*"
-                ]
+                "onlyDependOnLibsWithTags": ["*"]
               },
               {
                 "sourceTag": "scope:ui:lib:shared",
+                "onlyDependOnLibsWithTags": ["scope:ui:lib:shared"]
+              },
+              {
+                "sourceTag": "scope:tests:lib:shared",
                 "onlyDependOnLibsWithTags": [
-                  "scope:ui:lib:shared"
+                  "scope:tests:lib:shared",
+                  "scope:api:lib:shared"
                 ]
               }
             ]
@@ -365,19 +394,13 @@
               "order": "asc"
             },
             "groups": [
-              [
-                "builtin",
-                "external",
-                "internal"
-              ],
+              ["builtin", "external", "internal"],
               "parent",
               "sibling",
               "index"
             ],
             "newlines-between": "always",
-            "pathGroupsExcludedImportTypes": [
-              "internal"
-            ],
+            "pathGroupsExcludedImportTypes": ["internal"],
             "pathGroups": [
               {
                 "pattern": "@archie/**",
@@ -390,23 +413,13 @@
       }
     },
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
-      "extends": [
-        "plugin:@nrwl/nx/typescript"
-      ],
+      "files": ["*.ts", "*.tsx"],
+      "extends": ["plugin:@nrwl/nx/typescript"],
       "rules": {}
     },
     {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
-      "extends": [
-        "plugin:@nrwl/nx/javascript"
-      ],
+      "files": ["*.js", "*.jsx"],
+      "extends": ["plugin:@nrwl/nx/javascript"],
       "rules": {}
     }
   ]

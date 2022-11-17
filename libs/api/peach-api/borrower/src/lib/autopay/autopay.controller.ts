@@ -24,7 +24,7 @@ import {
   AutopayDto,
   CreateAutopayDocumentDto,
   CreateAutopayDto,
-} from './autopay.dto';
+} from '@archie/api/peach-api/data-transfer-objects';
 
 @Controller('v1/loan_autopay')
 export class AutopayController {

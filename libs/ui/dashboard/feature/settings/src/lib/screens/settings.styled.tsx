@@ -27,18 +27,7 @@ export const SettingsStyled = styled.div`
     }
   }
 
-  .btn-autopay {
-    background: none;
-    border: 0;
-    padding: 0;
-    cursor: pointer;
-  }
-
   .name {
     margin-bottom: 0.5rem;
-  }
-
-  .email {
-    letter-spacing: 0.02em;
   }
 `;

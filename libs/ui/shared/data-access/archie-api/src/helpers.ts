@@ -1,9 +1,19 @@
+import { GetTokenWithPopupOptions } from '@auth0/auth0-react';
+import {
+  MutationFunction,
+  QueryFunction,
+  QueryKey,
+} from '@tanstack/react-query';
 import axios, { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
-import { MutationFunction, QueryFunction, QueryKey } from 'react-query';
 
 import { SessionState } from '@archie/ui/shared/data-access/session';
 
-import { ApiError, ApiErrors, UnauthenticatedApiError } from './api-error';
+import {
+  ApiError,
+  ApiErrors,
+  UnauthenticatedApiError,
+  UnauthorizedApiError,
+} from './api-error';
 import { ApiErrorResponse, PaginationParams } from './interface';
 
 export const mapErrorResponse = (
@@ -12,6 +22,12 @@ export const mapErrorResponse = (
 ): ApiErrors => {
   if (apiErrorResponse.statusCode === 401) {
     return new UnauthenticatedApiError();
+  }
+  if (apiErrorResponse.statusCode === 403) {
+    return new UnauthorizedApiError(
+      apiErrorResponse.message,
+      apiErrorResponse.requiredScopes,
+    );
   }
 
   const errorName: string = apiErrorResponse.message;
@@ -107,6 +123,9 @@ export const sessionRefreshWrapper = <TQueryFnData>(
   setAccessToken: React.Dispatch<React.SetStateAction<string | undefined>>,
   setSessionState: React.Dispatch<React.SetStateAction<SessionState>>,
   getAccessTokenSilently: () => Promise<string>,
+  getAccessTokenWithPopup: (
+    options: GetTokenWithPopupOptions,
+  ) => Promise<string>,
 ): QueryFunction<TQueryFnData, QueryKey> => {
   const wrapper = async (): Promise<TQueryFnData> => {
     try {
@@ -121,6 +140,18 @@ export const sessionRefreshWrapper = <TQueryFnData>(
         } catch (error) {
           setSessionState(SessionState.NOT_AUTHENTICATED);
           throw new Error('TOKEN_REFRESH_FAILED');
+        }
+      }
+
+      if (error instanceof UnauthorizedApiError) {
+        try {
+          const accessToken = await getAccessTokenWithPopup({
+            scope: error.requiredScopes,
+          });
+
+          return queryFn(accessToken);
+        } catch (error) {
+          throw new Error('TOKEN_WITH_SCOPES_FLOW_FAILED');
         }
       }
 
@@ -141,6 +172,9 @@ export const sessionRefreshInfiniteWrapper = <TQueryFnData>(
   setAccessToken: React.Dispatch<React.SetStateAction<string | undefined>>,
   setSessionState: React.Dispatch<React.SetStateAction<SessionState>>,
   getAccessTokenSilently: () => Promise<string>,
+  getAccessTokenWithPopup: (
+    options: GetTokenWithPopupOptions,
+  ) => Promise<string>,
 ): QueryFunction<TQueryFnData, QueryKey> => {
   const wrapper = async (): Promise<TQueryFnData> => {
     try {
@@ -155,6 +189,18 @@ export const sessionRefreshInfiniteWrapper = <TQueryFnData>(
         } catch (error) {
           setSessionState(SessionState.NOT_AUTHENTICATED);
           throw new Error('TOKEN_REFRESH_FAILED');
+        }
+      }
+
+      if (error instanceof UnauthorizedApiError) {
+        try {
+          const accessToken = await getAccessTokenWithPopup({
+            scope: error.requiredScopes,
+          });
+
+          return queryFn(accessToken, paginationParams);
+        } catch (error) {
+          throw new Error('TOKEN_WITH_SCOPES_FLOW_FAILED');
         }
       }
 
@@ -178,6 +224,9 @@ export const sessionRefreshWrapperMutation = <
   setAccessToken: React.Dispatch<React.SetStateAction<string | undefined>>,
   setSessionState: React.Dispatch<React.SetStateAction<SessionState>>,
   getAccessTokenSilently: () => Promise<string>,
+  getAccessTokenWithPopup: (
+    options: GetTokenWithPopupOptions,
+  ) => Promise<string>,
 ): MutationFunction<TData, TVariables> => {
   const wrapper = async (payload: TVariables): Promise<TData> => {
     try {
@@ -199,6 +248,21 @@ export const sessionRefreshWrapperMutation = <
         } catch (error) {
           setSessionState(SessionState.NOT_AUTHENTICATED);
           throw new Error('TOKEN_REFRESH_FAILED');
+        }
+      }
+
+      if (error instanceof UnauthorizedApiError) {
+        try {
+          const accessToken = await getAccessTokenWithPopup({
+            scope: error.requiredScopes,
+          });
+
+          return mutationFn({
+            ...payload,
+            accessToken: accessToken,
+          });
+        } catch (error) {
+          throw new Error('TOKEN_WITH_SCOPES_FLOW_FAILED');
         }
       }
 

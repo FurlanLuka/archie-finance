@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreditLimitAssetAllocation } from '@archie/api/credit-line-api/data-transfer-objects';
+import { CreditLimitAssetAllocation } from '@archie/api/credit-line-api/data-transfer-objects/types';
 import { AssetInformation } from '../assets/assets.interfaces';
 import { AssetsService } from '../assets/assets.service';
 import { CreditLimitAssetAllocationReducerResponse } from '../credit_line/credit_line.interfaces';

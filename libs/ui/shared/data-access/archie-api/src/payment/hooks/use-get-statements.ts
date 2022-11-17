@@ -1,8 +1,10 @@
+import { Statement } from '@archie/api/peach-api/data-transfer-objects/types';
+
 import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse } from '../../interface';
-import { getStatements, Statement } from '../api/get-statements';
+import { getStatements } from '../api/get-statements';
 
-const STATEMENTS_RECORD_QUERY_KEY = 'statements_record';
+const STATEMENTS_RECORD_QUERY_KEY = ['statements_record'];
 
 export const useGetStatements = (): QueryResponse<Statement[]> => {
   return useExtendedQuery(

@@ -8,4 +8,4 @@ export const migrations = [
   UserApi1664184306209,
   UserApi1664269102994,
   UserApi1665667299055,
-  ]
+];

@@ -13,12 +13,12 @@ export enum PaypalEventType {
 
 export enum OrderStatus {
   CREATED = 'CREATED',
-  COMPLETED = 'COMPLETED'
+  COMPLETED = 'COMPLETED',
 }
 
 export interface PaypalWebhookBody {
-  event_type: PaypalEventType,
+  event_type: PaypalEventType;
   resource: {
     id: string;
-  }
+  };
 }
