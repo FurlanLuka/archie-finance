@@ -13,11 +13,9 @@ import {
 } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
-import { AssetValue } from '../interfaces';
-
+import { AssetValue } from './table-fixtures.interfaces';
 import {
   AlignCenterCellStyled,
-  AlignEndCellStyled,
   ChangeCellStyled,
   ActionsCellStyled,
 } from './table-fixtures.styled';
@@ -74,7 +72,7 @@ interface AllocationCellProps {
 }
 
 const AllocationCell: FC<AllocationCellProps> = ({ value }) => (
-  <AlignEndCellStyled>
+  <AlignCenterCellStyled>
     <span data-tip={`${value}%`}>{value.toFixed(2)}%</span>
     <ReactTooltip
       textColor={theme.tooltipText}
@@ -82,7 +80,7 @@ const AllocationCell: FC<AllocationCellProps> = ({ value }) => (
       effect="solid"
       delayHide={1000}
     />
-  </AlignEndCellStyled>
+  </AlignCenterCellStyled>
 );
 
 interface ActionsCellProps {
@@ -133,22 +131,16 @@ export const tableColumns: ColumnDef<AssetValue, any>[] = [
     header: 'Holdings',
     cell: ({ renderValue }) => renderValue(),
   }),
-  columnHelper.accessor('credit_limit', {
-    header: () => <AlignCenterCellStyled>Credit limit</AlignCenterCellStyled>,
+  columnHelper.accessor('allocation', {
+    header: () => <AlignCenterCellStyled>Allocation</AlignCenterCellStyled>,
     cell: ({ getValue }) => {
-      return <AlignCenterCellStyled>{getValue()}</AlignCenterCellStyled>;
+      return <AllocationCell value={getValue()} />;
     },
   }),
   columnHelper.accessor('change', {
     header: () => <AlignCenterCellStyled>Change</AlignCenterCellStyled>,
     cell: ({ getValue }) => {
       return <ChangeCell id={getValue().collateral_asset} />;
-    },
-  }),
-  columnHelper.accessor('allocation', {
-    header: () => <AlignCenterCellStyled>Allocation</AlignCenterCellStyled>,
-    cell: ({ getValue }) => {
-      return <AllocationCell value={getValue()} />;
     },
   }),
   columnHelper.accessor('actions', {

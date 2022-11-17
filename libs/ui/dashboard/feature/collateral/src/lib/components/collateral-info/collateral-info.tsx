@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import { FC, useMemo } from 'react';
 
 import { CreditLine } from '@archie/api/credit-line-api/data-transfer-objects/types';
@@ -12,7 +11,7 @@ import {
 import { Table } from '@archie/ui/shared/design-system';
 
 import { tableColumns } from '../../fixtures/table-fixtures';
-import { AssetValue } from '../../interfaces';
+import { AssetValue } from '../../fixtures/table-fixtures.interfaces';
 import { AssetsAllocation } from '../assets-allocation/assets-allocation';
 
 type AssetMap = Record<CollateralCurrency, AssetValue>;
@@ -49,15 +48,10 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({
             collateral_asset: ledgerAccount.assetId,
             balance: `$${ledgerAccount.accountValue}`,
             holdings: `${ledgerAccount.assetAmount} ${ledgerAccount.assetId}`,
-            credit_limit: `${
-              creditLimitAssetAllocation?.allocationPercentage ?? 0
-            }%`,
             change: {
               collateral_asset: ledgerAccount.assetId,
             },
-            allocation: BigNumber(ledgerAccount.accountValue)
-              .dividedBy(ledger.value)
-              .multipliedBy(100),
+            allocation: creditLimitAssetAllocation?.allocationPercentage ?? 0,
             actions: {
               collateral_asset: ledgerAccount.assetId,
               isHolding: true,
@@ -68,12 +62,7 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({
       },
       {} as AssetMap,
     );
-  }, [
-    creditLine.creditLimitAssetAllocation,
-    isInMarginCall,
-    ledger.accounts,
-    ledger.value,
-  ]);
+  }, [creditLine, isInMarginCall, ledger.accounts]);
 
   const tableData: AssetValue[] = useMemo(() => {
     const notAddedAssets: CollateralAsset[] = Object.values(
@@ -85,7 +74,6 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({
         collateral_asset: item.id,
         balance: '$0',
         holdings: `0 ${item.short}`,
-        credit_limit: '$0',
         change: {
           collateral_asset: item.id,
         },
