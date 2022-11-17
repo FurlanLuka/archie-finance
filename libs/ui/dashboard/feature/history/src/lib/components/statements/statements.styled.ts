@@ -7,9 +7,12 @@ export const StatementsStyled = styled.div`
   align-items: center;
   gap: 0.5rem;
 
-  @media (max-width: ${breakpoints.screenSM}) {
+  @media (max-width: ${breakpoints.screenMD}) {
     flex-direction: column;
+    align-items: flex-end;
+  }
+
+  @media (max-width: ${breakpoints.screenSM}) {
     align-items: flex-start;
-    gap: 0.5rem;
   }
 `;

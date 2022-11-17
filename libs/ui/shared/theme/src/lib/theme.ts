@@ -87,8 +87,8 @@ export interface Theme {
   navItemActive: string;
   // loading screen
   loadingBackground: string;
-  loadingBorder: string;
-  loadingBorderTop: string;
+  loadingDot: string;
+  loadingDotActive: string;
   // inline loader
   loaderBackground: string;
   // table
@@ -153,8 +153,8 @@ export const theme: Theme = {
   navItemActive: colors.neutralgray_600,
   // loading screen
   loadingBackground: colors.neutralgray_200,
-  loadingBorder: colors.neutralgray_300,
-  loadingBorderTop: colors.neutralgray_400,
+  loadingDot: colors.neutralgray_300,
+  loadingDotActive: colors.neutralgray_400,
   // inline loader
   loaderBackground: colors.neutralgray_200,
   // table

@@ -98,7 +98,7 @@
       "info_text_1": "Make sure you <b>only</b> send {{selected_collateral_asset}} to this address. Please select another asset above if you'd like to collateralize a different currency.",
       "info_text_2": "We will settle receipt of your collateral after <b>three</b> confirmations.",
       "info_link_1": "Follow along on",
-      "info_link_2": "this blockchain explorer "
+      "info_link_2": "this blockchain explorer"
     },
     "terms": {
       "title": "Terms & Conditions",
@@ -226,7 +226,7 @@
     },
     "successfull_withdrawal_modal": {
       "title": "Withdrawal successfully initiated",
-      "subtitle": "We have initiated your withdrawal request. Follow along on the",
+      "subtitle": "We have initiated your withdrawal request. Follow along on",
       "link": "the blockchain explorer"
     },
     "enter_2fa_code_modal": {
@@ -273,7 +273,7 @@
     "title": "History",
     "subtitle": "Recent Transactions",
     "btn_load_more": "Load more",
-    "btn_statements": "Download",
+    "btn_statements": "Download Statement",
     "fetch_statements": "Fetching statements...",
     "no_statements": "No statements"
   },

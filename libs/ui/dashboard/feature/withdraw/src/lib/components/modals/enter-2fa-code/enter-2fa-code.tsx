@@ -16,6 +16,7 @@ interface Enter2faCodeModalProps {
   onConfirm: () => void;
 }
 
+// Are we using this modal?
 export const Enter2faCodeModal: FC<Enter2faCodeModalProps> = ({
   isOpen,
   close,

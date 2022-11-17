@@ -53,7 +53,7 @@ export const PaymentScheduled: FC<PaymentScheduledProps> = ({
       </BodyM>
       <BodyM>{t('payment_modal.payment_scheduled.time_note')}</BodyM>
       <div className="btn-group">
-        <ButtonPrimary width="250px" onClick={handleConfirm}>
+        <ButtonPrimary width="10rem" onClick={handleConfirm}>
           {t('btn_ok')}
         </ButtonPrimary>
       </div>

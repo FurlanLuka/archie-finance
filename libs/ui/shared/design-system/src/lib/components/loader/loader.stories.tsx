@@ -5,7 +5,7 @@ import { theme } from '@archie/ui/shared/theme';
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
 
-import { Loader, LoaderProps } from './loader';
+import { Loader, LoaderProps } from './loader.styled';
 
 export default {
   title: 'Components/Loader',
