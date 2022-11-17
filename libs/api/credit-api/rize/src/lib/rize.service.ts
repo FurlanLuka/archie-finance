@@ -342,7 +342,7 @@ export class RizeService {
     await this.rizeApiService.loadFunds(customerId, credit.availableCredit);
   }
 
-  @Lock((credit: CreditBalanceUpdatedPayload) => credit.userId)
+  // @Lock((credit: CreditBalanceUpdatedPayload) => credit.userId)
   public async updateAvailableCredit(
     credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {
@@ -395,7 +395,7 @@ export class RizeService {
     }
   }
 
-  @Lock((userId: string) => userId)
+  // @Lock((userId: string) => userId)
   public async unlockCard(userId: string, unlockAt: string): Promise<void> {
     const updateResult: UpdateResult =
       await this.lastDebitCardUpdateMetaRepository.update(
@@ -426,7 +426,7 @@ export class RizeService {
     }
   }
 
-  @Lock((userId: string) => userId)
+  // @Lock((userId: string) => userId)
   public async lockCard(userId: string, lockAt: string): Promise<void> {
     const updateResult: UpdateResult =
       await this.lastDebitCardUpdateMetaRepository.update(

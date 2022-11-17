@@ -36,7 +36,7 @@ export class CreditLineService {
     private creditLineRepository: Repository<CreditLine>,
   ) {}
 
-  @Lock((payload: LedgerAccountUpdatedPayload) => payload.userId)
+  // @Lock((payload: LedgerAccountUpdatedPayload) => payload.userId)
   public async ledgerAccountUpdatedHandler({
     userId,
     ledgerAccounts,

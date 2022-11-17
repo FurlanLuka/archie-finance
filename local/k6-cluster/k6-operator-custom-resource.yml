@@ -3,7 +3,7 @@ kind: K6
 metadata:
   name: k6-stress-test
 spec:
-  parallelism: 10
+  parallelism: 5
   arguments: --out statsd
   script:
     configMap:
@@ -13,7 +13,7 @@ spec:
     image: cudr12/xk6-amqp-linux:latest
     env:
       - name: PARALLELISM
-        value: '10'
+        value: '5'
       - name: QUEUE_URL
         value: amqp://guest:guest@rabbitmq.default.svc.cluster.local:5672/
       - name: K6_STATSD_ENABLE_TAGS

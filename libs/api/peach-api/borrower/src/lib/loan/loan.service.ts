@@ -175,7 +175,7 @@ export class PeachBorrowerService {
     );
   }
 
-  @Lock((payload: CreditLineUpdatedPayload) => payload.userId)
+  // @Lock((payload: CreditLineUpdatedPayload) => payload.userId)
   public async handleCreditLineUpdatedEvent(
     creditLimit: CreditLineUpdatedPayload,
   ): Promise<void> {

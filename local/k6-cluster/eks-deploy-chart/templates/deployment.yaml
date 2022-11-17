@@ -43,7 +43,7 @@ spec:
               memory: '256Mi'
               cpu: '300m'
             limits:
-              memory: '292Mi'
+              memory: '1Gi'
           env:
             - name: DD_AGENT_HOST
               valueFrom:
@@ -108,8 +108,8 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: 'archie-{{ .Values.service }}-hpa'
 spec:
-  minReplicas: 1
-  maxReplicas: 3
+  minReplicas: 15
+  maxReplicas: 15
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
