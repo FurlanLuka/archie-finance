@@ -55,9 +55,6 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
     getAssetPriceResponse.state === RequestState.SUCCESS
   ) {
     const ledger = getLedgerResponse.data;
-    const assetPrice = getAssetPriceResponse.data.find(
-      (asset) => asset.assetId === assetInfo.id,
-    );
     const currentLedgerAccount = ledger.accounts.find(
       (ledgerAccount) => ledgerAccount.assetId === selectedAsset,
     );
