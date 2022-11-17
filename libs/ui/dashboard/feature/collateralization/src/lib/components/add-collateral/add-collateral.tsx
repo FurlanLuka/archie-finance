@@ -61,6 +61,9 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
     const currentLedgerAccount = ledger.accounts.find(
       (ledgerAccount) => ledgerAccount.assetId === selectedAsset,
     );
+    const assetPrice = getAssetPriceResponse.data.find(
+      (asset) => asset.assetId === assetInfo.id,
+    );
 
     if (!assetPrice) {
       return (
@@ -91,7 +94,7 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
               {t('dashboard_collateralization.subtitle_asset', {
                 collateral: currentLedgerAccount.assetAmount,
                 collateralAsset: currentLedgerAccount.assetId,
-                collateralValue: currentLedgerAccount.assetPrice,
+                collateralValue: currentLedgerAccount.accountValue,
               })}
             </BodyL>
           )}
