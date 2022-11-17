@@ -1,4 +1,4 @@
-import { Story, Meta } from '@storybook/react';
+import { Story } from '@ladle/react';
 import { Key } from 'react';
 
 import { theme } from '@archie/ui/shared/theme';
@@ -13,7 +13,7 @@ export default {
     layout: 'fullscreen',
     options: { showPanel: false },
   },
-} as Meta;
+};
 
 const colors = [
   { name: 'Black', value: '#081517' },
