@@ -1,0 +1,8 @@
+cronJobs:
+  curl:
+    - name: 'recalculate-ledger-values'
+      schedule: "0 * * * *"
+      command: "curl -X POST ${INTERNAL_API_URL}/internal/ledger/recalculate"
+    - name: 'fetch-asset-prices-v2'
+      schedule: "0 * * * *"
+      command: "curl -X POST ${INTERNAL_API_URL}/internal/asset/price/fetch"

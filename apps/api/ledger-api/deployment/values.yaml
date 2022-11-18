@@ -1,0 +1,38 @@
+service:
+  name: "ledger-api"
+
+cronJobs:
+  curl:
+    - name: 'recalculate-ledger-values'
+      schedule: "0 * * * *"
+      command: "curl -X POST ${INTERNAL_API_URL}/internal/ledger/recalculate"
+    - name: 'fetch-asset-prices-v2'
+      schedule: "*/5 * * * *"
+      command: "curl -X POST ${INTERNAL_API_URL}/internal/asset/price/fetch"
+
+vault:
+  secretConfig: "database/creds/ledger-api"
+  templateConfig: |+
+    {{- with secret "database/creds/ledger-api"}}
+    export TYPEORM_USERNAME="{{ .Data.username }}"
+    export TYPEORM_PASSWORD="{{ .Data.password }}"
+    {{- end }}
+    {{- with secret "kv/data/database" }}
+    export TYPEORM_PORT="{{ .Data.data.port }}"
+    export TYPEORM_HOST="{{ .Data.data.hostname }}"
+    {{- end }}
+    export TYPEORM_DATABASE="ledger-api"
+    {{- with secret "kv/data/auth0" }}
+    export AUTH0_DOMAIN="{{ .Data.data.domain }}"
+    export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
+    {{- end }}
+    {{- with secret "kv/data/ledger-api" }}
+    export ASSET_LIST='{{ .Data.data.asset_list }}'
+    export COINGECKO_API_URI="{{ .Data.data.coingecko_api_url }}"
+    {{- end }}
+    {{- with secret "kv/data/queue" }}
+    export QUEUE_URL="{{ .Data.data.url }}"
+    {{- end }}
+    {{- with secret "kv/data/redis" }}
+    export REDIS_URL="{{ .Data.data.url }}"
+    {{- end }}
