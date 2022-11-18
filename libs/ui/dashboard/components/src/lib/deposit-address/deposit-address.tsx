@@ -26,7 +26,7 @@ export const DepositAddress: FC<DepositAddressProps> = ({
   showTerms,
 }) => {
   const { t } = useTranslation();
-  const getDepositAddressResponse = useGetDepositAddress(assetInfo.id, true);
+  const getDepositAddressResponse = useGetDepositAddress(assetInfo.id);
 
   const getDepositAddress = (): string | undefined => {
     if (getDepositAddressResponse.state === RequestState.SUCCESS) {

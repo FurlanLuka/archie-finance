@@ -4,7 +4,7 @@ import { useExtendedQuery } from '../../helper-hooks';
 import { QueryResponse, RequestState } from '../../interface';
 import { getTransactions } from '../api/get-transactions';
 
-const RECENT_TRANSACTIONS_RECORD_QUERY_KEY = 'recent_transactions_record';
+const RECENT_TRANSACTIONS_RECORD_QUERY_KEY = ['recent_transactions_record'];
 
 export const useGetRecentTransactions = (): QueryResponse<Transaction[]> => {
   const queryResponse = useExtendedQuery(

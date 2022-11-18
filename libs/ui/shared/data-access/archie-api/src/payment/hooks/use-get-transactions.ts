@@ -9,7 +9,7 @@ import {
   mergeTransactionsWithLoanPayments,
 } from '../transactions.helpers';
 
-const TRANSACTIONS_RECORD_QUERY_KEY = 'transactions_record';
+const TRANSACTIONS_RECORD_QUERY_KEY = ['transactions_record'];
 
 const getNextPage = ({ meta }: TransactionResponse) => {
   if (meta.page * meta.limit + meta.count < meta.totalCount) {

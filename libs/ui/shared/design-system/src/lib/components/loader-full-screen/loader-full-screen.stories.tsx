@@ -1,4 +1,4 @@
-import { Story, Meta } from '@storybook/react';
+import { Story } from '@ladle/react';
 
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
@@ -12,7 +12,7 @@ export default {
     layout: 'fullscreen',
     options: { showPanel: false },
   },
-} as Meta;
+};
 
 export const Default: Story = () => (
   <StoriesContainer>

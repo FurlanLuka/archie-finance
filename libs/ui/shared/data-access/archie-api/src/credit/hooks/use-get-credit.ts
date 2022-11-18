@@ -11,7 +11,7 @@ import { QueryResponse } from '../../interface';
 import { getCredit } from '../api/get-credit';
 import { handleCreditBalanceUpdatedEvent } from '../event-handlers/handle-credit-balance-updated';
 
-export const CREDIT_RECORD_QUERY_KEY = 'credit_record';
+export const CREDIT_RECORD_QUERY_KEY = ['credit_record'];
 const CREDIT_BALANCE_UPDATED_HANDLER_ID = 'useGetLTV.ltv-updated';
 
 export const useGetCredit = (): QueryResponse<LoanBalances> => {
