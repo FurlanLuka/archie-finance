@@ -32,5 +32,5 @@ vault:
     export PEACH_COMPANY_ID="{{ .Data.data.peach_company_id }}"
     export PEACH_BORROWER_ROLE_ID="{{ .Data.data.peach_borrower_role_id }}"
     export PEACH_LOAN_ID="{{ .Data.data.peach_loan_id }}"
-    export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
+    export ENCRYPTION_KEY='{{ .Data.data.encryption_key }}'
     {{- end }}

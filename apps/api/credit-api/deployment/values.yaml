@@ -28,7 +28,7 @@ vault:
     export REDIS_URL="{{ .Data.data.url }}"
     {{- end }}
     {{- with secret "kv/data/credit-api" }}
-    export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
+    export ENCRYPTION_KEY='{{ .Data.data.encryption_key }}'
     export RIZE_PROGRAM_ID="{{ .Data.data.rize_program_id }}"
     export RIZE_HMAC_KEY="{{ .Data.data.rize_hmac_key }}"
     export RIZE_ENVIRONMENT="{{ .Data.data.rize_environment }}"

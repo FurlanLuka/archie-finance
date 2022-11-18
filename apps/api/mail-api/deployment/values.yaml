@@ -17,7 +17,7 @@ vault:
     export QUEUE_URL="{{ .Data.data.url }}"
     {{- end }}
     {{- with secret "kv/data/mail-api" }}
-    export ENCRYPTION_KEY="{{ .Data.data.encryption_key }}"
+    export ENCRYPTION_KEY='{{ .Data.data.encryption_key }}'
     export SENDGRID_API_KEY="{{ .Data.data.sendgrid_api_key }}"
     export SENDGRID_API_URL="{{ .Data.data.sendgrid_api_url }}"
     export SENDGRID_MAILING_LIST_ID="{{ .Data.data.sendgrid_mailing_list_id }}"
