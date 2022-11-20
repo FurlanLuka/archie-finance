@@ -1,0 +1,31 @@
+service:
+  name: "mail-api"
+
+vault:
+  secretConfig: "database/creds/mail-api"
+  templateConfig: |+
+    {{- with secret "database/creds/mail-api"}}
+    export TYPEORM_USERNAME="{{ .Data.username }}"
+    export TYPEORM_PASSWORD="{{ .Data.password }}"
+    {{- end }}
+    {{- with secret "kv/data/database" }}
+    export TYPEORM_PORT="{{ .Data.data.port }}"
+    export TYPEORM_HOST="{{ .Data.data.hostname }}"
+    {{- end }}
+    export TYPEORM_DATABASE="mail-api"
+    {{- with secret "kv/data/queue" }}
+    export QUEUE_URL="{{ .Data.data.url }}"
+    {{- end }}
+    {{- with secret "kv/data/mail-api" }}
+    export ENCRYPTION_KEY='{{ .Data.data.encryption_key }}'
+    export SENDGRID_API_KEY="{{ .Data.data.sendgrid_api_key }}"
+    export SENDGRID_API_URL="{{ .Data.data.sendgrid_api_url }}"
+    export SENDGRID_MAILING_LIST_ID="{{ .Data.data.sendgrid_mailing_list_id }}"
+    export SENDGRID_VERIFY_EMAIL_TEMPLATAE_ID="{{ .Data.data.sendgrid_verify_email_template_id }}"
+    export SENDGRID_MARGIN_CALL_EXITED_TEMPLATE_ID="{{ .Data.data.sendgrid_margin_call_exited_template_id }}"
+    export SENDGRID_MARGIN_CALL_REACHED_TEMPLATE_ID="{{ .Data.data.sendgrid_margin_call_reached_template_id }}"
+    export SENDGRID_MARGIN_CALL_IN_DANGER_TEMPLATE_ID="{{ .Data.data.sendgrid_margin_call_in_danger_template_id }}"
+    export SENDGRID_COLLATERAL_LIQUIDATED_TEMPLATE_ID="{{ .Data.data.sendgrid_collateral_liquidated_template_id }}"
+    export SENDGRID_CONNECT_SALES_TEMPLATE_ID="{{ .Data.data.sendgrid_connect_sales_template_id }}"
+    export ARCHIE_MARKETING_WEBSITE_URL="{{ .Data.data.marketing_website_url }}"
+    {{- end }}

@@ -1,0 +1,48 @@
+## Environment name. Set per environment (production | development)
+#enviroment: ''
+
+service:
+## Service name. Service name MUST be specified by each service
+#  name: ""
+## Service start / entrypoint command
+  command: "node service/main.js"
+
+## Minimum number of replicas
+replicas: 1
+
+## Resource request/limits
+resources:
+  request:
+    memory: "256Mi"
+    cpu: '250m'
+  limits:
+    memory: "292Mi"
+
+## Autoscaling configuration
+autoscaling:
+## Enable autoscaling. In case this is set as false, no autoscaling rules will be applied
+  enabled: true
+## Autoscaling when memory consumption hits 80%
+  memory: true
+## Autoscaling when cpu consumption hits 80%
+  cpu: true
+## Autoscaling when there are 50 or more ready to consume messages in the queue
+  queue: true
+## Autoscaling maximum replicas. Minimum replicas equals to the initial amount of replicas
+  maxReplicas: 3
+
+## Vault secrets configuration. Required by each service
+#vault:
+#  secret-config: ""
+#  template-config: ""
+
+# Cron jobs configuration
+#cronJobs:
+## Curl cronjob. Starts from the curlimages/curl image and has access to INTERNAL_API_URL env variable
+#  curl:
+##      Cron job name
+#    - name: 'example'
+##      Cron job execution schedule
+#      schedule: "* * * * *"
+##      Cron job command in bash.
+#      command: "curl -X POST ${INTERNAL_API_URL}/api"

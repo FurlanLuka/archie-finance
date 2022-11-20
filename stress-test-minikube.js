@@ -74,6 +74,12 @@ async function setupInfrastructureServices(debugEnabled) {
       );
     }
 
+    console.log('Starting Kubernetes metrics server...');
+    await exec(
+      `helm upgrade --install metrics-server -f local/k6-cluster/metrics-server.values.yml bitnami/metrics-server`,
+    );
+    console.log('Metrics server running ✅');
+
     console.log('Starting RabbitMQ...');
     await exec(
       `helm install rabbitmq -f local/k6-cluster/rabbitmq-values.yml bitnami/rabbitmq`,
@@ -112,7 +118,7 @@ async function setupTestUtilApi(debugEnabled) {
 
     console.log('Starting utils test api...');
     await exec(
-      `helm upgrade --install ${utilsTestApiMicroservice} apps/tests/${utilsTestApiMicroservice}/chart --set tag=latest --set image=${utilsTestApiMicroservice} --set local=true --force`,
+      `helm upgrade --install ${utilsTestApiMicroservice} local/k6-cluster/eks-deploy-chart --set environment=stress-test --set service=${utilsTestApiMicroservice} --set tag=latest --set image=${utilsTestApiMicroservice}`,
     );
     console.log('Utils test api running ✅');
   } catch (error) {
