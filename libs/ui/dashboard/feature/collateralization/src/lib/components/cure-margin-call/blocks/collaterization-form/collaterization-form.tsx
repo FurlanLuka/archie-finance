@@ -13,7 +13,7 @@ import { theme } from '@archie/ui/shared/theme';
 
 import { CollaterizationFormStyled } from './collaterization-form.styled';
 import { tableColumns } from './fixtures/table-fixtures';
-import { LtvTableEntry } from './interfaces';
+import { LtvTableEntry } from './fixtures/table-fixtures.interfaces';
 
 interface CollateralizationFormProps {
   assetInfo: CollateralAsset;

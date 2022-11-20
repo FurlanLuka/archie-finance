@@ -45,15 +45,15 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({
         return {
           ...previousValue,
           [ledgerAccount.assetId]: {
-            collateral_asset: ledgerAccount.assetId,
+            collateralAsset: ledgerAccount.assetId,
             balance: `$${ledgerAccount.accountValue}`,
             holdings: `${ledgerAccount.assetAmount} ${ledgerAccount.assetId}`,
             change: {
-              collateral_asset: ledgerAccount.assetId,
+              collateralAsset: ledgerAccount.assetId,
             },
             allocation: creditLimitAssetAllocation?.allocationPercentage ?? 0,
             actions: {
-              collateral_asset: ledgerAccount.assetId,
+              collateralAsset: ledgerAccount.assetId,
               isHolding: true,
               isInMarginCall,
             },
@@ -71,15 +71,15 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({
 
     return Object.values(assetMap).concat(
       notAddedAssets.map((item) => ({
-        collateral_asset: item.id,
+        collateralAsset: item.id,
         balance: '$0',
         holdings: `0 ${item.short}`,
         change: {
-          collateral_asset: item.id,
+          collateralAsset: item.id,
         },
         allocation: 0,
         actions: {
-          collateral_asset: item.id,
+          collateralAsset: item.id,
           isHolding: false,
           isInMarginCall,
         },

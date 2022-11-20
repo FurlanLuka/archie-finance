@@ -117,7 +117,7 @@ const ActionsCell: FC<ActionsCellProps> = ({ canClaim, id }) => {
 const columnHelper = createColumnHelper<AssetValue>();
 
 export const tableColumns: ColumnDef<AssetValue, any>[] = [
-  columnHelper.accessor('collateral_asset', {
+  columnHelper.accessor('collateralAsset', {
     header: '',
     cell: ({ getValue }) => {
       return <CollateralAssetCell id={getValue()} />;
@@ -132,7 +132,9 @@ export const tableColumns: ColumnDef<AssetValue, any>[] = [
     cell: ({ renderValue }) => renderValue(),
   }),
   columnHelper.accessor('allocation', {
-    header: () => <AlignCenterCellStyled>Allocation</AlignCenterCellStyled>,
+    header: () => (
+      <AlignCenterCellStyled>Allocation Percentage</AlignCenterCellStyled>
+    ),
     cell: ({ getValue }) => {
       return <AllocationCell value={getValue()} />;
     },
@@ -140,17 +142,19 @@ export const tableColumns: ColumnDef<AssetValue, any>[] = [
   columnHelper.accessor('change', {
     header: () => <AlignCenterCellStyled>Change</AlignCenterCellStyled>,
     cell: ({ getValue }) => {
-      return <ChangeCell id={getValue().collateral_asset} />;
+      const { collateralAsset } = getValue();
+
+      return <ChangeCell id={collateralAsset} />;
     },
   }),
   columnHelper.accessor('actions', {
     header: '',
     cell: ({ getValue }) => {
-      const { collateral_asset, isHolding, isInMarginCall } = getValue();
+      const { collateralAsset, isHolding, isInMarginCall } = getValue();
 
       return (
         <ActionsCell
-          id={collateral_asset}
+          id={collateralAsset}
           canClaim={isHolding && !isInMarginCall}
         />
       );

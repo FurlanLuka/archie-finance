@@ -5,7 +5,7 @@ import { copyToClipboard } from '@archie/ui/dashboard/utils';
 import { BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
-import { LtvTableEntry } from '../interfaces';
+import { LtvTableEntry } from './table-fixtures.interfaces';
 
 const columnHelper = createColumnHelper<LtvTableEntry>();
 
@@ -39,6 +39,18 @@ export const tableColumns = (
             delayHide={1000}
           />
         </>
+      );
+    },
+  }),
+  columnHelper.accessor('info', {
+    header: '',
+    cell: ({ getValue }) => {
+      const { text, color } = getValue();
+
+      return (
+        <BodyM color={color} weight={500} className="align-right">
+          {text}
+        </BodyM>
       );
     },
   }),

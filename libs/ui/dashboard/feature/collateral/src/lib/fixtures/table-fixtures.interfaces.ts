@@ -1,13 +1,13 @@
 export type AssetValue = {
-  collateral_asset: string;
+  collateralAsset: string;
   balance: string;
   holdings: string;
   allocation: number;
   change: {
-    collateral_asset: string;
+    collateralAsset: string;
   };
   actions: {
-    collateral_asset: string;
+    collateralAsset: string;
     isHolding: boolean;
   };
 };

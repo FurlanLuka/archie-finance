@@ -95,17 +95,13 @@ export const tableColumns: ColumnDef<Transaction, any>[] = [
   columnHelper.accessor('type', {
     header: 'Type',
     cell: ({ getValue }) => {
-      const value = getValue();
-
-      return <TypeCell type={value}>{value}</TypeCell>;
+      return <TypeCell type={getValue()}>{getValue()}</TypeCell>;
     },
   }),
   columnHelper.accessor('status', {
     header: 'Status',
     cell: ({ getValue }) => {
-      const value = getValue();
-
-      return <StatusCell status={value}>{value}</StatusCell>;
+      return <StatusCell status={getValue()}>{getValue()}</StatusCell>;
     },
   }),
   columnHelper.accessor(
