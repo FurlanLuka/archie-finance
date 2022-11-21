@@ -9,17 +9,16 @@ import { CollateralAsset } from '@archie/ui/shared/constants';
 import { InputRange, TitleL, BodyM } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
-import { CollaterizationFormStyled } from './collaterization-form.styled';
+import { CollateralizationCalculatorStyled } from './collateralization-calculator.styled';
 
-interface CollateralizationFormProps {
+interface CollateralizationCalculatorProps {
   assetInfo: CollateralAsset;
   assetPrice: number;
 }
 
-export const CollateralizationForm: FC<CollateralizationFormProps> = ({
-  assetInfo,
-  assetPrice,
-}) => {
+export const CollateralizationCalculator: FC<
+  CollateralizationCalculatorProps
+> = ({ assetInfo, assetPrice }) => {
   const { t } = useTranslation();
 
   const [lineOfCredit, setLineOfCredit] = useState(200);
@@ -42,7 +41,7 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
   };
 
   return (
-    <CollaterizationFormStyled>
+    <CollateralizationCalculatorStyled>
       <InputRange
         className="credit-slider"
         label={t('collateralization_step.inputs.input_range_label')}
@@ -88,6 +87,6 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
         assetAmount={requiredCollateral}
         showTerms
       />
-    </CollaterizationFormStyled>
+    </CollateralizationCalculatorStyled>
   );
 };

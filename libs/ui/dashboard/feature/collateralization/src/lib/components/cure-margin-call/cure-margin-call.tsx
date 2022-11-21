@@ -18,7 +18,7 @@ import {
 
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
 
-import { CollateralizationForm } from './blocks/collaterization-form/collaterization-form';
+import { MarginCallCalculator } from './blocks/margin-call-calculator/margin-call-calculator';
 
 interface CureMarginCallProps {
   selectedAsset: string;
@@ -82,7 +82,7 @@ export const CureMarginCall: FC<CureMarginCallProps> = ({ selectedAsset }) => {
           <BodyL className="subtitle-margin-call">
             {t('dashboard_collateralization.subtitle_margin_call')}
           </BodyL>
-          <CollateralizationForm
+          <MarginCallCalculator
             assetInfo={assetInfo}
             assetPrice={BigNumber(currentLedgerAccount.assetPrice).toNumber()}
             creditBalance={creditData.utilizationAmount}
