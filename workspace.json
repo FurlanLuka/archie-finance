@@ -24,6 +24,7 @@
     "api-ledger-recalculation-scheduler-api": "apps/api/ledger-recalculation-scheduler-api",
     "api-ledger-recalculation-scheduler-api-constants": "libs/api/ledger-recalculation-scheduler-api/constants",
     "api-ledger-recalculation-scheduler-api-data-transfer-objects": "libs/api/ledger-recalculation-scheduler-api/data-transfer-objects",
+    "api-ledger-recalculation-scheduler-api-scheduler": "libs/api/ledger-recalculation-scheduler-api/scheduler",
     "api-ledger-recalculation-scheduler-api-test-data": "libs/api/ledger-recalculation-scheduler-api/test-data",
     "api-ltv-api-constants": "libs/api/ltv-api/constants",
     "api-ltv-api-data-transfer-objects": "libs/api/ltv-api/data-transfer-objects",

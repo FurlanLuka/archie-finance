@@ -92,6 +92,9 @@
       "@archie/api/ledger-recalculation-scheduler-api/data-transfer-objects": [
         "libs/api/ledger-recalculation-scheduler-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/ledger-recalculation-scheduler-api/scheduler": [
+        "libs/api/ledger-recalculation-scheduler-api/scheduler/src/index.ts"
+      ],
       "@archie/api/ledger-recalculation-scheduler-api/test-data": [
         "libs/api/ledger-recalculation-scheduler-api/test-data/src/index.ts"
       ],
