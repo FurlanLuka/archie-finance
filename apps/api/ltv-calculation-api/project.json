@@ -1,0 +1,94 @@
+{
+  "name": "api-ltv-calculation-api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/ltv-calculation-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/api/ltv-calculation-api",
+        "main": "apps/api/ltv-calculation-api/src/main.ts",
+        "tsConfig": "apps/api/ltv-calculation-api/tsconfig.app.json",
+        "assets": [
+          "apps/api/ltv-calculation-api/src/assets"
+        ],
+        "tsPlugins": [
+          "@nestjs/swagger/plugin"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/api/ltv-calculation-api/src/environments/environment.ts",
+              "with": "apps/api/ltv-calculation-api/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "api-ltv-calculation-api:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "api-ltv-calculation-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/api/ltv-calculation-api/**/*.ts"
+        ]
+      }
+    },
+    "build-openapi": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build ltv-calculation-api && RUN_MIGRATIONS=false node dist/apps/ltv-calculation-api/main build-swagger"
+      }
+    },
+    "generate-migration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build ltv-calculation-api && node dist/apps/ltv-calculation-api/main generate-migration"
+      }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "test-integration": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/ltv-calculation-api"
+      ],
+      "options": {
+        "jestConfig": "apps/ltv-calculation-api/jest.config.ts",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
+    }
+  },
+  "tags": [
+    "scope:api:app:ltv-calculation-api"
+  ]
+}

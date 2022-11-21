@@ -1,0 +1,30 @@
+{
+  "name": "api-ltv-calculation-api-data-transfer-objects",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/ltv-calculation-api/data-transfer-objects/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/api/ltv-calculation-api/data-transfer-objects/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/api/ltv-calculation-api/data-transfer-objects/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": [
+    "scope:api:lib:ltv-calculation-api:shared",
+    "scope:api:lib:shared",
+    "scope:ui:lib:shared"
+  ]
+}

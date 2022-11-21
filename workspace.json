@@ -25,6 +25,10 @@
     "api-ltv-api-data-transfer-objects": "libs/api/ltv-api/data-transfer-objects",
     "api-ltv-api-ltv": "libs/api/ltv-api/ltv",
     "api-ltv-api-test-data": "libs/api/ltv-api/test-data",
+    "api-ltv-calculation-api": "apps/api/ltv-calculation-api",
+    "api-ltv-calculation-api-constants": "libs/api/ltv-calculation-api/constants",
+    "api-ltv-calculation-api-data-transfer-objects": "libs/api/ltv-calculation-api/data-transfer-objects",
+    "api-ltv-calculation-api-test-data": "libs/api/ltv-calculation-api/test-data",
     "api-mail-api-constants": "libs/api/mail-api/constants",
     "api-mail-api-contact": "libs/api/mail-api/contact",
     "api-mail-api-sendgrid": "libs/api/mail-api/sendgrid",
@@ -83,7 +87,6 @@
     "plugin-workspace-generator": "libs/plugin/workspace-generator",
     "referral-system-api": "apps/api/referral-system-api",
     "stress-tests": "apps/tests/stress",
-    "utils-test-api": "apps/tests/utils-test-api",
     "tests-utils-test-api-auth": "libs/tests/utils-test-api/auth",
     "tests-utils-test-api-constants": "libs/tests/utils-test-api/constants",
     "tests-utils-test-api-data-transfer-objects": "libs/tests/utils-test-api/data-transfer-objects",
@@ -112,6 +115,7 @@
     "ui-shared-theme": "libs/ui/shared/theme",
     "ui-shared-utils": "libs/ui/shared/utils",
     "user-api": "apps/api/user-api",
+    "utils-test-api": "apps/tests/utils-test-api",
     "webhook-api": "apps/api/webhook-api",
     "websocket-event-api": "apps/api/websocket-event-api"
   }
