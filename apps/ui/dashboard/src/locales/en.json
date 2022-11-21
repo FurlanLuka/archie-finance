@@ -186,7 +186,12 @@
   "next_payment_card": {
     "title": "Next Payment",
     "btn": "Pay now",
-    "chart": "Due in {{days}} days",
+    "chart_label": {
+      "future": "Due in {{days}} days",
+      "tomorrow": "Due tomorrow",
+      "today": "Due today",
+      "past": "Past due"
+    },
     "no_payment_due": "No payment due"
   },
   "dashboard_home": {
