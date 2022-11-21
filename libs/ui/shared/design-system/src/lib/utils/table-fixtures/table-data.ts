@@ -1,4 +1,14 @@
-export const tableData = [
+export interface TableDataEntry {
+  date: string;
+  description: {
+    title: string;
+    code: string;
+  };
+  status: string;
+  amount: string;
+}
+
+export const tableData: TableDataEntry[] = [
   {
     date: 'Yesterday',
     description: {
