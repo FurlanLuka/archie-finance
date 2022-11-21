@@ -4,30 +4,17 @@ import { CreditLine } from '@archie/api/credit-line-api/data-transfer-objects/ty
 import { Ledger } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { LtvStatus } from '@archie/api/ltv-api/data-transfer-objects/types';
 import {
+  CollateralAsset,
   CollateralAssets,
   CollateralCurrency,
 } from '@archie/ui/shared/constants';
 import { Table } from '@archie/ui/shared/design-system';
 
 import { tableColumns } from '../../fixtures/table-fixtures';
+import { AssetValue } from '../../fixtures/table-fixtures.interfaces';
 import { AssetsAllocation } from '../assets-allocation/assets-allocation';
 
-type AssetMap = Record<
-  CollateralCurrency,
-  {
-    collateral_asset: string;
-    balance: string;
-    holdings: string;
-    change: {
-      collateral_asset: string;
-    };
-    allocation: number;
-    actions: {
-      collateral_asset: string;
-      isHolding: boolean;
-    };
-  }
->;
+type AssetMap = Record<CollateralCurrency, AssetValue>;
 
 interface CollateralInfoProps {
   ledger: Ledger;
@@ -44,52 +31,55 @@ export const CollateralInfo: FC<CollateralInfoProps> = ({
   const isInMarginCall = ltvStatus === LtvStatus.margin_call;
 
   const assetMap: AssetMap = useMemo(() => {
-    return ledger.accounts.reduce((previousValue, ledgerAccount) => {
-      if (Number(ledgerAccount.assetAmount) === 0) {
-        return previousValue;
-      }
+    return ledger.accounts.reduce(
+      (previousValue: AssetMap, ledgerAccount): AssetMap => {
+        if (Number(ledgerAccount.assetAmount) === 0) {
+          return previousValue;
+        }
 
-      const creditLimitAssetAllocation =
-        creditLine.creditLimitAssetAllocation.find(
-          (item) => item.assetId === ledgerAccount.assetId,
-        );
+        const creditLimitAssetAllocation =
+          creditLine.creditLimitAssetAllocation.find(
+            (item) => item.assetId === ledgerAccount.assetId,
+          );
 
-      return {
-        ...previousValue,
-        [ledgerAccount.assetId]: {
-          collateral_asset: ledgerAccount.assetId,
-          balance: `$${ledgerAccount.accountValue}`,
-          holdings: `${ledgerAccount.assetAmount} ${ledgerAccount.assetId}`,
-          change: {
-            collateral_asset: ledgerAccount.assetId,
+        return {
+          ...previousValue,
+          [ledgerAccount.assetId]: {
+            collateralAsset: ledgerAccount.assetId,
+            balance: `$${ledgerAccount.accountValue}`,
+            holdings: `${ledgerAccount.assetAmount} ${ledgerAccount.assetId}`,
+            change: {
+              collateralAsset: ledgerAccount.assetId,
+            },
+            allocation: creditLimitAssetAllocation?.allocationPercentage ?? 0,
+            actions: {
+              collateralAsset: ledgerAccount.assetId,
+              isHolding: true,
+              isInMarginCall,
+            },
           },
-          allocation: creditLimitAssetAllocation?.allocationPercentage ?? 0,
-          actions: {
-            collateral_asset: ledgerAccount.assetId,
-            isHolding: true,
-            isInMarginCall,
-          },
-        },
-      };
-    }, {} as AssetMap);
+        };
+      },
+      {} as AssetMap,
+    );
   }, [creditLine, isInMarginCall, ledger.accounts]);
 
-  const tableData = useMemo(() => {
-    const notAddedAssets = Object.values(CollateralAssets).filter(
-      (asset) => assetMap[asset.id] === undefined,
-    );
+  const tableData: AssetValue[] = useMemo(() => {
+    const notAddedAssets: CollateralAsset[] = Object.values(
+      CollateralAssets,
+    ).filter((asset) => assetMap[asset.id] === undefined);
 
     return Object.values(assetMap).concat(
       notAddedAssets.map((item) => ({
-        collateral_asset: item.id,
+        collateralAsset: item.id,
         balance: '$0',
         holdings: `0 ${item.short}`,
         change: {
-          collateral_asset: item.id,
+          collateralAsset: item.id,
         },
         allocation: 0,
         actions: {
-          collateral_asset: item.id,
+          collateralAsset: item.id,
           isHolding: false,
           isInMarginCall,
         },

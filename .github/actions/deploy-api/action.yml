@@ -44,4 +44,4 @@ runs:
       env:
         KUBE_CONFIG_DATA: ${{ inputs.kube-config-data }}
       with:
-        command: helm upgrade --install ${{ inputs.projectName }} ./apps/api/${{ inputs.projectName }}/chart --set tag=${{ inputs.projectName }}-${{ inputs.image-tag }} --set image=${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr-repository }} --set environment=${{ inputs.environment }}
+        command: helm upgrade --install ${{ inputs.projectName }} ./charts/node-service --values ./charts/node-service/values.yaml --values ./charts/node-service/${{ inputs.environment }}.values.yaml --values apps/api/${{ inputs.projectName }}/deployment/values.yaml --values apps/api/${{ inputs.projectName }}/deployment/${{ inputs.environment }}.values.yaml --set tag=${{ inputs.projectName }}-${{ inputs.image-tag }} --set image=${{ steps.login-ecr.outputs.registry }}/${{ inputs.ecr-repository }}

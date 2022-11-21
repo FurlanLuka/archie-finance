@@ -1,44 +1,57 @@
-import { FC } from 'react';
-import { useTable, Column } from 'react-table';
+import {
+  useReactTable,
+  flexRender,
+  getCoreRowModel,
+  ColumnDef,
+} from '@tanstack/react-table';
 
 import { TableStyled } from './table.styled';
 
-export interface TableProps {
-  columns: Column<any>[];
-  data: Record<string, any>[];
+export interface TableProps<T> {
+  columns: ColumnDef<T>[];
+  data: T[];
 }
 
-export const Table: FC<TableProps> = ({ columns, data }) => {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({
-      columns,
-      data,
-    });
+export function Table<T>({ columns, data }: TableProps<T>) {
+  const { getRowModel, getHeaderGroups } = useReactTable({
+    columns,
+    data,
+    getCoreRowModel: getCoreRowModel(),
+  });
+  const headerGroups = getHeaderGroups();
+  const { rows } = getRowModel();
 
   return (
     <TableStyled>
-      <table {...getTableProps()}>
+      <table>
         <thead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr>
               {headerGroup.headers.map((column) =>
                 column.id.includes('hidden') ? null : (
-                  <th {...column.getHeaderProps()}>
-                    {column.render('Header')}
+                  <th>
+                    {flexRender(
+                      column.column.columnDef.header,
+                      column.getContext(),
+                    )}
                   </th>
                 ),
               )}
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody>
           {rows.map((row) => {
-            prepareRow(row);
             return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => {
+              <tr>
+                {row.getAllCells().map((cell) => {
                   return (
-                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                    <td key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </td>
                   );
                 })}
               </tr>
@@ -48,4 +61,4 @@ export const Table: FC<TableProps> = ({ columns, data }) => {
       </table>
     </TableStyled>
   );
-};
+}
