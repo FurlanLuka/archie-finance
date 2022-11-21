@@ -26,6 +26,10 @@ export enum ConfigVariables {
 export const LEDGER_ACCOUNT_UPDATED_TOPIC =
   new Event<LedgerAccountUpdatedPayload>('ledger.account.updated', 1);
 
+export const LEDGER_ACCOUNTS_UPDATED_TOPIC = new Event<
+  LedgerAccountUpdatedPayload[]
+>('ledger.accounts.updated', 1);
+
 export const INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND =
   new Event<InitiateLedgerAssetLiquidationCommandPayload>(
     'initiate.ledger.asset.liquidation',

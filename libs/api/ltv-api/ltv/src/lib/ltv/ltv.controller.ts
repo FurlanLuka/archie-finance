@@ -8,7 +8,10 @@ import { CreditNotSetUpError } from './ltv.errors';
 import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-line-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/ltv-api/constants';
 import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
-import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
+import {
+  LEDGER_ACCOUNT_UPDATED_TOPIC,
+  LEDGER_ACCOUNTS_UPDATED_TOPIC,
+} from '@archie/api/ledger-api/constants';
 import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
@@ -39,6 +42,14 @@ export class LtvQueueController {
   )
   async ledgerUpdated(payload: LedgerAccountUpdatedPayload): Promise<void> {
     return this.ltvService.handleLedgerAccountUpdatedEvent(payload);
+  }
+
+  @Subscribe(
+    LEDGER_ACCOUNTS_UPDATED_TOPIC,
+    LtvQueueController.CONTROLLER_QUEUE_NAME,
+  )
+  async ledgersUpdated(payload: LedgerAccountUpdatedPayload[]): Promise<void> {
+    return this.ltvService.handleLedgerAccountsUpdatedEvent(payload);
   }
 
   @Subscribe(

@@ -18,6 +18,10 @@ export interface Ledger {
   accounts: InternalLedgerAccountData[];
 }
 
+export interface UserGroupedLedger extends Ledger {
+  userId: string;
+}
+
 export interface LedgerAccountUpdatedPayload {
   userId: string;
   ledgerAccounts: LedgerAccountData[];

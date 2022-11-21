@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThan, Repository } from 'typeorm';
+import { In, LessThan, Repository } from 'typeorm';
 import { Credit } from './credit.entity';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
 import { DateTime } from 'luxon';
@@ -34,6 +34,14 @@ export class CreditService {
     });
 
     return credit?.utilizationAmount ?? 0;
+  }
+
+  public async getCreditBalances(userIds: string[]): Promise<Credit[]> {
+    const credits: Credit[] = await this.ltvCreditRepository.findBy({
+      userId: In(userIds),
+    });
+
+    return credits;
   }
 
   public async createCreditBalance(userId: string): Promise<void> {

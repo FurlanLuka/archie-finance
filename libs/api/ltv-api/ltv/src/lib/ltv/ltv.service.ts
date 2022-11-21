@@ -19,8 +19,12 @@ import { CreditService } from '../credit/credit.service';
 import { Lock } from '@archie/api/utils/redis';
 import { MarginService } from '../margin/margin.service';
 import { LedgerAccount } from '../ledger/ledger_account.entity';
-import { LtvMeta } from '../margin/margin.interfaces';
+import { LtvMeta, PerUserLtv } from '../margin/margin.interfaces';
 import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
+import { Credit } from '../credit/credit.entity';
+import { Liquidation } from '../margin/liquidation.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class LtvService {
@@ -30,6 +34,8 @@ export class LtvService {
     private ledgerService: LedgerService,
     private creditService: CreditService,
     private marginService: MarginService,
+    @InjectRepository(Liquidation)
+    private liquidationRepository: Repository<Liquidation>,
   ) {}
 
   async getCurrentLtv(userId: string): Promise<Ltv> {
@@ -75,6 +81,80 @@ export class LtvService {
     await this.marginService.executeMarginCallCheck(userId, ltv, ltvMeta);
   }
 
+  // TODO: lock
+  async handleLedgerAccountsUpdatedEvent(
+    ledgers: LedgerAccountUpdatedPayload[],
+  ): Promise<void> {
+    const userIds: string[] = ledgers.map((ledger) => ledger.userId);
+
+    await this.ledgerService.updateLedgers(ledgers);
+
+    const ledgerAccounts =
+      await this.ledgerService.getLedgerAccountsForMultipleUsers(userIds);
+    const creditBalances = await this.creditService.getCreditBalances(userIds);
+    const activeLiquidations: Liquidation[] =
+      //TODO: move query to separate service
+      await this.liquidationRepository.find({
+        where: {
+          marginCall: {
+            userId: In(userIds),
+          },
+        },
+        relations: {
+          marginCall: true,
+        },
+      });
+
+    const perUserLtv: PerUserLtv[] = await Promise.all(
+      ledgers.map(async ({ action, userId }: LedgerAccountUpdatedPayload) => {
+        // Can not happen in periodic check
+        if (action.type === LedgerActionType.LIQUIDATION) {
+          await this.marginService.acknowledgeLiquidationCollateralBalanceUpdate(
+            action.liquidation.id,
+          );
+        }
+
+        //TODO: create a setup stage to setup full account info
+        const usersLedgerAccounts = ledgerAccounts.filter(
+          (ledgerAccount) => ledgerAccount.userId === userId,
+        );
+        const usersCreditBalance = creditBalances.find(
+          (ledgerAccount) => ledgerAccount.userId === userId,
+        );
+        const usersActiveLiquidations = activeLiquidations.filter(
+          (liquidations) => liquidations.marginCall.userId === userId,
+        );
+
+        const ltvMeta: LtvMeta = await this.calculateNormalizedLtvMeta(
+          userId,
+          usersLedgerAccounts,
+          usersCreditBalance?.utilizationAmount ?? 0,
+          usersActiveLiquidations,
+        );
+
+        const ltv: number = this.ltvUtilService.calculateLtv(
+          ltvMeta.creditUtilization,
+          ltvMeta.ledgerValue,
+        );
+
+        this.queueService.publishEvent(LTV_UPDATED_TOPIC, {
+          userId,
+          ltv,
+        });
+
+        return {
+          userId,
+          ltv,
+          ltvMeta,
+        };
+      }),
+    );
+
+    await this.marginService.executeMarginCallChecks(perUserLtv);
+
+    // TODO: trigger processed EVENT
+  }
+
   @Lock((credit: CreditBalanceUpdatedPayload) => credit.userId)
   public async handleCreditBalanceUpdatedEvent(
     credit: CreditBalanceUpdatedPayload,
@@ -104,6 +184,23 @@ export class LtvService {
     );
   }
 
+  private calculateNormalizedLtvMeta(
+    userId: string,
+    ledgerAccounts: LedgerAccount[],
+    creditUtilization: number,
+    activeLiquidations: Liquidation[],
+  ): LtvMeta {
+    const ledgerValue: number =
+      this.ledgerService.getLedgerValue(ledgerAccounts);
+
+    return this.marginService.reducePendingLiquidationAmount(
+      userId,
+      creditUtilization,
+      ledgerValue,
+      activeLiquidations,
+    );
+  }
+
   private async getNormalizedLtvMeta(userId: string): Promise<LtvMeta> {
     const updatedLedgerAccounts: LedgerAccount[] =
       await this.ledgerService.getLedgerAccounts(userId);
@@ -114,7 +211,7 @@ export class LtvService {
       userId,
     );
 
-    return this.marginService.reducePendingLiquidationAmount(
+    return this.marginService.reducePendingLiquidationAmountWithLookup(
       userId,
       creditUtilization,
       ledgerValue,
