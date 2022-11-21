@@ -20,8 +20,6 @@ export const NextPaymentChart: FC<NextPaymentChartProps> = ({ dueDate }) => {
   const value = max - days;
   const backgroundSize = ((value - min) * 100) / (max - min) + '% 100%';
 
-  console.log(days);
-
   const getChartLabel = () => {
     if (days < 0) {
       return t('next_payment_card.chart_label.past');
