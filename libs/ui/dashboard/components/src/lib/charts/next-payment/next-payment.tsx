@@ -34,12 +34,12 @@ export const NextPaymentChart: FC<NextPaymentChartProps> = ({ dueDate }) => {
 
   const getChartColor = () => {
     if (days < 0) {
-      return theme.nextPaymentDanger;
+      return theme.textDanger;
     } else if (days === 0 || days === 1) {
-      return theme.nextPaymentWarning;
+      return theme.textWarning;
     }
 
-    return theme.nextPaymentOk;
+    return theme.textPositive;
   };
 
   return (

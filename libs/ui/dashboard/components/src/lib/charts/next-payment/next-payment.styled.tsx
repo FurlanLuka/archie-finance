@@ -10,7 +10,7 @@ export const NextPaymentChartStyled = styled.div<NextPaymentChartStyledProps>`
 
   input {
     display: block;
-    background-color: ${({ theme }) => theme.nextPaymentBackground};
+    background-color: ${({ theme }) => theme.backgroundDisabled};
     background-image: ${({ backgroundColor }) =>
       `linear-gradient(${backgroundColor}, ${backgroundColor})`};
     background-size: ${({ backgroundSize }) => backgroundSize};
