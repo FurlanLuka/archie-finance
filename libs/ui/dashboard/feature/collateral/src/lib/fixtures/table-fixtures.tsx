@@ -1,9 +1,9 @@
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
-import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { CollateralAssets } from '@archie/ui/shared/constants';
 import { useGetAssetPrice } from '@archie/ui/shared/data-access/archie-api/asset_price/hooks/use-get-asset-price';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
@@ -13,6 +13,7 @@ import {
 } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
+import { AssetValue } from './table-fixtures.interfaces';
 import {
   AlignCenterCellStyled,
   ChangeCellStyled,
@@ -113,62 +114,50 @@ const ActionsCell: FC<ActionsCellProps> = ({ canClaim, id }) => {
   );
 };
 
-export const tableColumns = [
-  {
-    Header: '',
-    id: 'hidden',
-    columns: [
-      {
-        Header: '',
-        accessor: 'collateral_asset',
-        width: 3,
-        Cell: ({ value }: any) => {
-          return <CollateralAssetCell id={value} />;
-        },
-      },
-      {
-        Header: 'Balance',
-        accessor: 'balance',
-        width: 2,
-      },
-      {
-        Header: 'Holdings',
-        accessor: 'holdings',
-        width: 2,
-      },
-      {
-        Header: (
-          <AlignCenterCellStyled>Allocation Percentage</AlignCenterCellStyled>
-        ),
-        accessor: 'allocation',
-        width: 1,
-        Cell: ({ value }: any) => {
-          return <AllocationCell value={value} />;
-        },
-      },
-      {
-        Header: <AlignCenterCellStyled>Change</AlignCenterCellStyled>,
-        accessor: 'change',
-        width: 1,
-        Cell: ({ value: { collateral_asset } }: any) => {
-          return <ChangeCell id={collateral_asset} />;
-        },
-      },
-      {
-        Header: '',
-        accessor: 'actions',
-        width: 1,
-        Cell: ({
-          value: { collateral_asset, isHolding, isInMarginCall },
-        }: any) => {
-          return (
-            <ActionsCell
-              id={collateral_asset}
-              canClaim={isHolding && !isInMarginCall}
-            />
-          );
-        },
-      },
-    ],
-  },
+const columnHelper = createColumnHelper<AssetValue>();
+
+export const tableColumns: ColumnDef<AssetValue, any>[] = [
+  columnHelper.accessor('collateralAsset', {
+    header: '',
+    cell: ({ getValue }) => {
+      return <CollateralAssetCell id={getValue()} />;
+    },
+  }),
+  columnHelper.accessor('balance', {
+    header: 'Balance',
+    cell: ({ renderValue }) => renderValue(),
+  }),
+  columnHelper.accessor('holdings', {
+    header: 'Holdings',
+    cell: ({ renderValue }) => renderValue(),
+  }),
+  columnHelper.accessor('allocation', {
+    header: () => (
+      <AlignCenterCellStyled>Allocation Percentage</AlignCenterCellStyled>
+    ),
+    cell: ({ getValue }) => {
+      return <AllocationCell value={getValue()} />;
+    },
+  }),
+  columnHelper.accessor('change', {
+    header: () => <AlignCenterCellStyled>Change</AlignCenterCellStyled>,
+    cell: ({ getValue }) => {
+      const { collateralAsset } = getValue();
+
+      return <ChangeCell id={collateralAsset} />;
+    },
+  }),
+  columnHelper.accessor('actions', {
+    header: '',
+    cell: ({ getValue }) => {
+      const { collateralAsset, isHolding, isInMarginCall } = getValue();
+
+      return (
+        <ActionsCell
+          id={collateralAsset}
+          canClaim={isHolding && !isInMarginCall}
+        />
+      );
+    },
+  }),
 ];
