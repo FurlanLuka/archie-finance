@@ -41,6 +41,7 @@ export const InputRangeStyled = styled.label<InputRangeStyledProps>`
       width: 1.5rem;
       height: 1.5rem;
       background-color: ${({ theme }) => theme.inputRangeFilled};
+      border: 0;
       border-radius: 100%;
       appearance: none;
       -webkit-appearance: none;
@@ -51,7 +52,10 @@ export const InputRangeStyled = styled.label<InputRangeStyledProps>`
       width: 1.5rem;
       height: 1.5rem;
       background-color: ${({ theme }) => theme.inputRangeFilled};
+      border: 0;
       border-radius: 100%;
+      appearance: none;
+      -webkit-appearance: none;
       cursor: pointer;
     }
   }
