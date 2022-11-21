@@ -16,6 +16,7 @@ import microserviceProjectTargetGenerator from '../microservice-project-target-g
 
 export interface NormalizedSchema extends MicroserviceGenerator {
   projectRoot: string;
+  constantsRoot: string
 }
 
 function normalizeOptions(
@@ -28,9 +29,16 @@ function normalizeOptions(
     options.name,
   );
 
+  const constantsRoot = joinPathFragments(
+    getWorkspaceLayout(tree).libsDir,
+    `api/${options.name}/constants`,
+  );
+
+
   return {
     ...options,
     projectRoot,
+    constantsRoot
   };
 }
 
