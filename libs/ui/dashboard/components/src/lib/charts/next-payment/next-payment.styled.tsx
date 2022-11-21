@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 interface NextPaymentChartStyledProps {
   backgroundSize: string;
+  backgroundColor: string;
 }
 
 export const NextPaymentChartStyled = styled.div<NextPaymentChartStyledProps>`
@@ -9,9 +10,9 @@ export const NextPaymentChartStyled = styled.div<NextPaymentChartStyledProps>`
 
   input {
     display: block;
-    background-color: ${({ theme }) => theme.nextPaymentDefault};
-    background-image: ${({ theme }) =>
-      `linear-gradient(${theme.nextPaymentActive}, ${theme.nextPaymentActive})`};
+    background-color: ${({ theme }) => theme.nextPaymentBackground};
+    background-image: ${({ backgroundColor }) =>
+      `linear-gradient(${backgroundColor}, ${backgroundColor})`};
     background-size: ${({ backgroundSize }) => backgroundSize};
     background-repeat: no-repeat;
     border-radius: 0.25rem;
@@ -24,10 +25,14 @@ export const NextPaymentChartStyled = styled.div<NextPaymentChartStyledProps>`
 
     ::-webkit-slider-thumb {
       display: none;
+      background-color: transparent;
+      border: 0;
     }
 
     ::-moz-range-thumb {
       display: none;
+      background-color: transparent;
+      border: 0;
     }
   }
 `;
