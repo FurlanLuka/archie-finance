@@ -28,6 +28,7 @@
     "api-ltv-calculation-api": "apps/api/ltv-calculation-api",
     "api-ltv-calculation-api-constants": "libs/api/ltv-calculation-api/constants",
     "api-ltv-calculation-api-data-transfer-objects": "libs/api/ltv-calculation-api/data-transfer-objects",
+    "api-ltv-calculation-api-ltv-calculation": "libs/api/ltv-calculation-api/ltv-calculation",
     "api-ltv-calculation-api-test-data": "libs/api/ltv-calculation-api/test-data",
     "api-mail-api-constants": "libs/api/mail-api/constants",
     "api-mail-api-contact": "libs/api/mail-api/contact",

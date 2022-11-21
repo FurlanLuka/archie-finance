@@ -105,6 +105,9 @@
       "@archie/api/ltv-calculation-api/data-transfer-objects": [
         "libs/api/ltv-calculation-api/data-transfer-objects/src/index.ts"
       ],
+      "@archie/api/ltv-calculation-api/ltv-calculation": [
+        "libs/api/ltv-calculation-api/ltv-calculation/src/index.ts"
+      ],
       "@archie/api/ltv-calculation-api/test-data": [
         "libs/api/ltv-calculation-api/test-data/src/index.ts"
       ],
