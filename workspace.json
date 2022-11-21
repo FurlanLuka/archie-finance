@@ -21,6 +21,10 @@
     "api-ledger-api-data-transfer-objects": "libs/api/ledger-api/data-transfer-objects",
     "api-ledger-api-ledger": "libs/api/ledger-api/ledger",
     "api-ledger-api-test-data": "libs/api/ledger-api/test-data",
+    "api-ledger-recalculation-scheduler-api": "apps/api/ledger-recalculation-scheduler-api",
+    "api-ledger-recalculation-scheduler-api-constants": "libs/api/ledger-recalculation-scheduler-api/constants",
+    "api-ledger-recalculation-scheduler-api-data-transfer-objects": "libs/api/ledger-recalculation-scheduler-api/data-transfer-objects",
+    "api-ledger-recalculation-scheduler-api-test-data": "libs/api/ledger-recalculation-scheduler-api/test-data",
     "api-ltv-api-constants": "libs/api/ltv-api/constants",
     "api-ltv-api-data-transfer-objects": "libs/api/ltv-api/data-transfer-objects",
     "api-ltv-api-ltv": "libs/api/ltv-api/ltv",
@@ -83,7 +87,6 @@
     "plugin-workspace-generator": "libs/plugin/workspace-generator",
     "referral-system-api": "apps/api/referral-system-api",
     "stress-tests": "apps/tests/stress",
-    "utils-test-api": "apps/tests/utils-test-api",
     "tests-utils-test-api-auth": "libs/tests/utils-test-api/auth",
     "tests-utils-test-api-constants": "libs/tests/utils-test-api/constants",
     "tests-utils-test-api-data-transfer-objects": "libs/tests/utils-test-api/data-transfer-objects",
@@ -112,6 +115,7 @@
     "ui-shared-theme": "libs/ui/shared/theme",
     "ui-shared-utils": "libs/ui/shared/utils",
     "user-api": "apps/api/user-api",
+    "utils-test-api": "apps/tests/utils-test-api",
     "webhook-api": "apps/api/webhook-api",
     "websocket-event-api": "apps/api/websocket-event-api"
   }

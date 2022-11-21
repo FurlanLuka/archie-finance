@@ -1,0 +1,94 @@
+{
+  "name": "api-ledger-recalculation-scheduler-api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/api/ledger-recalculation-scheduler-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/api/ledger-recalculation-scheduler-api",
+        "main": "apps/api/ledger-recalculation-scheduler-api/src/main.ts",
+        "tsConfig": "apps/api/ledger-recalculation-scheduler-api/tsconfig.app.json",
+        "assets": [
+          "apps/api/ledger-recalculation-scheduler-api/src/assets"
+        ],
+        "tsPlugins": [
+          "@nestjs/swagger/plugin"
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/api/ledger-recalculation-scheduler-api/src/environments/environment.ts",
+              "with": "apps/api/ledger-recalculation-scheduler-api/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "api-ledger-recalculation-scheduler-api:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "api-ledger-recalculation-scheduler-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": [
+        "{options.outputFile}"
+      ],
+      "options": {
+        "lintFilePatterns": [
+          "apps/api/ledger-recalculation-scheduler-api/**/*.ts"
+        ]
+      }
+    },
+    "build-openapi": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build ledger-recalculation-scheduler-api && RUN_MIGRATIONS=false node dist/apps/ledger-recalculation-scheduler-api/main build-swagger"
+      }
+    },
+    "generate-migration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run build ledger-recalculation-scheduler-api && node dist/apps/ledger-recalculation-scheduler-api/main generate-migration"
+      }
+    },
+    "build-docker": {
+      "executor": "@archie/plugin/deployment:docker-build"
+    },
+    "test-integration": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "coverage/apps/ledger-recalculation-scheduler-api"
+      ],
+      "options": {
+        "jestConfig": "apps/ledger-recalculation-scheduler-api/jest.config.ts",
+        "passWithNoTests": true,
+        "runInBand": true
+      }
+    },
+    "deploy": {
+      "executor": "@archie/plugin/deployment:deploy"
+    }
+  },
+  "tags": [
+    "scope:api:app:ledger-recalculation-scheduler-api"
+  ]
+}
