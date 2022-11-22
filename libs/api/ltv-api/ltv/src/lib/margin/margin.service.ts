@@ -17,9 +17,7 @@ import {
   MarginCallStatus,
   MarginCall as MarginCallResponse,
 } from '@archie/api/ltv-api/data-transfer-objects/types';
-import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
-import { LedgerAccount } from '../../../../../ledger-api/ledger/src/lib/ledger/ledger_account.entity';
-import { GroupingHelper, Map } from '@archie/api/utils/helpers';
+import { GroupingHelper, GroupMap } from '@archie/api/utils/helpers';
 
 @Injectable()
 export class MarginService {
@@ -207,7 +205,7 @@ export class MarginService {
   public async executeMarginCallChecks(
     perUserLtv: PerUserLtv[],
   ): Promise<void> {
-    const userIds = perUserLtv.map((perUserLtv) => perUserLtv.userId);
+    const userIds = perUserLtv.map((user) => user.userId);
 
     const [activeMarginCalls, lastMarginChecks, marginNotifications]: [
       MarginCall[],
@@ -229,15 +227,15 @@ export class MarginService {
         userId: In(userIds),
       }),
     ]);
-    const activeMarginCallsPerUser: Map<MarginCall> = GroupingHelper.mapBy(
+    const activeMarginCallsPerUser: GroupMap<MarginCall> = GroupingHelper.mapBy(
       activeMarginCalls,
       (marginCall) => marginCall.userId,
     );
-    const lastMarginCheckPerUser: Map<MarginCheck> = GroupingHelper.mapBy(
+    const lastMarginCheckPerUser: GroupMap<MarginCheck> = GroupingHelper.mapBy(
       lastMarginChecks,
       (marginCheck) => marginCheck.userId,
     );
-    const marginNotificationPerUser: Map<MarginNotification> =
+    const marginNotificationPerUser: GroupMap<MarginNotification> =
       GroupingHelper.mapBy(
         marginNotifications,
         (marginNotification) => marginNotification.userId,

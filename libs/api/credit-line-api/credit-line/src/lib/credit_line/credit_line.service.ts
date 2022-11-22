@@ -20,7 +20,6 @@ import {
 import BigNumber from 'bignumber.js';
 import { CreditLimitAssetAllocationService } from '../credit_limit_asset_allocation/credit_limit_asset_allocation.service';
 import { Lock } from '@archie/api/utils/redis';
-import { GroupingHelper } from '@archie/api/utils/helpers';
 import { LedgerAccountsPerUser } from '../ledger/ledger.interfaces';
 
 @Injectable()
@@ -77,7 +76,7 @@ export class CreditLineService {
       const updatedLedgerValue: number =
         this.ledgerService.getLedgerValue(usersLedgerAccounts);
 
-      const percentageDifference = this.getPercentageDifference(
+      const percentageDifference: number = this.getPercentageDifference(
         calculatedOnLedgerValue,
         updatedLedgerValue,
       );

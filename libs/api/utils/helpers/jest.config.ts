@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'api-utils--helpers',
+  displayName: 'api-utils-helpers',
   preset: '../../../../jest.preset.js',
   globals: {
     'ts-jest': {

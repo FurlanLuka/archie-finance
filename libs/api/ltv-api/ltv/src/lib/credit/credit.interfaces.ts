@@ -1,4 +1,4 @@
 import { Credit } from './credit.entity';
-import { Map } from '@archie/api/utils/helpers';
+import { GroupMap } from '@archie/api/utils/helpers';
 
-export type CreditPerUser = Map<Credit>;
+export type CreditPerUser = GroupMap<Credit>;

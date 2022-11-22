@@ -50,7 +50,7 @@
     "api-user-api-kyc": "libs/api/user-api/kyc",
     "api-user-api-test-data": "libs/api/user-api/test-data",
     "api-user-api-user": "libs/api/user-api/user",
-    "api-utils--helpers": "libs/api/utils/helpers",
+    "api-utils-helpers": "libs/api/utils/helpers",
     "api-utils-auth0": "libs/api/utils/auth0",
     "api-utils-config": "libs/api/utils/config",
     "api-utils-crypto": "libs/api/utils/crypto",

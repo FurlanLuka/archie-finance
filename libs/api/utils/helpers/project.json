@@ -1,5 +1,5 @@
 {
-  "name": "api-utils--helpers",
+  "name": "api-utils-helpers",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/api/utils/helpers/src",
   "projectType": "library",
@@ -20,5 +20,5 @@
       }
     }
   },
-  "tags": []
+  "tags": ["scope:api:lib:shared"]
 }

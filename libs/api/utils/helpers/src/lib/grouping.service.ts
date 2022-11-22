@@ -1,15 +1,19 @@
+import { Group, GroupMap } from './helper.interfaces';
+
 export class GroupingHelper {
   public static groupBy<T extends object>(
     data: T[],
     groupByPropertyFn: (elt: T) => string,
-  ): Record<string, T[]> {
-    return data.reduce((grouped: Record<string, T[]>, element: T) => {
+  ): Group<T> {
+    return data.reduce((grouped: Group<T>, element: T) => {
       const groupProperty: string = groupByPropertyFn(element);
 
-      if (grouped[groupProperty] === undefined) {
+      const existingElements: T[] | undefined = grouped[groupProperty];
+
+      if (existingElements === undefined) {
         grouped[groupProperty] = [element];
       } else {
-        grouped[groupProperty].push(element);
+        existingElements.push(element);
       }
 
       return grouped;
@@ -19,8 +23,8 @@ export class GroupingHelper {
   public static mapBy<T extends object>(
     data: T[],
     groupByPropertyFn: (elt: T) => string,
-  ): Record<string, T> {
-    return data.reduce((grouped: Record<string, T>, element: T) => {
+  ): GroupMap<T> {
+    return data.reduce((grouped: GroupMap<T>, element: T) => {
       const groupProperty: string = groupByPropertyFn(element);
 
       grouped[groupProperty] = element;
