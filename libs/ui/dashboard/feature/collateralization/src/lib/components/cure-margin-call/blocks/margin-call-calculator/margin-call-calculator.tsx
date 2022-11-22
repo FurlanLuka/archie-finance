@@ -11,19 +11,18 @@ import { CollateralAsset } from '@archie/ui/shared/constants';
 import { Table, InputText } from '@archie/ui/shared/design-system';
 import { theme } from '@archie/ui/shared/theme';
 
-import { CollaterizationFormStyled } from './collaterization-form.styled';
 import { tableColumns } from './fixtures/table-fixtures';
 import { LtvTableEntry } from './fixtures/table-fixtures.interfaces';
+import { MarginCallCalculatorStyled } from './margin-call-calculator.styled';
 
-interface CollateralizationFormProps {
+interface MarginCallCalculatorProps {
   assetInfo: CollateralAsset;
   assetPrice: number;
   creditBalance: number;
   collateralTotalValue: number;
 }
 
-// TODO rename to margin call something something
-export const CollateralizationForm: FC<CollateralizationFormProps> = ({
+export const MarginCallCalculator: FC<MarginCallCalculatorProps> = ({
   assetInfo,
   assetPrice,
   creditBalance,
@@ -105,11 +104,11 @@ export const CollateralizationForm: FC<CollateralizationFormProps> = ({
   }, [customLtv]);
 
   return (
-    <CollaterizationFormStyled>
+    <MarginCallCalculatorStyled>
       <div className="ltv-info">
         <Table columns={tableColumns(assetInfo.short)} data={tableData} />
       </div>
       <DepositAddress assetInfo={assetInfo} />
-    </CollaterizationFormStyled>
+    </MarginCallCalculatorStyled>
   );
 };
