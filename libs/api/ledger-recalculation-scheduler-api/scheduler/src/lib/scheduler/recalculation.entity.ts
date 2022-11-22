@@ -1,5 +1,8 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity({
+  name: 'ledger_recalculation',
+})
 export class LedgerRecalculation {
   @PrimaryGeneratedColumn('uuid')
   id: string;
