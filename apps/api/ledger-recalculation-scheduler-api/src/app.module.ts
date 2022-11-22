@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigVariables } from '@archie/api/ledger-recalculation-scheduler-api/constants';
 import { migrations } from './migrations';
 import { QueueModule } from '@archie/api/utils/queue';
+import { SchedulerModule } from '@archie/api/ledger-recalculation-scheduler-api/scheduler';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { QueueModule } from '@archie/api/utils/queue';
     }),
     QueueModule.register(),
     HealthModule,
+    SchedulerModule,
   ],
   controllers: [],
   providers: [],

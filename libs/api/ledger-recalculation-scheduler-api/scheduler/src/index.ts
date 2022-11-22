@@ -1,1 +1,1 @@
-console.log("hey there!");
+export { SchedulerModule } from './lib/scheduler/scheduler.module';
