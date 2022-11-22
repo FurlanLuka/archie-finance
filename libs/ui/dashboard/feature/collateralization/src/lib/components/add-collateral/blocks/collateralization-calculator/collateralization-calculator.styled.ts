@@ -20,7 +20,7 @@ const fadeOut = keyframes`
   }
 `;
 
-export const CollaterizationFormStyled = styled.div`
+export const CollateralizationCalculatorStyled = styled.div`
   width: 100%;
   max-width: 730px;
 

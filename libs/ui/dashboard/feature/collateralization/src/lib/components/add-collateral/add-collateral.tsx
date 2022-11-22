@@ -18,7 +18,7 @@ import {
 
 import { CollateralUpdatedModal } from '../../components/modals/collateral-updated/collateral-updated';
 
-import { CollateralizationForm } from './blocks/collaterization-form/collaterization-form';
+import { CollateralizationCalculator } from './blocks/collateralization-calculator/collateralization-calculator';
 
 interface AddCollateralProps {
   selectedAsset: string;
@@ -95,7 +95,7 @@ export const AddCollateral: FC<AddCollateralProps> = ({ selectedAsset }) => {
               })}
             </BodyL>
           )}
-          <CollateralizationForm
+          <CollateralizationCalculator
             assetInfo={assetInfo}
             assetPrice={BigNumber(assetPrice.price).toNumber()}
           />

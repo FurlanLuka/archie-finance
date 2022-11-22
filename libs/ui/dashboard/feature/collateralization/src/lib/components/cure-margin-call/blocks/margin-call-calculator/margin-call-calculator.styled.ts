@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const CollaterizationFormStyled = styled.div`
+export const MarginCallCalculatorStyled = styled.div`
   width: 100%;
   max-width: 730px;
 
