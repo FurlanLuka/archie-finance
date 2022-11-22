@@ -9,7 +9,7 @@ import { MarginAction } from './utils/utils.interfaces';
 import { MarginActionHandlersUtilService } from './utils/margin_action_handlers.service';
 import { MarginNotification } from './margin_notifications.entity';
 import { LtvMeta, PerUserLtv } from './margin.interfaces';
-import { Liquidation } from './liquidation.entity';
+import { Liquidation } from '../liquidation/liquidation.entity';
 import { MarginCallQueryDto } from '@archie/api/ltv-api/data-transfer-objects';
 import { MarginCallFactory } from './utils/margin_call_factory.service';
 import { BigNumber } from 'bignumber.js';
@@ -19,6 +19,7 @@ import {
 } from '@archie/api/ltv-api/data-transfer-objects/types';
 import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { LedgerAccount } from '../../../../../ledger-api/ledger/src/lib/ledger/ledger_account.entity';
+import { GroupingHelper, Map } from '@archie/api/utils/helpers';
 
 @Injectable()
 export class MarginService {
@@ -208,61 +209,49 @@ export class MarginService {
   ): Promise<void> {
     const userIds = perUserLtv.map((perUserLtv) => perUserLtv.userId);
 
-    const activeMarginCalls: MarginCall[] =
-      await this.marginCallsRepository.find({
+    const [activeMarginCalls, lastMarginChecks, marginNotifications]: [
+      MarginCall[],
+      MarginCheck[],
+      MarginNotification[],
+    ] = await Promise.all([
+      this.marginCallsRepository.find({
         where: {
           userId: In(userIds),
         },
         relations: {
           liquidation: true,
         },
-      });
-
-    const lastMarginChecks: MarginCheck[] =
-      await this.marginCheckRepository.findBy({
+      }),
+      this.marginCheckRepository.findBy({
         userId: In(userIds),
-      });
-    const marginNotifications: MarginNotification[] =
-      await this.marginNotificationRepository.findBy({
+      }),
+      this.marginNotificationRepository.findBy({
         userId: In(userIds),
-      });
-
-    // const marginCallsPerUser = userIds.reduce((marginCallsPerUser, userId) => {
-    //   const currentMarginCall: MarginCall | undefined =
-    //     marginCallsPerUser[userId].marginCall;
-    //   const lastMarginCheck: MarginCheck | undefined =
-    //     marginCallsPerUser[userId].marginCheck;
-    //   const marginNotifications: MarginNotification[] | undefined =
-    //     marginCallsPerUser[userId].marginNotifications;
-    //
-    //   marginCallsPerUser[userId] = {
-    //     marginCall: ,
-    //
-    //   }
-    //
-    //   return accountsPerUser;
-    // }, {});
+      }),
+    ]);
+    const activeMarginCallsPerUser: Map<MarginCall> = GroupingHelper.mapBy(
+      activeMarginCalls,
+      (marginCall) => marginCall.userId,
+    );
+    const lastMarginCheckPerUser: Map<MarginCheck> = GroupingHelper.mapBy(
+      lastMarginChecks,
+      (marginCheck) => marginCheck.userId,
+    );
+    const marginNotificationPerUser: Map<MarginNotification> =
+      GroupingHelper.mapBy(
+        marginNotifications,
+        (marginNotification) => marginNotification.userId,
+      );
 
     await Promise.all(
       perUserLtv.map(async ({ userId, ltv, ltvMeta }) => {
-        // TODO: move to user setup stage
         const activeMarginCall: MarginCall | null =
-          activeMarginCalls.find(
-            (marginCall) => marginCall.userId === userId,
-          ) ?? null;
-        const lastMarginCheck: MarginCheck | null =
-          lastMarginChecks.find(
-            (marginCheck) => marginCheck.userId === userId,
-          ) ?? null;
-        const marginNotification: MarginNotification | null =
-          marginNotifications.find(
-            (marginNotifications) => marginNotifications.userId === userId,
-          ) ?? null;
+          activeMarginCallsPerUser[userId] ?? null;
 
         const actions: MarginAction[] = this.marginCheckUtilService.getActions(
           activeMarginCall,
-          lastMarginCheck,
-          marginNotification,
+          lastMarginCheckPerUser[userId] ?? null,
+          marginNotificationPerUser[userId] ?? null,
           ltv,
           ltvMeta.ledgerValue,
         );

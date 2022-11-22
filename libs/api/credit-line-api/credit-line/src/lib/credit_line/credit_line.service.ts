@@ -5,7 +5,7 @@ import { LedgerAccount } from '../ledger/ledger_account.entity';
 import { AssetsService } from '../assets/assets.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreditLine } from './credit_line.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { QueueService } from '@archie/api/utils/queue';
 import {
   CREDIT_LINE_UPDATED_TOPIC,
@@ -20,6 +20,8 @@ import {
 import BigNumber from 'bignumber.js';
 import { CreditLimitAssetAllocationService } from '../credit_limit_asset_allocation/credit_limit_asset_allocation.service';
 import { Lock } from '@archie/api/utils/redis';
+import { GroupingHelper } from '@archie/api/utils/helpers';
+import { LedgerAccountsPerUser } from '../ledger/ledger.interfaces';
 
 @Injectable()
 export class CreditLineService {
@@ -47,6 +49,65 @@ export class CreditLineService {
       await this.ledgerService.getLedgerAccounts(userId);
 
     await this.tryUpdatingCreditLimit(userId, updatedLedgerAccounts);
+  }
+
+  // TODO: lock
+  public async ledgerAccountsUpdatedHandler(
+    ledgers: LedgerAccountUpdatedPayload[],
+  ): Promise<void> {
+    await this.ledgerService.updateLedgers(ledgers);
+
+    const userIds: string[] = ledgers.map((ledger) => ledger.userId);
+    const updatedLedgerAccounts: LedgerAccountsPerUser =
+      await this.ledgerService.getLedgerAccountsForMultipleUsers(userIds);
+
+    await this.tryUpdatingCreditLimits(userIds, updatedLedgerAccounts);
+  }
+
+  public async tryUpdatingCreditLimits(
+    userIds: string[],
+    ledgerAccounts: LedgerAccountsPerUser,
+  ): Promise<void> {
+    const creditLines: CreditLine[] = await this.creditLineRepository.findBy({
+      userId: In(userIds),
+    });
+    creditLines.map(async ({ userId, calculatedOnLedgerValue }: CreditLine) => {
+      const usersLedgerAccounts: LedgerAccount[] = ledgerAccounts[userId] ?? [];
+
+      const updatedLedgerValue: number =
+        this.ledgerService.getLedgerValue(usersLedgerAccounts);
+
+      const percentageDifference = this.getPercentageDifference(
+        calculatedOnLedgerValue,
+        updatedLedgerValue,
+      );
+
+      if (
+        percentageDifference >=
+        this.MINIMUM_COLLATERAL_CHANGE_PERCENTAGE_TO_ADJUST_CREDIT_LIMIT
+      ) {
+        const updatedCreditLimit =
+          this.calculateCreditLimit(usersLedgerAccounts);
+        const calculatedAt = new Date().toISOString();
+
+        await this.creditLineRepository.update(
+          {
+            userId,
+          },
+          {
+            creditLimit: updatedCreditLimit,
+            calculatedOnLedgerValue: updatedLedgerValue,
+            calculatedAt,
+          },
+        );
+
+        this.queueService.publishEvent(CREDIT_LINE_UPDATED_TOPIC, {
+          userId,
+          creditLimit: updatedCreditLimit,
+          calculatedAt,
+        });
+      }
+    });
   }
 
   public async tryUpdatingCreditLimit(

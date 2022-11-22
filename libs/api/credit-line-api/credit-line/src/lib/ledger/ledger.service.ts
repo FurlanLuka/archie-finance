@@ -1,10 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { LedgerAccountData } from '@archie/api/ledger-api/data-transfer-objects/types';
+import {
+  LedgerAccountData,
+  LedgerAccountUpdatedPayload,
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LedgerAccount } from '../ledger/ledger_account.entity';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { BigNumber } from 'bignumber.js';
 import { DateTime } from 'luxon';
+import { GroupingHelper } from '@archie/api/utils/helpers';
+import { LedgerAccountsPerUser } from './ledger.interfaces';
 
 @Injectable()
 export class LedgerService {
@@ -18,6 +23,49 @@ export class LedgerService {
     return this.ledgerAccountRepository.findBy({
       userId,
     });
+  }
+
+  public async getLedgerAccountsForMultipleUsers(
+    userIds: string[],
+  ): Promise<LedgerAccountsPerUser> {
+    const ledgerAccounts: LedgerAccount[] =
+      await this.ledgerAccountRepository.findBy({
+        userId: In(userIds),
+      });
+
+    return GroupingHelper.groupBy(
+      ledgerAccounts,
+      (ledgerAccount) => ledgerAccount.userId,
+    );
+  }
+
+  public async updateLedgers(
+    ledgers: LedgerAccountUpdatedPayload[],
+  ): Promise<void> {
+    const allLedgerAccounts: Partial<LedgerAccount>[] = ledgers.flatMap(
+      (ledger) => {
+        return ledger.ledgerAccounts.map(
+          (account): Partial<LedgerAccount> => ({
+            userId: ledger.userId,
+            assetId: account.assetId,
+            calculatedAt: account.calculatedAt,
+            value: BigNumber(account.accountValue)
+              .decimalPlaces(2, BigNumber.ROUND_DOWN)
+              .toNumber(),
+          }),
+        );
+      },
+    );
+
+    await this.ledgerAccountRepository
+      .createQueryBuilder()
+      .insert()
+      .into(LedgerAccount)
+      .values(allLedgerAccounts)
+      .onConflict(
+        `("assetId", "userId") DO UPDATE SET "calculatedAt" = EXCLUDED."calculatedAt", "value" = EXCLUDED."value" WHERE ledger_account."calculatedAt" <= EXCLUDED."calculatedAt"`,
+      )
+      .execute();
   }
 
   public async updateLedgerAccounts(

@@ -6,7 +6,7 @@ import { MarginCallPriceFactory } from './margin_call_price.factory';
 import { MarginCall } from '../../margin_calls.entity';
 import { MarginCheck } from '../../margin_check.entity';
 import { MarginNotification } from '../../margin_notifications.entity';
-import { Liquidation } from '../../liquidation.entity';
+import { Liquidation } from '../../../liquidation/liquidation.entity';
 
 @Module({
   controllers: [],

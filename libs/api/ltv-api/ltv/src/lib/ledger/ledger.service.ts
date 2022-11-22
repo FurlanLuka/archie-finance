@@ -8,6 +8,8 @@ import { LedgerAccount } from './ledger_account.entity';
 import { DataSource, In, Repository } from 'typeorm';
 import { BigNumber } from 'bignumber.js';
 import { DateTime } from 'luxon';
+import { LedgerAccountsPerUser } from './ledger.interfaces';
+import { GroupingHelper } from '@archie/api/utils/helpers';
 
 @Injectable()
 export class LedgerService {
@@ -25,10 +27,16 @@ export class LedgerService {
 
   public async getLedgerAccountsForMultipleUsers(
     userIds: string[],
-  ): Promise<LedgerAccount[]> {
-    return this.ledgerAccountRepository.findBy({
-      userId: In(userIds),
-    });
+  ): Promise<LedgerAccountsPerUser> {
+    const ledgerAccounts: LedgerAccount[] =
+      await this.ledgerAccountRepository.findBy({
+        userId: In(userIds),
+      });
+
+    return GroupingHelper.groupBy(
+      ledgerAccounts,
+      (ledgerAccount) => ledgerAccount.userId,
+    );
   }
 
   public async updateLedgerAccounts(

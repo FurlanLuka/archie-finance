@@ -5,17 +5,15 @@ import { UtilsModule } from './utils/utils.module';
 import { LedgerModule } from '../ledger/ledger.module';
 import { CreditModule } from '../credit/credit.module';
 import { MarginModule } from '../margin/margin.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Liquidation } from '../margin/liquidation.entity';
+import { LiquidationModule } from '../liquidation/liquidation.module';
 
 @Module({
-  // TODO: remove typeorm import
   imports: [
     UtilsModule,
     LedgerModule,
     CreditModule,
     MarginModule,
-    TypeOrmModule.forFeature([Liquidation]),
+    LiquidationModule,
   ],
   controllers: [LtvController, LtvQueueController],
   providers: [LtvService],

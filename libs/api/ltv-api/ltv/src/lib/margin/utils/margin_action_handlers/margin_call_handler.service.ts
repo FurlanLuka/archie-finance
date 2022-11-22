@@ -11,7 +11,7 @@ import { MARGIN_CALL_STARTED_TOPIC } from '@archie/api/ltv-api/constants';
 import { MarginCallPriceFactory } from './margin_call_price.factory';
 import { MarginActionHandlerPayload } from '../utils.interfaces';
 import { INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND } from '@archie/api/ledger-api/constants';
-import { Liquidation } from '../../liquidation.entity';
+import { Liquidation } from '../../../liquidation/liquidation.entity';
 
 @Injectable()
 export class MarginCallHandlerService {

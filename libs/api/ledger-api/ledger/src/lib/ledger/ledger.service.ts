@@ -28,8 +28,7 @@ import {
 import { BatchDecrementLedgerAccounts } from './ledger.interfaces';
 import { LedgerUser } from './ledger_user.entity';
 import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects/types';
-
-type LedgerAccountsPerUser = Record<string, LedgerAccount[]>;
+import { GroupingHelper } from '@archie/api/utils/helpers';
 
 @Injectable()
 export class LedgerService {
@@ -119,9 +118,50 @@ export class LedgerService {
     const assetPrices: AssetPrice[] =
       assetPrice ?? (await this.assetPricesService.getLatestAssetPrices());
 
+    return this.calculateLedgerState(ledgerAccounts, assetPrices);
+  }
+
+  async getLedgers(
+    userIds: string[],
+    assetPrice?: AssetPrice[],
+  ): Promise<UserGroupedLedger[]> {
+    const ledgerAccounts: LedgerAccount[] = await this.ledgerRepository.findBy({
+      userId: In(userIds),
+    });
+
+    const assetPrices: AssetPrice[] =
+      assetPrice ?? (await this.assetPricesService.getLatestAssetPrices());
+
+    const accountsPerUser = GroupingHelper.groupBy(
+      ledgerAccounts,
+      (account) => account.userId,
+    );
+
+    return Object.keys(accountsPerUser).map(
+      (userId: string): UserGroupedLedger => {
+        const userLedgerAccounts: LedgerAccount[] =
+          accountsPerUser[userId] ?? [];
+
+        const ledger: Ledger = this.calculateLedgerState(
+          userLedgerAccounts,
+          assetPrices,
+        );
+
+        return {
+          userId,
+          ...ledger,
+        };
+      },
+    );
+  }
+
+  private calculateLedgerState(
+    ledgerAccounts: LedgerAccount[],
+    assetPrices: AssetPrice[],
+  ): Ledger {
     let ledgerValue: BigNumber = BigNumber(0);
 
-    const accountData: InternalLedgerAccountData[] = ledgerAccounts.flatMap(
+    const accounts: InternalLedgerAccountData[] = ledgerAccounts.flatMap(
       ({ assetId, amount }) => {
         const assetInformation: AssetInformation | undefined =
           this.assetsService.getAssetInformation(assetId);
@@ -157,82 +197,8 @@ export class LedgerService {
 
     return {
       value: ledgerValue.decimalPlaces(2, BigNumber.ROUND_DOWN).toString(),
-      accounts: accountData,
+      accounts,
     };
-  }
-
-  async getLedgers(
-    userIds: string[],
-    assetPrice?: AssetPrice[],
-  ): Promise<UserGroupedLedger[]> {
-    const ledgerAccounts: LedgerAccount[] = await this.ledgerRepository.findBy({
-      userId: In(userIds),
-    });
-
-    const assetPrices: AssetPrice[] =
-      assetPrice ?? (await this.assetPricesService.getLatestAssetPrices());
-
-    const accountsPerUser: LedgerAccountsPerUser = ledgerAccounts.reduce(
-      (accountsPerUser: LedgerAccountsPerUser, account) => {
-        const currentAccounts: LedgerAccount[] | undefined =
-          accountsPerUser[account.userId];
-
-        accountsPerUser[account.userId] =
-          currentAccounts === undefined
-            ? [account]
-            : [...currentAccounts, account];
-
-        return accountsPerUser;
-      },
-      {},
-    );
-
-    return Object.keys(accountsPerUser).map(
-      (userId: string): UserGroupedLedger => {
-        const userLedgerAccounts: LedgerAccount[] = accountsPerUser[userId];
-
-        let ledgerValue: BigNumber = BigNumber(0);
-
-        const accountData: InternalLedgerAccountData[] =
-          userLedgerAccounts.flatMap(({ assetId, amount }) => {
-            const assetInformation: AssetInformation | undefined =
-              this.assetsService.getAssetInformation(assetId);
-
-            if (assetInformation === undefined) {
-              return [];
-            }
-
-            const accountAssetPrice: AssetPrice | undefined = assetPrices.find(
-              (asset) => asset.assetId === assetId,
-            );
-
-            if (accountAssetPrice === undefined) {
-              return [];
-            }
-
-            const accountValue = BigNumber(amount)
-              .multipliedBy(accountAssetPrice.price)
-              .decimalPlaces(2, BigNumber.ROUND_DOWN);
-
-            ledgerValue = ledgerValue.plus(accountValue);
-
-            return [
-              {
-                assetId: assetId,
-                assetPrice: accountAssetPrice.price.toString(),
-                accountValue: accountValue.toString(),
-                assetAmount: amount,
-              },
-            ];
-          });
-
-        return {
-          userId,
-          value: ledgerValue.decimalPlaces(2, BigNumber.ROUND_DOWN).toString(),
-          accounts: accountData,
-        };
-      },
-    );
   }
 
   async initiateLedgerRecalculation(): Promise<void> {

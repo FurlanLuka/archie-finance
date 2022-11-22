@@ -4,6 +4,8 @@ import { In, LessThan, Repository } from 'typeorm';
 import { Credit } from './credit.entity';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
 import { DateTime } from 'luxon';
+import { CreditPerUser } from './credit.interfaces';
+import { GroupingHelper } from '@archie/api/utils/helpers';
 
 @Injectable()
 export class CreditService {
@@ -36,12 +38,14 @@ export class CreditService {
     return credit?.utilizationAmount ?? 0;
   }
 
-  public async getCreditBalances(userIds: string[]): Promise<Credit[]> {
+  public async getCreditBalanceForMultipleUsers(
+    userIds: string[],
+  ): Promise<CreditPerUser> {
     const credits: Credit[] = await this.ltvCreditRepository.findBy({
       userId: In(userIds),
     });
 
-    return credits;
+    return GroupingHelper.mapBy(credits, (credit) => credit.userId);
   }
 
   public async createCreditBalance(userId: string): Promise<void> {
