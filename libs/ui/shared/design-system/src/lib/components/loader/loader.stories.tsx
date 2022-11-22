@@ -1,7 +1,5 @@
 import { Story } from '@ladle/react';
 
-import { theme } from '@archie/ui/shared/theme';
-
 import { StoriesContainer } from '../../utils/stories-container/stories-container';
 import { StoriesTitle } from '../../utils/stories-title/stories-title';
 
@@ -16,20 +14,26 @@ export default {
   },
 };
 
-export const Default: Story = () => (
+export const Primary: Story<LoaderProps> = (props) => (
   <StoriesContainer>
-    <StoriesTitle title="Loader" subtitle="default" />
-    <Loader />
-  </StoriesContainer>
-);
-
-export const WithCustomColor: Story<LoaderProps> = (props) => (
-  <StoriesContainer>
-    <StoriesTitle title="Loader" subtitle="with custom color" />
+    <StoriesTitle title="Loader" subtitle="primary" />
     <Loader {...props} />
   </StoriesContainer>
 );
 
-WithCustomColor.args = {
-  color: theme.loadingBorder,
+Primary.args = {
+  marginAuto: false,
+  small: false,
+};
+
+export const Small: Story<LoaderProps> = (props) => (
+  <StoriesContainer>
+    <StoriesTitle title="Loader" subtitle="smaller" />
+    <Loader {...props} />
+  </StoriesContainer>
+);
+
+Small.args = {
+  marginAuto: false,
+  small: true,
 };
