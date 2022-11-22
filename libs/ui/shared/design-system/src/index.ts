@@ -11,7 +11,6 @@ export * from './lib/components/layout/layout.styled';
 export * from './lib/components/link/link.styled';
 export * from './lib/components/loader/loader.styled';
 export * from './lib/components/loader-full-screen/loader-full-screen';
-export * from './lib/components/loader-inline/loader-inline.styled';
 export * from './lib/components/modal/modal';
 export * from './lib/components/skeleton/skeleton.styled';
 export * from './lib/components/status/status.styled';
