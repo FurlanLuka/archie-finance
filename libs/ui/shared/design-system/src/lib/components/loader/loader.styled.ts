@@ -36,7 +36,7 @@ export const Loader = styled.div<LoaderProps>`
     position: absolute;
     inset: 0px;
     border-radius: 50%;
-    border: ${({ color, theme }) => color ?? `24px solid ${theme.loadingDot}`}; 
+    border: ${({ theme }) => `24px solid ${theme.loadingDot}`}; 
     animation: ${prixClipFix} 2s infinite linear;
   }
 `
