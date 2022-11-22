@@ -1,5 +1,5 @@
 {
-  "name": "api-ledger-recalculation-scheduler-api",
+  "name": "ledger-recalculation-scheduler-api",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/api/ledger-recalculation-scheduler-api/src",
   "projectType": "application",
@@ -33,11 +33,11 @@
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "api-ledger-recalculation-scheduler-api:build"
+        "buildTarget": "ledger-recalculation-scheduler-api:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "api-ledger-recalculation-scheduler-api:build:production"
+          "buildTarget": "ledger-recalculation-scheduler-api:build:production"
         }
       }
     },

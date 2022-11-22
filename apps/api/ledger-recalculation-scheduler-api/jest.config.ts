@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'api-ledger-recalculation-scheduler-api',
+  displayName: 'ledger-recalculation-scheduler-api',
   preset: '../../../jest.preset.js',
   globals: {
     'ts-jest': {

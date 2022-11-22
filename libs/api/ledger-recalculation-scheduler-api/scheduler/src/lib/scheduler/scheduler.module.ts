@@ -5,7 +5,7 @@ import { SchedulerService } from './scheduler.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([LedgerRecalculation])],
-  providers: [],
+  providers: [SchedulerService],
   exports: [SchedulerService],
 })
 export class SchedulerModule {}
