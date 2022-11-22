@@ -4,7 +4,11 @@ import { useTranslation } from 'react-i18next';
 
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetStatements } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-statements';
-import { ButtonOutline, Select, BodyS } from '@archie/ui/shared/design-system';
+import {
+  LinkAsButtonOutline,
+  Select,
+  BodyS,
+} from '@archie/ui/shared/design-system';
 import { Icon } from '@archie/ui/shared/icons';
 import { theme } from '@archie/ui/shared/theme';
 
@@ -33,10 +37,10 @@ export const Statements: FC = () => {
           >
             {[]}
           </Select>
-          <ButtonOutline small width="175px" isLoading>
-            {t('dashboard_history.btn_statements')}{' '}
+          <LinkAsButtonOutline small isLoading>
+            {t('dashboard_history.btn_statements')}
             <Icon name="download" fill={theme.textDisabled} />
-          </ButtonOutline>
+          </LinkAsButtonOutline>
         </>
       );
     }
@@ -59,10 +63,10 @@ export const Statements: FC = () => {
             >
               {[]}
             </Select>
-            <ButtonOutline small width="175px" isDisabled>
-              {t('dashboard_history.btn_statements')}{' '}
+            <LinkAsButtonOutline small isDisabled>
+              {t('dashboard_history.btn_statements')}
               <Icon name="download" fill={theme.textDisabled} />
-            </ButtonOutline>
+            </LinkAsButtonOutline>
           </>
         );
       }

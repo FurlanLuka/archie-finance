@@ -63,32 +63,7 @@ export const DepositAddressStyled = styled.div<{ showTerms?: boolean }>`
   }
 
   .info-group {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
     margin-bottom: 1.5rem;
-  }
-
-  .info-link-url {
-    display: flex;
-    align-items: center;
-    color: ${({ theme }) => theme.textHighlight};
-
-    margin-top: 0.05rem;
-  }
-
-  .info-link {
-    display: flex;
-    gap: 0.25rem;
-
-    @media (max-width: ${breakpoints.screenSM}) {
-      flex-direction: column;
-      gap: 0;
-    }
-  }
-
-  .info-link-icon {
-    margin-left: 0.25rem;
   }
 
   .divider {

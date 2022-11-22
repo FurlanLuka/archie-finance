@@ -5,7 +5,7 @@ import { Statement } from '@archie/api/peach-api/data-transfer-objects/types';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetStatementDocument } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-statement-document';
 import {
-  ButtonOutline,
+  LinkAsButtonOutline,
   Select,
   SelectOption,
   BodyM,
@@ -13,8 +13,6 @@ import {
 } from '@archie/ui/shared/design-system';
 import { Icon } from '@archie/ui/shared/icons';
 import { theme } from '@archie/ui/shared/theme';
-
-import { StatementDocumentLink } from './statement-download.styled';
 
 interface StatementDownloadProps {
   statements: Statement[];
@@ -48,36 +46,35 @@ export const StatementDownload: FC<StatementDownloadProps> = ({
     </SelectOption>
   ));
 
-  // TODO add link to design system and stop using button
   const getDownloadLink = () => {
     if (getStatementDocumentResponse.state === RequestState.LOADING) {
       return (
-        <ButtonOutline small width="175px" isLoading>
-          {t('dashboard_history.btn_statements')}{' '}
+        <LinkAsButtonOutline small isLoading>
+          {t('dashboard_history.btn_statements')}
           <Icon name="download" fill={theme.textDisabled} />
-        </ButtonOutline>
+        </LinkAsButtonOutline>
       );
     }
 
     if (getStatementDocumentResponse.state === RequestState.SUCCESS) {
       return (
-        <StatementDocumentLink
+        <LinkAsButtonOutline
+          small
           href={getStatementDocumentResponse.data.url}
-          download
           target="_blank"
           rel="noopener noreferrer"
         >
-          {t('dashboard_history.btn_statements')}{' '}
+          {t('dashboard_history.btn_statements')}
           <Icon name="download" fill={theme.textHighlight} />
-        </StatementDocumentLink>
+        </LinkAsButtonOutline>
       );
     }
 
     return (
-      <ButtonOutline small width="175px" isDisabled>
-        {t('dashboard_history.btn_statements')}{' '}
+      <LinkAsButtonOutline small isDisabled>
+        {t('dashboard_history.btn_statements')}
         <Icon name="download" fill={theme.textDisabled} />
-      </ButtonOutline>
+      </LinkAsButtonOutline>
     );
   };
 

@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
 export const LoaderFullScreenStyled = styled.div`
-  position: fixed;
-  left: 0;
+  position: absolute;
   top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
   background-color: ${({ theme }) => theme.loadingBackground};
-  width: 100%;
-  height: 100%;
   z-index: 9999999999;
   display: flex;
   align-items: center;

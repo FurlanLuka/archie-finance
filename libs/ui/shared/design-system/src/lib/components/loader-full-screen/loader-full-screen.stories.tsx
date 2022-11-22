@@ -17,6 +17,8 @@ export default {
 export const Default: Story = () => (
   <StoriesContainer>
     <StoriesTitle title="Loader Full Screen" />
-    <LoaderFullScreen />
+    <div style={{ position: 'relative', height: '85%' }}>
+      <LoaderFullScreen />
+    </div>
   </StoriesContainer>
 );

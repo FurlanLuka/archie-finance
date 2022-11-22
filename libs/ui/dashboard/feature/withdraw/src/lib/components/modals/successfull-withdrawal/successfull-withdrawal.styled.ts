@@ -12,9 +12,4 @@ export const SuccessfullWithdrawalModalStyled = styled.div`
   .modal-subtitle {
     margin-bottom: 1.5rem;
   }
-
-  .link {
-    color: ${({ theme }) => theme.textHighlight};
-    padding-left: 0.25rem;
-  }
 `;

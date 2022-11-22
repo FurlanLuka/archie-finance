@@ -15,7 +15,28 @@ const flash = keyframes`
   }
 `
 
-export interface ButtonProps {
+export interface LinkProps {
+  isDisabled?: boolean;
+  color?: string;
+  padding?: string;
+}
+
+export const Link = styled.a<LinkProps>`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: inherit;
+  color: ${({ theme, isDisabled, color }) => isDisabled ? theme.textDisabled : (color ? color : theme.textHighlight)};
+  font-weight: inherit;
+  padding: ${({ padding }) => padding ?? '0 0.25rem'};
+
+  svg {
+    color: ${({ theme, isDisabled }) => isDisabled ? theme.textDisabled : 'inherit'};
+  }
+`
+
+export interface LinkAsButtonProps {
   isLoading?: boolean;
   isDisabled?: boolean;
   width?: string;
@@ -23,7 +44,7 @@ export interface ButtonProps {
   color?: string;
 }
 
-export const Button = styled.button<ButtonProps>`
+export const LinkAsButton = styled.a<LinkAsButtonProps>`
   position: relative;
   display: flex;
   align-items: center;
@@ -72,7 +93,7 @@ export const Button = styled.button<ButtonProps>`
   }
 `;
 
-export const ButtonPrimary = styled(Button)`
+export const LinkAsButtonPrimary = styled(LinkAsButton)`
   background-color: ${({ theme, isDisabled }) =>
     isDisabled ? theme.buttonDisabled : theme.buttonPrimary};
   color: ${({ theme }) => theme.textLight};
@@ -80,7 +101,7 @@ export const ButtonPrimary = styled(Button)`
     isDisabled ? theme.buttonDisabled : theme.buttonPrimary};
 `;
 
-export const ButtonOutline = styled(Button)`
+export const LinkAsButtonOutline = styled(LinkAsButton)`
   background-color: ${({ theme }) => theme.buttonOutline};
   color: ${({ theme, isDisabled, color }) =>
     isDisabled ? theme.buttonDisabled : color || theme.buttonPrimary};
@@ -88,7 +109,7 @@ export const ButtonOutline = styled(Button)`
     isDisabled ? theme.buttonDisabled : color || theme.buttonPrimary};
 `;
 
-export const ButtonGhost = styled(Button)`
+export const LinkAsButtonGhost = styled(LinkAsButton)`
   background-color: ${({ theme }) => theme.buttonOutline};
   color: ${({ theme, isDisabled }) =>
     isDisabled ? theme.buttonDisabled : theme.buttonGhost};
@@ -96,7 +117,7 @@ export const ButtonGhost = styled(Button)`
     isDisabled ? theme.buttonDisabled : theme.buttonGhost};
 `;
 
-export const ButtonLight = styled(Button)`
+export const LinkAsButtonLight = styled(LinkAsButton)`
   background-color: ${({ theme, isDisabled }) =>
     isDisabled ? theme.buttonDisabled : theme.buttonLight};
   color: ${({ theme, color }) => color ?? theme.textPrimary};

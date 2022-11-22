@@ -7,7 +7,7 @@ import { copyToClipboard } from '@archie/ui/dashboard/utils';
 import { CollateralAsset } from '@archie/ui/shared/constants';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetDepositAddress } from '@archie/ui/shared/data-access/archie-api/vault_account/hooks/use-get-deposit-address';
-import { Skeleton, BodyL, BodyM } from '@archie/ui/shared/design-system';
+import { Skeleton, BodyL, BodyM, Link } from '@archie/ui/shared/design-system';
 import { Icon } from '@archie/ui/shared/icons';
 import { QR_CODE } from '@archie/ui/shared/theme';
 import { theme } from '@archie/ui/shared/theme';
@@ -89,21 +89,16 @@ export const DepositAddress: FC<DepositAddressProps> = ({
                     collateralization_step.address.info_text_2
                   </Trans>
                 </BodyM>
-                <BodyM className="info-link">
+                <BodyM>
                   {t('collateralization_step.address.info_link_1')}
-                  <a
+                  <Link
                     href={`${assetInfo.url}/${getDepositAddress()}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="info-link-url"
                   >
                     {t('collateralization_step.address.info_link_2')}
-                    <Icon
-                      name="external-link"
-                      fill={theme.textHighlight}
-                      className="info-link-icon"
-                    />
-                  </a>
+                    <Icon name="external-link" fill={theme.textHighlight} />
+                  </Link>
                 </BodyM>
               </div>
             </div>
@@ -112,7 +107,6 @@ export const DepositAddress: FC<DepositAddressProps> = ({
           {showTerms && (
             <>
               <hr className="divider" />
-
               <div className="terms">
                 <div className="terms-title">
                   <BodyM weight={700}>

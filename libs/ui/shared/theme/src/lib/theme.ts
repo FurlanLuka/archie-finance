@@ -85,12 +85,10 @@ export interface Theme {
   // nav item
   navItem: string;
   navItemActive: string;
-  // loading screen
+  // loaders
   loadingBackground: string;
-  loadingBorder: string;
-  loadingBorderTop: string;
-  // inline loader
-  loaderBackground: string;
+  loadingDot: string;
+  loadingDotActive: string;
   // table
   tableBorderOuther: string;
   tableBorderInner: string;
@@ -149,12 +147,10 @@ export const theme: Theme = {
   // nav item
   navItem: colors.black,
   navItemActive: colors.neutralgray_600,
-  // loading screen
+  // loaders
   loadingBackground: colors.neutralgray_200,
-  loadingBorder: colors.neutralgray_300,
-  loadingBorderTop: colors.neutralgray_400,
-  // inline loader
-  loaderBackground: colors.neutralgray_200,
+  loadingDot: colors.neutralgray_300,
+  loadingDotActive: colors.neutralgray_400,
   // table
   tableBorderOuther: colors.neutralgray_500,
   tableBorderInner: colors.neutralgray_200,
