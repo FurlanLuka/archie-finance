@@ -17,7 +17,7 @@ function normalizeOptions(
   tree: Tree,
   options: MicroserviceModuleGeneratorSchema,
 ): NormalizedSchema {
-  const serviceRoot = `${getWorkspaceLayout(tree).appsDir}/${
+  const serviceRoot = `${getWorkspaceLayout(tree).appsDir}/api/${
     options.projectName
   }`;
 
