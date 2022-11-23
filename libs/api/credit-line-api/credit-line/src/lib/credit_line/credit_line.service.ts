@@ -50,7 +50,9 @@ export class CreditLineService {
     await this.updateCreditLimits(userIds, updatedLedgerAccounts);
   }
 
-  // TODO: lock
+  @Lock((ledgers: LedgerAccountUpdatedPayload[]) =>
+    ledgers.map((ledger) => ledger.userId),
+  )
   public async ledgerAccountsUpdatedHandler(
     ledgers: LedgerAccountUpdatedPayload[],
   ): Promise<void> {

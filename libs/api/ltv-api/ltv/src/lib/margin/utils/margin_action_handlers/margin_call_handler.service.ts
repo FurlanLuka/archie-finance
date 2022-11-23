@@ -85,14 +85,12 @@ export class MarginCallHandlerService {
         actionPayload.marginCall.uuid,
         loanRepaymentAmount,
       );
-    await this.queueService.publishEvent(
-      INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND,
-      {
-        userId: actionPayload.userId,
-        amount: loanRepaymentAmount.toString(),
-        liquidationId: liquidation.id,
-      },
-    );
+
+    this.queueService.publishEvent(INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND, {
+      userId: actionPayload.userId,
+      amount: loanRepaymentAmount.toString(),
+      liquidationId: liquidation.id,
+    });
 
     return {
       ...actionPayload,

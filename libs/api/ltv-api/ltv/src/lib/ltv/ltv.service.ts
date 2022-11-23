@@ -66,7 +66,9 @@ export class LtvService {
     await this.handleLedgerAccountsUpdatedEvent([ledger]);
   }
 
-  // TODO: lock
+  @Lock((ledgers: LedgerAccountUpdatedPayload[]) =>
+    ledgers.map((ledger) => ledger.userId),
+  )
   async handleLedgerAccountsUpdatedEvent(
     ledgers: LedgerAccountUpdatedPayload[],
   ): Promise<void> {

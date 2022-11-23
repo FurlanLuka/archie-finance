@@ -9,9 +9,7 @@ export class RedisService implements OnModuleInit {
   private redisClient: Client;
   private redlock: Redlock;
   private NO_RETRY = 0;
-  DEFAULT_MAX_LOCK_DURATION_IN_MS = 30000;
-
-  private activeLocks: RedlockLock[] = [];
+  DEFAULT_MAX_LOCK_DURATION_IN_MS = 60000;
 
   constructor(@Inject('CONFIG_OPTIONS') private options: RedisConfig) {}
 
@@ -52,37 +50,23 @@ export class RedisService implements OnModuleInit {
   }
 
   public async acquireLock(
-    resource: string,
+    resources: string[],
     duration = this.DEFAULT_MAX_LOCK_DURATION_IN_MS,
-  ): Promise<string> {
-    const prefixedKey = `${this.options.keyPrefix}_${resource}`;
-
-    const lock: RedlockLock = await this.redlock.acquire(
-      [prefixedKey],
-      duration,
+  ): Promise<RedlockLock> {
+    const prefixedResources: string[] = resources.map(
+      (resource): string => `${this.options.keyPrefix}_${resource}`,
     );
-    this.activeLocks.push(lock);
 
-    return prefixedKey;
+    return this.redlock.acquire(prefixedResources, duration);
   }
 
-  public async releaseLock(resource: string): Promise<void> {
-    const lock: RedlockLock | undefined = this.activeLocks.find((activeLock) =>
-      activeLock.resources.includes(resource),
-    );
-
-    if (lock !== undefined) {
-      this.activeLocks = this.activeLocks.filter(
-        (activeLock) => !activeLock.resources.includes(resource),
-      );
-
-      await lock.release();
-    }
+  public async releaseLock(lock: RedlockLock): Promise<void> {
+    await lock.release();
   }
 }
 
 export function Lock(
-  resourceNameCallBack: (payload: unknown) => string,
+  resourceNameCallBack: (payload: unknown) => string | string[],
 ): MethodDecorator {
   const injector = Inject(RedisService);
 
@@ -102,11 +86,13 @@ export function Lock(
 
     descriptor.value = async function (...args: unknown[]): Promise<unknown> {
       const redisService: RedisService = this.redisService;
-      let lockedResource: string;
+      let lock: RedlockLock;
 
       try {
-        lockedResource = await redisService.acquireLock(
-          resourceNameCallBack(args[0]),
+        const resourceNames: string | string[] = resourceNameCallBack(args[0]);
+
+        lock = await redisService.acquireLock(
+          typeof resourceNames === 'string' ? [resourceNames] : resourceNames,
         );
       } catch (error) {
         if (error instanceof ExecutionError) {
@@ -120,7 +106,7 @@ export function Lock(
         const response: unknown = await originalMethod.apply(this, args);
         return response;
       } finally {
-        await redisService.releaseLock(lockedResource);
+        await redisService.releaseLock(lock);
       }
     };
   };
