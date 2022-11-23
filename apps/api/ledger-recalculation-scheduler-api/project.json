@@ -53,13 +53,13 @@
     "build-openapi": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npm run build ledger-recalculation-scheduler-api && RUN_MIGRATIONS=false node dist/apps/ledger-recalculation-scheduler-api/main build-swagger"
+        "command": "npm run build ledger-recalculation-scheduler-api && RUN_MIGRATIONS=false node dist/apps/api/ledger-recalculation-scheduler-api/main build-swagger"
       }
     },
     "generate-migration": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npm run build ledger-recalculation-scheduler-api && node dist/apps/ledger-recalculation-scheduler-api/main generate-migration"
+        "command": "npm run build ledger-recalculation-scheduler-api && node dist/apps/api/ledger-recalculation-scheduler-api/main generate-migration"
       }
     },
     "build-docker": {
@@ -67,9 +67,9 @@
     },
     "test-integration": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/ledger-recalculation-scheduler-api"],
+      "outputs": ["coverage/apps/api/ledger-recalculation-scheduler-api"],
       "options": {
-        "jestConfig": "apps/ledger-recalculation-scheduler-api/jest.config.ts",
+        "jestConfig": "apps/api/ledger-recalculation-scheduler-api/jest.config.ts",
         "passWithNoTests": true,
         "runInBand": true
       }
