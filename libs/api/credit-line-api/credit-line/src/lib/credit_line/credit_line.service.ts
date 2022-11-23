@@ -38,16 +38,16 @@ export class CreditLineService {
   ) {}
 
   @Lock((payload: LedgerAccountUpdatedPayload) => payload.userId)
-  public async ledgerAccountUpdatedHandler({
-    userId,
-    ledgerAccounts,
-  }: LedgerAccountUpdatedPayload): Promise<void> {
-    await this.ledgerService.updateLedgerAccounts(userId, ledgerAccounts);
+  public async ledgerAccountUpdatedHandler(
+    ledger: LedgerAccountUpdatedPayload,
+  ): Promise<void> {
+    await this.ledgerService.updateLedgers([ledger]);
 
-    const updatedLedgerAccounts: LedgerAccount[] =
-      await this.ledgerService.getLedgerAccounts(userId);
+    const userIds = [ledger.userId];
+    const updatedLedgerAccounts: LedgerAccountsPerUser =
+      await this.ledgerService.getLedgerAccountsPerUser(userIds);
 
-    await this.tryUpdatingCreditLimit(userId, updatedLedgerAccounts);
+    await this.updateCreditLimits(userIds, updatedLedgerAccounts);
   }
 
   // TODO: lock
@@ -58,12 +58,12 @@ export class CreditLineService {
 
     const userIds: string[] = ledgers.map((ledger) => ledger.userId);
     const updatedLedgerAccounts: LedgerAccountsPerUser =
-      await this.ledgerService.getLedgerAccountsForMultipleUsers(userIds);
+      await this.ledgerService.getLedgerAccountsPerUser(userIds);
 
-    await this.tryUpdatingCreditLimits(userIds, updatedLedgerAccounts);
+    await this.updateCreditLimits(userIds, updatedLedgerAccounts);
   }
 
-  public async tryUpdatingCreditLimits(
+  public async updateCreditLimits(
     userIds: string[],
     ledgerAccounts: LedgerAccountsPerUser,
   ): Promise<void> {
@@ -107,54 +107,6 @@ export class CreditLineService {
         });
       }
     });
-  }
-
-  public async tryUpdatingCreditLimit(
-    userId: string,
-    ledgerAccounts: LedgerAccount[],
-  ): Promise<void> {
-    const creditLineRecord: CreditLine | null =
-      await this.creditLineRepository.findOneBy({
-        userId,
-      });
-
-    if (creditLineRecord === null) {
-      // Don't do anything, credit hasnt been created yet
-      return;
-    }
-
-    const updatedLedgerValue: number =
-      this.ledgerService.getLedgerValue(ledgerAccounts);
-
-    const percentageDifference = this.getPercentageDifference(
-      creditLineRecord.calculatedOnLedgerValue,
-      updatedLedgerValue,
-    );
-
-    if (
-      percentageDifference >=
-      this.MINIMUM_COLLATERAL_CHANGE_PERCENTAGE_TO_ADJUST_CREDIT_LIMIT
-    ) {
-      const updatedCreditLimit = this.calculateCreditLimit(ledgerAccounts);
-      const calculatedAt = new Date().toISOString();
-
-      await this.creditLineRepository.update(
-        {
-          userId,
-        },
-        {
-          creditLimit: updatedCreditLimit,
-          calculatedOnLedgerValue: updatedLedgerValue,
-          calculatedAt,
-        },
-      );
-
-      this.queueService.publishEvent(CREDIT_LINE_UPDATED_TOPIC, {
-        userId,
-        creditLimit: updatedCreditLimit,
-        calculatedAt,
-      });
-    }
   }
 
   public async createCreditLine(userId: string): Promise<CreditLineResponse> {

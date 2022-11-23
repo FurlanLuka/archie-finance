@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { MarginCall } from '../margin/margin_calls.entity';
+import { MarginCall } from '../margin/entities/margin_calls.entity';
 
 @Entity({
   name: 'margin_call_liquidation',

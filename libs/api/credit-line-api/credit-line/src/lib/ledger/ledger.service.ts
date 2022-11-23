@@ -1,13 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import {
-  LedgerAccountData,
-  LedgerAccountUpdatedPayload,
-} from '@archie/api/ledger-api/data-transfer-objects/types';
+import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LedgerAccount } from '../ledger/ledger_account.entity';
-import { DataSource, In, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { BigNumber } from 'bignumber.js';
-import { DateTime } from 'luxon';
 import { GroupingHelper } from '@archie/api/utils/helpers';
 import { LedgerAccountsPerUser } from './ledger.interfaces';
 
@@ -16,7 +12,6 @@ export class LedgerService {
   constructor(
     @InjectRepository(LedgerAccount)
     private ledgerAccountRepository: Repository<LedgerAccount>,
-    private dataSource: DataSource,
   ) {}
 
   public async getLedgerAccounts(userId: string): Promise<LedgerAccount[]> {
@@ -25,7 +20,7 @@ export class LedgerService {
     });
   }
 
-  public async getLedgerAccountsForMultipleUsers(
+  public async getLedgerAccountsPerUser(
     userIds: string[],
   ): Promise<LedgerAccountsPerUser> {
     const ledgerAccounts: LedgerAccount[] =
@@ -66,69 +61,6 @@ export class LedgerService {
         `("assetId", "userId") DO UPDATE SET "calculatedAt" = EXCLUDED."calculatedAt", "value" = EXCLUDED."value" WHERE ledger_account."calculatedAt" <= EXCLUDED."calculatedAt"`,
       )
       .execute();
-  }
-
-  public async updateLedgerAccounts(
-    userId: string,
-    ledgerAccounts: LedgerAccountData[],
-  ): Promise<void> {
-    const queryRunner = this.dataSource.createQueryRunner();
-
-    await queryRunner.startTransaction();
-
-    try {
-      await Promise.all(
-        ledgerAccounts.map(async (ledgerAccountData) => {
-          const ledgerAccount = await queryRunner.manager.findOneBy(
-            LedgerAccount,
-            {
-              assetId: ledgerAccountData.assetId,
-              userId,
-            },
-          );
-
-          if (ledgerAccount === null) {
-            await queryRunner.manager.save(LedgerAccount, {
-              userId,
-              assetId: ledgerAccountData.assetId,
-              value: BigNumber(ledgerAccountData.accountValue)
-                .decimalPlaces(2, BigNumber.ROUND_DOWN)
-                .toNumber(),
-              calculatedAt: ledgerAccountData.calculatedAt,
-            });
-
-            return;
-          }
-
-          if (
-            DateTime.fromISO(ledgerAccount.calculatedAt) >
-            DateTime.fromISO(ledgerAccountData.calculatedAt)
-          ) {
-            return;
-          }
-
-          await queryRunner.manager.update(
-            LedgerAccount,
-            {
-              userId,
-              assetId: ledgerAccountData.assetId,
-            },
-            {
-              value: BigNumber(ledgerAccountData.accountValue)
-                .decimalPlaces(2, BigNumber.ROUND_DOWN)
-                .toNumber(),
-              calculatedAt: ledgerAccountData.calculatedAt,
-            },
-          );
-        }),
-      );
-
-      await queryRunner.commitTransaction();
-    } catch (error) {
-      await queryRunner.rollbackTransaction();
-    } finally {
-      await queryRunner.release();
-    }
   }
 
   public getLedgerValue(ledgerAccounts: LedgerAccount[]): number {

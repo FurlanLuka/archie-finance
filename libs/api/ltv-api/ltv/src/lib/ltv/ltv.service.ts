@@ -54,31 +54,16 @@ export class LtvService {
   }
 
   @Lock((ledger: LedgerAccountUpdatedPayload) => ledger.userId)
-  async handleLedgerAccountUpdatedEvent({
-    userId,
-    ledgerAccounts,
-    action,
-  }: LedgerAccountUpdatedPayload): Promise<void> {
-    await this.ledgerService.updateLedgerAccounts(userId, ledgerAccounts);
-
-    if (action.type === LedgerActionType.LIQUIDATION) {
-      await this.marginService.acknowledgeLiquidationCollateralBalanceUpdate(
-        action.liquidation.id,
+  async handleLedgerAccountUpdatedEvent(
+    ledger: LedgerAccountUpdatedPayload,
+  ): Promise<void> {
+    if (ledger.action.type === LedgerActionType.LIQUIDATION) {
+      await this.liquidationService.acknowledgeLiquidationCollateralBalanceUpdate(
+        ledger.action.liquidation.id,
       );
     }
-    const ltvMeta = await this.getNormalizedLtvMeta(userId);
 
-    const ltv: number = this.ltvUtilService.calculateLtv(
-      ltvMeta.creditUtilization,
-      ltvMeta.ledgerValue,
-    );
-
-    this.queueService.publishEvent(LTV_UPDATED_TOPIC, {
-      userId,
-      ltv,
-    });
-
-    await this.marginService.executeMarginCallCheck(userId, ltv, ltvMeta);
+    await this.handleLedgerAccountsUpdatedEvent([ledger]);
   }
 
   // TODO: lock
@@ -93,8 +78,8 @@ export class LtvService {
       CreditPerUser,
       LiquidationsPerUser,
     ] = await Promise.all([
-      this.ledgerService.getLedgerAccountsForMultipleUsers(userIds),
-      this.creditService.getCreditBalanceForMultipleUsers(userIds),
+      this.ledgerService.getLedgerAccountsPerUser(userIds),
+      this.creditService.getCreditBalancePerUser(userIds),
       this.liquidationService.getLiquidations(userIds),
     ]);
 
@@ -126,8 +111,6 @@ export class LtvService {
     );
 
     await this.marginService.executeMarginCallChecks(perUserLtv);
-
-    // TODO: trigger processed event
   }
 
   @Lock((credit: CreditBalanceUpdatedPayload) => credit.userId)
@@ -137,7 +120,7 @@ export class LtvService {
     await this.creditService.updateCreditBalance(credit);
 
     if (credit.paymentDetails?.type === PaymentType.liquidation) {
-      await this.marginService.acknowledgeLiquidationCreditBalanceUpdate(
+      await this.liquidationService.acknowledgeLiquidationCreditBalanceUpdate(
         credit.paymentDetails.id,
       );
     }
@@ -152,11 +135,13 @@ export class LtvService {
       ltv,
     });
 
-    await this.marginService.executeMarginCallCheck(
-      credit.userId,
-      ltv,
-      ltvMeta,
-    );
+    await this.marginService.executeMarginCallChecks([
+      {
+        userId: credit.userId,
+        ltv,
+        ltvMeta,
+      },
+    ]);
   }
 
   private calculateNormalizedLtvMeta(
@@ -168,7 +153,7 @@ export class LtvService {
     const ledgerValue: number =
       this.ledgerService.getLedgerValue(ledgerAccounts);
 
-    return this.marginService.reducePendingLiquidationAmount(
+    return this.liquidationService.reducePendingLiquidationAmount(
       userId,
       creditUtilization,
       ledgerValue,
@@ -186,7 +171,7 @@ export class LtvService {
       userId,
     );
 
-    return this.marginService.reducePendingLiquidationAmountWithLookup(
+    return this.liquidationService.reducePendingLiquidationAmountWithLookup(
       userId,
       creditUtilization,
       ledgerValue,
@@ -195,7 +180,8 @@ export class LtvService {
 
   public async handleCreditLineCreatedEvent({
     userId,
+    calculatedAt,
   }: CreditLineCreatedPayload): Promise<void> {
-    await this.creditService.createCreditBalance(userId);
+    await this.creditService.createCreditBalance(userId, calculatedAt);
   }
 }

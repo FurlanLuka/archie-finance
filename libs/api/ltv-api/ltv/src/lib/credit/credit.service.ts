@@ -3,7 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, LessThan, Repository } from 'typeorm';
 import { Credit } from './credit.entity';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
-import { DateTime } from 'luxon';
 import { CreditPerUser } from './credit.interfaces';
 import { GroupingHelper } from '@archie/api/utils/helpers';
 
@@ -38,7 +37,7 @@ export class CreditService {
     return credit?.utilizationAmount ?? 0;
   }
 
-  public async getCreditBalanceForMultipleUsers(
+  public async getCreditBalancePerUser(
     userIds: string[],
   ): Promise<CreditPerUser> {
     const credits: Credit[] = await this.ltvCreditRepository.findBy({
@@ -48,10 +47,13 @@ export class CreditService {
     return GroupingHelper.mapBy(credits, (credit) => credit.userId);
   }
 
-  public async createCreditBalance(userId: string): Promise<void> {
+  public async createCreditBalance(
+    userId: string,
+    calculatedAt: string,
+  ): Promise<void> {
     await this.ltvCreditRepository.insert({
       userId,
-      calculatedAt: DateTime.now().toISO(),
+      calculatedAt: calculatedAt,
       utilizationAmount: 0,
     });
   }

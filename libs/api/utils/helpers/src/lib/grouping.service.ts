@@ -13,7 +13,7 @@ export class GroupingHelper {
       if (existingElements === undefined) {
         grouped[groupProperty] = [element];
       } else {
-        existingElements.push(element);
+        existingElements.push(element); // Push performance is better than spread
       }
 
       return grouped;

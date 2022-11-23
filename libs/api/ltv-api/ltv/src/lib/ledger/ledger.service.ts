@@ -25,7 +25,7 @@ export class LedgerService {
     });
   }
 
-  public async getLedgerAccountsForMultipleUsers(
+  public async getLedgerAccountsPerUser(
     userIds: string[],
   ): Promise<LedgerAccountsPerUser> {
     const ledgerAccounts: LedgerAccount[] =

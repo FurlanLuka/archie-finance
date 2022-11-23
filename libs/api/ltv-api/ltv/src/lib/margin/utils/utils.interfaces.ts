@@ -1,5 +1,5 @@
 import { LtvMeta } from '../margin.interfaces';
-import { MarginCall } from '../margin_calls.entity';
+import { MarginCall } from '../entities/margin_calls.entity';
 
 export enum MarginAction {
   activate_margin_call = 'activate_margin_call',

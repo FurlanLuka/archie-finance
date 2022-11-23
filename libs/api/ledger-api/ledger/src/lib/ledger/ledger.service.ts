@@ -111,14 +111,15 @@ export class LedgerService {
   }
 
   async getLedger(userId: string, assetPrice?: AssetPrice[]): Promise<Ledger> {
-    const ledgerAccounts: LedgerAccount[] = await this.ledgerRepository.findBy({
-      userId,
-    });
+    const { value, accounts }: UserGroupedLedger = await this.getLedgers(
+      [userId],
+      assetPrice,
+    )[0];
 
-    const assetPrices: AssetPrice[] =
-      assetPrice ?? (await this.assetPricesService.getLatestAssetPrices());
-
-    return this.calculateLedgerState(ledgerAccounts, assetPrices);
+    return {
+      value,
+      accounts,
+    };
   }
 
   async getLedgers(
