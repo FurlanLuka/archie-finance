@@ -19,7 +19,10 @@ import {
 import { AssetPrices } from '@archie/api/ledger-api/assets';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { LEDGER_ACCOUNT_UPDATED_TOPIC } from '@archie/api/ledger-api/constants';
+import {
+  LEDGER_ACCOUNT_UPDATED_TOPIC,
+  LEDGER_ACCOUNTS_UPDATED_TOPIC,
+} from '@archie/api/ledger-api/constants';
 import { BigNumber } from 'bignumber.js';
 import { initiateLedgerRecalcuationCommandPayloadFactory } from '@archie/api/ledger-api/test-data';
 import { LedgerActionType } from '@archie/api/ledger-api/data-transfer-objects/types';
@@ -112,7 +115,6 @@ describe('Ledger api deposit tests', () => {
       }
 
       expect(queueStub.publishEvent).toHaveBeenCalledTimes(100);
-
       generatedUserIds.forEach((userId, index) => {
         expect(queueStub.publishEvent).toHaveBeenNthCalledWith(
           index + 1,
@@ -166,29 +168,30 @@ describe('Ledger api deposit tests', () => {
       }
 
       expect(queueStub.publishEvent).toHaveBeenCalledTimes(100);
-
       generatedUserIds.forEach((userId, index) => {
         expect(queueStub.publishEvent).toHaveBeenNthCalledWith(
           index + 1,
-          LEDGER_ACCOUNT_UPDATED_TOPIC,
-          {
-            userId,
-            ledgerAccounts: [
-              {
-                assetId: depositedAssetId,
-                assetAmount: depositedAssetAmount,
-                accountValue: BigNumber(depositedAssetAmount)
-                  .multipliedBy(BITCOIN_PRICE)
-                  .decimalPlaces(2, BigNumber.ROUND_DOWN)
-                  .toString(),
-                assetPrice: BITCOIN_PRICE.toString(),
-                calculatedAt: expect.any(String),
+          LEDGER_ACCOUNTS_UPDATED_TOPIC,
+          [
+            {
+              userId,
+              ledgerAccounts: [
+                {
+                  assetId: depositedAssetId,
+                  assetAmount: depositedAssetAmount,
+                  accountValue: BigNumber(depositedAssetAmount)
+                    .multipliedBy(BITCOIN_PRICE)
+                    .decimalPlaces(2, BigNumber.ROUND_DOWN)
+                    .toString(),
+                  assetPrice: BITCOIN_PRICE.toString(),
+                  calculatedAt: expect.any(String),
+                },
+              ],
+              action: {
+                type: LedgerActionType.ASSET_PRICE_UPDATE,
               },
-            ],
-            action: {
-              type: LedgerActionType.ASSET_PRICE_UPDATE,
             },
-          },
+          ],
         );
       });
     });

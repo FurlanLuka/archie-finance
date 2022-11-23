@@ -111,10 +111,11 @@ export class LedgerService {
   }
 
   async getLedger(userId: string, assetPrice?: AssetPrice[]): Promise<Ledger> {
-    const { value, accounts }: UserGroupedLedger = await this.getLedgers(
+    const ledgers: UserGroupedLedger[] = await this.getLedgers(
       [userId],
       assetPrice,
-    )[0];
+    );
+    const { value, accounts } = ledgers[0];
 
     return {
       value,
@@ -138,22 +139,19 @@ export class LedgerService {
       (account) => account.userId,
     );
 
-    return Object.keys(accountsPerUser).map(
-      (userId: string): UserGroupedLedger => {
-        const userLedgerAccounts: LedgerAccount[] =
-          accountsPerUser[userId] ?? [];
+    return userIds.map((userId: string): UserGroupedLedger => {
+      const userLedgerAccounts: LedgerAccount[] = accountsPerUser[userId] ?? [];
 
-        const ledger: Ledger = this.calculateLedgerState(
-          userLedgerAccounts,
-          assetPrices,
-        );
+      const ledger: Ledger = this.calculateLedgerState(
+        userLedgerAccounts,
+        assetPrices,
+      );
 
-        return {
-          userId,
-          ...ledger,
-        };
-      },
-    );
+      return {
+        userId,
+        ...ledger,
+      };
+    });
   }
 
   private calculateLedgerState(
