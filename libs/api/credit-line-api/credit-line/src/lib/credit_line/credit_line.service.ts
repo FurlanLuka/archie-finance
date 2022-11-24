@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
+import {
+  LedgerAccountsUpdatedPayload,
+  LedgerAccountUpdatedPayload,
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { LedgerService } from '../ledger/ledger.service';
 import { LedgerAccount } from '../ledger/ledger_account.entity';
 import { AssetsService } from '../assets/assets.service';
@@ -10,6 +13,7 @@ import { QueueService } from '@archie/api/utils/queue';
 import {
   CREDIT_LINE_UPDATED_TOPIC,
   CREDIT_LINE_CREATED_TOPIC,
+  CREDIT_LINE_BATCH_RECALCULATION_COMPLETED_TOPIC,
 } from '@archie/api/credit-line-api/constants';
 import { CreditLine as CreditLineResponse } from '@archie/api/credit-line-api/data-transfer-objects/types';
 import {
@@ -37,38 +41,36 @@ export class CreditLineService {
     private creditLineRepository: Repository<CreditLine>,
   ) {}
 
-  @Lock((payload: LedgerAccountUpdatedPayload) => payload.userId)
   public async ledgerAccountUpdatedHandler(
     ledger: LedgerAccountUpdatedPayload,
   ): Promise<void> {
     await this.ledgerService.updateLedgers([ledger]);
 
-    const userIds = [ledger.userId];
-    const updatedLedgerAccounts: LedgerAccountsPerUser =
-      await this.ledgerService.getLedgerAccountsPerUser(userIds);
-
-    await this.updateCreditLimits(userIds, updatedLedgerAccounts);
+    await this.updateCreditLimits([ledger.userId]);
   }
 
-  @Lock((ledgers: LedgerAccountUpdatedPayload[]) =>
-    ledgers.map((ledger) => ledger.userId),
-  )
-  public async ledgerAccountsUpdatedHandler(
-    ledgers: LedgerAccountUpdatedPayload[],
-  ): Promise<void> {
+  public async ledgerAccountsUpdatedHandler({
+    ledgers,
+    batchId,
+  }: LedgerAccountsUpdatedPayload): Promise<void> {
     await this.ledgerService.updateLedgers(ledgers);
 
     const userIds: string[] = ledgers.map((ledger) => ledger.userId);
-    const updatedLedgerAccounts: LedgerAccountsPerUser =
-      await this.ledgerService.getLedgerAccountsPerUser(userIds);
+    await this.updateCreditLimits(userIds);
 
-    await this.updateCreditLimits(userIds, updatedLedgerAccounts);
+    await this.queueService.publishEvent(
+      CREDIT_LINE_BATCH_RECALCULATION_COMPLETED_TOPIC,
+      {
+        batchId,
+      },
+    );
   }
 
-  public async updateCreditLimits(
-    userIds: string[],
-    ledgerAccounts: LedgerAccountsPerUser,
-  ): Promise<void> {
+  @Lock((userIds: string[]) => userIds)
+  public async updateCreditLimits(userIds: string[]): Promise<void> {
+    const ledgerAccounts: LedgerAccountsPerUser =
+      await this.ledgerService.getLedgerAccountsPerUser(userIds);
+
     const creditLines: CreditLine[] = await this.creditLineRepository.findBy({
       userId: In(userIds),
     });

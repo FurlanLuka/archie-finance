@@ -11,11 +11,14 @@ import {
 import { AppModule } from '../src/app.module';
 import {
   ledgerAccountDataFactory,
+  ledgerAccountsUpdatedPayloadFactory,
   ledgerAccountUpdatedPayloadFactory,
 } from '@archie/api/ledger-api/test-data';
 import { CreditLineQueueController } from '@archie/api/credit-line-api/credit-line';
 import * as request from 'supertest';
 import { DateTime } from 'luxon';
+import { queueStub } from '@archie/test/integration/module-stubs';
+import { CREDIT_LINE_BATCH_RECALCULATION_COMPLETED_TOPIC } from '@archie/api/credit-line-api/constants';
 
 describe('Credit line creation tests', () => {
   let app: INestApplication;
@@ -113,10 +116,12 @@ describe('Credit line creation tests', () => {
       const ledgerUpdatedPayload = ledgerAccountUpdatedPayloadFactory({
         ledgerAccounts: [updatedBitcoinAccountAccount],
       });
-
+      const ledgersUpdatedPayload = ledgerAccountsUpdatedPayloadFactory({
+        ledgers: [ledgerUpdatedPayload],
+      });
       await app
         .get(CreditLineQueueController)
-        .ledgersUpdated([ledgerUpdatedPayload]);
+        .ledgersUpdated(ledgersUpdatedPayload);
 
       const response = await request(app.getHttpServer())
         .get('/v2/credit_lines')
@@ -140,6 +145,12 @@ describe('Credit line creation tests', () => {
           },
         ],
       });
+      expect(queueStub.publishEvent).toHaveBeenCalledWith(
+        CREDIT_LINE_BATCH_RECALCULATION_COMPLETED_TOPIC,
+        {
+          batchId: ledgersUpdatedPayload.batchId,
+        },
+      );
     });
   });
 });

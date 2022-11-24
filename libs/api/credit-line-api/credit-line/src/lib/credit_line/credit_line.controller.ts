@@ -5,7 +5,10 @@ import {
   LEDGER_ACCOUNTS_UPDATED_TOPIC,
 } from '@archie/api/ledger-api/constants';
 import { SERVICE_QUEUE_NAME } from '@archie/api/credit-line-api/constants';
-import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
+import {
+  LedgerAccountsUpdatedPayload,
+  LedgerAccountUpdatedPayload,
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { CreditLineService } from './credit_line.service';
 import { AuthGuard } from '@archie/api/utils/auth0';
 import { ApiBearerAuth } from '@nestjs/swagger';
@@ -56,7 +59,7 @@ export class CreditLineQueueController {
     LEDGER_ACCOUNTS_UPDATED_TOPIC,
     CreditLineQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async ledgersUpdated(payload: LedgerAccountUpdatedPayload[]): Promise<void> {
+  async ledgersUpdated(payload: LedgerAccountsUpdatedPayload): Promise<void> {
     return this.creditLineService.ledgerAccountsUpdatedHandler(payload);
   }
 }

@@ -12,7 +12,10 @@ import {
   LEDGER_ACCOUNT_UPDATED_TOPIC,
   LEDGER_ACCOUNTS_UPDATED_TOPIC,
 } from '@archie/api/ledger-api/constants';
-import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
+import {
+  LedgerAccountsUpdatedPayload,
+  LedgerAccountUpdatedPayload,
+} from '@archie/api/ledger-api/data-transfer-objects/types';
 import { CREDIT_BALANCE_UPDATED_TOPIC } from '@archie/api/peach-api/constants';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
 import { CreditLineCreatedPayload } from '@archie/api/credit-line-api/data-transfer-objects/types';
@@ -48,8 +51,8 @@ export class LtvQueueController {
     LEDGER_ACCOUNTS_UPDATED_TOPIC,
     LtvQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async ledgersUpdated(payload: LedgerAccountUpdatedPayload[]): Promise<void> {
-    return this.ltvService.handleLedgerAccountsUpdatedEvent(payload);
+  async ledgersUpdated(payload: LedgerAccountsUpdatedPayload): Promise<void> {
+    return this.ltvService.handleBatchLedgerAccountsUpdatedEvent(payload);
   }
 
   @Subscribe(

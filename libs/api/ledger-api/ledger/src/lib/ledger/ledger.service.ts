@@ -29,6 +29,7 @@ import { BatchDecrementLedgerAccounts } from './ledger.interfaces';
 import { LedgerUser } from './ledger_user.entity';
 import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { GroupingHelper } from '@archie/api/utils/helpers';
+import { v4 } from 'uuid';
 
 @Injectable()
 export class LedgerService {
@@ -213,6 +214,7 @@ export class LedgerService {
         .map((ledgerUser) => ledgerUser.userId);
 
       this.queueService.publishEvent(INITIATE_LEDGER_RECALCULATION_COMMAND, {
+        batchId: v4(),
         userIds: userIdChunk,
       });
     }
@@ -228,9 +230,9 @@ export class LedgerService {
       assetPrices,
     );
 
-    this.queueService.publishEvent(
-      LEDGER_ACCOUNTS_UPDATED_TOPIC,
-      ledgers.map(
+    this.queueService.publishEvent(LEDGER_ACCOUNTS_UPDATED_TOPIC, {
+      batchId: payload.batchId,
+      ledgers: ledgers.map(
         (ledger): LedgerAccountUpdatedPayload => ({
           userId: ledger.userId,
           ledgerAccounts: ledger.accounts.map((updatedAccount) => ({
@@ -242,7 +244,7 @@ export class LedgerService {
           },
         }),
       ),
-    );
+    });
   }
 
   async decrementLedgerAccount(

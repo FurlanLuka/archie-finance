@@ -14,3 +14,7 @@ export interface Ltv {
   ltv: number;
   status: LtvStatus;
 }
+
+export interface LtvBatchRecalculationCompleted {
+  batchId: string;
+}

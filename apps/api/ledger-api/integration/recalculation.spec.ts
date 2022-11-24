@@ -172,26 +172,29 @@ describe('Ledger api deposit tests', () => {
         expect(queueStub.publishEvent).toHaveBeenNthCalledWith(
           index + 1,
           LEDGER_ACCOUNTS_UPDATED_TOPIC,
-          [
-            {
-              userId,
-              ledgerAccounts: [
-                {
-                  assetId: depositedAssetId,
-                  assetAmount: depositedAssetAmount,
-                  accountValue: BigNumber(depositedAssetAmount)
-                    .multipliedBy(BITCOIN_PRICE)
-                    .decimalPlaces(2, BigNumber.ROUND_DOWN)
-                    .toString(),
-                  assetPrice: BITCOIN_PRICE.toString(),
-                  calculatedAt: expect.any(String),
+          {
+            batchId: initiateLedgerRecalcuationCommandPayloadFactory().batchId,
+            ledgers: [
+              {
+                userId,
+                ledgerAccounts: [
+                  {
+                    assetId: depositedAssetId,
+                    assetAmount: depositedAssetAmount,
+                    accountValue: BigNumber(depositedAssetAmount)
+                      .multipliedBy(BITCOIN_PRICE)
+                      .decimalPlaces(2, BigNumber.ROUND_DOWN)
+                      .toString(),
+                    assetPrice: BITCOIN_PRICE.toString(),
+                    calculatedAt: expect.any(String),
+                  },
+                ],
+                action: {
+                  type: LedgerActionType.ASSET_PRICE_UPDATE,
                 },
-              ],
-              action: {
-                type: LedgerActionType.ASSET_PRICE_UPDATE,
               },
-            },
-          ],
+            ],
+          },
         );
       });
     });

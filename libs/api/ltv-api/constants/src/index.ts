@@ -1,5 +1,6 @@
 import { Event } from '@archie/api/utils/queue/events';
 import {
+  LtvBatchRecalculationCompleted,
   MarginCallCompletedPayload,
   MarginCallLtvLimitApproachingPayload,
   MarginCallStartedPayload,
@@ -43,3 +44,9 @@ export const LTV_UPDATED_TOPIC = new Event<LtvUpdatedPayload>(
   'ltv.ltv.updated',
   1,
 );
+
+export const LTV_BATCH_RECALCULATION_COMPLETED_TOPIC =
+  new Event<LtvBatchRecalculationCompleted>(
+    'ltv.batch_recalculation.completed',
+    1,
+  );

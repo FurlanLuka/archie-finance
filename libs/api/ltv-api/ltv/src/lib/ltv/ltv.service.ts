@@ -7,6 +7,7 @@ import { QueueService } from '@archie/api/utils/queue';
 import { LtvUtilService } from './utils/ltv.service';
 import { LedgerService } from '../ledger/ledger.service';
 import {
+  LedgerAccountsUpdatedPayload,
   LedgerAccountUpdatedPayload,
   LedgerActionType,
 } from '@archie/api/ledger-api/data-transfer-objects/types';
@@ -20,7 +21,10 @@ import { Lock } from '@archie/api/utils/redis';
 import { MarginService } from '../margin/margin.service';
 import { LedgerAccount } from '../ledger/ledger_account.entity';
 import { LtvMeta, PerUserLtv } from '../margin/margin.interfaces';
-import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
+import {
+  LTV_BATCH_RECALCULATION_COMPLETED_TOPIC,
+  LTV_UPDATED_TOPIC,
+} from '@archie/api/ltv-api/constants';
 import { Liquidation } from '../liquidation/liquidation.entity';
 import { LiquidationService } from '../liquidation/liquidation.service';
 import { LedgerAccountsPerUser } from '../ledger/ledger.interfaces';
@@ -62,13 +66,24 @@ export class LtvService {
       );
     }
 
-    await this.handleLedgerAccountsUpdatedEvent([ledger]);
+    await this.handleLedgerUpdateEvent([ledger]);
+  }
+
+  async handleBatchLedgerAccountsUpdatedEvent({
+    batchId,
+    ledgers,
+  }: LedgerAccountsUpdatedPayload): Promise<void> {
+    await this.handleLedgerUpdateEvent(ledgers);
+
+    this.queueService.publishEvent(LTV_BATCH_RECALCULATION_COMPLETED_TOPIC, {
+      batchId,
+    });
   }
 
   @Lock((ledgers: LedgerAccountUpdatedPayload[]) =>
     ledgers.map((ledger) => ledger.userId),
   )
-  async handleLedgerAccountsUpdatedEvent(
+  private async handleLedgerUpdateEvent(
     ledgers: LedgerAccountUpdatedPayload[],
   ): Promise<void> {
     await this.ledgerService.updateLedgers(ledgers);

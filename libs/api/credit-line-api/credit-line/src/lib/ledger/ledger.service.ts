@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { LedgerAccountUpdatedPayload } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LedgerAccount } from '../ledger/ledger_account.entity';
+import { LedgerAccount } from './ledger_account.entity';
 import { In, Repository } from 'typeorm';
 import { BigNumber } from 'bignumber.js';
 import { GroupingHelper } from '@archie/api/utils/helpers';

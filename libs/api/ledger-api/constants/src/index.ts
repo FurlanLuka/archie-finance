@@ -3,6 +3,7 @@ import { InitiateLedgerAssetLiquidationCommandPayload } from '@archie/api/ledger
 import {
   LedgerAccountUpdatedPayload,
   InitiateLedgerRecalculationCommandPayload,
+  LedgerAccountsUpdatedPayload,
 } from '@archie/api/ledger-api/data-transfer-objects/types';
 
 export const SERVICE_NAME = 'ledger-api';
@@ -26,9 +27,8 @@ export enum ConfigVariables {
 export const LEDGER_ACCOUNT_UPDATED_TOPIC =
   new Event<LedgerAccountUpdatedPayload>('ledger.account.updated', 1);
 
-export const LEDGER_ACCOUNTS_UPDATED_TOPIC = new Event<
-  LedgerAccountUpdatedPayload[]
->('ledger.accounts.updated', 1);
+export const LEDGER_ACCOUNTS_UPDATED_TOPIC =
+  new Event<LedgerAccountsUpdatedPayload>('ledger.accounts.updated', 1);
 
 export const INITIATE_LEDGER_ASSET_LIQUIDATION_COMMAND =
   new Event<InitiateLedgerAssetLiquidationCommandPayload>(

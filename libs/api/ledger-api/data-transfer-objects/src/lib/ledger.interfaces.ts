@@ -28,7 +28,13 @@ export interface LedgerAccountUpdatedPayload {
   action: LedgerAccountAction;
 }
 
+export interface LedgerAccountsUpdatedPayload {
+  batchId: string;
+  ledgers: LedgerAccountUpdatedPayload[];
+}
+
 export interface InitiateLedgerRecalculationCommandPayload {
+  batchId: string;
   userIds: string[];
 }
 
