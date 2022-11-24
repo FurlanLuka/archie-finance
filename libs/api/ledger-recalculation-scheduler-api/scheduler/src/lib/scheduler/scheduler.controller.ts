@@ -7,7 +7,6 @@ import { Subscribe } from '@archie/api/utils/queue/decorators/subscribe';
 import { CREDIT_LINE_CREATED_TOPIC } from '@archie/api/credit-line-api/constants';
 import { SchedulerService } from './scheduler.service';
 import { CollateralReceivedPayload } from '@archie/api/credit-api/data-transfer-objects/types';
-import { InitiateBatchRecalculationPayload } from '@archie/api/ledger-recalculation-scheduler-api/data-transfer-objects/types';
 
 @Controller()
 export class SchedulerQueueController {
@@ -29,9 +28,7 @@ export class SchedulerQueueController {
     INITIATE_BATCH_RECALCULATION,
     SchedulerQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async batchRecalculationEventHandler(
-    payload: InitiateBatchRecalculationPayload,
-  ): Promise<void> {
-    await this.schedulerService.recalculateLedger(payload.userIds);
+  async batchRecalculationEventHandler(): Promise<void> {
+    await this.schedulerService.initiateBatchRecalculation();
   }
 }

@@ -1,3 +1,1 @@
-export interface InitiateBatchRecalculationPayload {
-  userIds: string[];
-}
+export {};
