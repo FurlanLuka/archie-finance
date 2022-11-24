@@ -54,7 +54,8 @@ export class RedisService implements OnModuleInit {
     duration = this.DEFAULT_MAX_LOCK_DURATION_IN_MS,
   ): Promise<RedlockLock> {
     const prefixedResources: string[] = resources.map(
-      (resource): string => `${this.options.keyPrefix}_${resource}`,
+      (resource): string =>
+        `${this.options.keyPrefix}_${Math.random()}_${resource}`,
     );
 
     return this.redlock.acquire(prefixedResources, duration);
@@ -90,10 +91,10 @@ export function Lock(
 
       try {
         const resourceNames: string | string[] = resourceNameCallBack(args[0]);
+        const resources: string[] =
+          typeof resourceNames === 'string' ? [resourceNames] : resourceNames;
 
-        lock = await redisService.acquireLock(
-          typeof resourceNames === 'string' ? [resourceNames] : resourceNames,
-        );
+        lock = await redisService.acquireLock(resources);
       } catch (error) {
         if (error instanceof ExecutionError) {
           throw new LockedResourceError();
@@ -108,6 +109,7 @@ export function Lock(
       } finally {
         await redisService.releaseLock(lock);
       }
+      return;
     };
   };
 }

@@ -53,7 +53,6 @@ export class LtvService {
     };
   }
 
-  @Lock((ledger: LedgerAccountUpdatedPayload) => ledger.userId)
   async handleLedgerAccountUpdatedEvent(
     ledger: LedgerAccountUpdatedPayload,
   ): Promise<void> {
