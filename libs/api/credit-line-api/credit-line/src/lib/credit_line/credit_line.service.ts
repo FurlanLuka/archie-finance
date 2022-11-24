@@ -58,7 +58,7 @@ export class CreditLineService {
     const userIds: string[] = ledgers.map((ledger) => ledger.userId);
     await this.updateCreditLimits(userIds);
 
-    await this.queueService.publishEvent(
+    this.queueService.publishEvent(
       CREDIT_LINE_BATCH_RECALCULATION_COMPLETED_TOPIC,
       {
         batchId,
