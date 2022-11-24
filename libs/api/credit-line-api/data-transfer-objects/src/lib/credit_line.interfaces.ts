@@ -21,3 +21,7 @@ export interface CreditLineCreatedPayload {
   ledgerValue: number;
   calculatedAt: string;
 }
+
+export interface CreditLineBatchRecalculationCompleted {
+  batchId: string;
+}

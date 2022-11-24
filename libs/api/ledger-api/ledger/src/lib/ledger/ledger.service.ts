@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, In, Repository } from 'typeorm';
 import { LedgerAccount } from './ledger_account.entity';
 import { BigNumber } from 'bignumber.js';
 import { LedgerAction, LedgerLog } from './ledger_log.entity';
@@ -15,16 +15,21 @@ import {
   InternalLedgerAccountData,
   Ledger,
   LedgerAccountAction,
+  LedgerAccountUpdatedPayload,
   LedgerActionType,
+  UserGroupedLedger,
 } from '@archie/api/ledger-api/data-transfer-objects/types';
 import { QueueService } from '@archie/api/utils/queue';
 import {
   INITIATE_LEDGER_RECALCULATION_COMMAND,
   LEDGER_ACCOUNT_UPDATED_TOPIC,
+  LEDGER_ACCOUNTS_UPDATED_TOPIC,
 } from '@archie/api/ledger-api/constants';
 import { BatchDecrementLedgerAccounts } from './ledger.interfaces';
 import { LedgerUser } from './ledger_user.entity';
 import { AssetPrice } from '@archie/api/ledger-api/data-transfer-objects/types';
+import { GroupingHelper } from '@archie/api/utils/helpers';
+import { v4 } from 'uuid';
 
 @Injectable()
 export class LedgerService {
@@ -107,16 +112,56 @@ export class LedgerService {
   }
 
   async getLedger(userId: string, assetPrice?: AssetPrice[]): Promise<Ledger> {
+    const ledgers: UserGroupedLedger[] = await this.getLedgers(
+      [userId],
+      assetPrice,
+    );
+    const { value, accounts } = ledgers[0];
+
+    return {
+      value,
+      accounts,
+    };
+  }
+
+  async getLedgers(
+    userIds: string[],
+    assetPrice?: AssetPrice[],
+  ): Promise<UserGroupedLedger[]> {
     const ledgerAccounts: LedgerAccount[] = await this.ledgerRepository.findBy({
-      userId,
+      userId: In(userIds),
     });
 
     const assetPrices: AssetPrice[] =
       assetPrice ?? (await this.assetPricesService.getLatestAssetPrices());
 
+    const accountsPerUser = GroupingHelper.groupBy(
+      ledgerAccounts,
+      (account) => account.userId,
+    );
+
+    return userIds.map((userId: string): UserGroupedLedger => {
+      const userLedgerAccounts: LedgerAccount[] = accountsPerUser[userId] ?? [];
+
+      const ledger: Ledger = this.calculateLedgerState(
+        userLedgerAccounts,
+        assetPrices,
+      );
+
+      return {
+        userId,
+        ...ledger,
+      };
+    });
+  }
+
+  private calculateLedgerState(
+    ledgerAccounts: LedgerAccount[],
+    assetPrices: AssetPrice[],
+  ): Ledger {
     let ledgerValue: BigNumber = BigNumber(0);
 
-    const accountData: InternalLedgerAccountData[] = ledgerAccounts.flatMap(
+    const accounts: InternalLedgerAccountData[] = ledgerAccounts.flatMap(
       ({ assetId, amount }) => {
         const assetInformation: AssetInformation | undefined =
           this.assetsService.getAssetInformation(assetId);
@@ -152,7 +197,7 @@ export class LedgerService {
 
     return {
       value: ledgerValue.decimalPlaces(2, BigNumber.ROUND_DOWN).toString(),
-      accounts: accountData,
+      accounts,
     };
   }
 
@@ -169,6 +214,7 @@ export class LedgerService {
         .map((ledgerUser) => ledgerUser.userId);
 
       this.queueService.publishEvent(INITIATE_LEDGER_RECALCULATION_COMMAND, {
+        batchId: v4(),
         userIds: userIdChunk,
       });
     }
@@ -179,13 +225,16 @@ export class LedgerService {
   ): Promise<void> {
     const assetPrices: AssetPrice[] =
       await this.assetPricesService.getLatestAssetPrices();
+    const ledgers: UserGroupedLedger[] = await this.getLedgers(
+      payload.userIds,
+      assetPrices,
+    );
 
-    await Promise.all(
-      payload.userIds.map(async (userId) => {
-        const ledger = await this.getLedger(userId, assetPrices);
-
-        this.queueService.publishEvent(LEDGER_ACCOUNT_UPDATED_TOPIC, {
-          userId,
+    this.queueService.publishEvent(LEDGER_ACCOUNTS_UPDATED_TOPIC, {
+      batchId: payload.batchId,
+      ledgers: ledgers.map(
+        (ledger): LedgerAccountUpdatedPayload => ({
+          userId: ledger.userId,
           ledgerAccounts: ledger.accounts.map((updatedAccount) => ({
             ...updatedAccount,
             calculatedAt: new Date().toISOString(),
@@ -193,9 +242,9 @@ export class LedgerService {
           action: {
             type: LedgerActionType.ASSET_PRICE_UPDATE,
           },
-        });
-      }),
-    );
+        }),
+      ),
+    });
   }
 
   async decrementLedgerAccount(

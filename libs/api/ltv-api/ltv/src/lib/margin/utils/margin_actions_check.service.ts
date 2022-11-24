@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { MarginCall } from '../margin_calls.entity';
-import { MarginCheck } from '../margin_check.entity';
+import { MarginCall } from '../entities/margin_calls.entity';
+import { MarginCheck } from '../entities/margin_check.entity';
 import { DateTime, Interval } from 'luxon';
 import { MarginAction } from './utils.interfaces';
 import { MathUtilService } from './math.service';
-import { MarginNotification } from '../margin_notifications.entity';
+import { MarginNotification } from '../entities/margin_notifications.entity';
 import {
   COLLATERAL_SALE_LTV_LIMIT,
   LTV_MARGIN_CALL_LIMIT,

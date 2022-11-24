@@ -35,6 +35,7 @@ export class QueueModule {
               ...exchanges,
             ]),
             uri: queueUrl,
+            prefetchCount: 250,
             enableControllerDiscovery: true,
             connectionInitOptions: { wait: false },
             logger: new Logger(),

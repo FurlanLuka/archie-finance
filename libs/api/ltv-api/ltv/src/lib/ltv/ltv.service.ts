@@ -7,6 +7,7 @@ import { QueueService } from '@archie/api/utils/queue';
 import { LtvUtilService } from './utils/ltv.service';
 import { LedgerService } from '../ledger/ledger.service';
 import {
+  LedgerAccountsUpdatedPayload,
   LedgerAccountUpdatedPayload,
   LedgerActionType,
 } from '@archie/api/ledger-api/data-transfer-objects/types';
@@ -19,8 +20,16 @@ import { CreditService } from '../credit/credit.service';
 import { Lock } from '@archie/api/utils/redis';
 import { MarginService } from '../margin/margin.service';
 import { LedgerAccount } from '../ledger/ledger_account.entity';
-import { LtvMeta } from '../margin/margin.interfaces';
-import { LTV_UPDATED_TOPIC } from '@archie/api/ltv-api/constants';
+import { LtvMeta, PerUserLtv } from '../margin/margin.interfaces';
+import {
+  LTV_BATCH_RECALCULATION_COMPLETED_TOPIC,
+  LTV_UPDATED_TOPIC,
+} from '@archie/api/ltv-api/constants';
+import { Liquidation } from '../liquidation/liquidation.entity';
+import { LiquidationService } from '../liquidation/liquidation.service';
+import { LedgerAccountsPerUser } from '../ledger/ledger.interfaces';
+import { CreditPerUser } from '../credit/credit.interfaces';
+import { LiquidationsPerUser } from '../liquidation/liquidation.interfaces';
 
 @Injectable()
 export class LtvService {
@@ -30,6 +39,7 @@ export class LtvService {
     private ledgerService: LedgerService,
     private creditService: CreditService,
     private marginService: MarginService,
+    private liquidationService: LiquidationService,
   ) {}
 
   async getCurrentLtv(userId: string): Promise<Ltv> {
@@ -47,32 +57,76 @@ export class LtvService {
     };
   }
 
-  @Lock((ledger: LedgerAccountUpdatedPayload) => ledger.userId)
-  async handleLedgerAccountUpdatedEvent({
-    userId,
-    ledgerAccounts,
-    action,
-  }: LedgerAccountUpdatedPayload): Promise<void> {
-    await this.ledgerService.updateLedgerAccounts(userId, ledgerAccounts);
-
-    if (action.type === LedgerActionType.LIQUIDATION) {
-      await this.marginService.acknowledgeLiquidationCollateralBalanceUpdate(
-        action.liquidation.id,
+  async handleLedgerAccountUpdatedEvent(
+    ledger: LedgerAccountUpdatedPayload,
+  ): Promise<void> {
+    if (ledger.action.type === LedgerActionType.LIQUIDATION) {
+      await this.liquidationService.acknowledgeLiquidationCollateralBalanceUpdate(
+        ledger.action.liquidation.id,
       );
     }
-    const ltvMeta = await this.getNormalizedLtvMeta(userId);
 
-    const ltv: number = this.ltvUtilService.calculateLtv(
-      ltvMeta.creditUtilization,
-      ltvMeta.ledgerValue,
+    await this.handleLedgerUpdateEvent([ledger]);
+  }
+
+  async handleBatchLedgerAccountsUpdatedEvent({
+    batchId,
+    ledgers,
+  }: LedgerAccountsUpdatedPayload): Promise<void> {
+    await this.handleLedgerUpdateEvent(ledgers);
+
+    this.queueService.publishEvent(LTV_BATCH_RECALCULATION_COMPLETED_TOPIC, {
+      batchId,
+    });
+  }
+
+  @Lock((ledgers: LedgerAccountUpdatedPayload[]) =>
+    ledgers.map((ledger) => ledger.userId),
+  )
+  private async handleLedgerUpdateEvent(
+    ledgers: LedgerAccountUpdatedPayload[],
+  ): Promise<void> {
+    await this.ledgerService.updateLedgers(ledgers);
+
+    const userIds: string[] = ledgers.map((ledger) => ledger.userId);
+    const [ledgerAccounts, creditBalances, liquidations]: [
+      LedgerAccountsPerUser,
+      CreditPerUser,
+      LiquidationsPerUser,
+    ] = await Promise.all([
+      this.ledgerService.getLedgerAccountsPerUser(userIds),
+      this.creditService.getCreditBalancePerUser(userIds),
+      this.liquidationService.getLiquidations(userIds),
+    ]);
+
+    const perUserLtv: PerUserLtv[] = ledgers.map(
+      ({ userId }: LedgerAccountUpdatedPayload) => {
+        const ltvMeta: LtvMeta = this.calculateNormalizedLtvMeta(
+          userId,
+          ledgerAccounts[userId] ?? [],
+          creditBalances[userId]?.utilizationAmount ?? 0,
+          liquidations[userId] ?? [],
+        );
+
+        const ltv: number = this.ltvUtilService.calculateLtv(
+          ltvMeta.creditUtilization,
+          ltvMeta.ledgerValue,
+        );
+
+        this.queueService.publishEvent(LTV_UPDATED_TOPIC, {
+          userId,
+          ltv,
+        });
+
+        return {
+          userId,
+          ltv,
+          ltvMeta,
+        };
+      },
     );
 
-    this.queueService.publishEvent(LTV_UPDATED_TOPIC, {
-      userId,
-      ltv,
-    });
-
-    await this.marginService.executeMarginCallCheck(userId, ltv, ltvMeta);
+    await this.marginService.executeMarginCallChecks(perUserLtv);
   }
 
   @Lock((credit: CreditBalanceUpdatedPayload) => credit.userId)
@@ -82,7 +136,7 @@ export class LtvService {
     await this.creditService.updateCreditBalance(credit);
 
     if (credit.paymentDetails?.type === PaymentType.liquidation) {
-      await this.marginService.acknowledgeLiquidationCreditBalanceUpdate(
+      await this.liquidationService.acknowledgeLiquidationCreditBalanceUpdate(
         credit.paymentDetails.id,
       );
     }
@@ -97,10 +151,29 @@ export class LtvService {
       ltv,
     });
 
-    await this.marginService.executeMarginCallCheck(
-      credit.userId,
-      ltv,
-      ltvMeta,
+    await this.marginService.executeMarginCallChecks([
+      {
+        userId: credit.userId,
+        ltv,
+        ltvMeta,
+      },
+    ]);
+  }
+
+  private calculateNormalizedLtvMeta(
+    userId: string,
+    ledgerAccounts: LedgerAccount[],
+    creditUtilization: number,
+    activeLiquidations: Liquidation[],
+  ): LtvMeta {
+    const ledgerValue: number =
+      this.ledgerService.getLedgerValue(ledgerAccounts);
+
+    return this.liquidationService.reducePendingLiquidationAmount(
+      userId,
+      creditUtilization,
+      ledgerValue,
+      activeLiquidations,
     );
   }
 
@@ -114,7 +187,7 @@ export class LtvService {
       userId,
     );
 
-    return this.marginService.reducePendingLiquidationAmount(
+    return this.liquidationService.reducePendingLiquidationAmountWithLookup(
       userId,
       creditUtilization,
       ledgerValue,
@@ -123,7 +196,8 @@ export class LtvService {
 
   public async handleCreditLineCreatedEvent({
     userId,
+    calculatedAt,
   }: CreditLineCreatedPayload): Promise<void> {
-    await this.creditService.createCreditBalance(userId);
+    await this.creditService.createCreditBalance(userId, calculatedAt);
   }
 }

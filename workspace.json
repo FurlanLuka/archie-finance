@@ -50,6 +50,7 @@
     "api-user-api-kyc": "libs/api/user-api/kyc",
     "api-user-api-test-data": "libs/api/user-api/test-data",
     "api-user-api-user": "libs/api/user-api/user",
+    "api-utils-helpers": "libs/api/utils/helpers",
     "api-utils-auth0": "libs/api/utils/auth0",
     "api-utils-config": "libs/api/utils/config",
     "api-utils-crypto": "libs/api/utils/crypto",
@@ -83,7 +84,6 @@
     "plugin-workspace-generator": "libs/plugin/workspace-generator",
     "referral-system-api": "apps/api/referral-system-api",
     "stress-tests": "apps/tests/stress",
-    "utils-test-api": "apps/tests/utils-test-api",
     "tests-utils-test-api-auth": "libs/tests/utils-test-api/auth",
     "tests-utils-test-api-constants": "libs/tests/utils-test-api/constants",
     "tests-utils-test-api-data-transfer-objects": "libs/tests/utils-test-api/data-transfer-objects",
@@ -112,6 +112,7 @@
     "ui-shared-theme": "libs/ui/shared/theme",
     "ui-shared-utils": "libs/ui/shared/utils",
     "user-api": "apps/api/user-api",
+    "utils-test-api": "apps/tests/utils-test-api",
     "webhook-api": "apps/api/webhook-api",
     "websocket-event-api": "apps/api/websocket-event-api"
   }

@@ -9,7 +9,7 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Liquidation } from './liquidation.entity';
+import { Liquidation } from '../../liquidation/liquidation.entity';
 
 @Entity({
   name: 'margin_margin_calls',
