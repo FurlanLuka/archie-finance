@@ -1,6 +1,7 @@
 import { Event } from '@archie/api/utils/queue/events';
 export const SERVICE_NAME = 'ledger-recalculation-scheduler-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
+import { InitiateBatchRecalculationPayload } from '@archie/api/ledger-recalculation-scheduler-api/data-transfer-objects/types';
 
 export enum ConfigVariables {
   TYPEORM_HOST = 'TYPEORM_HOST',
@@ -16,3 +17,12 @@ export const INITIATE_LEDGER_RECALCULATION_SCHEDULER = new Event(
   'initiate.ledger.recalculation.scheduler',
   1,
 );
+export const INITIATE_BATCH_RECALCULATION =
+  new Event<InitiateBatchRecalculationPayload>(
+    'initiate.ledger.recalculation.batch',
+    1,
+  );
+
+export const LOW_LTV = 30;
+export const MEDIUM_LTV = 50;
+export const HIGH_LTV = 70;
