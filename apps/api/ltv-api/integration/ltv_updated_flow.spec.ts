@@ -174,7 +174,7 @@ describe('Ltv api tests', () => {
       ledgerValue = ledgerValue - 0.1 * ledgerValue;
       const ltv = (creditUtilizationAmount / ledgerValue) * 100;
 
-      await app.get(LtvQueueController).ledgerUpdated(
+      await app.get(LtvQueueController).ledgersUpdated([
         ledgerAccountUpdatedPayloadFactory({
           ledgerAccounts: [
             ledgerAccountDataFactory({
@@ -182,7 +182,7 @@ describe('Ltv api tests', () => {
             }),
           ],
         }),
-      );
+      ]);
 
       expect(queueStub.publishEvent).toBeCalledTimes(2);
       expect(queueStub.publishEvent).nthCalledWith(1, LTV_UPDATED_TOPIC, {

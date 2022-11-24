@@ -116,7 +116,7 @@ describe('Credit line creation tests', () => {
 
       await app
         .get(CreditLineQueueController)
-        .ledgerUpdated(ledgerUpdatedPayload);
+        .ledgersUpdated([ledgerUpdatedPayload]);
 
       const response = await request(app.getHttpServer())
         .get('/v2/credit_lines')
