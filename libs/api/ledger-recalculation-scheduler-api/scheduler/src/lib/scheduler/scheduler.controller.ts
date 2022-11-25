@@ -30,7 +30,7 @@ export class SchedulerQueueController {
     INITIATE_BATCH_RECALCULATION,
     SchedulerQueueController.CONTROLLER_QUEUE_NAME,
   )
-  async batchRecalculationEventHandler(): Promise<void> {
+  async initiateBatchRecalculationHandler(): Promise<void> {
     await this.schedulerService.initiateBatchRecalculation();
   }
   @Subscribe(
