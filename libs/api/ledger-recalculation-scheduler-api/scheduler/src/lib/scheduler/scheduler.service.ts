@@ -5,7 +5,6 @@ import { LedgerRecalculation } from './recalculation.entity';
 import { DateTime } from 'luxon';
 import {
   HIGH_LTV,
-  INITIATE_BATCH_RECALCULATION,
   LOW_LTV,
   MEDIUM_LTV,
 } from '@archie/api/ledger-recalculation-scheduler-api/constants';
@@ -13,6 +12,7 @@ import { QueueService } from '@archie/api/utils/queue';
 import { v4 } from 'uuid';
 import { BatchUser } from './batch.entity';
 import { Scheduler } from './scheduler.entity';
+import { INITIATE_LEDGER_RECALCULATION_COMMAND } from '@archie/api/ledger-api/constants';
 
 @Injectable()
 export class SchedulerService {
@@ -39,15 +39,43 @@ export class SchedulerService {
     });
   }
 
-  // handle batch LTV updated in credit line processed
-  // where do we get the LTV from tho?
-  public async handleBatchRecalculated(batchId: string): Promise<void> {
-    const now = DateTime.now().toISO();
+  public async handleLtvUpdatedEvent(
+    userId: string,
+    ltv: number,
+  ): Promise<void> {
+    await this.ledgerRecalculationRepository.update({ userId }, { ltv });
+  }
 
-    console.log('Ledger recaulculated', batchId);
+  public async handleLtvRecalculatedEvent(batchId: string): Promise<void> {
+    await this.schedulerRepository.update({ batchId }, { ltvProcessed: true });
+
+    await this.handleBatchRecalculated(batchId);
+  }
+
+  public async handleCreditLineRecalculatedEvent(
+    batchId: string,
+  ): Promise<void> {
+    await this.schedulerRepository.update(
+      { batchId },
+      { creditLineProcessed: true },
+    );
+
+    await this.handleBatchRecalculated(batchId);
+  }
+
+  public async handleBatchRecalculated(batchId: string): Promise<void> {
     const schedulerForBatch = await this.schedulerRepository.findOneByOrFail({
       batchId,
     });
+
+    if (
+      !schedulerForBatch.ltvProcessed ||
+      !schedulerForBatch.creditLineProcessed
+    ) {
+      return;
+    }
+
+    const now = DateTime.now().toISO();
 
     const usersForBatch = await this.batchUserRepository.find({
       where: { batchId },
@@ -82,6 +110,27 @@ export class SchedulerService {
     } else {
       // publish next batch id
       const nextBatchId = pendingSchedulers[0].batchId;
+
+      const usersForNextBatch = (
+        await this.batchUserRepository.find({
+          where: { batchId: nextBatchId },
+          select: ['userId'],
+        })
+      ).map(({ userId }) => userId);
+
+      await Promise.all(
+        usersForNextBatch.map(async (userId) => {
+          await this.ledgerRecalculationRepository.update(
+            { userId },
+            { recalculationTriggeredAt: now },
+          );
+        }),
+      );
+
+      this.queueService.publishEvent(INITIATE_LEDGER_RECALCULATION_COMMAND, {
+        batchId: nextBatchId,
+        userIds: usersForNextBatch,
+      });
     }
   }
 
@@ -137,6 +186,7 @@ export class SchedulerService {
     ];
 
     let firstBatchId;
+    let firstBatchOfUsers;
     const groupId = v4();
 
     for (let i = 0; i < batchOfUserIds.length; i += this.BATCH_SIZE) {
@@ -144,6 +194,7 @@ export class SchedulerService {
       const batchId = v4();
       if (i === 0) {
         firstBatchId = batchId;
+        firstBatchOfUsers = userIds;
       }
 
       await this.schedulerRepository.save({
@@ -162,9 +213,9 @@ export class SchedulerService {
       );
     }
 
-    // publish batch id
-    this.queueService.publishEvent(INITIATE_BATCH_RECALCULATION, {
-      userIds: batchOfUserIds,
+    this.queueService.publishEvent(INITIATE_LEDGER_RECALCULATION_COMMAND, {
+      batchId: firstBatchId,
+      userIds: firstBatchOfUsers,
     });
 
     await Promise.all(
