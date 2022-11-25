@@ -1,4 +1,6 @@
 import { Event } from '@archie/api/utils/queue/events';
+import { BatchRecalculationCompletedPayload } from '@archie/api/ledger-recalculation-scheduler-api/data-transfer-objects/types';
+
 export const SERVICE_NAME = 'ledger-recalculation-scheduler-api';
 export const SERVICE_QUEUE_NAME = `${SERVICE_NAME}-queue`;
 
@@ -16,6 +18,11 @@ export const INITIATE_BATCH_RECALCULATION = new Event(
   'initiate.ledger.recalculation.batch',
   1,
 );
+export const BATCH_RECALCULATION_COMPLETED =
+  new Event<BatchRecalculationCompletedPayload>(
+    'batch.recalculation.completed',
+    1,
+  );
 
 export const LOW_LTV = 30;
 export const MEDIUM_LTV = 50;

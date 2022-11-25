@@ -39,9 +39,50 @@ export class SchedulerService {
     });
   }
 
-  public async handleLedgerRecalculated(batchId: string): Promise<void> {
+  // handle batch LTV updated in credit line processed
+  // where do we get the LTV from tho?
+  public async handleBatchRecalculated(batchId: string): Promise<void> {
+    const now = DateTime.now().toISO();
+
     console.log('Ledger recaulculated', batchId);
-    // set the timestamps accordingly and choose next scheduler entry
+    const schedulerForBatch = await this.schedulerRepository.findOneByOrFail({
+      batchId,
+    });
+
+    const usersForBatch = await this.batchUserRepository.find({
+      where: { batchId },
+      select: ['userId'],
+    });
+
+    await Promise.all(
+      usersForBatch.map(async ({ userId }) => {
+        await this.ledgerRecalculationRepository.update(
+          { userId },
+          { processedAt: now },
+        );
+      }),
+    );
+
+    await this.schedulerRepository.update(
+      { id: schedulerForBatch.id },
+      { ltvProcessed: true, creditLineProcessed: true },
+    );
+
+    const schedulersForGroup = await this.schedulerRepository.find({
+      where: { groupId: schedulerForBatch.groupId },
+    });
+
+    const pendingSchedulers = schedulersForGroup.filter(
+      (s) => s.ltvProcessed === false && s.creditLineProcessed === false,
+    );
+
+    // if no more pending, create a new batch
+    if (pendingSchedulers.length === 0) {
+      await this.initiateBatchRecalculation();
+    } else {
+      // publish next batch id
+      const nextBatchId = pendingSchedulers[0].batchId;
+    }
   }
 
   public async initiateBatchRecalculation(): Promise<void> {
@@ -66,6 +107,7 @@ export class SchedulerService {
     const batchCountHigh = Math.floor(totalHigh / 10);
     const batchCountCritical = Math.floor(totalCritical / 5);
 
+    // update recalculationTriggeredAt
     const batchLowLtv = await this.ledgerRecalculationRepository.find({
       order: { recalculationTriggeredAt: 'asc' },
       take: batchCountLow,
@@ -95,6 +137,8 @@ export class SchedulerService {
     ];
 
     let firstBatchId;
+    const groupId = v4();
+
     for (let i = 0; i < batchOfUserIds.length; i += this.BATCH_SIZE) {
       const userIds = batchOfUserIds.slice(i, i + this.BATCH_SIZE);
       const batchId = v4();
@@ -104,9 +148,11 @@ export class SchedulerService {
 
       await this.schedulerRepository.save({
         batchId,
-        groupTimestamp: now,
+        groupId,
+        createdAt: now,
         ltvProcessed: false,
         creditLineProcessed: false,
+        published: false,
       });
 
       await Promise.all(
@@ -120,5 +166,18 @@ export class SchedulerService {
     this.queueService.publishEvent(INITIATE_BATCH_RECALCULATION, {
       userIds: batchOfUserIds,
     });
+
+    await Promise.all(
+      batchOfUserIds.map(async (userId) => {
+        await this.ledgerRecalculationRepository.update(
+          { userId },
+          { recalculationTriggeredAt: now },
+        );
+      }),
+    );
+    await this.schedulerRepository.update(
+      { batchId: firstBatchId, groupId },
+      { published: true },
+    );
   }
 }
