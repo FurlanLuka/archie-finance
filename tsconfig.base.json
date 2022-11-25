@@ -147,6 +147,9 @@
       "@archie/api/peach-api/test-data": [
         "libs/api/peach-api/test-data/src/index.ts"
       ],
+      "@archie/api/peach-api/test-data/nock": [
+        "libs/api/peach-api/test-data/src/lib/peach_nock"
+      ],
       "@archie/api/referral-system-api/constants": [
         "libs/api/referral-system-api/constants/src/index.ts"
       ],

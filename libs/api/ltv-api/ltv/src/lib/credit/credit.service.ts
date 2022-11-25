@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LessThan, Repository, UpdateResult } from 'typeorm';
+import { LessThan, Repository } from 'typeorm';
 import { Credit } from './credit.entity';
 import { CreditBalanceUpdatedPayload } from '@archie/api/peach-api/data-transfer-objects/types';
-import { DateTime } from 'luxon';
 
 @Injectable()
 export class CreditService {
@@ -17,7 +16,7 @@ export class CreditService {
   ): Promise<void> {
     const existingCreditLine: Credit | null =
       await this.ltvCreditRepository.findOneBy({
-        userId: credit?.userId,
+        userId: credit.userId,
       });
 
     if (existingCreditLine === null)
