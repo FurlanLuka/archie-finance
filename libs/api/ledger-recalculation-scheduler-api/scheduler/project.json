@@ -1,0 +1,29 @@
+{
+  "name": "api-ledger-recalculation-scheduler-api-scheduler",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/api/ledger-recalculation-scheduler-api/scheduler/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/api/ledger-recalculation-scheduler-api/scheduler/**/*.ts"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/api/ledger-recalculation-scheduler-api/scheduler/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": [
+    "scope:api:lib:ledger-recalculation-scheduler-api:shared",
+    "scope:api:lib:shared"
+  ]
+}

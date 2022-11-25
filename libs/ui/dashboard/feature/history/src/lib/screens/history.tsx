@@ -2,6 +2,7 @@ import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Navigate } from 'react-router-dom';
 
+import { Transaction } from '@archie/api/credit-api/data-transfer-objects/types';
 import { TransactionsTable } from '@archie/ui/dashboard/components';
 import { RequestState } from '@archie/ui/shared/data-access/archie-api/interface';
 import { useGetTransactions } from '@archie/ui/shared/data-access/archie-api/payment/hooks/use-get-transactions';
@@ -22,7 +23,7 @@ export const HistoryScreen: FC = () => {
 
   const getTransactionsResponse = useGetTransactions();
 
-  const data = useMemo(() => {
+  const data: Transaction[] = useMemo(() => {
     if (
       getTransactionsResponse.state === RequestState.SUCCESS ||
       getTransactionsResponse.state === RequestState.LOADING_NEXT_PAGE
