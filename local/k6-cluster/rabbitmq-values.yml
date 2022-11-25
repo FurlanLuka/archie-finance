@@ -22,7 +22,7 @@ auth:
   username: guest
   password: guest
 
-replicaCount: 4
+replicaCount: 1
 livenessProbe:
   enabled: false
 readinessProbe:

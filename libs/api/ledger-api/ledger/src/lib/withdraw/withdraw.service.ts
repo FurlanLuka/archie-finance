@@ -90,7 +90,7 @@ export class WithdrawService {
     };
   }
 
-  // @Lock((userId: string, ..._) => userId)
+  @Lock((userId: string, ..._) => userId)
   public async withdraw(
     userId: string,
     assetId: string,

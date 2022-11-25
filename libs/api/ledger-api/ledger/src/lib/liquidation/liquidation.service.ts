@@ -67,9 +67,9 @@ export class LiquidationService {
     );
   }
 
-  // @Lock(
-  //   (payload: InitiateLedgerAssetLiquidationCommandPayload) => payload.userId,
-  // )
+  @Lock(
+    (payload: InitiateLedgerAssetLiquidationCommandPayload) => payload.userId,
+  )
   public async initiateLedgerAssetLiquidation({
     userId,
     amount,

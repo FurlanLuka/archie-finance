@@ -47,7 +47,7 @@ export class LtvService {
     };
   }
 
-  // @Lock((ledger: LedgerAccountUpdatedPayload) => ledger.userId)
+  @Lock((ledger: LedgerAccountUpdatedPayload) => ledger.userId)
   async handleLedgerAccountUpdatedEvent({
     userId,
     ledgerAccounts,
@@ -75,7 +75,7 @@ export class LtvService {
     await this.marginService.executeMarginCallCheck(userId, ltv, ltvMeta);
   }
 
-  // @Lock((credit: CreditBalanceUpdatedPayload) => credit.userId)
+  @Lock((credit: CreditBalanceUpdatedPayload) => credit.userId)
   public async handleCreditBalanceUpdatedEvent(
     credit: CreditBalanceUpdatedPayload,
   ): Promise<void> {

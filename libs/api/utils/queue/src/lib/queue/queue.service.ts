@@ -57,11 +57,11 @@ export class QueueService implements OnApplicationBootstrap {
       headers,
     });
 
-    // if (this.useEventLog) {
-    //   const eventLogId = `${event.getRoutingKey()}-${eventId}-${exchange}`;
-    //
-    //   void this.logService?.writeEventLog(eventLogId, message);
-    // }
+    if (this.useEventLog) {
+      const eventLogId = `${event.getRoutingKey()}-${eventId}-${exchange}`;
+
+      void this.logService?.writeEventLog(eventLogId, message);
+    }
   }
 
   public async request<K = object, T extends object = object>(

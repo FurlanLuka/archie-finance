@@ -76,9 +76,9 @@ export function Subscribe(
     decorators.push(TraceEvent(fullQueueName, !event.getOptions().isSensitive));
   }
 
-  // if (subscriptionOptions.useIdempotency) {
-  //   decorators.push(Idempotent(routingKey, fullQueueName));
-  // }
+  if (subscriptionOptions.useIdempotency) {
+    decorators.push(Idempotent(routingKey, fullQueueName));
+  }
 
   decorators.push(
     RabbitSubscribe({
