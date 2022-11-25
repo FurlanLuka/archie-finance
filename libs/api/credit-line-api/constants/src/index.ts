@@ -1,5 +1,6 @@
 import { Event } from '@archie/api/utils/queue/events';
 import {
+  CreditLineBatchRecalculationCompleted,
   CreditLineCreatedPayload,
   CreditLineUpdatedPayload,
 } from '@archie/api/credit-line-api/data-transfer-objects/types';
@@ -29,3 +30,8 @@ export const CREDIT_LINE_UPDATED_TOPIC = new Event<CreditLineUpdatedPayload>(
   'credit_line.updated',
   1,
 );
+export const CREDIT_LINE_BATCH_RECALCULATION_COMPLETED_TOPIC =
+  new Event<CreditLineBatchRecalculationCompleted>(
+    'credit_line.batch_recalculation.completed',
+    1,
+  );

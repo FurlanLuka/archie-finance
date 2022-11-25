@@ -21,6 +21,7 @@ import { LtvDto } from '@archie/api/ltv-api/data-transfer-objects';
 import { LtvStatus } from '@archie/api/ltv-api/data-transfer-objects/types';
 import {
   ledgerAccountDataFactory,
+  ledgerAccountsUpdatedPayloadFactory,
   ledgerAccountUpdatedPayloadFactory,
 } from '@archie/api/ledger-api/test-data';
 import { creditLineCreatedDataFactory } from '@archie/api/credit-line-api/test-data';
@@ -29,6 +30,7 @@ import BigNumber from 'bignumber.js';
 import { DateTime } from 'luxon';
 import {
   COLLATERAL_SALE_LTV_LIMIT,
+  LTV_BATCH_RECALCULATION_COMPLETED_TOPIC,
   LTV_MARGIN_CALL_LIMIT,
   LTV_UPDATED_TOPIC,
   MARGIN_CALL_COMPLETED_TOPIC,
@@ -173,18 +175,21 @@ describe('Ltv api tests', () => {
     it(`should send ltv margin notification once collateral value falls for another 10%`, async () => {
       ledgerValue = ledgerValue - 0.1 * ledgerValue;
       const ltv = (creditUtilizationAmount / ledgerValue) * 100;
+      const ledgersUpdatedPayload = ledgerAccountsUpdatedPayloadFactory({
+        ledgers: [
+          ledgerAccountUpdatedPayloadFactory({
+            ledgerAccounts: [
+              ledgerAccountDataFactory({
+                accountValue: ledgerValue.toString(),
+              }),
+            ],
+          }),
+        ],
+      });
 
-      await app.get(LtvQueueController).ledgerUpdated(
-        ledgerAccountUpdatedPayloadFactory({
-          ledgerAccounts: [
-            ledgerAccountDataFactory({
-              accountValue: ledgerValue.toString(),
-            }),
-          ],
-        }),
-      );
+      await app.get(LtvQueueController).ledgersUpdated(ledgersUpdatedPayload);
 
-      expect(queueStub.publishEvent).toBeCalledTimes(2);
+      expect(queueStub.publishEvent).toBeCalledTimes(3);
       expect(queueStub.publishEvent).nthCalledWith(1, LTV_UPDATED_TOPIC, {
         userId: user.id,
         ltv,
@@ -196,6 +201,13 @@ describe('Ltv api tests', () => {
           userId: user.id,
           ltv,
           ...getMarginPrices(),
+        },
+      );
+      expect(queueStub.publishEvent).nthCalledWith(
+        3,
+        LTV_BATCH_RECALCULATION_COMPLETED_TOPIC,
+        {
+          batchId: ledgersUpdatedPayload.batchId,
         },
       );
     });

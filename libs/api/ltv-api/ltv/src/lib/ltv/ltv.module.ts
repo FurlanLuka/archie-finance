@@ -5,9 +5,16 @@ import { UtilsModule } from './utils/utils.module';
 import { LedgerModule } from '../ledger/ledger.module';
 import { CreditModule } from '../credit/credit.module';
 import { MarginModule } from '../margin/margin.module';
+import { LiquidationModule } from '../liquidation/liquidation.module';
 
 @Module({
-  imports: [UtilsModule, LedgerModule, CreditModule, MarginModule],
+  imports: [
+    UtilsModule,
+    LedgerModule,
+    CreditModule,
+    MarginModule,
+    LiquidationModule,
+  ],
   controllers: [LtvController, LtvQueueController],
   providers: [LtvService],
   exports: [LtvService],

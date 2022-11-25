@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MarginCall } from '../margin_calls.entity';
+import { MarginCall } from '../entities/margin_calls.entity';
 import {
   MarginCall as MarginCallResponse,
   MarginCallStatus,

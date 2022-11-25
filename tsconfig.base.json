@@ -192,6 +192,7 @@
         "libs/api/user-api/test-data/src/index.ts"
       ],
       "@archie/api/user-api/user": ["libs/api/user-api/user/src/index.ts"],
+      "@archie/api/utils/helpers": ["libs/api/utils/helpers/src/index.ts"],
       "@archie/api/utils/auth0": ["libs/api/utils/auth0/src/index.ts"],
       "@archie/api/utils/config": ["libs/api/utils/config/src/index.ts"],
       "@archie/api/utils/crypto": ["libs/api/utils/crypto/src/index.ts"],
