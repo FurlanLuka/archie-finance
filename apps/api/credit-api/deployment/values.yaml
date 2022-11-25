@@ -1,0 +1,42 @@
+service:
+  name: "credit-api"
+
+autoscaling:
+  # Disabled due to Rize queue
+  enabled: false
+
+vault:
+  secretConfig: "database/creds/credit-api"
+  templateConfig: |+
+    {{- with secret "database/creds/credit-api"}}
+    export TYPEORM_USERNAME="{{ .Data.username }}"
+    export TYPEORM_PASSWORD="{{ .Data.password }}"
+    {{- end }}
+    {{- with secret "kv/data/database" }}
+    export TYPEORM_PORT="{{ .Data.data.port }}"
+    export TYPEORM_HOST="{{ .Data.data.hostname }}"
+    {{- end }}
+    export TYPEORM_DATABASE="credit-api"
+    {{- with secret "kv/data/auth0" }}
+    export AUTH0_DOMAIN="{{ .Data.data.domain }}"
+    export AUTH0_AUDIENCE="{{ .Data.data.audience }}"
+    {{- end }}
+    {{- with secret "kv/data/queue" }}
+    export QUEUE_URL="{{ .Data.data.url }}"
+    {{- end }}
+    {{- with secret "kv/data/redis" }}
+    export REDIS_URL="{{ .Data.data.url }}"
+    {{- end }}
+    {{- with secret "kv/data/credit-api" }}
+    export ENCRYPTION_KEY='{{ .Data.data.encryption_key }}'
+    export RIZE_PROGRAM_ID="{{ .Data.data.rize_program_id }}"
+    export RIZE_HMAC_KEY="{{ .Data.data.rize_hmac_key }}"
+    export RIZE_ENVIRONMENT="{{ .Data.data.rize_environment }}"
+    export RIZE_MQ_HOST="{{ .Data.data.rize_mq_host }}"
+    export RIZE_MQ_TOPIC_PREFIX="{{ .Data.data.rize_mq_topic_prefix }}"
+    export RIZE_MQ_USERNAME="{{ .Data.data.rize_mq_username }}"
+    export RIZE_MQ_PASSWORD="{{ .Data.data.rize_mq_password }}"
+    export PLAID_ENVIRONMENT="{{ .Data.data.plaid_environment }}"
+    export PLAID_CLIENT_ID="{{ .Data.data.plaid_client_id }}"
+    export PLAID_SECRET="{{ .Data.data.plaid_secret }}"
+    {{- end }}

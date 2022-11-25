@@ -40,17 +40,17 @@ const DescriptionCell: FC<DescriptionCellProps> = ({ title, code }) => (
   </>
 );
 
-type TypeCellProps = PropsWithChildren<{
+interface TypeCellProps extends PropsWithChildren {
   type: TransactionType;
-}>;
+}
 
 const TypeCell: FC<TypeCellProps> = ({ type }) => (
   <BodyM weight={500}>{TransactionTypeText[type]}</BodyM>
 );
 
-type StatusCellProps = PropsWithChildren<{
+interface StatusCellProps extends PropsWithChildren {
   status: TransactionStatus;
-}>;
+}
 
 const StatusCell: FC<StatusCellProps> = ({ status }) => (
   <BodyM color={TransactionStatusColor[status]} weight={500}>

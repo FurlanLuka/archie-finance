@@ -1,0 +1,6 @@
+service:
+  name: "utils-test-api"
+
+vault:
+  secretConfig: "database/creds/utils-test-api"
+  templateConfig: ""

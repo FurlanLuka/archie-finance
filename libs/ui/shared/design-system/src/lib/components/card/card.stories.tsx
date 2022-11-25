@@ -1,4 +1,4 @@
-import { Story, Meta } from '@storybook/react';
+import { Story } from '@ladle/react';
 
 import { theme } from '@archie/ui/shared/theme';
 
@@ -20,7 +20,7 @@ export default {
     layout: 'fullscreen',
     options: { showPanel: true },
   },
-} as Meta;
+};
 
 export const Small: Story<CardProps> = (props) => (
   <StoriesContainer bgColor={theme.backgroundSecondary}>

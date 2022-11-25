@@ -6,7 +6,7 @@ import { QueryResponse } from '../../interface';
 import { getAutopay } from '../api/get-autopay';
 import { AUTOPAY_NOT_CONFIGURED } from '../autopay.interfaces';
 
-export const AUTOPAY_RECORD_QUERY_KEY = 'autopay_record';
+export const AUTOPAY_RECORD_QUERY_KEY = ['autopay_record'];
 
 export const useGetAutopay = (): QueryResponse<AutopayResponse | null> => {
   return useExtendedQuery(

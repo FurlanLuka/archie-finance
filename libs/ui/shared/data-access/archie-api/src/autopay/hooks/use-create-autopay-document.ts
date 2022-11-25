@@ -12,7 +12,7 @@ export const useCreateAutopayDocument = (): MutationQueryResponse<
   CreateAutopayDocumentBody
 > => {
   return useExtendedMutation<AutopayAgreement, CreateAutopayDocumentBody>(
-    'create_autopay_document',
+    ['create_autopay_document'],
     createAutopayDocument,
   );
 };

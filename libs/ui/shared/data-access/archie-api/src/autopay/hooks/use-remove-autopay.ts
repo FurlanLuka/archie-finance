@@ -1,4 +1,4 @@
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { useExtendedMutation } from '../../helper-hooks';
 import { DefaultVariables } from '../../helpers';
@@ -11,13 +11,13 @@ export const useRemoveAutopay = (): MutationQueryResponse<void> => {
   const queryClient = useQueryClient();
 
   return useExtendedMutation<void, DefaultVariables>(
-    'remove_autopay',
+    ['remove_autopay'],
     async ({ accessToken }) => {
       return removeAutopay(accessToken);
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(AUTOPAY_RECORD_QUERY_KEY);
+        queryClient.invalidateQueries({ queryKey: AUTOPAY_RECORD_QUERY_KEY });
       },
     },
   );

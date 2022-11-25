@@ -8,7 +8,7 @@ export const useCreateRizeUser = (): MutationQueryResponse<
   DefaultVariables
 > => {
   return useExtendedMutation<unknown, DefaultVariables>(
-    'rize_user_create',
+    ['rize_user_create'],
     createRizeUser,
   );
 };
