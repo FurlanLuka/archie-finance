@@ -3,7 +3,7 @@ kind: K6
 metadata:
   name: k6-stress-test
 spec:
-  parallelism: 4
+  parallelism: 5
   arguments: --out statsd
   script:
     configMap:
@@ -18,7 +18,9 @@ spec:
         value: 'true'
       - name: K6_STATSD_ADDR
         value: datadog:8125
-      - name: API_BASE_URL
+      - name: ONBOARDING_BASE_URL
         value: http://archie-onboarding-api-service:80
       - name: AUTH_BASE_URL
         value: http://archie-utils-test-api-service:80
+      - name: CREDIT_LINE_BASE_URL
+        value: http://archie-credit-line-api-service:80

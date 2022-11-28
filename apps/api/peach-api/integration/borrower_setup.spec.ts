@@ -53,8 +53,8 @@ import {
   creditLimitFactory,
   balancesFactory,
   creditLimitUpdateRequestBodyFactory,
-  PeachNock,
 } from '@archie/api/peach-api/test-data';
+import { PeachNock } from '@archie/api/peach-api/test-data/nock';
 import { LockedResourceError } from '@archie/api/utils/redis';
 import { DateTime } from 'luxon';
 

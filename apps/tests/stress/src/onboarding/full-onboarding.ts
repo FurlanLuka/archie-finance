@@ -6,7 +6,6 @@ import {
   group,
   httpGet,
   check,
-  getApiBaseUrl,
   createAccessToken,
 } from '../utils';
 import { SERVICE_QUEUE_NAME } from '@archie/api/onboarding-api/constants';
@@ -24,6 +23,7 @@ import {
 } from '@archie/api/user-api/test-data';
 import { creditLineCreatedDataFactory } from '@archie/api/credit-line-api/test-data';
 import { cardActivatedDataFactory } from '@archie/api/credit-api/test-data';
+import { ONBOARDING_BASE_URL } from '../config';
 
 export const options = getOptions();
 
@@ -32,7 +32,6 @@ export function setup(): void {
 }
 
 export default function (): void {
-  const API_BASE_URL: string = getApiBaseUrl();
   const userId: string = uuidv4();
   const accessToken: string = createAccessToken(userId);
 
@@ -41,7 +40,7 @@ export default function (): void {
 
     group('Create onboarding record', () => {
       const response = httpGet({
-        uri: `${API_BASE_URL}/v1/onboarding`,
+        uri: `${ONBOARDING_BASE_URL}/v1/onboarding`,
         accessToken,
       });
 

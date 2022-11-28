@@ -7,3 +7,11 @@ auth:
     adminPasswordKey: "postgres"
     userPasswordKey: "postgres"
     replicationPasswordKey: "postgres"
+
+primary:
+  resources:
+    limits:
+      cpu: "2"
+      memory: "4Gi"
+  extendedConfiguration: |
+    max_connections = 5000
