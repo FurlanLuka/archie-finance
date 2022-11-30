@@ -1,25 +1,26 @@
 import { DynamicModule, Logger, Module, Provider } from '@nestjs/common';
 import {
-  RabbitMQExchangeConfig,
+  RabbitMQExchange,
   RabbitMQModule,
-} from '@golevelup/nestjs-rabbitmq';
+} from 'nestjs-rabbit-messaging-queue';
 import { ConfigModule, ConfigService } from '@archie/api/utils/config';
-import { QueueUtilService } from './queue-util.service';
+import { QueueConstants } from './queue.constants';
 import { QueueOptions } from './queue.interfaces';
 import { QueueService } from './queue.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Idempotency } from '../log/event_idempotency.entity';
 import { EventLog } from '../log/event_log.entity';
 import { LogService } from '../log/log.service';
+import { RmqModule } from 'nestjs-rabbit-messaging-queue';
 
 @Module({})
 export class QueueModule {
   static register(options?: QueueOptions): DynamicModule {
-    const exchanges: RabbitMQExchangeConfig[] = options?.exchanges ?? [];
+    const exchanges: RabbitMQExchange[] = options?.exchanges ?? [];
     const useEventLog = options?.useEventLog ?? true;
 
     const imports = [
-      RabbitMQModule.forRootAsync(RabbitMQModule, {
+      RmqModule.register({
         imports: [ConfigModule],
         inject: [ConfigService],
         useFactory: (configService: ConfigService) => {
@@ -30,10 +31,7 @@ export class QueueModule {
           }
 
           return {
-            exchanges: QueueUtilService.createExchanges([
-              QueueUtilService.GLOBAL_EXCHANGE,
-              ...exchanges,
-            ]),
+            exchanges: [QueueConstants.GLOBAL_EXCHANGE, ...exchanges],
             uri: queueUrl,
             prefetchCount: 250,
             enableControllerDiscovery: true,
@@ -52,7 +50,7 @@ export class QueueModule {
       QueueService,
     ];
 
-    const exports: Provider[] = [RabbitMQModule, QueueService];
+    const exports: Provider[] = [RmqModule, QueueService];
 
     if (useEventLog) {
       imports.push(TypeOrmModule.forFeature([EventLog, Idempotency]));
