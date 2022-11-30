@@ -1,8 +1,8 @@
-import { RabbitMQExchangeConfig } from '@golevelup/nestjs-rabbitmq';
+import { RabbitMQExchange } from 'nestjs-rabbit-messaging-queue';
 
 export interface QueueOptions {
   useEventLog?: boolean;
-  exchanges?: RabbitMQExchangeConfig[];
+  exchanges?: RabbitMQExchange[];
 }
 
 export enum RPCResponseType {
